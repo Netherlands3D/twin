@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
@@ -42,13 +41,6 @@ namespace Netherlands3D.UI.Panels
         private SetOfXYZ scale;
         
         private TransformLayerPropertyData transformPropertyData;
-
-        private string positionUnitCharacter = "";
-        private string rotationUnitCharacter = "";
-        private string formatString;
-        
-        private const string unparseableDecimalSeparator = ",";
-        private const string parseableDecimalSeparator = ".";
         
         public TransformPanel()
         {
@@ -68,32 +60,14 @@ namespace Netherlands3D.UI.Panels
             scale.xField.InputField.RegisterValueChangedCallback(OnScaleChanged);
             scale.yField.InputField.RegisterValueChangedCallback(OnScaleChanged);
             scale.zField.InputField.RegisterValueChangedCallback(OnScaleChanged);
-            
-            formatString = GetFormatString(0);
         }
 
         //the param is doing nothing to match signature
         private void OnPositionChanged(ChangeEvent<string> onChange)
         {
-            var numberFormat = new NumberFormatInfo
-            {
-                NumberDecimalSeparator = parseableDecimalSeparator
-            };
-
-            //remove the unit character and set the correct decimal separator
-            var xText = position.xField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            var yText = position.yField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            var zText = position.zField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            if (positionUnitCharacter.Length > 0)
-            {
-                xText = xText.Replace(positionUnitCharacter, string.Empty);
-                yText = yText.Replace(positionUnitCharacter, string.Empty);
-                zText = zText.Replace(positionUnitCharacter, string.Empty);
-            }
-            
-            double.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
-            double.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
-            double.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
+            var x = position.xField.GetValueAsDouble();
+            var y = position.yField.GetValueAsDouble();
+            var z = position.zField.GetValueAsDouble();
 
             var rdCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
             transformPropertyData.Position = rdCoordinate;
@@ -102,56 +76,22 @@ namespace Netherlands3D.UI.Panels
         //the param is doing nothing to match signature
         private void OnRotationChanged(ChangeEvent<string> onChange)
         {
-            var numberFormat = new NumberFormatInfo
-            {
-                NumberDecimalSeparator = parseableDecimalSeparator
-            };
+            var x = rotation.xField.GetValueAsDouble();
+            var y = rotation.yField.GetValueAsDouble();
+            var z = rotation.zField.GetValueAsDouble();
 
-            //remove the unit character and set the correct decimal separator
-            var xText = rotation.xField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            var yText = rotation.yField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            var zText = rotation.zField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-
-            if (rotationUnitCharacter.Length > 0)
-            {
-                xText = xText.Replace(rotationUnitCharacter, string.Empty);
-                yText = yText.Replace(rotationUnitCharacter, string.Empty);
-                zText = zText.Replace(rotationUnitCharacter, string.Empty);
-            }
-            
-            float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
-            float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
-            float.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
-
-            transformPropertyData.EulerRotation = new Vector3(x, y, z);
+            transformPropertyData.EulerRotation = new Vector3((float)x, (float)y, (float)z);
         }
         
         //the param is doing nothing to match signature
         private void OnScaleChanged(ChangeEvent<string> onChange)
         {
-            var numberFormat = new NumberFormatInfo
-            {
-                NumberDecimalSeparator = parseableDecimalSeparator
-            };
-
-            //remove the unit character and set the correct decimal separator
-            var xText = scale.xField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            var yText = scale.yField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            var zText = scale.zField.InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);            
-
-            if (transformPropertyData.ScaleUnitCharacter.Length > 0)
-            {
-                xText = xText.Replace(transformPropertyData.ScaleUnitCharacter, string.Empty);
-                yText = yText.Replace(transformPropertyData.ScaleUnitCharacter, string.Empty);
-                zText = zText.Replace(transformPropertyData.ScaleUnitCharacter, string.Empty);
-            }
-            
-            float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
-            float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
-            float.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
+            var x = scale.xField.GetValueAsDouble();
+            var y = scale.yField.GetValueAsDouble();
+            var z = scale.zField.GetValueAsDouble();
 
             float scaleMultiplier = transformPropertyData.ScaleUnitCharacter == "%" ? 100f : 1f;
-            transformPropertyData.LocalScale = new Vector3(x / scaleMultiplier, y / scaleMultiplier, z / scaleMultiplier);
+            transformPropertyData.LocalScale = new Vector3((float)x / scaleMultiplier, (float)y / scaleMultiplier, (float)z / scaleMultiplier);
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -162,11 +102,20 @@ namespace Netherlands3D.UI.Panels
             transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);
             transformPropertyData.OnScaleChanged.AddListener(UpdateScalingFields);
             
+            SetUnitCharacter(scale, transformPropertyData.ScaleUnitCharacter);
+            
             UpdatePositionFields(transformPropertyData.Position);
             UpdateRotationFields(transformPropertyData.EulerRotation);
             UpdateScalingFields(transformPropertyData.LocalScale);
 
             SetTransformLocks(properties);
+        }
+
+        private void SetUnitCharacter(SetOfXYZ fields, string unitCharacter)
+        {
+            fields.xField.UnitCharacter = unitCharacter;
+            fields.yField.UnitCharacter = unitCharacter;
+            fields.zField.UnitCharacter = unitCharacter;
         }
 
         private void SetTransformLocks(List<LayerPropertyData> properties)
@@ -191,39 +140,29 @@ namespace Netherlands3D.UI.Panels
         
         private void UpdatePositionFields(Coordinate newPosition)
         {
-            var rdCoordinate = newPosition.Convert( CoordinateSystem.RDNAP);
-
-            position.xField.InputField.SetValueWithoutNotify($"{rdCoordinate.easting.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
-            position.yField.InputField.SetValueWithoutNotify($"{rdCoordinate.northing.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
-            position.zField.InputField.SetValueWithoutNotify($"{rdCoordinate.height.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            var rdCoordinate = newPosition.Convert(CoordinateSystem.RDNAP);
+            position.xField.SetValueWithoutNotify(rdCoordinate.easting);
+            position.yField.SetValueWithoutNotify(rdCoordinate.northing);
+            position.zField.SetValueWithoutNotify(rdCoordinate.height);
         }
 
         private void UpdateRotationFields(Vector3 eulerAngles)
         {
-            rotation.xField.InputField.SetValueWithoutNotify($"{eulerAngles.x.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
-            rotation.yField.InputField.SetValueWithoutNotify($"{eulerAngles.y.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
-            rotation.zField.InputField.SetValueWithoutNotify($"{eulerAngles.z.ToString(formatString, CultureInfo.InvariantCulture)}{rotationUnitCharacter}");
+            rotation.xField.SetValueWithoutNotify(eulerAngles.x);
+            rotation.yField.SetValueWithoutNotify(eulerAngles.y);
+            rotation.zField.SetValueWithoutNotify(eulerAngles.z);
         }
 
         private void UpdateScalingFields(Vector3 newScale)
         {
             float scaleMultiplier = transformPropertyData.ScaleUnitCharacter == "%" ? 100f : 1f;
-            var xPercentage = newScale.x * scaleMultiplier;
-            var yPercentage = newScale.y * scaleMultiplier;
-            var zPercentage = newScale.z * scaleMultiplier;
+            var x = newScale.x * scaleMultiplier;
+            var y = newScale.y * scaleMultiplier;
+            var z = newScale.z * scaleMultiplier;
 
-            scale.xField.InputField.SetValueWithoutNotify($"{xPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{transformPropertyData.ScaleUnitCharacter}");
-            scale.yField.InputField.SetValueWithoutNotify($"{yPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{transformPropertyData.ScaleUnitCharacter}");
-            scale.zField.InputField.SetValueWithoutNotify($"{zPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{transformPropertyData.ScaleUnitCharacter}");
-        }
-        
-        private static string GetFormatString(int decimals)
-        {
-            if (decimals == 0)
-                return "0";
-
-            string zeros = new string('0', decimals);
-            return $"0.{zeros}";
+            scale.xField.SetValueWithoutNotify(x);
+            scale.yField.SetValueWithoutNotify(y);
+            scale.zField.SetValueWithoutNotify(z);
         }
     }
 }

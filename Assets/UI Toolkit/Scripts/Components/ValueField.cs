@@ -1,6 +1,5 @@
+using System.Globalization;
 using Netherlands3D.UI.ExtensionMethods;
-using Netherlands3D.UI_Toolkit.Scripts;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -16,6 +15,8 @@ namespace Netherlands3D.UI.Components
     {
         private const string StyleClassPrefix = "value-field-style-";
         private const string DefaultPlaceholder = "123456";
+        private const string unparseableDecimalSeparator = ",";
+        private const string parseableDecimalSeparator = ".";
 
         private VisualElement labelContainer;
         private Label labelText;
@@ -25,6 +26,9 @@ namespace Netherlands3D.UI.Components
         private string placeholderText = DefaultPlaceholder;
         private ValueFieldStyle valueFieldStyle = ValueFieldStyle.Default;
         private float scrollStep = 1f;
+        private string unitCharacter = string.Empty;
+        private string formatString;
+        private int decimalCount;
 
         public VisualElement LabelContainer => labelContainer ??= this.Q<VisualElement>("LabelContainer");
         public Label LabelText => labelText ??= this.Q<Label>("LabelText");
@@ -71,7 +75,25 @@ namespace Netherlands3D.UI.Components
             set => scrollStep = value;
         }
 
+        [UxmlAttribute("unit-character")]
+        public string UnitCharacter
+        {
+            get => unitCharacter;
+            set => unitCharacter = value;
+        }
         
+        [UxmlAttribute("decimal-count")]
+        public int DecimalCount
+        {
+            get => decimalCount;
+            set
+            {
+                decimalCount = value;
+                formatString = GetFormatString(value);
+            }
+        }
+
+
         public ValueField()
         {
             this.CloneComponentTree("Components");
@@ -86,6 +108,7 @@ namespace Netherlands3D.UI.Components
                 ApplyLabelTypography();
                 ApplyPlaceholder();
                 RegisterScrollCallback();
+                formatString = GetFormatString(DecimalCount);
             });
         }
 
@@ -134,12 +157,8 @@ namespace Netherlands3D.UI.Components
         private void OnScroll(WheelEvent evt)
         {
             var direction = evt.delta.y > 0f ? -1f : 1f;
-
-            var currentValue = 0f;
-            if (!string.IsNullOrWhiteSpace(InputField.value))
-                float.TryParse(InputField.value, System.Globalization.NumberStyles.Float,
-                    System.Globalization.CultureInfo.InvariantCulture, out currentValue);
-
+            
+            var currentValue = GetValueAsDouble();
             var newValue = currentValue + direction * scrollStep;
 
             // We cannot set the InputField.text directly, we need to set it and manually invoke the change events
@@ -153,6 +172,37 @@ namespace Netherlands3D.UI.Components
             InputField.SendEvent(changeEvent);
 
             evt.StopPropagation();
+        }
+
+        public void SetValueWithoutNotify(double newValue)
+        {
+            InputField.SetValueWithoutNotify($"{newValue.ToString(formatString, CultureInfo.InvariantCulture)}{UnitCharacter}");
+        }
+        
+        public double GetValueAsDouble()
+        {
+            //remove the unit character and set the correct decimal separator
+            var numberFormat = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = parseableDecimalSeparator
+            };
+            
+            var text = InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            if(UnitCharacter.Length > 0)
+            text = text.Replace(UnitCharacter, string.Empty);
+
+            double.TryParse(text, NumberStyles.Float, numberFormat, out var value);
+
+            return value;
+        }
+        
+        private static string GetFormatString(int decimals)
+        {
+            if (decimals == 0)
+                return "0";
+
+            string zeros = new string('0', decimals);
+            return $"0.{zeros}";
         }
     }
 }
