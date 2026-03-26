@@ -4,10 +4,5 @@
   xmlns:nl3d="Netherlands3D.UI.Components" 
   noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
   editor-extension-mode="False" 
-  class="contentcontainer text-header unity-foldout">
-
-  <!-- Header icons -->
-  <nl3d:Icon name="LeadingIcon" class="leading-icon" />
-  <nl3d:HelpButton name="HelpButton" class="help-button" />
-  <nl3d:DropDown name="DropDown" class="dropdown"/>
+  class="dropdown">
 </ui:UXML>

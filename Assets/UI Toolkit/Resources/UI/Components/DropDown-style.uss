@@ -1,0 +1,25 @@
+.dropdown {
+    height: var(--spacing-11);
+    background-color: transparent;
+    border: var(--spacing-0_5) solid var(--color-white);
+    border-radius: var(--spacing-2);
+    padding: 0 var(--spacing-2);
+}
+
+/* Input */
+.dropdown .unity-base-field__input {
+    color: var(--color-white);
+}
+
+/* Arrow → replace like your hamburger icon */
+.dropdown .unity-popup-field__arrow {
+    background-image: var(--icon-warning);
+    width: var(--spacing-4);
+    height: var(--spacing-4);
+    -unity-background-image-tint-color: var(--color-white);
+}
+
+/* Remove default arrow look if needed */
+.unity-popup-field__arrow {
+    background-color: transparent;
+}

@@ -1,7 +1,11 @@
 using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
+using TextField = UnityEngine.UIElements.TextField;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -22,6 +26,8 @@ namespace Netherlands3D.UI.Panels
         private VisualElement update;
         private VisualElement Warning => warning ??= this.Q<VisualElement>("MessageTitleWarning");
         private VisualElement Update => update ??= this.Q<VisualElement>("MessageTitleUpdate");
+        
+        private ContentContainer content => this.Q<ContentContainer>();
 
         private enum ContentState
         {
@@ -40,6 +46,7 @@ namespace Netherlands3D.UI.Panels
             OnShow += () => EnableInClassList("active", true);
             OnHide += () => EnableInClassList("active", false);
             
+            InitializeDropdown();
             
             SetContentState(ContentState.Warning);
             Button.clicked += () =>
@@ -49,9 +56,21 @@ namespace Netherlands3D.UI.Panels
                 else
                 {
                     OnConfirm?.Invoke();
+                    SetContentState(ContentState.Warning);
                     Hide();
                 }
             };
+        }
+
+        private void InitializeDropdown()
+        {
+            var list = Enum.GetValues(typeof(ContentState))
+                .Cast<ContentState>()
+                .Skip(1) //skip warning
+                .Select(e => e.ToString())
+                .ToList();
+            
+            content.SetDropdownValues(list);
         }
 
         private void SetContentState(ContentState state)
@@ -64,18 +83,21 @@ namespace Netherlands3D.UI.Panels
                     Update.SetEnabled(false);
                     Button.LabelText = "Update";
                     Button.ShowIcon = Button.ButtonStyle.WithIcon;
+                    content.ShowDropDown = false;
                     break;
                 case ContentState.Key:
                     Update.SetEnabled(true);
                     Warning.SetEnabled(false);
                     Button.LabelText = "Bevestigen";
                     Button.ShowIcon =  Button.ButtonStyle.Normal;
+                    content.ShowDropDown = true;
                     break;
                 case ContentState.UsernameAndPassword:
                     Update.SetEnabled(true);
                     Warning.SetEnabled(false);
                     Button.LabelText = "Bevestigen";
                     Button.ShowIcon =  Button.ButtonStyle.Normal;
+                    content.ShowDropDown = true;
                     break;
             }
         }
