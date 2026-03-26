@@ -1,8 +1,12 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/Components/ButtonTest-style.uss?fileID=7433441132597879392&amp;guid=04f5501a0c42645d3a5965acf9ef2ba8&amp;type=3#ButtonTest-style"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/Components/ToggleTest-style.uss?fileID=7433441132597879392&amp;guid=255bd4eb787c9481e90c7aa1fc86fde0&amp;type=3#ToggleTest-style"/>
     <Netherlands3D.UI.Components.InspectorPanel style="height: 455px; width: 395px; display: flex;">
         <Netherlands3D.UI.Components.ContentContainer>
             <Netherlands3D.UI.Components.ScrollView>
+                <Netherlands3D.UI.Components.ToggleTest/>
+                <Netherlands3D.UI.Components.ButtonTest/>
                 <Netherlands3D.UI.Components.Breadcrumb/>
                 <Netherlands3D.UI.Components.IconButton/>
                 <Netherlands3D.UI.Components.BackButton/>

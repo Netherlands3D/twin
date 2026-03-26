@@ -1,0 +1,6 @@
+@import url("InteractableBase-style.uss");
+
+.button-test {
+    width: 70%;
+    flex-direction: row;
+}

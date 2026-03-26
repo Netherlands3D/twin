@@ -1,0 +1,9 @@
+@import url("InteractableBase-style.uss");
+
+.toggle-test {
+    width: 50%;
+}
+
+.toggle-test > .icon{
+    display:none;
+}

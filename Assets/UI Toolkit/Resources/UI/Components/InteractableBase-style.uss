@@ -1,0 +1,8 @@
+.interactable{
+    width: var(--icon-width);
+    height: 40px;
+    background-color: red;
+    border-radius: 5px;
+    border-width: 2px;
+    border-color: var(--color-blue-900);
+}
