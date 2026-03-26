@@ -12,6 +12,7 @@ using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
+    [RequireComponent(typeof(UIDocument))]
     public class PropertyPanelBehaviour : MonoBehaviour
     {
         [SerializeField] private InputActionAsset inputActionAsset;
@@ -23,7 +24,6 @@ namespace Netherlands3D.UI.Panels
         private InputAction touchAction;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private VisualElement propertySectionContainer;
-        private List<VisualElement> propertySections = new(); //property sections
 
         void OnEnable()
         {
@@ -35,11 +35,7 @@ namespace Netherlands3D.UI.Panels
 
         public void ClearActivePanel()
         {
-            
-            foreach (var section in propertySections)
-                propertySectionContainer.Remove(section);
-            
-            propertySections.Clear();
+            propertySectionContainer.Clear();
             propertiesPanel.SetEnabled(false);
         }
 
@@ -74,7 +70,6 @@ namespace Netherlands3D.UI.Panels
                 var panelType = PropertySectionRegistry.TypeRegistry[type];
 
                 var propertySection = (VisualElement)Activator.CreateInstance(panelType);
-                propertySections.Add(propertySection);
                 propertySectionContainer.Add(propertySection);
                 ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
                 return true;
