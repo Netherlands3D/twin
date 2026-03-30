@@ -26,9 +26,6 @@ namespace Netherlands3D.UI.Panels
 
         private VisualElement scatterSettingsSection;
         private RadioButtonGroup scatterAreaRadioButtonGroup;
-        // private RadioButton strokeRadioButton;
-        // private RadioButton fillRadioButton;
-        // private RadioButton strokeAndFillRadioButton;
         private Slider strokeWidthSlider;
         private Slider densitySlider;
         private Slider positionRandomnessSlider;
@@ -46,10 +43,6 @@ namespace Netherlands3D.UI.Panels
 
             scatterSettingsSection = this.Q<VisualElement>("ScatterSettingsSection");
             scatterAreaRadioButtonGroup = scatterSettingsSection.Q<RadioButtonGroup>("LocatieVerspreiding");
-            // fillRadioButton = scatterAreaRadioButtonGroup.Q<RadioButton>("Midden");
-            // strokeRadioButton = scatterAreaRadioButtonGroup.Q<RadioButton>("Rand");
-            // strokeAndFillRadioButton = scatterAreaRadioButtonGroup.Q<RadioButton>("Beide");
-            
             strokeWidthSlider = scatterSettingsSection.Q<Slider>("RandBreedte");
             densitySlider = scatterSettingsSection.Q<Slider>("Dichtheid");
             positionRandomnessSlider = scatterSettingsSection.Q<Slider>("Verspreidingsgraad");
@@ -79,31 +72,21 @@ namespace Netherlands3D.UI.Panels
             
             OnScatterSettingsChanged();
             settings.ScatterSettingsChanged.AddListener(OnScatterSettingsChanged);
-
-            scatterAreaRadioButtonGroup.RegisterValueChangedCallback(OnFillTypeChanged);
-
-            strokeWidthSlider.RegisterValueChangedCallback(OnStrokeWidthValueChanged);
-            // strokeWidthSlider.SetValueWithoutNotify(settings.StrokeWidth);
+            settings.ScatterDistributionChanged.AddListener(OnScatterSettingsChanged);
+            // settings.ScatterShapeChanged.AddListener(OnScatterSettingsChanged);
+            SetRotationSliderVisible(settings.AutoRotateToLine);
+            settings.AutoRotateToLineChanged.AddListener(SetRotationSliderVisible);
             
+            scatterAreaRadioButtonGroup.RegisterValueChangedCallback(OnFillTypeChanged);
+            strokeWidthSlider.RegisterValueChangedCallback(OnStrokeWidthValueChanged);
             densitySlider.RegisterValueChangedCallback(OnDensitySliderValueChanged);
-            // densitySlider.SetValueWithoutNotify(settings.Density);
-
             positionRandomnessSlider.RegisterValueChangedCallback(OnPositionRandomnessValueChanged);
-            // positionRandomnessSlider.SetValueWithoutNotify(settings.Scatter);
-
             rotationSlider.RegisterValueChangedCallback(OnRotationValueChanged);
-            // rotationSlider.SetValueWithoutNotify(settings.Angle);
-
             heightSliderRange.RegisterValueChangedCallback(OnHeightRangeChanged);
-            // var heightRange = new Vector2(settings.MinScale.y, settings.MaxScale.y);
-            // heightSliderRange.SetValueWithoutNotify(heightRange);
-
             diameterSliderRange.RegisterValueChangedCallback(OnDiameterRangeChanged);
-            // var diameterRange = new Vector2(settings.MinScale.x, settings.MaxScale.x); //x and z are the same for diameter
-            // diameterSliderRange.SetValueWithoutNotify(diameterRange);
         }
 
-        private void SetSectionVisible(VisualElement section ,bool isVisible)
+        private void SetSectionVisible(VisualElement section, bool isVisible)
         {
             if (isVisible)
                 section.RemoveFromClassList(inactiveUSSClassName);
@@ -114,6 +97,13 @@ namespace Netherlands3D.UI.Panels
         private void SetEntireSectionVisible(bool isVisible)
         {
             SetSectionVisible(this, isVisible);
+        }
+        
+        private void SetRotationSliderVisible(bool autoRotate)
+        {
+            Debug.Log("auto rotate:  " + autoRotate);
+            rotationSlider.SetEnabled(!autoRotate);
+            // SetSectionVisible(rotationSlider, !autoRotate);
         }
         
         private void OnFillTypeChanged(ChangeEvent<int> evt)
@@ -155,9 +145,8 @@ namespace Netherlands3D.UI.Panels
             densitySlider.value = settings.Density;
             positionRandomnessSlider.value = settings.Scatter;
             rotationSlider.value = settings.Angle;
-            // ShowAngleSlider = !settings.AutoRotateToLine;
-            SetSectionVisible(rotationSlider, !settings.AutoRotateToLine);
-            rotationSlider.AddToClassList("test");
+            Debug.Log("settings angle: " + settings.Angle);
+            Debug.Log("rot slider value: " + rotationSlider.value);
             heightSliderRange.value = new Vector2(settings.MinScale.y,  settings.MaxScale.y);
             diameterSliderRange.value = new Vector2(settings.MinScale.x, settings.MaxScale.x); //x and z are the same for diameter
         }
