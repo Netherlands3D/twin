@@ -5,7 +5,7 @@
     editor-extension-mode="False" 
     class="hide-object-listview-item"
 >
-    <nl3d:Icon name="Icon" class="hide-object-listview-item__icon"/>
+    <nl3d:Icon name="Icon"/>
     <ui:Label name="bagidtag" text="BAG ID" class="hide-object-listview-item__title"/>
     <ui:Label name="bagidtext" text="################" class="hide-object-listview-item__id"/>
 </ui:UXML>
