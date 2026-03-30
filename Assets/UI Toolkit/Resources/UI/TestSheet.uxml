@@ -8,7 +8,7 @@
                 <Netherlands3D.UI.Components.BackButton/>
                 <Netherlands3D.UI.Components.HelpButton/>
                 <Netherlands3D.UI.Components.Button/>
-                <Netherlands3D.UI.Components.Toggle/>
+                <Netherlands3D.UI.Components.ToggleButton/>
                 <Netherlands3D.UI.Components.Icon/>
                 <Netherlands3D.UI.Components.Slider/>
                 <Netherlands3D.UI.Components.SliderRange/>

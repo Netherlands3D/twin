@@ -1,7 +1,5 @@
 ﻿using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -9,23 +7,77 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Button : UnityEngine.UIElements.Button
     {
-        public enum ButtonType
+        /// <summary>
+        /// Define a shared set of modifiers between various button instances. Most buttons inherit their behaviour
+        /// from this class, but some -like the ToggleButton- inherit their basic behaviour from a different class
+        /// and can use this as a shared set of button behaviours.
+        /// </summary>
+        public class Modifiers
         {
-            Standard,
-            transparent
-        }
+            public enum ButtonType
+            {
+                Standard,
+                Transparent
+            }
 
-        public enum ButtonStyle
-        {
-            Normal,
-            WithIcon,
-            IconOnly
-        }
+            public enum ButtonStyle
+            {
+                Normal,
+                WithIcon,
+                IconOnly
+            }
 
-        public enum ButtonIconPosition
-        {
-            Left,
-            Right
+            public enum ButtonIconPosition
+            {
+                Left,
+                Right
+            }
+
+            private readonly VisualElement button;
+
+            private ButtonType buttonType = ButtonType.Standard;
+            public ButtonType Type
+            {
+                get => buttonType;
+                set { buttonType = value; UpdateClassList(); }
+            }
+
+            private ButtonStyle buttonStyle = ButtonStyle.WithIcon;
+            public ButtonStyle ShowIcon
+            {
+                get => buttonStyle;
+                set { buttonStyle = value; UpdateClassList(); }
+            }
+
+            private ButtonIconPosition buttonIconPosition = ButtonIconPosition.Left;
+
+            public ButtonIconPosition IconPosition
+            {
+                get => buttonIconPosition;
+                set { buttonIconPosition = value; UpdateClassList(); }
+            }
+            
+            public Modifiers(VisualElement button)
+            {
+                this.button = button;
+                button.RegisterCallback<AttachToPanelEvent>(OnAttachPanelEvent);
+            }
+            
+            ~Modifiers() {
+                button.UnregisterCallback<AttachToPanelEvent>(OnAttachPanelEvent);
+            }
+
+            private void OnAttachPanelEvent(AttachToPanelEvent _)
+            {
+                UpdateClassList();
+            }
+
+            private void UpdateClassList()
+            {
+                button.ReplacePrefixedValueInClassList("button-type-", buttonType.ToString().ToKebabCase());
+                button.ReplacePrefixedValueInClassList("button-style-", buttonStyle.ToString().ToKebabCase());
+                button.ReplacePrefixedValueInClassList("button-icon-position-", buttonIconPosition.ToString().ToKebabCase());
+            }
         }
 
         // Query and cache icon component
@@ -40,28 +92,25 @@ namespace Netherlands3D.UI.Components
         private VisualElement TypeDivider => this.Q<VisualElement>("Divider") ?? this.Q<VisualElement>(null, "divider");
         private Label TypeLabelElement => this.Q<Label>("TypeLabel") ?? this.Q<Label>(null, "type-label");
 
-        private ButtonType buttonType = ButtonType.Standard;
+        private readonly Modifiers modifiers;
         [UxmlAttribute("button-type")]
-        public ButtonType Type
+        public Modifiers.ButtonType Type
         {
-            get => buttonType;
-            set { buttonType = value; UpdateClassList(); }
+            get => modifiers.Type;
+            set => modifiers.Type = value;
         }
 
-        private ButtonStyle buttonStyle = ButtonStyle.WithIcon;
         [UxmlAttribute("button-style")]
-        public ButtonStyle ShowIcon
-        {
-            get => buttonStyle;
-            set { buttonStyle = value; UpdateClassList(); }
+        public Modifiers.ButtonStyle ShowIcon {
+            get => modifiers.ShowIcon;
+            set => modifiers.ShowIcon = value;
         }
 
-        private ButtonIconPosition buttonIconPosition = ButtonIconPosition.Left;
         [UxmlAttribute("button-icon-position")]
-        public ButtonIconPosition IconPosition
+        public Modifiers.ButtonIconPosition IconPosition
         {
-            get => buttonIconPosition;
-            set { buttonIconPosition = value; UpdateClassList(); }
+            get => modifiers.IconPosition;
+            set => modifiers.IconPosition = value;
         }
 
         // Type badge config
@@ -81,7 +130,6 @@ namespace Netherlands3D.UI.Components
             set { typeLabel = value; ApplyTypeBadge(); }
         }
 
-
         // Pass-throughs
         [UxmlAttribute("icon")]
         public IconImage Image
@@ -99,26 +147,18 @@ namespace Netherlands3D.UI.Components
 
         public Button()
         {
+            modifiers = new(this);
             this.CloneComponentTree("Components");
-            this.AddComponentStylesheet("Components");
 
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                UpdateClassList();
-
-                // If a type label was provided via UXML attribute, ensure it is reflected on the element
-                if (!string.IsNullOrEmpty(typeLabel) && TypeLabelElement != null)
-                    TypeLabelElement.text = typeLabel;
-
-                ApplyTypeBadge();
-            });
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
         }
 
-        private void UpdateClassList()
+        private void OnAttachToPanelEvent(AttachToPanelEvent _)
         {
-            this.ReplacePrefixedValueInClassList("button-type-", buttonType.ToString().ToKebabCase());
-            this.ReplacePrefixedValueInClassList("button-style-", buttonStyle.ToString().ToKebabCase());
-            this.ReplacePrefixedValueInClassList("button-icon-position-", buttonIconPosition.ToString().ToKebabCase());
+            // If a type label was provided via UXML attribute, ensure it is reflected on the element
+            if (!string.IsNullOrEmpty(typeLabel) && TypeLabelElement != null) TypeLabelElement.text = typeLabel;
+
+            ApplyTypeBadge();
         }
 
         /// <summary>

@@ -1,0 +1,20 @@
+.button.button--toggle .unity-checkmark,
+.button.button--toggle .unity-toggle__input,
+.button.button--toggle .unity-toggle__checkmark {
+    display: none;
+}
+
+.button.button--toggle:checked {
+    background-color: var(--button-active-color);
+    border-color: var(--button-active-color);
+}
+.button.button--toggle.button-type-transparent:checked {
+    --button-active-contrast-color: var(--color-white);
+    background-color: var(--button-active-color);
+}
+.button.button--toggle:checked .unity-label {
+    color: var(--button-active-contrast-color);
+}
+.button.button--toggle:checked > #Icon {
+    -unity-background-image-tint-color: var(--button-active-contrast-color);
+}

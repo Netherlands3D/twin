@@ -8,11 +8,11 @@ namespace Netherlands3D.UI.Components
     {
         // TODO: clean-up OpenLibrary and AddToLibrary after removing buttons 
         // also clean-up corresponding behaviours in InspectorPanelBehaviour.cs
-        public Toggle OpenLibrary => this.Q<Toggle>("OpenLibrary");
+        public ToggleButton OpenLibrary => this.Q<ToggleButton>("OpenLibrary");
         private Button AddFolder => this.Q<Button>("AddFolder");
         private Button Delete => this.Q<Button>("Delete");
-        private Toggle AddToLibrary => this.Q<Toggle>("AddToLibrary");
-        public Toggle AddLayer => this.Q<Toggle>("AddLayer");
+        private ToggleButton AddToLibrary => this.Q<ToggleButton>("AddToLibrary");
+        public ToggleButton AddLayer => this.Q<ToggleButton>("AddLayer");
 
         public EventCallback<ChangeEvent<bool>> OnOpenLibraryToggled { get; set; }
         public EventCallback<ClickEvent> OnAddFolderClicked { get; set; }

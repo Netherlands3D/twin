@@ -6,6 +6,8 @@
     editor-extension-mode="False" 
     class="button text-base unity-button"
 >
+    <ui:Style src="Button.uss"/>
+    
     <nl3d:Icon name="Icon"/>
     <ui:Label name="Label" text="Label" />
 
