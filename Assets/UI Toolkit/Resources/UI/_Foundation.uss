@@ -6,7 +6,9 @@
     box-sizing: border-box;
 }
 
-.text-base {
+.text-base, 
+.unity-label, 
+.text-header {
     -unity-font-definition: var(--nl3d-default-font);
     font-size: var(--font-size-base);
     -unity-font-style: normal;
@@ -15,9 +17,6 @@
 
 .text-header {
     -unity-font-definition: var(--nl3d-header-font);
-    font-size: var(--font-size-base);
-    -unity-font-style: normal;
-    color: var(--color-text);
 }
 
 .inspector-header-title {

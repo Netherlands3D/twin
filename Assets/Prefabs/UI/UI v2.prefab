@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 6924611943033293180}
   - component: {fileID: 7337907536587320542}
   - component: {fileID: 8758499406149279786}
+  - component: {fileID: 6449633652433648055}
+  - component: {fileID: 2679958399476094032}
   m_Layer: 5
   m_Name: UI v2
   m_TagString: Untagged
@@ -55,9 +57,13 @@ MonoBehaviour:
   sourceAsset: {fileID: 9197481963319205126, guid: 6647caf475c8b1c4d997f363bebbaf1e,
     type: 3}
   m_SortingOrder: 0
+  m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
 --- !u!114 &9214300892430282656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,3 +260,32 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &6449633652433648055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78da410b8ae506f2689c101c958c6956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
+    type: 3}
+  panelBehaviours:
+  - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
+--- !u!114 &2679958399476094032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
+  service: {fileID: 6449633652433648055}
