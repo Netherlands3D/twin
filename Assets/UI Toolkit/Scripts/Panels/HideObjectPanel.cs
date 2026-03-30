@@ -19,7 +19,7 @@ namespace Netherlands3D.UI.Panels
         private ListView ListView => listView ??= this.Q<ListView>();
         
         private Button button;
-        public Button Button => button ??= this.Q<Button>("HideButton");
+        private Button Button => button ??= this.Q<Button>("HideButton");
 
         public HideObjectPanel()
         {
@@ -34,14 +34,7 @@ namespace Netherlands3D.UI.Panels
             
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
-
-            //todo leave this temp keys test code until meerdere gebouwen is merged
-            // List<string> keys = new List<string>()
-            // {
-            //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test",
-            //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test"
-            // };
-            // PopulateBagIds(keys);
+           
             PopulateBagIds(data.Keys.ToList());
 
             Button.clicked += OnClose.Invoke;
