@@ -2,6 +2,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.UI.Components;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
@@ -11,6 +12,8 @@ namespace Netherlands3D.UI.Behaviours
     {
         [SerializeField] private StringEvent ShowAttributionEvent;
         [SerializeField] private Vector3Event OnCameraPositionChangedEvent;
+        [SerializeField] private UnityEvent OnOrientToNorth = new();
+        [SerializeField] private UnityEvent<bool> OnToggleOrthographicView = new();
         
         private UIDocument appDocument;
 
@@ -20,6 +23,9 @@ namespace Netherlands3D.UI.Behaviours
 
         private Footer footer;
         private Footer Footer => footer ??= Root?.Q<Footer>();
+
+        private ToolbarNavigation navigationToolbar;
+        private ToolbarNavigation NavigationToolbar => navigationToolbar ??= Root?.Q<ToolbarNavigation>();
 #endregion
 
         private void Awake()
@@ -33,6 +39,8 @@ namespace Netherlands3D.UI.Behaviours
             // if attribution changed while object is disabled
             ShowAttributionEvent.AddListenerStarted(OnShowAttribution);
             OnCameraPositionChangedEvent.AddListenerStarted(OnActiveCameraPositionChanged);
+            NavigationToolbar.OrientToNorth += OnOrientToNorth.Invoke; 
+            NavigationToolbar.ToggleOrthographicView += OnToggleOrthographicView.Invoke; 
         }
 
         public void OnShowAttribution(string attribution)
