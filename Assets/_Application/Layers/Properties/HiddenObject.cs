@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin.layers.properties
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
-
+            
             if(debugFeatures)
             {
                 ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(OnDebugMapping);
@@ -57,7 +57,7 @@ namespace Netherlands3D.Twin.layers.properties
             {
                 //do cascading to get css result styling
                 Symbolizer symbolizer = visualization.GetStyling(feature);
-
+            
                 if (feature.Geometry is ObjectMappingItem item)
                 {
                     bool? visiblity = symbolizer.GetVisibility();
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.layers.properties
                         string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                         Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                         var visibilityColor = visiblity == true ? storedColor : Color.clear;
-                        Interaction.AddOverrideColor(id, visibilityColor);
+                        Interaction.AddLayerColor(visualization.LayerData.Id.ToString(), id, visibilityColor);
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace Netherlands3D.Twin.layers.properties
             
             foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
             {
-                Interaction.ApplyColors(kv.Value);
+                Interaction.ApplyColors(kv.Value, visualization.LayerData.Id.ToString());
             }
         }
         
@@ -103,10 +103,21 @@ namespace Netherlands3D.Twin.layers.properties
         
         private void OnAddedMapping(ObjectMapping mapping)
         {  
-            foreach (ObjectMappingItem item in mapping.items.Values)
+            HiddenObjectsPropertyData stylingPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
+            if (stylingPropertyData == null) return;
+
+            //only create features and add them for existing data in styling rules
+            foreach (KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
-                var layerFeature = visualization.CreateFeature(item);
-                visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                if (kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
+                {
+                    string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);
+                    if (mapping.items.TryGetValue(objectId, out var item))
+                    {
+                        var layerFeature = visualization.CreateFeature(item);
+                        visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                    }
+                }
             }
             OnApplyStyling();
         }

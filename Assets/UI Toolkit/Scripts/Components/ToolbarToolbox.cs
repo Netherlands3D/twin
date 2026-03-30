@@ -7,8 +7,8 @@ namespace Netherlands3D.UI.Components
     public partial class ToolbarToolbox : VisualElement
     {
         public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
-        public Button Dome => this.Q<Button>("Screenshot");
-        public Button Screenshot => this.Q<Button>("Dome");
+        public Button Screenshot => this.Q<Button>("Screenshot");
+        public Button Dome => this.Q<Button>("Dome");
         public ToolbarToolbox()
         {
             this.CloneComponentTree("Components");

@@ -6,8 +6,8 @@
     box-sizing: border-box;
 }
 
-.text-base,
-.unity-label,
+.text-base, 
+.unity-label, 
 .text-header {
     -unity-font-definition: var(--nl3d-default-font);
     font-size: var(--font-size-base);
