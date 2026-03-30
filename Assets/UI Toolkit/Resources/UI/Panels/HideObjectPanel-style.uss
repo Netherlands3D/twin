@@ -25,7 +25,7 @@
 }
 
 .hide-object-panel__selection-tag{
-    margin-right: 20px;
+    margin-right: var(--spacing-5);
 }
 
 .hide-object-panel__selection-tag-text{
