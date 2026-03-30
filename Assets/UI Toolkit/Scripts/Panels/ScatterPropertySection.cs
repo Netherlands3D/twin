@@ -71,9 +71,10 @@ namespace Netherlands3D.UI.Panels
             }
             
             OnScatterSettingsChanged();
-            settings.ScatterSettingsChanged.AddListener(OnScatterSettingsChanged);
-            settings.ScatterDistributionChanged.AddListener(OnScatterSettingsChanged);
-            // settings.ScatterShapeChanged.AddListener(OnScatterSettingsChanged);
+            settings.ScatterSettingsChanged.AddListener(OnScatterSettingsChanged); //the panel should update regardless of which scatter settings change
+            settings.ScatterDistributionChanged.AddListener(OnScatterSettingsChanged); //the panel should update regardless of which scatter settings change
+            settings.ScatterShapeChanged.AddListener(OnScatterSettingsChanged); //the panel should update regardless of which scatter settings change
+            
             SetRotationSliderVisible(settings.AutoRotateToLine);
             settings.AutoRotateToLineChanged.AddListener(SetRotationSliderVisible);
             
@@ -101,9 +102,7 @@ namespace Netherlands3D.UI.Panels
         
         private void SetRotationSliderVisible(bool autoRotate)
         {
-            Debug.Log("auto rotate:  " + autoRotate);
             rotationSlider.SetEnabled(!autoRotate);
-            // SetSectionVisible(rotationSlider, !autoRotate);
         }
         
         private void OnFillTypeChanged(ChangeEvent<int> evt)
@@ -142,11 +141,10 @@ namespace Netherlands3D.UI.Panels
             };
 
             strokeWidthSlider.value = settings.StrokeWidth;
+            SetSectionVisible(strokeWidthSlider, settings.FillType != FillType.Complete);
             densitySlider.value = settings.Density;
             positionRandomnessSlider.value = settings.Scatter;
             rotationSlider.value = settings.Angle;
-            Debug.Log("settings angle: " + settings.Angle);
-            Debug.Log("rot slider value: " + rotationSlider.value);
             heightSliderRange.value = new Vector2(settings.MinScale.y,  settings.MaxScale.y);
             diameterSliderRange.value = new Vector2(settings.MinScale.x, settings.MaxScale.x); //x and z are the same for diameter
         }

@@ -5,13 +5,13 @@
             <nl3d:CheckboxToggle LabelText="Verspreid objecten in tekengebied"/>
         </ui:VisualElement>
         <ui:VisualElement name="ScatterSettingsSection" class="scatter-property-section__scatter-settings">
-            <nl3d:RadioButtonGroup name="LocatieVerspreiding" label="Locatie verspreiding" value="2" choices="Midden,Rand,Beide" />
-            <nl3d:Slider name="RandBreedte" label="Breedte rand" low-value="0.01" high-value="100" />
-            <nl3d:Slider name="Dichtheid" label="Dichtheid" low-value="0.01" high-value="10000" />
-            <nl3d:Slider name="Verspreidingsgraad" label="Verspreidingsgraad" low-value="0" high-value="100" />
+            <nl3d:RadioButtonGroup name="LocatieVerspreiding" label="Locatie verspreiding" value="2" choices="Midden,Rand,Beide" class="scatter-property-section__scatter-control"/>
+            <nl3d:Slider name="RandBreedte" label="Breedte rand" low-value="0.01" high-value="100" class="scatter-property-section__scatter-control" />
+            <nl3d:Slider name="Dichtheid" label="Dichtheid" low-value="0.01" high-value="10000" class="scatter-property-section__scatter-control" />
+            <nl3d:Slider name="Verspreidingsgraad" label="Verspreidingsgraad" low-value="0" high-value="100" class="scatter-property-section__scatter-control" />
             <nl3d:Slider name="RotatieRaster" label="Rotatie raster" low-value="0" high-value="360" class="scatter-property-section__scatter-control" />
-            <nl3d:SliderRange  name="HoogteVariatie" label="Hoogte variatie" low-value="0" high-value="50"/>
-            <nl3d:SliderRange  name="DiameterVariatie" label="Diameter variatie" low-value="0" high-value="50"/>
+            <nl3d:SliderRange  name="HoogteVariatie" label="Hoogte variatie" low-value="0" high-value="50" class="scatter-property-section__scatter-control" />
+            <nl3d:SliderRange  name="DiameterVariatie" label="Diameter variatie" low-value="0" high-value="50" class="scatter-property-section__scatter-control" />
         </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
