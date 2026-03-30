@@ -1,3 +1,5 @@
-.scatter-property-section.inactive {
+.scatter-property-section.inactive,
+.scatter-property-section__scatter-settings.inactive,
+.scatter-property-section__scatter-control.inactive{
     display: none;
 }
