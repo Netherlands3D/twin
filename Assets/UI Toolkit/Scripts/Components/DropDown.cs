@@ -42,6 +42,8 @@ namespace Netherlands3D.UI.Components
                         var styleSheet = Resources.Load<StyleSheet>($"UI/Components/DropDown-style");
                         popup.styleSheets.Add(styleSheet);
                         popup.AddToClassList("dropdown-popup-container");
+
+                        popup.Query<Scroller>().ToList().ForEach(scroller => scroller.RemoveFromHierarchy());
                     }
                 }); 
             });
