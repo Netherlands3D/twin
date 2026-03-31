@@ -34,11 +34,6 @@ namespace Netherlands3D.UI.Components
             
             
             this.RegisterValueChangedCallback(OnValueChanged);
-            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-        }
-
-        private void OnAttachToPanel(AttachToPanelEvent evt)
-        {
             SetImage(value);
         }
 

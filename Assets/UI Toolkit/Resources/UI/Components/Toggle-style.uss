@@ -114,7 +114,3 @@
 .toggle:disabled > #Label {
     color: var(--toggle-disabled-color);
 }
-
-.toggle--borderless {
-    border-width: 0;
-}

@@ -32,7 +32,7 @@
     display: none;
 }
 
-.visibility-toggle > #Icon {
+.visibility-toggle > .icon {
     width: var(--spacing-6);
     height: var(--spacing-6);
 }
