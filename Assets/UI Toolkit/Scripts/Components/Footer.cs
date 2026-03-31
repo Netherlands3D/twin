@@ -6,24 +6,39 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Footer : VisualElement
     {
-        // Elements from UXML (cached via Q when accessed)
-        private VisualElement divider;
-        public VisualElement Divider => divider ??= this.Q<VisualElement>("Divider");
+        private Label attributionLabel;
+        private Label AttributionLabel => attributionLabel ??= this.Q<Label>("Attribution");
 
-        private Label appName;
-        public Label AppName => appName ??= this.Q<Label>("AppName");
+        private CoordinateLabel coordinateLabel;
+        private CoordinateLabel CoordinateLabel => coordinateLabel ??= this.Q<CoordinateLabel>();
 
-        private Label attribution;
-        public Label Attribution => attribution ??= this.Q<Label>("Attribution");
+        [UxmlAttribute("attribution")]
+        public string Attribution
+        {
+            get => AttributionLabel.text;
+            set => AttributionLabel.text = value;
+        }
 
-        private Label coordinateX;
-        public Label CoordinateX => coordinateX ??= this.Q<Label>("CoordinateX");
+        [UxmlAttribute("x")]
+        public float X
+        {
+            get => CoordinateLabel.X;
+            set => CoordinateLabel.X = value;
+        }
 
-        private Label coordinateY;
-        public Label CoordinateY => coordinateY ??= this.Q<Label>("CoordinateY");
+        [UxmlAttribute("y")]
+        public float Y
+        {
+            get => CoordinateLabel.Y;
+            set => CoordinateLabel.Y = value;
+        }
 
-        private Label coordinateZ;
-        public Label CoordinateZ => coordinateZ ??= this.Q<Label>("CoordinateZ");
+        [UxmlAttribute("z")]
+        public float Z
+        {
+            get => CoordinateLabel.Z;
+            set => CoordinateLabel.Z = value;
+        }
 
         public Footer()
         {

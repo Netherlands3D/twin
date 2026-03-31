@@ -10,7 +10,7 @@
         <ui:VisualElement class="mask-layer-list-view-item__cell">
             <nl3d:Icon name="LayerTypeIcon"/>
         </ui:VisualElement>
-        <ui:VisualElement class="mask-layer-list-view-item__cell" style="flex-grow: 1;">
+        <ui:VisualElement class="mask-layer-list-view-item__cell">
             <ui:Label name="LayerNameLabel" text="LayerName"/>
         </ui:VisualElement>
     </ui:VisualElement>
