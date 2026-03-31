@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
    
-    public abstract class FloatingPanelBehaviour : ScriptableObject, IVisualizationWithPropertyData
+    public abstract class FloatingPanelBehaviour : ScriptableObject
     {
         protected FloatingPanel floatingPanel;
         protected VisualElement content;
@@ -25,8 +25,5 @@ namespace Netherlands3D.UI.Panels
             content = null;
             floatingPanel = null;
         }
-
-        //public abstract List<VisualElement> SpawnPropertyData(IVisualizationWithPropertyData data);
-        public abstract void LoadProperties(List<LayerPropertyData> properties);
     }
 }

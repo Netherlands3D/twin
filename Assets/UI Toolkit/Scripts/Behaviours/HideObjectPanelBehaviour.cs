@@ -51,10 +51,5 @@ namespace Netherlands3D.UI.Panels
             panel.OnClose.RemoveListener(CloseFloatingPanel);
             base.Dispose();
         }
-
-        public override void LoadProperties(List<LayerPropertyData> properties)
-        {
-            //has no data for now
-        }
     }
 }
