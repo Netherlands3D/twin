@@ -25,7 +25,7 @@ namespace Netherlands3D.UI.Panels
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private VisualElement propertySectionContainer;
 
-        void OnEnable()
+        private void Start()
         {
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");

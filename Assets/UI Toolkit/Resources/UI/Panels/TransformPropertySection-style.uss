@@ -8,7 +8,6 @@
     margin-right: var(--spacing-2);
 }
 
-.transform-property-section__item.transform-property-section__value-field--last{
+.transform-property-section__item.transform-property-section__item--last{
     margin-right: 0;
 }
- 
