@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4399201792515060189}
   - component: {fileID: 9214300892430282656}
   - component: {fileID: 5715699707642146679}
+  - component: {fileID: 873264101414426239}
   - component: {fileID: 6710636431810850412}
   - component: {fileID: 6924611943033293180}
   - component: {fileID: 7337907536587320542}
@@ -34,7 +35,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 891704482898673965}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -108,6 +109,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &873264101414426239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3adb988a4a3c4e4ea91fac29b0a7601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.FooterBehaviour
+  ShowAttributionEvent: {fileID: 11400000, guid: ed0a4e76488b45c46a5bf90e6d680af3,
+    type: 2}
+  OnCameraPositionChangedEvent: {fileID: 11400000, guid: d4a74b03cccc58345974ac5fcbc59d0c,
+    type: 2}
 --- !u!114 &6710636431810850412
 MonoBehaviour:
   m_ObjectHideFlags: 0
