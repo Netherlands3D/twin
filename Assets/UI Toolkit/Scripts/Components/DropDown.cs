@@ -42,8 +42,19 @@ namespace Netherlands3D.UI.Components
                         var styleSheet = Resources.Load<StyleSheet>($"UI/Components/DropDown-style");
                         popup.styleSheets.Add(styleSheet);
                         popup.AddToClassList("dropdown-popup-container");
-
-                        popup.Query<Scroller>().ToList().ForEach(scroller => scroller.RemoveFromHierarchy());
+                        float width = this.contentContainer.resolvedStyle.width;
+                        popup.style.width = width;
+                        float left = this.contentContainer.worldBound.x;
+                        popup.style.left = left;
+                        List<VisualElement> items = popup.Query<VisualElement>(className: "unity-base-dropdown__item").ToList();
+                        items.ForEach(i =>
+                        {
+                            i.RemoveFromHierarchy();
+                            popup.Add(i);
+                            i.Clear();
+                            i.AddToClassList("dropdown-popup-item");
+                        });
+                        popup.Q<UnityEngine.UIElements.ScrollView>()?.RemoveFromHierarchy();
                     }
                 }); 
             });

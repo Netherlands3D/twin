@@ -47,5 +47,14 @@
 .dropdown-popup-container {
     margin: 0;
     padding: 0;
+    border-width: 0;
 }
 
+.dropdown-popup-item {
+    padding: 0;
+    background-color: white;
+}
+.dropdown-popup-item:hover {
+    padding: 0;
+    background-color: red;
+}
