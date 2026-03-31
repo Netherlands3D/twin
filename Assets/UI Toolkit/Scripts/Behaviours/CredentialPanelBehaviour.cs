@@ -35,6 +35,9 @@ namespace Netherlands3D.UI.Behaviours
         {
             credentialHandler.OnAuthorizationHandled.AddListener(ProcessAuthorization);
             Panel.OnConfirm += ApplyCredentials;
+            
+            //DEBUG workaround to show panel immediately
+            Panel.Show();
         }
 
         private void OnDestroy()

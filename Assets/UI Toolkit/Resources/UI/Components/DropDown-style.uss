@@ -44,3 +44,7 @@
     display: none;
 }
 
+.dropdown-popup-container {
+    margin: 0;
+    padding: 0;
+}
