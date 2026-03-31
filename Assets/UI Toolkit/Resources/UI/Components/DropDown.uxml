@@ -5,4 +5,6 @@
   noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
   editor-extension-mode="False" 
   class="dropdown">
+  
+  <nl3d:Icon image="Key" color="Blue900"/>
 </ui:UXML>

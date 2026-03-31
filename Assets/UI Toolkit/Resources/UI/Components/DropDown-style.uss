@@ -1,25 +1,46 @@
 .dropdown {
     height: var(--spacing-11);
     background-color: transparent;
-    border: var(--spacing-0_5) solid var(--color-white);
-    border-radius: var(--spacing-2);
-    padding: 0 var(--spacing-2);
+    border-radius: var(--spacing-4);
+    border-width: var(--spacing-1);
+    border-color: var(--color-blue-50);
+    padding: var(--spacing-2);
+    margin: 0;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    align-items: center;
+    flex-shrink: 1;
+    flex-grow: 0;
+}
+
+.dropdown:hover {
+    border-color: var(--color-blue-700);
 }
 
 /* Input */
 .dropdown .unity-base-field__input {
     color: var(--color-white);
+    background-color: transparent; 
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    min-width: 0;
 }
 
-/* Arrow → replace like your hamburger icon */
-.dropdown .unity-popup-field__arrow {
-    background-image: var(--icon-warning);
-    width: var(--spacing-4);
-    height: var(--spacing-4);
-    -unity-background-image-tint-color: var(--color-white);
+
+
+.dropdown .icon {
+    background-image: var(--icon-keytokencode);
 }
 
-/* Remove default arrow look if needed */
-.unity-popup-field__arrow {
-    background-color: transparent;
+.dropdown .unity-base-popup-field__arrow {
+    background-image: var(--icon-chevrondown);
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    margin-left: var(--spacing-2);
 }
+
+.dropdown .unity-text-element {
+    display: none;
+}
+

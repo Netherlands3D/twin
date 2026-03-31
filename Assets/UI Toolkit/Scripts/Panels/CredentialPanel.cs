@@ -84,6 +84,7 @@ namespace Netherlands3D.UI.Panels
                     Button.LabelText = "Update";
                     Button.ShowIcon = Button.ButtonStyle.WithIcon;
                     content.ShowDropDown = false;
+                    content.ShowHelpIcon = true;
                     break;
                 case ContentState.Key:
                     Update.SetEnabled(true);
@@ -91,6 +92,7 @@ namespace Netherlands3D.UI.Panels
                     Button.LabelText = "Bevestigen";
                     Button.ShowIcon =  Button.ButtonStyle.Normal;
                     content.ShowDropDown = true;
+                    content.ShowHelpIcon = false;
                     break;
                 case ContentState.UsernameAndPassword:
                     Update.SetEnabled(true);
@@ -98,6 +100,7 @@ namespace Netherlands3D.UI.Panels
                     Button.LabelText = "Bevestigen";
                     Button.ShowIcon =  Button.ButtonStyle.Normal;
                     content.ShowDropDown = true;
+                    content.ShowHelpIcon = false;
                     break;
             }
         }
