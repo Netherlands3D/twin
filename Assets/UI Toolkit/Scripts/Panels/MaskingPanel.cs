@@ -12,18 +12,18 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    public partial class DomePanel : VisualElement
+    public partial class MaskingPanel : VisualElement
     {
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
 
-        public DomePanel()
+        public MaskingPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");    
         }
         
-        public DomePanel(Dictionary<string, object> data) : this()
+        public MaskingPanel(List<LayerData> layers) : this()
         {
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
@@ -31,7 +31,7 @@ namespace Netherlands3D.UI.Panels
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
             
-            PopulateMaskLayerPanel(data);
+            PopulateMaskLayerPanel(layers);
         }
         
         private VisualElement MakeListViewItem()
@@ -47,10 +47,20 @@ namespace Netherlands3D.UI.Panels
             maskLayerRowElement.Initialize(layerData);
         }
         
-        private void PopulateMaskLayerPanel(Dictionary<string, object> data)
+        private void PopulateMaskLayerPanel(List<LayerData> layers)
         {
-            ListView.itemsSource = data.Values.ToList();
+            ListView.itemsSource = layers;
             ListView.RefreshItems();
+        }
+
+        public void SetHeader(string headerText)
+        {
+            this.Q<Header>().LabelText = headerText;
+        }
+
+        public void SetDescription(string description)
+        {
+            this.Q<Label>("Description").text = description;
         }
     }
 }

@@ -1,30 +1,30 @@
-.dome-panel {
+.masking-panel {
     padding: var(--spacing-4);
     flex-direction: column;
 }
 
-.dome-panel > * {
+.masking-panel > * {
     margin-bottom: var(--spacing-3);
 }
 
-.dome-panel__message-text {
+.masking-panel__message-text {
     -unity-text-align: middle-left;
     margin: 0;
     padding: 0;
     white-space: normal;
 }
 
-.dome-panel__body {
+.masking-panel__body {
     flex-grow: 1;
     margin-bottom: 0;
     margin-top: var(--spacing-3);
 }
 
-.dome-panel__body > * {
+.masking-panel__body > * {
     margin-bottom: var(--spacing-3);
 }
 
-.dome-panel__list-view{
+.masking-panel__list-view{
     flex-grow: 1;
     height: auto;
     margin-bottom: 0;

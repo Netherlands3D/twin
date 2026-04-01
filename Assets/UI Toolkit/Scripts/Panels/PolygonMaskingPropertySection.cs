@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
@@ -21,6 +23,9 @@ namespace Netherlands3D.UI.Panels
         private Toggle maskToggle;
         private Toggle maskInvertToggle;
         
+        private MaskingPanel maskingPanel;
+        private ContentContainer contentContainer;
+        
         public PolygonMaskingPropertySection()
         {
             this.CloneComponentTree("Panels");
@@ -28,6 +33,8 @@ namespace Netherlands3D.UI.Panels
             
             maskToggle = this.Q<Toggle>("IsMaskToggle");
             maskInvertToggle = this.Q<Toggle>("InvertMaskToggle");
+            contentContainer = this.Q<ContentContainer>();
+
             
             maskToggle.RegisterValueChangedCallback(OnIsMaskChanged);
             maskInvertToggle.RegisterValueChangedCallback(OnInvertMaskChanged);
@@ -53,14 +60,22 @@ namespace Netherlands3D.UI.Panels
             if (evt.newValue)
                 AddMaskingPanel();
             else
-                this.Q<ContentContainer>().Remove(this.Q<DomePanel>());
+                RemoveMaskingPanel();
         
             SetMaxMasksText();
         }
 
         private void AddMaskingPanel()
         {
-            this.Q<ContentContainer>().Add(new DomePanel());
+            var hierarchy = ProjectData.Current.RootLayer.GetFlatHierarchy();
+            var layers =hierarchy.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToList(); //keep only the maskable layers
+            maskingPanel = new MaskingPanel(layers);
+            contentContainer.Add(maskingPanel);
+        }
+        
+        private void RemoveMaskingPanel()
+        {
+            contentContainer.Remove(maskingPanel);
         }
 
         private void OnInvertMaskChanged(ChangeEvent<bool> evt)

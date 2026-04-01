@@ -21,17 +21,17 @@ namespace Netherlands3D.UI.Panels
             return true;
         }
 
-        public override Dictionary<string, object> GetData()
+        public override object GetData()
         {
              ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
              Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
             return selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
         }
 
-        public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, Dictionary<string,object> data = null)
+        public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, params object[] constructorArgs)
         {
-            base.SpawnFloatingPanelContent(floatingPanel, data);
-            content = new HideObjectPanel(data);
+            base.SpawnFloatingPanelContent(floatingPanel);
+            content = new HideObjectPanel(constructorArgs[0] as Dictionary<string, object>);
             HideObjectPanel panel = content as HideObjectPanel;
             panel.OnClose.AddListener(CloseFloatingPanel);
             return content;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Tools;
@@ -12,16 +13,22 @@ namespace Netherlands3D.UI.Panels
     public class DomePanelBehaviour : FloatingPanelBehaviour
     {
         [SerializeField] private Tool domeTool;
-        public override Dictionary<string, object> GetData()
+        [SerializeField] [TextArea] private string headerText = "Uitsnijden lagen binnen de dome";
+        [SerializeField] [TextArea] private string description = "Kies hieronder welke lagen zichtbaar zijn binnen de dome. Verborgen lagen worden niet meegenomen in de uitsnede.";
+        
+        public override object GetData()
         {
             var layers = ProjectData.Current.RootLayer.GetFlatHierarchy();
-            return layers.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToDictionary(layer => layer.Id.ToString(), layer => (object)layer); //keep only the maskable layers
+            return layers.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToList(); //keep only the maskable layers
         }
         
-        public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, Dictionary<string,object> data = null)
+        public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, params object[] constructorArgs)
         {
-            base.SpawnFloatingPanelContent(floatingPanel, data);
-            DomePanel content = new DomePanel(data);
+            base.SpawnFloatingPanelContent(floatingPanel, constructorArgs);
+            var layers = constructorArgs[0] as List<LayerData>;
+            MaskingPanel content = new MaskingPanel(layers);
+            content.SetHeader(headerText);
+            content.SetDescription(description);
             return content;
         }
         
