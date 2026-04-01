@@ -9,6 +9,8 @@ namespace Netherlands3D.UI.Panels
 {
     public class ContextMenuBehaviour : MonoBehaviour
     {
+        private const string contentUSSClass = "floating-panel__content";
+        
         [SerializeField] private InputActionAsset inputActionAsset;
         [SerializeField] private FloatingPanelBehaviour[] panelBehaviours;
         
@@ -142,6 +144,7 @@ namespace Netherlands3D.UI.Panels
                 selectedBehaviour = panelBehaviour;
                 var data = panelBehaviour.GetData();
                 content = panelBehaviour.SpawnFloatingPanelContent(floatingPanel, data);
+                content.AddToClassList(contentUSSClass);
                 floatingPanel.Add(content);
                 floatingPanel.SetPosition(screenPos);
                 break;

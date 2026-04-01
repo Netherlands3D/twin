@@ -6,3 +6,7 @@
     max-height: 600px;
 }
 
+.floating-panel__content {
+    padding: var(--spacing-4);
+}
+

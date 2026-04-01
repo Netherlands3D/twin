@@ -1,5 +1,4 @@
 .masking-panel {
-    padding: var(--spacing-4);
     flex-direction: column;
 }
 
