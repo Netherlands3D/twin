@@ -1,8 +1,5 @@
-using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
-using System.Linq;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,7 +17,7 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
             
-            this.RegisterCallback<AttachToPanelEvent>(evt =>
+            RegisterCallback<AttachToPanelEvent>(evt =>
             {
                 //find the panel settings root not the ui root
                 VisualElement root = this;
@@ -29,8 +26,6 @@ namespace Netherlands3D.UI.Components
 
                 rootSettings = root;
             });
-            
-           
             
             RegisterCallback<MouseDownEvent>(evt =>
             {
@@ -51,21 +46,17 @@ namespace Netherlands3D.UI.Components
                         //TODO do this only once
                         popup.RegisterCallback<GeometryChangedEvent>(evt =>
                         {
-                            float width = this.contentContainer.resolvedStyle.width;
+                            float width = contentContainer.resolvedStyle.width;
                             popup.style.width = width;
-                            float left = this.contentContainer.worldBound.x;
+                            float left = contentContainer.worldBound.x;
                             popup.style.left = left;
                         });
                         
                         List<VisualElement> items = popup.Query<VisualElement>(className: "unity-base-dropdown__item").ToList();
                         items.ForEach(i =>
                         {
-                            // i.RemoveFromHierarchy();
-                            // popup.Add(i);
-                            // i.Clear();
                             i.AddToClassList("dropdown-popup-item");
                         });
-                        //popup.Q<UnityEngine.UIElements.ScrollView>()?.RemoveFromHierarchy();
                     }
                 }); 
             });
