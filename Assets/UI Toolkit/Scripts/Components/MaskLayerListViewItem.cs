@@ -14,7 +14,7 @@ namespace Netherlands3D.UI.Components
         private int maskingBitIndex;
         
         private VisibilityToggle MaskActiveToggle => this.Q<VisibilityToggle>("MaskActiveToggle");
-        private Label LayerNameLabel => this.Q<Label>("LayerNameLabel"); //todo: this is now wrapped in a visual element for layout, should this be a component?
+        private Label LayerNameLabel => this.Q<Label>("LayerNameLabel");
         
         private Icon layerTypeIcon;
         private Icon LayerTypeIcon => layerTypeIcon ??= this.Q<Icon>("LayerTypeIcon");
