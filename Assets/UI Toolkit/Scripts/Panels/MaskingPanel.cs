@@ -14,6 +14,8 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class MaskingPanel : VisualElement
     {
+        private int maskBitIndex;
+        
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
 
@@ -23,8 +25,10 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");    
         }
         
-        public MaskingPanel(List<LayerData> layers) : this()
+        public MaskingPanel(List<LayerData> layers, int maskBitIndex) : this()
         {
+            this.maskBitIndex = maskBitIndex;
+            
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
         
@@ -44,7 +48,7 @@ namespace Netherlands3D.UI.Panels
             if (item is not MaskLayerListViewItem maskLayerRowElement) return;
             
             var layerData = ListView.itemsSource[index] as LayerData;
-            maskLayerRowElement.Initialize(layerData);
+            maskLayerRowElement.Initialize(layerData, maskBitIndex);
         }
         
         private void PopulateMaskLayerPanel(List<LayerData> layers)

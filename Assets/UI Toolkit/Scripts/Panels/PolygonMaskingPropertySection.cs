@@ -69,7 +69,7 @@ namespace Netherlands3D.UI.Panels
         {
             var hierarchy = ProjectData.Current.RootLayer.GetFlatHierarchy();
             var layers =hierarchy.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToList(); //keep only the maskable layers
-            maskingPanel = new MaskingPanel(layers);
+            maskingPanel = new MaskingPanel(layers, polygonPropertyData.MaskBitIndex);
             contentContainer.Add(maskingPanel);
         }
         

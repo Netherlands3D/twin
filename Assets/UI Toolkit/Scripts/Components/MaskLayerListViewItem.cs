@@ -11,6 +11,8 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class MaskLayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
+        private int maskingBitIndex;
+        
         private VisibilityToggle MaskActiveToggle => this.Q<VisibilityToggle>("MaskActiveToggle");
         private Label LayerNameLabel => this.Q<Label>("LayerNameLabel"); //todo: this is now wrapped in a visual element for layout, should this be a component?
         
@@ -28,18 +30,19 @@ namespace Netherlands3D.UI.Components
         
         private void OnToggleChanged(ChangeEvent<bool> evt)
         {
-            SetDomeMaskingBit(evt.newValue);
+            SetMaskingBit(evt.newValue);
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             var layerPropertyData = layerData.GetProperty<MaskingLayerPropertyData>();
-            var isOn = GetIsDomeMaskingBitSet(layerPropertyData);
+            var isOn = GetIsMaskingBitSet(layerPropertyData);
             MaskActiveToggle.value = isOn;
         }
 
-        public void Initialize(LayerData layerData)
+        public void Initialize(LayerData layerData, int maskingBitIndex)
         {
+            this.maskingBitIndex = maskingBitIndex;
             userData = layerData;
             LayerNameLabel.text = layerData.Name;
             LoadProperties(layerData.LayerProperties);
@@ -51,18 +54,18 @@ namespace Netherlands3D.UI.Components
             return LayerTypeSpriteLibrary.GetIconImage(layerData);
         }
 
-        private bool GetIsDomeMaskingBitSet(MaskingLayerPropertyData layerPropertyData)
+        private bool GetIsMaskingBitSet(MaskingLayerPropertyData layerPropertyData)
         {
             var currentLayerMask = layerPropertyData.GetMaskLayerMask();
-            int maskBitToCheck = 1 << MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX;
+            int maskBitToCheck = 1 << maskingBitIndex;
             bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
             return isBitSet;
         }
 
-        private void SetDomeMaskingBit(bool active)
+        private void SetMaskingBit(bool active)
         {
             MaskingLayerPropertyData propertyData = layerData.GetProperty<MaskingLayerPropertyData>();
-            propertyData.SetMaskBit(MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX, active);
+            propertyData.SetMaskBit(maskingBitIndex, active);
         }
     }
 }
