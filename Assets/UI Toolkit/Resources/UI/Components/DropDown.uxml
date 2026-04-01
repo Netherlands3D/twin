@@ -6,5 +6,5 @@
   editor-extension-mode="False" 
   class="dropdown">
   
-  <nl3d:Icon image="Key" color="Blue900" class="kan ik dit via code toevoegen?"/>
+  <nl3d:Icon image="Key" color="Blue900"/>
 </ui:UXML>

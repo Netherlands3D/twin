@@ -30,6 +30,8 @@ namespace Netherlands3D.UI.Components
                 rootSettings = root;
             });
             
+           
+            
             RegisterCallback<MouseDownEvent>(evt =>
             {
                 schedule.Execute(() =>
@@ -38,23 +40,32 @@ namespace Netherlands3D.UI.Components
                     if (rootSettings.childCount > 1)
                     {
                         VisualElement popupArea = rootSettings.ElementAt(1);
+                        popupArea.RemoveFromClassList("unity-base-dropdown");
                         popup = popupArea.ElementAt(0);
+                        popup.RemoveFromClassList("unity-base-dropdown__container-outer");
                         var styleSheet = Resources.Load<StyleSheet>($"UI/Components/DropDown-style");
                         popup.styleSheets.Add(styleSheet);
                         popup.AddToClassList("dropdown-popup-container");
-                        float width = this.contentContainer.resolvedStyle.width;
-                        popup.style.width = width;
-                        float left = this.contentContainer.worldBound.x;
-                        popup.style.left = left;
+                        
+                        
+                        //TODO do this only once
+                        popup.RegisterCallback<GeometryChangedEvent>(evt =>
+                        {
+                            float width = this.contentContainer.resolvedStyle.width;
+                            popup.style.width = width;
+                            float left = this.contentContainer.worldBound.x;
+                            popup.style.left = left;
+                        });
+                        
                         List<VisualElement> items = popup.Query<VisualElement>(className: "unity-base-dropdown__item").ToList();
                         items.ForEach(i =>
                         {
-                            i.RemoveFromHierarchy();
-                            popup.Add(i);
-                            i.Clear();
+                            // i.RemoveFromHierarchy();
+                            // popup.Add(i);
+                            // i.Clear();
                             i.AddToClassList("dropdown-popup-item");
                         });
-                        popup.Q<UnityEngine.UIElements.ScrollView>()?.RemoveFromHierarchy();
+                        //popup.Q<UnityEngine.UIElements.ScrollView>()?.RemoveFromHierarchy();
                     }
                 }); 
             });
@@ -63,14 +74,6 @@ namespace Netherlands3D.UI.Components
             {
                 Debug.Log(rootSettings.childCount);
             });
-        }
-        
-        VisualElement GetRoot(VisualElement ve)
-        {
-            while (ve.parent != null)
-                ve = ve.parent;
-
-            return ve;
         }
     }
 }
