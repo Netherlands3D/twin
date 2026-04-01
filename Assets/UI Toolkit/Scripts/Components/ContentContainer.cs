@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
@@ -132,11 +133,16 @@ namespace Netherlands3D.UI.Components
         
         public int DropDownValue => dropDown.choices.IndexOf(dropDown.value);
 
-        public void SetDropdownValues(List<string> values)
+        public void SetDropdownValues(List<IconImage> values)
         {
-            dropDown.choices = values;
+            dropDown.SetValueIcons(values);
+            var choiceStrings = values.Select(value => value.ToString()).ToList();
+            dropDown.choices = choiceStrings;
             if (values != null && values.Count > 0)
-                dropDown.value = values[0]; 
+            {
+                dropDown.value = choiceStrings[0];
+                dropDown.SetValue(0);
+            } 
         }
 
         private string helpUrl;

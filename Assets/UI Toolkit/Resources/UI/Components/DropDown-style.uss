@@ -26,10 +26,6 @@
     min-width: 0;
 }
 
-.dropdown .icon {
-    background-image: var(--icon-keytokencode);
-}
-
 .dropdown .unity-base-popup-field__arrow {
     background-image: var(--icon-chevrondown);
     width: var(--spacing-6);

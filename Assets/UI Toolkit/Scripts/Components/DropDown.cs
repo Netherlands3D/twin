@@ -18,6 +18,8 @@ namespace Netherlands3D.UI.Components
         private VisualElement rootSettings;
         private VisualElement popup;
         
+        private List<IconImage> valueIcons;
+        
         public DropDown()
         {
             this.CloneComponentTree("Components");
@@ -37,6 +39,7 @@ namespace Netherlands3D.UI.Components
             
             RegisterCallback<MouseDownEvent>(evt =>
             {
+                //wait a frame to have the popup instantiated
                 schedule.Execute(() =>
                 {
                     //check if the popuparea is present, if not there is no popup at all
@@ -54,34 +57,40 @@ namespace Netherlands3D.UI.Components
                         popup.AddToClassList("dropdown-popup-container");
                         
                         List<VisualElement> items = popup.Query<VisualElement>(className: "unity-base-dropdown__item").ToList();
-                        items.ForEach(i =>
+                        for (int i = 0; i < items.Count; i++)
                         {
-                            i.AddToClassList("dropdown-popup-item");
-                            if(i == items.First())
-                                i.AddToClassList("dropdown-popup-item__first-item");
-                            else if(i == items.Last())
-                                i.AddToClassList("dropdown-popup-item__last-item");
+                            VisualElement item = items[i];
+                            item.AddToClassList("dropdown-popup-item");
+                            if(item == items.First())
+                                item.AddToClassList("dropdown-popup-item__first-item");
+                            else if(item == items.Last())
+                                item.AddToClassList("dropdown-popup-item__last-item");
                             else
-                                i.AddToClassList("dropdown-popup-item__middle-item");
+                                item.AddToClassList("dropdown-popup-item__middle-item");
                             
-                            i.Clear();
-                            //i.Q<Label>().text = "";
+                            item.Clear();
                             Icon icon = new Icon();
                             icon.pickingMode = PickingMode.Ignore;
-                            icon.Image = IconImage.KeyTokenCode;
+                            icon.Image = valueIcons[i];
                             
                             float height = contentContainer.resolvedStyle.height;
-                            i.style.height = height;
-                            i.Add(icon);
-                        });
+                            item.style.height = height;
+                            item.Add(icon);
+                        };
                     }
                 }); 
             });
 
             this.RegisterValueChangedCallback(evt =>
             {
-                Debug.Log(rootSettings.childCount);
+                //update the main icon after the choice change
+                SetValue(index);
             });
+        }
+
+        public void SetValue(int index)
+        {
+            Icon.Image = valueIcons[index]; 
         }
 
         private void SetPopupPosition(GeometryChangedEvent evt)
@@ -92,6 +101,11 @@ namespace Netherlands3D.UI.Components
             float top = contentContainer.worldBound.y;
             popup.style.left = left;
             popup.style.top = top;
+        }
+
+        public void SetValueIcons(List<IconImage> values)
+        {
+            valueIcons = values;
         }
     }
 }

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -38,6 +40,13 @@ namespace Netherlands3D.UI.Panels
         
         private ContentState contentState;
         
+        private Dictionary<ContentState, IconImage> icons = new()
+        {
+            {ContentState.Warning, IconImage.Warning},
+            {ContentState.Key, IconImage.KeyTokenCode},
+            {ContentState.UsernameAndPassword, IconImage.UsernamePassword}
+        };
+        
         public CredentialPanel()
         {
             this.CloneComponentTree("Panels");
@@ -64,13 +73,12 @@ namespace Netherlands3D.UI.Panels
 
         private void InitializeDropdown()
         {
-            var list = Enum.GetValues(typeof(ContentState))
-                .Cast<ContentState>()
-                .Skip(1) //skip warning
-                .Select(e => e.ToString())
+            var valueIcons = icons
+                .Where(kvp => kvp.Key != ContentState.Warning)
+                .Select(kvp => kvp.Value)
                 .ToList();
-            
-            content.SetDropdownValues(list);
+    
+            content.SetDropdownValues(valueIcons);
         }
 
         private void SetContentState(ContentState state)
