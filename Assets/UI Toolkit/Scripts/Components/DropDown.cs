@@ -1,5 +1,6 @@
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,6 +11,10 @@ namespace Netherlands3D.UI.Components
     public partial class DropDown : DropdownField
     {
        
+        // Query and cache icon component
+        private Icon icon;
+        private Icon Icon => icon ??= this.Q<Icon>();
+        
         private VisualElement rootSettings;
         private VisualElement popup;
         
@@ -26,6 +31,8 @@ namespace Netherlands3D.UI.Components
                     root = root.parent;
 
                 rootSettings = root;
+                
+                Icon.pickingMode = PickingMode.Ignore;
             });
             
             RegisterCallback<MouseDownEvent>(evt =>
@@ -50,6 +57,13 @@ namespace Netherlands3D.UI.Components
                         items.ForEach(i =>
                         {
                             i.AddToClassList("dropdown-popup-item");
+                            if(i == items.First())
+                                i.AddToClassList("dropdown-popup-item__first-item");
+                            else if(i == items.Last())
+                                i.AddToClassList("dropdown-popup-item__last-item");
+                            else
+                                i.AddToClassList("dropdown-popup-item__middle-item");
+                            
                             i.Clear();
                             //i.Q<Label>().text = "";
                             Icon icon = new Icon();
