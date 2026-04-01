@@ -1,5 +1,6 @@
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -36,26 +37,28 @@ namespace Netherlands3D.UI.Components
                     {
                         VisualElement popupArea = rootSettings.ElementAt(1);
                         popupArea.RemoveFromClassList("unity-base-dropdown");
+                        
                         popup = popupArea.ElementAt(0);
+                        popup.UnregisterCallback<GeometryChangedEvent>(SetPopupPosition);
+                        popup.RegisterCallback<GeometryChangedEvent>(SetPopupPosition);
                         popup.RemoveFromClassList("unity-base-dropdown__container-outer");
                         var styleSheet = Resources.Load<StyleSheet>($"UI/Components/DropDown-style");
                         popup.styleSheets.Add(styleSheet);
                         popup.AddToClassList("dropdown-popup-container");
                         
-                        
-                        //TODO do this only once
-                        popup.RegisterCallback<GeometryChangedEvent>(evt =>
-                        {
-                            float width = contentContainer.resolvedStyle.width;
-                            popup.style.width = width;
-                            float left = contentContainer.worldBound.x;
-                            popup.style.left = left;
-                        });
-                        
                         List<VisualElement> items = popup.Query<VisualElement>(className: "unity-base-dropdown__item").ToList();
                         items.ForEach(i =>
                         {
                             i.AddToClassList("dropdown-popup-item");
+                            i.Clear();
+                            //i.Q<Label>().text = "";
+                            Icon icon = new Icon();
+                            icon.pickingMode = PickingMode.Ignore;
+                            icon.Image = IconImage.KeyTokenCode;
+                            
+                            float height = contentContainer.resolvedStyle.height;
+                            i.style.height = height;
+                            i.Add(icon);
                         });
                     }
                 }); 
@@ -65,6 +68,16 @@ namespace Netherlands3D.UI.Components
             {
                 Debug.Log(rootSettings.childCount);
             });
+        }
+
+        private void SetPopupPosition(GeometryChangedEvent evt)
+        {
+            float width = contentContainer.resolvedStyle.width;
+            popup.style.width = width;
+            float left = contentContainer.worldBound.x;
+            float top = contentContainer.worldBound.y;
+            popup.style.left = left;
+            popup.style.top = top;
         }
     }
 }
