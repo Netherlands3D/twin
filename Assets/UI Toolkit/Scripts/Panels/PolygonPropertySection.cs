@@ -24,9 +24,6 @@ namespace Netherlands3D.UI.Panels
         private VisualElement gridPropertiesElement;
         private Button editGridButton;
         
-        private Toggle maskToggle;
-        private Toggle maskInvertToggle;
-        
         public PolygonPropertySection()
         {
             this.CloneComponentTree("Panels");
@@ -38,13 +35,8 @@ namespace Netherlands3D.UI.Panels
             gridPropertiesElement = this.Q<VisualElement>("GridProperties");
             editGridButton = this.Q<Button>("EditGridButton");
             
-            maskToggle = this.Q<Toggle>("IsMaskToggle");
-            maskInvertToggle = this.Q<Toggle>("InvertMaskToggle");
-            
             lineWidthSlider.RegisterValueChangedCallback(OnStrokeWidthChanged);
             editGridButton.RegisterCallback<ClickEvent>(OnEditGridButtonPressed);
-            maskToggle.RegisterValueChangedCallback(OnIsMaskChanged);
-            maskInvertToggle.RegisterValueChangedCallback(OnInvertMaskChanged);
         }
         
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -52,17 +44,14 @@ namespace Netherlands3D.UI.Panels
             polygonPropertyData = properties.Get<PolygonSelectionLayerPropertyData>();
             
             lineWidthSlider.SetValueWithoutNotify(polygonPropertyData.LineWidth);
-            maskToggle.SetValueWithoutNotify(polygonPropertyData.IsMask);
-            maskInvertToggle.SetValueWithoutNotify(polygonPropertyData.InvertMask);
+            if (polygonPropertyData.ShapeType != ShapeType.Line && polygonPropertyData.ShapeType != ShapeType.Grid)
+            {
+                //We don't have any specific information to show, so we delete the panel again
+                parent.Remove(this);
+            }
             
             SetSectionVisible(linePropertiesElement, polygonPropertyData.ShapeType == ShapeType.Line);
             SetSectionVisible(gridPropertiesElement, polygonPropertyData.ShapeType == ShapeType.Grid);
-
-            maskToggle.SetEnabled(maskToggle.value || PolygonSelectionLayerPropertyData.NumAvailableMasks > 0);
-            SetMaxMasksText();
-
-            // if (polygonPropertyData.IsMask)
-            //     PopulateMaskLayerPanel();
         }
 
         private void SetSectionVisible(VisualElement section, bool isVisible)
@@ -82,29 +71,6 @@ namespace Netherlands3D.UI.Panels
         {
             Debug.Log("edit grid button pressed");
             throw new NotImplementedException();
-        }
-
-        private void OnIsMaskChanged(ChangeEvent<bool> evt)
-        {
-            polygonPropertyData.IsMask = evt.newValue;
-            
-            // if (isMask)
-            //     PopulateMaskLayerPanel();
-            // else
-            //     ClearMaskLayerPanel();
-
-            SetMaxMasksText();
-        }
-        
-        private void OnInvertMaskChanged(ChangeEvent<bool> evt)
-        {
-            polygonPropertyData.InvertMask = evt.newValue;
-        }
-        
-        private void SetMaxMasksText()
-        {
-            Debug.Log("set amount of available masks text");
-            // maxMasksText.text = string.Format(maxMasksTextTemplate, PolygonSelectionLayerPropertyData.NumAvailableMasks.ToString(), PolygonSelectionLayerPropertyData.MaxAvailableMasks.ToString());
         }
     }
 }

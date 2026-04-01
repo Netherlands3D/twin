@@ -1,21 +1,10 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="PolygonPropertySection" class="polygon-property-section">
     <nl3d:ContentContainer leading-icon="Polygon" text="Tekengebied">
         <ui:VisualElement name="LineProperties" class="polygon-property-section__shape-type-section">
-            <nl3d:Slider name="LineWidthSlider" low-value="0.01" high-value="200"/>
+            <nl3d:Slider label="Lijnbreedte" name="LineWidthSlider" low-value="0.01" high-value="200"/>
         </ui:VisualElement>
         <ui:VisualElement name="GridProperties" class="polygon-property-section__shape-type-section">
             <nl3d:Button name="EditGridButton" icon="OrthogonalView" LabelText="Grid bewerken"/>
-        </ui:VisualElement>
-        <nl3d:DomePanel />
-        <ui:VisualElement name="MaskProperties">
-            <nl3d:Header icon="LayerMask" text="Gebied uitsnijden" />
-            <ui:Label text="Met deze functie kan je de basislagen (bomen, bossen, gebouwen, maaiveld) en eigen lagen uitsnijden." class="polygon-property-section__message-text" />
-            <nl3d:CheckboxToggle name="IsMaskToggle" LabelText="Gebied uitsnijden"/>
-            <nl3d:CheckboxToggle name="InvertMaskToggle" LabelText="Effect omdraaien (omgeving verbergen)"/>
-            <nl3d:DomePanel />
-<!--            <ui:VisualElement name="Content" class="dome-panel__body">-->
-<!--                <nl3d:ListView name="ItemListView" class="dome-panel__list-view"/>-->
-<!--            </ui:VisualElement>-->
         </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
