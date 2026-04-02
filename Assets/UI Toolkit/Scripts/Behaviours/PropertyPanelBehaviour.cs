@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
@@ -15,8 +13,6 @@ namespace Netherlands3D.UI.Panels
     [RequireComponent(typeof(UIDocument))]
     public class PropertyPanelBehaviour : MonoBehaviour
     {
-        [SerializeField] private InputActionAsset inputActionAsset;
-
         private VisualElement root;
         private InputAction rightClickAction;
         private InputAction leftClickAction;
