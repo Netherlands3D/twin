@@ -22,12 +22,13 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
+            
+            ClearActivePanel();
         }
 
         public void ClearActivePanel()
         {
-            if(propertySectionContainer.childCount > 0)
-                propertySectionContainer.Clear();
+            propertySectionContainer.Clear();
             propertiesPanel.SetEnabled(false);
         }
 
