@@ -2,6 +2,7 @@
     <nl3d:ContentContainer leading-icon="LayerMask" text="Gebied uitsnijden">
             <ui:Label text="Met deze functie kan je de basislagen (bomen, bossen, gebouwen, maaiveld) en eigen lagen uitsnijden." class="polygon-mask-property-section__message-text" />
             <nl3d:CheckboxToggle name="IsMaskToggle" LabelText="Gebied uitsnijden"/>
+            <ui:Label name="MaxMasksText" text="Er kunnen maximaal 22 maskers tegelijk bestaan ({0}/{1})" class="polygon-mask-property-section__message-text" />
             <nl3d:CheckboxToggle name="InvertMaskToggle" LabelText="Effect omdraaien (omgeving verbergen)"/>
     </nl3d:ContentContainer>
 </ui:UXML>

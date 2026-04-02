@@ -26,6 +26,9 @@ namespace Netherlands3D.UI.Panels
         private MaskingPanel maskingPanel;
         private ContentContainer contentContainer;
         
+        private Label  maxMasksText;
+        private string maxMasksTextTemplate;
+        
         public PolygonMaskingPropertySection()
         {
             this.CloneComponentTree("Panels");
@@ -34,7 +37,8 @@ namespace Netherlands3D.UI.Panels
             maskToggle = this.Q<Toggle>("IsMaskToggle");
             maskInvertToggle = this.Q<Toggle>("InvertMaskToggle");
             contentContainer = this.Q<ContentContainer>();
-
+            maxMasksText = this.Q<Label>("MaxMasksText");
+            maxMasksTextTemplate = maxMasksText.text;
             
             maskToggle.RegisterValueChangedCallback(OnIsMaskChanged);
             maskInvertToggle.RegisterValueChangedCallback(OnInvertMaskChanged);
@@ -85,8 +89,7 @@ namespace Netherlands3D.UI.Panels
         
         private void SetMaxMasksText()
         {
-            Debug.Log("set amount of available masks text");
-            // maxMasksText.text = string.Format(maxMasksTextTemplate, PolygonSelectionLayerPropertyData.NumAvailableMasks.ToString(), PolygonSelectionLayerPropertyData.MaxAvailableMasks.ToString());
+            maxMasksText.text = string.Format(maxMasksTextTemplate, PolygonSelectionLayerPropertyData.NumAvailableMasks.ToString(), PolygonSelectionLayerPropertyData.MaxAvailableMasks.ToString());
         }
     }
 }
