@@ -46,6 +46,7 @@ namespace Netherlands3D.UI.Panels
         }
         
         private ContentState contentState;
+        private ContentState previousState;
         
         private readonly Dictionary<int, (ContentState state, IconImage icon)> dropDownValues = new()
         {
@@ -66,9 +67,10 @@ namespace Netherlands3D.UI.Panels
             SetContentState(ContentState.Warning);
             Button.clicked += () =>
             {
-                if (contentState == ContentState.Warning ||
-                    contentState == ContentState.Error)
+                if (contentState == ContentState.Warning)
                     SetContentState(ContentState.Key);
+                else if(contentState == ContentState.Error)
+                    SetContentState(previousState);
                 else
                 {
                     if (string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value))
@@ -99,9 +101,16 @@ namespace Netherlands3D.UI.Panels
 
         private void SetContentState(ContentState state)
         {
+            previousState = contentState;
             contentState = state;
-            int index = dropDownValues.FirstOrDefault(kvp => kvp.Value.state == state).Key;
-            if (dropDownValues.ContainsKey(index)) 
+            
+            //update the dropdownvalue if the content is set to a valid value
+            int index = -1;
+            foreach (KeyValuePair<int, (ContentState state, IconImage icon)> kv in dropDownValues)
+                if(kv.Value.state == state)
+                    index = kv.Key;
+            
+            if(dropDownValues.Keys.Contains(index))
                 content.SetDropdownValue(index);
             
             switch (state)
