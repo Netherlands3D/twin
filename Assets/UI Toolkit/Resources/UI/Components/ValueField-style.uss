@@ -71,15 +71,15 @@
     color: var(--color-blue-200);
 }
 
-/* Variant for PropertiesPanel */
-.value-field.value-field-style-properties-panel {
+/* Variant for Small style */
+.value-field.value-field--style-small {
     align-self: flex-start;
     width: var(--spacing-24);
     min-width: var(--spacing-12);
     height: var(--spacing-7);
 }
 
-.value-field.value-field-style-properties-panel .value-field__label {
+.value-field.value-field--style-small .value-field__label {
     padding: var(--spacing-1);
     width: var(--spacing-6);
     min-width: var(--spacing-6);
@@ -87,17 +87,17 @@
     border-bottom-left-radius: var(--spacing-1);
 }
 
-.value-field.value-field-style-properties-panel .textfield .unity-base-text-field__input {
+.value-field.value-field--style-small .textfield .unity-base-text-field__input {
     padding: var(--spacing-1);
     border-top-right-radius: var(--spacing-1);
     border-bottom-right-radius: var(--spacing-1);
 }
 
-.value-field.value-field-style-properties-panel .textfield {
+.value-field.value-field--style-small .textfield {
     min-height: var(--spacing-7);
 }
 
 
-.value-field.value-field-style-properties-panel .textfield TextElement {
+.value-field.value-field--style-small .textfield TextElement {
     -unity-text-align: middle-left;
 }

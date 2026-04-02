@@ -7,13 +7,13 @@ namespace Netherlands3D.UI.Components
     public enum ValueFieldStyle
     {
         Default,
-        PropertiesPanel
+        Small
     }
 
     [UxmlElement]
     public partial class ValueField : VisualElement
     {
-        private const string StyleClassPrefix = "value-field-style-";
+        private const string StyleClassPrefix = "value-field--style-";
         private const string DefaultPlaceholder = "123456";
         private const string unparseableDecimalSeparator = ",";
         private const string parseableDecimalSeparator = ".";

@@ -2,21 +2,21 @@
     <nl3d:ContentContainer leading-icon="ScaleV1" text="Transformatie">
         <ui:VisualElement class="transform-property-section__row">
             <nl3d:Icon image="Move" class="transform-property-section__item"/>
-            <nl3d:ValueField name="PositionX" value-field-style="PropertiesPanel" label-text="X" class="transform-property-section__item"/>
-            <nl3d:ValueField name="PositionY" value-field-style="PropertiesPanel" label-text="Y" class="transform-property-section__item"/>
-            <nl3d:ValueField name="PositionZ" value-field-style="PropertiesPanel" label-text="Z" class="transform-property-section__item transform-property-section__item-last"/>
+            <nl3d:ValueField name="PositionX" value-field-style="Small" label-text="X" class="transform-property-section__item"/>
+            <nl3d:ValueField name="PositionY" value-field-style="Small" label-text="Y" class="transform-property-section__item"/>
+            <nl3d:ValueField name="PositionZ" value-field-style="Small" label-text="Z" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="transform-property-section__row">
             <nl3d:Icon image="RotateV2" class="transform-property-section__item"/>
-            <nl3d:ValueField name="RotationX" value-field-style="PropertiesPanel" label-text="X" class="transform-property-section__item"/>
-            <nl3d:ValueField name="RotationY" value-field-style="PropertiesPanel" label-text="Y" class="transform-property-section__item"/>
-            <nl3d:ValueField name="RotationZ" value-field-style="PropertiesPanel" label-text="Z" class="transform-property-section__item transform-property-section__item-last"/>
+            <nl3d:ValueField name="RotationX" value-field-style="Small" label-text="X" class="transform-property-section__item"/>
+            <nl3d:ValueField name="RotationY" value-field-style="Small" label-text="Y" class="transform-property-section__item"/>
+            <nl3d:ValueField name="RotationZ" value-field-style="Small" label-text="Z" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="transform-property-section__row">
             <nl3d:Icon image="ScaleV2" class="transform-property-section__item"/>
-            <nl3d:ValueField name="ScaleX" value-field-style="PropertiesPanel" label-text="X" class="transform-property-section__item"/>
-            <nl3d:ValueField name="ScaleY" value-field-style="PropertiesPanel" label-text="Y" class="transform-property-section__item"/>
-            <nl3d:ValueField name="ScaleZ" value-field-style="PropertiesPanel" label-text="Z" class="transform-property-section__item transform-property-section__item-last"/>
+            <nl3d:ValueField name="ScaleX" value-field-style="Small" label-text="X" class="transform-property-section__item"/>
+            <nl3d:ValueField name="ScaleY" value-field-style="Small" label-text="Y" class="transform-property-section__item"/>
+            <nl3d:ValueField name="ScaleZ" value-field-style="Small" label-text="Z" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
