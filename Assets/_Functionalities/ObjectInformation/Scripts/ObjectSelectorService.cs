@@ -11,11 +11,11 @@ using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
-using Netherlands3D.Twin;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
@@ -91,6 +91,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
+
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
             
@@ -104,6 +105,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
+
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.RemoveListener(Deselect);
             
@@ -163,6 +165,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
+            //TODO this should be refactored when UITOOLKIT will be implemented fully
+            if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked())
+                return;
+            
             //TODO this should be refactored when UITOOLKIT will be implemented fully
             //is the click on any other button than the excluded ui elements then deselect
             if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
