@@ -167,7 +167,7 @@ namespace Netherlands3D.UI.Components
                 newValue.ToString(System.Globalization.CultureInfo.InvariantCulture)
             );
 
-            using var changeEvent = ChangeEvent<string>.GetPooled(oldValue, InputField.value);
+            using var changeEvent = NavigationSubmitEvent.GetPooled();
             changeEvent.target = InputField;
             InputField.SendEvent(changeEvent);
 
