@@ -1,4 +1,5 @@
 using System;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
@@ -13,6 +14,26 @@ namespace Netherlands3D.UI.Panels
         
         private Button retryButton;
         public Button RetryButton => retryButton ??= this.Q<Button>("RetryButton");
+
+        private ContentContainer content;
+        private ContentContainer Content => content ??= this.Q<ContentContainer>();
+        
+        private Label errorMessage;
+        private Label ErrorMessage => errorMessage ??= this.Q<Label>("ErrorMessage");
+        
+        [UxmlAttribute("text")]
+        public string HeaderText
+        {
+            get => Content.HeaderText;
+            set => Content.HeaderText = value;
+        }
+        
+        [UxmlAttribute("message")]
+        public string Message
+        {
+            get => ErrorMessage.text;
+            set => ErrorMessage.text = value;
+        }
 
         public ErrorPanel()
         {

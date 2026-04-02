@@ -45,14 +45,14 @@ namespace Netherlands3D.UI.Panels
             GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnImportUri);
-            UriImportFailed += ShowErrorPanel; 
+            UriImportFailed += ErrorPanel.Show; 
             // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
             //ImportFromUrlButton.RegisterCallback<ClickEvent>(OnFileImportFromUrlStarted);
         }
         
         ~ImportAssetPanel()
         {
-            UriImportFailed -= ShowErrorPanel;
+            UriImportFailed -= ErrorPanel.Show;
         }
 
         public override string GetTitle() => "Importeren";
@@ -74,16 +74,6 @@ namespace Netherlands3D.UI.Panels
                 Debug.LogException(e);
                 UriImportFailed?.Invoke();
             }
-        }
-
-        public void ShowErrorPanel()
-        {
-            ErrorPanel.Show();
-        }
-
-        public void HideErrorPanel()
-        {
-            ErrorPanel.Hide();
         }
     }
 }

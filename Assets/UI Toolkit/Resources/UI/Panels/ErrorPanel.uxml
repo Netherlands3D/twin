@@ -7,12 +7,13 @@
     name="ErrorPanel" 
     class="error-panel"
 >
-    <nl3d:ContentContainer class="error-panel__content-container" container-type="NoFoldout" container-style="Normal" show-divider="true" show-help-icon="true" text="Eigen bestand toevoegen">
+    <nl3d:ContentContainer class="error-panel__content-container" container-type="NoFoldout" container-style="Normal" show-divider="true" show-help-icon="true">
         <ui:VisualElement name="MessageTitle" class="error-panel__message-title">
+            <nl3d:Icon image="Warning" color="Warning"/>
             <ui:Label text="| Oeps! Er is iets fout gegaan" class="error-panel__message-title-text"/>
         </ui:VisualElement>
         <ui:VisualElement name="Message" class="error-panel__message">
-            <ui:Label text="Het bestand dat u probeert toe te voegen kon niet worden ingeladen. Controleer of het bestandstype wordt ondersteunt en of u de juiste URL link heeft ingevoerd." class="error-panel__message-text"/>
+            <ui:Label name="ErrorMessage" class="error-panel__message-text"/>
         </ui:VisualElement>
         <nl3d:Button LabelText="Opnieuw proberen" button-style="Normal" class="error-panel__retry-button" name="RetryButton" />
     </nl3d:ContentContainer>

@@ -36,17 +36,18 @@ namespace Netherlands3D.UI.Panels
         private VisualElement UserName => username ??= this.Q<VisualElement>("MessageTitleUserName");
         
         private ContentContainer content => this.Q<ContentContainer>();
+        
+        private ErrorPanel errorPanel;
+        private ErrorPanel ErrorPanel =>  errorPanel ??= this.Q<ErrorPanel>();
 
         private enum ContentState
         {
             Warning,
-            Error,
             Key,
             UsernameAndPassword
         }
         
         private ContentState contentState;
-        private ContentState previousState;
         
         private readonly Dictionary<int, (ContentState state, IconImage icon)> dropDownValues = new()
         {
@@ -69,13 +70,11 @@ namespace Netherlands3D.UI.Panels
             {
                 if (contentState == ContentState.Warning)
                     SetContentState(ContentState.Key);
-                else if(contentState == ContentState.Error)
-                    SetContentState(previousState);
                 else
                 {
                     if (string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value))
                     {
-                        SetContentState(ContentState.Error);
+                        ErrorPanel.Show();
                         return;
                     }
                     OnConfirm?.Invoke();
@@ -101,7 +100,6 @@ namespace Netherlands3D.UI.Panels
 
         private void SetContentState(ContentState state)
         {
-            previousState = contentState;
             contentState = state;
             
             //update the dropdownvalue if the content is set to a valid value
@@ -112,19 +110,10 @@ namespace Netherlands3D.UI.Panels
             
             if(dropDownValues.Keys.Contains(index))
                 content.SetDropdownValue(index);
-            
+           
             switch (state)
             {
                 case ContentState.Warning:
-                    Warning.SetEnabled(true);
-                    Code.SetEnabled(false);
-                    UserName.SetEnabled(false);
-                    Button.LabelText = "Update";
-                    Button.ShowIcon = Button.ButtonStyle.WithIcon;
-                    content.ShowDropDown = false;
-                    content.ShowHelpIcon = true;
-                    break;
-                case ContentState.Error:
                     Warning.SetEnabled(true);
                     Code.SetEnabled(false);
                     UserName.SetEnabled(false);
