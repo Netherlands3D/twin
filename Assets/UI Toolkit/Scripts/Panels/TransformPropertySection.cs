@@ -7,6 +7,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using RuntimeHandle;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -39,31 +40,40 @@ namespace Netherlands3D.UI.Panels
         private SetOfXYZ position;
         private SetOfXYZ rotation;
         private SetOfXYZ scale;
-        
+
         private TransformLayerPropertyData transformPropertyData;
-        
+
         public TransformPropertySection()
         {
             this.CloneComponentTree("Panels");
-            this.AddComponentStylesheet("Panels");    
-            
+            this.AddComponentStylesheet("Panels");
+
             position = new(this.Q<NumberField>("PositionX"), this.Q<NumberField>("PositionY"), this.Q<NumberField>("PositionZ"));
             rotation = new(this.Q<NumberField>("RotationX"), this.Q<NumberField>("RotationY"), this.Q<NumberField>("RotationZ"));
             scale = new(this.Q<NumberField>("ScaleX"), this.Q<NumberField>("ScaleY"), this.Q<NumberField>("ScaleZ"));
-            
-            position.xField.InputField.RegisterValueChangedCallback(OnPositionChanged);
-            position.yField.InputField.RegisterValueChangedCallback(OnPositionChanged);
-            position.zField.InputField.RegisterValueChangedCallback(OnPositionChanged);
-            rotation.xField.InputField.RegisterValueChangedCallback(OnRotationChanged);
-            rotation.yField.InputField.RegisterValueChangedCallback(OnRotationChanged);
-            rotation.zField.InputField.RegisterValueChangedCallback(OnRotationChanged);
-            scale.xField.InputField.RegisterValueChangedCallback(OnScaleChanged);
-            scale.yField.InputField.RegisterValueChangedCallback(OnScaleChanged);
-            scale.zField.InputField.RegisterValueChangedCallback(OnScaleChanged);
-        }
 
-        //the param is doing nothing to match signature
-        private void OnPositionChanged(ChangeEvent<string> onChange)
+            position.xField.InputField.RegisterCallback<BlurEvent>(_ => OnPositionChanged());
+            position.yField.InputField.RegisterCallback<BlurEvent>(_ => OnPositionChanged());
+            position.zField.InputField.RegisterCallback<BlurEvent>(_ => OnPositionChanged());
+            rotation.xField.InputField.RegisterCallback<BlurEvent>(_ => OnRotationChanged());
+            rotation.yField.InputField.RegisterCallback<BlurEvent>(_ => OnRotationChanged());
+            rotation.zField.InputField.RegisterCallback<BlurEvent>(_ => OnRotationChanged());
+            scale.xField.InputField.RegisterCallback<BlurEvent>(_ => OnScaleChanged());
+            scale.yField.InputField.RegisterCallback<BlurEvent>(_ => OnScaleChanged());
+            scale.zField.InputField.RegisterCallback<BlurEvent>(_ => OnScaleChanged());
+            
+            position.xField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => position.xField.Focus(), TrickleDown.TrickleDown);
+            position.yField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => position.yField.Focus(), TrickleDown.TrickleDown);
+            position.zField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => position.zField.Focus(), TrickleDown.TrickleDown);
+            rotation.xField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => rotation.xField.Focus(), TrickleDown.TrickleDown);
+            rotation.yField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => rotation.yField.Focus(), TrickleDown.TrickleDown);
+            rotation.zField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => rotation.zField.Focus(), TrickleDown.TrickleDown);
+            scale.xField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => scale.xField.Focus(), TrickleDown.TrickleDown);
+            scale.yField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => scale.yField.Focus(), TrickleDown.TrickleDown);
+            scale.zField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => scale.zField.Focus(), TrickleDown.TrickleDown);
+        }
+        
+        private void OnPositionChanged()
         {
             var x = position.xField.GetValueAsDouble();
             var y = position.yField.GetValueAsDouble();
@@ -72,9 +82,8 @@ namespace Netherlands3D.UI.Panels
             var rdCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
             transformPropertyData.Position = rdCoordinate;
         }
-        
-        //the param is doing nothing to match signature
-        private void OnRotationChanged(ChangeEvent<string> onChange)
+
+        private void OnRotationChanged()
         {
             var x = rotation.xField.GetValueAsDouble();
             var y = rotation.yField.GetValueAsDouble();
@@ -82,9 +91,8 @@ namespace Netherlands3D.UI.Panels
 
             transformPropertyData.EulerRotation = new Vector3((float)x, (float)y, (float)z);
         }
-        
-        //the param is doing nothing to match signature
-        private void OnScaleChanged(ChangeEvent<string> onChange)
+
+        private void OnScaleChanged()
         {
             var x = scale.xField.GetValueAsDouble();
             var y = scale.yField.GetValueAsDouble();
@@ -101,9 +109,9 @@ namespace Netherlands3D.UI.Panels
             transformPropertyData.OnPositionChanged.AddListener(UpdatePositionFields);
             transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);
             transformPropertyData.OnScaleChanged.AddListener(UpdateScalingFields);
-            
+
             SetUnitCharacter(scale, transformPropertyData.ScaleUnitCharacter);
-            
+
             UpdatePositionFields(transformPropertyData.Position);
             UpdateRotationFields(transformPropertyData.EulerRotation);
             UpdateScalingFields(transformPropertyData.LocalScale);
@@ -128,16 +136,16 @@ namespace Netherlands3D.UI.Panels
                 scale.EnableAxes(HandleAxes.XYZ);
                 return;
             }
-            
+
             HandleAxes enabledPositionAxes = (HandleAxes)propertyData.PositionAxes;
             HandleAxes enabledRotationAxes = (HandleAxes)propertyData.RotationAxes;
             HandleAxes enabledScaleAxes = (HandleAxes)propertyData.ScaleAxes;
-            
+
             position.EnableAxes(enabledPositionAxes);
             rotation.EnableAxes(enabledRotationAxes);
             scale.EnableAxes(enabledScaleAxes);
         }
-        
+
         private void UpdatePositionFields(Coordinate newPosition)
         {
             var rdCoordinate = newPosition.Convert(CoordinateSystem.RDNAP);

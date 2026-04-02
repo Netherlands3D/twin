@@ -14,7 +14,7 @@ namespace Netherlands3D.UI.Components
     public partial class NumberField : VisualElement
     {
         private const string StyleClassPrefix = "number-field--style-";
-        private const string DefaultPlaceholder = "123456";
+        private const string DefaultPlaceholder = "-";
         private const string unparseableDecimalSeparator = ",";
         private const string parseableDecimalSeparator = ".";
 
@@ -201,7 +201,7 @@ namespace Netherlands3D.UI.Components
             if (decimals == 0)
                 return "0";
 
-            string zeros = new string('0', decimals);
+            string zeros = new string('#', decimals);
             return $"0.{zeros}";
         }
     }
