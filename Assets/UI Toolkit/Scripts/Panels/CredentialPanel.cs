@@ -17,34 +17,40 @@ namespace Netherlands3D.UI.Panels
         public Action OnShow;
         public Action OnHide;
         public Action OnConfirm;
+        public Action OnFailed;
         
         private Button button;
         private Button Button => button ??= this.Q<Button>("RetryButton");
         
-        private TextField keyField;
-        public TextField KeyField => keyField ??= this.Q<TextField>("KeyField");
+        private TextField codeField;
+        public TextField CodeField => codeField ??= this.Q<TextField>("CodeField");
+        
+        private TextField usernameField;
+        public TextField UserNameField => usernameField ??= this.Q<TextField>("UsernameField");
 
         private VisualElement warning;
-        private VisualElement update;
+        private VisualElement code;
+        private VisualElement username;
         private VisualElement Warning => warning ??= this.Q<VisualElement>("MessageTitleWarning");
-        private VisualElement Update => update ??= this.Q<VisualElement>("MessageTitleUpdate");
+        private VisualElement Code => code ??= this.Q<VisualElement>("MessageTitleCode");
+        private VisualElement UserName => username ??= this.Q<VisualElement>("MessageTitleUserName");
         
         private ContentContainer content => this.Q<ContentContainer>();
 
         private enum ContentState
         {
             Warning,
+            Error,
             Key,
             UsernameAndPassword
         }
         
         private ContentState contentState;
         
-        private Dictionary<ContentState, IconImage> icons = new()
+        private readonly Dictionary<int, (ContentState state, IconImage icon)> dropDownValues = new()
         {
-            {ContentState.Warning, IconImage.Warning},
-            {ContentState.Key, IconImage.KeyTokenCode},
-            {ContentState.UsernameAndPassword, IconImage.UsernamePassword}
+            { 0, (ContentState.Key, IconImage.KeyTokenCode) },
+            { 1, (ContentState.UsernameAndPassword, IconImage.UsernamePassword) }
         };
         
         public CredentialPanel()
@@ -60,12 +66,18 @@ namespace Netherlands3D.UI.Panels
             SetContentState(ContentState.Warning);
             Button.clicked += () =>
             {
-                if (contentState == ContentState.Warning)
+                if (contentState == ContentState.Warning ||
+                    contentState == ContentState.Error)
                     SetContentState(ContentState.Key);
                 else
                 {
+                    if (string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value))
+                    {
+                        SetContentState(ContentState.Error);
+                        return;
+                    }
                     OnConfirm?.Invoke();
-                    SetContentState(ContentState.Warning);
+                    ResetState();
                     Hide();
                 }
             };
@@ -73,38 +85,61 @@ namespace Netherlands3D.UI.Panels
 
         private void InitializeDropdown()
         {
-            var valueIcons = icons
-                .Where(kvp => kvp.Key != ContentState.Warning)
-                .Select(kvp => kvp.Value)
-                .ToList();
-    
-            content.SetDropdownValues(valueIcons);
+            content.SetDropdownValues(dropDownValues.Values.Select(x => x.icon).ToList());
+            content.AddDropDownListener(SetContentState);
+        }
+
+        private void SetContentState(int state)
+        {
+            if (!dropDownValues.TryGetValue(state, out var mapping))
+                return;
+            
+            SetContentState(mapping.state);
         }
 
         private void SetContentState(ContentState state)
         {
             contentState = state;
+            int index = dropDownValues.FirstOrDefault(kvp => kvp.Value.state == state).Key;
+            if (dropDownValues.ContainsKey(index)) 
+                content.SetDropdownValue(index);
+            
             switch (state)
             {
                 case ContentState.Warning:
                     Warning.SetEnabled(true);
-                    Update.SetEnabled(false);
+                    Code.SetEnabled(false);
+                    UserName.SetEnabled(false);
+                    Button.LabelText = "Update";
+                    Button.ShowIcon = Button.ButtonStyle.WithIcon;
+                    content.ShowDropDown = false;
+                    content.ShowHelpIcon = true;
+                    break;
+                case ContentState.Error:
+                    Warning.SetEnabled(true);
+                    Code.SetEnabled(false);
+                    UserName.SetEnabled(false);
                     Button.LabelText = "Update";
                     Button.ShowIcon = Button.ButtonStyle.WithIcon;
                     content.ShowDropDown = false;
                     content.ShowHelpIcon = true;
                     break;
                 case ContentState.Key:
-                    Update.SetEnabled(true);
                     Warning.SetEnabled(false);
+                    Code.SetEnabled(true);
+                    Code.Q<Label>().text = "Wachtwoord of code";
+                    UserName.SetEnabled(false);
                     Button.LabelText = "Bevestigen";
                     Button.ShowIcon =  Button.ButtonStyle.Normal;
                     content.ShowDropDown = true;
                     content.ShowHelpIcon = false;
+                    
                     break;
                 case ContentState.UsernameAndPassword:
-                    Update.SetEnabled(true);
                     Warning.SetEnabled(false);
+                    Code.SetEnabled(true);
+                    Code.Q<Label>().text = "Wachtwoord";
+                    UserName.SetEnabled(true);
                     Button.LabelText = "Bevestigen";
                     Button.ShowIcon =  Button.ButtonStyle.Normal;
                     content.ShowDropDown = true;
@@ -115,5 +150,7 @@ namespace Netherlands3D.UI.Panels
         
         public void Show() => OnShow?.Invoke();
         public void Hide() => OnHide?.Invoke();
+        
+        public void ResetState() => SetContentState(ContentState.Warning);
     }
 }

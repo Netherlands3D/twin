@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
@@ -11,7 +12,8 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class DropDown : DropdownField
     {
-       
+        public UnityEvent<int> DropDownValueChanged = new();
+        
         // Query and cache icon component
         private Icon icon;
         private Icon Icon => icon ??= this.Q<Icon>();
@@ -93,6 +95,7 @@ namespace Netherlands3D.UI.Components
             {
                 //update the main icon after the choice change
                 SetValue(index);
+                DropDownValueChanged.Invoke(index);
             });
         }
 
@@ -108,6 +111,7 @@ namespace Netherlands3D.UI.Components
 
         public void SetValue(int index)
         {
+            value = choices[index];
             Icon.Image = valueIcons[index]; 
         }
 

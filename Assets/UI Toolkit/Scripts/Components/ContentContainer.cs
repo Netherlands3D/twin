@@ -4,6 +4,7 @@ using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -140,9 +141,18 @@ namespace Netherlands3D.UI.Components
             dropDown.choices = choiceStrings;
             if (values != null && values.Count > 0)
             {
-                dropDown.value = choiceStrings[0];
-                dropDown.SetValue(0);
+                SetDropdownValue(0);
             } 
+        }
+
+        public void SetDropdownValue(int value)
+        {
+            dropDown.SetValue(value);
+        }
+
+        public void AddDropDownListener(UnityAction<int> listener)
+        {
+            dropDown.DropDownValueChanged.AddListener(listener);
         }
 
         private string helpUrl;
