@@ -19,6 +19,9 @@ GameObject:
   - component: {fileID: 8758499406149279786}
   - component: {fileID: 6449633652433648055}
   - component: {fileID: 2679958399476094032}
+  - component: {fileID: 3212184586756192212}
+  - component: {fileID: 2273040406529005978}
+  - component: {fileID: 3354041231514316206}
   m_Layer: 5
   m_Name: UI v2
   m_TagString: Untagged
@@ -307,3 +310,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
   service: {fileID: 6449633652433648055}
+--- !u!114 &3212184586756192212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Credentials.CredentialHandler
+  keyVault: {fileID: 0}
+--- !u!114 &2273040406529005978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a002345d35eb03b9fa224a363263ae75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.InspectorAssetPanelBehaviour
+  uploadFileEvent: {fileID: 0}
+  OpenLegacyFileImportContentPanel:
+    m_PersistentCalls:
+      m_Calls: []
+  importSucceeded:
+    m_PersistentCalls:
+      m_Calls: []
+  importFailed:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3354041231514316206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Credentials.CredentialHandler
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
