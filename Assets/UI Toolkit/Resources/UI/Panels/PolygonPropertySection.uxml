@@ -4,7 +4,7 @@
             <nl3d:Slider label="Lijnbreedte" name="LineWidthSlider" low-value="0.01" high-value="200"/>
         </ui:VisualElement>
         <ui:VisualElement name="GridProperties" class="polygon-property-section__shape-type-section">
-            <nl3d:Button name="EditGridButton" icon="OrthogonalView" LabelText="Grid bewerken"/>
+            <nl3d:Button name="EditGridButton" icon="OrthogonalView" LabelText="Grid bewerken" class="polygon-property-section__button"/>
         </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
