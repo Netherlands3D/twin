@@ -26,7 +26,8 @@ namespace Netherlands3D.UI.Panels
 
         public void ClearActivePanel()
         {
-            propertySectionContainer.Clear();
+            if(propertySectionContainer.childCount > 0)
+                propertySectionContainer.Clear();
             propertiesPanel.SetEnabled(false);
         }
 
