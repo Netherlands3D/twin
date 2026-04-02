@@ -4,16 +4,16 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
-    public enum ValueFieldStyle
+    public enum NumberFieldStyle
     {
         Default,
         Small
     }
 
     [UxmlElement]
-    public partial class ValueField : VisualElement
+    public partial class NumberField : VisualElement
     {
-        private const string StyleClassPrefix = "value-field--style-";
+        private const string StyleClassPrefix = "number-field--style-";
         private const string DefaultPlaceholder = "123456";
         private const string unparseableDecimalSeparator = ",";
         private const string parseableDecimalSeparator = ".";
@@ -24,7 +24,7 @@ namespace Netherlands3D.UI.Components
 
         private string label = "X";
         private string placeholderText = DefaultPlaceholder;
-        private ValueFieldStyle valueFieldStyle = ValueFieldStyle.Default;
+        private NumberFieldStyle numberFieldStyle = NumberFieldStyle.Default;
         private float scrollStep = 1f;
         private string unitCharacter = string.Empty;
         private string formatString;
@@ -56,13 +56,13 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        [UxmlAttribute("value-field-style")]
-        public ValueFieldStyle Style
+        [UxmlAttribute("number-field-style")]
+        public NumberFieldStyle Style
         {
-            get => valueFieldStyle;
+            get => numberFieldStyle;
             set
             {
-                valueFieldStyle = value;
+                numberFieldStyle = value;
                 UpdateStyleClass();
                 ApplyLabelTypography();
             }
@@ -94,12 +94,12 @@ namespace Netherlands3D.UI.Components
         }
 
 
-        public ValueField()
+        public NumberField()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            AddToClassList("value-field");
+            AddToClassList("number-field");
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
@@ -126,7 +126,7 @@ namespace Netherlands3D.UI.Components
             LabelText.RemoveFromClassList("text-header");
             LabelText.RemoveFromClassList("text-base");
 
-            if (valueFieldStyle == ValueFieldStyle.Default)
+            if (numberFieldStyle == NumberFieldStyle.Default)
                 LabelText.AddToClassList("text-header");
             else
                 LabelText.AddToClassList("text-base");
@@ -143,7 +143,7 @@ namespace Netherlands3D.UI.Components
         {
             this.ReplacePrefixedValueInClassList(
                 StyleClassPrefix,
-                valueFieldStyle.ToString().ToKebabCase()
+                numberFieldStyle.ToString().ToKebabCase()
             );
         }
         

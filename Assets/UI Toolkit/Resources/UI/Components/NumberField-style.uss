@@ -1,6 +1,6 @@
 @import url("TextField-style.uss");
 
-.value-field {
+.number-field {
     flex-direction: row;
     align-items: stretch;
     height: var(--spacing-10);
@@ -8,7 +8,7 @@
 }
 
 /* Left label container */
-.value-field__label {
+.number-field__label {
     min-width: var(--spacing-10);
     justify-content: center;
     align-items: center;
@@ -22,19 +22,19 @@
     border-bottom-left-radius: var(--spacing-2);
 }
 
-.value-field__label-text {
+.number-field__label-text {
     margin: 0;
     -unity-text-align: middle-center;
 }
 
-/* Value input field */
-.value-field__input {
+/* Number input field */
+.number-field__input {
     flex-grow: 0;
     flex-shrink: 1;
     min-width: var(--spacing-16);
 }
 
-.value-field .textfield .unity-base-text-field__input {
+.number-field .textfield .unity-base-text-field__input {
     padding-left: var(--spacing-4);
     padding-top: var(--spacing-2);
     padding-right: var(--spacing-4);
@@ -50,36 +50,36 @@
     border-bottom-right-radius: var(--spacing-2);
 }
 
-.value-field .textfield .unity-base-text-field__input:hover {
+.number-field .textfield .unity-base-text-field__input:hover {
     background-color: var(--color-blue-100);
 }
 
-.value-field .textfield TextElement {
+.number-field .textfield TextElement {
     -unity-text-align: middle-right;
 }
 
 /* Disabled */
-.value-field:disabled {
+.number-field:disabled {
     opacity: 1;
 }
 
-.value-field .value-field__label:disabled {
+.number-field .number-field__label:disabled {
     background-color: var(--color-white);
 }
 
-.value-field:disabled .value-field__label-text {
+.number-field:disabled .number-field__label-text {
     color: var(--color-blue-200);
 }
 
 /* Variant for Small style */
-.value-field.value-field--style-small {
+.number-field.number-field--style-small {
     align-self: flex-start;
     width: var(--spacing-24);
     min-width: var(--spacing-12);
     height: var(--spacing-7);
 }
 
-.value-field.value-field--style-small .value-field__label {
+.number-field.number-field--style-small .number-field__label {
     padding: var(--spacing-1);
     width: var(--spacing-6);
     min-width: var(--spacing-6);
@@ -87,17 +87,17 @@
     border-bottom-left-radius: var(--spacing-1);
 }
 
-.value-field.value-field--style-small .textfield .unity-base-text-field__input {
+.number-field.number-field--style-small .textfield .unity-base-text-field__input {
     padding: var(--spacing-1);
     border-top-right-radius: var(--spacing-1);
     border-bottom-right-radius: var(--spacing-1);
 }
 
-.value-field.value-field--style-small .textfield {
+.number-field.number-field--style-small .textfield {
     min-height: var(--spacing-7);
 }
 
 
-.value-field.value-field--style-small .textfield TextElement {
+.number-field.number-field--style-small .textfield TextElement {
     -unity-text-align: middle-left;
 }

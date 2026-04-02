@@ -17,11 +17,11 @@ namespace Netherlands3D.UI.Panels
     {
         private class SetOfXYZ
         {
-            public ValueField xField;
-            public ValueField yField;
-            public ValueField zField;
+            public NumberField xField;
+            public NumberField yField;
+            public NumberField zField;
 
-            public SetOfXYZ(ValueField xField, ValueField yField, ValueField zField)
+            public SetOfXYZ(NumberField xField, NumberField yField, NumberField zField)
             {
                 this.xField = xField;
                 this.yField = yField;
@@ -47,9 +47,9 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");    
             
-            position = new(this.Q<ValueField>("PositionX"), this.Q<ValueField>("PositionY"), this.Q<ValueField>("PositionZ"));
-            rotation = new(this.Q<ValueField>("RotationX"), this.Q<ValueField>("RotationY"), this.Q<ValueField>("RotationZ"));
-            scale = new(this.Q<ValueField>("ScaleX"), this.Q<ValueField>("ScaleY"), this.Q<ValueField>("ScaleZ"));
+            position = new(this.Q<NumberField>("PositionX"), this.Q<NumberField>("PositionY"), this.Q<NumberField>("PositionZ"));
+            rotation = new(this.Q<NumberField>("RotationX"), this.Q<NumberField>("RotationY"), this.Q<NumberField>("RotationZ"));
+            scale = new(this.Q<NumberField>("ScaleX"), this.Q<NumberField>("ScaleY"), this.Q<NumberField>("ScaleZ"));
             
             position.xField.InputField.RegisterValueChangedCallback(OnPositionChanged);
             position.yField.InputField.RegisterValueChangedCallback(OnPositionChanged);
