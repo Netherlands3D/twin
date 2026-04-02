@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
 
@@ -14,10 +13,6 @@ namespace Netherlands3D.UI.Panels
     public class PropertyPanelBehaviour : MonoBehaviour
     {
         private VisualElement root;
-        private InputAction rightClickAction;
-        private InputAction leftClickAction;
-        private InputAction longPressAction;
-        private InputAction touchAction;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private VisualElement propertySectionContainer;
 
