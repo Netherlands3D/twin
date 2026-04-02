@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -20,10 +21,14 @@ namespace Netherlands3D.UI.Components
         
         private List<IconImage> valueIcons;
         
+        private EventCallback<PointerUpEvent> pointerConsumeCallback = null;
+        
         public DropDown()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
+            
+            
             
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
@@ -37,7 +42,7 @@ namespace Netherlands3D.UI.Components
                 Icon.pickingMode = PickingMode.Ignore;
             });
             
-            RegisterCallback<MouseDownEvent>(evt =>
+            RegisterCallback<PointerDownEvent>(evt =>
             {
                 //wait a frame to have the popup instantiated
                 schedule.Execute(() =>
@@ -47,6 +52,9 @@ namespace Netherlands3D.UI.Components
                     {
                         VisualElement popupArea = rootSettings.ElementAt(1);
                         popupArea.RemoveFromClassList("unity-base-dropdown");
+                        
+                        //we need to block and consume the first pointer up or the popup will close immediately
+                        ConsumePointer(evt, popupArea);
                         
                         popup = popupArea.ElementAt(0);
                         popup.UnregisterCallback<GeometryChangedEvent>(SetPopupPosition);
@@ -86,6 +94,16 @@ namespace Netherlands3D.UI.Components
                 //update the main icon after the choice change
                 SetValue(index);
             });
+        }
+
+        private void ConsumePointer(PointerDownEvent evt, VisualElement area)
+        {
+            pointerConsumeCallback = (evt) =>
+            {
+                evt.StopImmediatePropagation();
+                area.UnregisterCallback(pointerConsumeCallback, TrickleDown.TrickleDown);
+            };
+            area.RegisterCallback(pointerConsumeCallback, TrickleDown.TrickleDown);
         }
 
         public void SetValue(int index)
