@@ -931,6 +931,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FooterBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1725377468385142864, guid: 25ffb8d76b150854d93ed18046e32085,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2482602390287277236, guid: 25ffb8d76b150854d93ed18046e32085,
         type: 3}
       propertyPath: m_AnchorMax.x

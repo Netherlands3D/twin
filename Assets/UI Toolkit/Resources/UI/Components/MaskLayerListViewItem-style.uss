@@ -1,0 +1,14 @@
+.mask-layer-list-view-item {
+    align-items: center;
+    flex-direction: row;
+    flex-grow: 1;
+    margin-bottom: var(--spacing-1);
+}
+
+.mask-layer-list-view-item:hover {
+    background-color: transparent;
+}
+
+.mask-layer-list-view-item__cell {
+    padding-right: var(--spacing-3);
+}
