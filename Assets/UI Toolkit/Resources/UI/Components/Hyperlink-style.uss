@@ -1,0 +1,8 @@
+.hyperlink{
+    color: var(--color-link-text);
+    cursor: link;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-link-text);
+    padding-bottom: 0;
+    align-self: flex-start;
+}
