@@ -15,6 +15,17 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
             
             RegisterCallback<ClickEvent>(OnClick);
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+        }
+
+        private void OnAttachToPanel(AttachToPanelEvent evt)
+        {
+            text = UnderlineText(text);
+        }
+
+        private string UnderlineText(string s)
+        {
+            return "<u>" + s +"</u>";
         }
 
         private void OnClick(ClickEvent evt)
