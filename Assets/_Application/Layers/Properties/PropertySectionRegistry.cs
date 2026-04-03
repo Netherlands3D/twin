@@ -5,66 +5,28 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [Serializable]
-    public class PropertyPanelEntry
+    public static class PropertySectionRegistry
     {
-        public string TypeName;
-        public GameObject Prefab;
-    }
-
-    [CreateAssetMenu(fileName = "PropertyPanelRegistry", menuName = "Netherlands3D/PropertyPanelRegistry", order = 0)]
-    public class PropertySectionRegistry : ScriptableObject
-    {
-        [SerializeField] private List<PropertyPanelEntry> Entries = new();
-#if UNITY_EDITOR
-        private void OnValidate()
+        public static Dictionary<Type, Type> TypeRegistry = new Dictionary<Type, Type>();
+            
+        static PropertySectionRegistry()
         {
-            PropertySectionRegistryBuilder.Rebuild();
-        }
-#endif
-        public void AddEntry(string typeName, GameObject prefab)
-        {
-            var entry = new PropertyPanelEntry();
-            entry.TypeName = typeName;
-            entry.Prefab = prefab;
-            Entries.Add(entry);
-        }
-
-        public void Clear()
-        {
-            Entries.Clear();
-        }
-
-        public bool HasPanel(Type type)
-        {
-            return Entries.Any(entry => entry.TypeName == type.AssemblyQualifiedName);
-        }
-
-        public List<GameObject> GetPanelPrefabs(Type type, LayerPropertyData propertyData)
-        {
-            List<GameObject> prefabs = new List<GameObject>();  
-            foreach(var entry in Entries)
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
             {
-                if (entry.TypeName == type.AssemblyQualifiedName)
+                foreach (var type in assembly.GetTypes())
                 {
-                    prefabs.Add(entry.Prefab);
-                }
-            }
-
-            foreach (var interfaceType in type.GetInterfaces())
-            {
-                if (!HasPanel(interfaceType))
-                    continue;
-
-                foreach (var entry in Entries)
-                {
-                    if (entry.TypeName == interfaceType.AssemblyQualifiedName)
+                    if (type
+                            .GetCustomAttributes(typeof(PropertySectionAttribute), false)
+                            .FirstOrDefault() is PropertySectionAttribute attr)
                     {
-                        prefabs.Add(entry.Prefab);
+                        if (type.IsNested) continue; //The [UxmlElement] attribute causes Unity to code-generate a nested UxmlSerializedData class inside the panel classes, and that nested class inherits the attributes (PropertySectionAttribute) of its parent, so it will be picked up twice here.
+                        if (type.IsSubclassOf(typeof(MonoBehaviour))) continue; //todo: Remove this once all property panels are converted
+
+                        TypeRegistry.Add(attr.RequiredPropertyType, type);
                     }
                 }
             }
-            return prefabs;
         }
     }
 }

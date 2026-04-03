@@ -1,68 +1,70 @@
+using System;
 using System.Collections.Generic;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
+    [RequireComponent(typeof(UIDocument))]
     public class PropertyPanelBehaviour : MonoBehaviour
     {
-        [SerializeField] private InputActionAsset inputActionAsset;
-        [SerializeField] private PropertySectionRegistry registry;
-
         private VisualElement root;
-        private InputAction rightClickAction;
-        private InputAction leftClickAction;
-        private InputAction longPressAction;
-        private InputAction touchAction;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private VisualElement propertySectionContainer;
-        private List<ContentContainer> propertySections = new(); //property sections
 
         private void Start()
         {
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             propertySectionContainer = propertiesPanel.Q("Content");
-            propertiesPanel.Q<Button>().clicked += ClearActivePanel; //todo: replace this with ClearActivePanel once the Property class is no longer needed
+            propertiesPanel.Q<Button>().clicked += ClearActivePanel;
+            
+            ClearActivePanel();
         }
 
         public void ClearActivePanel()
         {
+            propertySectionContainer.Clear();
             propertiesPanel.SetEnabled(false);
-            
-            if (propertySections.Count == 0) //todo
-                return;
-
-            foreach (var section in propertySections)
-                propertiesPanel.Remove(section);
         }
 
         public void SpawnPanel(LayerData layer)
         {
+            ClearActivePanel();
             propertiesPanel.SetEnabled(true);
             CheckAndSpawnPanel(layer);
         }
 
         private void CheckAndSpawnPanel(LayerData layer)
         {
-            if (!ShowPanelsForProperty(layer))
+            var hasPanels = false;
+            foreach (var property in layer.LayerProperties)
             {
-                Debug.Log(layer.Name + " has no property sections");
+                if (property.IsEditable == false) continue;
+
+                hasPanels |= ShowPanelsForProperty(property, layer.LayerProperties);
+            }
+
+            if (!hasPanels)
+            {
+                ClearActivePanel();
             }
         }
 
-        private bool ShowPanelsForProperty(LayerData layer)
+        private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
         {
-            if (layer.LayerProperties.Count > 0)
+            var type = property.GetType();
+            if (PropertySectionRegistry.TypeRegistry.ContainsKey(type))
             {
-                Debug.Log("spawn panels for: " + layer.Name);
-                // propertySectionContainer.Add(new PropertySection()); //todo
+                var panelType = PropertySectionRegistry.TypeRegistry[type];
+
+                var propertySection = (VisualElement)Activator.CreateInstance(panelType);
+                propertySectionContainer.Add(propertySection);
+                ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
                 return true;
             }
 
