@@ -13,7 +13,6 @@
     font-size: var(--font-size-base);
     -unity-font-style: normal;
     color: var(--color-text);
-    white-space: pre-wrap;
 }
 
 .text-header {
