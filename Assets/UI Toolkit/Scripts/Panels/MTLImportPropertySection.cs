@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.OBJImporter;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -15,21 +16,30 @@ namespace Netherlands3D.UI.Panels
         private ColorPropertyData stylingPropertyData;
         private OBJPropertyData objPropertyData;
 
+        private Button importButton;
+        
         public MTLImportPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
             
+            importButton = this.Q<Button>();
+            importButton.RegisterCallback<ClickEvent>(StartImport);
+            ServiceLocator.GetService<FileOpen>().onFilesSelected.AddListener(ImportMtl);
+        }
+
+        private void StartImport(ClickEvent evt)
+        {
+            ServiceLocator.GetService<FileOpen>().OpenFile("mtl");
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             objPropertyData = properties.Get<OBJPropertyData>();
             stylingPropertyData = properties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            objPropertyData.MtlImportSuccess.AddListener(OnMTLImportError);
+            objPropertyData.MtlImportSuccess.AddListener(OnMTLImportCompleted);
         }
         
-        //todo called in the inspector by FileOpen.cs
         public void ImportMtl(string path)
         {
             path = path.TrimEnd(',');
@@ -61,7 +71,7 @@ namespace Netherlands3D.UI.Panels
             // }
         }
 
-        private void OnMTLImportError(bool success)
+        private void OnMTLImportCompleted(bool success)
         {
             if (success)
             {

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1470089695843067273}
   - component: {fileID: 1748615501916967598}
   - component: {fileID: 2624745901488078463}
+  - component: {fileID: 8779175394998946664}
   m_Layer: 0
   m_Name: FileOpener
   m_TagString: Untagged
@@ -90,3 +91,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8779175394998946664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2388221261345448311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
+  service: {fileID: 1748615501916967598}
