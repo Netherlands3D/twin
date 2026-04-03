@@ -16,7 +16,9 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void Start()
         {
-            Hide();
+            //todo: this is no longer needed after the transition to UI toolkit
+            card.gameObject.SetActive(false);
+            sections.ClearAllChildren();
         }
 
         public void Show(LayerData layer)
