@@ -8,7 +8,7 @@
          >
     <nl3d:ContentContainer leading-icon="Height" text="Referentiehoogte aanpassen">
         <ui:Label text="De hoogtebepaling van een laag kan op twee manieren gemeten worden, ten opzichte van de ellipsoïde of de geoïde. De referentiehoogte van de geoïde ligt tussen de 41 en 44 meter boven de ellipsoïde." class="vertical-datum-property-section__text"/>
-        <ui:Image/>
+        <ui:Image source="project://database/Assets/_Functionalities/OGC3DTiles/Afbeelding%20referentiehoogte.png"/>
         <ui:Label text="Wordt de hoogte niet goed weergegeven? Pas dan hieronder de referentiehoogte aan." class="vertical-datum-property-section__text"/>
         <nl3d:RadioButtonGroup label="" value="0" choices="&lt;b&gt;Ellipsoïde:&lt;/b&gt; het oppervlak alsof de aarde egaal is (standaardinstelling).,&lt;b&gt;Geoïde:&lt;/b&gt; het oppervlak op gemiddeld zeeniveau."/>
         <nl3d:Hyperlink text="Toelichting hoogtebepaling" url="https://3dtilesnederland.nl/over-terrein-en-3d-tilesets/"/>
