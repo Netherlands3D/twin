@@ -5,6 +5,7 @@
     xmlns:nl3d="Netherlands3D.UI.Components"
     editor-extension-mode="False" 
     class="hyperlink"
+    pointer-style-hover="Pointer"
 >
     <ui:Label class="hyperlink__text"/>
 </ui:UXML>
