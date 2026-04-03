@@ -38,6 +38,14 @@ namespace Netherlands3D.UI.Panels
         {
             ClearActivePanel();
             propertiesPanel.SetEnabled(true);
+
+            CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
+            if (credentials != null && !layer.HasValidCredentials)
+            {
+                bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
+                if (showingCredentials) return;
+            }
+
             CheckAndSpawnPropertyPanels(layer);
         }
 
