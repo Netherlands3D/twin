@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -19,6 +21,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         public void Show(LayerData layer)
         {
+            //UI Toolkit section todo: remove the rest of this function, and possibly this entire script once the LayerUI is converted to UI toolkit
+            var propertyPanelBehaviour = FindAnyObjectByType<PropertyPanelBehaviour>();
+            propertyPanelBehaviour.SpawnPanel(layer);
+            //---
+            
             card.SetActive(true);
             sections.ClearAllChildren();
             
@@ -55,6 +62,10 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void Hide()
         {
+            var propertyPanelBehaviour = FindAnyObjectByType<PropertyPanelBehaviour>();
+            propertyPanelBehaviour.ClearActivePanel();
+            
+            //todo: this is no longer needed after the transition to UI toolkit
             card.gameObject.SetActive(false);
             sections.ClearAllChildren();
         }

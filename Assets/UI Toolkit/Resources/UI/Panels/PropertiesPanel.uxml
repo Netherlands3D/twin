@@ -4,12 +4,12 @@
     xmlns:nl3d="Netherlands3D.UI.Components" 
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
     editor-extension-mode="False" 
-    class="properties"
+    class="properties-panel"
 >
-    <ui:VisualElement name="Header" class="properties-header">
-        <ui:Label text="Label" class="inspector-header-title"/>
-        <nl3d:Button name="PropertiesHeaderCloseButton" button-style="IconOnly" icon="close" class="properties-header-button-close"/>
+    <ui:VisualElement name="Header" class="properties-panel__header">
+        <nl3d:Header text="Eigenschappen" class="properties-panel__header-title"/>
+        <nl3d:Button name="PropertiesHeaderCloseButton" button-style="IconOnly" icon="close" class="properties-panel__header-button-close"/>
     </ui:VisualElement>
     <nl3d:ToolbarProperties />
-    <ui:VisualElement class="properties-content" name="Content" />
+    <ui:VisualElement class="properties-panel__content" name="Content" />
 </ui:UXML>
