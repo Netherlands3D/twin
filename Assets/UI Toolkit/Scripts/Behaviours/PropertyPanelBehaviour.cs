@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
 
@@ -15,13 +12,7 @@ namespace Netherlands3D.UI.Panels
     [RequireComponent(typeof(UIDocument))]
     public class PropertyPanelBehaviour : MonoBehaviour
     {
-        [SerializeField] private InputActionAsset inputActionAsset;
-
         private VisualElement root;
-        private InputAction rightClickAction;
-        private InputAction leftClickAction;
-        private InputAction longPressAction;
-        private InputAction touchAction;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private VisualElement propertySectionContainer;
 
@@ -31,6 +22,8 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
+            
+            ClearActivePanel();
         }
 
         public void ClearActivePanel()
