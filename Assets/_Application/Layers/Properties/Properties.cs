@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 foreach (var interfaceType in type.GetInterfaces())
                 {
                     // if (registry.HasPanel(interfaceType))
-                    if (PropertySectionRegistry.TypeRegistry.ContainsKey(type))
+                    if (PropertySectionRegistry.TypeRegistry.ContainsKey(interfaceType))
                     {
                         return true;
                     }
