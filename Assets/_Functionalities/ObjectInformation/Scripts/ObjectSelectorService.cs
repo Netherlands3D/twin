@@ -171,15 +171,18 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //is the click on any other button than the excluded ui elements then deselect
             if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
             {
-                Transform t = clickedObject.transform;
-                foreach (var excluded in excludedUIForDeselection)
+                if (clickedObject != null)
                 {
-                    if (t.IsChildOf(excluded))
-                        return;
+                    Transform t = clickedObject.transform;
+                    foreach (var excluded in excludedUIForDeselection)
+                    {
+                        if (t.IsChildOf(excluded))
+                            return;
+                    }
+
+                    Deselect();
+                    return;
                 }
-                
-                Deselect();
-                return;
             }
             
             //TODO this should be refactored when UITOOLKIT will be implemented fully
