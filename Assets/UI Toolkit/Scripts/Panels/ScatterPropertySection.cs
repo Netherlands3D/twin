@@ -17,7 +17,6 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(ToggleScatterPropertyData))]
     public partial class ScatterPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-        const string inactiveUSSClassName = "inactive";
         private ToggleScatterPropertyData convertToScatterPropertyData;
         private ScatterGenerationSettingsPropertyData settings;
 
@@ -73,7 +72,7 @@ namespace Netherlands3D.UI.Panels
             settings = properties.Get<ScatterGenerationSettingsPropertyData>();
             if (settings == null)
             {
-                SetSectionVisible(scatterSettingsSection, false);
+                scatterSettingsSection.SetEnabled(false);
                 return;
             }
 
@@ -94,17 +93,10 @@ namespace Netherlands3D.UI.Panels
             diameterSliderRange.RegisterValueChangedCallback(OnDiameterRangeChanged);
         }
 
-        private void SetSectionVisible(VisualElement section, bool isVisible)
-        {
-            if (isVisible)
-                section.RemoveFromClassList(inactiveUSSClassName);
-            else
-                section.AddToClassList(inactiveUSSClassName);
-        }
 
         private void SetEntireSectionVisible(bool isVisible)
         {
-            SetSectionVisible(this, isVisible);
+            SetEnabled(isVisible);
         }
 
         private void SetRotationSliderVisible(bool autoRotate)
@@ -124,7 +116,7 @@ namespace Netherlands3D.UI.Panels
 
         private void SetScatterSettingsSectionVisible(bool isScattered)
         {
-            SetSectionVisible(scatterSettingsSection, isScattered);
+            scatterSettingsSection.SetEnabled(isScattered);
         }
 
         private void OnScatterSettingsChanged()
@@ -132,7 +124,7 @@ namespace Netherlands3D.UI.Panels
             scatterAreaRadioButtonGroup.value = fillTypeIndices.IndexOf(settings.FillType);
 
             strokeWidthSlider.value = settings.StrokeWidth;
-            SetSectionVisible(strokeWidthSlider, settings.FillType != FillType.Complete);
+            strokeWidthSlider.SetEnabled(settings.FillType != FillType.Complete);
             densitySlider.value = settings.Density;
             positionRandomnessSlider.value = settings.Scatter;
             rotationSlider.value = settings.Angle;

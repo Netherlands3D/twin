@@ -1,5 +1,9 @@
 .scatter-property-section.inactive,
-.scatter-property-section__scatter-settings.inactive,
-.scatter-property-section__scatter-control.inactive{
+.scatter-property-section__scatter-settings:disabled,
+.scatter-property-section__scatter-control:disabled{
     display: none;
+}
+
+.scatter-property-section__scatter-control:disabled.visible-when-disabled{
+    display: flex;
 }

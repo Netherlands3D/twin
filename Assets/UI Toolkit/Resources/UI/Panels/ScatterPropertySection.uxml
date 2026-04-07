@@ -9,7 +9,7 @@
             <nl3d:Slider name="RandBreedte" label="Breedte rand" low-value="0.01" high-value="100" class="scatter-property-section__scatter-control" />
             <nl3d:Slider name="Dichtheid" label="Dichtheid" low-value="0.01" high-value="10000" class="scatter-property-section__scatter-control" />
             <nl3d:Slider name="Verspreidingsgraad" label="Verspreidingsgraad" low-value="0" high-value="100" class="scatter-property-section__scatter-control" />
-            <nl3d:Slider name="RotatieRaster" label="Rotatie raster" low-value="0" high-value="360" class="scatter-property-section__scatter-control" />
+            <nl3d:Slider name="RotatieRaster" label="Rotatie raster" low-value="0" high-value="360" class="scatter-property-section__scatter-control visible-when-disabled" />
             <nl3d:SliderRange  name="HoogteVariatie" label="Hoogte variatie" low-value="0" high-value="50" class="scatter-property-section__scatter-control" />
             <nl3d:SliderRange  name="DiameterVariatie" label="Diameter variatie" low-value="0" high-value="50" class="scatter-property-section__scatter-control" />
         </ui:VisualElement>
