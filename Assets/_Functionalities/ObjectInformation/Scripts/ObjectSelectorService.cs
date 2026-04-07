@@ -155,6 +155,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+       
+
         public bool IsAnyToolActive()
         {
             foreach (Tool tool in activeForTools)
