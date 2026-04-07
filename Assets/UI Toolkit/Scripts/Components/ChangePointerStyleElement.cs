@@ -57,7 +57,6 @@ namespace Netherlands3D.UI.Components
         
         public ChangePointerStyleElement()
         {
-            // this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
             RegisterCallback<PointerOverEvent>(OnPointerOver);
