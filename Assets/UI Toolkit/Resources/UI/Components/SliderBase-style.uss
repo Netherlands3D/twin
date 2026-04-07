@@ -72,6 +72,7 @@
     border-radius: 100%;
 }
 
-.unity-base-field__label{
+.slider .unity-base-field__label,
+.slider-range .unity-base-field__label{
     -unity-font-definition: var(--nl3d-header-font);
 }
