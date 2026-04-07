@@ -33,6 +33,13 @@ namespace Netherlands3D.UI.Panels
         private SliderRange heightSliderRange;
         private SliderRange diameterSliderRange;
 
+        private List<FillType> fillTypeIndices = new List<FillType>()
+        {
+            FillType.Fill, // 0
+            FillType.Stroke, // 1
+            FillType.Complete // 2
+        };
+
         public ScatterPropertySection()
         {
             this.CloneComponentTree("Panels");
@@ -69,15 +76,15 @@ namespace Netherlands3D.UI.Panels
                 SetSectionVisible(scatterSettingsSection, false);
                 return;
             }
-            
+
             OnScatterSettingsChanged();
             settings.ScatterSettingsChanged.AddListener(OnScatterSettingsChanged); //the panel should update regardless of which scatter settings change
             settings.ScatterDistributionChanged.AddListener(OnScatterSettingsChanged); //the panel should update regardless of which scatter settings change
             settings.ScatterShapeChanged.AddListener(OnScatterSettingsChanged); //the panel should update regardless of which scatter settings change
-            
+
             SetRotationSliderVisible(settings.AutoRotateToLine);
             settings.AutoRotateToLineChanged.AddListener(SetRotationSliderVisible);
-            
+
             scatterAreaRadioButtonGroup.RegisterValueChangedCallback(OnFillTypeChanged);
             strokeWidthSlider.RegisterValueChangedCallback(OnStrokeWidthValueChanged);
             densitySlider.RegisterValueChangedCallback(OnDensitySliderValueChanged);
@@ -94,31 +101,20 @@ namespace Netherlands3D.UI.Panels
             else
                 section.AddToClassList(inactiveUSSClassName);
         }
-        
+
         private void SetEntireSectionVisible(bool isVisible)
         {
             SetSectionVisible(this, isVisible);
         }
-        
+
         private void SetRotationSliderVisible(bool autoRotate)
         {
             rotationSlider.SetEnabled(!autoRotate);
         }
-        
+
         private void OnFillTypeChanged(ChangeEvent<int> evt)
         {
-            switch (evt.newValue)
-            {
-                case 0:
-                    settings.FillType = FillType.Fill;
-                    break;
-                case 1:
-                    settings.FillType = FillType.Stroke;
-                    break;
-                case 2:
-                    settings.FillType = FillType.Complete;
-                    break;
-            }
+            settings.FillType = fillTypeIndices[evt.newValue];
         }
 
         private void OnConvertToggleValueChanged(ChangeEvent<bool> evt)
@@ -133,19 +129,14 @@ namespace Netherlands3D.UI.Panels
 
         private void OnScatterSettingsChanged()
         {
-            scatterAreaRadioButtonGroup.value = settings.FillType switch
-            {
-                FillType.Complete => 2, // Beide
-                FillType.Stroke => 1, // Rand
-                FillType.Fill => 0  // Midden
-            };
+            scatterAreaRadioButtonGroup.value = fillTypeIndices.IndexOf(settings.FillType);
 
             strokeWidthSlider.value = settings.StrokeWidth;
             SetSectionVisible(strokeWidthSlider, settings.FillType != FillType.Complete);
             densitySlider.value = settings.Density;
             positionRandomnessSlider.value = settings.Scatter;
             rotationSlider.value = settings.Angle;
-            heightSliderRange.value = new Vector2(settings.MinScale.y,  settings.MaxScale.y);
+            heightSliderRange.value = new Vector2(settings.MinScale.y, settings.MaxScale.y);
             diameterSliderRange.value = new Vector2(settings.MinScale.x, settings.MaxScale.x); //x and z are the same for diameter
         }
 
@@ -153,7 +144,7 @@ namespace Netherlands3D.UI.Panels
         {
             settings.StrokeWidth = evt.newValue;
         }
-        
+
         private void OnDensitySliderValueChanged(ChangeEvent<float> evt)
         {
             settings.Density = evt.newValue;
@@ -163,12 +154,12 @@ namespace Netherlands3D.UI.Panels
         {
             settings.Scatter = evt.newValue;
         }
-        
+
         private void OnRotationValueChanged(ChangeEvent<float> evt)
         {
             settings.Angle = evt.newValue;
         }
-        
+
         private void OnHeightRangeChanged(ChangeEvent<Vector2> evt)
         {
             var minScale = settings.MinScale;
@@ -181,7 +172,7 @@ namespace Netherlands3D.UI.Panels
             settings.MinScale = minScale;
             settings.MaxScale = maxScale;
         }
-        
+
         private void OnDiameterRangeChanged(ChangeEvent<Vector2> evt)
         {
             var minScale = settings.MinScale;
