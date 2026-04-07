@@ -14,8 +14,6 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(PolygonSelectionLayerPropertyData))]
     public partial class PolygonPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-        const string inactiveUSSClassName = "inactive";
-        
         private PolygonSelectionLayerPropertyData polygonPropertyData;
         
         private VisualElement linePropertiesElement;
@@ -50,16 +48,8 @@ namespace Netherlands3D.UI.Panels
                 parent.Remove(this);
             }
             
-            SetSectionVisible(linePropertiesElement, polygonPropertyData.ShapeType == ShapeType.Line);
-            SetSectionVisible(gridPropertiesElement, polygonPropertyData.ShapeType == ShapeType.Grid);
-        }
-
-        private void SetSectionVisible(VisualElement section, bool isVisible)
-        {
-            if (isVisible)
-                section.RemoveFromClassList(inactiveUSSClassName);
-            else
-                section.AddToClassList(inactiveUSSClassName);
+            linePropertiesElement.SetEnabled(polygonPropertyData.ShapeType == ShapeType.Line);
+            gridPropertiesElement.SetEnabled(polygonPropertyData.ShapeType == ShapeType.Grid);
         }
 
         private void OnStrokeWidthChanged(ChangeEvent<float> evt)

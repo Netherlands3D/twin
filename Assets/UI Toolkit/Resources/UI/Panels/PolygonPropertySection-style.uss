@@ -1,4 +1,4 @@
-.inactive{
+.polygon-property-section__shape-type-section:disabled{
     display: none;
 }
 
