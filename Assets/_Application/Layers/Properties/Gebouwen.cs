@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin.layers.properties
     public class Gebouwen : MonoBehaviour, IVisualizationWithPropertyData
     {
         private LayerGameObject visualization;
+        private List<string> buildingIds = new();
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -38,14 +39,14 @@ namespace Netherlands3D.Twin.layers.properties
                 return;
 
             BuildingPropertyData propertyData = visualization.LayerData.GetProperty<BuildingPropertyData>();
-            propertyData.buildingIds.Clear();
+            buildingIds.Clear();
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)
             {
                 if(kv.Value is MeshMapping)
-                    propertyData.buildingIds.Add(kv.Key);
+                    buildingIds.Add(kv.Key);
             }
-            Debug.Log(propertyData.buildingIds.Count);
+            propertyData.BuildingIds = buildingIds;
         }
     }
 }
