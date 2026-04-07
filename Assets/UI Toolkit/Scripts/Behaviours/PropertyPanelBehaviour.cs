@@ -64,7 +64,6 @@ namespace Netherlands3D.UI.Panels
                 var panelTypes = PropertySectionRegistry.TypeRegistry[type];
                 foreach (var panelType in panelTypes)
                 {
-                    Debug.Log(panelType.Name);
                     var propertySection = (VisualElement)Activator.CreateInstance(panelType);
                     propertySectionContainer.Add(propertySection);
                     ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
