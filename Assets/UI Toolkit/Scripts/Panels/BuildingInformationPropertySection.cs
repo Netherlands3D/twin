@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.Services;
@@ -51,7 +52,7 @@ namespace Netherlands3D.UI.Panels
             Dictionary<string, Coordinate> buildingIds = buildingPropertyData.BuildingIds;
             if(buildingIds.Count == 0) return;
 
-            thumbnailContainer.schedule.Execute(() => { LoadBagId(buildingIds[0]); });
+            thumbnailContainer.schedule.Execute(() => { LoadBagId(buildingIds.FirstOrDefault()); });
         }
 
         private void OnIdsChanged(Dictionary<string, Coordinate> buildingIds)
@@ -61,9 +62,10 @@ namespace Netherlands3D.UI.Panels
             LoadBagId(buildingIds[0]);
         }
         
-        private void LoadBagId(string bagId)
+        private void LoadBagId(KeyValuePair<string, Coordinate> bagId)
         {
-            if (removeFromID.Length > 0) bagId = bagId.Replace(removeFromID, "");
+            string key = bagId.Key;
+            if (removeFromID.Length > 0) key = key.Replace(removeFromID, "");
 
             if (downloadProcess != null)
             {
