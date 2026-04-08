@@ -6,6 +6,7 @@
     box-sizing: border-box;
 }
 
+/* Default font styles */
 .text-base, 
 .unity-label, 
 .text-header {
@@ -24,4 +25,32 @@
     font-size: var(--font-size-lg);
     -unity-font-style: normal;
     color: var(--color-text);
+}
+
+/* Default shadow styles */
+.shadow-sm {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    background-color: var(--color-blue-900);
+    opacity: 0.3;
+    filter: blur(1px);
+}
+
+.shadow-md {
+    position: absolute;
+    left: var(--spacing-0_5);
+    top: var(--spacing-0_5);
+    background-color: var(--color-blue-900);
+    opacity: 0.3;
+    filter: blur(var(--spacing-0_5));
+}
+
+.shadow-lg {
+    position: absolute;
+    left: var(--spacing-1);
+    top: var(--spacing-1);
+    background-color: var(--color-blue-900);
+    opacity: 0.3;
+    filter: blur(var(--spacing-1));
 }

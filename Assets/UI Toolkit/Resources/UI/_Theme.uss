@@ -76,6 +76,11 @@
     --color-selection: rgba(0, 120, 250, 0.2);
     --color-link-text: rgb(51, 102, 204);
     --color-warning: rgb(227, 86, 86);
+
+    /* ColorPicker sprites */
+    --image-color-wheel: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/ColorWheel.png");
+    --image-color-slider-color: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/SliderColor.png");
+    --image-color-slider-alpha-bg: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/AlphaSliderAlpha.png");
     
     /* List of all known icons */
     --icon-adjustmentshorizontal: url("project://database/Assets/Sprites/UI/Icons/Type=AdjustmentsHorizontal,%20Color=white,%20Size=medium.png");
