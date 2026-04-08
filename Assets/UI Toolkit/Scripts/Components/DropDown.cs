@@ -1,6 +1,7 @@
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
 using Netherlands3D.UI_Toolkit.Scripts;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -95,8 +96,9 @@ namespace Netherlands3D.UI.Components
             popup.style.width = width;
             float left = contentContainer.worldBound.x;
             float top = contentContainer.worldBound.yMax;
+            float border = contentContainer.resolvedStyle.borderBottomWidth;
+            popup.style.top = top - border;
             popup.style.left = left;
-            popup.style.top = top;
         }
 
         public void SetValueIcons(List<IconImage> values)
