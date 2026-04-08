@@ -136,13 +136,12 @@ namespace Netherlands3D.UI.Components
 
         public void SetDropdownValues(List<IconImage> values)
         {
+            if(values == null || values.Count == 0) return;
+            
             dropDown.SetValueIcons(values);
             var choiceStrings = values.Select(value => value.ToString()).ToList();
             dropDown.choices = choiceStrings;
-            if (values != null && values.Count > 0)
-            {
-                SetDropdownValue(0);
-            } 
+            SetDropdownValue(0); 
         }
 
         public void SetDropdownValue(int value)
@@ -153,6 +152,11 @@ namespace Netherlands3D.UI.Components
         public void AddDropDownListener(UnityAction<int> listener)
         {
             dropDown.DropDownValueChanged.AddListener(listener);
+        }
+
+        public void RemoveDropDownListener(UnityAction<int> listener)
+        {
+            dropDown.DropDownValueChanged.RemoveListener(listener);
         }
 
         private string helpUrl;
@@ -208,8 +212,6 @@ namespace Netherlands3D.UI.Components
             var label = HeaderLabel;
             var check = Checkmark;
             if (check == null) return;
-            // var dropdown = dropDown;
-            // if(dropdown == null) return;
 
             if (leadingIcon != null && leadingIcon.parent != input) input.Add(leadingIcon);
             if (label != null && label.parent != input) input.Add(label);

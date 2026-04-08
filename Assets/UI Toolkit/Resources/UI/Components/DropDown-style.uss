@@ -37,43 +37,31 @@
     display: none;
 }
 
-.dropdown-popup-item {   
+.dropdown-popup-item {
     background-color: white;
     border-color: var(--color-blue-700);
-    border-radius: var(--spacing-4);
-    border-width: var(--spacing-1);
+    border-left-width: var(--spacing-1);
+    border-right-width: var(--spacing-1);
     padding: var(--spacing-2);
-    margin: 0;
     align-items: center;
     flex-shrink: 1;
     flex-grow: 0;
+
+
+    margin: 0;
 }
 
 .dropdown-popup-item.dropdown-popup-item__first-item {
     border-top-width: var(--spacing-1);
-    border-bottom-width: 0;
     border-top-left-radius: var(--spacing-4);
     border-top-right-radius: var(--spacing-4);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-bottom: 0;
+
 }
 
 .dropdown-popup-item.dropdown-popup-item__last-item {
-    border-top-width: 0;
     border-bottom-width: var(--spacing-1);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
     border-bottom-left-radius: var(--spacing-4);
     border-bottom-right-radius: var(--spacing-4);
-    margin-top: 0;
-}
-
-.dropdown-popup-item.dropdown-popup-item__middle-item {
-    border-top-width: 0;
-    border-bottom-width: 0;
-    border-radius: 0;
-    margin: 0;
 }
 
 

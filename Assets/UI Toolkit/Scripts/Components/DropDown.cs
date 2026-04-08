@@ -71,20 +71,16 @@ namespace Netherlands3D.UI.Components
                         {
                             VisualElement item = items[i];
                             item.AddToClassList("dropdown-popup-item");
-                            if(item == items.First())
+                            if(i == 0)
                                 item.AddToClassList("dropdown-popup-item__first-item");
-                            else if(item == items.Last())
+                            else if(i == items.Count - 1)
                                 item.AddToClassList("dropdown-popup-item__last-item");
-                            else
-                                item.AddToClassList("dropdown-popup-item__middle-item");
+                            
                             
                             item.Clear();
                             Icon icon = new Icon();
                             icon.pickingMode = PickingMode.Ignore;
                             icon.Image = valueIcons[i];
-                            
-                            float height = contentContainer.resolvedStyle.height;
-                            item.style.height = height;
                             item.Add(icon);
                         };
                     }
