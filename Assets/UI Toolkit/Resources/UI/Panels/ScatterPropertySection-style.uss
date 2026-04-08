@@ -1,4 +1,4 @@
-.scatter-property-section.inactive,
+.scatter-property-section:disabled,
 .scatter-property-section__scatter-settings:disabled,
 .scatter-property-section__scatter-control:disabled{
     display: none;
