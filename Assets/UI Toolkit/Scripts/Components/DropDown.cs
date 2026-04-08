@@ -47,9 +47,6 @@ namespace Netherlands3D.UI.Components
                     //check if the popuparea is present, if not there is no popup at all
                     if (popupArea != null)
                     {
-                        //we need to block and consume the first pointer up or the popup will close immediately
-                        ConsumePointer(evt, popupArea);
-                        
                         popup = rootSettings.Query<VisualElement>(className: "unity-base-dropdown__container-outer");
                         popup.RegisterCallback<GeometryChangedEvent>(SetPopupPosition);
                         popup.AddComponentStylesheetByType(GetType());
@@ -86,18 +83,6 @@ namespace Netherlands3D.UI.Components
             item.Add(icon);
         }
 
-        private void ConsumePointer(PointerDownEvent evt, VisualElement area)
-        {
-            //we have to cache the callback class scope so we can unsubscribe it again.
-            //because of the ordering of event callbacks we have to register the callback like this instead of immediately registering it without the cached callback
-            pointerConsumeCallback = (evt) =>
-            {
-                evt.StopImmediatePropagation();
-                area.UnregisterCallback(pointerConsumeCallback, TrickleDown.TrickleDown);
-            };
-            area.RegisterCallback(pointerConsumeCallback, TrickleDown.TrickleDown);
-        }
-
         public void SetValue(int index)
         {
             value = choices[index];
@@ -109,7 +94,7 @@ namespace Netherlands3D.UI.Components
             float width = contentContainer.resolvedStyle.width;
             popup.style.width = width;
             float left = contentContainer.worldBound.x;
-            float top = contentContainer.worldBound.y;
+            float top = contentContainer.worldBound.yMax;
             popup.style.left = left;
             popup.style.top = top;
         }
