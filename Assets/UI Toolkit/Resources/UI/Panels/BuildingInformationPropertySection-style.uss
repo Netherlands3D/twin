@@ -1,1 +1,9 @@
+.object-information-bagid__row {
+    flex-direction: row;
+}
 
+.object-information-bagid__label{
+    -unity-font-definition: var(--nl3d-default-font-semi-bold);
+    margin: 0;
+    padding: 0;
+}

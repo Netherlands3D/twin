@@ -9,5 +9,10 @@
     
     <nl3d:ContentContainer leading-icon="NorthArrow" text="Informatie gebouw">
         <ui:VisualElement class="object-information-thumbnail__container" name="ThumbnailContainer" />
+        <ui:Label name="InformatieLabel" text="Praktische informatie:" class="object-information-bagid__label"/>  
+        <ui:VisualElement class="object-information-bagid__row">
+            <ui:Label name="BagIdLabel" text="BAG ID" class="object-information-bagid__label"/>
+            <!-- <ui:Label name="BagIdLabel" text="BAG ID" class="object-information-bagid__label"/>     -->
+        </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
