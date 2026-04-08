@@ -12,6 +12,7 @@
         <ui:Label name="InformatieLabel" text="Praktische informatie:" class="object-information-bagid__label"/>  
         <ui:VisualElement class="object-information-bagid__row">
             <ui:Label name="BagIdLabel" text="BAG ID" class="object-information-bagid__label"/>
+            <nl3d:Hyperlink text="Toelichting hoogtebepaling" url="https://3dtilesnederland.nl/over-terrein-en-3d-tilesets/"/>
             <!-- <ui:Label name="BagIdLabel" text="BAG ID" class="object-information-bagid__label"/>     -->
         </ui:VisualElement>
     </nl3d:ContentContainer>
