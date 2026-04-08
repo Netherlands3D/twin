@@ -1,10 +1,7 @@
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.UI_Toolkit.Scripts;
-using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -91,6 +88,8 @@ namespace Netherlands3D.UI.Components
 
         private void ConsumePointer(PointerDownEvent evt, VisualElement area)
         {
+            //we have to cache the callback class scope so we can unsubscribe it again.
+            //because of the ordering of event callbacks we have to register the callback like this instead of immediately registering it without the cached callback
             pointerConsumeCallback = (evt) =>
             {
                 evt.StopImmediatePropagation();
