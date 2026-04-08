@@ -14,7 +14,6 @@ namespace Netherlands3D.UI.Components
     {
         public UnityEvent<int> DropDownValueChanged = new();
         
-        // Query and cache icon component
         private Icon icon;
         private Icon Icon => icon ??= this.Q<Icon>();
         
@@ -29,8 +28,6 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            
-            
             
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
@@ -49,36 +46,22 @@ namespace Netherlands3D.UI.Components
                 //wait a frame to have the popup instantiated
                 schedule.Execute(() =>
                 {
+                    VisualElement popupArea = rootSettings.Query<VisualElement>(className: "unity-base-dropdown");
                     //check if the popuparea is present, if not there is no popup at all
-                    if (rootSettings.childCount > 1)
+                    if (popupArea != null)
                     {
-                        VisualElement popupArea = rootSettings.ElementAt(1);
-                       
-                        
                         //we need to block and consume the first pointer up or the popup will close immediately
                         ConsumePointer(evt, popupArea);
                         
-                        popup = popupArea.ElementAt(0);
-                      
+                        popup = rootSettings.Query<VisualElement>(className: "unity-base-dropdown__container-outer");
                         popup.RegisterCallback<GeometryChangedEvent>(SetPopupPosition);
-                  
                         popup.AddComponentStylesheetByType(GetType());
                         
                         List<VisualElement> items = popup.Query<VisualElement>(className: "unity-base-dropdown__item").ToList();
                         for (int i = 0; i < items.Count; i++)
                         {
                             VisualElement item = items[i];
-                            if(i == 0)
-                                item.AddToClassList("dropdown-popup-item__first-item");
-                            else if(i == items.Count - 1)
-                                item.AddToClassList("dropdown-popup-item__last-item");
-                            
-                            
-                            item.Clear();
-                            Icon icon = new Icon();
-                            icon.pickingMode = PickingMode.Ignore;
-                            icon.Image = valueIcons[i];
-                            item.Add(icon);
+                            CreateDropdownItem(item, i, items.Count);
                         };
                     }
                 }); 
@@ -90,6 +73,20 @@ namespace Netherlands3D.UI.Components
                 SetValue(index);
                 DropDownValueChanged.Invoke(index);
             });
+        }
+        
+        private void CreateDropdownItem(VisualElement item, int index, int total)
+        {
+            if(index == 0)
+                item.AddToClassList("dropdown-popup-item__first-item");
+            else if(index == total - 1)
+                item.AddToClassList("dropdown-popup-item__last-item");
+                
+            item.Clear();
+            Icon icon = new Icon();
+            icon.pickingMode = PickingMode.Ignore;
+            icon.Image = valueIcons[index];
+            item.Add(icon);
         }
 
         private void ConsumePointer(PointerDownEvent evt, VisualElement area)
