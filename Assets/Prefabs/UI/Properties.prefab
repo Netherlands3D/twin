@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   card: {fileID: 278569769419280114}
   sections: {fileID: 196147295931165467}
+  registry: {fileID: 11400000, guid: 69110388472154f81b1e455c9688c6cd, type: 2}
 --- !u!114 &4886931328279182371
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -77,17 +77,33 @@ namespace Netherlands3D.Twin.Projects
             {
                 IndexTypeWithDataContract(type);
             }
+
+            // Now add all aliases as well
+            types = assembly.GetTypes().Where(t => t.IsDefined(typeof(DataContractAliasesAttribute)));
+            foreach (var type in types)
+            {
+                IndexAliasWithDataContract(type);
+            }
         }
 
         private void IndexTypeWithDataContract(Type type)
         {
-            var attribute = Attribute.GetCustomAttribute(type, typeof(DataContractAttribute)) as DataContractAttribute;
-            if (attribute == null) return;
+            if (Attribute.GetCustomAttribute(type, typeof(DataContractAttribute)) is not DataContractAttribute attribute) return;
 
-            KnownTypes.TryAdd(ExtractTypeAlias(type, attribute), type);
+            KnownTypes.TryAdd(ExtractDataContractNameForType(type, attribute), type);
         }
 
-        private static string ExtractTypeAlias(Type type, DataContractAttribute attribute)
+        private void IndexAliasWithDataContract(Type type)
+        {
+            if (Attribute.GetCustomAttribute(type, typeof(DataContractAliasesAttribute)) is not DataContractAliasesAttribute attribute) return;
+
+            for (var index = 0; index < attribute.Names.Length; index++)
+            {
+                KnownTypes.TryAdd(ExtractDataContractNameForType(type, attribute, index), type);
+            }
+        }
+
+        private static string ExtractDataContractNameForType(Type type, DataContractAttribute attribute)
         {
             // By default, we assume DataContract doesn't have additional info defined and we use the Type's
             // full name as a type code
@@ -99,6 +115,24 @@ namespace Netherlands3D.Twin.Projects
             // if DataContract does have a name defined; we use that so that we type-map the data and prevent future
             // issues when changing the location or namespace of a serialized class.
             alias = attribute.Name;
+            
+            if (string.IsNullOrEmpty(attribute.Namespace)) return alias;
+
+            // It would be even better if the DataContract has a vendor specific namespace, to prevent naming clashes
+            return $"{attribute.Namespace}/{alias}";
+        }
+
+        private static string ExtractDataContractNameForType(Type type, DataContractAliasesAttribute attribute, int index)
+        {
+            // If there is no name associated with the DataContract, that's OK and we return the type's name.
+            if (string.IsNullOrEmpty(attribute.Names[index]))
+            {
+                throw new Exception("No name defined for DataContract alias, aliases should always have a name");
+            }
+            
+            // if DataContract does have a name defined; we use that so that we type-map the data and prevent future
+            // issues when changing the location or namespace of a serialized class.
+            var alias = attribute.Names[index];
             
             if (string.IsNullOrEmpty(attribute.Namespace)) return alias;
 

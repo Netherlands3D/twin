@@ -16,7 +16,10 @@
 *  permissions and limitations under the License.
 */
 
+using System;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 
 namespace Netherlands3D.Minimap
@@ -32,7 +35,14 @@ namespace Netherlands3D.Minimap
             uiQuad = GetComponent<UIQuad>();
             wmtsMap = GetComponentInParent<WMTSMap>();
 
-			activeCamera = Camera.main;
+            CameraService cameraService = ServiceLocator.GetService<CameraService>();
+			activeCamera = cameraService.ActiveCamera;
+			cameraService.OnSwitchCamera.AddListener(SetCamera);
+        }
+
+        public void SetCamera(Camera camera)
+        {
+	        activeCamera = camera;
         }
 
         void Update()
@@ -42,6 +52,7 @@ namespace Netherlands3D.Minimap
 
 		private void DrawCameraFrustumOnMap()
 		{
+			
 			//Get corners
 			CameraExtents.GetRDExtent(activeCamera);
 			var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);
@@ -59,10 +70,10 @@ namespace Netherlands3D.Minimap
 			}
 		}
 
-		/// <summary>
-		/// Set the camera that needs to be used for the frustum.
-		/// </summary>
-		/// <param name="camera"></param>
-		public void SetActiveCamera(Camera camera) => activeCamera = camera;
-	}
+		private void OnDestroy()
+		{
+			CameraService cameraService = ServiceLocator.GetService<CameraService>();
+			cameraService.OnSwitchCamera.RemoveListener(SetCamera);
+		}
+    }
 }

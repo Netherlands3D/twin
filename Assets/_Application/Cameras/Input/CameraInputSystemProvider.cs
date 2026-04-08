@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using System;
+using UnityEngine.UIElements;
 #endif
 
 /* Copyright(C)  X Gemeente
@@ -87,23 +88,24 @@ namespace Netherlands3D.Twin.Cameras.Input
 
         private string[] originalProcessors;
 
-        public bool OverLockingObject
+        //TODO we need to remove/refactor this when UITOOLKIT is fully implemented
+        public bool OverLockingObject(out GameObject clickedObject)
         {
-            get
-            {
-                if (!inputSystemUIInputModule)
-                    return false;
-
-                var uiElementSelected = EventSystem.current.currentSelectedGameObject != null;
-                
-                GameObject gameObjectUnderPoint = inputSystemUIInputModule.GetLastRaycastResult(0).gameObject;
-                if (uiElementSelected || (gameObjectUnderPoint && gameObjectUnderPoint.IsInLayerMask(lockInputLayers)))
-                {
-                    return true;
-                }
-
+            clickedObject = null;
+            GameObject gameObjectUnderPoint = null;
+            if (!inputSystemUIInputModule)
                 return false;
+
+            var uiElementSelected = EventSystem.current.currentSelectedGameObject != null;
+
+            gameObjectUnderPoint = inputSystemUIInputModule.GetLastRaycastResult(0).gameObject;
+            clickedObject = gameObjectUnderPoint;
+            if (uiElementSelected || (gameObjectUnderPoint && gameObjectUnderPoint.IsInLayerMask(lockInputLayers)))
+            {
+                return true;
             }
+
+            return false;
         }
 
         private void Awake()
@@ -130,10 +132,18 @@ namespace Netherlands3D.Twin.Cameras.Input
             firstPersonModifierAction = cameraActionMap.FindAction("FirstPersonModifier");
             pointerAction = cameraActionMap.FindAction("Point");
 
+            rotateModifierAction.performed += OnRotate;
+            rotateModifierAction.canceled += OnRotate;
+
             SetOriginalProcessors(zoomAction);
             
             if (UseZoomScaleValue)
                 ApplyInputActionScaling(zoomAction, scrollScaleValue);
+        }
+
+        private void OnRotate(InputAction.CallbackContext ctx)
+        {
+            rotateModifier.InvokeStarted(ctx.ReadValueAsButton());
         }
 
         private void SetOriginalProcessors(InputAction action)
@@ -174,7 +184,7 @@ namespace Netherlands3D.Twin.Cameras.Input
         public void Update()
         {
             //Optionaly ignore camera input when the pointer is interacting with UI
-            if (!isDragging && OverLockingObject)
+            if (!isDragging && OverLockingObject(out GameObject clickedObject))
             {
                 ingoringInput = true;
                 return;
@@ -280,7 +290,6 @@ namespace Netherlands3D.Twin.Cameras.Input
 
             //Send modifiers
             draggingModifier.InvokeStarted(dragging);
-            rotateModifier.InvokeStarted(rotate);
             firstPersonModifier.InvokeStarted(firstPerson);
 
             //Always send main pointer position

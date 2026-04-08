@@ -9,15 +9,18 @@ namespace Netherlands3D.Twin.Configuration
 {
     public class ConfiguratorStarter : MonoBehaviour
     {
-        [SerializeField] private ProjectData currentProjectData;
+        [SerializeField] private PrefabLibrary prefabLibrary;
         [SerializeField] private Configurator configurator;
+        public UnityEvent OnStartConfiguration = new();
         public UnityEvent<Configuration> OnLoadedConfiguration = new();
 
         /// <summary>
         /// Make sure to set the culture to invariant to prevent issues with parsing floats and doubles.
         /// This way we consistently use the dot as the decimal separator.
         /// </summary>
-        private void Awake() {
+        private void Awake()
+        {
+            OnStartConfiguration.Invoke();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Coordinates.CoordinateSystems.connectedCoordinateSystem = Coordinates.CoordinateSystem.RDNAP;
 
@@ -27,6 +30,8 @@ namespace Netherlands3D.Twin.Configuration
 
         private IEnumerator Start()
         {
+            var currentProjectData = ScriptableObject.CreateInstance<ProjectData>();
+            currentProjectData.PrefabLibrary = prefabLibrary;
             ProjectData.SetCurrentProject(currentProjectData); //initialize a new project to work on, this sets ProjectData.Current
             configurator.OnLoaded.AddListener(AfterLoading);
             yield return configurator.Execute();

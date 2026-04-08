@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.SelectionTools;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
@@ -33,10 +32,7 @@ namespace Netherlands3D.Twin.Samplers
 
         private Coroutine scatterCoroutine;
         private Queue<IEnumerator> coroutineQueue = new Queue<IEnumerator>(); //queue to ensure the camera only processes one request at a time
-
-        public ScatterSettingsPropertySection scatterProptertiesPrefab; //todo: find a better way to reference this.
-        public ToggleScatterPropertySection ToggleScatterPropertySection; //todo: find a better way to reference this.
-
+        
 #if UNITY_EDITOR //for debug purposes
         private Bounds polyBounds;
         private Bounds gridBounds;
@@ -261,7 +257,7 @@ namespace Netherlands3D.Twin.Samplers
             var width = Mathf.CeilToInt(gridSampleSize * gridBounds.size.x);
             var height = Mathf.CeilToInt(gridSampleSize * gridBounds.size.z);
 
-            var renderTexture = new RenderTexture(width, height, GraphicsFormat.R32G32B32A32_SFloat, GraphicsFormat.None);
+            var renderTexture = new RenderTexture(width, height, GraphicsFormat.R32G32B32A32_SFloat, GraphicsFormat.D16_UNorm); //In the render graph API, the output Render Texture must have a depth buffer, GraphicsFormat.D16_UNorm is the minimum value to keep the render texture light weight.
             depthCamera.targetTexture = renderTexture;
             if (depthCamera.targetTexture.width > 4096 || depthCamera.targetTexture.height > 4096)
                 throw new ArgumentOutOfRangeException("Texture size should not be higher than 4096");

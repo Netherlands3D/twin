@@ -7,7 +7,9 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.layers.properties;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,7 +17,8 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class HiddenObjectsPropertySection : PropertySectionWithLayerGameObject, IMultiSelectable
+    [PropertySection(typeof(HiddenObjectsPropertyData), Symbolizer.VisibilityProperty)]
+    public class HiddenObjectsPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject hiddenItemPrefab;
@@ -23,7 +26,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private float cameraDistance = 150f;
         [SerializeField] private Material selectionMaterial;
 
-        private LayerGameObject layer;       
         private GameObject selectedGhostObject;
         private UnityAction<IMapping> waitForMappingLoaded;
         
@@ -32,18 +34,16 @@ namespace Netherlands3D.Twin.Layers.Properties
         public List<ISelectable> Items { get; set; } = new();
         public ISelectable FirstSelectedItem { get; set; }
 
-        public override LayerGameObject LayerGameObject
-        {
-            get => layer;
-            set => Initialize(value);
-        }
+        private HiddenObjectsPropertyData stylingPropertyData;
 
-        private void Initialize(LayerGameObject layer)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            this.layer = layer;
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
+            if (stylingPropertyData == null) return;
+
             CreateItems();
             UpdateVisibility();
-            layer.OnStylingApplied.AddListener(UpdateVisibility);
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
 
             ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
             //deselect any selected feature in the world when opening the hidden feature panel
@@ -66,12 +66,12 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             layerContent.ClearAllChildren();
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
-            foreach(KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
+            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
-                if(kv.Key.Contains(CartesianTileLayerStyler.VisibilityIdentifier))
+                if(kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
                 {
-                    string objectId = CartesianTileLayerStyler.ObjectIdFromVisibilityStyleRuleName(kv.Key);                    
-                    bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
+                    string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);                    
+                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
                     if (visibility == false)
                         CreateVisibilityItem(objectId);
                 }
@@ -99,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             //update the toggles based on visibility attributes in data
             foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
             {
-                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(item.ObjectId);
+                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(item.ObjectId);
                 item.SetToggleState(visibility == true);
             }
         }        
@@ -108,25 +108,25 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             //the feature being changed should always have its coordinate within the styling rule!
             Coordinate? coord;
-            LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
+            LayerFeature layerFeature = HiddenObject.GetLayerFeatureFromBagId(objectId);
             if(layerFeature != null)
             {               
-                coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObject(layerFeature);
+                coord = stylingPropertyData.GetVisibilityCoordinateForSubObject(layerFeature);
                 if(coord == null)
                 {
                     Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                     return;
                 }
-                (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord);
+                stylingPropertyData.SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord);
                 return;
             }
-            coord = (Coordinate)(layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
+            coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                 return;
             }
-            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObjectByAttributeTag(objectId, visible, (Coordinate)coord);            
+            stylingPropertyData.SetVisibilityForSubObjectById(objectId, visible, (Coordinate)coord);            
         }
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
@@ -189,14 +189,14 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HiddenFeatureSelected(string objectId)
         {
-            Coordinate ? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
+            Coordinate ? coord = stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                 return;
             }
 
-            LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
+            LayerFeature layerFeature = HiddenObject.GetLayerFeatureFromBagId(objectId);
             if(layerFeature == null)
             {
                 //there is no layerfeature present, lets attach a listener to wait for the mapping to be loaded
@@ -251,13 +251,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void ShowGhostMesh(string objectId)
         {
             DestroyGhostMesh();
-            bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
+            bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
             if (visibility == true)
             {
                 return;
             }
 
-            Coordinate? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
+            Coordinate? coord = stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
@@ -296,23 +296,23 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnDestroy()
         {
             DestroyGhostMesh();
-            layer.OnStylingApplied.RemoveListener(UpdateVisibility);
+            stylingPropertyData.OnStylingChanged.RemoveListener(UpdateVisibility);
             ObjectSelectorService.MappingTree.OnMappingRemoved.RemoveListener(OnMappingRemoved);
 
             //remove all visibility data for features that became visible
             List<string> idsToRemove = new List<string>();
-            foreach (KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
+            foreach (KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
-                if (kv.Key.Contains(CartesianTileLayerStyler.VisibilityIdentifier))
+                if (kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
                 {
-                    string objectId = CartesianTileLayerStyler.ObjectIdFromVisibilityStyleRuleName(kv.Key);
-                    bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
+                    string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);
+                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
                     if (visibility == true)
                         idsToRemove.Add(objectId);
                 }
             }
             foreach (string id in idsToRemove)
-                (layer.Styler as CartesianTileLayerStyler).RemoveVisibilityForSubObjectByAttributeTag(id);
+                stylingPropertyData.RemoveVisibilityForSubObjectById(id);
         }
     }
 }

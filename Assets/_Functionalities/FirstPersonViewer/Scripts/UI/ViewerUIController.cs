@@ -1,0 +1,53 @@
+using DG.Tweening;
+using Netherlands3D.Services;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Netherlands3D.FirstPersonViewer.UI
+{
+    public class ViewerUIController : MonoBehaviour
+    {
+        private CanvasGroup viewerGroup;
+        [SerializeField] private GameObject viewerUI;
+        [SerializeField] private List<GameObject> uiToDisable;
+
+        private FirstPersonViewer firstPersonViewer;
+
+        private void Start()
+        {
+            viewerGroup = viewerUI.GetComponent<CanvasGroup>();
+
+            //Events get cleared in First Person Viewer code.
+            firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
+            firstPersonViewer.OnViewerEntered.AddListener(EnterViewer);
+            firstPersonViewer.OnViewerExited.AddListener(ExitViewer);
+
+            viewerUI.SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            firstPersonViewer.OnViewerEntered.RemoveListener(EnterViewer);
+            firstPersonViewer.OnViewerExited.RemoveListener(ExitViewer);
+        }
+
+        private void EnterViewer()
+        {
+            uiToDisable.ForEach(ui => ui.SetActive(false));
+
+            if (viewerGroup != null)
+            {
+                viewerGroup.alpha = 0;
+                viewerUI.SetActive(false);
+                viewerGroup.DOFade(1, 1f).SetDelay(1);
+            }
+            viewerUI.SetActive(true);
+        }
+
+        private void ExitViewer(bool modified)
+        {
+            viewerUI?.SetActive(false);
+            uiToDisable.ForEach(ui => ui.SetActive(true));
+        }
+    }
+}

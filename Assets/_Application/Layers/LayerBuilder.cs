@@ -4,8 +4,8 @@ using JetBrains.Annotations;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -18,11 +18,9 @@ namespace Netherlands3D.Twin.Layers
         internal Uri Url { get; private set; }
         private string Name { get; set; }
         private Color? Color { get; set; }
-        private LayerData Parent { get; set; }
         internal StoredAuthorization Credentials { get; set; }
         internal List<LayerPropertyData> Properties { get; } = new();
         [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
-        private List<LayerStyle> Styles { get; } = new();
         private Action<LayerData> whenBuilt;
         
         internal LayerBuilder()
@@ -32,12 +30,6 @@ namespace Netherlands3D.Twin.Layers
         public static ILayerBuilder Create() => new LayerBuilder();
 
         public static ILayerBuilder Create(LayerPresetArgs args) => LayerPresetRegistry.Create(args);
-
-        public ILayerBuilder FromUrl(Uri url) => OfType("url").At(url).WithCredentials(new Public(url));
-
-        public ILayerBuilder FromUrl(string url) => FromUrl(new Uri(url));
-
-        public ILayerBuilder FromFile(Uri url) => OfType("file").At(url);
 
         public ILayerBuilder OfType(string type)
         {
@@ -64,13 +56,6 @@ namespace Netherlands3D.Twin.Layers
         {
             Url = url;
 
-            return this;
-        }
-
-        public ILayerBuilder ChildOf(LayerData parent)
-        {
-            Parent = parent;
-            
             return this;
         }
 
@@ -115,14 +100,7 @@ namespace Netherlands3D.Twin.Layers
             
             return this;
         }
-
-        public ILayerBuilder AddStyle(LayerStyle style)
-        {
-            Styles.Add(style);
-
-            return this;
-        }
-
+        
         public ILayerBuilder WhenBuilt(Action<LayerData> callback)
         {
             this.whenBuilt = callback;
@@ -130,28 +108,16 @@ namespace Netherlands3D.Twin.Layers
             return this;
         }
 
-        public LayerData Build(LayerGameObject ontoReference)
-        {
-            var layerData = new ReferencedLayerData(Name, Type, ontoReference);
-            ontoReference.LayerData = layerData;
+        public LayerData Build()
+        {            
+            LayerData layerData = new LayerData(Name, Type);
             
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
             if (Color.HasValue) layerData.Color = Color.Value;
-            if (Parent != null) layerData.SetParent(Parent);
 
             foreach (var property in Properties)
             {
                 layerData.SetProperty(property);
-            }
-
-            if (DefaultSymbolizer != null)
-            {
-                layerData.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
-            }
-            
-            foreach (var style in Styles)
-            {
-                layerData.AddStyle(style);
             }
 
             whenBuilt?.Invoke(layerData);

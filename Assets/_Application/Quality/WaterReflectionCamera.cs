@@ -5,6 +5,7 @@ namespace Netherlands3D.Twin.Quality
 {
     public class WaterReflectionCamera : MonoBehaviour
     {
+        private const int MINIMUM_DEPTH_BUFFER_FORMAT = 16; //In the render graph API, the output Render Texture must have a depth buffer, this is the minimum value to keep the render texture light weight.
         private RenderTexture renderTexture;
 
         [SerializeField] private float scaleMultiplier = 0.1f;
@@ -28,6 +29,20 @@ namespace Netherlands3D.Twin.Quality
 
         private GlobalKeyword exampleFeatureKeyword;
 
+        private void Start()
+        {
+            followCamera = App.Cameras.ActiveCamera;
+            App.Cameras.OnSwitchCamera.AddListener(SetCamera);
+
+            if (!renderTexture)
+                CreateNewRenderTexture();
+        }
+
+        public void SetCamera(Camera camera)
+        {
+            followCamera = camera;
+        }
+
         private void OnEnable()
         {
             exampleFeatureKeyword = GlobalKeyword.Create(waterReflectionsFeatureKeyword);
@@ -36,11 +51,7 @@ namespace Netherlands3D.Twin.Quality
             if (!camera)
                 camera = GetComponent<Camera>();
 
-            if (!followCamera)
-                followCamera = Camera.main;
-
-            if (!renderTexture)
-                CreateNewRenderTexture();
+            
         }
 
         private void OnDisable()
@@ -53,8 +64,7 @@ namespace Netherlands3D.Twin.Quality
 
         private void CreateNewRenderTexture()
         {
-            renderTexture = new RenderTexture(Mathf.RoundToInt(followCamera.pixelWidth * ScaleMultiplier), Mathf.RoundToInt(followCamera.pixelHeight * ScaleMultiplier), 0);
-
+            renderTexture = new RenderTexture(Mathf.RoundToInt(followCamera.pixelWidth * ScaleMultiplier), Mathf.RoundToInt(followCamera.pixelHeight * ScaleMultiplier), MINIMUM_DEPTH_BUFFER_FORMAT);
             screenWidthOnInit = followCamera.pixelWidth;
             screenHeightOnInit = followCamera.pixelHeight;
             camera.targetTexture = renderTexture;
@@ -63,8 +73,6 @@ namespace Netherlands3D.Twin.Quality
 
         void LateUpdate()
         {
-            followCamera = Camera.main;
-
             camera.fieldOfView = followCamera.fieldOfView;
 
             if (Screen.width != followCamera.pixelHeight || screenHeightOnInit != followCamera.pixelHeight)
@@ -87,6 +95,11 @@ namespace Netherlands3D.Twin.Quality
 
             Destroy(renderTexture);
             CreateNewRenderTexture();
+        }
+        
+        private void OnDestroy()
+        {
+            App.Cameras.OnSwitchCamera.RemoveListener(SetCamera);
         }
     }
 }

@@ -24,6 +24,13 @@ namespace Netherlands3D.Functionalities.Wms
         protected Texture2D texture;
         protected private Material materialInstance;
 
+        public virtual void Project(Texture2D tex, int size, float height, int renderIndex, float minDepth, bool isEnabled = true)
+        {
+            SetSize(size, size, size);
+            gameObject.SetActive(isEnabled);
+            SetTexture(tex);
+        }
+
         /// <summary>
         /// Sets the size of the projection area by scaling the renderer object
         /// </summary>

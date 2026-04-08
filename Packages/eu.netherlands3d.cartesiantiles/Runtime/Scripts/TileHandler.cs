@@ -22,9 +22,9 @@ using UnityEngine;
 
 using System.Linq;
 using Netherlands3D.Coordinates;
-using UnityEngine.Networking;
-
-
+using Netherlands3D.Services;
+using UnityEngine.Events;
+using Netherlands3D.Twin.Cameras;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -112,8 +112,19 @@ namespace Netherlands3D.CartesianTiles
 
         private float groundLevelClipRange = 1000;
 
+        public UnityEvent<Layer> layerAdded = new();
+        public UnityEvent<Layer> layerRemoved = new();
+        
+        private Camera activeCamera;
+
         void Start()
         {
+            CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            SetActiveCamera(cameraService.ActiveCamera);
+            
+            //todo we want to listen to current active camera, but for now commented until a new fpv algorithm is introduced to calculate the tilehandler camera extents for optimal loading tiles
+            //cameraService.OnSwitchCamera.AddListener(SetActiveCamera);
+            
             layers = GetComponentsInChildren<Layer>(false).ToList();
             if (layers.Count == 0)
             {
@@ -123,15 +134,21 @@ namespace Netherlands3D.CartesianTiles
             pauseLoading = false;
             CacheCameraFrustum();
 
-            if (!Camera.main)
-            {
-                Debug.LogWarning("The TileHandler requires a camera. Make sure your scene has a camera, and it is tagged as MainCamera.");
-                this.enabled = false;
-            }
-
             if (tileSizes.Count == 0)
             {
                 GetTilesizes();
+            }
+        }
+
+        public void SetActiveCamera(Camera camera)
+        {
+            activeCamera = camera;
+            if(activeCamera != null)
+                this.enabled = true;
+            else
+            {
+                Debug.LogWarning("The TileHandler requires a camera. Make sure your scene has a camera, and it is tagged as MainCamera.");
+                this.enabled = false;
             }
         }
 
@@ -139,6 +156,7 @@ namespace Netherlands3D.CartesianTiles
         {
             layers.Add(layer);
             GetTilesizes();
+            layerAdded.Invoke(layer);
         }
 
         public void RemoveLayer(Layer layer)
@@ -160,11 +178,35 @@ namespace Netherlands3D.CartesianTiles
                     tileChange.layerIndex = layerIndex;
                     tileChange.priorityScore = CalculatePriorityScore(layer.layerPriority, 0, tileDistance.z, TileAction.Remove);
                     AddTileChange(tileChange, layerIndex);
-
                 }
             }
+
             InstantlyStartRemoveChanges();
+            //since we want to remove a layer, we now need to update the layer indices of all pending and active changes to reflect the new indices. this is not ideal, but is a fix until we rewrite the TileKit
+            for (var index = 0; index < pendingTileChanges.Count; index++)
+            {
+                var oldChange = pendingTileChanges[index];
+                if (oldChange.layerIndex > layerIndex) //only these changes need their index updated.
+                {
+                    var newChange = oldChange;
+                    newChange.layerIndex = oldChange.layerIndex - 1; //this change needs their index decremented by 1
+                    Debug.Log("decrementing pending change with index " + oldChange.layerIndex + " to " + newChange.layerIndex);
+                    pendingTileChanges[index] = newChange;
+                }
+            }
+
+            foreach (var kvp in activeTileChanges.ToList())
+            {
+                var oldChange = kvp.Value;
+                var newChange = oldChange;
+                newChange.layerIndex = oldChange.layerIndex - 1; //this change needs their index decremented by 1
+                Debug.Log("decrementing active change with index " + oldChange.layerIndex + " to " + newChange.layerIndex);
+
+                activeTileChanges[kvp.Key] = newChange;
+            }
+
             layers.Remove(layer);
+            layerRemoved.Invoke(layer);
         }
 
         private void CacheCameraFrustum()
@@ -226,25 +268,24 @@ namespace Netherlands3D.CartesianTiles
         }
 
         private void InstantlyStartRemoveChanges()
-        {            
-            for (int i = 0; i < pendingTileChanges.Count; i++)
+        {
+            var removeChanges = pendingTileChanges.Where(change => change.action == TileAction.Remove);
+            //since we are modifying the collection, just take the first one and process it untill the collection is empty
+            while (removeChanges.Any())
             {
-                if (pendingTileChanges[i].action == TileAction.Remove)
-                {
-                    var removeChange = pendingTileChanges[i];
-                    layers[removeChange.layerIndex].HandleTile(removeChange);
-                    pendingTileChanges.RemoveAt(i);
+                var removeChange = removeChanges.First(); 
+                layers[removeChange.layerIndex].HandleTile(removeChange);
+                pendingTileChanges.RemoveAt(0);
 
-                    //Abort all tilechanges with the same key
-                    AbortSimilarTileChanges(removeChange);
-                    AbortPendingSimilarTileChanges(removeChange);
-                }
+                //Abort all tilechanges with the same key
+                AbortSimilarTileChanges(removeChange);
+                AbortPendingSimilarTileChanges(removeChange);
             }
         }
 
         private void AbortSimilarTileChanges(TileChange removeChange)
         {
-            var changes = activeTileChanges.Where(change => ((change.Value.X == removeChange.X) && (change.Value.Y == removeChange.Y))).ToArray();
+            var changes = activeTileChanges.Where(change => (change.Value.X == removeChange.X) && (change.Value.Y == removeChange.Y) && (change.Value.layerIndex == removeChange.layerIndex)).ToArray();
             for (int i = changes.Length - 1; i >= 0; i--)
             {
                 var runningChange = changes[i];
@@ -256,7 +297,7 @@ namespace Netherlands3D.CartesianTiles
 
         private void AbortPendingSimilarTileChanges(TileChange removeChange)
         {
-            var changes = pendingTileChanges.Where(change => ((change.X == removeChange.X) && (change.Y == removeChange.Y))).ToArray();
+            var changes = pendingTileChanges.Where(change => (change.X == removeChange.X) && (change.Y == removeChange.Y) && (change.layerIndex == removeChange.layerIndex)).ToArray();
             for (int i = changes.Length - 1; i >= 0; i--)
             {
                 var runningChange = changes[i];
@@ -280,15 +321,15 @@ namespace Netherlands3D.CartesianTiles
         private Vector4 GetViewRange()
         {
             Extent cameraExtent;
-            if (Camera.main.transform.position.y > 20)
+            if (activeCamera.transform.position.y > 20)
             {
                 useRadialDistanceCheck = false;
-                cameraExtent = Camera.main.GetRDExtent(Camera.main.farClipPlane + maxTileSize);
+                cameraExtent = activeCamera.GetRDExtent(activeCamera.farClipPlane + maxTileSize);
             }
             else
             {
                 useRadialDistanceCheck = true;
-                var cameraRD = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RD); ;
+                var cameraRD = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RD); ;
                 cameraExtent = new Extent(
                     cameraRD.easting - groundLevelClipRange,
                     cameraRD.northing - groundLevelClipRange,
@@ -308,7 +349,7 @@ namespace Netherlands3D.CartesianTiles
 
         private Vector3Int GetRDCameraPosition()
         {
-            var cameraPositionRD = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RDNAP);
+            var cameraPositionRD = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RDNAP);
             Vector3Int cameraPosition = new Vector3Int();
             cameraPosition.x = (int)cameraPositionRD.easting;
             cameraPosition.y = (int)cameraPositionRD.northing;
@@ -344,6 +385,13 @@ namespace Netherlands3D.CartesianTiles
                     }
                 }
             }
+
+            if (tileSizes.Count == 0)
+            {
+                maxTileSize = 0;
+                return;
+            }
+            
             maxTileSize = tileSizes.Max();
         }
 
@@ -361,7 +409,7 @@ namespace Netherlands3D.CartesianTiles
             //Godview only frustum check
             if (filterByCameraFrustum && !useRadialDistanceCheck)
             {
-                GeometryUtility.CalculateFrustumPlanes(Camera.main, cameraFrustumPlanes);
+                GeometryUtility.CalculateFrustumPlanes(activeCamera, cameraFrustumPlanes);
             }
 
             maxTileDistances = 0;
@@ -665,6 +713,13 @@ namespace Netherlands3D.CartesianTiles
                 }
             }
             return highestPriorityTileChange;
+        }
+        
+        private void OnDestroy()
+        {
+            //todo we want to listen to current active camera, but for now commented until a new fpv algorithm is introduced to calculate the tilehandler camera extents for optimal loading tiles
+            // CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            // cameraService.OnSwitchCamera.RemoveListener(SetActiveCamera);
         }
     }
 

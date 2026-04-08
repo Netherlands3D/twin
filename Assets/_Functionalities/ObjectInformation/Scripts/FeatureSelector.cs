@@ -49,7 +49,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Select(FeatureMapping mapping)
         {
-            mapping.SelectFeature();
+            mapping.Select(null);
         }
 
         public void Deselect()
@@ -58,7 +58,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 foreach (var mapping in featureMappings.SelectMany(pair => pair.Value))
                 {
-                    mapping.DeselectFeature();
+                    mapping.Deselect();
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void FindFeatureAtPointerPosition()
         {            
-            Vector3 groundPosition = pointerToWorldPosition.WorldPoint.ToUnity();
+            Vector3 groundPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
             FindFeatureByPosition(groundPosition);            
         }
 
@@ -131,11 +131,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             Vector3 worldCenter = localToWorld.MultiplyPoint3x4(localBounds.center);
             Bounds worldBounds = new Bounds(worldCenter, polygon.bounds.size);
 
-            if (!PolygonSelectionCalculator.IsBoundsInView(worldBounds, frustumPlanes))
+            if (!PolygonSelectionService.IsBoundsInView(worldBounds, frustumPlanes))
                 return false;
 
             var point2d = new Vector2(worldPoint.x, worldPoint.z);
-            if (!PolygonSelectionCalculator.IsInBounds2D(worldBounds, point2d))
+            if (!PolygonSelectionService.IsInBounds2D(worldBounds, point2d))
                 return false;
 
             Matrix4x4 worldToLocal = transform.worldToLocalMatrix;

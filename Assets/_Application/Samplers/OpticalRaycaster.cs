@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 
@@ -8,6 +9,8 @@ namespace Netherlands3D.Twin.Samplers
 {
     public class OpticalRaycaster : MonoBehaviour
     {
+        private const int MINIMUM_DEPTH_BUFFER_FORMAT = 16; //In the render graph API, the output Render Texture must have a depth buffer, this is the minimum value to keep the render texture light weight.
+        
         public Camera depthCameraPrefab;
         public Material depthToWorldMaterial; //capture depth data shader
         public Material visualizationMaterial; //convert to temp position data
@@ -15,6 +18,12 @@ namespace Netherlands3D.Twin.Samplers
         private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
         private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
+        
+        float totalDepth = 0;
+        [SerializeField] private Camera depthCamera;
+        private Texture2D samplerTexture;
+
+        [Header("Events")][SerializeField] public UnityEvent<Vector3> OnDepthSampled;
 
         private const int maxRequests = 3;
         private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
@@ -23,6 +32,11 @@ namespace Netherlands3D.Twin.Samplers
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
         {
+            GetWorldPointAsync(screenPoint, callback, Camera.main, cullingMask);
+        }
+
+        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, Camera camera, int cullingMask = defaultRaycastLayers)
+        {
             if (activeRequests.Count > maxRequests)
             {
                 callback.Invoke(Vector3.zero, false);
@@ -30,9 +44,10 @@ namespace Netherlands3D.Twin.Samplers
             }
 
             OpticalRequest opticalRequest = GetRequest();
+            opticalRequest.SetActiveCamera(camera); 
             opticalRequest.SetCullingMask(cullingMask);
             opticalRequest.SetScreenPoint(screenPoint);
-            opticalRequest.AlignWithMainCamera();
+            opticalRequest.AlignWithCamera();
             opticalRequest.UpdateShaders();
             opticalRequest.SetResultCallback(callback);
             opticalRequest.framesActive = 0;
@@ -55,7 +70,7 @@ namespace Netherlands3D.Twin.Samplers
                 OpticalRequest opticalRequest = GetRequest();
                 opticalRequest.SetCullingMask(cullingMask);
                 opticalRequest.SetScreenPoint(screenPoints[i]);
-                opticalRequest.AlignWithMainCamera();
+                opticalRequest.AlignWithCamera();
                 opticalRequest.UpdateShaders();
                 opticalRequest.SetResultCallback(multipointCallback.pointCallbacks[i]);
                 opticalRequest.framesActive = 0;
@@ -96,6 +111,113 @@ namespace Netherlands3D.Twin.Samplers
                     activeRequests.RemoveAt(i);
                 }
             }
+        }
+
+        
+
+        void Start()
+        {
+            OpticalRequest request = GetRequest();
+            depthCamera = request.depthCamera;
+            if (depthCamera.targetTexture == null)
+            {
+                Debug.Log("Depth camera has no target texture. Please assign a render texture to the depth camera.", this.gameObject);
+                this.enabled = false;
+                return;
+            }
+
+            //We will only render on demand using camera.Render()
+            depthCamera.enabled = false;
+            
+            //Create a red channel texture that we can sample depth from
+            samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.RGBAFloat, false);
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(samplerTexture);
+        }
+
+        /// <summary>
+        /// Only use this method if it is used continiously in Update.
+        /// If one sample is needed, use AlignDepthCameraToScreenPoint, and GetSamplerCameraWorldPoint
+        /// in a Coroutine with a WaitForEndOfFrame between every step.
+        /// </summary>
+        /// <returns></returns>
+        public Vector3 GetWorldPointAtCameraScreenPoint(Camera camera, Vector3 screenPoint)
+        {
+            AlignWithCamera(camera, screenPoint);
+            RenderDepthCamera();
+
+            return GetDepthCameraWorldPoint();
+        }
+
+        public Vector3 GetWorldPointFromPosition(Vector3 position, Vector3 direction)
+        {
+            AlignDepthCameraFromPositionToDirection(position, direction);
+            RenderDepthCamera();
+
+            return GetDepthCameraWorldPoint();
+        }
+        
+        public void AlignWithCamera(Camera camera, Vector3 screenPoint)
+        {
+            if (camera == null) camera = Camera.main;
+
+            depthCamera.transform.position = camera.transform.position;
+            if (camera.orthographic)
+            {
+                Vector3 worldPoint = camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)); 
+                depthCamera.transform.position = worldPoint - camera.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
+                depthCamera.transform.LookAt(worldPoint);
+            }
+            else
+            {
+                Vector3 worldPoint = camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane));
+                depthCamera.transform.LookAt(worldPoint);
+            }
+        }
+
+        public void AlignDepthCameraToScreenPoint(Camera camera, Vector3 screenPoint)
+        {
+            //Align and rotate sampler camera to look at screenpoint
+            depthCamera.transform.position = camera.transform.position;
+            depthCamera.transform.LookAt(camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)));
+        }
+
+        public void AlignDepthCameraFromPositionToDirection(Vector3 position, Vector3 direction)
+        {
+            //Align depth camera 
+            depthCamera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(direction));
+        }
+
+        public Vector3 GetDepthCameraWorldPoint()
+        {
+            var worldPoint = ReadWorldPositionFromPixel();
+            OnDepthSampled.Invoke(worldPoint);
+
+            return worldPoint;
+        }
+
+        public void RenderDepthCamera()
+        {
+            //Read pixels from the depth texture
+            depthCamera.Render();
+            RenderTexture.active = depthCamera.targetTexture;
+            samplerTexture.ReadPixels(new Rect(0, 0, depthCamera.targetTexture.width, depthCamera.targetTexture.height), 0, 0);
+            samplerTexture.Apply();
+            RenderTexture.active = null;
+        }
+
+        private Vector3 ReadWorldPositionFromPixel()
+        {
+            var worldPosition = samplerTexture.GetPixel(0, 0);
+
+            return new Vector3(
+                worldPosition.r,
+                worldPosition.g,
+                worldPosition.b
+            );
         }
 
         private void RequestCallback(OpticalRequest opticalRequest)
@@ -145,9 +267,8 @@ namespace Netherlands3D.Twin.Samplers
             //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
             //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
             //but we cannot do this since we need a pool and create a rendertexture for each request
-            RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
+            RenderTexture renderTexture = new RenderTexture(1, 1, MINIMUM_DEPTH_BUFFER_FORMAT, RenderTextureFormat.Depth);
             renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
-            renderTexture.depthStencilFormat = GraphicsFormat.None;
             renderTexture.Create();
             return renderTexture;
         }
@@ -221,6 +342,8 @@ namespace Netherlands3D.Twin.Samplers
             public int resultCount = 0;
             public bool hasHit = false;
 
+            private Camera activeCamera; 
+
             public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
                 this.depthMaterial = new Material(depthMaterial);
@@ -265,18 +388,25 @@ namespace Netherlands3D.Twin.Samplers
                 depthCamera.cullingMask = mask;
             }
 
-            public void AlignWithMainCamera()
+            public void SetActiveCamera(Camera camera)
             {
-                depthCamera.transform.position = Camera.main.transform.position;
-                if (Camera.main.orthographic)
+                activeCamera = camera;
+            }
+
+            public void AlignWithCamera()
+            {
+                if (activeCamera == null) activeCamera = Camera.main;
+
+                depthCamera.transform.position = activeCamera.transform.position;
+                if (activeCamera.orthographic)
                 {
-                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane));
-                    depthCamera.transform.position = worldPoint - Camera.main.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
+                    Vector3 worldPoint = activeCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, activeCamera.nearClipPlane)); 
+                    depthCamera.transform.position = worldPoint - activeCamera.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
                     depthCamera.transform.LookAt(worldPoint);
                 }
                 else
                 {
-                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane));
+                    Vector3 worldPoint = activeCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, activeCamera.nearClipPlane));
                     depthCamera.transform.LookAt(worldPoint);
                 }
             }

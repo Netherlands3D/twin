@@ -295,7 +295,7 @@ MonoBehaviour:
 
 
     Kies hieronder op welke
-    lagen deze uitsnede van toepassing is. Verborgen lagen worden niet meegenomen
+    lagen deze uitsnede van toepassing is. Alleen verborgen lagen worden meegenomen
     in de uitsnede.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}

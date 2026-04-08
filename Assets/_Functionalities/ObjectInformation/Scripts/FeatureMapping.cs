@@ -5,6 +5,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -22,7 +23,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
         public Feature Feature { get { return feature; } }
         public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
+        //todo: Mapping.BoundingBox should be the bbox of all meshes in the feature, this is currently not working correctly.
         public BoundingBox BoundingBox => boundingBox;
+        public LayerData LayerData => geoJsonLayerParent.LayerData;
 
         private Feature feature;
         private List<Mesh> meshes;
@@ -88,7 +91,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 {
                     Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
                     GeoJSONPolygonLayer polygonLayer = visualisationLayer as GeoJSONPolygonLayer;
-                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
+                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes[i]);
                     bool isSelected = FeatureSelector.ProcessPolygonSelection(meshes[i], pv.transform, frustumPlanes, unityPos);
                     if (isSelected)
                     {
@@ -231,6 +234,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     }
                 }
 
+                Color col = new Color(1, 0, 0, 0);
+                List<Color> colors = new List<Color>();
+                foreach (Vector3 v in mesh.vertices)
+                    colors.Add(col);
+
+                mesh.SetColors(colors);
+
                 mesh.RecalculateBounds();
                 subObject.transform.SetParent(visualisationLayer.Transform);
                 subObject.layer = LayerMask.NameToLayer("Projected");
@@ -243,24 +253,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private List<GameObject> selectedGameObjects = new List<GameObject>();
 
-        public void SelectFeature()
+        public void Select(string subId = null)
         {
             //transform for mesh world matrix
             selectedGameObjects = CreateFeatureGameObjects();
             if (selectedGameObjects.Count == 0) return; 
 
             Color selectionColor = Color.blue;           
-            visualisationLayer.SetVisualisationColor(selectedGameObjects[0].transform, meshes, selectionColor);
-            foreach (Mesh mesh in meshes)
-            {
-                Color[] colors = new Color[mesh.vertexCount];
-                for (int i = 0; i < mesh.vertexCount; i++)
-                    colors[i] = THUMBNAIL_COLOR;
-                mesh.SetColors(colors);
-            }
+            visualisationLayer.SetVisualisationSelected(selectedGameObjects[0].transform, meshes, selectionColor);
         }
 
-        public void DeselectFeature()
+        public void Deselect()
         {
             if(selectedGameObjects.Count > 0)
             {
@@ -269,17 +272,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             selectedGameObjects.Clear();
 
-            visualisationLayer.SetVisualisationColorToDefault();
-            foreach (Mesh mesh in meshes)
-            {
-                Color[] colors = new Color[mesh.vertexCount];
-                for (int i = 0; i < mesh.vertexCount; i++)
-                    colors[i] = NO_OVERRIDE_COLOR;
-                mesh.SetColors(colors);
-            }
+            visualisationLayer.SetVisualisationDeselected();
         }
-
-        private static readonly Color NO_OVERRIDE_COLOR = new Color(0, 0, 1, 0);
-        private static readonly Color THUMBNAIL_COLOR = new Color(1, 0, 0, 0);
     }
 }

@@ -16,6 +16,8 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         [JsonIgnore] public readonly UnityEvent<Uri> OnObjUriChanged = new();
         [JsonIgnore] public readonly UnityEvent<Uri> OnMtlUriChanged = new();
+        [JsonIgnore] public UnityEvent<bool> MtlImportSuccess = new();
+        [JsonIgnore] public UnityEvent<bool> ObjImportSuccess = new();
 
         [JsonIgnore]
         public Uri ObjFile

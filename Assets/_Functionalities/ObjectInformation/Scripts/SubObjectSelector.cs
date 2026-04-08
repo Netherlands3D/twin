@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
@@ -12,61 +15,172 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public bool HasObjectMapping => foundObject != null;
         public MeshMapping Object => foundObject; 
 
-        private ColorSetLayer ColorSetLayer { get; set; } = new(0, new());
         private MeshMapping foundObject;
 
         private PointerToWorldPosition pointerToWorldPosition;
+        private Dictionary<string, bool> blockedBagIds = new Dictionary<string, bool>();
+        private Dictionary<MeshMapping, List<string>> selectedMappings = new();
 
         private void Awake()
         {
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
         }
 
+        public void UpdateReplacedSelectedMappings()
+        {
+            var keysToReplace = new List<MeshMapping>();
+            foreach (var kvp in selectedMappings)
+            {
+                if (kvp.Key.ObjectMapping == null)
+                    keysToReplace.Add(kvp.Key);
+            }
+            foreach (var oldKey in keysToReplace)
+            {
+                MeshMapping replacedMapping = ServiceLocator.GetService<ObjectSelectorService>().GetReplacedMapping(oldKey);
+                if(replacedMapping == null) continue;
+                
+                if (selectedMappings.TryGetValue(oldKey, out var oldList))
+                {
+                    selectedMappings.Remove(oldKey);
+                    selectedMappings[replacedMapping] = oldList;
+                }
+            }
+        }
+        
+        public void BlockBagId(string bagId, bool block)
+        {
+            blockedBagIds[bagId] = block;
+        }
+        
         public void Select(string bagId)
         {
-            Deselect();
-            ColorSetLayer = GeometryColorizer.InsertCustomColorSet(
-                -1, 
-                new Dictionary<string, Color> 
-                {
-                    { bagId, new Color(1, 0, 0, 0) }
-                }
-            );
+            foundObject.Select(bagId);
+            LayerData data = foundObject.LayerData;
+            if(data == null || !data.ActiveInHierarchy)
+                return;
+
+            string layerId = data.Id.ToString();
+            Interaction.AddSelectionColor(layerId, bagId, new Color(1, 0, 0, 0));
+            if(!selectedMappings.ContainsKey(foundObject))
+                selectedMappings.TryAdd(foundObject, new List<string> { bagId });
+            selectedMappings[foundObject].Add(bagId);
+            
+            Interaction.ApplyColors(foundObject.ObjectMapping, layerId);
         }
 
-        public LayerData GetLayerDataForSubObject(ObjectMapping subObject)
+        public void Deselect(string bagId)
         {
-            Transform parent = subObject.gameObject.transform.parent;
-            LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
-            if (layerGameObject)
+            foreach (var kvp in selectedMappings.ToList())
             {
-                return layerGameObject.LayerData;   
+                List<string> bagIds = kvp.Value;
+                if (bagIds.Remove(bagId))
+                {
+                    LayerData data = kvp.Key.LayerData;
+                    Interaction.RemoveSelectionColor(data.Id.ToString(), bagId);
+
+                    if (bagIds.Count == 0)
+                        selectedMappings.Remove(kvp.Key);
+                    
+                    Interaction.ApplyColors(kvp.Key.ObjectMapping, data.Id.ToString());
+                }
+            }
+        }
+        
+        public void Deselect()
+        {
+            foundObject?.Deselect();
+            foreach (var kvp in selectedMappings)
+            {
+                LayerData data = kvp.Key.LayerData;
+                foreach (string bagId in kvp.Value)
+                {
+                    Interaction.RemoveSelectionColor(data.Id.ToString(), bagId);
+                }
+                if(kvp.Key.ObjectMapping != null)
+                    Interaction.ApplyColors(kvp.Key.ObjectMapping, data.Id.ToString());
+            }
+            selectedMappings.Clear();
+        }
+        
+        public bool IsMappingVisible(MeshMapping mapping, string bagId)
+        {
+            LayerFeature feature = GetLayerFeatureFromBagID(bagId, mapping, out LayerGameObject layer);
+            if (feature != null)
+            {
+                HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                bool? v = hiddenPropertyData.GetVisibilityForSubObject(feature);
+                if (v != true) return false;
+            }
+            if (bagId == null || blockedBagIds.ContainsKey(bagId))
+                return false;
+            return true;
+        }
+        
+        public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        {
+            layer = null;
+            if (selectedMapping is not MeshMapping mapping) return null;
+            if(mapping.ObjectMapping == null) return null;
+
+            layer = GetLayerGameObjectFromMapping(selectedMapping);
+            mapping.ObjectMapping.items.TryGetValue(bagID, out var item);
+            return item;
+        }
+
+        public LayerGameObject GetLayerGameObjectFromMapping(IMapping mapping)
+        {
+            if (mapping is FeatureMapping featureMapping)
+            {
+                return featureMapping.VisualisationParent;
+            }
+
+            if (mapping is MeshMapping meshMapping)
+            {
+                MeshMapping map = meshMapping;
+                if (meshMapping.ObjectMapping == null)                    
+                {
+                    //when tile is replacing lod the objectmapping can be missing
+                    map = ServiceLocator.GetService<ObjectSelectorService>().GetReplacedMapping(meshMapping);
+                }
+                if (map == null) return null;
+
+                LayerGameObject layerGameObject = map.ObjectMapping.GetComponentInParent<LayerGameObject>();
+                return layerGameObject;
             }
             return null;
         }
-
-        public void Deselect()
+        
+        public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
-            GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
-            ColorSetLayer = null;
+            ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
+            if (layer == null)
+                return null;
+
+            return layer.GetLayerFeatureByGeometry(item);
         }
 
         public string FindSubObjectAtPointerPosition()
         {
             foundObject = null;
             string bagId = null;
-            Vector3 groundPosition = pointerToWorldPosition.WorldPoint.ToUnity();
+            Vector3 groundPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
             Coordinate coord = new Coordinate(groundPosition);
             List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)
                 return bagId;
-
+            
             foreach (MeshMapping mapping in mappings)
-            {                
-                ObjectMapping objectMapping = mapping.ObjectMapping;
+            { 
+                LayerData data = mapping.LayerData;
+                if (data == null || !data.ActiveInHierarchy)
+                    continue;
+                
                 MeshMappingItem item = mapping.FindItemForPosition(groundPosition);
                 if (item != null)
                 {
+                    if(IsMappingVisible(mapping, item.ObjectMappingItem.objectID) == false)
+                        continue;
+                    
                     foundObject = mapping;
                     bagId = item.ObjectMappingItem.objectID;
                     break;

@@ -1234,47 +1234,7 @@ PrefabInstance:
     - target: {fileID: 4543035819173704079, guid: 249c0bb997289744caad69f086f94465,
         type: 3}
       propertyPath: m_Name
-      value: PolygonInputToLayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970481386311860828, guid: 249c0bb997289744caad69f086f94465,
-        type: 3}
-      propertyPath: lineEditedEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970481386311860828, guid: 249c0bb997289744caad69f086f94465,
-        type: 3}
-      propertyPath: lineCreatedEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970481386311860828, guid: 249c0bb997289744caad69f086f94465,
-        type: 3}
-      propertyPath: polygonEditedEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970481386311860828, guid: 249c0bb997289744caad69f086f94465,
-        type: 3}
-      propertyPath: polygonCreatedEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970481386311860828, guid: 249c0bb997289744caad69f086f94465,
-        type: 3}
-      propertyPath: lineEditedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970481386311860828, guid: 249c0bb997289744caad69f086f94465,
-        type: 3}
-      propertyPath: lineCreatedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970481386311860828, guid: 249c0bb997289744caad69f086f94465,
-        type: 3}
-      propertyPath: polygonEditedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970481386311860828, guid: 249c0bb997289744caad69f086f94465,
-        type: 3}
-      propertyPath: polygonCreatedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
+      value: PolygonCreationService
       objectReference: {fileID: 0}
     - target: {fileID: 8252544850299417775, guid: 249c0bb997289744caad69f086f94465,
         type: 3}
@@ -1558,6 +1518,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3919916255551741050}
     m_Modifications:
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.20580018
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.08770155
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.896635
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.38210014
+      objectReference: {fileID: 0}
     - target: {fileID: 5593048648800678674, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -7,6 +7,7 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using KindMen.Uxios;
 using KindMen.Uxios.Errors;
 using KindMen.Uxios.Errors.Http;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using RSG;
 
 namespace Netherlands3D.Credentials
@@ -57,7 +58,13 @@ namespace Netherlands3D.Credentials
         public void Authorize(Uri inputUri, string username, string passwordOrKey)
         {
             var domain = new Uri(inputUri.GetLeftPart(UriPartial.Path));
-
+            
+            if (inputUri.IsStoredInProject())
+            {
+                OnAuthorizationTypeDetermined.Invoke(new Public(domain));
+                return;
+            }
+            
             //check if we already have an authorization for this url 
             if (storedAuthorizations.TryGetValue(domain, out var authorization))
             {
@@ -199,7 +206,7 @@ namespace Netherlands3D.Credentials
             return exception switch
             {
                 AuthenticationError => false,
-                HttpClientError => true,
+                HttpClientError error => (int)(error.Status) != 498, //when statuscode 498 on invalid token, we wish to return false here
                 HttpServerError error => throw new Exception(
                     $"the request returned a response that is not implemented: {error.Status} from Uri: {error.Config.Url}"
                 ),

@@ -2,18 +2,15 @@ using System;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.GeoJSON.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
-    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs>
     {
-        [SerializeField] private UnityEvent<string> displayErrorMessageEvent = new();
-
         public bool Supports(LocalFile localFile)
         {
             using var reader = new StreamReader(localFile.LocalFilePath);
@@ -27,20 +24,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 );
         }
 
-        public void Execute(LocalFile localFile)
-        {
-            ParseGeoJSON(localFile);
-        }
-
-        private async void ParseGeoJSON(LocalFile localFile)
+        public LayerPresetArgs Execute(LocalFile localFile)
         {
             var layerName = CreateName(localFile);
             var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            var layerData = await App.Layers.Add(new GeoJSONPreset.Args(layerName, url));
-
-            GeoJsonLayerGameObject newLayer = layerData.Reference as GeoJsonLayerGameObject;
-            newLayer.Parser.OnParseError.AddListener(displayErrorMessageEvent.Invoke);
+            return new GeoJSONPreset.Args(layerName, url);
         }
 
         private static string CreateName(LocalFile localFile)

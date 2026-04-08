@@ -18,7 +18,8 @@ namespace Netherlands3D.Tiles3D
             
             var materialGenerator = new NL3DMaterialGenerator();
             GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
-            
+            tile.content.gltf = gltf;
+
             var success = true;
             Uri uri = null;
             if (sourcePath != "")
@@ -55,12 +56,7 @@ namespace Netherlands3D.Tiles3D
 
             if (parseAssetMetaData)
             {
-                Content content = containerTransform.GetComponent<Content>();
-                if (content != null)
-                {
-                    parsedGltf.ParseAssetMetaData(content);
-                }
-
+                parsedGltf.ParseAssetMetaData(tile.content);
             }
 
             if (overrideMaterial != null)

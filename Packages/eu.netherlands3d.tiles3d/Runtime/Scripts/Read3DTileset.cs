@@ -155,7 +155,8 @@ namespace Netherlands3D.Tiles3D
             root = null;
             visibleTiles = new();
 
-            InitializeURLAndLoadTileSet();
+            if(gameObject.activeInHierarchy) //todo: quick fix to avoid coroutine errors, might need to be refactored to be more stable
+                InitializeURLAndLoadTileSet();
         }
 
         /// <summary>
@@ -373,6 +374,10 @@ namespace Netherlands3D.Tiles3D
                 string jsonstring = www.downloadHandler.text;
                 ParseTileset.DebugLog = debugLog;
                 ParseTileset.subtreeReader = GetComponent<ReadSubtree>();
+                if (string.IsNullOrEmpty(jsonstring))
+                {
+                    throw new ArgumentException("tileset json is empty");
+                }
                 JSONNode rootnode = JSON.Parse(jsonstring)["root"];
                 root = ParseTileset.ReadTileset(rootnode,this);
                 
@@ -668,7 +673,10 @@ namespace Netherlands3D.Tiles3D
                     {
                         string jsonstring = www.downloadHandler.text;
                         tile.nestedTilesLoaded = true;
-
+                        if (string.IsNullOrEmpty(jsonstring))
+                        {
+                            throw new ArgumentException("tile json is empty");
+                        }
                         JSONNode node = JSON.Parse(jsonstring)["root"];
                         ParseTileset.ReadExplicitNode(node, tile);
                         nestedTreeLoaded = true;

@@ -22,7 +22,8 @@ namespace Netherlands3D.Tiles3D
             
             var materialGenerator = new NL3DMaterialGenerator();
             GltfImport gltf = new GltfImport(null, null, materialGenerator);
-            
+            tile.content.gltf = gltf;
+
             var success = true;
             Uri uri = null;
             if (sourcePath != "")

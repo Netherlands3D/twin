@@ -7,7 +7,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -15,10 +14,7 @@ namespace Netherlands3D.Functionalities.Wms
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
 
-        private Config requestConfig { get; set; } = new Config()
-        {
-            TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)
-        };
+        private Config requestConfig { get; set; } = new();
 
         public int RenderIndex
         {
@@ -69,16 +65,12 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void ClearConfig()
         {
-            requestConfig = new Config()
-            {
-                TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)
-            };
+            requestConfig = new Config();
         }
-        
+
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
-
             if (!tiles.ContainsKey(tileKey))
             {
                 onLogMessage.Invoke(LogType.Warning, "Tile key does not exist");
@@ -86,56 +78,73 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             //on loading project form save file this can be empty 
-            if (string.IsNullOrEmpty(wmsUrl))
-                yield break;
+            if (string.IsNullOrEmpty(wmsUrl)) yield break;
 
             var mapData = MapFilters.FromUrl(new Uri(wmsUrl));
-            Tile tile = tiles[tileKey];
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
-            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), requestConfig);
-            promise.Then(response =>
-                {
-                    ClearPreviousTexture(tile);
-                    Texture2D tex = response.Data as Texture2D;
-                    
-                    if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
-                    {
-                        Destroy(tex);
-                        return;
-                    }
-                    
-                    tex.name = tile.tileKey.ToString();
-                    tex.Compress(true);
-                    tex.filterMode = FilterMode.Bilinear;
-                    tex.Apply(false, true);
-                    
-                    projector.SetSize(tileSize, tileSize, tileSize);
-                    projector.gameObject.SetActive(isEnabled);
-                    projector.SetTexture(tex);
 
-                    //force the depth to be at least larger than its height to prevent z-fighting
-                    DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
-                    TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
-                    if (ProjectorHeight >= decalProjector.size.z)
-                        textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+            // Because requestConfig is by-ref, changing it will change all requests in flight; as such we clone the config before
+            // assigning a payload
+            var configWithPayload = Config.BasedOn(requestConfig);
+            configWithPayload = configWithPayload.WithPayload(new WMSTileDataLayerChangePayload(tileChange, url));
 
-                    //set the render index, to make sure the render order is maintained
-                    textureDecalProjector.SetPriority(renderIndex);
-                }
-            );
-
-            promise.Catch(exception =>
-            {
-                Debug.LogError($"Could not download {url}: " + exception.Message);
-                RemoveGameObjectFromTile(tileKey);
-            });
-
-            // Always issue the callback
-            promise.Finally(() => { callback(tileChange); });
+            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), configWithPayload);
+            promise.Then(OnDownloadedTexture);
+            promise.Catch(OnFailedToDownloadTexture);
 
             yield return Uxios.WaitForRequest(promise);
+            callback?.Invoke(tileChange);
+        }
+
+        private void OnDownloadedTexture(IResponse response)
+        {
+            var payload = response.Config.GetPayload<WMSTileDataLayerChangePayload>();
+            var tileKey = payload.TileKey;
+            var tex = response.Data as Texture2D;
+
+            if (!tex)
+            {
+                onLogMessage.Invoke(LogType.Warning, $"Texture could not load for tile '{tileKey.x},{tileKey.y}'");
+                return;
+            }
+
+            if (!tiles.TryGetValue(tileKey, out var tile))
+            {
+                onLogMessage.Invoke(LogType.Warning, $"Tile '{tileKey.x},{tileKey.y}' has been cleaned up in the mean time, cancelling rendering");
+                Destroy(tex);
+                tex = null; // extra null-setting to make sure any managed shell is cleaned up
+                return;
+            }
+
+            ClearPreviousTexture(tile);
+                    
+            if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
+            {
+                Destroy(tex);
+                tex = null; // extra null-setting to make sure any managed shell is cleaned up
+                return;
+            }
+                    
+            tex.name = tile.tileKey.ToString();
+            projector.Project(tex, tileSize, ProjectorHeight, renderIndex, ProjectorMinDepth, isEnabled);
+        }
+
+        private void OnFailedToDownloadTexture(Exception exception)
+        {
+            // An unknown exception occurred - log the outcome and don't do much since we don't know anything about
+            // it. This should not occur in normal operation.
+            if (exception is not Error uxiosError)
+            {
+                Debug.LogException(exception);
+                return;
+            }
+
+            var payload = uxiosError.Config.GetPayload<WMSTileDataLayerChangePayload>();
+
+            Debug.LogError($"Could not download {payload.Url}: " + exception.Message);
+            RemoveGameObjectFromTile(payload.TileKey);
         }
 
         private BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
