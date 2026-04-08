@@ -8,5 +8,6 @@
     >
     
     <nl3d:ContentContainer leading-icon="NorthArrow" text="Informatie gebouw">
+        <ui:VisualElement class="object-information-thumbnail__container" name="ThumbnailContainer" />
     </nl3d:ContentContainer>
 </ui:UXML>

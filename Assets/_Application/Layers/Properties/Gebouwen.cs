@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
@@ -13,7 +14,7 @@ namespace Netherlands3D.Twin.layers.properties
     public class Gebouwen : MonoBehaviour, IVisualizationWithPropertyData
     {
         private LayerGameObject visualization;
-        private List<string> buildingIds = new();
+        private Dictionary<string, Coordinate> buildingIds = new();
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -43,8 +44,11 @@ namespace Netherlands3D.Twin.layers.properties
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)
             {
-                if(kv.Value is MeshMapping)
-                    buildingIds.Add(kv.Key);
+                if (kv.Value is MeshMapping map)
+                {
+                    Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, map.ObjectMapping.items[kv.Key]);
+                    buildingIds.Add(kv.Key, coord);
+                }
             }
             propertyData.BuildingIds = buildingIds;
         }

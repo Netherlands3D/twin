@@ -1,8 +1,16 @@
+using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Coordinates;
+using Netherlands3D.GeoJSON;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -17,27 +25,105 @@ namespace Netherlands3D.UI.Panels
         private const string removeFromID = "NL.IMBAG.Pand.";
         
         private BuildingPropertyData buildingPropertyData;
+        private Coroutine downloadProcess;
+        private VisualElement thumbnailContainer;
 
         public BuildingInformationPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
+            thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
+            
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
                 buildingPropertyData.OnIdsChanged.RemoveListener(OnIdsChanged);
             });
+            
+           
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             buildingPropertyData = properties.Get<BuildingPropertyData>();
             buildingPropertyData.OnIdsChanged.AddListener(OnIdsChanged);
+            
+            Dictionary<string, Coordinate> buildingIds = buildingPropertyData.BuildingIds;
+            if(buildingIds.Count == 0) return;
+
+            thumbnailContainer.schedule.Execute(() => { LoadBagId(buildingIds[0]); });
         }
 
-        private void OnIdsChanged(List<string> buildingIds)
+        private void OnIdsChanged(Dictionary<string, Coordinate> buildingIds)
         {
+            if(buildingIds.Count == 0) return;
             
+            LoadBagId(buildingIds[0]);
+        }
+        
+        private void LoadBagId(string bagId)
+        {
+            if (removeFromID.Length > 0) bagId = bagId.Replace(removeFromID, "");
+
+            if (downloadProcess != null)
+            {
+                ThumbnailCoroutineRunner.Instance.StopCoroutine(downloadProcess);
+            }
+
+            downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetBagIDData(bagId));
+        }
+
+        private IEnumerator GetBagIDData(string bagID)
+        {
+            yield return GetBAGData(bagID);
+         
+            //Adressess (slower request next)
+            //yield return GetAddresses(bagID);
+        }
+
+        private IEnumerator GetBAGData(string bagID)
+        {
+            var requestUrl = bagRequestUrl.Replace(idReplacementString, bagID);
+            var webRequest = UnityWebRequest.Get(requestUrl);
+
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Geen BAG data gevonden");
+                yield break;
+            }
+
+            string bagIdText;
+            string yearText;
+            string statusText;
+
+            GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
+            while (customJsonHandler.GotoNextFeature())
+            {
+                var properties = customJsonHandler.GetProperties();
+
+                bagIdText = properties["identificatie"].ToString();
+                yearText = properties["bouwjaar"].ToString();
+                statusText = properties["status"].ToString();
+
+                OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+                PointerToWorldPosition pointerToWorldPosition = raycaster.gameObject.GetComponent<PointerToWorldPosition>();
+
+                //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
+                Bounds currentObjectBounds = new Bounds(pointerToWorldPosition.WorldPoint.ToUnity(), Vector3.one * 50.0f);
+                RenderTexture rTex = RenderedThumbnail.RenderThumbnail(currentObjectBounds);
+                Texture2D tex = new Texture2D(rTex.width, rTex.height, TextureFormat.RGBA32, false);
+
+                RenderTexture.active = rTex;
+                tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
+                tex.Apply();
+                RenderTexture.active = null;
+                thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
+                float aspect = (float)rTex.height / rTex.width;
+                float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
+                thumbnailContainer.style.height = newHeight;
+            }
         }
     }
 }
