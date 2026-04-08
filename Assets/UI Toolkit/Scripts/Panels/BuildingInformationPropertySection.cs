@@ -59,7 +59,7 @@ namespace Netherlands3D.UI.Panels
         {
             if(buildingIds.Count == 0) return;
             
-            LoadBagId(buildingIds[0]);
+            LoadBagId(buildingIds.FirstOrDefault());
         }
         
         private void LoadBagId(KeyValuePair<string, Coordinate> bagId)
@@ -72,18 +72,18 @@ namespace Netherlands3D.UI.Panels
                 ThumbnailCoroutineRunner.Instance.StopCoroutine(downloadProcess);
             }
 
-            downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetBagIDData(bagId));
+            downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetBagIDData(key, bagId.Value));
         }
 
-        private IEnumerator GetBagIDData(string bagID)
+        private IEnumerator GetBagIDData(string bagID, Coordinate coordinate)
         {
-            yield return GetBAGData(bagID);
+            yield return GetBAGData(bagID, coordinate);
          
             //Adressess (slower request next)
             //yield return GetAddresses(bagID);
         }
 
-        private IEnumerator GetBAGData(string bagID)
+        private IEnumerator GetBAGData(string bagID, Coordinate coordinate)
         {
             var requestUrl = bagRequestUrl.Replace(idReplacementString, bagID);
             var webRequest = UnityWebRequest.Get(requestUrl);
@@ -109,11 +109,8 @@ namespace Netherlands3D.UI.Panels
                 yearText = properties["bouwjaar"].ToString();
                 statusText = properties["status"].ToString();
 
-                OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-                PointerToWorldPosition pointerToWorldPosition = raycaster.gameObject.GetComponent<PointerToWorldPosition>();
-
                 //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
-                Bounds currentObjectBounds = new Bounds(pointerToWorldPosition.WorldPoint.ToUnity(), Vector3.one * 50.0f);
+                Bounds currentObjectBounds = new Bounds(coordinate.ToUnity(), Vector3.one * 50.0f);
                 RenderTexture rTex = RenderedThumbnail.RenderThumbnail(currentObjectBounds);
                 Texture2D tex = new Texture2D(rTex.width, rTex.height, TextureFormat.RGBA32, false);
 
