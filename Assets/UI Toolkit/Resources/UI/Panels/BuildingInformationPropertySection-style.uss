@@ -1,9 +1,15 @@
 .object-information-bagid__row {
     flex-direction: row;
+    align-items: center;
 }
 
 .object-information-bagid__label{
     -unity-font-definition: var(--nl3d-default-font-semi-bold);
     margin: 0;
     padding: 0;
+    justify-content: flex-start;
+}
+
+.object-information-bagid__link {
+    justify-content: space-evenly;
 }

@@ -9,10 +9,12 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
+using Button = Netherlands3D.UI.Components.Button;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -28,6 +30,8 @@ namespace Netherlands3D.UI.Panels
         private BuildingPropertyData buildingPropertyData;
         private Coroutine downloadProcess;
         private VisualElement thumbnailContainer;
+        private Hyperlink bagLink;
+        private Button bagLinkButton;
 
         public BuildingInformationPropertySection()
         {
@@ -35,6 +39,10 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
 
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
+            bagLink = this.Q<Hyperlink>("Link");
+            bagLinkButton = this.Q<Button>("BagIdLink");
+            bagLinkButton.clicked += () => bagLink.Click(); //probably remove button entirely
+           
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
@@ -96,9 +104,13 @@ namespace Netherlands3D.UI.Panels
                 yield break;
             }
 
+            
+            
             string bagIdText;
             string yearText;
             string statusText;
+            
+            
 
             GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
             while (customJsonHandler.GotoNextFeature())
@@ -108,6 +120,9 @@ namespace Netherlands3D.UI.Panels
                 bagIdText = properties["identificatie"].ToString();
                 yearText = properties["bouwjaar"].ToString();
                 statusText = properties["status"].ToString();
+                
+                bagLink.text = bagID;
+                bagLink.url = "https://bagviewer.kadaster.nl/lvbag/bag-viewer/?objectId=" + bagIdText;
 
                 //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
                 Bounds currentObjectBounds = new Bounds(coordinate.ToUnity(), Vector3.one * 50.0f);

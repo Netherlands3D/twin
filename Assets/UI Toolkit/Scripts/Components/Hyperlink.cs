@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -54,6 +55,11 @@ namespace Netherlands3D.UI.Components
         }
         
         private void OnClick(ClickEvent evt)
+        {
+            Application.OpenURL(url);
+        }
+        
+        public void Click()
         {
             Application.OpenURL(url);
         }
