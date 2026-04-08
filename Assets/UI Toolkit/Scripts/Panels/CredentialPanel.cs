@@ -43,7 +43,8 @@ namespace Netherlands3D.UI.Panels
         {
             Warning,
             Key,
-            UsernameAndPassword
+            UsernameAndPassword,
+            Test
         }
         
         private ContentState contentState;
@@ -51,7 +52,9 @@ namespace Netherlands3D.UI.Panels
         private readonly Dictionary<int, (ContentState state, IconImage icon)> dropDownValues = new()
         {
             { 0, (ContentState.Key, IconImage.KeyTokenCode) },
-            { 1, (ContentState.UsernameAndPassword, IconImage.UsernamePassword) }
+            { 1, (ContentState.UsernameAndPassword, IconImage.UsernamePassword) },
+            
+            { 2, (ContentState.Test, IconImage.Warning) }
         };
         
         public CredentialPanel()

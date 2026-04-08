@@ -53,24 +53,21 @@ namespace Netherlands3D.UI.Components
                     if (rootSettings.childCount > 1)
                     {
                         VisualElement popupArea = rootSettings.ElementAt(1);
-                        popupArea.RemoveFromClassList("unity-base-dropdown");
+                       
                         
                         //we need to block and consume the first pointer up or the popup will close immediately
                         ConsumePointer(evt, popupArea);
                         
                         popup = popupArea.ElementAt(0);
-                        popup.UnregisterCallback<GeometryChangedEvent>(SetPopupPosition);
+                      
                         popup.RegisterCallback<GeometryChangedEvent>(SetPopupPosition);
-                        popup.RemoveFromClassList("unity-base-dropdown__container-outer");
-                        var styleSheet = Resources.Load<StyleSheet>($"UI/Components/DropDown-style");
-                        popup.styleSheets.Add(styleSheet);
-                        popup.AddToClassList("dropdown-popup-container");
+                  
+                        popup.AddComponentStylesheetByType(GetType());
                         
                         List<VisualElement> items = popup.Query<VisualElement>(className: "unity-base-dropdown__item").ToList();
                         for (int i = 0; i < items.Count; i++)
                         {
                             VisualElement item = items[i];
-                            item.AddToClassList("dropdown-popup-item");
                             if(i == 0)
                                 item.AddToClassList("dropdown-popup-item__first-item");
                             else if(i == items.Count - 1)
