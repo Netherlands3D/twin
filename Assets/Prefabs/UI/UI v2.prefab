@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6449633652433648055}
   - component: {fileID: 2679958399476094032}
   - component: {fileID: 2273040406529005978}
-  - component: {fileID: 6663534916003227170}
+  - component: {fileID: 5188715498986471469}
   m_Layer: 5
   m_Name: UI v2
   m_TagString: Untagged
@@ -149,13 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.InspectorAssetPanelBehaviour
   uploadFileEvent: {fileID: 11400000, guid: e22d53683e618894db885d9659d65237, type: 2}
-  importSucceeded:
-    m_PersistentCalls:
-      m_Calls: []
-  importFailed:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &6663534916003227170
+--- !u!114 &5188715498986471469
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,10 +158,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 891704482898673965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f42d23241efa7b15ca62f0b84c7c336e, type: 3}
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.CredentialPanelBehaviour
-  OnAuthorizationHandled:
-    m_PersistentCalls:
-      m_Calls: []
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Credentials.CredentialHandler
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
