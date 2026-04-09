@@ -4,9 +4,10 @@
     background-color: var(--color-white);
     border-radius: var(--border-radius-md);
     max-height: 600px;
+    padding: var(--spacing-4);
 }
 
-.floating-panel__content {
-    padding: var(--spacing-4);
+.floating-panel:disabled {
+    display: none;
 }
 
