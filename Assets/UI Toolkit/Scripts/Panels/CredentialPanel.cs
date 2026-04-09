@@ -29,7 +29,6 @@ namespace Netherlands3D.UI.Panels
         private VisualElement warning;
         private VisualElement code;
         private VisualElement username;
-        private VisualElement Warning => warning ??= this.Q<VisualElement>("MessageTitleWarning");
         private VisualElement Code => code ??= this.Q<VisualElement>("MessageTitleCode");
         private VisualElement UserName => username ??= this.Q<VisualElement>("MessageTitleUserName");
 
