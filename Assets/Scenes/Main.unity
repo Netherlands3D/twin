@@ -700,27 +700,27 @@ MonoBehaviour:
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_PointAction: {fileID: -1654692200621890270, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_MoveAction: {fileID: -8784545083839296357, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_SubmitAction: {fileID: 392368643174621059, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_CancelAction: {fileID: 7727032971491509709, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_LeftClickAction: {fileID: 3001919216989983466, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_MiddleClickAction: {fileID: -2185481485913320682, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_RightClickAction: {fileID: -4090225696740746782, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: 8cd41b301cb054584b1c4735c6c2237d,
     type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
@@ -899,6 +899,12 @@ PrefabInstance:
 --- !u!1 &1433589262 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4361285768587773211, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+    type: 3}
+  m_PrefabInstance: {fileID: 7980937525333781997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1665972962 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2142174851707608255, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
     type: 3}
   m_PrefabInstance: {fileID: 7980937525333781997}
   m_PrefabAsset: {fileID: 0}
@@ -1237,7 +1243,7 @@ PrefabInstance:
     - target: {fileID: 33761118266606107, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: excludedUIForDeselection.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 33761118266606107, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -1269,6 +1275,11 @@ PrefabInstance:
       propertyPath: 'excludedUIForDeselection.Array.data[5]'
       value: 
       objectReference: {fileID: 7980937525333781999}
+    - target: {fileID: 33761118266606107, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
+        type: 3}
+      propertyPath: 'excludedUIForDeselection.Array.data[6]'
+      value: 
+      objectReference: {fileID: 1665972962}
     - target: {fileID: 39599883149469642, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: loadingScreenCanvas
@@ -1752,9 +1763,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6924611943033293180, guid: 5ba1df40519b07e4c8a5b0993382af49, type: 3}
-    - {fileID: 7337907536587320542, guid: 5ba1df40519b07e4c8a5b0993382af49, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -31,10 +31,6 @@ namespace Netherlands3D.UI.Behaviours
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
         
-        [SerializeField] 
-        [Obsolete("Replaced by the OnUriImportStarted event as soon as copy/paste and credential support is added")]
-        private UnityEvent OpenLegacyFileImportContentPanel;
-        
         private ToolbarMain toolbarMain;
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         
