@@ -24,7 +24,8 @@ namespace Netherlands3D.UI.Behaviours
             credentialHandler = GetComponent<ICredentialHandler>();
         }
 
-        private void OnEnable()
+        //we need to use the start here, because inspectorpanel behaviour is instantiating the importassetpanel and the oneable will be too late for that
+        private void Start()
         {
             Panel.importSucceeded.AddListener(OnImportSucceeded);
             Panel.importFailed.AddListener(OnImportFailed);
@@ -32,7 +33,7 @@ namespace Netherlands3D.UI.Behaviours
             Panel.SetCredentialHandler(credentialHandler);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             Panel.importSucceeded.RemoveListener(OnImportSucceeded);
             Panel.importFailed.RemoveListener(OnImportFailed);
