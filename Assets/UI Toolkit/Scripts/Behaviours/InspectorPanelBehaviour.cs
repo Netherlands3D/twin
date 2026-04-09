@@ -58,6 +58,7 @@ namespace Netherlands3D.UI.Behaviours
 
             GetPanel<ImportAssetPanel>().OnShow += OnShowImportAssetPanel;
             GetPanel<ImportAssetPanel>().OnHide += OnHideImportAssetPanel;
+            GetPanel<ImportAssetPanel>().OpenAssetLibrary += OpenAssetLibrary;
             
             ToolbarMain.AddButton.clicked += ShowPanel<ImportAssetPanel>;
         }
@@ -74,6 +75,7 @@ namespace Netherlands3D.UI.Behaviours
 
             GetPanel<ImportAssetPanel>().OnShow -= OnShowImportAssetPanel;
             GetPanel<ImportAssetPanel>().OnHide -= OnHideImportAssetPanel;
+            GetPanel<ImportAssetPanel>().OpenAssetLibrary -= OpenAssetLibrary;
             
             ToolbarMain.AddButton.clicked -= ShowPanel<ImportAssetPanel>;
         }

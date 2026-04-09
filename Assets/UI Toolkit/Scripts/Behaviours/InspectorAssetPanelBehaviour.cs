@@ -16,10 +16,6 @@ namespace Netherlands3D.UI.Behaviours
         private UIDocument appDocument;
         [SerializeField] private TriggerEvent uploadFileEvent;
 
-        [SerializeField]
-        [Obsolete("Replaced by UriImportStarted")]
-        private UnityEvent OpenLegacyFileImportContentPanel;
-
         private VisualElement root;
         private VisualElement Root => root ??= appDocument?.rootVisualElement;
         
@@ -41,9 +37,6 @@ namespace Netherlands3D.UI.Behaviours
         {
             Panel.FileUploadStarted += OnUploadStarted;
             Panel.UriImportStarted += OnUriImportStarted;
-
-            // legacy
-            Panel.FileImportFromUrlStarted += OnFileImportFromUrlStarted;
             
             importSucceeded.AddListener(OnImportSucceeded);
             importFailed.AddListener(OnImportFailed);
@@ -54,9 +47,6 @@ namespace Netherlands3D.UI.Behaviours
         {
             Panel.FileUploadStarted -= OnUploadStarted;
             Panel.UriImportStarted -= OnUriImportStarted;
-
-            // legacy
-            Panel.FileImportFromUrlStarted -= OnFileImportFromUrlStarted;
             
             importSucceeded.RemoveListener(OnImportSucceeded);
             importFailed.RemoveListener(OnImportFailed);
@@ -100,12 +90,6 @@ namespace Netherlands3D.UI.Behaviours
         private void OnImportFailed()
         {
            
-        }
-
-        [Obsolete]
-        private void OnFileImportFromUrlStarted(ClickEvent evt)
-        {
-            OpenLegacyFileImportContentPanel?.Invoke();
         }
     }
 }

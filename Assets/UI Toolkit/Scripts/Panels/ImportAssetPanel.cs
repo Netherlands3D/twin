@@ -17,7 +17,6 @@ namespace Netherlands3D.UI.Panels
         
         private Button goToAssetLibraryButton;
         private Button GoToAssetLibraryButton => goToAssetLibraryButton ??= this.Q<Button>("GoToAssetLibraryButton");
-       
         
         private TextField importUriField;
         private TextField ImportUriField => importUriField ??= this.Q<TextField>("ImportUriField");
@@ -27,7 +26,7 @@ namespace Netherlands3D.UI.Panels
         private ErrorPanel errorPanel;
         private ErrorPanel ErrorPanel =>  errorPanel ??= this.Q<ErrorPanel>();
 
-        public EventCallback<ClickEvent> OpenAssetLibrary { get; set; }
+        public Action OpenAssetLibrary { get; set; }
         public EventCallback<ClickEvent> FileImportFromUrlStarted { get; set; }
         public EventCallback<ClickEvent> FileUploadStarted { get; set; }
         public Action<Uri> UriImportStarted { get; set; }
@@ -46,8 +45,6 @@ namespace Netherlands3D.UI.Panels
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnImportUri);
             UriImportFailed += ErrorPanel.Show; 
-            // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
-            //ImportFromUrlButton.RegisterCallback<ClickEvent>(OnFileImportFromUrlStarted);
         }
         
         ~ImportAssetPanel()
@@ -57,7 +54,7 @@ namespace Netherlands3D.UI.Panels
 
         public override string GetTitle() => "Importeren";
 
-        private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke(evt);
+        private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke();
         private void OnFileImportFromUrlStarted(ClickEvent evt) => FileImportFromUrlStarted?.Invoke(evt);
         private void OnUploadStarted(ClickEvent evt) => FileUploadStarted?.Invoke(evt);
 
