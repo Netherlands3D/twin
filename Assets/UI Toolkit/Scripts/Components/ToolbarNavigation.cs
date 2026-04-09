@@ -25,6 +25,12 @@ namespace Netherlands3D.UI.Components
             Perspective.RegisterValueChangedCallback(OnToggleOrthographicView);
         }
 
+        public void UpdateCompass(float yawInDegrees)
+        {
+            North.Q<Icon>().style.rotate = new StyleRotate(new Rotate(yawInDegrees));
+            North.EnableInClassList("toolbar-navigation__compass--north", yawInDegrees is > 359.0f or < 1.0f);
+        }
+
         private void OnToggleOrthographicView(ChangeEvent<bool> value)
         {
             ToggleOrthographicView?.Invoke(value.newValue);
