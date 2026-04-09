@@ -18,7 +18,7 @@
                 <nl3d:ToolbarToolbox picking-mode="Ignore" />
                 <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1;"/>
             </ui:VisualElement>
-            <nl3d:PropertiesPanel/>
+            <nl3d:PropertiesPanel name="PropertiesPanel"/>
         </ui:VisualElement>
         <ui:VisualElement name="BottomSection" picking-mode="Ignore" style="align-items: flex-end; flex-direction: row;">
             <nl3d:Footer/>

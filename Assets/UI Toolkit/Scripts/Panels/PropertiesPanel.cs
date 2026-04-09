@@ -6,8 +6,8 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class PropertiesPanel : VisualElement
     {
-        private Label header;
-        private Label Header => header ??= this.Q<Label>(className: "properties-header-title");
+        private Header header;
+        private Header Header => header ??= this.Q<Header>(className: "properties-header-title");
         private Button propertiesHeaderCloseButton;
         public Button PropertiesHeaderCloseButton => propertiesHeaderCloseButton ??= this.Q<Button>("PropertiesHeaderCloseButton");
 
@@ -17,8 +17,8 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("header-text")]
         public string HeaderText
         {
-            get => Header?.text;
-            set { if (Header != null) Header.text = value; }
+            get => Header?.LabelText;
+            set { if (Header != null) Header.LabelText = value; }
         }
 
         private ToolbarProperties toolbar;
