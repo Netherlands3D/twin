@@ -7,7 +7,7 @@
 
 .object-information-bagid__label{
     -unity-font-definition: var(--nl3d-default-font-semi-bold);
-    margin-top: var(--spacing-3);
+    margin: var(--spacing-3) 0 0 0;
     padding: 0;
 }
 
