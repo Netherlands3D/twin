@@ -17,22 +17,21 @@ namespace Netherlands3D.UI.Panels
         
         private Button goToAssetLibraryButton;
         private Button GoToAssetLibraryButton => goToAssetLibraryButton ??= this.Q<Button>("GoToAssetLibraryButton");
-
-        private Button importFromUrlButton;
+       
         
-        // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
-        private Button ImportFromUrlButton => importFromUrlButton ??= this.Q<Button>("FileImportFromUrlButton");
         private TextField importUriField;
-        // End: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
-        
         private TextField ImportUriField => importUriField ??= this.Q<TextField>("ImportUriField");
         private Button importUriButton;
         private Button ImportUriButton => importUriButton ??= this.Q<Button>("ImportUriButton");
+        
+        private ErrorPanel errorPanel;
+        private ErrorPanel ErrorPanel =>  errorPanel ??= this.Q<ErrorPanel>();
 
         public EventCallback<ClickEvent> OpenAssetLibrary { get; set; }
         public EventCallback<ClickEvent> FileImportFromUrlStarted { get; set; }
         public EventCallback<ClickEvent> FileUploadStarted { get; set; }
         public Action<Uri> UriImportStarted { get; set; }
+        public Action UriImportFailed { get; set; }
 
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.AddLayer;
 
@@ -46,9 +45,14 @@ namespace Netherlands3D.UI.Panels
             GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnImportUri);
-            
+            UriImportFailed += ErrorPanel.Show; 
             // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
-            ImportFromUrlButton.RegisterCallback<ClickEvent>(OnFileImportFromUrlStarted);
+            //ImportFromUrlButton.RegisterCallback<ClickEvent>(OnFileImportFromUrlStarted);
+        }
+        
+        ~ImportAssetPanel()
+        {
+            UriImportFailed -= ErrorPanel.Show;
         }
 
         public override string GetTitle() => "Importeren";
@@ -68,6 +72,7 @@ namespace Netherlands3D.UI.Panels
             {
                 // TODO: Add better error handling
                 Debug.LogException(e);
+                UriImportFailed?.Invoke();
             }
         }
     }

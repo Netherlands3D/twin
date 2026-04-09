@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
-using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
@@ -31,8 +28,6 @@ namespace Netherlands3D.UI.Behaviours
 
         private AssetLibraryPanel assetLibraryPanel;
         private AssetLibraryPanel AssetLibraryPanel => assetLibraryPanel ??= panels.OfType<AssetLibraryPanel>().FirstOrDefault();
-        private ImportAssetPanel importAssetPanel;
-        private ImportAssetPanel ImportAssetPanel => importAssetPanel ??= panels.OfType<ImportAssetPanel>().FirstOrDefault();
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
@@ -40,6 +35,10 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] 
         [Obsolete("Replaced by the OnUriImportStarted event as soon as copy/paste and credential support is added")]
         private UnityEvent OpenLegacyFileImportContentPanel;
+        
+        private ToolbarMain toolbarMain;
+        private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
+        
 
         private void Awake()
         {
@@ -58,14 +57,10 @@ namespace Netherlands3D.UI.Behaviours
             AssetLibraryPanel.OnHide += OnHideAssetLibrary;
             AssetLibraryPanel.OnOpenCatalogItem += OnOpenCatalogItem;
 
-            ImportAssetPanel.OnShow += OnShowImportAssetPanel;
-            ImportAssetPanel.OnHide += OnHideImportAssetPanel;
-            ImportAssetPanel.OpenAssetLibrary += OpenAssetLibraryClick;
-            ImportAssetPanel.FileUploadStarted += OnUploadStartedClick;
-            ImportAssetPanel.UriImportStarted += OnUriImportStarted;
+            GetPanel<ImportAssetPanel>().OnShow += OnShowImportAssetPanel;
+            GetPanel<ImportAssetPanel>().OnHide += OnHideImportAssetPanel;
             
-            // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
-            ImportAssetPanel.FileImportFromUrlStarted += OnFileImportFromUrlStarted;
+            ToolbarMain.AddButton.clicked += ShowPanel<ImportAssetPanel>;
         }
 
         private void OnDisable()
@@ -78,14 +73,10 @@ namespace Netherlands3D.UI.Behaviours
             AssetLibraryPanel.OnHide -= OnHideAssetLibrary;
             AssetLibraryPanel.OnOpenCatalogItem -= OnOpenCatalogItem;
 
-            ImportAssetPanel.OnShow -= OnShowImportAssetPanel;
-            ImportAssetPanel.OnHide -= OnHideImportAssetPanel;
-            ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibraryClick;
-            ImportAssetPanel.FileUploadStarted -= OnUploadStartedClick;
-            ImportAssetPanel.UriImportStarted -= OnUriImportStarted;
-
-            // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
-            ImportAssetPanel.FileImportFromUrlStarted -= OnFileImportFromUrlStarted;
+            GetPanel<ImportAssetPanel>().OnShow -= OnShowImportAssetPanel;
+            GetPanel<ImportAssetPanel>().OnHide -= OnHideImportAssetPanel;
+            
+            ToolbarMain.AddButton.clicked -= ShowPanel<ImportAssetPanel>;
         }
 
         public void Open()
@@ -99,38 +90,45 @@ namespace Netherlands3D.UI.Behaviours
         }
 
         // TODO: Shouldn't this be in the InspectorPanel component?
-        public BaseInspectorContentPanel RegisterPanel<T>() where T : BaseInspectorContentPanel,new()
+        public BaseInspectorContentPanel RegisterPanel<T>() where T : BaseInspectorContentPanel, new()
         {
-            return RegisterPanel(new T());
-        }
-
-        // TODO: Shouldn't this be in the InspectorPanel component?
-        public BaseInspectorContentPanel RegisterPanel(BaseInspectorContentPanel panel)
-        {
+            var panel = new T();
             panels.Add(panel);
+
             InspectorPanel.Content.Add(panel);
-            
-            // Ensure panel is hidden by default
             panel.Hide();
-            
+
             return panel;
         }
 
         public void ShowPanel<T>() where T : BaseInspectorContentPanel
         {
+            BaseInspectorContentPanel previousPanel = activePanel;
             // only one panel can be open at a time
             HidePanel();
+
+            //was the activepanel already open? then toggle it to close
+            if (previousPanel == GetPanel<T>())
+            {
+                return;
+            }
             
             Open();
-            activePanel = panels.OfType<T>().FirstOrDefault();
+            activePanel = GetPanel<T>();
             InspectorPanel.HeaderText = activePanel.GetTitle();
             InspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
             activePanel.Show();
         }
 
+        public T GetPanel<T>() where T : BaseInspectorContentPanel
+        {
+            return panels.OfType<T>().FirstOrDefault();
+        }
+
         public void HidePanel()
         {
             activePanel?.Hide();
+            activePanel = null;
         }
 
         public void OpenAssetLibrary() => ShowPanel<AssetLibraryPanel>();
@@ -175,49 +173,14 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnAddLayerToggled(ChangeEvent<bool> evt)
         {
-            if (!evt.newValue)
-            {
-                CloseImportAssetPanel();
-                return;
-            }
-
-            OpenImportAssetPanel();
+            if (evt.newValue) ShowPanel<ImportAssetPanel>();
+            else HidePanel();
         }
 
         private void OnOpenLibraryToggled(ChangeEvent<bool> evt)
         {
-            if (!evt.newValue)
-            {
-                CloseAssetLibrary();
-                return;
-            }
-
-            OpenAssetLibrary();
-        }
-
-        private void OpenAssetLibraryClick(ClickEvent evt)
-        {
-            OpenAssetLibrary();
-        }
-
-        private void OnUploadStartedClick(ClickEvent evt)
-        {
-            uploadFileEvent.InvokeStarted();
-            
-            Close();
-        }
-
-        private void OnUriImportStarted(Uri uri)
-        {
-            App.Layers.AddFromUrl(uri, new Public(uri)); //todo: Exceptions should still be handled
-            Close();
-        }
-        
-        [Obsolete("Replaced by the OnUriImportStarted event as soon as copy/paste and credential support is added")]
-        private void OnFileImportFromUrlStarted(ClickEvent evt)
-        {
-            OpenLegacyFileImportContentPanel.Invoke();
-            Close();
+            if (evt.newValue) ShowPanel<AssetLibraryPanel>();
+            else HidePanel();
         }
 
         private void OnOpenCatalogItem(ICatalogItem catalogItem)
