@@ -78,8 +78,8 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnUriImportStarted(Uri uri)
         {
-            credentialBehaviour.CredentialHandler.SetUri(uri.ToString());
-            credentialBehaviour.CredentialHandler.ApplyCredentials();
+            credentialBehaviour.SetUri(uri.ToString());
+            credentialBehaviour.ApplyCredentials();
         }
         
         private void OnImportSucceeded()

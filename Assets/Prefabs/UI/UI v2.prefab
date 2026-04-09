@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 6449633652433648055}
   - component: {fileID: 2679958399476094032}
   - component: {fileID: 2273040406529005978}
-  - component: {fileID: 3354041231514316206}
   - component: {fileID: 6663534916003227170}
   m_Layer: 5
   m_Name: UI v2
@@ -91,21 +90,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
-  OpenLegacyFileImportContentPanel:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: a823ea20a9346ea41a755774e3a29407, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &873264101414426239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,19 +155,6 @@ MonoBehaviour:
   importFailed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3354041231514316206
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891704482898673965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Credentials.CredentialHandler
-  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!114 &6663534916003227170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,3 +170,4 @@ MonoBehaviour:
   OnAuthorizationHandled:
     m_PersistentCalls:
       m_Calls: []
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}

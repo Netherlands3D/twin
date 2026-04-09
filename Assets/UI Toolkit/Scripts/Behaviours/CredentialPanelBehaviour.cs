@@ -8,15 +8,17 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
 {
-    [RequireComponent(typeof(UIDocument), typeof(CredentialHandler))]
+    [RequireComponent(typeof(UIDocument))]
     public class CredentialPanelBehaviour : MonoBehaviour
     {
         private UIDocument appDocument;
         public UnityEvent<Uri, StoredAuthorization> OnAuthorizationHandled;
+        public StoredAuthorization Authorization { get; private set; }
+        public Uri Uri { get; set; }
+
+        public string UserName { get; set; }
+        public string PasswordOrKeyOrTokenOrCode { get; set; }
         
-        public CredentialHandler CredentialHandler => credentialHandler;
-        
-    
         private VisualElement root;
         private VisualElement Root => root ??= appDocument?.rootVisualElement;
         
@@ -24,35 +26,59 @@ namespace Netherlands3D.UI.Behaviours
         private CredentialPanel panel;
         private CredentialPanel Panel => panel ??= Root?.Q<CredentialPanel>();
         
-        private CredentialHandler credentialHandler;
+        [Tooltip("KeyVault Scriptable Object")] [SerializeField]
+        private KeyVault keyVault;
+        
         
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
-            credentialHandler = GetComponent<CredentialHandler>();
+            keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
         }
 
         private void Start()
         {
-            credentialHandler.OnAuthorizationHandled.AddListener(ProcessAuthorization);
             Panel.OnConfirm += ApplyCredentials;
         }
 
         private void OnDestroy()
         {
-            credentialHandler.OnAuthorizationHandled.RemoveListener(ProcessAuthorization);
+            keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
             Panel.OnConfirm -= ApplyCredentials;
         }
 
-        private void ApplyCredentials()
+        public void ApplyCredentials()
         {
-            credentialHandler.UserName = panel.UserNameField.value;
-            credentialHandler.PasswordOrKeyOrTokenOrCode = Panel.CodeField.value;
-            credentialHandler.ApplyCredentials();
+            UserName = panel.UserNameField.value;
+            PasswordOrKeyOrTokenOrCode = Panel.CodeField.value;
+            keyVault.Authorize(Uri, UserName, PasswordOrKeyOrTokenOrCode);
         }
-        
-        private void ProcessAuthorization(Uri uri, StoredAuthorization auth)
+
+        //called in the inspector on end edit of url input field
+        public void SetUri(string url)
         {
+            if (!string.IsNullOrEmpty(url))
+                Uri = new Uri(url);
+        }
+
+        public void ClearCredentials()
+        {
+            UserName = "";
+            PasswordOrKeyOrTokenOrCode = "";
+        }
+
+        private void DeterminedAuthorizationType(StoredAuthorization auth)
+        {
+            if (Uri == null ||
+                auth.Domain !=
+                new Uri(Uri.GetLeftPart(UriPartial.Path)) || //ensure the returned authorization is relevant to us
+                auth == Authorization) //ensure the new auth is not the same at the one we already have. If it is, we don't need a reload
+            {
+                return;
+            }
+            
+            Authorization = auth;
+            
             if (auth is FailedOrUnsupported)
             {
                 Panel.Show();
@@ -60,7 +86,7 @@ namespace Netherlands3D.UI.Behaviours
             }
 
             Panel.Hide();
-            OnAuthorizationHandled?.Invoke(uri, auth);
+            OnAuthorizationHandled.Invoke(auth.SanitizeUrl(Uri), auth);
         }
     }
 }

@@ -149,9 +149,6 @@ namespace Netherlands3D.UI.Behaviours
             Close();
         }
 
-        public void OpenImportAssetPanel() => ShowPanel<ImportAssetPanel>();
-        public void CloseImportAssetPanel() => HidePanel();
-
         // TODO: Shouldn't this be in the InspectorPanel component?
         private void OnShowImportAssetPanel()
         {
