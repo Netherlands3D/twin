@@ -18,8 +18,8 @@ namespace Netherlands3D.UI.Panels
         public Action OnConfirm;
         public Action OnFailed;
         
-        private Button button;
-        private Button Button => button ??= this.Q<Button>("RetryButton");
+        private Button confirmButton;
+        private Button ConfirmButton => confirmButton ??= this.Q<Button>("ConfirmButton");
         
         private TextField codeField;
         public TextField CodeField => codeField ??= this.Q<TextField>("CodeField");
@@ -68,7 +68,7 @@ namespace Netherlands3D.UI.Panels
             InitializeDropdown();
             
             SetContentState(ContentState.Warning);
-            Button.clicked += () =>
+            ConfirmButton.clicked += () =>
             {
                 if (contentState == ContentState.Warning)
                     SetContentState(ContentState.Key);
@@ -119,8 +119,8 @@ namespace Netherlands3D.UI.Panels
                     Warning.SetEnabled(true);
                     Code.SetEnabled(false);
                     UserName.SetEnabled(false);
-                    Button.LabelText = "Update";
-                    Button.ShowIcon = Button.ButtonStyle.WithIcon;
+                    ConfirmButton.LabelText = "Update";
+                    ConfirmButton.ShowIcon = Button.ButtonStyle.WithIcon;
                     content.ShowDropDown = false;
                     content.ShowHelpIcon = true;
                     break;
@@ -129,8 +129,8 @@ namespace Netherlands3D.UI.Panels
                     Code.SetEnabled(true);
                     Code.Q<Label>().text = "Wachtwoord of code";
                     UserName.SetEnabled(false);
-                    Button.LabelText = "Bevestigen";
-                    Button.ShowIcon =  Button.ButtonStyle.Normal;
+                    ConfirmButton.LabelText = "Bevestigen";
+                    ConfirmButton.ShowIcon =  Button.ButtonStyle.Normal;
                     content.ShowDropDown = true;
                     content.ShowHelpIcon = false;
                     
@@ -140,8 +140,8 @@ namespace Netherlands3D.UI.Panels
                     Code.SetEnabled(true);
                     Code.Q<Label>().text = "Wachtwoord";
                     UserName.SetEnabled(true);
-                    Button.LabelText = "Bevestigen";
-                    Button.ShowIcon =  Button.ButtonStyle.Normal;
+                    ConfirmButton.LabelText = "Bevestigen";
+                    ConfirmButton.ShowIcon =  Button.ButtonStyle.Normal;
                     content.ShowDropDown = true;
                     content.ShowHelpIcon = false;
                     break;

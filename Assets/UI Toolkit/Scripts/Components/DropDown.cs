@@ -20,8 +20,6 @@ namespace Netherlands3D.UI.Components
         
         private List<IconImage> valueIcons;
         
-        private EventCallback<PointerUpEvent> pointerConsumeCallback = null;
-        
         public DropDown()
         {
             this.CloneComponentTree("Components");
