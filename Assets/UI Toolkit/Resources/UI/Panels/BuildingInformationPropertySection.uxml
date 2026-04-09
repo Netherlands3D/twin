@@ -12,10 +12,14 @@
         <ui:Label name="InformatieLabel" text="Praktische informatie:" class="object-information-bagid__label"/>  
         <ui:VisualElement class="object-information-bagid__row">
             <ui:Label name="BagIdLabel" text="BAG ID" class="object-information-bagid__label"/>
-            <nl3d:Button name="BagIdLink" icon="Link" button-style="IconOnly" class="object-information-bagid__link">
+            <ui:VisualElement name="LinkRow" class="object-information-bagid__link-row">
+                <nl3d:Icon name="LinkIcon" image="Link" class="object-information-bagid__link-icon"/>
                 <nl3d:Hyperlink name="Link"/>
-            </nl3d:Button>
-            <!-- <ui:Label name="BagIdLabel" text="BAG ID" class="object-information-bagid__label"/>     -->
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="StatusRow" class="object-information-bagid__row">
+            <ui:Label name="StatusLabel" text="Status" class="object-information-bagid__label"/>
+            <ui:Label name="StatusValue" class="object-information-bagid__label-value"/>
         </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>

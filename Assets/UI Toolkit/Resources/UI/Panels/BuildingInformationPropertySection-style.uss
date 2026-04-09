@@ -1,15 +1,25 @@
 .object-information-bagid__row {
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    margin-top: var(--spacing-3);
 }
 
 .object-information-bagid__label{
     -unity-font-definition: var(--nl3d-default-font-semi-bold);
-    margin: 0;
+    margin-top: var(--spacing-3);
     padding: 0;
-    justify-content: flex-start;
 }
 
-.object-information-bagid__link {
-    justify-content: space-evenly;
+.object-information-bagid__link-row {
+    flex-direction: row;
+    align-items: center;
+    border-width: var(--spacing-1);
+    border-radius: var(--spacing-4);
+    border-color: var(--color-blue-200);
+    padding: var(--spacing-2);
+}
+
+.object-information-bagid__label-value{
+    
 }

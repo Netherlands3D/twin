@@ -31,7 +31,7 @@ namespace Netherlands3D.UI.Panels
         private Coroutine downloadProcess;
         private VisualElement thumbnailContainer;
         private Hyperlink bagLink;
-        private Button bagLinkButton;
+        private Label statusValue;
 
         public BuildingInformationPropertySection()
         {
@@ -40,9 +40,7 @@ namespace Netherlands3D.UI.Panels
 
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
             bagLink = this.Q<Hyperlink>("Link");
-            bagLinkButton = this.Q<Button>("BagIdLink");
-            bagLinkButton.clicked += () => bagLink.Click(); //probably remove button entirely
-           
+            statusValue = this.Q<Label>("StatusValue");
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
@@ -123,6 +121,8 @@ namespace Netherlands3D.UI.Panels
                 
                 bagLink.text = bagID;
                 bagLink.url = "https://bagviewer.kadaster.nl/lvbag/bag-viewer/?objectId=" + bagIdText;
+                
+                statusValue.text = statusText;
 
                 //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
                 Bounds currentObjectBounds = new Bounds(coordinate.ToUnity(), Vector3.one * 50.0f);
