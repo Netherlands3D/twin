@@ -108,22 +108,15 @@ namespace Netherlands3D.UI.Panels
             if (dropDownValues.Keys.Contains(index))
                 credentialContent.SetDropdownValue(index);
 
+            warningContent.SetEnabled(state == ContentState.Warning);
+            credentialContent.SetEnabled(state != ContentState.Warning);
             switch (state)
             {
-                case ContentState.Warning:
-                    warningContent.SetEnabled(true);
-                    credentialContent.SetEnabled(false);
-                    break;
                 case ContentState.Key:
-                    warningContent.SetEnabled(false);
-                    credentialContent.SetEnabled(true);
                     Code.Q<Label>().text = "Wachtwoord of code";
                     UserName.SetEnabled(false);
-
                     break;
                 case ContentState.UsernameAndPassword:
-                    warningContent.SetEnabled(false);
-                    credentialContent.SetEnabled(true);
                     Code.Q<Label>().text = "Wachtwoord";
                     UserName.SetEnabled(true);
                     break;
