@@ -18,7 +18,6 @@ namespace Netherlands3D.UI.Behaviours
     {
         private UIDocument appDocument;
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
-        [SerializeField] private TriggerEvent uploadFileEvent;
     
         private VisualElement root;
         private VisualElement Root => root ??= appDocument?.rootVisualElement;

@@ -95,7 +95,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
-  uploadFileEvent: {fileID: 11400000, guid: e22d53683e618894db885d9659d65237, type: 2}
   OpenLegacyFileImportContentPanel:
     m_PersistentCalls:
       m_Calls:
@@ -322,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a002345d35eb03b9fa224a363263ae75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.InspectorAssetPanelBehaviour
-  uploadFileEvent: {fileID: 0}
+  uploadFileEvent: {fileID: 11400000, guid: e22d53683e618894db885d9659d65237, type: 2}
   OpenLegacyFileImportContentPanel:
     m_PersistentCalls:
       m_Calls: []
