@@ -10,7 +10,6 @@ namespace Netherlands3D.UI.Behaviours
     public class InspectorAssetPanelBehaviour : MonoBehaviour
     {
         private UIDocument appDocument;
-        [SerializeField] private TriggerEvent uploadFileEvent;
 
         private VisualElement root;
         private VisualElement Root => root ??= appDocument?.rootVisualElement;
@@ -28,8 +27,6 @@ namespace Netherlands3D.UI.Behaviours
 
         private void Start()
         {
-            Panel.FileUploadStarted += OnUploadStarted;
-            
             Panel.importSucceeded.AddListener(OnImportSucceeded);
             Panel.importFailed.AddListener(OnImportFailed);
             
@@ -38,15 +35,8 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnDestroy()
         {
-            Panel.FileUploadStarted -= OnUploadStarted;
-            
             Panel.importSucceeded.RemoveListener(OnImportSucceeded);
             Panel.importFailed.RemoveListener(OnImportFailed);
-        }
-
-        private void OnUploadStarted(ClickEvent evt)
-        {
-            uploadFileEvent.InvokeStarted(); //todo: remove scriptable event
         }
         
         private void OnImportSucceeded()

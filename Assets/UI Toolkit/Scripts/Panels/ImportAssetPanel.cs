@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -16,6 +17,8 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class ImportAssetPanel : BaseInspectorContentPanel
     {
+        public const string supportedFileTypes = "obj,csv,json,geojson,glb";
+        
         private Button uploadButton;
         private Button UploadButton => uploadButton ??= this.Q<Button>("FileUploadButton");
 
@@ -92,7 +95,10 @@ namespace Netherlands3D.UI.Panels
         public override string GetTitle() => "Importeren";
 
         private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke();
-        private void OnUploadStarted(ClickEvent evt) => FileUploadStarted?.Invoke(evt);
+        private void OnUploadStarted(ClickEvent evt)
+        { 
+            ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes);
+        }
 
         private void OnInportUriButtonClicked(ClickEvent evt)
         {
