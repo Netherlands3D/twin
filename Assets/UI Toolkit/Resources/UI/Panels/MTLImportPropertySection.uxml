@@ -1,6 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xmlns:ui="UnityEngine.UIElements" 
-         xmlns:nl3d="Netherlands3D.UI.Components" 
+         xmlns:nl3d="Netherlands3D.UI.Components"
+         xmlns:nl3dP="Netherlands3D.UI.Panels"
          noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
          editor-extension-mode="False" 
          name="MTLImportPropertySection"
@@ -10,5 +11,6 @@
         <ui:Label text="U kunt het MTL (.mtl) bestand aan dit object toevoegen of updaten door deze te vervangen met een ander MTL bestand." class="mtl-property-section__text"/>
         <nl3d:Button LabelText="Nieuwe MTL toevoegen" button-style="Normal" class="mtl-property-section__button"/>
         <nl3d:TextCallOut text="Op dit moment wordt het toevoegen van aanvullende texturen nog niet ondersteund." class="mtl-property-section__text"/>
+        <nl3dP:ErrorPanel />
     </nl3d:ContentContainer>
 </ui:UXML>

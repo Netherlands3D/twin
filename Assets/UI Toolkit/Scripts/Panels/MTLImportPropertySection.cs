@@ -15,6 +15,8 @@ namespace Netherlands3D.UI.Panels
     {
         private ColorPropertyData stylingPropertyData;
         private OBJPropertyData objPropertyData;
+        
+        private ErrorPanel errorPanel;
 
         private Button importButton;
         
@@ -26,6 +28,8 @@ namespace Netherlands3D.UI.Panels
             importButton = this.Q<Button>();
             importButton.RegisterCallback<ClickEvent>(StartImport);
             ServiceLocator.GetService<FileOpen>().onFilesSelected.AddListener(ImportMtl);
+            
+            errorPanel = this.Q<ErrorPanel>();
         }
 
         private void StartImport(ClickEvent evt)
@@ -76,9 +80,11 @@ namespace Netherlands3D.UI.Panels
             if (success)
             {
                 SetNormalUIPanels();
+                errorPanel.SetEnabled(false);
             }
             else
             {
+                errorPanel.SetEnabled(true);
                 // importErrorPanel.SetActive(true);
                 // defaultImportPanel.SetActive(false);
                 // hasMtlPanel.SetActive(false);
