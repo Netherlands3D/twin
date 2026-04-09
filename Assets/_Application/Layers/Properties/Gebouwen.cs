@@ -26,18 +26,23 @@ namespace Netherlands3D.Twin.layers.properties
         {
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.SelectSubObjectWithBagId.AddListener(ProcessMeshMappingForLayer);
+            selectorService.OnDeselect.AddListener(ClearMeshMappingsForLayer);
         }
 
         private void OnDisable()
         {
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.SelectSubObjectWithBagId.RemoveListener(ProcessMeshMappingForLayer);
+            selectorService.OnDeselect.RemoveListener(ClearMeshMappingsForLayer);
         }
 
         private void ProcessMeshMappingForLayer(MeshMapping mapping, string bagId)
         {
-            if(visualization == null || visualization.LayerData != mapping.LayerData)
+            if (visualization == null || mapping == null || visualization.LayerData != mapping.LayerData)
+            {
+                ClearMeshMappingsForLayer();
                 return;
+            }
 
             BuildingPropertyData propertyData = visualization.LayerData.GetProperty<BuildingPropertyData>();
             buildingIds.Clear();
@@ -51,6 +56,16 @@ namespace Netherlands3D.Twin.layers.properties
                 }
             }
             propertyData.BuildingIds = buildingIds;
+        }
+
+        private void ClearMeshMappingsForLayer()
+        {
+            if(visualization == null)
+                return;
+            
+            BuildingPropertyData propertyData = visualization.LayerData.GetProperty<BuildingPropertyData>();
+            buildingIds.Clear();
+            propertyData.BuildingIds = null; //dont clear but set to null to trigger changed event
         }
     }
 }

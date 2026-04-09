@@ -236,11 +236,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 DeselectBagId(bagId);
                 selectedMappings.Remove(bagId);
                 SelectSubObjectWithBagId?.Invoke(selectedMappings.Count > 0 ? map : null, bagId);
-                if (selectedMappings.Count == 0)
-                {
-                    lastSelectedMappingLayerData.DeselectLayer();
-                    lastSelectedMappingLayerData = null;
-                }
+                // if (selectedMappings.Count == 0)
+                // {
+                //     lastSelectedMappingLayerData.DeselectLayer();
+                //     lastSelectedMappingLayerData = null;
+                // }
             }
         }
 

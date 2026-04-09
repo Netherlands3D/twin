@@ -14,7 +14,7 @@ using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
-using Button = Netherlands3D.UI.Components.Button;
+using ListView = Netherlands3D.UI.Components.ListView;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -32,6 +32,10 @@ namespace Netherlands3D.UI.Panels
         private VisualElement thumbnailContainer;
         private Hyperlink bagLink;
         private Label statusValue;
+        private Label yearValue;
+        
+        private ListView addressListView;
+        private ListView AddressListView => addressListView ??= this.Q<ListView>();
 
         public BuildingInformationPropertySection()
         {
@@ -41,13 +45,18 @@ namespace Netherlands3D.UI.Panels
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
             bagLink = this.Q<Hyperlink>("Link");
             statusValue = this.Q<Label>("StatusValue");
+            yearValue = this.Q<Label>("YearValue");
+            
+            AddressListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            AddressListView.selectionType = SelectionType.None;
+            
+            AddressListView.makeItem = MakeListViewItem;
+            AddressListView.bindItem = BindListViewItem;
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
                 buildingPropertyData.OnIdsChanged.RemoveListener(OnIdsChanged);
             });
-            
-           
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -56,16 +65,43 @@ namespace Netherlands3D.UI.Panels
             buildingPropertyData.OnIdsChanged.AddListener(OnIdsChanged);
             
             Dictionary<string, Coordinate> buildingIds = buildingPropertyData.BuildingIds;
-            if(buildingIds.Count == 0) return;
+            if (buildingIds == null || buildingIds.Count == 0)
+            {
+                Clear();
+                return;
+            }
 
             thumbnailContainer.schedule.Execute(() => { LoadBagId(buildingIds.FirstOrDefault()); });
         }
 
         private void OnIdsChanged(Dictionary<string, Coordinate> buildingIds)
         {
-            if(buildingIds.Count == 0) return;
+            if (buildingIds == null || buildingIds.Count == 0)
+            {
+                Clear();
+                return;
+            }
             
             LoadBagId(buildingIds.FirstOrDefault());
+        }
+        
+        public void PopulateAddresses(List<string> addresses)
+        {
+            AddressListView.itemsSource = addresses;
+            AddressListView.RefreshItems();
+        }
+        
+        private VisualElement MakeListViewItem()
+        {
+            return new Label();
+        }
+        
+        private void BindListViewItem(VisualElement item, int index)
+        {
+            if (item is not Label listViewItem) return;
+            
+             string text = AddressListView.itemsSource[index] as string;
+             listViewItem.text = text;
         }
         
         private void LoadBagId(KeyValuePair<string, Coordinate> bagId)
@@ -84,9 +120,7 @@ namespace Netherlands3D.UI.Panels
         private IEnumerator GetBagIDData(string bagID, Coordinate coordinate)
         {
             yield return GetBAGData(bagID, coordinate);
-         
-            //Adressess (slower request next)
-            //yield return GetAddresses(bagID);
+            yield return GetAddresses(bagID);
         }
 
         private IEnumerator GetBAGData(string bagID, Coordinate coordinate)
@@ -101,14 +135,10 @@ namespace Netherlands3D.UI.Panels
                 Debug.LogError("Geen BAG data gevonden");
                 yield break;
             }
-
-            
             
             string bagIdText;
             string yearText;
             string statusText;
-            
-            
 
             GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
             while (customJsonHandler.GotoNextFeature())
@@ -123,6 +153,7 @@ namespace Netherlands3D.UI.Panels
                 bagLink.url = "https://bagviewer.kadaster.nl/lvbag/bag-viewer/?objectId=" + bagIdText;
                 
                 statusValue.text = statusText;
+                yearValue.text = yearText;
 
                 //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
                 Bounds currentObjectBounds = new Bounds(coordinate.ToUnity(), Vector3.one * 50.0f);
@@ -138,6 +169,52 @@ namespace Netherlands3D.UI.Panels
                 float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
                 thumbnailContainer.style.height = newHeight;
             }
+        }
+        
+        private IEnumerator GetAddresses(string bagID)
+        {
+            var requestUrl = addressRequestUrl.Replace(idReplacementString, bagID);
+            var webRequest = UnityWebRequest.Get(requestUrl);
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                PopulateAddresses(new List<string>() { "Geen adressen gevonden" });
+                yield break;
+            }
+
+            List<string> addresses = new List<string>();
+            string districtText;
+            
+            GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
+            bool gotDistrict = false;
+            while (customJsonHandler.GotoNextFeature())
+            {
+                var properties = customJsonHandler.GetProperties();
+
+                //Use first address result to determine district
+                if (!gotDistrict)
+                {
+                    districtText = properties["openbare_ruimte"].ToString();
+                    gotDistrict = true;
+                }
+
+                string address = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}";
+                addresses.Add(address);
+            }
+            
+            PopulateAddresses(addresses);
+        }
+
+        private void Clear()
+        {
+            thumbnailContainer.style.height = 0;
+            PopulateAddresses(new List<string>());
+            bagLink.text = "";
+            bagLink.url = "";
+                
+            statusValue.text = "";
+            yearValue.text = "";
         }
     }
 }

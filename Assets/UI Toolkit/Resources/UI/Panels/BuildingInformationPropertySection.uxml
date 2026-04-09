@@ -21,5 +21,12 @@
             <ui:Label name="StatusLabel" text="Status" class="object-information-bagid__label"/>
             <ui:Label name="StatusValue" class="object-information-bagid__label-value"/>
         </ui:VisualElement>
+        <ui:VisualElement name="YearRow" class="object-information-bagid__row">
+            <ui:Label name="YearLabel" text="Bouwjaar" class="object-information-bagid__label"/>
+            <ui:Label name="YearValue" class="object-information-bagid__label-value"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="Divider" class="divider" />
+        <ui:Label name="AddressLabel" text="Adres(sen):" class="object-information-bagid__label"/>
+        <nl3d:ListView name="AddressListView" class="object-information-address__list-view"/>
     </nl3d:ContentContainer>
 </ui:UXML>

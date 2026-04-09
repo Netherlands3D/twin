@@ -20,6 +20,6 @@
     padding: var(--spacing-2);
 }
 
-.object-information-bagid__label-value{
-    
+.object-information-address__list-view{
+    margin-top: var(--spacing-3);
 }
