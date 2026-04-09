@@ -1,0 +1,98 @@
+.dropdown {
+    height: var(--spacing-11);
+    background-color: transparent;
+    border-radius: var(--spacing-4);
+    border-width: var(--spacing-1);
+    border-color: var(--color-blue-50);
+    padding: var(--spacing-2);
+    margin: 0;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    align-items: center;
+    flex-shrink: 1;
+    flex-grow: 0;
+}
+
+.dropdown:hover {
+    border-color: var(--color-blue-700);
+}
+
+.dropdown .unity-base-field__input {
+    color: var(--color-white);
+    background-color: transparent; 
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    min-width: 0;
+}
+
+.dropdown .unity-base-popup-field__arrow {
+    background-image: var(--icon-chevrondown);
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    margin-left: var(--spacing-2);
+}
+
+.dropdown .unity-text-element {
+    display: none;
+}
+
+
+.unity-base-dropdown__item{
+    background-color: white;
+    border-color: var(--color-blue-700);
+    border-left-width: var(--spacing-1);
+    border-right-width: var(--spacing-1);
+    padding: var(--spacing-2);
+    align-items: center;
+    flex-shrink: 1;
+    flex-grow: 0;
+    margin: 0;
+}
+
+.unity-base-dropdown__item.dropdown-popup-item__first-item {
+    border-top-width: var(--spacing-1);
+    border-top-left-radius: var(--spacing-4);
+    border-top-right-radius: var(--spacing-4);
+
+}
+
+.unity-base-dropdown__item.dropdown-popup-item__last-item {
+    border-bottom-width: var(--spacing-1);
+    border-bottom-left-radius: var(--spacing-4);
+    border-bottom-right-radius: var(--spacing-4);
+}
+
+
+
+
+.unity-base-dropdown__item:hover {    
+    background-color: var(--color-blue-700);
+}
+
+.unity-base-dropdown__item:hover .icon{
+    -unity-background-image-tint-color: var(--color-white);
+}
+
+.unity-base-dropdown__container-outer .unity-repeat-button,
+.unity-base-dropdown__container-outer .unity-scroll-view__vertical-scroller,
+.unity-base-dropdown__container-outer .unity-scroll-view__horizontal-scroller,
+.unity-base-dropdown__container-outer .unity-scroller__slider,
+.unity-base-dropdown__container-outer .unity-scroller {
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    opacity: 0;
+    display: none;
+}
+
+.unity-base-dropdown__container-outer{
+    border-radius: var(--spacing-4);
+    border-width: 0;
+}
+
+.unity-base-dropdown__container-outer > * {
+    padding: 0;
+    background-color: transparent;
+}

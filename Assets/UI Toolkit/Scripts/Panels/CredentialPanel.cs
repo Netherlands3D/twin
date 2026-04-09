@@ -1,7 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
+using TextField = UnityEngine.UIElements.TextField;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -11,26 +16,46 @@ namespace Netherlands3D.UI.Panels
         public Action OnShow;
         public Action OnHide;
         public Action OnConfirm;
+        public Action OnFailed;
         
-        private Button button;
-        private Button Button => button ??= this.Q<Button>("RetryButton");
+        private Button confirmButton;
+        private Button ConfirmButton => confirmButton ??= this.Q<Button>("ConfirmButton");
         
-        private TextField keyField;
-        public TextField KeyField => keyField ??= this.Q<TextField>("KeyField");
+        private TextField codeField;
+        public TextField CodeField => codeField ??= this.Q<TextField>("CodeField");
+        
+        private TextField usernameField;
+        public TextField UserNameField => usernameField ??= this.Q<TextField>("UsernameField");
 
         private VisualElement warning;
-        private VisualElement update;
+        private VisualElement code;
+        private VisualElement username;
         private VisualElement Warning => warning ??= this.Q<VisualElement>("MessageTitleWarning");
-        private VisualElement Update => update ??= this.Q<VisualElement>("MessageTitleUpdate");
+        private VisualElement Code => code ??= this.Q<VisualElement>("MessageTitleCode");
+        private VisualElement UserName => username ??= this.Q<VisualElement>("MessageTitleUserName");
+        
+        private ContentContainer content => this.Q<ContentContainer>();
+        
+        private ErrorPanel errorPanel;
+        private ErrorPanel ErrorPanel =>  errorPanel ??= this.Q<ErrorPanel>();
 
         private enum ContentState
         {
             Warning,
             Key,
-            UsernameAndPassword
+            UsernameAndPassword,
+            Test
         }
         
         private ContentState contentState;
+        
+        private readonly Dictionary<int, (ContentState state, IconImage icon)> dropDownValues = new()
+        {
+            { 0, (ContentState.Key, IconImage.KeyTokenCode) },
+            { 1, (ContentState.UsernameAndPassword, IconImage.UsernamePassword) },
+            
+            { 2, (ContentState.Test, IconImage.Warning) }
+        };
         
         public CredentialPanel()
         {
@@ -40,47 +65,92 @@ namespace Netherlands3D.UI.Panels
             OnShow += () => EnableInClassList("active", true);
             OnHide += () => EnableInClassList("active", false);
             
+            InitializeDropdown();
             
             SetContentState(ContentState.Warning);
-            Button.clicked += () =>
+            ConfirmButton.clicked += () =>
             {
                 if (contentState == ContentState.Warning)
                     SetContentState(ContentState.Key);
                 else
                 {
+                    if (string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value))
+                    {
+                        ErrorPanel.Show();
+                        return;
+                    }
                     OnConfirm?.Invoke();
+                    ResetState();
                     Hide();
                 }
             };
         }
 
+        private void InitializeDropdown()
+        {
+            content.SetDropdownValues(dropDownValues.Values.Select(x => x.icon).ToList());
+            content.AddDropDownListener(SetContentState);
+        }
+
+        private void SetContentState(int state)
+        {
+            if (!dropDownValues.TryGetValue(state, out var mapping))
+                return;
+            
+            SetContentState(mapping.state);
+        }
+
         private void SetContentState(ContentState state)
         {
             contentState = state;
+            
+            //update the dropdownvalue if the content is set to a valid value
+            int index = -1;
+            foreach (KeyValuePair<int, (ContentState state, IconImage icon)> kv in dropDownValues)
+                if(kv.Value.state == state)
+                    index = kv.Key;
+            
+            if(dropDownValues.Keys.Contains(index))
+                content.SetDropdownValue(index);
+           
             switch (state)
             {
                 case ContentState.Warning:
                     Warning.SetEnabled(true);
-                    Update.SetEnabled(false);
-                    Button.LabelText = "Update";
-                    Button.ShowIcon = Button.ButtonStyle.WithIcon;
+                    Code.SetEnabled(false);
+                    UserName.SetEnabled(false);
+                    ConfirmButton.LabelText = "Update";
+                    ConfirmButton.ShowIcon = Button.ButtonStyle.WithIcon;
+                    content.ShowDropDown = false;
+                    content.ShowHelpIcon = true;
                     break;
                 case ContentState.Key:
-                    Update.SetEnabled(true);
                     Warning.SetEnabled(false);
-                    Button.LabelText = "Bevestigen";
-                    Button.ShowIcon =  Button.ButtonStyle.Normal;
+                    Code.SetEnabled(true);
+                    Code.Q<Label>().text = "Wachtwoord of code";
+                    UserName.SetEnabled(false);
+                    ConfirmButton.LabelText = "Bevestigen";
+                    ConfirmButton.ShowIcon =  Button.ButtonStyle.Normal;
+                    content.ShowDropDown = true;
+                    content.ShowHelpIcon = false;
+                    
                     break;
                 case ContentState.UsernameAndPassword:
-                    Update.SetEnabled(true);
                     Warning.SetEnabled(false);
-                    Button.LabelText = "Bevestigen";
-                    Button.ShowIcon =  Button.ButtonStyle.Normal;
+                    Code.SetEnabled(true);
+                    Code.Q<Label>().text = "Wachtwoord";
+                    UserName.SetEnabled(true);
+                    ConfirmButton.LabelText = "Bevestigen";
+                    ConfirmButton.ShowIcon =  Button.ButtonStyle.Normal;
+                    content.ShowDropDown = true;
+                    content.ShowHelpIcon = false;
                     break;
             }
         }
         
         public void Show() => OnShow?.Invoke();
         public void Hide() => OnHide?.Invoke();
+        
+        public void ResetState() => SetContentState(ContentState.Warning);
     }
 }

@@ -22,13 +22,13 @@
 .error-panel__message-title {
     flex-grow: 0;
     flex-shrink: 0;   
-    margin-top: var(--spacing-4);
+    flex-direction: row;
 }
 
 .error-panel__message-title-text {
     color: var(--color-warning);
     -unity-text-align: middle-left;
-    margin: 0;
+    margin-left: var(--spacing-2);
     padding: 0;
     white-space: normal;
 }

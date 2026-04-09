@@ -13,6 +13,7 @@ namespace Netherlands3D.UI.Behaviours
     {
         private UIDocument appDocument;
         public UnityEvent<Uri, StoredAuthorization> OnAuthorizationHandled;
+        
         public CredentialHandler CredentialHandler => credentialHandler;
         
     
@@ -45,8 +46,8 @@ namespace Netherlands3D.UI.Behaviours
 
         private void ApplyCredentials()
         {
-            credentialHandler.UserName = ""; //userNameInputField.text;
-            credentialHandler.PasswordOrKeyOrTokenOrCode = Panel.KeyField.value;
+            credentialHandler.UserName = panel.UserNameField.value;
+            credentialHandler.PasswordOrKeyOrTokenOrCode = Panel.CodeField.value;
             credentialHandler.ApplyCredentials();
         }
         
@@ -54,12 +55,10 @@ namespace Netherlands3D.UI.Behaviours
         {
             if (auth is FailedOrUnsupported)
             {
-                //3b. if no: set UI so user inputs credentials and go to step 2
                 Panel.Show();
                 return;
             }
 
-            //3a. if yes: pass this to the Layer service
             Panel.Hide();
             OnAuthorizationHandled?.Invoke(uri, auth);
         }
