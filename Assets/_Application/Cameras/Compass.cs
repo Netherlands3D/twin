@@ -10,9 +10,6 @@ namespace Netherlands3D.Twin.Cameras
 {
     public class Compass : MonoBehaviour
     {
-        public RectTransform arrowTransform;
-        public Color NorthColor;
-
         [Header("Input")][SerializeField] private InputActionAsset inputActionAsset;
         private InputAction rotateStartAction;
         private InputAction rotateAction;
@@ -22,8 +19,6 @@ namespace Netherlands3D.Twin.Cameras
         private Camera cameraComponent;
         private FreeCamera freeCamera;
         private Transform cameraTransform;
-        private Image arrowImage;
-        private Color arrowColor;      
         private const float northAngleMargin = 1.0f;
         private const float animationDuration = 1.0f;        
 
@@ -31,27 +26,24 @@ namespace Netherlands3D.Twin.Cameras
         {
             cameraComponent = GetComponent<Camera>();
             freeCamera = cameraComponent.GetComponent<FreeCamera>();
-            arrowImage = arrowTransform.GetComponent<Image>();
             cameraTransform = cameraComponent.transform;            
-            arrowColor = arrowImage.color;
 
             //when user rotates, cancel the animation if active
             cameraActionMap = inputActionAsset.FindActionMap("Camera");
             rotateStartAction = cameraActionMap.FindAction("RotateModifier");
             rotateAction = cameraActionMap.FindAction("Look");
             rotateStartAction.started += CancelAnimation;
-            onUpdateArrow = c => UpdateArrow();
             rotateAction.started += onUpdateArrow;
         }
 
-        private void UpdateArrow()
-        {
-            arrowTransform.SetRotationZ(cameraTransform.transform.eulerAngles.y);
-            float angle = cameraComponent.orthographic ? 
-                Vector3.SignedAngle(cameraTransform.up, Vector3.forward, Vector3.up) : 
-                Mathf.Rad2Deg * Mathf.Atan2(cameraTransform.forward.z, cameraTransform.forward.x) - 90;            
-            arrowImage.color = Mathf.Abs(angle) < northAngleMargin ? NorthColor : arrowColor;
-        }
+        // private void UpdateArrow()
+        // {
+            // arrowTransform.SetRotationZ(cameraTransform.transform.eulerAngles.y);
+            // float angle = cameraComponent.orthographic ? 
+            //     Vector3.SignedAngle(cameraTransform.up, Vector3.forward, Vector3.up) : 
+            //     Mathf.Rad2Deg * Mathf.Atan2(cameraTransform.forward.z, cameraTransform.forward.x) - 90;            
+            // arrowImage.color = Mathf.Abs(angle) < northAngleMargin ? NorthColor : arrowColor;
+        // }
 
         public void SwitchToNorth()
         {
@@ -92,7 +84,7 @@ namespace Netherlands3D.Twin.Cameras
                 freeCamera.LockDragging(true);
                 SetTileHandlersEnabled(activeTileHandlers, false);
             });
-            sequence.Join(cameraTransform.DORotate(rotateTo.eulerAngles, animationDuration).OnUpdate(() => UpdateArrow()));
+            sequence.Join(cameraTransform.DORotate(rotateTo.eulerAngles, animationDuration));
             sequence.AppendCallback(() =>
             {
                 SetTileHandlersEnabled(activeTileHandlers, true);
