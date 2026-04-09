@@ -1,5 +1,4 @@
 using Netherlands3D.Credentials;
-using Netherlands3D.Events;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -25,7 +24,7 @@ namespace Netherlands3D.UI.Behaviours
             credentialHandler = GetComponent<ICredentialHandler>();
         }
 
-        private void Start()
+        private void OnEnable()
         {
             Panel.importSucceeded.AddListener(OnImportSucceeded);
             Panel.importFailed.AddListener(OnImportFailed);
@@ -33,7 +32,7 @@ namespace Netherlands3D.UI.Behaviours
             Panel.SetCredentialHandler(credentialHandler);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             Panel.importSucceeded.RemoveListener(OnImportSucceeded);
             Panel.importFailed.RemoveListener(OnImportFailed);
