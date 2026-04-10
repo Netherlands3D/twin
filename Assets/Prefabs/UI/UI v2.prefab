@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 6449633652433648055}
   - component: {fileID: 2679958399476094032}
   - component: {fileID: 9090450019030462779}
-  - component: {fileID: 6173910856907851689}
   - component: {fileID: 1069307500535868884}
   - component: {fileID: 5188715498986471469}
   m_Layer: 5
@@ -55,7 +54,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 9f7be72ae5639dd469eb35ed8bd40f63, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 6647caf475c8b1c4d997f363bebbaf1e, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 6647caf475c8b1c4d997f363bebbaf1e,
+    type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -103,8 +103,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3adb988a4a3c4e4ea91fac29b0a7601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.FooterBehaviour
-  ShowAttributionEvent: {fileID: 11400000, guid: ed0a4e76488b45c46a5bf90e6d680af3, type: 2}
-  OnCameraPositionChangedEvent: {fileID: 11400000, guid: d4a74b03cccc58345974ac5fcbc59d0c, type: 2}
+  ShowAttributionEvent: {fileID: 11400000, guid: ed0a4e76488b45c46a5bf90e6d680af3,
+    type: 2}
+  OnCameraPositionChangedEvent: {fileID: 11400000, guid: d4a74b03cccc58345974ac5fcbc59d0c,
+    type: 2}
 --- !u!114 &6449633652433648055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,7 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78da410b8ae506f2689c101c958c6956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6, type: 3}
+  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
+    type: 3}
   panelBehaviours:
   - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
   - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
@@ -146,19 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84023e9768a59483ea04c3ace772cec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Panels.PropertyPanelBehaviour
---- !u!114 &6173910856907851689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891704482898673965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Credentials.CredentialHandler
-  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!114 &1069307500535868884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,16 +161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a002345d35eb03b9fa224a363263ae75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.InspectorAssetPanelBehaviour
-  uploadFileEvent: {fileID: 0}
-  OpenLegacyFileImportContentPanel:
-    m_PersistentCalls:
-      m_Calls: []
-  importSucceeded:
-    m_PersistentCalls:
-      m_Calls: []
-  importFailed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &5188715498986471469
 MonoBehaviour:
   m_ObjectHideFlags: 0
