@@ -45,7 +45,7 @@ namespace Netherlands3D.UI.Behaviours
         {
             appDocument = GetComponent<UIDocument>();
             credentialHandler = GetComponent<ICredentialHandler>();
-            RegisterPanel<AssetLibraryPanel>();
+            RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
             
             ImportAssetPanel.SetCredentialHandler(credentialHandler);
@@ -55,36 +55,22 @@ namespace Netherlands3D.UI.Behaviours
         {
             InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
-            InspectorPanel.InspectorHeaderCloseButton.clicked += HidePanel;
-            
-            AssetLibraryPanel.OnShow += OnShowAssetLibrary;
-            AssetLibraryPanel.OnHide += OnHideAssetLibrary;
-            AssetLibraryPanel.OnOpenCatalogItem += OnOpenCatalogItem;
-
-            ImportAssetPanel.OnShow += OnShowImportAssetPanel;
-            ImportAssetPanel.OnHide += OnHideImportAssetPanel;
+            InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
             ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
-            ImportAssetPanel.importSucceeded.AddListener(HidePanel);
+            ImportAssetPanel.importSucceeded.AddListener(Close);
             
-            ToolbarMain.AddButton.clicked += ShowPanel<ImportAssetPanel>;
+            ToolbarMain.AddButton.clicked += ToggleImportAssetPanel;
         }
 
         private void OnDisable()
         {
             InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
             InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
-            InspectorPanel.InspectorHeaderCloseButton.clicked -= HidePanel;
-
-            AssetLibraryPanel.OnShow -= OnShowAssetLibrary;
-            AssetLibraryPanel.OnHide -= OnHideAssetLibrary;
-            AssetLibraryPanel.OnOpenCatalogItem -= OnOpenCatalogItem;
-
-            ImportAssetPanel.OnShow -= OnShowImportAssetPanel;
-            ImportAssetPanel.OnHide -= OnHideImportAssetPanel;
+            InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
-            ImportAssetPanel.importSucceeded.RemoveListener(HidePanel);
+            ImportAssetPanel.importSucceeded.RemoveListener(Close);
             
-            ToolbarMain.AddButton.clicked -= ShowPanel<ImportAssetPanel>;
+            ToolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
         }
 
         public void Open()
@@ -98,9 +84,9 @@ namespace Netherlands3D.UI.Behaviours
         }
 
         // TODO: Shouldn't this be in the InspectorPanel component?
-        public BaseInspectorContentPanel RegisterPanel<T>() where T : BaseInspectorContentPanel, new()
+        public BaseInspectorContentPanel RegisterPanel<T>(params object[] args) where T : BaseInspectorContentPanel
         {
-            var panel = new T();
+            var panel = (T)Activator.CreateInstance(typeof(T), args);
             panels.Add(panel);
 
             InspectorPanel.Content.Add(panel);
@@ -111,16 +97,8 @@ namespace Netherlands3D.UI.Behaviours
 
         public void ShowPanel<T>() where T : BaseInspectorContentPanel
         {
-            BaseInspectorContentPanel previousPanel = activePanel;
             // only one panel can be open at a time
             HidePanel();
-
-            //was the activepanel already open? then toggle it to close
-            if (previousPanel == GetPanel<T>())
-            {
-                return;
-            }
-            
             Open();
             activePanel = GetPanel<T>();
             InspectorPanel.HeaderText = activePanel.GetTitle();
@@ -140,68 +118,31 @@ namespace Netherlands3D.UI.Behaviours
         }
 
         public void OpenAssetLibrary() => ShowPanel<AssetLibraryPanel>();
-        public void CloseAssetLibrary() => HidePanel();
 
-        // TODO: Shouldn't this be in the InspectorPanel component?
-        private void OnShowAssetLibrary()
+        public void ToggleImportAssetPanel()
         {
-            AssetLibraryPanel.LoadCatalog(assetLibrary.Catalog);
-
-            InspectorPanel.Toolbar.OpenLibrary.SetValueWithoutNotify(true);
+            if (inspectorPanel.IsOpen())
+            {
+                HidePanel();
+                Close();
+            }
+            else
+            {   
+                Open();
+                ShowPanel<ImportAssetPanel>();
+            }
         }
-
-        // TODO: Shouldn't this be in the InspectorPanel component?
-        private void OnHideAssetLibrary()
-        {
-            InspectorPanel.Toolbar.OpenLibrary.SetValueWithoutNotify(false);
-            
-            // TODO: At the moment - the InspectorPanel is only available for the Asset Library; once we add more
-            // onto this panel, remove this line as it shouldn't auto-close yet
-            Close();
-        }
-
-        // TODO: Shouldn't this be in the InspectorPanel component?
-        private void OnShowImportAssetPanel()
-        {
-            InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
-        }
-
-        // TODO: Shouldn't this be in the InspectorPanel component?
-        private void OnHideImportAssetPanel()
-        {
-            InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(false);
-
-            // TODO: At the moment - the InspectorPanel is only available for the Asset Library; once we add more
-            // onto this panel, remove this line as it shouldn't auto-close yet
-            Close();
-        }
-        
-       
 
         private void OnAddLayerToggled(ChangeEvent<bool> evt)
         {
             if (evt.newValue) ShowPanel<ImportAssetPanel>();
-            else HidePanel();
+            else Close();
         }
 
         private void OnOpenLibraryToggled(ChangeEvent<bool> evt)
         {
             if (evt.newValue) ShowPanel<AssetLibraryPanel>();
-            else HidePanel();
-        }
-
-        private void OnOpenCatalogItem(ICatalogItem catalogItem)
-        {
-            switch (catalogItem)
-            {
-                case RecordItem recordItem: assetLibrary.Load(recordItem); return;
-                case DataService dataService: assetLibrary.Trigger(dataService); return;
-                default:
-                    Debug.LogError(
-                        $"Tried to open catalog item with type {catalogItem.GetType().Name}, but this is not a record item"
-                    );
-                    break;
-            }
+            else Close();
         }
     }
 }

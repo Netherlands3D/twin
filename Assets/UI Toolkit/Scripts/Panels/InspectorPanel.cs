@@ -61,5 +61,7 @@ namespace Netherlands3D.UI.Components
         {
             EnableInClassList("active", false);
         }
+
+        public bool IsOpen() => ClassListContains("active");
     }
 }
