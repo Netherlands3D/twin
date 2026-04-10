@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.Credentials;
 using Netherlands3D.Events;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -13,7 +14,7 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
 {
-    [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(UIDocument), typeof(ICredentialHandler))]
     public class InspectorPanelBehaviour : MonoBehaviour
     {
         private UIDocument appDocument;
@@ -27,6 +28,9 @@ namespace Netherlands3D.UI.Behaviours
 
         private AssetLibraryPanel assetLibraryPanel;
         private AssetLibraryPanel AssetLibraryPanel => assetLibraryPanel ??= panels.OfType<AssetLibraryPanel>().FirstOrDefault();
+        
+        private ImportAssetPanel importAssetPanel;
+        private ImportAssetPanel ImportAssetPanel => importAssetPanel ??= panels.OfType<ImportAssetPanel>().FirstOrDefault();
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
@@ -34,12 +38,17 @@ namespace Netherlands3D.UI.Behaviours
         private ToolbarMain toolbarMain;
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         
+        private ICredentialHandler credentialHandler;
+        
 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
+            credentialHandler = GetComponent<ICredentialHandler>();
             RegisterPanel<AssetLibraryPanel>();
             RegisterPanel<ImportAssetPanel>();
+            
+            ImportAssetPanel.SetCredentialHandler(credentialHandler);
         }
 
         private void OnEnable()
@@ -52,9 +61,10 @@ namespace Netherlands3D.UI.Behaviours
             AssetLibraryPanel.OnHide += OnHideAssetLibrary;
             AssetLibraryPanel.OnOpenCatalogItem += OnOpenCatalogItem;
 
-            GetPanel<ImportAssetPanel>().OnShow += OnShowImportAssetPanel;
-            GetPanel<ImportAssetPanel>().OnHide += OnHideImportAssetPanel;
-            GetPanel<ImportAssetPanel>().OpenAssetLibrary += OpenAssetLibrary;
+            ImportAssetPanel.OnShow += OnShowImportAssetPanel;
+            ImportAssetPanel.OnHide += OnHideImportAssetPanel;
+            ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
+            ImportAssetPanel.importSucceeded.AddListener(HidePanel);
             
             ToolbarMain.AddButton.clicked += ShowPanel<ImportAssetPanel>;
         }
@@ -69,9 +79,10 @@ namespace Netherlands3D.UI.Behaviours
             AssetLibraryPanel.OnHide -= OnHideAssetLibrary;
             AssetLibraryPanel.OnOpenCatalogItem -= OnOpenCatalogItem;
 
-            GetPanel<ImportAssetPanel>().OnShow -= OnShowImportAssetPanel;
-            GetPanel<ImportAssetPanel>().OnHide -= OnHideImportAssetPanel;
-            GetPanel<ImportAssetPanel>().OpenAssetLibrary -= OpenAssetLibrary;
+            ImportAssetPanel.OnShow -= OnShowImportAssetPanel;
+            ImportAssetPanel.OnHide -= OnHideImportAssetPanel;
+            ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
+            ImportAssetPanel.importSucceeded.RemoveListener(HidePanel);
             
             ToolbarMain.AddButton.clicked -= ShowPanel<ImportAssetPanel>;
         }
@@ -164,6 +175,8 @@ namespace Netherlands3D.UI.Behaviours
             // onto this panel, remove this line as it shouldn't auto-close yet
             Close();
         }
+        
+       
 
         private void OnAddLayerToggled(ChangeEvent<bool> evt)
         {
