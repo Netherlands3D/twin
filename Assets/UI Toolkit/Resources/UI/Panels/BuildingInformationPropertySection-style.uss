@@ -1,3 +1,13 @@
+.object-information__divider{
+    display: flex;
+    flex-grow: 1;
+    height: var(--spacing-0_5);
+    min-height: var(--spacing-0_5);    
+    margin-top: var(--spacing-3);
+    background-color: var(--divider-bg-color);
+    border-radius: 0.5px;
+}
+
 .object-information-bagid__row {
     flex-direction: row;
     align-items: center;

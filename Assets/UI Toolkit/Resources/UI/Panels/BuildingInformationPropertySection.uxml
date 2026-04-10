@@ -7,7 +7,7 @@
     name="BuildingInformationPropertySection"
     >
     
-    <nl3d:ContentContainer leading-icon="NorthArrow" text="Informatie gebouw">
+    <nl3d:ContentContainer leading-icon="SelectionPointer" text="Informatie gebouw">
         <ui:VisualElement class="object-information-thumbnail__container" name="ThumbnailContainer" />
         <ui:Label name="InformatieLabel" text="Praktische informatie:" class="object-information-bagid__label"/>  
         <ui:VisualElement class="object-information-bagid__row">
@@ -25,7 +25,7 @@
             <ui:Label name="YearLabel" text="Bouwjaar" class="object-information-bagid__label"/>
             <ui:Label name="YearValue" class="object-information-bagid__label-value"/>
         </ui:VisualElement>
-        <ui:VisualElement name="Divider" class="divider" />
+        <ui:VisualElement name="Divider" class="object-information__divider" />
         <ui:Label name="AddressLabel" text="Adres(sen):" class="object-information-bagid__label"/>
         <nl3d:ListView name="AddressListView" class="object-information-address__list-view"/>
     </nl3d:ContentContainer>

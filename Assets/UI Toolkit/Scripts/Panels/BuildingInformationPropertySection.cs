@@ -71,7 +71,8 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
-            thumbnailContainer.schedule.Execute(() => { LoadBagId(buildingIds.FirstOrDefault()); });
+            LoadBagId(buildingIds.FirstOrDefault());
+            thumbnailContainer.schedule.Execute(() => {  });
         }
 
         private void OnIdsChanged(Dictionary<string, Coordinate> buildingIds)
@@ -132,7 +133,7 @@ namespace Netherlands3D.UI.Panels
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Geen BAG data gevonden");
+                Clear();
                 yield break;
             }
             
@@ -179,7 +180,7 @@ namespace Netherlands3D.UI.Panels
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                PopulateAddresses(new List<string>() { "Geen adressen gevonden" });
+                Clear();
                 yield break;
             }
 
@@ -209,7 +210,7 @@ namespace Netherlands3D.UI.Panels
         private void Clear()
         {
             thumbnailContainer.style.height = 0;
-            PopulateAddresses(new List<string>());
+            PopulateAddresses(new List<string>() { "Geen adressen gevonden" });
             bagLink.text = "";
             bagLink.url = "";
                 
