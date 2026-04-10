@@ -16,30 +16,11 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(TransformLayerPropertyData))]
     public partial class TransformPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-        private class SetOfXYZ
-        {
-            public NumberField xField;
-            public NumberField yField;
-            public NumberField zField;
 
-            public SetOfXYZ(NumberField xField, NumberField yField, NumberField zField)
-            {
-                this.xField = xField;
-                this.yField = yField;
-                this.zField = zField;
-            }
 
-            public void EnableAxes(HandleAxes enabledAxes)
-            {
-                xField.SetEnabled(enabledAxes.HasFlag(HandleAxes.X));
-                yField.SetEnabled(enabledAxes.HasFlag(HandleAxes.Y));
-                zField.SetEnabled(enabledAxes.HasFlag(HandleAxes.Z));
-            }
-        }
-
-        private SetOfXYZ position;
-        private SetOfXYZ rotation;
-        private SetOfXYZ scale;
+        private XYZField position;
+        private XYZField rotation;
+        private XYZField scale;
 
         private TransformLayerPropertyData transformPropertyData;
 
@@ -48,9 +29,9 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            position = new(this.Q<NumberField>("PositionX"), this.Q<NumberField>("PositionY"), this.Q<NumberField>("PositionZ"));
-            rotation = new(this.Q<NumberField>("RotationX"), this.Q<NumberField>("RotationY"), this.Q<NumberField>("RotationZ"));
-            scale = new(this.Q<NumberField>("ScaleX"), this.Q<NumberField>("ScaleY"), this.Q<NumberField>("ScaleZ"));
+            position = this.Q<XYZField>("Position");
+            rotation = this.Q<XYZField>("Rotation");
+            scale = this.Q<XYZField>("Scale");
 
             position.xField.InputField.RegisterCallback<BlurEvent>(_ => OnPositionChanged());
             position.yField.InputField.RegisterCallback<BlurEvent>(_ => OnPositionChanged());
@@ -119,7 +100,7 @@ namespace Netherlands3D.UI.Panels
             SetTransformLocks(properties);
         }
 
-        private void SetUnitCharacter(SetOfXYZ fields, string unitCharacter)
+        private void SetUnitCharacter(XYZField fields, string unitCharacter)
         {
             fields.xField.UnitCharacter = unitCharacter;
             fields.yField.UnitCharacter = unitCharacter;
