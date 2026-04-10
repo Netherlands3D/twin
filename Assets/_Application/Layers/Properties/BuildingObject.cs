@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.layers.properties
 {
     //TODO maybe the name for this class is not right, component to be compatible with buildingpropertysection to show bag id information
     [RequireComponent(typeof(LayerGameObject))]
-    public class Gebouwen : MonoBehaviour, IVisualizationWithPropertyData
+    public class BuildingObject : MonoBehaviour, IVisualizationWithPropertyData
     {
         private LayerGameObject visualization;
         private Dictionary<string, Coordinate> buildingIds = new();
