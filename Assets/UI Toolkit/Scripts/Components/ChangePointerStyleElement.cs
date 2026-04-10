@@ -13,44 +13,44 @@ namespace Netherlands3D.UI.Components
 
         public enum PointerStyle
         {
-            AUTO,
-            DEFAULT,
-            NONE,
-            CONTEXT_MENU,
-            HELP,
-            POINTER,
-            PROGRESS,
-            WAIT,
-            CELL,
-            CROSSHAIR,
-            TEXT,
-            VERTICAL_TEXT,
-            ALIAS,
-            COPY,
-            MOVE,
-            NO_DROP,
-            NOT_ALLOWED,
-            GRAB,
-            GRABBING,
-            ALL_SCROLL,
-            COL_RESIZE,
-            ROW_RESIZE,
-            N_RESIZE,
-            NE_RESIZE,
-            E_RESIZE,
-            SE_RESIZE,
-            S_RESIZE,
-            SW_RESIZE,
-            W_RESIZE,
-            NW_RESIZE,
-            EW_RESIZE,
-            NS_RESIZE,
-            NESW_RESIZE,
-            NWSE_RESIZE
+            Auto,
+            Default,
+            None,
+            ContextMenu,
+            Help,
+            Pointer,
+            Progress,
+            Wait,
+            Cell,
+            Crosshair,
+            Text,
+            VerticalText,
+            Alias,
+            Copy,
+            Move,
+            NoDrop,
+            NotAllowed,
+            Grab,
+            Grabbing,
+            AllScroll,
+            ColResize,
+            RowResize,
+            NResize,
+            NeResize,
+            EResize,
+            SeResize,
+            SResize,
+            SwResize,
+            WResize,
+            NwResize,
+            EwResize,
+            NsResize,
+            NeswResize,
+            NwseResize
         }
         
-        private PointerStyle styleOnHover = PointerStyle.POINTER;
-        public static PointerStyle pointerType = PointerStyle.AUTO;
+        private PointerStyle styleOnHover = PointerStyle.Pointer;
+        public static PointerStyle pointerType = PointerStyle.Auto;
         
         [UxmlAttribute("pointer-style-hover")]
         public PointerStyle StyleOnHover { get => styleOnHover; set => styleOnHover = value; }
@@ -70,14 +70,14 @@ namespace Netherlands3D.UI.Components
 
         private void OnPointerOut(PointerOutEvent evt)
         {
-            ChangeCursor(PointerStyle.AUTO);
+            ChangeCursor(PointerStyle.Auto);
         }
         
         public static void ChangeCursor(PointerStyle type)
         {
             pointerType = type;
             var cursorString = type.ToString().ToKebabCase();
-            
+
 #if !UNITY_EDITOR && UNITY_WEBGL
             SetCSSCursor(cursorString);
 #endif
