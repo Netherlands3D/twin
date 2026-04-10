@@ -1,13 +1,12 @@
 .error-panel {
     display: none;
-    flex-wrap: wrap;
-    flex-shrink: 0;
-    flex-grow: 1;
-    margin-top: var(--spacing-2);
 }
 
 .error-panel.active {
     display: flex;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    flex-grow: 0;
     transition-property: opacity;
     transition-duration: 0.3s;
     opacity: 1;
@@ -23,13 +22,13 @@
 .error-panel__message-title {
     flex-grow: 0;
     flex-shrink: 0;   
-    margin-top: var(--spacing-4);
+    flex-direction: row;
 }
 
 .error-panel__message-title-text {
     color: var(--color-warning);
     -unity-text-align: middle-left;
-    margin: 0;
+    margin-left: var(--spacing-2);
     padding: 0;
     white-space: normal;
 }

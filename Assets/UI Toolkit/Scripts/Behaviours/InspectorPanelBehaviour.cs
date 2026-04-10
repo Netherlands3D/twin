@@ -18,7 +18,6 @@ namespace Netherlands3D.UI.Behaviours
     {
         private UIDocument appDocument;
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
-        [SerializeField] private TriggerEvent uploadFileEvent;
     
         private VisualElement root;
         private VisualElement Root => root ??= appDocument?.rootVisualElement;
@@ -31,10 +30,6 @@ namespace Netherlands3D.UI.Behaviours
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
-        
-        [SerializeField] 
-        [Obsolete("Replaced by the OnUriImportStarted event as soon as copy/paste and credential support is added")]
-        private UnityEvent OpenLegacyFileImportContentPanel;
         
         private ToolbarMain toolbarMain;
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
@@ -59,6 +54,7 @@ namespace Netherlands3D.UI.Behaviours
 
             GetPanel<ImportAssetPanel>().OnShow += OnShowImportAssetPanel;
             GetPanel<ImportAssetPanel>().OnHide += OnHideImportAssetPanel;
+            GetPanel<ImportAssetPanel>().OpenAssetLibrary += OpenAssetLibrary;
             
             ToolbarMain.AddButton.clicked += ShowPanel<ImportAssetPanel>;
         }
@@ -75,6 +71,7 @@ namespace Netherlands3D.UI.Behaviours
 
             GetPanel<ImportAssetPanel>().OnShow -= OnShowImportAssetPanel;
             GetPanel<ImportAssetPanel>().OnHide -= OnHideImportAssetPanel;
+            GetPanel<ImportAssetPanel>().OpenAssetLibrary -= OpenAssetLibrary;
             
             ToolbarMain.AddButton.clicked -= ShowPanel<ImportAssetPanel>;
         }
@@ -151,9 +148,6 @@ namespace Netherlands3D.UI.Behaviours
             // onto this panel, remove this line as it shouldn't auto-close yet
             Close();
         }
-
-        public void OpenImportAssetPanel() => ShowPanel<ImportAssetPanel>();
-        public void CloseImportAssetPanel() => HidePanel();
 
         // TODO: Shouldn't this be in the InspectorPanel component?
         private void OnShowImportAssetPanel()

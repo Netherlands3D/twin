@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,6 +21,12 @@ namespace Netherlands3D.UI.ExtensionMethods
             if (!string.IsNullOrEmpty(path)) path += "/";
             
             var styleSheet = Resources.Load<StyleSheet>($"UI/{path}{component.GetType().Name}-style");
+            component.styleSheets.Add(styleSheet);
+        }
+        
+        public static void AddComponentStylesheetByType(this VisualElement component, Type type)
+        {
+            var styleSheet = Resources.Load<StyleSheet>($"UI/Components/{type.Name}-style");
             component.styleSheets.Add(styleSheet);
         }
 
