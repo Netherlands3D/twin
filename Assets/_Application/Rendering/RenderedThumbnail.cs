@@ -4,8 +4,12 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Rendering
 {
+	//TODO make this class a static helper class with only static methods after UIToolkit is fully implemented. No need to keep this as a monobehaviour.
+	
     public class RenderedThumbnail : MonoBehaviour
     {
+	    
+	    
         [Header("Thumbnail")]
         [SerializeField] private RawImage thumbnail;
         [SerializeField] private GameObject displayIfNoThumbnail;
@@ -88,6 +92,8 @@ namespace Netherlands3D.Twin.Rendering
             if(thumbnailRenderTexture != null) Destroy(thumbnailRenderTexture);
         }
         
+        
+        //TODO this should be the only method to use when UIToolkit is done
         public static RenderTexture RenderThumbnail(Bounds targetBounds, bool orthographic = false, int width = 340, int height = 200)
 		{
 			if(temporaryThumbnailRenderTexture != null) Destroy(temporaryThumbnailRenderTexture);
