@@ -14,6 +14,8 @@ using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {	
+	//TODO remove this class when UIToolkit is fully implemented -> moved to buildingpropertysection
+	[Obsolete]
 	public class BagInspector : MonoBehaviour
 	{
 		[Header("GeoJSON Data Sources")]
