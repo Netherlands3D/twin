@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="SensorPropertySection" class="sensor-property-section">
+    <nl3d:ContentContainer leading-icon="UrbanReleaf" text="Urban Releaf">
+        <ui:Label text="Bodemvochtigheid" />
+        <ui:VisualElement class="sensor-property-section__row">
+            <ui:Label text="Startdatum"/>
+            <nl3d:NumberField />
+            <nl3d:NumberField />
+            <nl3d:NumberField />
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
+</ui:UXML>
