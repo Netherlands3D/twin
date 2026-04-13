@@ -1,4 +1,4 @@
-.error-panel {
+.error-panel:disabled {
     display: none;
 }
 

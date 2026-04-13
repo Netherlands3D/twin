@@ -64,6 +64,7 @@ namespace Netherlands3D.UI.Panels
             UriImportFailed += ErrorPanel.Show;
             
             CredentialPanel.SetEnabled(false);
+            errorPanel.SetEnabled(false);
         }
 
         public void SetCredentialHandler(ICredentialHandler handler)

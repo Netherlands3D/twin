@@ -15,18 +15,8 @@ namespace Netherlands3D.UI.Panels
         private Button retryButton;
         public Button RetryButton => retryButton ??= this.Q<Button>("RetryButton");
 
-        private ContentContainer content;
-        private ContentContainer Content => content ??= this.Q<ContentContainer>();
-        
         private Label errorMessage;
         private Label ErrorMessage => errorMessage ??= this.Q<Label>("ErrorMessage");
-        
-        [UxmlAttribute("text")]
-        public string HeaderText
-        {
-            get => Content.HeaderText;
-            set => Content.HeaderText = value;
-        }
         
         [UxmlAttribute("message")]
         public string Message
@@ -40,8 +30,8 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            OnShow += () => EnableInClassList("active", true);
-            OnHide += () => EnableInClassList("active", false);
+            OnShow += () => SetEnabled(true);
+            OnHide += () => SetEnabled(false);
             RetryButton.clicked += Hide;
         }
 
