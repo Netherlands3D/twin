@@ -134,6 +134,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnRemoveSelectedLayer(LayerData data)
         {
             //we need to check this before Isclicked because it checks if its over the ui
+            //this is to deselect the layer when there is clicked outside of any selectable from this layer
             if(ProjectData.Current.RootLayer.SelectedLayers.Count == 0)
             {
                 if (lastSelectedLayerData != null || lastSelectedMappingLayerData != null)
@@ -241,7 +242,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void ProcessFeatureMappingSelection(FeatureMapping feature)
         {
-            LayerData layerData = feature.VisualisationParent.LayerData;
+            LayerData layerData = feature.VisualisationLayer.LayerData;
             if(!layerData.IsSelected)
                 layerData.SelectLayer(true);
                     
