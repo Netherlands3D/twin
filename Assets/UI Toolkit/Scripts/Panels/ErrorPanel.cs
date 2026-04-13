@@ -1,47 +1,52 @@
-using System;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
-using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     public partial class ErrorPanel : VisualElement
     {
-        public Action OnShow;
-        public Action OnHide;
+        const string hiddenUssClassName = "hidden";
+        private ErrorPanelContent Content;
+        private ContentContainer contentContainer;
         
-        private Button retryButton;
-        public Button RetryButton => retryButton ??= this.Q<Button>("RetryButton");
-
-        private Label errorMessage;
-        private Label ErrorMessage => errorMessage ??= this.Q<Label>("ErrorMessage");
+        [UxmlAttribute("header-text")]
+        public string HeaderText
+        {
+            get => contentContainer.HeaderText;
+            set => contentContainer.HeaderText = value;
+        }
         
         [UxmlAttribute("message")]
         public string Message
         {
-            get => ErrorMessage.text;
-            set => ErrorMessage.text = value;
+            get => Content.Message;
+            set => Content.Message = value;
         }
 
         public ErrorPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            OnShow += () => SetEnabled(true);
-            OnHide += () => SetEnabled(false);
-            RetryButton.clicked += Hide;
+            Content = this.Q<ErrorPanelContent>();
+            contentContainer = this.Q<ContentContainer>();
+            
+            Content.OnHide.AddListener(Hide);
+            Content.OnShow.AddListener(Show);
         }
 
-        ~ErrorPanel()
+
+        public void Show()
         {
-            RetryButton.clicked -= Hide;
+            RemoveFromClassList(hiddenUssClassName);
+            Content.RemoveFromClassList(hiddenUssClassName); //do not call Content.Show() as this would give an infinite loop
         }
 
-        
-        public void Show() => OnShow?.Invoke();
-        public void Hide() => OnHide?.Invoke();
+        public void Hide()
+        {
+            AddToClassList(hiddenUssClassName);
+            Content.AddToClassList(hiddenUssClassName); //do not call Content.Show() as this would give an infinite loop
+        }
     }
 }
