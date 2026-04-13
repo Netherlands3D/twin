@@ -10,6 +10,7 @@ namespace Netherlands3D.UI.Components
     {
         private Button North => this.Q<Button>("North");
         private Toggle Perspective => this.Q<Toggle>("Perspective");
+        private VisualElement FPV => this.Q<VisualElement>("FPV");
 
         public event Action OrientToNorth;
         public event Action<bool> ToggleOrthographicView;
@@ -20,20 +21,32 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            RegisterCallback<AttachToPanelEvent>(_ => UpdateDynamicAttributes());
-            North.RegisterCallback<ClickEvent>(_ => OrientToNorth?.Invoke());
+            FPV.Q<Icon>().AddManipulator(new FirstPersonViewManipulator());
+            
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
+            North.RegisterCallback<ClickEvent>(OnNorthClick);
             Perspective.RegisterValueChangedCallback(OnToggleOrthographicView);
+        }
+
+        private void OnAttachToPanelEvent(AttachToPanelEvent _)
+        {
+            UpdateDynamicAttributes();
+        }
+
+        private void OnNorthClick(ClickEvent _)
+        {
+            OrientToNorth?.Invoke();
+        }
+
+        private void OnToggleOrthographicView(ChangeEvent<bool> value)
+        {
+            ToggleOrthographicView?.Invoke(value.newValue);
         }
 
         public void UpdateCompass(float yawInDegrees)
         {
             North.Q<Icon>().style.rotate = new StyleRotate(new Rotate(yawInDegrees));
             North.EnableInClassList("toolbar-navigation__compass--north", yawInDegrees is > 359.0f or < 1.0f);
-        }
-
-        private void OnToggleOrthographicView(ChangeEvent<bool> value)
-        {
-            ToggleOrthographicView?.Invoke(value.newValue);
         }
 
         private void UpdateDynamicAttributes()
