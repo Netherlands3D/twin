@@ -56,6 +56,12 @@ namespace Netherlands3D.UI.Components
             // Ensure initial style is correctly set
             RegisterCallback<AttachToPanelEvent>(_ => UpdateClassList());
         }
+
+        public void ToggleButtonsOffWithoutNotify()
+        {
+            OpenLibrary.SetValueWithoutNotify(false);
+            AddLayer.SetValueWithoutNotify(false);
+        }
         
         private void UpdateClassList()
         {

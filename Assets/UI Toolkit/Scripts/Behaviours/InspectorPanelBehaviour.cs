@@ -57,7 +57,7 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
             ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
-            ImportAssetPanel.importSucceeded.AddListener(Close);
+            ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
             ToolbarMain.AddButton.clicked += ToggleImportAssetPanel;
         }
@@ -68,7 +68,7 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
             InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
-            ImportAssetPanel.importSucceeded.RemoveListener(Close);
+            ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
             
             ToolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
         }
@@ -80,6 +80,8 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Close()
         {
+            ToolbarMain.ClearWithoutNotify();
+            InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             InspectorPanel.Close();
         }
 
@@ -117,18 +119,23 @@ namespace Netherlands3D.UI.Behaviours
             activePanel = null;
         }
 
-        public void OpenAssetLibrary() => ShowPanel<AssetLibraryPanel>();
+        public void OpenAssetLibrary()
+        {
+            ShowPanel<AssetLibraryPanel>();
+        }
 
         public void ToggleImportAssetPanel()
         {
             if (inspectorPanel.IsOpen())
             {
                 HidePanel();
-                Close();
+                //do not use Close here to avoid the toggle notification
+                InspectorPanel.Close(); 
             }
             else
             {   
                 Open();
+                InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
                 ShowPanel<ImportAssetPanel>();
             }
         }
@@ -143,6 +150,12 @@ namespace Netherlands3D.UI.Behaviours
         {
             if (evt.newValue) ShowPanel<AssetLibraryPanel>();
             else Close();
+        }
+
+        private void OnImportSucceeded()
+        {
+            InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(false);
+            Close();
         }
     }
 }
