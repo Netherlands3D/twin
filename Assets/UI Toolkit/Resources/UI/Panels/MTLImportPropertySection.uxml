@@ -8,9 +8,11 @@
          class="mtl-property-section">
     <nl3d:ContentContainer leading-icon="Object" text="Materialen (.mtl) toevoegen">
         <ui:Label text="Kies een nieuw MTL bestand voor dit object" class="text-header mtl-property-section__text"/>
-        <ui:Label text="U kunt het MTL (.mtl) bestand aan dit object toevoegen of updaten door deze te vervangen met een ander MTL bestand." class="mtl-property-section__text"/>
-        <nl3d:Button LabelText="Nieuwe MTL toevoegen" button-style="Normal" class="mtl-property-section__button"/>
-        <nl3d:TextCallOut text="Op dit moment wordt het toevoegen van aanvullende texturen nog niet ondersteund." class="mtl-property-section__text"/>
-        <nl3dP:ErrorPanel />
+        <ui:VisualElement name="ImportMTLSection" class="mtl-property-section__import-panel">
+            <ui:Label text="U kunt het MTL (.mtl) bestand aan dit object toevoegen of updaten door deze te vervangen met een ander MTL bestand." class="mtl-property-section__text"/>
+            <nl3d:Button LabelText="Nieuwe MTL toevoegen" button-style="Normal" class="mtl-property-section__button"/>
+            <nl3d:TextCallOut text="Op dit moment wordt het toevoegen van aanvullende texturen nog niet ondersteund." class="mtl-property-section__text"/>
+        </ui:VisualElement>
+        <nl3dP:ErrorPanelContent class="mtl-property-section__error-panel"/>
     </nl3d:ContentContainer>
 </ui:UXML>

@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -13,23 +14,31 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(OBJPropertyData))]
     public partial class MTLImportPropertySection : VisualElement, IVisualizationWithPropertyData
     {
+        const string hiddenUssClassName = "hidden";
+        
         private ColorPropertyData stylingPropertyData;
         private OBJPropertyData objPropertyData;
-        
-        private ErrorPanel errorPanel;
+
+        private ErrorPanelContent errorPanel;
+        private VisualElement defaultImportPanel;
 
         private Button importButton;
-        
+
         public MTLImportPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            
+
             importButton = this.Q<Button>();
             importButton.RegisterCallback<ClickEvent>(StartImport);
             ServiceLocator.GetService<FileOpen>().onFilesSelected.AddListener(ImportMtl);
+
+            defaultImportPanel = this.Q<VisualElement>("ImportMTLSection");
+            errorPanel = this.Q<ErrorPanelContent>();
+
+            errorPanel.OnHide.AddListener(() => defaultImportPanel.RemoveFromClassList(hiddenUssClassName));
             
-            errorPanel = this.Q<ErrorPanel>();
+            SetPanels(true);
         }
 
         private void StartImport(ClickEvent evt)
@@ -43,7 +52,7 @@ namespace Netherlands3D.UI.Panels
             stylingPropertyData = properties.GetDefaultStylingPropertyData<ColorPropertyData>();
             objPropertyData.MtlImportSuccess.AddListener(OnMTLImportCompleted);
         }
-        
+
         public void ImportMtl(string path)
         {
             path = path.TrimEnd(',');
@@ -55,8 +64,6 @@ namespace Netherlands3D.UI.Panels
             stylingPropertyData.SetDefaultSymbolizerColor(null);
 
             SetMtlPathInPropertyData(path);
-
-            SetNormalUIPanels();
         }
 
 
@@ -65,31 +72,25 @@ namespace Netherlands3D.UI.Panels
             objPropertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
 
-        private void SetNormalUIPanels()
+        private void SetPanels(bool defaultActive)
         {
-            // importErrorPanel.SetActive(false);
-            // if (!string.IsNullOrEmpty(objPropertyData.MtlFile?.ToString()))
-            // {
-            //     defaultImportPanel.SetActive(false);
-            //     hasMtlPanel.SetActive(true);
-            // }
+            if (defaultActive)
+            {
+                errorPanel.Hide();
+                defaultImportPanel.RemoveFromClassList(hiddenUssClassName);
+            }
+            else
+            {
+                errorPanel.Show();
+                defaultImportPanel.AddToClassList(hiddenUssClassName);
+            }
+            
+            Debug.Log("setting default panel:  " + defaultActive);
         }
 
         private void OnMTLImportCompleted(bool success)
         {
-            if (success)
-            {
-                SetNormalUIPanels();
-                errorPanel.SetEnabled(false);
-            }
-            else
-            {
-                errorPanel.SetEnabled(true);
-                // importErrorPanel.SetActive(true);
-                // defaultImportPanel.SetActive(false);
-                // hasMtlPanel.SetActive(false);
-            }
+            SetPanels(success);
         }
-
     }
 }
