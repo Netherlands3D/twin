@@ -59,6 +59,12 @@ namespace Netherlands3D.UI.Panels
             UriImportFailed += ErrorPanel.Show;
             
             CredentialPanel.SetEnabled(false);
+            
+            RegisterCallback<DetachFromPanelEvent>(_ =>
+            {
+                UriImportFailed -= ErrorPanel.Show;
+                credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            });
         }
 
         public void SetCredentialHandler(ICredentialHandler handler)
@@ -79,12 +85,6 @@ namespace Netherlands3D.UI.Panels
 
             credentialPanel.SetEnabled(false);
             AddLayerFromUrl(uri, auth);
-        }
-
-        ~ImportAssetPanel()
-        {
-            UriImportFailed -= ErrorPanel.Show;
-            credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
         public override string GetTitle() => "Importeren";

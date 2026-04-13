@@ -54,14 +54,14 @@ namespace Netherlands3D.UI.Components
 
         public void Open()
         {
-            EnableInClassList("active", true);
+            EnableInClassList("hidden", false);
         }
 
         public void Close()
         {
-            EnableInClassList("active", false);
+            EnableInClassList("hidden", true);
         }
 
-        public bool IsOpen() => ClassListContains("active");
+        public bool IsOpen() => !ClassListContains("hidden");
     }
 }

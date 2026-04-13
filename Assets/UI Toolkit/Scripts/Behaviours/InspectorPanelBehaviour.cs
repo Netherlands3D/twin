@@ -48,6 +48,8 @@ namespace Netherlands3D.UI.Behaviours
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
             
+            InspectorPanel.Close();
+            
             ImportAssetPanel.SetCredentialHandler(credentialHandler);
         }
 
