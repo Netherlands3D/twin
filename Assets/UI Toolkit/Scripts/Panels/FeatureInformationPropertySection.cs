@@ -1,25 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
-using Netherlands3D.GeoJSON;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
-using Netherlands3D.Twin.Samplers;
-using Netherlands3D.UI.Components;
+using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
 
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(BuildingPropertyData))]
+    [PropertySection(typeof(FeaturePropertyData))]
     public partial class FeatureInformationPropertySection : VisualElement, IVisualizationWithPropertyData
     { 
         private FeaturePropertyData featurePropertyData;
@@ -29,7 +24,7 @@ namespace Netherlands3D.UI.Panels
         private ListView addressListView;
         private ListView AddressListView => addressListView ??= this.Q<ListView>();
 
-        public BuildingInformationPropertySection()
+        public FeatureInformationPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -50,29 +45,26 @@ namespace Netherlands3D.UI.Panels
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            featurePropertyData = properties.Get<BuildingPropertyData>();
+            featurePropertyData = properties.Get<FeaturePropertyData>();
             featurePropertyData.OnIdsChanged.AddListener(OnIdsChanged);
             
-            Dictionary<string, Coordinate> buildingIds = featurePropertyData.BuildingIds;
-            if (buildingIds == null || buildingIds.Count == 0)
+            Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds = featurePropertyData.FeatureIds;
+            if (featureIds == null || featureIds.Count == 0)
             {
                 Clear();
                 return;
             }
-
-            LoadBagId(buildingIds.FirstOrDefault());
-            thumbnailContainer.schedule.Execute(() => {  });
+            LoadFeatureProperties(featureIds);
         }
 
-        private void OnIdsChanged(Dictionary<string, Coordinate> buildingIds)
+        private void OnIdsChanged(Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds)
         {
-            if (buildingIds == null || buildingIds.Count == 0)
+            if (featureIds == null || featureIds.Count == 0)
             {
                 Clear();
                 return;
             }
-            
-            LoadBagId(buildingIds.FirstOrDefault());
+            LoadFeatureProperties(featureIds);
         }
         
         public void PopulateAddresses(List<string> addresses)
@@ -94,117 +86,50 @@ namespace Netherlands3D.UI.Panels
              listViewItem.text = text;
         }
         
-        private void LoadBagId(KeyValuePair<string, Coordinate> bagId)
+        private void LoadFeatureProperties(Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds)
         {
-            string key = bagId.Key;
-            if (removeFromID.Length > 0) key = key.Replace(removeFromID, "");
-
-            if (downloadProcess != null)
+            foreach (KeyValuePair<string, (BoundingBox, Dictionary<string, object>)> kv in featureIds)
             {
-                ThumbnailCoroutineRunner.Instance.StopCoroutine(downloadProcess);
-            }
-
-            downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetBagIDData(key, bagId.Value));
-        }
-
-        private IEnumerator GetBagIDData(string bagID, Coordinate coordinate)
-        {
-            yield return GetBAGData(bagID, coordinate);
-            yield return GetAddresses(bagID);
-        }
-
-        private IEnumerator GetBAGData(string bagID, Coordinate coordinate)
-        {
-            var requestUrl = bagRequestUrl.Replace(idReplacementString, bagID);
-            var webRequest = UnityWebRequest.Get(requestUrl);
-
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Clear();
-                yield break;
-            }
-            
-            string bagIdText;
-            string yearText;
-            string statusText;
-
-            GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
-            while (customJsonHandler.GotoNextFeature())
-            {
-                var properties = customJsonHandler.GetProperties();
-
-                bagIdText = properties["identificatie"].ToString();
-                yearText = properties["bouwjaar"].ToString();
-                statusText = properties["status"].ToString();
+                Dictionary<string, object> featureProperties = kv.Value.Item2;
+                BoundingBox bbox = kv.Value.Item1;
+                string featureId = kv.Key;
                 
-                bagLink.text = bagID;
-                bagLink.url = "https://bagviewer.kadaster.nl/lvbag/bag-viewer/?objectId=" + bagIdText;
                 
-                statusValue.text = statusText;
-                yearValue.text = yearText;
-
-                //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
-                Bounds currentObjectBounds = new Bounds(coordinate.ToUnity(), Vector3.one * 50.0f);
-                RenderTexture rTex = RenderedThumbnail.RenderThumbnail(currentObjectBounds);
-                Texture2D tex = new Texture2D(rTex.width, rTex.height, TextureFormat.RGBA32, false);
-
-                RenderTexture.active = rTex;
-                tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
-                tex.Apply();
-                RenderTexture.active = null;
-                thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
-                float aspect = (float)rTex.height / rTex.width;
-                float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
-                thumbnailContainer.style.height = newHeight;
-            }
-        }
-        
-        private IEnumerator GetAddresses(string bagID)
-        {
-            var requestUrl = addressRequestUrl.Replace(idReplacementString, bagID);
-            var webRequest = UnityWebRequest.Get(requestUrl);
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Clear();
-                yield break;
-            }
-
-            List<string> addresses = new List<string>();
-            string districtText;
-            
-            GeoJSONStreamReader customJsonHandler = new GeoJSONStreamReader(webRequest.downloadHandler.text);
-            bool gotDistrict = false;
-            while (customJsonHandler.GotoNextFeature())
-            {
-                var properties = customJsonHandler.GetProperties();
-
-                //Use first address result to determine district
-                if (!gotDistrict)
+                if (downloadProcess != null)
                 {
-                    districtText = properties["openbare_ruimte"].ToString();
-                    gotDistrict = true;
+                    ThumbnailCoroutineRunner.Instance.StopCoroutine(downloadProcess);
                 }
 
-                string address = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} {properties["huisletter"]}{properties["toevoeging"]}";
-                addresses.Add(address);
+                downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetProperties(featureId, bbox, featureProperties));
+                
+                PopulateAddresses(featureProperties.Keys.ToList());
+                break;
             }
-            
-            PopulateAddresses(addresses);
+        }
+
+        private IEnumerator GetProperties(string featureId, BoundingBox bbox, Dictionary<string, object> properties)
+        {
+            yield return null;
+
+            //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
+            Bounds currentObjectBounds = bbox.ToUnityBounds();
+            RenderTexture rTex = RenderedThumbnail.RenderThumbnail(currentObjectBounds);
+            Texture2D tex = new Texture2D(rTex.width, rTex.height, TextureFormat.RGBA32, false);
+
+            RenderTexture.active = rTex;
+            tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
+            tex.Apply();
+            RenderTexture.active = null;
+            thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
+            float aspect = (float)rTex.height / rTex.width;
+            float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
+            thumbnailContainer.style.height = newHeight;
         }
 
         private void Clear()
         {
             thumbnailContainer.style.height = 0;
-            PopulateAddresses(new List<string>() { "Geen adressen gevonden" });
-            bagLink.text = "";
-            bagLink.url = "";
-                
-            statusValue.text = "";
-            yearValue.text = "";
+            PopulateAddresses(new List<string>() { "Geen overige informatie gevonden" });
         }
     }
 }

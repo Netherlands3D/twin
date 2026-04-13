@@ -6,6 +6,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.layers.properties
@@ -15,7 +16,7 @@ namespace Netherlands3D.Twin.layers.properties
     public class FeatureObject : MonoBehaviour, IVisualizationWithPropertyData
     {
         private LayerGameObject visualization;
-        private Dictionary<string, (Coordinate, Dictionary<string, object>)> featureIds = new();
+        private Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds = new();
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -53,8 +54,7 @@ namespace Netherlands3D.Twin.layers.properties
                 if (kv.Value is FeatureMapping map)
                 {
                     Dictionary<string, object> properties = map.Feature.Properties as Dictionary<string, object>;
-                    Coordinate coord = map.GetCoordinateForFeatureMapping();
-                    featureIds.Add(kv.Key, (coord, properties));
+                    featureIds.Add(kv.Key, (map.BoundingBox, properties));
                 }
             }
             propertyData.FeatureIds = featureIds;

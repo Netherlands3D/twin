@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8363319932289052987}
   - component: {fileID: -2311983791405174025}
   - component: {fileID: 44681409752656876}
-  - component: {fileID: 4794155127066318744}
   m_Layer: 0
   m_Name: GeoJsonLayer
   m_TagString: Untagged
@@ -83,15 +82,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
---- !u!114 &4794155127066318744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2418701555395206593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d965efdbd7af0fac9bb44622e1e20db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.FeatureObject
