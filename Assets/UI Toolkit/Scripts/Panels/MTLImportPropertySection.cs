@@ -40,7 +40,7 @@ namespace Netherlands3D.UI.Panels
 
             errorPanel.OnHide.AddListener(() => defaultImportPanel.RemoveFromClassList(UtilityClassConstants.HIDDEN));
             
-            SetPanels(true);
+            DisplayContent(true);
             
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
@@ -81,9 +81,9 @@ namespace Netherlands3D.UI.Panels
             objPropertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
 
-        private void SetPanels(bool defaultActive)
+        private void DisplayContent(bool showImportPanel)
         {
-            if (defaultActive)
+            if (showImportPanel)
             {
                 errorPanel.Hide();
                 defaultImportPanel.RemoveFromClassList(UtilityClassConstants.HIDDEN);
@@ -97,7 +97,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnMTLImportCompleted(bool success)
         {
-            SetPanels(success);
+            DisplayContent(success);
         }
     }
 }
