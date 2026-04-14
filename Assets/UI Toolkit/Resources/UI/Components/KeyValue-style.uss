@@ -1,22 +1,23 @@
 .key-value__key {
     -unity-font-definition: var(--nl3d-default-font-semi-bold);
-    margin: 0 var(--spacing-2) 0 0;
+    margin: 0;
     padding: 0;
+    white-space: pre-wrap; /*todo should we?*/
 }
 
 .key-value__value {
-    margin: 0;
+    margin: var(--spacing-2) 0 0 0;
     padding: 0;
+    white-space: pre-wrap; /*todo should we?*/
 }
 
 .key-value__divider{
     display: flex;
-    flex-grow: 1;
-    height: var(--spacing-0_5);
-    min-height: var(--spacing-0_5);
-    margin-top: var(--spacing-3);
-    background-color: var(--divider-bg-color);
+    flex-grow: 0;
+    margin: var(--spacing-2) 0 var(--spacing-2) 0;
+    border-color: var(--divider-bg-color);
     border-radius: 0.5px;
+    border-bottom-width: 2px;
 }
 
 .key-value__divider.hidden
