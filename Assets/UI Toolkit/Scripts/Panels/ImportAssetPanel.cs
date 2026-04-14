@@ -34,11 +34,6 @@ namespace Netherlands3D.UI.Panels
         private ErrorPanel ErrorPanel => errorPanel ??= this.Q<ErrorPanel>();
 
         public Action OpenAssetLibrary { get; set; }
-        public EventCallback<ClickEvent> FileImportFromUrlStarted { get; set; }
-
-        public EventCallback<ClickEvent> FileUploadStarted { get; set; }
-
-        // public Action<Uri> UriImportStarted { get; set; }
         public Action UriImportFailed { get; set; }
 
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.AddLayer;
@@ -64,7 +59,12 @@ namespace Netherlands3D.UI.Panels
             UriImportFailed += ErrorPanel.Show;
             
             CredentialPanel.SetEnabled(false);
-            errorPanel.Hide();
+            
+            RegisterCallback<DetachFromPanelEvent>(_ =>
+            {
+                UriImportFailed -= ErrorPanel.Show;
+                credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            });
         }
 
         public void SetCredentialHandler(ICredentialHandler handler)
@@ -85,12 +85,6 @@ namespace Netherlands3D.UI.Panels
 
             credentialPanel.SetEnabled(false);
             AddLayerFromUrl(uri, auth);
-        }
-
-        ~ImportAssetPanel()
-        {
-            UriImportFailed -= ErrorPanel.Show;
-            credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
         public override string GetTitle() => "Importeren";
