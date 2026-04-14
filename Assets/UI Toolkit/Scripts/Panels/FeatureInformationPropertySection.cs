@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,8 +22,10 @@ namespace Netherlands3D.UI.Panels
         private Coroutine downloadProcess;
         private VisualElement thumbnailContainer;
         
-        private ListView addressListView;
-        private ListView AddressListView => addressListView ??= this.Q<ListView>();
+        private ListView propertiesListView;
+        private ListView PropertysListView => propertiesListView ??= this.Q<ListView>();
+
+        private Dictionary<string, object> empty = new() {{ "geen informatie", null} };
 
         public FeatureInformationPropertySection()
         {
@@ -31,11 +34,11 @@ namespace Netherlands3D.UI.Panels
 
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
             
-            AddressListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            AddressListView.selectionType = SelectionType.None;
+            PropertysListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            PropertysListView.selectionType = SelectionType.None;
             
-            AddressListView.makeItem = MakeListViewItem;
-            AddressListView.bindItem = BindListViewItem;
+            PropertysListView.makeItem = MakeListViewItem;
+            PropertysListView.bindItem = BindListViewItem;
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
@@ -67,23 +70,33 @@ namespace Netherlands3D.UI.Panels
             LoadFeatureProperties(featureIds);
         }
         
-        public void PopulateAddresses(List<string> addresses)
+        public void PopulateAddresses(Dictionary<string, object> properties)
         {
-            AddressListView.itemsSource = addresses;
-            AddressListView.RefreshItems();
+            var list = properties
+                .Select(kv => new KeyValue
+                {
+                    Key = kv.Key,
+                    Value = kv.Value?.ToString()
+                })
+                .ToList();
+            PropertysListView.itemsSource = list;
+            //PropertysListView.RefreshItems();
         }
         
         private VisualElement MakeListViewItem()
         {
-            return new Label();
+            KeyValue kv = new KeyValue();
+            kv.ShowDivider(true);
+            return kv;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not Label listViewItem) return;
+            if (item is not KeyValue element) return;
             
-             string text = AddressListView.itemsSource[index] as string;
-             listViewItem.text = text;
+            var kv = (KeyValue)PropertysListView.itemsSource[index];
+            element.Key = kv.Key;
+            element.Value = kv.Value;
         }
         
         private void LoadFeatureProperties(Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds)
@@ -92,22 +105,17 @@ namespace Netherlands3D.UI.Panels
             {
                 Dictionary<string, object> featureProperties = kv.Value.Item2;
                 BoundingBox bbox = kv.Value.Item1;
-                string featureId = kv.Key;
-                
-                
                 if (downloadProcess != null)
                 {
                     ThumbnailCoroutineRunner.Instance.StopCoroutine(downloadProcess);
                 }
-
-                downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetProperties(featureId, bbox, featureProperties));
-                
-                PopulateAddresses(featureProperties.Keys.ToList());
+                downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetFeatureThumbnail(bbox));
+                PopulateAddresses(featureProperties);
                 break;
             }
         }
 
-        private IEnumerator GetProperties(string featureId, BoundingBox bbox, Dictionary<string, object> properties)
+        private IEnumerator GetFeatureThumbnail(BoundingBox bbox)
         {
             yield return null;
 
@@ -129,7 +137,7 @@ namespace Netherlands3D.UI.Panels
         private void Clear()
         {
             thumbnailContainer.style.height = 0;
-            PopulateAddresses(new List<string>() { "Geen overige informatie gevonden" });
+            PopulateAddresses(empty);
         }
     }
 }
