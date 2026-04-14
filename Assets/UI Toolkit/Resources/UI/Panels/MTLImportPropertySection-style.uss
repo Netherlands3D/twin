@@ -5,7 +5,3 @@
 .mtl-property-section__button{
     align-self: flex-start;
 }
-
-.mtl-property-section__import-panel.hidden{
-    display: none;
-}
