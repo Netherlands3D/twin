@@ -15,6 +15,8 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(OBJPropertyData))]
     public partial class MTLImportPropertySection : VisualElement, IVisualizationWithPropertyData
     {
+        private FileOpen fileOpen;
+        
         private ColorPropertyData stylingPropertyData;
         private OBJPropertyData objPropertyData;
 
@@ -30,7 +32,8 @@ namespace Netherlands3D.UI.Panels
 
             importButton = this.Q<Button>();
             importButton.RegisterCallback<ClickEvent>(StartImport);
-            ServiceLocator.GetService<FileOpen>().onFilesSelected.AddListener(ImportMtl);
+            fileOpen = ServiceLocator.GetService<FileOpen>();
+            fileOpen.onFilesSelected.AddListener(ImportMtl);
 
             defaultImportPanel = this.Q<VisualElement>("ImportMTLSection");
             errorPanel = this.Q<ErrorPanelContent>();
@@ -49,7 +52,7 @@ namespace Netherlands3D.UI.Panels
 
         private void StartImport(ClickEvent evt)
         {
-            ServiceLocator.GetService<FileOpen>().OpenFile("mtl");
+            fileOpen.OpenFile("mtl");
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -90,8 +93,6 @@ namespace Netherlands3D.UI.Panels
                 errorPanel.Show();
                 defaultImportPanel.AddToClassList(UtilityClassConstants.HIDDEN);
             }
-            
-            Debug.Log("setting default panel:  " + defaultActive);
         }
 
         private void OnMTLImportCompleted(bool success)
