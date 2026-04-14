@@ -33,3 +33,11 @@
 .object-information-address__list-view{
     margin-top: var(--spacing-3);
 }
+
+.object-information__container{
+    flex-shrink: 0;
+}
+
+.object-information-thumbnail__container{
+    flex-shrink: 0;
+}

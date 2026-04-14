@@ -13,7 +13,6 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.layers.properties
 {
-    //TODO maybe the name for this class is not right, component to be compatible with buildingpropertysection to show bag id information
     [RequireComponent(typeof(LayerGameObject))]
     public class FeatureObject : MonoBehaviour, IVisualizationWithPropertyData
     {
@@ -42,6 +41,7 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void ProcessFeatureMappingForLayer(FeatureMapping mapping)
         {
+            //TODO this is begging for a refactor, we dont want to check the parent but until https://gemeente-amsterdam.atlassian.net/browse/S3DA-1935 this has to stay
             if (visualization == null || mapping == null || visualization.LayerData.ParentLayer != mapping.LayerData)
             {
                 ClearFeatureMappingsForLayer();

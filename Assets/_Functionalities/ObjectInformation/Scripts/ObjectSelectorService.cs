@@ -28,7 +28,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
-        public UnityEvent OnSelectDifferentLayer = new();
+        public UnityEvent<LayerData> OnSelectDifferentLayer = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -92,6 +92,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
 
+            SelectFeature.AddListener(EnablePropertyPanelForLastSelectedFeature);
+            SelectSubObjectWithBagId.AddListener(EnablePropertyPanelForLastSelectedFeature);
+            
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
             
@@ -105,6 +108,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
+            
+            SelectFeature.RemoveListener(EnablePropertyPanelForLastSelectedFeature); 
+            SelectSubObjectWithBagId.RemoveListener(EnablePropertyPanelForLastSelectedFeature);
 
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.RemoveListener(Deselect);
@@ -126,7 +132,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (ProjectData.Current.RootLayer.SelectedLayers.Count > 0 && ProjectData.Current.RootLayer.SelectedLayers.Last() != data)
             {
                 Deselect();
-                OnSelectDifferentLayer.Invoke();
+                OnSelectDifferentLayer.Invoke(data);
             }
             lastSelectedLayerData = data;
         }
@@ -144,6 +150,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     lastSelectedMappingLayerData = null;
                 }
             }
+        }
+
+        private void EnablePropertyPanelForLastSelectedFeature(IMapping mapping)
+        {
+            //TODO make toggle be toggled on state when layerpanel is implemented with ui toolkit
+            
+            var propertyPanelBehaviour = FindAnyObjectByType<PropertyPanelBehaviour>();
+            propertyPanelBehaviour.SpawnPanel(lastSelectedMappingLayerData);
+        }
+        
+        private void EnablePropertyPanelForLastSelectedFeature(IMapping mapping, string id)
+        {
+            EnablePropertyPanelForLastSelectedFeature(mapping);
         }
 
         private void Start()

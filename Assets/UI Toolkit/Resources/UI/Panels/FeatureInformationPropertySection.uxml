@@ -8,7 +8,9 @@
     >
     
     <nl3d:ContentContainer leading-icon="SelectionPointer" text="Overige informatie">
-        <ui:VisualElement class="feature-information-thumbnail__container" name="ThumbnailContainer" />
+        <ui:VisualElement class="feature-information__container">
+            <ui:VisualElement class="feature-information-thumbnail__container" name="ThumbnailContainer" />
+        </ui:VisualElement>
         <nl3d:ListView name="AddressListView" class="feature-information-address__list-view"/>
     </nl3d:ContentContainer>
 </ui:UXML>

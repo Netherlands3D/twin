@@ -8,24 +8,26 @@
     >
     
     <nl3d:ContentContainer leading-icon="SelectionPointer" text="Informatie gebouw">
-        <ui:VisualElement class="object-information-thumbnail__container" name="ThumbnailContainer" />
-        <ui:Label name="InformatieLabel" text="Praktische informatie:" class="object-information-bagid__label"/>  
-        <ui:VisualElement class="object-information-bagid__row">
-            <ui:Label name="BagIdLabel" text="BAG ID" class="object-information-bagid__label"/>
-            <ui:VisualElement name="LinkRow" class="object-information-bagid__link-row">
-                <nl3d:Icon name="LinkIcon" image="Link" class="object-information-bagid__link-icon"/>
-                <nl3d:Hyperlink name="Link"/>
+        <ui:VisualElement class="object-information__container">
+            <ui:VisualElement class="object-information-thumbnail__container" name="ThumbnailContainer" />
+            <ui:Label name="InformatieLabel" text="Praktische informatie:" class="object-information-bagid__label"/>  
+            <ui:VisualElement class="object-information-bagid__row">
+                <ui:Label name="BagIdLabel" text="BAG ID" class="object-information-bagid__label"/>
+                <ui:VisualElement name="LinkRow" class="object-information-bagid__link-row">
+                    <nl3d:Icon name="LinkIcon" image="Link" class="object-information-bagid__link-icon"/>
+                    <nl3d:Hyperlink name="Link"/>
+                </ui:VisualElement>
             </ui:VisualElement>
+            <ui:VisualElement name="StatusRow" class="object-information-bagid__row">
+                <ui:Label name="StatusLabel" text="Status" class="object-information-bagid__label"/>
+                <ui:Label name="StatusValue" class="object-information-bagid__label-value"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="YearRow" class="object-information-bagid__row">
+                <ui:Label name="YearLabel" text="Bouwjaar" class="object-information-bagid__label"/>
+                <ui:Label name="YearValue" class="object-information-bagid__label-value"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="Divider" class="object-information__divider" />
         </ui:VisualElement>
-        <ui:VisualElement name="StatusRow" class="object-information-bagid__row">
-            <ui:Label name="StatusLabel" text="Status" class="object-information-bagid__label"/>
-            <ui:Label name="StatusValue" class="object-information-bagid__label-value"/>
-        </ui:VisualElement>
-        <ui:VisualElement name="YearRow" class="object-information-bagid__row">
-            <ui:Label name="YearLabel" text="Bouwjaar" class="object-information-bagid__label"/>
-            <ui:Label name="YearValue" class="object-information-bagid__label-value"/>
-        </ui:VisualElement>
-        <ui:VisualElement name="Divider" class="object-information__divider" />
         <ui:Label name="AddressLabel" text="Adres(sen):" class="object-information-bagid__label"/>
         <nl3d:ListView name="AddressListView" class="object-information-address__list-view"/>
     </nl3d:ContentContainer>
