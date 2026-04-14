@@ -4,6 +4,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,8 +15,6 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(OBJPropertyData))]
     public partial class MTLImportPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-        const string hiddenUssClassName = "hidden";
-        
         private ColorPropertyData stylingPropertyData;
         private OBJPropertyData objPropertyData;
 
@@ -36,7 +35,7 @@ namespace Netherlands3D.UI.Panels
             defaultImportPanel = this.Q<VisualElement>("ImportMTLSection");
             errorPanel = this.Q<ErrorPanelContent>();
 
-            errorPanel.OnHide.AddListener(() => defaultImportPanel.RemoveFromClassList(hiddenUssClassName));
+            errorPanel.OnHide.AddListener(() => defaultImportPanel.RemoveFromClassList(UtilityClassConstants.HIDDEN));
             
             SetPanels(true);
         }
@@ -77,12 +76,12 @@ namespace Netherlands3D.UI.Panels
             if (defaultActive)
             {
                 errorPanel.Hide();
-                defaultImportPanel.RemoveFromClassList(hiddenUssClassName);
+                defaultImportPanel.RemoveFromClassList(UtilityClassConstants.HIDDEN);
             }
             else
             {
                 errorPanel.Show();
-                defaultImportPanel.AddToClassList(hiddenUssClassName);
+                defaultImportPanel.AddToClassList(UtilityClassConstants.HIDDEN);
             }
             
             Debug.Log("setting default panel:  " + defaultActive);

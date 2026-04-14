@@ -1,3 +1,4 @@
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -7,7 +8,6 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class ErrorPanel : VisualElement
     {
-        const string hiddenUssClassName = "hidden";
         private ErrorPanelContent Content;
         private ContentContainer contentContainer;
         
@@ -39,14 +39,14 @@ namespace Netherlands3D.UI.Panels
 
         public void Show()
         {
-            RemoveFromClassList(hiddenUssClassName);
-            Content.RemoveFromClassList(hiddenUssClassName); //do not call Content.Show() as this would give an infinite loop
+            RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            Content.RemoveFromClassList(UtilityClassConstants.HIDDEN); //do not call Content.Show() as this would give an infinite loop
         }
 
         public void Hide()
         {
-            AddToClassList(hiddenUssClassName);
-            Content.AddToClassList(hiddenUssClassName); //do not call Content.Show() as this would give an infinite loop
+            AddToClassList(UtilityClassConstants.HIDDEN);
+            Content.AddToClassList(UtilityClassConstants.HIDDEN); //do not call Content.Show() as this would give an infinite loop
         }
     }
 }

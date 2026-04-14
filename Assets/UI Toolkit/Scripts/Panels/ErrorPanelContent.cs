@@ -1,4 +1,5 @@
 using System;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -8,8 +9,6 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class ErrorPanelContent : VisualElement
     {
-        const string hiddenUssClassName = "hidden";
-        
         public UnityEvent OnShow = new();
         public UnityEvent OnHide = new();
         
@@ -44,13 +43,13 @@ namespace Netherlands3D.UI.Panels
         
         public void Show()
         {
-            RemoveFromClassList(hiddenUssClassName);
+            RemoveFromClassList(UtilityClassConstants.HIDDEN);
             OnShow.Invoke();
         }
 
         public void Hide()
         { 
-            AddToClassList(hiddenUssClassName);
+            AddToClassList(UtilityClassConstants.HIDDEN);
             OnHide.Invoke();
         }
     }
