@@ -38,6 +38,13 @@ namespace Netherlands3D.UI.Panels
             errorPanel.OnHide.AddListener(() => defaultImportPanel.RemoveFromClassList(UtilityClassConstants.HIDDEN));
             
             SetPanels(true);
+            
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            objPropertyData.MtlImportSuccess.RemoveListener(OnMTLImportCompleted);
         }
 
         private void StartImport(ClickEvent evt)
