@@ -38,7 +38,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnHexValueChanged(ChangeEvent<string> evt)
         {
-            if(!hexField.hasFocusPseudoState)
+            if(!hexField.hasFocusPseudoState) //don't trigger an infinite loop if the text is updated through the Spectrum or slider changing
                 return;
             
             var hexString = hexField.text;
@@ -65,23 +65,18 @@ namespace Netherlands3D.UI.Panels
         private void SetColor(Color newColor)
         {
             Color.RGBToHSV(newColor, out float h, out float s, out float v);
-            colorSpectrum.SetValueWithoutNotify(h*360f, s);
+            colorSpectrum.SetValueWithoutNotify(h * 360f, s);
             brightnessSlider.SetValueWithoutNotify(v);
+            ColorSelected.Invoke(newColor);
         }
 
         private void OnColorInputChanged()
         {
-            var newColor = Color.HSVToRGB(colorSpectrum.Hue/360f, colorSpectrum.Saturation, brightnessSlider.value);
-            UpdateHexColorText(newColor);
-            ColorSelected.Invoke(newColor);
-        }
-        
-        private void UpdateHexColorText(Color newColor)
-        {
+            var newColor = Color.HSVToRGB(colorSpectrum.Hue / 360f, colorSpectrum.Saturation, brightnessSlider.value);
             string hex = ColorUtility.ToHtmlStringRGB(newColor);
             hexField.SetText($"#{hex}");
+            ColorSelected.Invoke(newColor);
         }
-
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
