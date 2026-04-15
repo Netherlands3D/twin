@@ -92,5 +92,10 @@ namespace Netherlands3D.UI.Components
             this.RemoveFromClassListStartingWith("textfield-style-");
             AddToClassList("textfield-style-" + fieldStyle.ToString().ToKebabCase());
         }
+
+        public void SetText(string text)
+        {
+            this.text = text;
+        }
     }
 }
