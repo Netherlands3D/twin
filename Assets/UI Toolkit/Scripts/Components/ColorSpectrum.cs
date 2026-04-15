@@ -102,5 +102,22 @@ namespace Netherlands3D.UI.Components
             Saturation = Vector2.Distance(center, selectorPosition) / colorSpectrumRadius;
             SpectrumChanged.Invoke();
         }
+
+        public void SetValueWithoutNotify(float hue, float saturation)
+        {
+            this.hue = hue;
+            this.saturation = saturation;
+
+            var angle = hue * Mathf.Deg2Rad;
+            var distance = saturation * colorSpectrumRadius;
+
+            selectorPosition = center + new Vector2(
+                Mathf.Cos(angle) * distance,
+                Mathf.Sin(angle) * distance
+            );
+
+            Thumb.style.left = selectorPosition.x;
+            Thumb.style.top = selectorPosition.y;
+        }
     }
 }
