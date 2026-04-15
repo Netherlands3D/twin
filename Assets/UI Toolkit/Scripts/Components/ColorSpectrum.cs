@@ -108,7 +108,7 @@ namespace Netherlands3D.UI.Components
             this.hue = hue;
             this.saturation = saturation;
 
-            var angle = hue * Mathf.Deg2Rad;
+            var angle = (hue - 90f) * Mathf.Deg2Rad; //red is at the top so the whole spectrum is rotated by 90 degrees
             var distance = saturation * colorSpectrumRadius;
 
             selectorPosition = center + new Vector2(

@@ -38,6 +38,9 @@ namespace Netherlands3D.UI.Panels
 
         private void OnHexValueChanged(ChangeEvent<string> evt)
         {
+            if(!hexField.hasFocusPseudoState)
+                return;
+            
             var hexString = hexField.text;
             if (!hexString.StartsWith("#"))
             {
@@ -62,7 +65,7 @@ namespace Netherlands3D.UI.Panels
         private void SetColor(Color newColor)
         {
             Color.RGBToHSV(newColor, out float h, out float s, out float v);
-            colorSpectrum.SetValueWithoutNotify(h, s);
+            colorSpectrum.SetValueWithoutNotify(h*360f, s);
             brightnessSlider.SetValueWithoutNotify(v);
         }
 
