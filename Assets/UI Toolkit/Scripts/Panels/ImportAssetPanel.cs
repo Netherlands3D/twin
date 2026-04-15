@@ -55,7 +55,7 @@ namespace Netherlands3D.UI.Panels
             OnHide += () => EnableInClassList("active", false);
             GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
-            ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
+            ImportUriButton.RegisterCallback<ClickEvent>(OnImport);
             UriImportFailed += ErrorPanel.Show;
             
             CredentialPanel.SetEnabled(false);
@@ -64,10 +64,12 @@ namespace Netherlands3D.UI.Panels
             {
                 UriImportFailed -= ErrorPanel.Show;
                 credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-                ImportUriField.OnTextCommitted.RemoveListener(OnImport);
             });
-            
-            ImportUriField.OnTextCommitted.AddListener(OnImport);
+
+            ImportUriField.RegisterCallback<TextSubmitEvent>(_ =>
+            {
+                OnImport(null);
+            });
         }
 
         public void SetCredentialHandler(ICredentialHandler handler)
@@ -97,17 +99,12 @@ namespace Netherlands3D.UI.Panels
             ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes);
         }
 
-        private void OnInportUriButtonClicked(ClickEvent evt)
-        {
-            OnImport(importUriField.value);
-        }
-
-        private void OnImport(string value)
+        private void OnImport(ClickEvent evt)
         {
             try
             {
                 credentialHandler.ClearCredentials();
-                Uri uri = new Uri(value);
+                Uri uri = new Uri(ImportUriField.value);
 
                 credentialHandler.Uri = uri;
                 credentialHandler.ApplyCredentials();

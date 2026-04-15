@@ -4,7 +4,6 @@ using Netherlands3D.Credentials;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEditor;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using TextField = Netherlands3D.UI.Components.TextField;
@@ -65,7 +64,10 @@ namespace Netherlands3D.UI.Panels
             SetContentState(ContentState.Warning);
             WarningButton.clicked += () => { SetContentState(ContentState.Key); };
             CredentialButton.clicked += OnConfirm;
-            CodeField.OnTextCommitted.AddListener(v => OnConfirm());
+            CodeField.RegisterCallback<TextSubmitEvent>(_ =>
+            {
+                OnConfirm();
+            });
         }
 
         private void OnConfirm()
