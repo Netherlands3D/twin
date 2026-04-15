@@ -1,5 +1,6 @@
 using Netherlands3D.UI.ExtensionMethods;
-using Netherlands3D.UI_Toolkit.Scripts;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -9,30 +10,29 @@ namespace Netherlands3D.UI.Components
     {
         private VisualElement thumb;
         private VisualElement Thumb => thumb ??= this.Q<VisualElement>("Thumb");
-
-        private float selectorX = 80f;
-        [UxmlAttribute("selector-x")]
-        public float SelectorX
+        private Vector2 dragStartPosition;
+        
+        private Vector2 center => new Vector2(resolvedStyle.width / 2, resolvedStyle.height / 2);
+        private float colorSpectrumRadius = 80f;
+        
+        private Vector2 selectorPosition = new Vector2(80f, 80f);
+        [UxmlAttribute("selector-position")]
+        public Vector2 SelectorPosition
         {
-            get => selectorX;
+            get => selectorPosition;
             set
             {
-                selectorX = value;
+                var offset = value - center;
+                selectorPosition = value;
+                if (offset.magnitude > colorSpectrumRadius)
+                    selectorPosition = center + (offset.normalized * colorSpectrumRadius);
+                    
                 ApplySelectorPosition();
             }
         }
 
-        private float selectorY = 80f;
-        [UxmlAttribute("selector-y")]
-        public float SelectorY
-        {
-            get => selectorY;
-            set
-            {
-                selectorY = value;
-                ApplySelectorPosition();
-            }
-        }
+        public UnityEvent<float> HueChanged = new();
+        public UnityEvent<float> SaturationChanged = new();
 
         public ColorSpectrum()
         {
@@ -40,17 +40,45 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             AddToClassList("color-spectrum");
-
             RegisterCallback<AttachToPanelEvent>(_ => ApplySelectorPosition());
+            
+            var dragManipulator = new DragManipulator();
+            dragManipulator.DragStarted.AddListener(OnDragStarted);
+            dragManipulator.Dragging.AddListener(OnDragging);
+            this.AddManipulator(dragManipulator);
+        }
+        
+        private void OnDragStarted(Vector2 startPosition)
+        {
+            dragStartPosition = startPosition;
+            SelectorPosition = startPosition;
+        }
+        
+        private void OnDragging(Vector2 delta)
+        {
+            SelectorPosition = dragStartPosition + delta;
         }
 
         private void ApplySelectorPosition()
         {
             if (Thumb == null)
                 return;
+            
+            Thumb.style.left = SelectorPosition.x;
+            Thumb.style.top = SelectorPosition.y;
 
-            Thumb.style.left = selectorX;
-            Thumb.style.top = selectorY;
+            var top = new Vector2(center.x, colorSpectrumRadius);
+            var angle= Vector2.Angle(top - center, SelectorPosition - center);
+    
+            //if the selector is on the left side of the spectrum, the angle calculates the angle on the left side instead of the outer angle needed for the hue value
+            if(selectorPosition.x <  center.x) 
+               angle = 360f - angle;
+            
+            var saturation = Vector2.Distance(center, selectorPosition) / colorSpectrumRadius;
+            
+            Debug.Log(angle + "\t" +saturation);
+            HueChanged.Invoke(angle);
+            SaturationChanged.Invoke(saturation);
         }
     }
 }
