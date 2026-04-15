@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False"
+         name="ScatterPropertySection" class="scatter-property-section">
+    <nl3d:ContentContainer leading-icon="ScatterObject" text="Object verspreiden">
+        <ui:VisualElement name="ToggleScatterSection">
+            <nl3d:CheckboxToggle LabelText="Verspreid objecten in tekengebied"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="ScatterSettingsSection" class="scatter-property-section__scatter-settings">
+            <nl3d:RadioButtonGroup name="LocatieVerspreiding" label="Locatie verspreiding" value="2" choices="Midden,Rand,Beide" class="scatter-property-section__scatter-control"/>
+            <nl3d:Slider name="RandBreedte" label="Breedte rand (meters)" low-value="0.01" high-value="100" class="scatter-property-section__scatter-control" />
+            <nl3d:Slider name="Dichtheid" label="Dichtheid (objecten/hectare)" low-value="0.01" high-value="10000" class="scatter-property-section__scatter-control" />
+            <nl3d:Slider name="Verspreidingsgraad" label="Verspreidingsgraad (%)" low-value="0" high-value="100" class="scatter-property-section__scatter-control" />
+            <nl3d:Slider name="RotatieRaster" label="Rotatie raster (˚)" low-value="0" high-value="360" class="scatter-property-section__scatter-control visible-when-disabled" />
+            <nl3d:SliderRange  name="HoogteVariatie" label="Hoogte variatie (m)" low-value="0" high-value="50" class="scatter-property-section__scatter-control" />
+            <nl3d:SliderRange  name="DiameterVariatie" label="Diameter variatie (m)" low-value="0" high-value="50" class="scatter-property-section__scatter-control" />
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
+</ui:UXML>

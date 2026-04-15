@@ -41,7 +41,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             this.strokeWidth = strokeWidth;
         }
 
-        [JsonIgnore] public bool AutoRotateToLine { get; set; } = false; // the Panel needs to know the shapeType of the parent, but this is not accessible, so this is an intermediary
+        [JsonIgnore] private bool autoRotateToLine = false;
+        [JsonIgnore] public UnityEvent<bool> AutoRotateToLineChanged = new UnityEvent<bool>();
+        [JsonIgnore]
+        public bool AutoRotateToLine
+        {
+            get => autoRotateToLine;
+            set
+            {
+                autoRotateToLine = value;
+                AutoRotateToLineChanged.Invoke(value);
+            }
+        } // the Panel needs to know the shapeType of the parent, but this is not accessible, so this is an intermediary
 
         [JsonIgnore] 
         public string OriginalPrefabId

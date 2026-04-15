@@ -71,3 +71,8 @@
     border-width: 1.5px;
     border-radius: 100%;
 }
+
+.slider .unity-base-field__label,
+.slider-range .unity-base-field__label{
+    -unity-font-definition: var(--nl3d-header-font);
+}

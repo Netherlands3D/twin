@@ -1,27 +1,40 @@
-.toolbar-navigation { 
-    flex-shrink: 0;
-    flex-grow: 0;
-    margin: 0px;
-}
-
-.unity-button-group {
+.toolbar-navigation {
     flex-direction: row;
-    flex-shrink: 0;
-    flex-grow: 0;
-    align-self: flex-end;
-    align-content: flex-start;
-    height: 44px;
-    min-height: 44px;
-    max-height: 52px;
-    margin-left: 0px;
-    margin-top: var(--spacing-2);
-    margin-right: 0px;
-    margin-bottom: 0px;
-    background-color: transparent;
+    flex: 0 0 auto;
+    height: var(--spacing-11);
+    margin: var(--spacing-2) 0 0;
 }
 
-.toolbar-navigation__group .button {
-    flex-shrink: 0;
-    flex-grow: 0;
+.toolbar-navigation__button,
+.toolbar-navigation__button.button,
+.toolbar-navigation__button.toggle {
+    flex: 0 0 auto;
     margin-right: var(--spacing-2);
+}
+
+.toolbar-navigation__button.toolbar-navigation__fpv {
+    display: none;
+    flex: 0 0 auto;
+    align-items: center;
+
+    min-height: var(--spacing-11);
+    padding: var(--spacing-2);
+    background-color: transparent;
+    border-color: var(--color-white);
+    border-width: 2px;
+    border-radius: var(--spacing-2);
+}
+
+.app--functionality-first-person-viewer .toolbar-navigation__button.toolbar-navigation__fpv {
+    display: flex;
+}
+
+/* We need a deep hierarchy level because of the specificity in the button component */
+.toolbar-navigation .toolbar-navigation__button.toolbar-navigation__compass .icon {
+    --icon-tint-color: var(--color-blue-700);
+}
+
+/* We need a deep hierarchy level because of the specificity in the button component */
+.toolbar-navigation .toolbar-navigation__button.toolbar-navigation__compass.toolbar-navigation__compass--north .icon {
+    --icon-tint-color: var(--color-white);
 }
