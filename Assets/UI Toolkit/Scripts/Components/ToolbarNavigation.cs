@@ -20,7 +20,7 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            RegisterCallback<AttachToPanelEvent>(_ => UpdateDynamicAttributes());
+            RegisterCallback<AttachToPanelEvent>(_ => UpdatePerspectiveIcon());
             North.RegisterCallback<ClickEvent>(_ => OrientToNorth?.Invoke());
             Perspective.RegisterValueChangedCallback(OnToggleOrthographicView);
         }
@@ -36,7 +36,7 @@ namespace Netherlands3D.UI.Components
             ToggleOrthographicView?.Invoke(value.newValue);
         }
 
-        private void UpdateDynamicAttributes()
+        private void UpdatePerspectiveIcon()
         {
             Perspective.Image = Perspective.value ? IconImage.OrthogonalView : IconImage.PerspectiveView;
         }
