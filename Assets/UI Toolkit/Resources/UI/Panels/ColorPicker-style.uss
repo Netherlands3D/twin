@@ -9,11 +9,15 @@
     margin-bottom: 0;
 }
 
-
 .color-picker__item {
     margin-right: var(--spacing-4);
 }
 
 .color-picker__item-last {
     margin-right: 0;
+}
+
+.color-picker__text-field{
+    min-width: 85px;
+    max-width: 85px;
 }
