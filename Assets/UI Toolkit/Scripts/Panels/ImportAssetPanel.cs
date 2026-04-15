@@ -99,6 +99,7 @@ namespace Netherlands3D.UI.Panels
         {
             try
             {
+                credentialHandler.ClearCredentials();
                 Uri uri = new Uri(ImportUriField.value);
 
                 credentialHandler.Uri = uri;
