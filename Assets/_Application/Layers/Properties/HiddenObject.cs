@@ -14,6 +14,8 @@ namespace Netherlands3D.Twin.layers.properties
     [RequireComponent(typeof(LayerGameObject))]
     public class HiddenObject : MonoBehaviour, IVisualizationWithPropertyData
     {
+        [SerializeField]  private Material selectionMaterial;
+        
         public bool debugFeatures = false;
         
         private LayerGameObject visualization;

@@ -17,6 +17,15 @@ namespace Netherlands3D.Twin.Layers.Properties
         public const string VisibilityAttributeIdentifier = "data-visibility";
         public const string VisibilityAttributePositionIdentifier = "data-visibility-position";
         public const string VisibilityIdentifier = "visibility";
+        
+        [JsonIgnore] private Material selectionMaterial;
+        
+        [JsonIgnore]
+        public Material SelectionMaterial
+        {
+            get => selectionMaterial;
+            set => selectionMaterial = value;
+        }
      
         public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate)
         {
@@ -87,9 +96,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         }
         
         [JsonConstructor]
-        public HiddenObjectsPropertyData()
+        public HiddenObjectsPropertyData(Material selectionMaterial)
         {
-            
+            this.selectionMaterial = selectionMaterial;
         }
     }
 }

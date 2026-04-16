@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
@@ -23,8 +24,8 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(HiddenObjectsPropertyData))]
     public partial class HiddenObjectsPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-        [SerializeField] private float cameraDistance = 150f;
-        [SerializeField] private Material selectionMaterial;
+        private float cameraDistance = 150f;
+        private Material selectionMaterial;
 
         private GameObject selectedGhostObject;
         private UnityAction<IMapping> waitForMappingLoaded;
@@ -49,6 +50,11 @@ namespace Netherlands3D.UI.Panels
             
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
+            
+            RegisterCallback<DetachFromPanelEvent>(_ => 
+            {
+                OnDestroy();  
+            });
         }
         
         
@@ -73,6 +79,8 @@ namespace Netherlands3D.UI.Panels
             stylingPropertyData = properties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
             if (stylingPropertyData == null) return;
 
+            selectionMaterial = stylingPropertyData.SelectionMaterial;
+            
             CreateItems();
             UpdateVisibility();
             stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
@@ -316,7 +324,7 @@ namespace Netherlands3D.UI.Panels
         {
             if (selectedGhostObject != null)
             {
-                Destroy(selectedGhostObject);
+                MonoBehaviour.Destroy(selectedGhostObject);
                 selectedGhostObject = null;
             }
         }
