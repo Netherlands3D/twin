@@ -12,8 +12,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class TextField : UnityEngine.UIElements.TextField
     {
-        public UnityEvent<string> OnTextCommitted = new();
-        
         public enum TextFieldStyle
         {
             Normal,
@@ -121,15 +119,6 @@ namespace Netherlands3D.UI.Components
                     textInput.RegisterCallback<PointerDownEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
                     textInput.RegisterCallback<PointerUpEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
                     textInput.RegisterCallback<PointerCaptureOutEvent>(e => UpdateInput());
-
-                    textInput.RegisterCallback<KeyDownEvent>(e =>
-                    {
-                        if (e.keyCode == KeyCode.Return)
-                        {
-                            UpdateInput();
-                            OnTextCommitted.Invoke(value);
-                        }
-                    }, TrickleDown.TrickleDown);
                 }
             });
         }

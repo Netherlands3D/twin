@@ -64,10 +64,9 @@ namespace Netherlands3D.UI.Panels
             {
                 UriImportFailed -= ErrorPanel.Show;
                 credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-                ImportUriField.OnTextCommitted.RemoveListener(OnImport);
             });
             
-            ImportUriField.OnTextCommitted.AddListener(OnImport);
+            ImportUriField.RegisterCallback<NavigationSubmitEvent>(evt => OnImport(importUriField.value), TrickleDown.TrickleDown);
         }
 
         public void SetCredentialHandler(ICredentialHandler handler)

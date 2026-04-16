@@ -65,7 +65,7 @@ namespace Netherlands3D.UI.Panels
             SetContentState(ContentState.Warning);
             WarningButton.clicked += () => { SetContentState(ContentState.Key); };
             CredentialButton.clicked += OnConfirm;
-            CodeField.OnTextCommitted.AddListener(v => OnConfirm());
+            CodeField.RegisterCallback<NavigationSubmitEvent>(evt => OnConfirm(), TrickleDown.TrickleDown);
         }
 
         private void OnConfirm()
