@@ -29,6 +29,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
         public UnityEvent<LayerData> OnSelectDifferentLayer = new();
+        public UnityEvent OnNoLayerSelected = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -95,6 +96,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             SelectFeature.AddListener(EnablePropertyPanelForLastSelectedFeature);
             SelectSubObjectWithBagId.AddListener(EnablePropertyPanelForLastSelectedFeature);
+            OnNoLayerSelected.AddListener(DisablePropertyPanel);
             
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
@@ -112,6 +114,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             SelectFeature.RemoveListener(EnablePropertyPanelForLastSelectedFeature); 
             SelectSubObjectWithBagId.RemoveListener(EnablePropertyPanelForLastSelectedFeature);
+            OnNoLayerSelected.RemoveListener(DisablePropertyPanel);
 
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.RemoveListener(Deselect);
@@ -149,6 +152,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Deselect();
                     lastSelectedLayerData = null;
                     lastSelectedMappingLayerData = null;
+                    
+                    OnNoLayerSelected.Invoke();
                 }
             }
         }
@@ -164,6 +169,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void EnablePropertyPanelForLastSelectedFeature(IMapping mapping, string id)
         {
             EnablePropertyPanelForLastSelectedFeature(mapping);
+        }
+
+        private void DisablePropertyPanel()
+        {
+            var propertyPanelBehaviour = FindAnyObjectByType<PropertyPanelBehaviour>();
+            propertyPanelBehaviour.ClearActivePanel();
         }
 
         private void Start()
