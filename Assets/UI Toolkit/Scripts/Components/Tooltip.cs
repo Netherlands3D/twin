@@ -22,6 +22,13 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
+            
+            Show(false);
+        }
+        
+        public void Show(bool show)
+        {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !show);
         }
     }
 }
