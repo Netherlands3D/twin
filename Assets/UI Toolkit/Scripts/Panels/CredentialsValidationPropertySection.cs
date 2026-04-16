@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     [PropertySection(typeof(CredentialsRequiredPropertyData))]
-    public partial class CredentialsValidationPropertySection : VisualElement, ICredentialsPropertySection, IVisualizationWithPropertyData
+    public partial class CredentialsValidationPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private CredentialPanel credentialPanel;
         private CredentialPanel CredentialPanel => credentialPanel ??= this.Q<CredentialPanel>();  
@@ -22,12 +22,12 @@ namespace Netherlands3D.UI.Panels
         public CredentialsValidationPropertySection()
         {
             this.CloneComponentTree("Panels");
-            this.AddComponentStylesheet("Panels");    
+            this.AddComponentStylesheet("Panels");   
             
             CredentialPanel.SetEnabled(true);
-        }
             
-      
+            handler = new CredentialPropertyHandler();
+        }
 
         public ICredentialHandler Handler
         {
@@ -39,31 +39,17 @@ namespace Netherlands3D.UI.Panels
                 handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
         }
-
-        private void Awake()
-        {
-            Handler = GetComponent<ICredentialHandler>();
-        }
-
-        private void Start()
-        {
-            handler?.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
-        }
-
-        private void OnDestroy()
-        {
-            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
-        }
+      
 
         private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
             var accepted = auth != null && auth is not FailedOrUnsupported;
             
-            if (accepted)//we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
-                statusPanel.SetActive(true);
-    
-            validCredentialsPanel.SetActive(accepted);
-            invalidCredentialsPanel.SetActive(!accepted);
+            // if (accepted)//we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
+            //     statusPanel.SetActive(true);
+            //
+            // validCredentialsPanel.SetActive(accepted);
+            // invalidCredentialsPanel.SetActive(!accepted);
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -72,11 +58,11 @@ namespace Netherlands3D.UI.Panels
             Handler.ApplyCredentials();
         }
         
-        public void ResetStatusPanel(bool validCredentials)
-        {
-            statusPanel.SetActive(true);
-            validCredentialsPanel.SetActive(validCredentials);
-            invalidCredentialsPanel.SetActive(!validCredentials);
-        }
+        // public void ResetStatusPanel(bool validCredentials)
+        // {
+        //     statusPanel.SetActive(true);
+        //     validCredentialsPanel.SetActive(validCredentials);
+        //     invalidCredentialsPanel.SetActive(!validCredentials);
+        // }
     }
 }

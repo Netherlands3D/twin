@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Credentials
 {
     //this is the handler to query the keyvault and return the credentials object to be processed further
-    public class CredentialHandler : MonoBehaviour, ICredentialHandler
+    public class CredentialPropertyHandler : ICredentialHandler
     {
         public Uri Uri { get; set; }
 
@@ -14,21 +14,15 @@ namespace Netherlands3D.Credentials
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public UnityEvent<Uri, StoredAuthorization.StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
         public StoredAuthorization.StoredAuthorization Authorization { get; private set; }
-
+        
         private KeyVault keyVault;
 
-        private void Awake()
+        public CredentialPropertyHandler()
         {
             keyVault = ServiceLocator.GetService<KeyVaultService>().KeyVault;
-            keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
         }
 
-        private void OnDestroy()
-        {
-            keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
-        }
-        
-    //called in the inspector on end edit of url input field
+        //called in the inspector on end edit of url input field
         public void SetUri(string url)
         {
             if (!string.IsNullOrEmpty(url))
@@ -47,6 +41,16 @@ namespace Netherlands3D.Credentials
             UserName = "";
             PasswordOrKeyOrTokenOrCode = "";
             Authorization = null;
+        }
+
+        private void Awake()
+        {
+            keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
+        }
+
+        private void OnDestroy()
+        {
+            keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
         private void DeterminedAuthorizationType(StoredAuthorization.StoredAuthorization auth)
