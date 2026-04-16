@@ -7,7 +7,7 @@
                     <ui:Label text="Hover over dit element om je cursor te veranderen"/>
                 </Netherlands3D.UI.Components.ChangePointerStyleElement>
                 <Netherlands3D.UI.Components.Hyperlink text="website" url="https://netherlands3d.eu" tooltip="website"/>
-                <Netherlands3D.UI.Components.Tooltip style="display: flex;"/>
+                <Netherlands3D.UI.Components.Tooltip/>
                 <Netherlands3D.UI.Components.Breadcrumb/>
                 <Netherlands3D.UI.Components.IconButton/>
                 <Netherlands3D.UI.Components.BackButton/>
