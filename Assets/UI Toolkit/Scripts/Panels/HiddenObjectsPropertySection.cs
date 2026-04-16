@@ -1,28 +1,28 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.layers.properties;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using ListView = UnityEngine.UIElements.ListView;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.UI.Panels
 {
-    [PropertySection(typeof(HiddenObjectsPropertyData), Symbolizer.VisibilityProperty)]
-    public class HiddenObjectsPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
+    [UxmlElement]
+    [PropertySection(typeof(HiddenObjectsPropertyData))]
+    public partial class HiddenObjectsPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-        [SerializeField] private RectTransform content;
-        [SerializeField] private GameObject hiddenItemPrefab;
-        [SerializeField] private RectTransform layerContent;
         [SerializeField] private float cameraDistance = 150f;
         [SerializeField] private Material selectionMaterial;
 
@@ -35,6 +35,38 @@ namespace Netherlands3D.Twin.Layers.Properties
         public ISelectable FirstSelectedItem { get; set; }
 
         private HiddenObjectsPropertyData stylingPropertyData;
+        
+        private ListView listView;
+        private ListView ListView => listView ??= this.Q<ListView>();
+        
+        public HiddenObjectsPropertySection()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");    
+            
+            ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            ListView.selectionType = SelectionType.None;
+            
+            ListView.makeItem = MakeListViewItem;
+            ListView.bindItem = BindListViewItem;
+        }
+        
+        
+        
+        private VisualElement MakeListViewItem()
+        {
+            return new HideObjectListViewItem();
+        }
+        
+        private void BindListViewItem(VisualElement item, int index)
+        {
+            if (item is not HideObjectListViewItem listViewItem) return;
+            
+            string mapping = ListView.itemsSource[index] as string;
+            listViewItem.ID = mapping;
+        }
+        
+        
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -49,18 +81,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             //deselect any selected feature in the world when opening the hidden feature panel
             ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
             selector.Deselect();
-
-            StartCoroutine(OnPropertySectionsLoaded());
         }
-
-        private IEnumerator OnPropertySectionsLoaded()
+        
+        public void PopulateBagIds(List<string> mappings)
         {
-            yield return new WaitForEndOfFrame();
-                       
-            // workaround to have a minimum height for the content loaded (because of scrollrects)
-            LayoutElement layout = GetComponent<LayoutElement>();
-            layout.minHeight = content.rect.height;
+            ListView.itemsSource = mappings;
+            ListView.RefreshItems();
         }
+        
 
         private void CreateItems()
         {
