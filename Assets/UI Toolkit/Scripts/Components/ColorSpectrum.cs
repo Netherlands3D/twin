@@ -10,6 +10,8 @@ namespace Netherlands3D.UI.Components
     {
         private VisualElement thumb;
         private VisualElement Thumb => thumb ??= this.Q<VisualElement>("Thumb");
+        private VisualElement spectrum;
+        private VisualElement Spectrum => spectrum ??= this.Q<VisualElement>("Surface"); 
         private Vector2 dragStartPosition;
 
         private Vector2 center => new Vector2(resolvedStyle.width / 2, resolvedStyle.height / 2);
@@ -33,6 +35,7 @@ namespace Netherlands3D.UI.Components
         }
 
         private float hue;
+
         public float Hue
         {
             get => hue;
@@ -44,13 +47,27 @@ namespace Netherlands3D.UI.Components
         }
 
         private float saturation;
+
         public float Saturation
         {
             get => saturation;
             private set
             {
-                saturation = value; 
+                saturation = value;
                 SaturationChanged.Invoke(saturation);
+            }
+        }
+
+        private float brightness;
+
+        public float Brightness
+        {
+            get => brightness;
+            set
+            {
+                brightness = value;
+                Debug.Log(value);
+                ApplyOverlayTint();
             }
         }
 
@@ -118,6 +135,14 @@ namespace Netherlands3D.UI.Components
 
             Thumb.style.left = selectorPosition.x;
             Thumb.style.top = selectorPosition.y;
+        }
+
+        private void ApplyOverlayTint()
+        {
+            if (Spectrum == null)
+                return;
+
+            Spectrum.style.unityBackgroundImageTintColor = Color.HSVToRGB(0, 0, brightness);
         }
     }
 }
