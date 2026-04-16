@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: DomePanelBehaviour
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Panels.DomePanelBehaviour
   domeTool: {fileID: 11400000, guid: e184b14b2cc24f14e895ecc328e689e2, type: 2}
+  headerText: Uitsnijden lagen binnen de dome
+  description: Kies hieronder welke lagen zichtbaar zijn binnen de dome. Verborgen
+    lagen worden niet meegenomen in de uitsnede.

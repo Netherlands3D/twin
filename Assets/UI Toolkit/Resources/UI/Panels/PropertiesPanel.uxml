@@ -11,5 +11,5 @@
         <nl3d:Button name="PropertiesHeaderCloseButton" button-style="IconOnly" icon="close" class="properties-panel__header-button-close"/>
     </ui:VisualElement>
     <nl3d:ToolbarProperties />
-    <ui:VisualElement class="properties-panel__content" name="Content" />
+    <nl3d:ScrollView class="properties-panel__content" name="Content" />
 </ui:UXML>
