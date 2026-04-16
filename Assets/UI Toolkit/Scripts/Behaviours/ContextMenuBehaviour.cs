@@ -27,7 +27,6 @@ namespace Netherlands3D.UI.Panels
             floatingPanel = new FloatingPanel();
             root.Add(floatingPanel);
             floatingPanel.OnClose.AddListener(ClearActivePanel);
-            floatingPanel.SetEnabled(false);
             var map = inputActionAsset.FindActionMap("Camera", true);
             rightClickAction = map.FindAction("RightClick", true);
             leftClickAction = map.FindAction("LeftClick", true);
