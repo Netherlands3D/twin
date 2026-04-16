@@ -59,8 +59,8 @@ namespace Netherlands3D.UI.Components
             fill = false;
 
             lowValue = 0f;
-            highValue = 1f;
-            value = 1f;
+            highValue = 255f;
+            value = 255f;
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
