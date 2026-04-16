@@ -4,9 +4,10 @@ using Netherlands3D.Credentials;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEditor;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
-using TextField = UnityEngine.UIElements.TextField;
+using TextField = Netherlands3D.UI.Components.TextField;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -55,31 +56,31 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            
+
             warningContent = this.Q<ContentContainer>("WarningContent");
             credentialContent = this.Q<ContentContainer>("CredentialContent");
 
             InitializeDropdown();
 
             SetContentState(ContentState.Warning);
-            WarningButton.clicked += () =>
-            {
-                SetContentState(ContentState.Key);
-            };
-            CredentialButton.clicked += () =>
-            {
-                if (string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value))
-                {
-                    ErrorPanel.Show();
-                    return;
-                }
+            WarningButton.clicked += () => { SetContentState(ContentState.Key); };
+            CredentialButton.clicked += OnConfirm;
+            CodeField.RegisterCallback<NavigationSubmitEvent>(evt => OnConfirm(), TrickleDown.TrickleDown);
+        }
 
-                handler.UserName = UserNameField.value;
-                handler.PasswordOrKeyOrTokenOrCode = CodeField.value;
-                handler.ApplyCredentials();
-                ResetState();
-                SetEnabled(false);
-            };
+        private void OnConfirm()
+        {
+            if (string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value))
+            {
+                ErrorPanel.Show();
+                return;
+            }
+
+            handler.UserName = UserNameField.value;
+            handler.PasswordOrKeyOrTokenOrCode = CodeField.value;
+            handler.ApplyCredentials();
+            ResetState();
+            SetEnabled(false);
         }
 
         private void InitializeDropdown()
