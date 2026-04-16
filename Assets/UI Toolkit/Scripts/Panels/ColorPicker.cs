@@ -12,33 +12,41 @@ namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     [PropertySection(typeof(ColorPropertyData))]
-
     public partial class ColorPicker : VisualElement, IVisualizationWithPropertyData
     {
         private ColorSpectrum colorSpectrum;
         private ColorSlider brightnessSlider;
         private TextField hexField;
         private ColorTile colorTile;
-        
+
         public UnityEvent<Color> ColorSelected = new();
-        
+
         public ColorPicker()
         {
             this.CloneComponentTree("Panels");
-            this.AddComponentStylesheet("Panels");    
-            
+            this.AddComponentStylesheet("Panels");
+
             colorSpectrum = this.Q<ColorSpectrum>();
             brightnessSlider = this.Q<ColorSlider>();
             hexField = this.Q<TextField>();
             colorTile = this.Q<ColorTile>();
 
             hexField.RegisterValueChangedCallback(OnHexValueChanged);
-            hexField.RegisterCallback<NavigationSubmitEvent>(_ => OnHexValueChanged(null), TrickleDown.TrickleDown);
-            
+            hexField.RegisterCallback<NavigationSubmitEvent>(OnHexColorSubmitted, TrickleDown.TrickleDown);
+
             colorSpectrum.SpectrumChanged.AddListener(OnColorInputChanged);
             brightnessSlider.RegisterValueChangedCallback(_ => OnColorInputChanged());
-            
+
             ColorSelected.AddListener(SetColorTileColor);
+        }
+
+        private void OnHexColorSubmitted(NavigationSubmitEvent evt)
+        {
+            OnHexValueChanged(null);
+            //reset or format hex text
+            var newColor = Color.HSVToRGB(colorSpectrum.Hue / 360f, colorSpectrum.Saturation, brightnessSlider.value);
+            string hex = ColorUtility.ToHtmlStringRGB(newColor);
+            hexField.SetText($"#{hex}");
         }
 
         private void SetColorTileColor(Color newColor)
@@ -49,9 +57,9 @@ namespace Netherlands3D.UI.Panels
 
         private void OnHexValueChanged(ChangeEvent<string> evt)
         {
-            if(!hexField.hasFocusPseudoState) //don't trigger an infinite loop if the text is updated through the Spectrum or slider changing
+            if (!hexField.hasFocusPseudoState) //don't trigger an infinite loop if the text is updated through the Spectrum or slider changing
                 return;
-            
+
             if (!HexColorUtility.ParseHexColor(hexField.text, out var color)) return;
 
             SetColorInputComponents(color);
@@ -68,7 +76,7 @@ namespace Netherlands3D.UI.Panels
 
         private void SetInputComponentsColorTint(float h, float s, float v)
         {
-            var newColorFullBrightness = ColorUtility.ToHtmlStringRGB(Color.HSVToRGB(h/360, s, 1));
+            var newColorFullBrightness = ColorUtility.ToHtmlStringRGB(Color.HSVToRGB(h / 360, s, 1));
             Debug.Log(newColorFullBrightness);
             brightnessSlider.Color = newColorFullBrightness;
             colorSpectrum.Brightness = v;
@@ -76,9 +84,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnColorInputChanged()
         {
-            Debug.Log(colorSpectrum.Hue + " " + colorSpectrum.Saturation + " " + brightnessSlider.value);
             var newColor = Color.HSVToRGB(colorSpectrum.Hue / 360f, colorSpectrum.Saturation, brightnessSlider.value);
-            Debug.Log(newColor);
             string hex = ColorUtility.ToHtmlStringRGB(newColor);
             hexField.SetText($"#{hex}");
             SetInputComponentsColorTint(colorSpectrum.Hue, colorSpectrum.Saturation, brightnessSlider.value);
@@ -87,7 +93,6 @@ namespace Netherlands3D.UI.Panels
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            
         }
     }
 }
