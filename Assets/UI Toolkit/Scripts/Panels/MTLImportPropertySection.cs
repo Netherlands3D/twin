@@ -15,6 +15,12 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(OBJPropertyData))]
     public partial class MTLImportPropertySection : VisualElement, IVisualizationWithPropertyData
     {
+        private enum ViewState
+        {
+            Import,
+            Error
+        }
+        
         private FileOpen fileOpen;
         
         private ColorPropertyData stylingPropertyData;
@@ -40,7 +46,7 @@ namespace Netherlands3D.UI.Panels
 
             errorPanel.OnHide.AddListener(() => defaultImportPanel.RemoveFromClassList(UtilityClassConstants.HIDDEN));
             
-            DisplayContent(true);
+            SetViewState(ViewState.Import);
             
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
@@ -75,29 +81,24 @@ namespace Netherlands3D.UI.Panels
             SetMtlPathInPropertyData(path);
         }
 
-
         private void SetMtlPathInPropertyData(string fullPath)
         {
             objPropertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
-
-        private void DisplayContent(bool showImportPanel)
+        
+        private void SetViewState(ViewState state)
         {
-            if (showImportPanel)
-            {
-                errorPanel.Hide();
-                defaultImportPanel.RemoveFromClassList(UtilityClassConstants.HIDDEN);
-            }
-            else
-            {
+            if (state == ViewState.Error)
                 errorPanel.Show();
-                defaultImportPanel.AddToClassList(UtilityClassConstants.HIDDEN);
-            }
+            else
+                errorPanel.Hide();
+            
+            defaultImportPanel.EnableInClassList(UtilityClassConstants.HIDDEN, state == ViewState.Error);
         }
 
         private void OnMTLImportCompleted(bool success)
         {
-            DisplayContent(success);
+            SetViewState(success ? ViewState.Import : ViewState.Error);
         }
     }
 }
