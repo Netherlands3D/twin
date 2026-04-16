@@ -91,8 +91,8 @@ namespace Netherlands3D.UI.Components
             Thumb.style.left = SelectorPosition.x;
             Thumb.style.top = SelectorPosition.y;
 
-            var top = new Vector2(center.x, colorSpectrumRadius);
-            var angle = Vector2.Angle(top - center, SelectorPosition - center);
+            var top = new Vector2(0, -colorSpectrumRadius);
+            var angle = Vector2.Angle(top, SelectorPosition - center);
 
             //if the selector is on the left side of the spectrum, the angle calculates the angle on the left side instead of the outer angle needed for the hue value
             if (selectorPosition.x < center.x)

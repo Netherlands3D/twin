@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Netherlands3D.UI.Panels
         private ColorSpectrum colorSpectrum;
         private ColorSlider brightnessSlider;
         private TextField hexField;
+        private ColorTile colorTile;
         
         public UnityEvent<Color> ColorSelected = new();
         
@@ -28,12 +30,21 @@ namespace Netherlands3D.UI.Panels
             colorSpectrum = this.Q<ColorSpectrum>();
             brightnessSlider = this.Q<ColorSlider>();
             hexField = this.Q<TextField>();
+            colorTile = this.Q<ColorTile>();
 
             hexField.RegisterValueChangedCallback(OnHexValueChanged);
             hexField.RegisterCallback<NavigationSubmitEvent>(_ => OnHexValueChanged(null), TrickleDown.TrickleDown);
             
             colorSpectrum.SpectrumChanged.AddListener(OnColorInputChanged);
             brightnessSlider.RegisterValueChangedCallback(_ => OnColorInputChanged());
+            
+            ColorSelected.AddListener(SetColorTileColor);
+        }
+
+        private void SetColorTileColor(Color newColor)
+        {
+            string hex = ColorUtility.ToHtmlStringRGB(newColor);
+            colorTile.Color = hex;
         }
 
         private void OnHexValueChanged(ChangeEvent<string> evt)
@@ -41,38 +52,34 @@ namespace Netherlands3D.UI.Panels
             if(!hexField.hasFocusPseudoState) //don't trigger an infinite loop if the text is updated through the Spectrum or slider changing
                 return;
             
-            var hexString = hexField.text;
-            if (!hexString.StartsWith("#"))
-            {
-                hexString = "#" + hexString;
-            }
+            if (!HexColorUtility.ParseHexColor(hexField.text, out var color)) return;
 
-            if (hexString.Length != 7 && hexString.Length != 9)
-            {
-                Debug.LogWarning("Invalid HEX format. Ensure it is 6 or 8 characters long after '#'.");
-                return;
-            }
-
-            if (!ColorUtility.TryParseHtmlString(hexString, out Color color))
-            {
-                Debug.LogWarning("Failed to parse color from hex code: " + hexString);
-                return;
-            }
-
-            SetColor(color);
+            SetColorInputComponents(color);
         }
 
-        private void SetColor(Color newColor)
+        private void SetColorInputComponents(Color newColor)
         {
             Color.RGBToHSV(newColor, out float h, out float s, out float v);
             colorSpectrum.SetValueWithoutNotify(h * 360f, s);
             brightnessSlider.SetValueWithoutNotify(v);
+            SetInputComponentsColorTint(h, s, v);
             ColorSelected.Invoke(newColor);
+        }
+
+        private void SetInputComponentsColorTint(float h, float s, float v)
+        {
+            var newColorFullBrightness = ColorUtility.ToHtmlStringRGB(Color.HSVToRGB(h, s, 1));
+            Debug.Log(newColorFullBrightness);
+            brightnessSlider.Color = newColorFullBrightness;
+            
+            // colorSpectrum.tint
         }
 
         private void OnColorInputChanged()
         {
+            Debug.Log(colorSpectrum.Hue + " " + colorSpectrum.Saturation + " " + brightnessSlider.value);
             var newColor = Color.HSVToRGB(colorSpectrum.Hue / 360f, colorSpectrum.Saturation, brightnessSlider.value);
+            Debug.Log(newColor);
             string hex = ColorUtility.ToHtmlStringRGB(newColor);
             hexField.SetText($"#{hex}");
             ColorSelected.Invoke(newColor);

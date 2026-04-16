@@ -117,7 +117,7 @@ namespace Netherlands3D.UI.Components
             if (overlayLayer == null)
                 return;
 
-            if (ColorUtility.TryParseHtmlString(colorHex, out var parsedColor))
+            if (HexColorUtility.ParseHexColor(colorHex, out var parsedColor))
             {
                 overlayLayer.style.unityBackgroundImageTintColor = parsedColor;
             }

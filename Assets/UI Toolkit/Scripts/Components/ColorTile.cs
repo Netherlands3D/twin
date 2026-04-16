@@ -1,3 +1,4 @@
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -75,7 +76,7 @@ namespace Netherlands3D.UI.Components
             if (Fill == null)
                 return;
 
-            if (ColorUtility.TryParseHtmlString(colorHex, out var parsedColor))
+            if (HexColorUtility.ParseHexColor(colorHex, out var parsedColor))
             {
                 Fill.style.backgroundColor = parsedColor;
             }
