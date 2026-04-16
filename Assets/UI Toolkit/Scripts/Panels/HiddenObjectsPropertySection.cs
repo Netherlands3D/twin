@@ -100,7 +100,7 @@ namespace Netherlands3D.UI.Panels
 
         private void CreateItems()
         {
-            layerContent.ClearAllChildren();
+           
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
@@ -120,14 +120,14 @@ namespace Netherlands3D.UI.Panels
                 if (obj.ObjectId == objectID)
                     return;
 
-            GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);            
-            HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
-            item.SetObjectId(objectID);
-            //because all ui elements will be destroyed on close an anonymous listener is fine here  
-            item.ToggleVisibility.AddListener(isOn => OnClickToggle(objectID));
-            item.ToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(objectID, visible));
-            item.OnSelectItem.AddListener(OnClickItem);
-            Items.Add(item);
+            // GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);            
+            // HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
+            // item.SetObjectId(objectID);
+            // //because all ui elements will be destroyed on close an anonymous listener is fine here  
+            // item.ToggleVisibility.AddListener(isOn => OnClickToggle(objectID));
+            // item.ToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(objectID, visible));
+            // item.OnSelectItem.AddListener(OnClickItem);
+            // Items.Add(item);
         }
 
         private void UpdateVisibility()
@@ -193,11 +193,11 @@ namespace Netherlands3D.UI.Panels
         {        
             //select layer
             UpdateSelectedButtonIndex(objectId);
-            MultiSelectionUtility.ProcessLayerSelection(this, anythingSelected => 
-            { 
-                if(anythingSelected)
-                    HiddenFeatureSelected(objectId);
-            });
+            // MultiSelectionUtility.ProcessLayerSelection(this, anythingSelected => 
+            // { 
+            //     if(anythingSelected)
+            //         HiddenFeatureSelected(objectId);
+            // });
         }
 
         private void OnClickToggle(string objectId)
