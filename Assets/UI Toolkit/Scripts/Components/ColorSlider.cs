@@ -69,6 +69,13 @@ namespace Netherlands3D.UI.Components
                 UpdateBackgroundStyle();
                 ApplyOverlayTint();
             });
+
+            this.RegisterValueChangedCallback(UpdateShadowPosition);
+        }
+
+        private void UpdateShadowPosition(ChangeEvent<float> evt)
+        {
+            draggerShadow.style.translate = dragger.resolvedStyle.translate;
         }
 
         private void BuildTrackerLayers()
