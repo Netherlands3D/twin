@@ -1,0 +1,7 @@
+.inactive{
+    display: none;
+}
+
+.polygon-mask-property-section__message-text{
+    white-space: pre-wrap;
+}

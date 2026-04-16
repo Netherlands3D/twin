@@ -1,0 +1,15 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="MaskingPanel" 
+    class="masking-panel"
+>
+    <nl3d:Header icon="LayerMask" text="Uitsnijden lagen"/>
+    <ui:Label name="Description" text="Kies hieronder welke lagen zichtbaar zijn binnen het tekengebied. Verborgen lagen worden niet meegenomen in de uitsnede." class="masking-panel__message-text"/>
+    <ui:VisualElement name="Content" class="masking-panel__body">
+        <nl3d:ListView name="ItemListView" class="masking-panel__list-view"/>
+    </ui:VisualElement>
+</ui:UXML>
