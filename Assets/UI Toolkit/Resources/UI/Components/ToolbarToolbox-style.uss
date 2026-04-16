@@ -1,15 +1,14 @@
 .toolbar-toolbox {
-    margin-left: 0px;
-    margin-top: 0px;
-    flex-shrink: 0;
-    flex-grow: 1;
+    margin-left: 0;
+    margin-top: 0;
+    flex: 0 1 auto;
+    align-items: center;
 }
 
-.unity-button-group {    
+.toolbar-toolbox__group.unity-button-group {    
     flex-direction: row;
-    justify-content: center;
-    align-self: stretch;
-    align-content: flex-start;
+    /*justify-content: center;*/
+    /*align-content: flex-start;*/
     height: 44px;
     min-height: 44px;
     max-height: 52px;
