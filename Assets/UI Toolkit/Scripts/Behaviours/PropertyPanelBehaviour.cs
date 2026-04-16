@@ -88,17 +88,19 @@ namespace Netherlands3D.UI.Panels
         private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
         {
             var type = property.GetType();
-            if (PropertySectionRegistry.TypeRegistry.ContainsKey(type))
+            var hasPanels = PropertySectionRegistry.TypeRegistry.ContainsKey(type);
+            if (hasPanels)
             {
-                var panelType = PropertySectionRegistry.TypeRegistry[type];
-
-                var propertySection = (VisualElement)Activator.CreateInstance(panelType);
-                propertySectionContainer.Add(propertySection);
-                ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
-                return true;
+                var panelTypes = PropertySectionRegistry.TypeRegistry[type];
+                foreach (var panelType in panelTypes)
+                {
+                    var propertySection = (VisualElement)Activator.CreateInstance(panelType);
+                    propertySectionContainer.Add(propertySection);
+                    ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
+                }
             }
 
-            return false;
+            return hasPanels;
         }
     }
 }
