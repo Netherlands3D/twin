@@ -3,19 +3,31 @@ using System.Collections.Generic;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using UnityEngine;
+using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
+namespace Netherlands3D.UI.Panels
 {
+    [UxmlElement]
     [PropertySection(typeof(CredentialsRequiredPropertyData))]
-    public class CredentialsValidationPropertySection : MonoBehaviour, ICredentialsPropertySection, IVisualizationWithPropertyData
+    public partial class CredentialsValidationPropertySection : VisualElement, ICredentialsPropertySection, IVisualizationWithPropertyData
     {
+        private CredentialPanel credentialPanel;
+        private CredentialPanel CredentialPanel => credentialPanel ??= this.Q<CredentialPanel>();  
+        
         private ICredentialHandler handler;
-
-        [SerializeField] private GameObject statusPanel;
-        [SerializeField] private GameObject validCredentialsPanel;
-        [SerializeField] private GameObject invalidCredentialsPanel;
+        
+        public CredentialsValidationPropertySection()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");    
+            
+            CredentialPanel.SetEnabled(true);
+        }
+            
+      
 
         public ICredentialHandler Handler
         {
