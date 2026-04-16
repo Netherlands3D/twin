@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Credentials;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEditor;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using TextField = Netherlands3D.UI.Components.TextField;
@@ -20,6 +20,8 @@ namespace Netherlands3D.UI.Panels
         private Button WarningButton => warningButton ??= this.Q<Button>("WarningButton");
         private Button credentialButton;
         private Button CredentialButton => credentialButton ??= this.Q<Button>("CredentialButton");
+        private Button acceptedButton;
+        private Button AcceptedButton => acceptedButton ??= this.Q<Button>("AcceptedButton");
 
         private TextField codeField;
         public TextField CodeField => codeField ??= this.Q<TextField>("CodeField");
@@ -35,6 +37,7 @@ namespace Netherlands3D.UI.Panels
 
         private ContentContainer warningContent;
         private ContentContainer credentialContent;
+        private ContentContainer acceptedContent;
 
         private ErrorPanel errorPanel;
         private ErrorPanel ErrorPanel => errorPanel ??= this.Q<ErrorPanel>();
@@ -43,7 +46,8 @@ namespace Netherlands3D.UI.Panels
         {
             Warning,
             Key,
-            UsernameAndPassword
+            UsernameAndPassword,
+            Accepted
         }
 
         private readonly Dictionary<int, (ContentState state, IconImage icon)> dropDownValues = new()
@@ -59,11 +63,13 @@ namespace Netherlands3D.UI.Panels
 
             warningContent = this.Q<ContentContainer>("WarningContent");
             credentialContent = this.Q<ContentContainer>("CredentialContent");
+            acceptedContent = this.Q<ContentContainer>("AcceptedContent");
 
             InitializeDropdown();
 
             SetContentState(ContentState.Warning);
             WarningButton.clicked += () => { SetContentState(ContentState.Key); };
+            AcceptedButton.clicked += () => { SetContentState(ContentState.Key); };
             CredentialButton.clicked += OnConfirm;
             CodeField.RegisterCallback<NavigationSubmitEvent>(evt => OnConfirm(), TrickleDown.TrickleDown);
         }
@@ -79,8 +85,6 @@ namespace Netherlands3D.UI.Panels
             handler.UserName = UserNameField.value;
             handler.PasswordOrKeyOrTokenOrCode = CodeField.value;
             handler.ApplyCredentials();
-            ResetState();
-            SetEnabled(false);
         }
 
         private void InitializeDropdown()
@@ -109,7 +113,8 @@ namespace Netherlands3D.UI.Panels
                 credentialContent.SetDropdownValue(index);
 
             warningContent.SetEnabled(state == ContentState.Warning);
-            credentialContent.SetEnabled(state != ContentState.Warning);
+            credentialContent.SetEnabled(state == ContentState.Key | state == ContentState.UsernameAndPassword);
+            acceptedContent.SetEnabled(state == ContentState.Accepted);
             switch (state)
             {
                 case ContentState.Key:
@@ -124,5 +129,12 @@ namespace Netherlands3D.UI.Panels
         }
 
         public void ResetState() => SetContentState(ContentState.Warning);
+        
+        public void SetAcceptedState() => SetContentState(ContentState.Accepted);
+        
+        public void Show(bool show)
+        {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+        }
     }
 }

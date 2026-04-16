@@ -12,21 +12,28 @@ namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     [PropertySection(typeof(CredentialsRequiredPropertyData))]
-    public partial class CredentialsValidationPropertySection : VisualElement, IVisualizationWithPropertyData
+    public partial class CredentialsPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private CredentialPanel credentialPanel;
         private CredentialPanel CredentialPanel => credentialPanel ??= this.Q<CredentialPanel>();  
         
         private ICredentialHandler handler;
         
-        public CredentialsValidationPropertySection()
+        public CredentialsPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");   
             
-            CredentialPanel.SetEnabled(true);
+            CredentialPanel.Show(true);
             
-            handler = new CredentialPropertyHandler();
+            Handler = new CredentialPropertyHandler();
+            CredentialPanel.handler = handler;
+            
+            RegisterCallback<DetachFromPanelEvent>(evt =>
+            {
+                CredentialPropertyHandler propertyHandler = Handler as CredentialPropertyHandler;
+                propertyHandler.Destroy();
+            });
         }
 
         public ICredentialHandler Handler
@@ -35,8 +42,10 @@ namespace Netherlands3D.UI.Panels
             set
             {
                 handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
+                handler?.OnAuthorizationUnchanged.RemoveListener(OnCredentialsHandled);
                 handler = value;
                 handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
+                handler.OnAuthorizationUnchanged.AddListener(OnCredentialsHandled);
             }
         }
       
@@ -45,11 +54,11 @@ namespace Netherlands3D.UI.Panels
         {
             var accepted = auth != null && auth is not FailedOrUnsupported;
             
-            // if (accepted)//we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
-            //     statusPanel.SetActive(true);
-            //
-            // validCredentialsPanel.SetActive(accepted);
-            // invalidCredentialsPanel.SetActive(!accepted);
+            //we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
+            if (accepted)
+                CredentialPanel.SetAcceptedState();
+            else
+                CredentialPanel.ResetState();
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -57,12 +66,5 @@ namespace Netherlands3D.UI.Panels
             Handler.Uri = properties.Get<LayerURLPropertyData>().Url;
             Handler.ApplyCredentials();
         }
-        
-        // public void ResetStatusPanel(bool validCredentials)
-        // {
-        //     statusPanel.SetActive(true);
-        //     validCredentialsPanel.SetActive(validCredentials);
-        //     invalidCredentialsPanel.SetActive(!validCredentials);
-        // }
     }
 }
