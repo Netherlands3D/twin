@@ -1,0 +1,11 @@
+.polygon-property-section__shape-type-section:disabled{
+    display: none;
+}
+
+.polygon-property-section__message-text{
+    white-space: pre-wrap;
+}
+
+.polygon-property-section__button{
+    align-self: flex-start;
+}

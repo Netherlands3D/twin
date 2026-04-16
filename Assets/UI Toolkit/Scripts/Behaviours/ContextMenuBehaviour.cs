@@ -57,6 +57,7 @@ namespace Netherlands3D.UI.Panels
             selectedBehaviour?.Dispose();
             floatingPanel.Remove(content);
             content = null;
+            floatingPanel.SetEnabled(false);
         }
 
         private void OnRightClick(InputAction.CallbackContext ctx)
@@ -142,6 +143,7 @@ namespace Netherlands3D.UI.Panels
                 selectedBehaviour = panelBehaviour;
                 var data = panelBehaviour.GetData();
                 content = panelBehaviour.SpawnFloatingPanelContent(floatingPanel, data);
+                floatingPanel.SetEnabled(true);
                 floatingPanel.Add(content);
                 floatingPanel.SetPosition(screenPos);
                 break;

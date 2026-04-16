@@ -12,13 +12,14 @@ namespace Netherlands3D.UI.Panels
         protected VisualElement content;
         
         public abstract bool ShouldBeActive();
-        public abstract Dictionary<string, object> GetData();
+        public abstract object GetData();
 
-        public virtual VisualElement SpawnFloatingPanelContent(FloatingPanel panel, Dictionary<string, object> data = null)
+        public virtual VisualElement SpawnFloatingPanelContent(FloatingPanel panel, params object[] constructorArgs)
         {
             floatingPanel = panel;
             return content;
         }
+
 
         public virtual void Dispose()
         {
