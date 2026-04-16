@@ -74,12 +74,14 @@ namespace Netherlands3D.UI.Panels
             {
                 if (PropertySectionRegistry.TypeRegistry.ContainsKey(interfaceType))
                 {
-                    var panelType = PropertySectionRegistry.TypeRegistry[interfaceType];
-
-                    var propertySection = (VisualElement)Activator.CreateInstance(panelType);
-                    propertySectionContainer.Add(propertySection);
-                    ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
-                    hasPanel = true;
+                    var panelTypes = PropertySectionRegistry.TypeRegistry[interfaceType];
+                    foreach (var panelType in panelTypes)
+                    {
+                        var propertySection = (VisualElement)Activator.CreateInstance(panelType);
+                        propertySectionContainer.Add(propertySection);
+                        ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
+                        hasPanel = true;
+                    }
                 }
             }
             return hasPanel;
