@@ -59,11 +59,6 @@ namespace Netherlands3D.UI.Components
             });
         }
 
-        // TODO: Sync selection state with the MainToolbar.
-        // - When the menu closes: deselect any HamburgerMenu buttons.
-        // - When a MainToolbar button is selected: collapse the HamburgerMenu and clear its selection.
-        // Goal: HamburgerMenu should behave as if its hamburger toggle is part of the MainToolbar�s selection model.
-
         private void OnFoldoutValueChanged(ChangeEvent<bool> evt)
         {
             if (evt.target != this) return;

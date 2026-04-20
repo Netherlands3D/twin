@@ -22,7 +22,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         public UnityEvent OnOpenSettings = new();
         public UnityEvent OnHelp = new();
 
-        private void Awake()
+        private void Start()
         {
             HamburgerMenu.OpenProjectButton.RegisterCallback<ClickEvent>(OnOpenProjectAction);
             HamburgerMenu.SaveProjectButton.RegisterCallback<ClickEvent>(OnSaveProjectAction);
