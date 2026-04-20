@@ -61,7 +61,7 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
-            ToolbarMain.AddButton.clicked += ToggleImportAssetPanel;
+            ToolbarMain.OnAddClicked += ToggleImportAssetPanel;
         }
 
         private void OnDisable()
@@ -72,7 +72,7 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
             ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
             
-            ToolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
+            ToolbarMain.OnAddClicked -= ToggleImportAssetPanel;
         }
 
         public void Open()

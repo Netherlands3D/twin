@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,12 +9,31 @@ namespace Netherlands3D.UI.Components
     public partial class ToolbarMain : VisualElement
     {
         public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
-        public Button LayerButton => this.Q<Button>("Layer");
-        public Button LibraryButton => this.Q<Button>("Library");
-        public Button AddButton => this.Q<Button>("Add");
-        public Button SearchButton => this.Q<Button>("Search");
-        public Button SunPositionButton => this.Q<Button>("SunPosition");
-        public Button DownloadTileButton => this.Q<Button>("DownloadTile");
+
+        private Button layerButton;
+        private Button LayerButton => layerButton ??= this.Q<Button>("Layer");
+
+        private Button libraryButton;
+        private Button LibraryButton => libraryButton ??= this.Q<Button>("Library");
+
+        private Button addButton;
+        private Button AddButton => addButton ??= this.Q<Button>("Add");
+
+        private Button searchButton;
+        private Button SearchButton => searchButton ??= this.Q<Button>("Search");
+
+        private Button sunPositionButton;
+        private Button SunPositionButton => sunPositionButton ??= this.Q<Button>("SunPosition");
+
+        private Button downloadTileButton;
+        private Button DownloadTileButton => downloadTileButton ??= this.Q<Button>("DownloadTile");
+
+        public event Action OnLayerClicked;
+        public event Action OnLibraryClicked;
+        public event Action OnAddClicked;
+        public event Action OnSearchClicked;
+        public event Action OnSunPositionClicked;
+        public event Action OnDownloadTileClicked;
 
         private VisualElement divider;
         public VisualElement Divider => divider ??= this.Q<VisualElement>("Divider");
@@ -22,17 +42,37 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            // TODO: Register events
 
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                // Defaults: single selection, empty selection allowed
-                Group.allowEmptySelection = true;
-                Group.isMultipleSelection = false;
-                
-                ClearWithoutNotify();
-            });
+            RegisterButtonCallbacks();
+
+            RegisterCallback<AttachToPanelEvent>(NotifyAttachedToPanel);
         }
+
+        private void RegisterButtonCallbacks()
+        {
+            LayerButton.clicked += NotifyLayerClicked;
+            LibraryButton.clicked += NotifyLibraryClicked;
+            AddButton.clicked += NotifyAddClicked;
+            SearchButton.clicked += NotifySearchClicked;
+            SunPositionButton.clicked += NotifySunPositionClicked;
+            DownloadTileButton.clicked += NotifyDownloadTileClicked;
+        }
+
+        private void NotifyAttachedToPanel(AttachToPanelEvent _)
+        {
+            // Defaults: single selection, empty selection allowed
+            Group.allowEmptySelection = true;
+            Group.isMultipleSelection = false;
+
+            ClearWithoutNotify();
+        }
+
+        private void NotifyLayerClicked() => OnLayerClicked?.Invoke();
+        private void NotifyLibraryClicked() => OnLibraryClicked?.Invoke();
+        private void NotifyAddClicked() => OnAddClicked?.Invoke();
+        private void NotifySearchClicked() => OnSearchClicked?.Invoke();
+        private void NotifySunPositionClicked() => OnSunPositionClicked?.Invoke();
+        private void NotifyDownloadTileClicked() => OnDownloadTileClicked?.Invoke();
 
         public void ClearWithoutNotify()
         {
