@@ -1,6 +1,7 @@
 ﻿using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -8,6 +9,9 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class HideObjectListViewItem : VisualElement
     {
+        public UnityEvent<bool> OnToggleVisibility = new();
+        
+        
         private Icon icon;
         private Icon Icon => icon ??= this.Q<Icon>("bagicon");
         
@@ -40,6 +44,17 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             Image = IconImage.Object;
+            
+            VisibilityToggle.RegisterValueChangedCallback(OnToggleValueChanged);
+            RegisterCallback<DetachFromPanelEvent>(evt =>
+            {
+                visibilityToggle.UnregisterValueChangedCallback(OnToggleValueChanged);
+            });
+        }
+        
+        private void OnToggleValueChanged(ChangeEvent<bool> evt)
+        {
+            OnToggleVisibility.Invoke(evt.newValue);
         }
 
         public void ShowToggle(bool show)

@@ -137,4 +137,4 @@
 .icon.image-width { --icon-image: var(--icon-width); }
 .icon.image-visibility { --icon-image: var(--icon-visibility); }
 .icon.image-invisible { --icon-image: var(--icon-invisible); }
-.icon.image-visibilitymixed { --icon-image: var(--icon-visibilitymixed); }
+.icon.image-visibility-mixed { --icon-image: var(--icon-visibilitymixed); }

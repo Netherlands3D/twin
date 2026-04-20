@@ -40,6 +40,8 @@ namespace Netherlands3D.UI.Panels
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
         
+        private List<string> objectIds = new();
+        
         public HiddenObjectsPropertySection()
         {
             this.CloneComponentTree("Panels");
@@ -61,14 +63,19 @@ namespace Netherlands3D.UI.Panels
         {
             HideObjectListViewItem item = new HideObjectListViewItem();
             item.ShowToggle(true);
+            item.OnToggleVisibility.AddListener(isOn => OnClickToggle(item.ID));
+            item.OnToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(item.ID, visible));
+            // item.OnSelectItem.AddListener(OnClickItem);
             return item;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
             if (item is not HideObjectListViewItem listViewItem) return;
-            
+           
             string mapping = ListView.itemsSource[index] as string;
+            bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(mapping);
+            listViewItem.SetToggleValue(visibility == true);
             listViewItem.ID = mapping;
         }
 
@@ -78,8 +85,19 @@ namespace Netherlands3D.UI.Panels
             if (stylingPropertyData == null) return;
 
             selectionMaterial = stylingPropertyData.SelectionMaterial;
-            
-            List<string> objectIds = new();
+            UpdateVisibility();
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
+
+            ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
+            //deselect any selected feature in the world when opening the hidden feature panel
+            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector.Deselect();
+        }
+
+        private void UpdateVisibility()
+        {
+           
+            objectIds.Clear();
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
@@ -92,41 +110,7 @@ namespace Netherlands3D.UI.Panels
                 }
             }
             ListView.itemsSource = objectIds;
-            ListView.RefreshItems();
-            
-            UpdateVisibility();
-            stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
-
-            ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
-            //deselect any selected feature in the world when opening the hidden feature panel
-            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
-            selector.Deselect();
-        }
-
-        private void CreateVisibilityItem(string objectID)
-        {
-            // foreach (HiddenObjectsVisibilityItem obj in Items.OfType<HiddenObjectsVisibilityItem>())
-            //     if (obj.ObjectId == objectID)
-            //         return;
-
-            // GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);            
-            // HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
-            // item.SetObjectId(objectID);
-            // //because all ui elements will be destroyed on close an anonymous listener is fine here  
-            // item.ToggleVisibility.AddListener(isOn => OnClickToggle(objectID));
-            // item.ToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(objectID, visible));
-            // item.OnSelectItem.AddListener(OnClickItem);
-            // Items.Add(item);
-        }
-
-        private void UpdateVisibility()
-        {
-            //update the toggles based on visibility attributes in data
-            foreach (HideObjectListViewItem item in listView.itemsSource)
-            {
-                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(item.ID);
-                item.SetToggleValue(visibility == true);
-            }
+            listView.RefreshItems();
         }        
 
         private void ToggleVisibilityForFeature(string objectId, bool visible)
