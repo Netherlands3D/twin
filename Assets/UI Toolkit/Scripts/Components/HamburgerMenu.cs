@@ -54,8 +54,6 @@ namespace Netherlands3D.UI.Components
 
                 UpdateExpandedClass(value);
 
-                ApplyToggleButtonGroupDefaults();
-
                 // Mark last button (for override border radius)
                 schedule.Execute(UpdateLastButtonClass).ExecuteLater(0);
             });
@@ -77,20 +75,6 @@ namespace Netherlands3D.UI.Components
         private void UpdateExpandedClass(bool isExpanded)
         {
             EnableInClassList(ExpandedClassName, isExpanded);
-        }
-
-        private void ApplyToggleButtonGroupDefaults()
-        {
-            // var group = ButtonGroup;
-            // if (group == null) return;
-
-            // Defaults: single selection, empty selection allowed
-            // group.allowEmptySelection = true;
-            // group.isMultipleSelection = false;
-
-            // Clear selection: bitmask 0, length = number of options
-            // int optionCount = group.childCount;
-            // group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, optionCount));
         }
 
         // Move UXML button group to contentContainer inside the foldout
