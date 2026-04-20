@@ -1,4 +1,5 @@
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.UI_Toolkit;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,8 +9,8 @@ namespace Netherlands3D
     public class AppRootBehaviour : MonoBehaviour
     {
         private UIDocument appDocument;
-        private VisualElement root;
-        private VisualElement Root => root ??= appDocument?.rootVisualElement;
+        private VisualElement appRoot;
+        private VisualElement AppRoot => appRoot ??= appDocument?.rootVisualElement.Q("App");
 
         private void Start()
         {
@@ -18,12 +19,12 @@ namespace Netherlands3D
 
         public void Show()
         {
-            Root.RemoveFromClassList("app--hide");
+            AppRoot.RemoveFromClassList(UtilityClassConstants.HIDDEN);
         }
 
         public void Hide()
         {
-            Root.AddToClassList("app--hide");
+            AppRoot.AddToClassList(UtilityClassConstants.HIDDEN);
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace Netherlands3D
         /// </summary>
         public void EnableFunctionality(Functionality functionality)
         {
-            Root.AddToClassList("app--functionality-" + functionality.Id);
+            AppRoot.AddToClassList("app--functionality-" + functionality.Id);
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace Netherlands3D
         /// </summary>
         public void DisableFunctionality(Functionality functionality)
         {
-            Root.RemoveFromClassList("app--functionality-" + functionality.Id);
+            AppRoot.RemoveFromClassList("app--functionality-" + functionality.Id);
         }
     }
 }

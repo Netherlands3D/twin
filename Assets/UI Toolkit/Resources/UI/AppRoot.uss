@@ -5,6 +5,6 @@
     padding: 4px;
 }
 
-.app--hide {
+.app.hidden {
     display: none;
 }
