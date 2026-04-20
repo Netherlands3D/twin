@@ -35,6 +35,7 @@ namespace Netherlands3D.Credentials
         {
             UserName = "";
             PasswordOrKeyOrTokenOrCode = "";
+            Authorization = null;
         }
 
         private void Awake()

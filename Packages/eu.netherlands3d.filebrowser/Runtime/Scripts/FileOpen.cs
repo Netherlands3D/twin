@@ -10,7 +10,7 @@ using UnityEngine.Events;
 using Netherlands3D.JavascriptConnection;
 #endif
 
-public class FileOpen : MonoBehaviour
+public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no longer rely on the scriptable event after transition to UI Toolkit
 {
     private Button button;
 
@@ -19,7 +19,7 @@ public class FileOpen : MonoBehaviour
     private static extern void BrowseForFile(string inputFieldName);
 
     [Tooltip("Allowed file input selections")] [SerializeField]
-    private string fileExtentions = "csv";
+    private string fileExtentions = "csv"; //todo: when transition to UI toolkit is complete, the serialized extensions should be able to be deleted and passed from the UI component
 
     [Tooltip("Allowed selection multiple files")] [SerializeField]
     private bool multiSelect = false;
@@ -69,10 +69,15 @@ public class FileOpen : MonoBehaviour
     }
 #endif
 
+    public void OpenFile()
+    {
+        OpenFile(fileExtentions);
+    }
+
     /// <summary>
     /// Opens the File browser to pick a file to import
     /// </summary>
-    public void OpenFile()
+    public void OpenFile(string fileExtentions)
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
         BrowseForFile("_" + gameObject.GetInstanceID());
