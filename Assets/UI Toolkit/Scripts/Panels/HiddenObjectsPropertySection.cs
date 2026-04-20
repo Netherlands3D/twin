@@ -16,7 +16,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
-using ListView = UnityEngine.UIElements.ListView;
+using ListView = Netherlands3D.UI.Components.ListView;
 
 namespace Netherlands3D.UI.Panels
 {

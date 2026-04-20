@@ -101,5 +101,6 @@
         Width = 16,
         Visibility = 200,
         Invisible = 201,
+        VisibilityMixed = 202,
     }
 }
