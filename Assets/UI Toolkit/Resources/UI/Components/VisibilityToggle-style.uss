@@ -26,6 +26,7 @@
     border-width: 0;
 }
 
+.visibility-toggle.hidden,
 .visibility-toggle .unity-checkmark,
 .visibility-toggle .unity-toggle__input,
 .visibility-toggle .unity-toggle__checkmark {

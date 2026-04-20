@@ -53,7 +53,9 @@ namespace Netherlands3D.UI.Panels
         
         private VisualElement MakeListViewItem()
         {
-            return new HideObjectListViewItem();
+            HideObjectListViewItem listViewItem = new HideObjectListViewItem();
+            listViewItem.ShowToggle(false);
+            return listViewItem;
         }
         
         private void BindListViewItem(VisualElement item, int index)

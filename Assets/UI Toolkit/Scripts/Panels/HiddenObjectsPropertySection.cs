@@ -57,11 +57,11 @@ namespace Netherlands3D.UI.Panels
             });
         }
         
-        
-        
         private VisualElement MakeListViewItem()
         {
-            return new HideObjectListViewItem();
+            HideObjectListViewItem item = new HideObjectListViewItem();
+            item.ShowToggle(true);
+            return item;
         }
         
         private void BindListViewItem(VisualElement item, int index)
@@ -71,8 +71,6 @@ namespace Netherlands3D.UI.Panels
             string mapping = ListView.itemsSource[index] as string;
             listViewItem.ID = mapping;
         }
-        
-        
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -81,26 +79,7 @@ namespace Netherlands3D.UI.Panels
 
             selectionMaterial = stylingPropertyData.SelectionMaterial;
             
-            CreateItems();
-            UpdateVisibility();
-            stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
-
-            ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
-            //deselect any selected feature in the world when opening the hidden feature panel
-            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
-            selector.Deselect();
-        }
-        
-        public void PopulateBagIds(List<string> mappings)
-        {
-            ListView.itemsSource = mappings;
-            ListView.RefreshItems();
-        }
-        
-
-        private void CreateItems()
-        {
-           
+            List<string> objectIds = new();
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
@@ -109,16 +88,26 @@ namespace Netherlands3D.UI.Panels
                     string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);                    
                     bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
                     if (visibility == false)
-                        CreateVisibilityItem(objectId);
+                        objectIds.Add(objectId);
                 }
             }
+            ListView.itemsSource = objectIds;
+            ListView.RefreshItems();
+            
+            UpdateVisibility();
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
+
+            ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
+            //deselect any selected feature in the world when opening the hidden feature panel
+            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector.Deselect();
         }
 
         private void CreateVisibilityItem(string objectID)
         {
-            foreach (HiddenObjectsVisibilityItem obj in Items.OfType<HiddenObjectsVisibilityItem>())
-                if (obj.ObjectId == objectID)
-                    return;
+            // foreach (HiddenObjectsVisibilityItem obj in Items.OfType<HiddenObjectsVisibilityItem>())
+            //     if (obj.ObjectId == objectID)
+            //         return;
 
             // GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);            
             // HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
@@ -133,10 +122,10 @@ namespace Netherlands3D.UI.Panels
         private void UpdateVisibility()
         {
             //update the toggles based on visibility attributes in data
-            foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
+            foreach (HideObjectListViewItem item in listView.itemsSource)
             {
-                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(item.ObjectId);
-                item.SetToggleState(visibility == true);
+                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(item.ID);
+                item.SetToggleValue(visibility == true);
             }
         }        
 
