@@ -1,0 +1,8 @@
+.hyperlink{
+    align-self: flex-start;
+}
+
+.unity-label.hyperlink__text{
+    color: var(--color-link-text);
+    cursor: link;
+}

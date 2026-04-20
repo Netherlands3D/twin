@@ -30,17 +30,12 @@ namespace Netherlands3D.UI.Components
 
         private void OnAttachToPanelEvent(AttachToPanelEvent _)
         {
-            UpdateDynamicAttributes();
+            UpdatePerspectiveIcon();
         }
 
         private void OnNorthClick(ClickEvent _)
         {
             OrientToNorth?.Invoke();
-        }
-
-        private void OnToggleOrthographicView(ChangeEvent<bool> value)
-        {
-            ToggleOrthographicView?.Invoke(value.newValue);
         }
 
         public void UpdateCompass(float yawInDegrees)
@@ -49,7 +44,12 @@ namespace Netherlands3D.UI.Components
             North.EnableInClassList("toolbar-navigation__compass--north", yawInDegrees is > 359.0f or < 1.0f);
         }
 
-        private void UpdateDynamicAttributes()
+        private void OnToggleOrthographicView(ChangeEvent<bool> value)
+        {
+            ToggleOrthographicView?.Invoke(value.newValue);
+        }
+
+        private void UpdatePerspectiveIcon()
         {
             Perspective.Image = Perspective.value ? IconImage.OrthogonalView : IconImage.PerspectiveView;
         }

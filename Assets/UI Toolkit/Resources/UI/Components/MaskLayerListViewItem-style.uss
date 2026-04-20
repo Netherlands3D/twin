@@ -9,6 +9,6 @@
     background-color: transparent;
 }
 
-.mask-layer-list-view-item__cell {
-    padding-right: var(--spacing-3);
+.mask-layer-list-view-item .mask-layer-list-view-item__cell {
+    margin-right: var(--spacing-3);
 }
