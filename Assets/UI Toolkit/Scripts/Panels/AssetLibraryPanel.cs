@@ -2,11 +2,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D.Catalogs;
+using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -23,16 +25,17 @@ namespace Netherlands3D.UI.Panels
         private ListView ListView => listView ??= this.Q<ListView>();
         private Breadcrumb breadcrumb;
         private Breadcrumb Breadcrumb => breadcrumb ??= this.Q<Breadcrumb>();
-
-        public Action<ICatalogItem> OnOpenCatalogItem;
         
-        public AssetLibraryPanel()
+        public AssetLibraryPanel(){}
+        public AssetLibraryPanel(AssetLibrary.AssetLibrary assetLibrary)
         {
+            this.assetLibrary = assetLibrary;
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
             OnShow += () => EnableInClassList("active", true);
             OnHide += () => EnableInClassList("active", false);
+            OnShow += () => LoadCatalog(assetLibrary.Catalog);
 
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
@@ -74,7 +77,8 @@ namespace Netherlands3D.UI.Panels
                     await OpenFolder(catalog.Title, catalogItemCollection);
                     return;
                 case ICatalogItemCollection collection: await OpenFolder(catalogItem.Title, collection); return;
-                default: OnOpenCatalogItem?.Invoke(catalogItem); break;
+                default: OnOpenCatalogItem(catalogItem); 
+                    break;
             }
         }
 
@@ -121,6 +125,20 @@ namespace Netherlands3D.UI.Panels
             };
             button.Image = icon;
             button.userData = catalogItem;
+        }
+        
+        private void OnOpenCatalogItem(ICatalogItem catalogItem)
+        {
+            switch (catalogItem)
+            {
+                case RecordItem recordItem: assetLibrary.Load(recordItem); return;
+                case DataService dataService: assetLibrary.Trigger(dataService); return;
+                default:
+                    Debug.LogError(
+                        $"Tried to open catalog item with type {catalogItem.GetType().Name}, but this is not a record item"
+                    );
+                    break;
+            }
         }
     }
 }
