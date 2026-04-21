@@ -95,10 +95,15 @@ namespace Netherlands3D.Twin.Layers.Properties
             return $"feature.{visibilityIdentifier}.{VisibilityIdentifier}";
         }
         
-        [JsonConstructor]
         public HiddenObjectsPropertyData(Material selectionMaterial)
         {
             this.selectionMaterial = selectionMaterial;
+        }
+        
+        [JsonConstructor]
+        public HiddenObjectsPropertyData()
+        {
+            
         }
     }
 }

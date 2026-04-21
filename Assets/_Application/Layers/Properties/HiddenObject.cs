@@ -35,6 +35,7 @@ namespace Netherlands3D.Twin.layers.properties
         private void SetupFeatures()
         {
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
+            hiddenObjectsPropertyData.SelectionMaterial = selectionMaterial;
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
