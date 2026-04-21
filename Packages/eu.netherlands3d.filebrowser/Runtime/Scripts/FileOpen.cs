@@ -55,7 +55,7 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
 
         // Each FileOpen gets its own DrawHTMLOverCanvas and HTML input element
         javaScriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
-        javaScriptInput.AlignObjectID(fileInputName, button != null);
+        javaScriptInput.AlignObjectID(fileInputName, false);
     }
 
     private void SetJavaScriptFileExtensions(string fileExtentions)
