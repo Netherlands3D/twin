@@ -28,20 +28,11 @@ namespace Netherlands3D.UI.Panels
     {
         private float cameraDistance = 150f;
         private Material selectionMaterial;
-
         private GameObject selectedGhostObject;
         private UnityAction<IMapping> waitForMappingLoaded;
-        
-        //public int SelectedButtonIndex { get; set; } = -1;
-        //public List<ISelectable> SelectedItems { get; } = new();
-        //public List<ISelectable> Items { get; set; } = new();
-       
-
         private HiddenObjectsPropertyData stylingPropertyData;
-        
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
-        
         private List<string> objectIds = new();
         
         public HiddenObjectsPropertySection()
@@ -55,28 +46,9 @@ namespace Netherlands3D.UI.Panels
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
             
-           
-            
-            // Callback invoked when the user double clicks an item
-            ListView.itemsChosen += (selectedItems) =>
-            {
-                Debug.Log("Items chosen: " + string.Join(", ", selectedItems));
-            };
-
-            // Callback invoked when the user changes the selection inside the ListView
-            ListView.selectedIndicesChanged += (selectedIndices) =>
-            {
-                Debug.Log("Index selected: " + string.Join(", ", selectedIndices));
-
-                // Note: selectedIndices can also be used to get the selected items from the itemsSource directly or
-                //ListView.viewController.GetItemForIndex(index).
-            };
-            
             //when clicked outside the listview, deselect the current selection
             ListView.RegisterCallback<AttachToPanelEvent>(evt =>
             {
-                //InputSystem.onAnyButtonPress.CallOnce(_ => { }); 
-    
                 var pointerAction = new InputAction(binding: "<Pointer>/press");
                 pointerAction.performed += _ =>
                 {
@@ -85,9 +57,11 @@ namespace Netherlands3D.UI.Panels
                         ListView.panel,
                         new Vector2(pos.x, Screen.height - pos.y)
                     );
-        
+
                     if (!ListView.worldBound.Contains(panelPos))
-                        ListView.ClearSelection();
+                    {
+                        Deselect();
+                    }
                 };
                 pointerAction.Enable();
     
@@ -104,14 +78,11 @@ namespace Netherlands3D.UI.Panels
         {
             HideObjectListViewItem item = new HideObjectListViewItem();
             item.ShowToggle(true);
-            //item.OnToggleVisibility.AddListener(isOn => OnClickToggle(item.ID));
             item.OnToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(item.ID, visible));
             item.RegisterCallback<PointerUpEvent>(evt =>
             {
-               // OnClickItem(item.ID);
                HiddenFeatureSelected(item.ID);
             });
-            // item.OnSelectItem.AddListener(OnClickItem);
             return item;
         }
         
@@ -133,18 +104,6 @@ namespace Netherlands3D.UI.Panels
             selectionMaterial = stylingPropertyData.SelectionMaterial;
             
             objectIds.Clear();
-            //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
-            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
-            {
-                if(kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
-                {
-                    string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);                    
-                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
-                    if (visibility == false)
-                        objectIds.Add(objectId);
-                }
-            }
-            
             UpdateVisibility();
             stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
 
@@ -154,10 +113,26 @@ namespace Netherlands3D.UI.Panels
             selector.Deselect();
         }
 
+        private void Deselect()
+        {
+            ListView.ClearSelection();
+            DestroyGhostMesh();
+        }
+
         private void UpdateVisibility()
         {
-           
-            
+            //dont clear the list of id's because we want to keep them during the panels life
+            //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
+            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
+            {
+                if(kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
+                {
+                    string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);                    
+                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
+                    if (visibility == false && !objectIds.Contains(objectId))
+                        objectIds.Add(objectId);
+                }
+            }
             ListView.itemsSource = objectIds;
             listView.RefreshItems();
         }        
@@ -189,75 +164,23 @@ namespace Netherlands3D.UI.Panels
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
         {
+            //toggle the selection of items
             foreach (int i in ListView.selectedIndices.ToList())
             {
                 var id = ListView.itemsSource[i] as string;
                 ToggleVisibilityForFeature(id, visible);
             }
 
+            //is the item not selected but toggled, then also toggle the visibility
             int index = ListView.itemsSource.IndexOf(objectId);
             if (index >= 0 && !ListView.selectedIndices.Contains(index))
                 ToggleVisibilityForFeature(objectId, visible);
             
-            
-            // foreach (HiddenObjectsVisibilityItem item in SelectedItems.OfType<HiddenObjectsVisibilityItem>())
-            // {
-            //     ToggleVisibilityForFeature(item.ObjectId, visible);
-            // }
-
             if (!visible)
                 ShowGhostMesh(objectId);
             else
                 DestroyGhostMesh();
         }
-
-        // private void UpdateSelectedButtonIndex(string objectId)
-        // {
-        //     SelectedButtonIndex = -1;
-        //     foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
-        //         if (item.ObjectId == objectId)
-        //         {
-        //             SelectedButtonIndex = Items.IndexOf(item);
-        //             break;
-        //         }
-        // }
-
-        // private void OnClickItem(string objectId)
-        // {        
-        //     //select layer
-        //     //UpdateSelectedButtonIndex(objectId);
-        //     if(ListView.selectedIndices.ToList().Count > 0)
-        //         HiddenFeatureSelected(objectId);
-        //     
-        //     // MultiSelectionUtility.ProcessLayerSelection(this, anythingSelected => 
-        //     // { 
-        //     //     if(anythingSelected)
-        //     //         HiddenFeatureSelected(objectId);
-        //     // });
-        // }
-        //
-        // private void OnClickToggle(string objectId)
-        // {
-        //     //if there was already a selection of layers,
-        //     //we should only toggle but not process a new selection of layers
-        //     //but if the selected toggle was outside the selection of layers then process a new selection and select that layer
-        //     //UpdateSelectedButtonIndex(objectId);
-        //     if (ListView.selectedIndices.ToList().Count > 1)
-        //     {
-        //         if (!ListView.selectedIndices.Contains(ListView.selectedIndex))
-        //         {
-        //             OnClickItem(objectId);
-        //         }
-        //         return;
-        //     }
-        //     //same item selected do nothing
-        //     if (ListView.selectedIndices.ToList().Count == 1 && ListView.selectedIndices.First() == ListView.selectedIndex)
-        //     {
-        //         return;
-        //     }
-        //     //select the new layer
-        //     OnClickItem(objectId);
-        // }
 
         private void HiddenFeatureSelected(string objectId)
         {
