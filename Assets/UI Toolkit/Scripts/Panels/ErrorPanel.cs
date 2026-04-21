@@ -1,57 +1,52 @@
-using System;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
-using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     public partial class ErrorPanel : VisualElement
     {
-        public Action OnShow;
-        public Action OnHide;
+        private ErrorPanelContent Content;
+        private ContentContainer contentContainer;
         
-        private Button retryButton;
-        public Button RetryButton => retryButton ??= this.Q<Button>("RetryButton");
-
-        private ContentContainer content;
-        private ContentContainer Content => content ??= this.Q<ContentContainer>();
-        
-        private Label errorMessage;
-        private Label ErrorMessage => errorMessage ??= this.Q<Label>("ErrorMessage");
-        
-        [UxmlAttribute("text")]
+        [UxmlAttribute("header-text")]
         public string HeaderText
         {
-            get => Content.HeaderText;
-            set => Content.HeaderText = value;
+            get => contentContainer.HeaderText;
+            set => contentContainer.HeaderText = value;
         }
         
         [UxmlAttribute("message")]
         public string Message
         {
-            get => ErrorMessage.text;
-            set => ErrorMessage.text = value;
+            get => Content.Message;
+            set => Content.Message = value;
         }
 
         public ErrorPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            OnShow += () => EnableInClassList("active", true);
-            OnHide += () => EnableInClassList("active", false);
-            RetryButton.clicked += Hide;
+            Content = this.Q<ErrorPanelContent>();
+            contentContainer = this.Q<ContentContainer>();
+            
+            Content.OnHide.AddListener(Hide);
+            Content.OnShow.AddListener(Show);
         }
 
-        ~ErrorPanel()
+
+        public void Show()
         {
-            RetryButton.clicked -= Hide;
+            RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            Content.RemoveFromClassList(UtilityClassConstants.HIDDEN); //do not call Content.Show() as this would give an infinite loop
         }
 
-        
-        public void Show() => OnShow?.Invoke();
-        public void Hide() => OnHide?.Invoke();
+        public void Hide()
+        {
+            AddToClassList(UtilityClassConstants.HIDDEN);
+            Content.AddToClassList(UtilityClassConstants.HIDDEN); //do not call Content.Show() as this would give an infinite loop
+        }
     }
 }

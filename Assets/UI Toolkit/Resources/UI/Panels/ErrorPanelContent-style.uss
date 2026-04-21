@@ -1,0 +1,37 @@
+.error-panel__retry-button {
+    align-self: flex-end;
+    padding-top: var(--spacing-2);
+    padding-bottom: var(--spacing-2);
+    margin-right: 0;
+}
+
+.error-panel__message-title {
+    flex-grow: 0;
+    flex-shrink: 0;   
+    flex-direction: row;
+}
+
+.error-panel__message-title-text {
+    color: var(--color-warning);
+    -unity-text-align: middle-left;
+    margin-left: var(--spacing-2);
+    padding: 0;
+    white-space: normal;
+}
+
+.error-panel__message {
+    font-size: var(--font-size-base);
+    -unity-font-definition: var(--nl3d-default-font);
+    
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-top: var(--spacing-2_5);
+    margin-bottom: var(--spacing-2_5);
+}
+
+.error-panel__message-text {
+    -unity-text-align: middle-left;
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+}
