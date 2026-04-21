@@ -18,18 +18,19 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     [UsedImplicitly]
     private static extern void BrowseForFile(string inputFieldName);
 
-    [Tooltip("Allowed file input selections")] [SerializeField]
-    private string fileExtentions = "csv"; //todo: when transition to UI toolkit is complete, the serialized extensions should be able to be deleted and passed from the UI component
+    // [Tooltip("Allowed file input selections")] [SerializeField]
+    // private string fileExtentions = "csv"; //todo: when transition to UI toolkit is complete, the serialized extensions should be able to be deleted and passed from the UI component
 
     [Tooltip("Allowed selection multiple files")] [SerializeField]
     private bool multiSelect = false;
 
     public UnityEvent<string> onFilesSelected = new();
 
-// #if !UNITY_EDITOR && UNITY_WEBGL
-    private string fileInputName;
+#if !UNITY_EDITOR && UNITY_WEBGL
+    private string fileInputName = string.Empty;
     private FileInputIndexedDB javaScriptFileInputHandler;
-// #endif
+    private DrawHTMLOverCanvas javaScriptInput;
+#endif
 
     private void Awake()
     {
@@ -39,52 +40,44 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     private void Start()
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
-        // CreateJavaScriptImporter();
+        CreateJavaScriptImporter();
 #else
-        if (button) button.onClick.AddListener(OpenFile);
+        // if (button) button.onClick.AddListener(OpenFile);
 #endif
     }
 
 #if !UNITY_EDITOR && UNITY_WEBGL
     private void CreateJavaScriptImporter()
     {
-        // javaScriptFileInputHandler = FindObjectOfType<FileInputIndexedDB>(true);
+        fileInputName = "_" + gameObject.GetInstanceID();
 
-        if (javaScriptFileInputHandler != null)
-            return;
-        
-        GameObject go = new GameObject("UserFileUploads");
-        javaScriptFileInputHandler = go.AddComponent<FileInputIndexedDB>();
+        var existingHandler = FindObjectOfType<FileInputIndexedDB>(true);
+        if (existingHandler != null)
+        {
+            javaScriptFileInputHandler = existingHandler;
+        }
+        else
+        {
+            GameObject go = new GameObject("UserFileUploads");
+            javaScriptFileInputHandler = go.AddComponent<FileInputIndexedDB>();
+        }
 
-        // Set file input name with generated id to avoid html conflicts
-        fileInputName += "_" + gameObject.GetInstanceID();
-        name = fileInputName;
-
-        DrawHTMLOverCanvas javascriptInput = go.AddComponent<DrawHTMLOverCanvas>();
-        javascriptInput.SetupInput(fileInputName, fileExtentions, multiSelect);
-
-        // if button is null, no visual element is attached and we should prevent the DrawHTMLOverCanvas from actually
-        // drawing something over the whole canvas. We still need the HTML input element though as that triggers the
-        // file upload dialog in `OpenFile()`
-        javascriptInput.AlignObjectID(fileInputName, button != null);
+        // Each FileOpen gets its own DrawHTMLOverCanvas and HTML input element
+        javaScriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
+        javaScriptInput.AlignObjectID(fileInputName, button != null);
     }
 
-    private void DestroyJavaScriptImporter()
+    private void SetJavaScriptFileExtensions(string fileExtentions)
     {
-        if(javaScriptFileInputHandler != null)
-            Destroy(javaScriptFileInputHandler.gameObject);
+        Debug.Log("setting file extensions: " + fileExtentions);
+        javaScriptInput.SetupInput(fileInputName, fileExtentions, multiSelect);
     }
-
-    public void ClickNativeButton()
-    {
-        CreateJavaScriptImporter();
-        javaScriptFileInputHandler.SetCallbackAddress(SendResults);
-    }
+    
 #endif
 
-    public void OpenFile()
+    public void ClickNativeButton() //called in the jslib
     {
-        OpenFile(fileExtentions);
+        Debug.Log("button clicked");
     }
 
     /// <summary>
@@ -93,8 +86,9 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     public void OpenFile(string fileExtentions)
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
-        CreateJavaScriptImporter();
-        BrowseForFile("_" + gameObject.GetInstanceID());
+        javaScriptFileInputHandler.SetCallbackAddress(SendResults);
+        SetJavaScriptFileExtensions(fileExtentions);
+        BrowseForFile(fileInputName);
 #else
         string[] fileExtentionNames = fileExtentions.Split(',');
         ExtensionFilter[] extentionfilters = new ExtensionFilter[1];
@@ -134,8 +128,5 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     {
         Debug.Log("button received: " + filePaths);
         onFilesSelected.Invoke(filePaths);
-#if !UNITY_EDITOR && UNITY_WEBGL
-        DestroyJavaScriptImporter();
-#endif
     }
 }
