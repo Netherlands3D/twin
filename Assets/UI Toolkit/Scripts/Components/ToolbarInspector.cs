@@ -48,8 +48,19 @@ namespace Netherlands3D.UI.Components
             AddToLibrary.RegisterValueChangedCallback(evt => OnAddToLibraryToggled?.Invoke(evt));
             AddLayer.RegisterValueChangedCallback(evt => OnAddLayerToggled?.Invoke(evt));
             
+            OnAddLayerToggled += (b) => AddLayer.SetValueWithoutNotify(b.newValue);
+            OnOpenLibraryToggled += (b) => OpenLibrary.SetValueWithoutNotify(b.newValue);
+            OnAddLayerToggled += (b) => OpenLibrary.SetValueWithoutNotify(false);
+            OnOpenLibraryToggled += (b) => AddLayer.SetValueWithoutNotify(false);
+            
             // Ensure initial style is correctly set
             RegisterCallback<AttachToPanelEvent>(_ => UpdateClassList());
+        }
+
+        public void ToggleButtonsOffWithoutNotify()
+        {
+            OpenLibrary.SetValueWithoutNotify(false);
+            AddLayer.SetValueWithoutNotify(false);
         }
         
         private void UpdateClassList()

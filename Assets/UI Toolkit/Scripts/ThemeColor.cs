@@ -10,5 +10,6 @@
         Blue300 = 5,
         Blue700 = 6,
         Blue900 = 7,
+        Warning = 8
     }
 }

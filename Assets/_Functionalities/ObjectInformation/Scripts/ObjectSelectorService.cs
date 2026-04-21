@@ -3,7 +3,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Tools;
@@ -163,9 +162,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     return true;
             return false;
         }
-        
-        
-        
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
