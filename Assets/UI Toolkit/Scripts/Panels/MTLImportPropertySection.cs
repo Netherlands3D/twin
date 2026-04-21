@@ -53,6 +53,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
+            fileOpen.onFilesSelected.RemoveListener(ImportMtl);
             objPropertyData.MtlImportSuccess.RemoveListener(OnMTLImportCompleted);
         }
 
