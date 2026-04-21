@@ -26,10 +26,10 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
 
     public UnityEvent<string> onFilesSelected = new();
 
-#if !UNITY_EDITOR && UNITY_WEBGL
+// #if !UNITY_EDITOR && UNITY_WEBGL
     private string fileInputName;
     private FileInputIndexedDB javaScriptFileInputHandler;
-#endif
+// #endif
 
     private void Awake()
     {
@@ -39,32 +39,45 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     private void Start()
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
-        javaScriptFileInputHandler = FindObjectOfType<FileInputIndexedDB>(true);
-        if (javaScriptFileInputHandler == null)
-        {
-            GameObject go = new GameObject("UserFileUploads");
-            javaScriptFileInputHandler = go.AddComponent<FileInputIndexedDB>();
-        }
-
-        // Set file input name with generated id to avoid html conflicts
-        fileInputName += "_" + gameObject.GetInstanceID();
-        name = fileInputName;
-
-        DrawHTMLOverCanvas javascriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
-        javascriptInput.SetupInput(fileInputName, fileExtentions, multiSelect);
-
-        // if button is null, no visual element is attached and we should prevent the DrawHTMLOverCanvas from actually
-        // drawing something over the whole canvas. We still need the HTML input element though as that triggers the
-        // file upload dialog in `OpenFile()`
-        javascriptInput.AlignObjectID(fileInputName, button != null);
+        // CreateJavaScriptImporter();
 #else
         if (button) button.onClick.AddListener(OpenFile);
 #endif
     }
 
 #if !UNITY_EDITOR && UNITY_WEBGL
+    private void CreateJavaScriptImporter()
+    {
+        // javaScriptFileInputHandler = FindObjectOfType<FileInputIndexedDB>(true);
+
+        if (javaScriptFileInputHandler != null)
+            return;
+        
+        GameObject go = new GameObject("UserFileUploads");
+        javaScriptFileInputHandler = go.AddComponent<FileInputIndexedDB>();
+
+        // Set file input name with generated id to avoid html conflicts
+        fileInputName += "_" + gameObject.GetInstanceID();
+        name = fileInputName;
+
+        DrawHTMLOverCanvas javascriptInput = go.AddComponent<DrawHTMLOverCanvas>();
+        javascriptInput.SetupInput(fileInputName, fileExtentions, multiSelect);
+
+        // if button is null, no visual element is attached and we should prevent the DrawHTMLOverCanvas from actually
+        // drawing something over the whole canvas. We still need the HTML input element though as that triggers the
+        // file upload dialog in `OpenFile()`
+        javascriptInput.AlignObjectID(fileInputName, button != null);
+    }
+
+    private void DestroyJavaScriptImporter()
+    {
+        if(javaScriptFileInputHandler != null)
+            Destroy(javaScriptFileInputHandler.gameObject);
+    }
+
     public void ClickNativeButton()
     {
+        CreateJavaScriptImporter();
         javaScriptFileInputHandler.SetCallbackAddress(SendResults);
     }
 #endif
@@ -80,12 +93,14 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     public void OpenFile(string fileExtentions)
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
+        CreateJavaScriptImporter();
         BrowseForFile("_" + gameObject.GetInstanceID());
 #else
         string[] fileExtentionNames = fileExtentions.Split(',');
         ExtensionFilter[] extentionfilters = new ExtensionFilter[1];
 
         extentionfilters[0] = new ExtensionFilter(fileExtentionNames[0], fileExtentionNames);
+        Debug.Log(extentionfilters.Length);
 
         string[] filenames = SFB.StandaloneFileBrowser.OpenFilePanel("select file(s)", "", extentionfilters, multiSelect);
         string resultingFiles = "";
@@ -119,5 +134,8 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     {
         Debug.Log("button received: " + filePaths);
         onFilesSelected.Invoke(filePaths);
+#if !UNITY_EDITOR && UNITY_WEBGL
+        DestroyJavaScriptImporter();
+#endif
     }
 }
