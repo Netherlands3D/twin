@@ -35,6 +35,7 @@ namespace Netherlands3D.UI.Panels
         private ListView ListView => listView ??= this.Q<ListView>();
         private List<string> objectIds = new();
         private List<string> toggledObjectIds = new();
+        private bool showSelection = true;
         
         public HiddenObjectsPropertySection()
         {
@@ -91,7 +92,9 @@ namespace Netherlands3D.UI.Panels
         {
             ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
             selector.Deselect();
-
+            
+            if(!showSelection) return;
+            
             foreach (int i in indices)
             {
                 var id = ListView.itemsSource[i] as string;
@@ -164,7 +167,7 @@ namespace Netherlands3D.UI.Panels
                         objectIds.Add(objectId);
                     
                     //select the recently toggled on building so we can actually see what was toggled on
-                    if (visibility == true && toggledObjectIds.Contains(objectId))
+                    if (showSelection && visibility == true && toggledObjectIds.Contains(objectId))
                     {
                         Coordinate coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
                         selector.SelectBagId(objectId, coord);
@@ -203,6 +206,16 @@ namespace Netherlands3D.UI.Panels
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
         {
+            //is the new layer not selected yet and is no modifier pressed, then clear selection and select the new layer
+            int index = ListView.itemsSource.IndexOf(objectId);
+            if (index >= 0 && !ListView.selectedIndices.Contains(index))
+            {
+                if(MultiSelectionUtility.NoModifierKeyPressed())
+                    ClearSelection();
+                
+                ListView.AddToSelection(index);
+            }
+            
             toggledObjectIds.Clear();
             //toggle the selection of items
             foreach (int i in ListView.selectedIndices.ToList())
@@ -211,16 +224,6 @@ namespace Netherlands3D.UI.Panels
                 if(visible)
                     toggledObjectIds.Add(id);
                 ToggleVisibilityForFeature(id, visible);
-            }
-
-            //is the item not selected but toggled, then also toggle the visibility
-            int index = ListView.itemsSource.IndexOf(objectId);
-            bool toggleSingleItem = index >= 0 && !ListView.selectedIndices.Contains(index);
-            if (toggleSingleItem)
-            {
-                if(visible)
-                    toggledObjectIds.Add(objectId);
-                ToggleVisibilityForFeature(objectId, visible);
             }
            
             if (!visible)
