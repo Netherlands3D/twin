@@ -1,3 +1,4 @@
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -54,12 +55,14 @@ namespace Netherlands3D.UI.Components
 
         public void Open()
         {
-            EnableInClassList("active", true);
+            EnableInClassList(UtilityClassConstants.HIDDEN, false);
         }
 
         public void Close()
         {
-            EnableInClassList("active", false);
+            EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
+
+        public bool IsOpen() => !ClassListContains(UtilityClassConstants.HIDDEN);
     }
 }
