@@ -9,4 +9,5 @@
   <!-- Header icons -->
   <nl3d:Icon name="LeadingIcon" class="leading-icon" />
   <nl3d:HelpButton name="HelpButton" class="help-button" />
+  <nl3d:DropDown name="DropDown" class="dropdown"/>
 </ui:UXML>

@@ -32,17 +32,17 @@
     --button-border-color: var(--color-white);
 }
 
-.button > #Icon {
+.button > .icon {
     width: var(--spacing-6);
     height: var(--spacing-6);
 }
-.button.button-type-transparent > #Icon {
+.button.button-type-transparent > .icon {
     --icon-tint-color: var(--color-white);
 }
 
 /* Variants */
 .button.button-style-normal { align-items: center; }
-.button.button-style-normal > #Icon { display: none; }
+.button.button-style-normal > .icon { display: none; }
 .button.button-style-wide { 
     align-self: stretch; 
     flex-grow: 1; 
@@ -64,13 +64,13 @@
 .button.button-style-icon-only > #Label { display: none; }
 
 /* Icon gap (left/right) */
-.button.button-style-with-icon.button-icon-position-left > #Icon {
+.button.button-style-with-icon.button-icon-position-left > .icon {
     margin-right: var(--button-icon-gap);
 }
 .button.button-style-with-icon.button-icon-position-right {
     flex-direction: row-reverse;
 }
-.button.button-style-with-icon.button-icon-position-right > #Icon {
+.button.button-style-with-icon.button-icon-position-right > .icon {
     margin-left: var(--button-icon-gap);
 }
 
@@ -128,7 +128,7 @@
 .button:active .unity-label {
     color: var(--button-active-contrast-color);
 }
-.button:active > #Icon {
+.button:active > .icon {
     -unity-background-image-tint-color: var(--button-active-contrast-color);
 }
 
@@ -161,8 +161,8 @@
     color: var(--button-active-contrast-color);
 }
 
-.button:checked > #Icon {
-    -unity-background-image-tint-color: var(--button-active-contrast-color);
+.button:checked > .icon {
+    --icon-tint-color: var(--button-active-contrast-color);
 }
 
 .button.button-type-transparent:checked {
