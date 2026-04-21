@@ -146,7 +146,7 @@ namespace Netherlands3D.UI.Components
                 }
             }
 
-            this.SetSelectionWithoutNotify(newSelection);
+            SetSelection(newSelection);
             evt.StopPropagation();
         }
     }

@@ -34,6 +34,7 @@ namespace Netherlands3D.UI.Panels
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
         private List<string> objectIds = new();
+        private List<string> toggledObjectIds = new();
         
         public HiddenObjectsPropertySection()
         {
@@ -46,32 +47,61 @@ namespace Netherlands3D.UI.Panels
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
             
-            //when clicked outside the listview, deselect the current selection
+            
             ListView.RegisterCallback<AttachToPanelEvent>(evt =>
             {
-                var pointerAction = new InputAction(binding: "<Pointer>/press");
-                pointerAction.performed += _ =>
-                {
-                    var pos = Pointer.current.position.ReadValue();
-                    var panelPos = RuntimePanelUtils.ScreenToPanel(
-                        ListView.panel,
-                        new Vector2(pos.x, Screen.height - pos.y)
-                    );
-
-                    if (!ListView.worldBound.Contains(panelPos))
-                    {
-                        Deselect();
-                    }
-                };
-                pointerAction.Enable();
-    
-                ListView.RegisterCallback<DetachFromPanelEvent>(_ => pointerAction.Dispose());
+                //when clicked outside the listview, deselect the current selection
+                RegisterOutsidePanelClick();
             });
+            
+            ListView.selectedIndicesChanged += indices =>
+            {
+                //show selection in world when items in panel are selected
+                UpdateSelectionForIndices(indices);
+            };
             
             RegisterCallback<DetachFromPanelEvent>(_ => 
             {
                 OnDestroy();  
             });
+        }
+
+        private void RegisterOutsidePanelClick()
+        {
+            var pointerAction = new InputAction(binding: "<Pointer>/press");
+            pointerAction.performed += _ =>
+            {
+                var pos = Pointer.current.position.ReadValue();
+                var panelPos = RuntimePanelUtils.ScreenToPanel(
+                    ListView.panel,
+                    new Vector2(pos.x, Screen.height - pos.y)
+                );
+                    
+                if (!ListView.worldBound.Contains(panelPos))
+                {
+                    ClearSelection();
+                }
+            };
+            pointerAction.Enable();
+    
+            ListView.RegisterCallback<DetachFromPanelEvent>(_ => pointerAction.Dispose());
+        }
+
+        private void UpdateSelectionForIndices(IEnumerable<int> indices)
+        {
+            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector.Deselect();
+
+            foreach (int i in indices)
+            {
+                var id = ListView.itemsSource[i] as string;
+                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(id);
+                if (visibility == true)
+                {
+                    Coordinate coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(id);
+                    selector.SelectBagId(id, coord);
+                }
+            }
         }
         
         private VisualElement MakeListViewItem()
@@ -82,6 +112,7 @@ namespace Netherlands3D.UI.Panels
             item.RegisterCallback<PointerUpEvent>(evt =>
             {
                HiddenFeatureSelected(item.ID);
+               
             });
             return item;
         }
@@ -106,14 +137,10 @@ namespace Netherlands3D.UI.Panels
             objectIds.Clear();
             UpdateVisibility();
             stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
-
             ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
-            //deselect any selected feature in the world when opening the hidden feature panel
-            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
-            selector.Deselect();
         }
 
-        private void Deselect()
+        private void ClearSelection()
         {
             ListView.ClearSelection();
             DestroyGhostMesh();
@@ -121,6 +148,10 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateVisibility()
         {
+            //deselect any selected feature in the world when opening the hidden feature panel
+            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector.Deselect();
+            
             //dont clear the list of id's because we want to keep them during the panels life
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
@@ -131,8 +162,16 @@ namespace Netherlands3D.UI.Panels
                     bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
                     if (visibility == false && !objectIds.Contains(objectId))
                         objectIds.Add(objectId);
+                    
+                    //select the recently toggled on building so we can actually see what was toggled on
+                    if (visibility == true && toggledObjectIds.Contains(objectId))
+                    {
+                        Coordinate coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
+                        selector.SelectBagId(objectId, coord);
+                    }
                 }
             }
+           
             ListView.itemsSource = objectIds;
             listView.RefreshItems();
         }        
@@ -159,23 +198,31 @@ namespace Netherlands3D.UI.Panels
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                 return;
             }
-            stylingPropertyData.SetVisibilityForSubObjectById(objectId, visible, (Coordinate)coord);            
+            stylingPropertyData.SetVisibilityForSubObjectById(objectId, visible, (Coordinate)coord);
         }
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
         {
+            toggledObjectIds.Clear();
             //toggle the selection of items
             foreach (int i in ListView.selectedIndices.ToList())
             {
                 var id = ListView.itemsSource[i] as string;
+                if(visible)
+                    toggledObjectIds.Add(id);
                 ToggleVisibilityForFeature(id, visible);
             }
 
             //is the item not selected but toggled, then also toggle the visibility
             int index = ListView.itemsSource.IndexOf(objectId);
-            if (index >= 0 && !ListView.selectedIndices.Contains(index))
+            bool toggleSingleItem = index >= 0 && !ListView.selectedIndices.Contains(index);
+            if (toggleSingleItem)
+            {
+                if(visible)
+                    toggledObjectIds.Add(objectId);
                 ToggleVisibilityForFeature(objectId, visible);
-            
+            }
+           
             if (!visible)
                 ShowGhostMesh(objectId);
             else

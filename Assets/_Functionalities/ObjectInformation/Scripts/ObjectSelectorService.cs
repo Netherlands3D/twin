@@ -178,7 +178,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Transform t = clickedObject.transform;
                     foreach (var excluded in excludedUIForDeselection)
                     {
-                        if (t.IsChildOf(excluded))
+                        if (excluded != null && t.IsChildOf(excluded))
                             return;
                     }
 
@@ -268,6 +268,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+        public void SelectBagId(string bagId, Coordinate coordinate)
+        {
+            MeshMapping mapping = subObjectSelector.FindSubObjectAtCoordinate(coordinate, bagId);
+            if(mapping == null) return;
+            
+            SelectBagId(bagId, false);
+            if (!selectedMappings.ContainsKey(bagId))
+                selectedMappings.Add(bagId, mapping);
+            SelectSubObjectWithBagId?.Invoke(mapping, bagId);
+        }
+
         private void ProcessFeatureMappingSelection(FeatureMapping feature)
         {
             LayerData layerData = feature.VisualisationParent.LayerData;
@@ -341,24 +352,24 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return subObjectSelector.FindSubObjectAtPointerPosition();            
         }
 
-        public void SelectBagId(string bagId, bool deselectPrevious = true)
+        private void SelectBagId(string bagId, bool deselectPrevious = true)
         {
             if(deselectPrevious)
                 subObjectSelector.Deselect();
             subObjectSelector.Select(bagId);
         }
         
-        public void DeselectBagId(string bagId)
+        private void DeselectBagId(string bagId)
         {
             subObjectSelector.Deselect(bagId);
         }
 
-        public void SelectFeatureMapping(FeatureMapping feature)
+        private void SelectFeatureMapping(FeatureMapping feature)
         {
             featureSelector.Select(feature);
         }
 
-        public bool IsMappingVisible(IMapping mapping, string bagId)
+        private bool IsMappingVisible(IMapping mapping, string bagId)
         {
             if (mapping is MeshMapping map)
             {
