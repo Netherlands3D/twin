@@ -4,6 +4,10 @@
     align-items: center;
     margin-bottom: var(--spacing-1_25);
     margin-top: var(--spacing-1_25);
+
+    transition-property: background-color;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in;
 }
 
 .hide-object-listview-item > * {
@@ -19,15 +23,7 @@
     background-color: transparent;
 }
 
-.hide-object-listview-item.unity-list-view__item:hover {
-    background-color: transparent;
-}
-
 .hide-object-listview-item.unity-collection-view__item {
-    background-color: transparent;
-}
-
-.hide-object-listview-item.unity-collection-view__item:hover {
     background-color: transparent;
 }
 
@@ -42,6 +38,14 @@
     padding: 0;
 }
 
-.hide-object-listview-item__toggle {
-    margin-right: var(--spacing-3);
+.hide-object-listview-item .hide-object-listview-item__toggle {
+    background-color: transparent;
+}
+
+.hide-object-listview-item:hover{
+    background-color: var(--color-blue-700-hover);
+}
+
+.hide-object-listview-item:checked{
+    background-color: var(--color-selection);
 }

@@ -48,10 +48,25 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");    
             
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            ListView.selectionType = SelectionType.None;
+            ListView.selectionType = SelectionType.Multiple;
             
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
+            
+            // Callback invoked when the user double clicks an item
+            ListView.itemsChosen += (selectedItems) =>
+            {
+                Debug.Log("Items chosen: " + string.Join(", ", selectedItems));
+            };
+
+            // Callback invoked when the user changes the selection inside the ListView
+            ListView.selectedIndicesChanged += (selectedIndices) =>
+            {
+                Debug.Log("Index selected: " + string.Join(", ", selectedIndices));
+
+                // Note: selectedIndices can also be used to get the selected items from the itemsSource directly or
+                // by using listView.viewController.GetItemForIndex(index).
+            };
             
             RegisterCallback<DetachFromPanelEvent>(_ => 
             {
@@ -73,6 +88,7 @@ namespace Netherlands3D.UI.Panels
         {
             if (item is not HideObjectListViewItem listViewItem) return;
            
+            item.userData = index; 
             string mapping = ListView.itemsSource[index] as string;
             bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(mapping);
             listViewItem.SetToggleValue(visibility == true);

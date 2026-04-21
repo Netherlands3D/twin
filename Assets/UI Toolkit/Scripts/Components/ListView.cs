@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -9,6 +10,7 @@ namespace Netherlands3D.UI.Components
     {
         // Keep user bind so we can call it first.
         private Action<VisualElement, int> _userBind;
+        private int _firstSelectedIndex = -1;
 
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
@@ -19,9 +21,14 @@ namespace Netherlands3D.UI.Components
             set
             {
                 _userBind = value;
-                base.bindItem = (ve, i) => _userBind?.Invoke(ve, i);
+                base.bindItem = (ve, i) =>
+                {
+                    _userBind?.Invoke(ve, i);
+                    ve.userData = i;
+                };
             }
         }
+
 
         [UxmlAttribute("fixed-item-height")]
         public float FixedItemHeight
@@ -59,6 +66,8 @@ namespace Netherlands3D.UI.Components
             // Defaults only if user code did not set factories
             if (makeItem == null) makeItem = CreateDefaultItem;
             if (base.bindItem == null) this.bindItem = DefaultBind;
+            
+            RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
         }
 
         /// <summary>
@@ -74,6 +83,71 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void DefaultBind(VisualElement item, int index)
         {
+        }
+        
+        private void OnPointerDown(PointerDownEvent evt)
+        {
+            if (selectionType != SelectionType.Multiple) return;
+
+            var el = evt.target as VisualElement;
+            while (el != null && !el.ClassListContains("unity-list-view__item"))
+                el = el.parent;
+            if (el == null) return;
+
+            var clickedIndex = (int)el.userData;
+
+            if (!evt.shiftKey)
+            {
+                _firstSelectedIndex = clickedIndex;
+                return;
+            }
+
+            var selectedIndices = this.selectedIndices.ToList();
+            if (selectedIndices.Count == 0)
+            {
+                _firstSelectedIndex = clickedIndex;
+                this.SetSelectionWithoutNotify(new[] { clickedIndex });
+                evt.StopPropagation();
+                return;
+            }
+
+            int firstIndex = _firstSelectedIndex;
+            int targetIndex = clickedIndex;
+            int lastSelectedIndex = selectedIndices.Max();
+
+            bool addSelection = !selectedIndices.Contains(targetIndex);
+
+            var newSelection = selectedIndices.ToList();
+
+            if (!addSelection)
+            {
+                if (firstIndex < targetIndex)
+                    for (int i = targetIndex + 1; i <= lastSelectedIndex; i++)
+                        newSelection.Remove(i);
+                else if (firstIndex > targetIndex)
+                    for (int i = selectedIndices.Min(); i < targetIndex; i++)
+                        newSelection.Remove(i);
+                else if (firstIndex == targetIndex)
+                    newSelection.RemoveAll(i => i != targetIndex);
+            }
+            else
+            {
+                if (firstIndex < targetIndex)
+                {
+                    for (int i = firstIndex; i <= targetIndex; i++)
+                        if (!newSelection.Contains(i))
+                            newSelection.Add(i);
+                }
+                else if (firstIndex > targetIndex)
+                {
+                    for (int i = targetIndex; i <= firstIndex; i++)
+                        if (!newSelection.Contains(i))
+                            newSelection.Add(i);
+                }
+            }
+
+            this.SetSelectionWithoutNotify(newSelection);
+            evt.StopPropagation();
         }
     }
 }
