@@ -12,8 +12,6 @@ using Netherlands3D.JavascriptConnection;
 
 public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no longer rely on the scriptable event after transition to UI Toolkit
 {
-    private Button button;
-
     [DllImport("__Internal")]
     [UsedImplicitly]
     private static extern void BrowseForFile(string inputFieldName);
@@ -32,17 +30,10 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     private DrawHTMLOverCanvas javaScriptInput;
 #endif
 
-    private void Awake()
-    {
-        button = GetComponent<Button>();
-    }
-
     private void Start()
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
         CreateJavaScriptImporter();
-#else
-        // if (button) button.onClick.AddListener(OpenFile);
 #endif
     }
 
@@ -69,7 +60,6 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
 
     private void SetJavaScriptFileExtensions(string fileExtentions)
     {
-        Debug.Log("setting file extensions: " + fileExtentions);
         javaScriptInput.SetupInput(fileInputName, fileExtentions, multiSelect);
     }
     
@@ -77,7 +67,6 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
 
     public void ClickNativeButton() //called in the jslib
     {
-        Debug.Log("button clicked");
     }
 
     /// <summary>
@@ -94,7 +83,6 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
         ExtensionFilter[] extentionfilters = new ExtensionFilter[1];
 
         extentionfilters[0] = new ExtensionFilter(fileExtentionNames[0], fileExtentionNames);
-        Debug.Log(extentionfilters.Length);
 
         string[] filenames = SFB.StandaloneFileBrowser.OpenFilePanel("select file(s)", "", extentionfilters, multiSelect);
         string resultingFiles = "";
