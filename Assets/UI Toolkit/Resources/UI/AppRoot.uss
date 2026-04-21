@@ -1,10 +1,5 @@
 ﻿.app {
-    display: flex;
     flex-grow: 1;
     margin: 8px;
     padding: 4px;
-}
-
-.app.hidden {
-    display: none;
 }
