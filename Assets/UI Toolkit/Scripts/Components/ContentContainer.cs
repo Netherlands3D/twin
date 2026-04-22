@@ -1,7 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -23,6 +27,7 @@ namespace Netherlands3D.UI.Components
         // Elements from UXML
         private Icon leadingIcon => this.Q<Icon>("LeadingIcon");
         private HelpButton helpButton => this.Q<HelpButton>("HelpButton");
+        private DropDown dropDown => this.Q<DropDown>("DropDown");
 
         public enum ContainerType
         {
@@ -113,6 +118,47 @@ namespace Netherlands3D.UI.Components
             }
         }
 
+        private bool showDropDown;
+        
+        [UxmlAttribute("show-dropdown")]
+        public bool ShowDropDown
+        {
+            get => showDropDown;
+            set
+            {
+                showDropDown = value;
+                UpdateIcons();
+                ReorderHeaderChildren();
+            }
+        }
+        
+        public int DropDownValue => dropDown.choices.IndexOf(dropDown.value);
+
+        public void SetDropdownValues(List<IconImage> values)
+        {
+            if(values == null || values.Count == 0) return;
+            
+            dropDown.SetValueIcons(values);
+            var choiceStrings = values.Select(value => value.ToString()).ToList();
+            dropDown.choices = choiceStrings;
+            SetDropdownValue(0); 
+        }
+
+        public void SetDropdownValue(int value)
+        {
+            dropDown.SetValue(value);
+        }
+
+        public void AddDropDownListener(UnityAction<int> listener)
+        {
+            dropDown.DropDownValueChanged.AddListener(listener);
+        }
+
+        public void RemoveDropDownListener(UnityAction<int> listener)
+        {
+            dropDown.DropDownValueChanged.RemoveListener(listener);
+        }
+
         private string helpUrl;
         private VisualElement headerDivider;
 
@@ -170,12 +216,14 @@ namespace Netherlands3D.UI.Components
             if (leadingIcon != null && leadingIcon.parent != input) input.Add(leadingIcon);
             if (label != null && label.parent != input) input.Add(label);
             if (helpButton != null && helpButton.parent != input) input.Add(helpButton);
+            if(dropDown != null && dropDown.parent != input) input.Add(dropDown);
             if (check.parent != input) input.Add(check);
 
             int i = 0;
             if (leadingIcon != null) input.Insert(i++, leadingIcon);
             if (label != null) input.Insert(i++, label);
             if (helpButton != null) input.Insert(i++, helpButton);
+            if(dropDown != null) input.Insert(i++, dropDown);
             input.Insert(i, check);
         }
 
@@ -235,6 +283,9 @@ namespace Netherlands3D.UI.Components
 
             if (helpButton != null)
                 helpButton.style.display = showHelpIcon ? DisplayStyle.Flex : DisplayStyle.None;
+            
+            if(dropDown != null)
+                dropDown.style.display = showDropDown ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

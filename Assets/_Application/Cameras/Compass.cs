@@ -1,56 +1,43 @@
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using GG.Extensions;
+using Netherlands3D.CartesianTiles;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Cameras
 {
     public class Compass : MonoBehaviour
     {
-        public RectTransform arrowTransform;
-        public Color NorthColor;
-
         [Header("Input")][SerializeField] private InputActionAsset inputActionAsset;
         private InputAction rotateStartAction;
         private InputAction rotateAction;
         private InputActionMap cameraActionMap;
-        private Action<InputAction.CallbackContext> onUpdateArrow;
         private Sequence animationSequence;
         private Camera cameraComponent;
         private FreeCamera freeCamera;
         private Transform cameraTransform;
-        private Image arrowImage;
-        private Color arrowColor;      
-        private const float northAngleMargin = 1.0f;
         private const float animationDuration = 1.0f;        
 
+        public UnityEvent<float> ChangeDirection = new();
+        
         private void Awake()
         {
             cameraComponent = GetComponent<Camera>();
             freeCamera = cameraComponent.GetComponent<FreeCamera>();
-            arrowImage = arrowTransform.GetComponent<Image>();
             cameraTransform = cameraComponent.transform;            
-            arrowColor = arrowImage.color;
 
             //when user rotates, cancel the animation if active
             cameraActionMap = inputActionAsset.FindActionMap("Camera");
             rotateStartAction = cameraActionMap.FindAction("RotateModifier");
             rotateAction = cameraActionMap.FindAction("Look");
             rotateStartAction.started += CancelAnimation;
-            onUpdateArrow = c => UpdateArrow();
-            rotateAction.started += onUpdateArrow;
+            rotateAction.started += OnUpdateArrow;
         }
 
-        private void UpdateArrow()
+        private void OnUpdateArrow(InputAction.CallbackContext obj)
         {
-            arrowTransform.SetRotationZ(cameraTransform.transform.eulerAngles.y);
-            float angle = cameraComponent.orthographic ? 
-                Vector3.SignedAngle(cameraTransform.up, Vector3.forward, Vector3.up) : 
-                Mathf.Rad2Deg * Mathf.Atan2(cameraTransform.forward.z, cameraTransform.forward.x) - 90;            
-            arrowImage.color = Mathf.Abs(angle) < northAngleMargin ? NorthColor : arrowColor;
+            ChangeDirection.Invoke(cameraTransform.eulerAngles.y);
         }
 
         public void SwitchToNorth()
@@ -71,7 +58,7 @@ namespace Netherlands3D.Twin.Cameras
 
             // Find the tile handlers that are currently active, to disable them at the start of the animation
             // and reactivate them after the animation to prevent glitching from LOD switches
-            var activeTileHandlers = FindObjectsByType<CartesianTiles.TileHandler>(
+            var activeTileHandlers = FindObjectsByType<TileHandler>(
                 FindObjectsInactive.Exclude,
                 FindObjectsSortMode.None
             );
@@ -83,7 +70,7 @@ namespace Netherlands3D.Twin.Cameras
             animationSequence.Play();
         }
 
-        private Sequence CreateAnimationSequence(Quaternion rotateTo, CartesianTiles.TileHandler[] activeTileHandlers)
+        private Sequence CreateAnimationSequence(Quaternion rotateTo, TileHandler[] activeTileHandlers)
         {
             Sequence sequence = DOTween.Sequence(cameraTransform);
             sequence.SetEase(Ease.InOutCubic);
@@ -92,7 +79,7 @@ namespace Netherlands3D.Twin.Cameras
                 freeCamera.LockDragging(true);
                 SetTileHandlersEnabled(activeTileHandlers, false);
             });
-            sequence.Join(cameraTransform.DORotate(rotateTo.eulerAngles, animationDuration).OnUpdate(() => UpdateArrow()));
+            sequence.Join(cameraTransform.DORotate(rotateTo.eulerAngles, animationDuration));
             sequence.AppendCallback(() =>
             {
                 SetTileHandlersEnabled(activeTileHandlers, true);
@@ -114,7 +101,7 @@ namespace Netherlands3D.Twin.Cameras
             cameraTransform.eulerAngles = angles;
         }
 
-        private void SetTileHandlersEnabled(IEnumerable<CartesianTiles.TileHandler> activeTileHandlers, bool enabled)
+        private void SetTileHandlersEnabled(IEnumerable<TileHandler> activeTileHandlers, bool enabled)
         {            
             foreach (var handler in activeTileHandlers)
             {
@@ -125,7 +112,7 @@ namespace Netherlands3D.Twin.Cameras
         private void OnDestroy()
         {
             rotateStartAction.started -= CancelAnimation;
-            rotateAction.started -= onUpdateArrow;
+            rotateAction.started -= OnUpdateArrow;
         }
     }
 }

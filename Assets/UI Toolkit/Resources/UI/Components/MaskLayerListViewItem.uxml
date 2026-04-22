@@ -4,14 +4,8 @@
          noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
          editor-extension-mode="False" >
     <ui:VisualElement class="mask-layer-list-view-item">
-        <ui:VisualElement class="mask-layer-list-view-item__cell">
-            <nl3d:VisibilityToggle name="MaskActiveToggle" toggle-style="IconOnly" icon="Visibility"/>
-        </ui:VisualElement>
-        <ui:VisualElement class="mask-layer-list-view-item__cell">
-            <nl3d:Icon name="LayerTypeIcon"/>
-        </ui:VisualElement>
-        <ui:VisualElement class="mask-layer-list-view-item__cell">
-            <ui:Label name="LayerNameLabel" text="LayerName"/>
-        </ui:VisualElement>
-    </ui:VisualElement>
+            <nl3d:VisibilityToggle name="MaskActiveToggle" toggle-style="IconOnly" icon="Visibility" class="mask-layer-list-view-item__cell"/>
+            <nl3d:Icon name="LayerTypeIcon" class="mask-layer-list-view-item__cell"/>
+            <ui:Label name="LayerNameLabel" text="LayerName" class="mask-layer-list-view-item__cell"/>
+\    </ui:VisualElement>
 </ui:UXML>

@@ -28,11 +28,15 @@ namespace Netherlands3D.UI.Components
                 // Defaults: single selection, empty selection allowed
                 Group.allowEmptySelection = true;
                 Group.isMultipleSelection = false;
-
-                // Clear selection: bitmask 0, length = number of options
-                int optionCount = Group.childCount;
-                Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, optionCount));
+                
+                ClearWithoutNotify();
             });
+        }
+
+        public void ClearWithoutNotify()
+        {
+            // Clear selection: bitmask 0, length = number of options
+            Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, Group.childCount));
         }
     }
 }

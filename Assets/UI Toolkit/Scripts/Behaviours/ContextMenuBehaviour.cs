@@ -27,6 +27,7 @@ namespace Netherlands3D.UI.Panels
             floatingPanel = new FloatingPanel();
             root.Add(floatingPanel);
             floatingPanel.OnClose.AddListener(ClearActivePanel);
+            floatingPanel.SetEnabled(false);
             var map = inputActionAsset.FindActionMap("Camera", true);
             rightClickAction = map.FindAction("RightClick", true);
             leftClickAction = map.FindAction("LeftClick", true);
@@ -57,6 +58,7 @@ namespace Netherlands3D.UI.Panels
             selectedBehaviour?.Dispose();
             floatingPanel.Remove(content);
             content = null;
+            floatingPanel.SetEnabled(false);
         }
 
         private void OnRightClick(InputAction.CallbackContext ctx)
@@ -142,6 +144,7 @@ namespace Netherlands3D.UI.Panels
                 selectedBehaviour = panelBehaviour;
                 var data = panelBehaviour.GetData();
                 content = panelBehaviour.SpawnFloatingPanelContent(floatingPanel, data);
+                floatingPanel.SetEnabled(true);
                 floatingPanel.Add(content);
                 floatingPanel.SetPosition(screenPos);
                 break;
