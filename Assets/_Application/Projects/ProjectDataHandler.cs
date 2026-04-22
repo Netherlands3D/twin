@@ -187,8 +187,7 @@ namespace Netherlands3D.Twin.Projects
 #if UNITY_WEBGL && !UNITY_EDITOR
             var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + url);
-            if(!string.IsNullOrEmpty(url))
-                credentialHandler.Uri = new Uri(url);
+            credentialHandler.Uri = new Uri(url); //url should never be empty and if it is we expect an exception
 
             credentialHandler.ApplyCredentials();
 #else
