@@ -3,7 +3,7 @@
     <Netherlands3D.UI.Components.InspectorPanel style="height: 455px; width: 395px; display: flex;">
         <Netherlands3D.UI.Components.ContentContainer>
             <Netherlands3D.UI.Components.ScrollView>
-                <Netherlands3D.UI.Components.DropDown/>
+                <Netherlands3D.UI.Components.DropDown />
                 <Netherlands3D.UI.Components.ChangePointerStyleElement pointer-style-hover="Pointer">
                     <ui:Label text="Hover over dit element om je cursor te veranderen"/>
                 </Netherlands3D.UI.Components.ChangePointerStyleElement>

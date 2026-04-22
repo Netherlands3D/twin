@@ -10,6 +10,7 @@ namespace Netherlands3D.UI.Components
     {
         private Button North => this.Q<Button>("North");
         private Toggle Perspective => this.Q<Toggle>("Perspective");
+        private VisualElement FPV => this.Q<VisualElement>("FPV");
 
         public event Action OrientToNorth;
         public event Action<bool> ToggleOrthographicView;
@@ -20,9 +21,21 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            RegisterCallback<AttachToPanelEvent>(_ => UpdatePerspectiveIcon());
-            North.RegisterCallback<ClickEvent>(_ => OrientToNorth?.Invoke());
+            FPV.Q<Icon>().AddManipulator(new FirstPersonViewManipulator());
+            
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
+            North.RegisterCallback<ClickEvent>(OnNorthClick);
             Perspective.RegisterValueChangedCallback(OnToggleOrthographicView);
+        }
+
+        private void OnAttachToPanelEvent(AttachToPanelEvent _)
+        {
+            UpdatePerspectiveIcon();
+        }
+
+        private void OnNorthClick(ClickEvent _)
+        {
+            OrientToNorth?.Invoke();
         }
 
         public void UpdateCompass(float yawInDegrees)
