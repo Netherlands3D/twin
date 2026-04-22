@@ -61,7 +61,6 @@ namespace Netherlands3D.UI.Panels
                 return;
 
             if (!HexColorUtility.ParseHexColor(hexField.text, out var color)) return;
-
             SetColorInputComponents(color);
         }
 
@@ -69,7 +68,7 @@ namespace Netherlands3D.UI.Panels
         {
             Color.RGBToHSV(newColor, out float h, out float s, out float v);
             colorSpectrum.SetValueWithoutNotify(h * 360f, s);
-            brightnessSlider.SetValueWithoutNotify(v);
+            brightnessSlider.SetValueWithoutNotify(v * 255f);
             SetInputComponentsColorTint(colorSpectrum.Hue, colorSpectrum.Saturation, brightnessSlider.value / 255f);
             ColorSelected.Invoke(newColor);
         }
@@ -77,7 +76,6 @@ namespace Netherlands3D.UI.Panels
         private void SetInputComponentsColorTint(float h, float s, float v)
         {
             var newColorFullBrightness = ColorUtility.ToHtmlStringRGB(Color.HSVToRGB(h / 360, s, 1));
-            Debug.Log(newColorFullBrightness);
             brightnessSlider.Color = newColorFullBrightness;
             colorSpectrum.Brightness = v;
         }
