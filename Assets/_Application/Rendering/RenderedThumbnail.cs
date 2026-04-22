@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Rendering
 		[SerializeField] private bool orthographic = false;
 		[SerializeField] private float farClipPlaneCamera = 20000;
 		private RenderTexture thumbnailRenderTexture;
-		private static RenderTexture temporaryThumbnailRenderTexture;
+		
 
         /// <summary>
 		/// Render world bounds to thumbnail
@@ -91,52 +91,5 @@ namespace Netherlands3D.Twin.Rendering
         private void OnDestroy() {
             if(thumbnailRenderTexture != null) Destroy(thumbnailRenderTexture);
         }
-        
-        
-        //TODO this should be the only method to use when UIToolkit is done
-        public static RenderTexture RenderThumbnail(Bounds targetBounds, bool orthographic = false, int width = 340, int height = 200)
-		{
-			if(temporaryThumbnailRenderTexture != null) Destroy(temporaryThumbnailRenderTexture);
-
-			float margin = 1.5f;
-			float farClipPlaneCamera = 20000;
-			Vector3 cameraRotation = new Vector3(60, 0, 0);
-    
-            // Create new rendertexture and camera
-            temporaryThumbnailRenderTexture = new RenderTexture(width, height, 24);
-            temporaryThumbnailRenderTexture.Create();
-			var temporaryThumbnailCamera = new GameObject("ThumbnailCamera").AddComponent<Camera>();
-			temporaryThumbnailCamera.orthographic = orthographic;
-			temporaryThumbnailCamera.clearFlags = CameraClearFlags.Color;
-			temporaryThumbnailCamera.backgroundColor = Color.grey;
-			temporaryThumbnailCamera.enabled = false; // Only render on demand
-			temporaryThumbnailCamera.farClipPlane = farClipPlaneCamera;
-			temporaryThumbnailCamera.targetTexture = temporaryThumbnailRenderTexture;
-			temporaryThumbnailCamera.cullingMask = ~((1 << 13) + (1 << 14)); // all layers except PolygonMask, PolygonMaskInverted		
-            
-			// Determine distance to cover bounds with camera
-			var targetBoundsCenter = targetBounds.center;
-			var targetBoundsSize = targetBounds.size;
-			var targetBoundsMaxSize = Mathf.Max(targetBoundsSize.x, targetBoundsSize.y, targetBoundsSize.z);
-
-			// Set camera in right angle; and move backwards to frame the target bounds
-			temporaryThumbnailCamera.transform.position = targetBoundsCenter;
-			temporaryThumbnailCamera.transform.eulerAngles = cameraRotation;
-            temporaryThumbnailCamera.transform.Translate(Vector3.back * targetBoundsMaxSize * margin, Space.Self);
-			temporaryThumbnailCamera.orthographicSize = targetBoundsMaxSize * 0.5f * margin;
-
-			// add universal additional camera data, and set target renderer
-			var additionalCameraData = temporaryThumbnailCamera.gameObject.AddComponent<UniversalAdditionalCameraData>();
-			additionalCameraData.SetRenderer(2);
-
-			// Render to our thumbnail texture
-			temporaryThumbnailCamera.Render();
-            temporaryThumbnailCamera.targetTexture = null;
-
-            // Cleanup
-            Destroy(temporaryThumbnailCamera.gameObject);
-            
-            return temporaryThumbnailRenderTexture;
-		}
     }
 }

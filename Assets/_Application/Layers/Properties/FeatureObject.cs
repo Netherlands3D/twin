@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.layers.properties
     public class FeatureObject : MonoBehaviour, IVisualizationWithPropertyData
     {
         private LayerGameObject visualization;
-        private Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds = new();
+        private Dictionary<string, FeaturePropertyData.FeatureData> featureIds = new();
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -58,7 +58,10 @@ namespace Netherlands3D.Twin.layers.properties
                     Bounds bounds = GetThumbnailBoundingBox(map);
                     BoundingBox bbox = new  BoundingBox(bounds);
                     Dictionary<string, object> properties = map.Feature.Properties as Dictionary<string, object>;
-                    featureIds.Add(kv.Key, (bbox, properties));
+                    FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
+                    data.Properties = properties;
+                    data.BoundingBox = bbox;
+                    featureIds.Add(kv.Key, data);
                 }
             }
             propertyData.FeatureIds = featureIds;

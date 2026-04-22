@@ -12,12 +12,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "Feature")]
     public class FeaturePropertyData : LayerPropertyData
     {
-        [JsonIgnore] private Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds = new();
+        [JsonIgnore] private Dictionary<string, FeatureData> featureIds = new();
         
-        [JsonIgnore] public readonly UnityEvent<Dictionary<string, (BoundingBox, Dictionary<string, object>)>> OnIdsChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Dictionary<string, FeatureData>> OnIdsChanged = new();
 
         [JsonIgnore]
-        public Dictionary<string, (BoundingBox, Dictionary<string, object>)> FeatureIds
+        public Dictionary<string, FeatureData> FeatureIds
         {
             get => featureIds;
             set
@@ -25,6 +25,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
                 featureIds = value;
                 OnIdsChanged.Invoke(featureIds);
             }
+        }
+        
+        public struct FeatureData
+        {
+            public BoundingBox BoundingBox;
+            public Dictionary<string, object> Properties;
         }
     }
 }

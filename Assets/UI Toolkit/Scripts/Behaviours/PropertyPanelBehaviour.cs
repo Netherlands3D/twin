@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
@@ -26,6 +28,15 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
             ClearActivePanel();
+            
+            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            selectorService.OnSelectLayer.AddListener(SpawnPanel);
+        }
+
+        private void OnDestroy()
+        {
+            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            selectorService.OnSelectLayer.RemoveListener(SpawnPanel);
         }
 
         public void ClearActivePanel()

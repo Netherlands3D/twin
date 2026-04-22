@@ -110,12 +110,12 @@ namespace Netherlands3D.UI.Panels
             string key = bagId.Key;
             if (removeFromID.Length > 0) key = key.Replace(removeFromID, "");
 
+            ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
             if (downloadProcess != null)
             {
-                ThumbnailCoroutineRunner.Instance.StopCoroutine(downloadProcess);
+                thumbnailService.StopCoroutine(downloadProcess);
             }
-
-            downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetBagIDData(key, bagId.Value));
+            downloadProcess = thumbnailService.StartCoroutine(GetBagIDData(key, bagId.Value));
         }
 
         private IEnumerator GetBagIDData(string bagID, Coordinate coordinate)
@@ -156,9 +156,11 @@ namespace Netherlands3D.UI.Panels
                 statusValue.text = statusText;
                 yearValue.text = yearText;
 
+                ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
+                
                 //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
                 Bounds currentObjectBounds = new Bounds(coordinate.ToUnity(), Vector3.one * 50.0f);
-                RenderTexture rTex = RenderedThumbnail.RenderThumbnail(currentObjectBounds);
+                RenderTexture rTex = thumbnailService.RenderThumbnail(currentObjectBounds);
                 Texture2D tex = new Texture2D(rTex.width, rTex.height, TextureFormat.RGBA32, false);
 
                 RenderTexture.active = rTex;

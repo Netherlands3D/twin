@@ -28,6 +28,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
         public UnityEvent<LayerData> OnSelectDifferentLayer = new();
+        public UnityEvent<LayerData> OnSelectLayer = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -91,9 +92,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
-
-            SelectFeature.AddListener(EnablePropertyPanelForLastSelectedFeature);
-            SelectSubObjectWithBagId.AddListener(EnablePropertyPanelForLastSelectedFeature);
             
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
@@ -108,9 +106,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
-            
-            SelectFeature.RemoveListener(EnablePropertyPanelForLastSelectedFeature); 
-            SelectSubObjectWithBagId.RemoveListener(EnablePropertyPanelForLastSelectedFeature);
 
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.RemoveListener(Deselect);
@@ -151,20 +146,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
             }
         }
-
-        private void EnablePropertyPanelForLastSelectedFeature(IMapping mapping)
-        {
-            //TODO make toggle be toggled on state when layerpanel is implemented with ui toolkit
-            
-            var propertyPanelBehaviour = FindAnyObjectByType<PropertyPanelBehaviour>();
-            propertyPanelBehaviour.SpawnPanel(lastSelectedMappingLayerData);
-        }
         
-        private void EnablePropertyPanelForLastSelectedFeature(IMapping mapping, string id)
-        {
-            EnablePropertyPanelForLastSelectedFeature(mapping);
-        }
-
         private void Start()
         {
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
@@ -270,6 +252,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 layerData.SelectLayer(true);
                     
             lastSelectedMappingLayerData = layerData;
+            OnSelectLayer.Invoke(layerData);
 
             if (!selectedMappings.ContainsKey(bagId) && previousBagId != bagId)
             {
@@ -292,6 +275,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 layerData.SelectLayer(true);
                     
             lastSelectedMappingLayerData = layerData;
+            OnSelectLayer.Invoke(layerData);
             SelectFeatureMapping(feature);
 
             string key = feature.Id;

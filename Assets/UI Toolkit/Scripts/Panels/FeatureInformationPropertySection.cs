@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -51,7 +52,7 @@ namespace Netherlands3D.UI.Panels
             featurePropertyData = properties.Get<FeaturePropertyData>();
             featurePropertyData.OnIdsChanged.AddListener(OnIdsChanged);
             
-            Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds = featurePropertyData.FeatureIds;
+            Dictionary<string, FeaturePropertyData.FeatureData> featureIds = featurePropertyData.FeatureIds;
             if (featureIds == null || featureIds.Count == 0)
             {
                 Clear();
@@ -60,7 +61,7 @@ namespace Netherlands3D.UI.Panels
             LoadFeatureProperties(featureIds);
         }
 
-        private void OnIdsChanged(Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds)
+        private void OnIdsChanged(Dictionary<string, FeaturePropertyData.FeatureData> featureIds)
         {
             if (featureIds == null || featureIds.Count == 0)
             {
@@ -80,7 +81,7 @@ namespace Netherlands3D.UI.Panels
                 })
                 .ToList();
             PropertysListView.itemsSource = list;
-            //PropertysListView.RefreshItems();
+            
         }
         
         private VisualElement MakeListViewItem()
@@ -99,17 +100,18 @@ namespace Netherlands3D.UI.Panels
             element.Value = kv.Value;
         }
         
-        private void LoadFeatureProperties(Dictionary<string, (BoundingBox, Dictionary<string, object>)> featureIds)
+        private void LoadFeatureProperties(Dictionary<string, FeaturePropertyData.FeatureData> featureIds)
         {
-            foreach (KeyValuePair<string, (BoundingBox, Dictionary<string, object>)> kv in featureIds)
+            foreach (KeyValuePair<string, FeaturePropertyData.FeatureData> kv in featureIds)
             {
-                Dictionary<string, object> featureProperties = kv.Value.Item2;
-                BoundingBox bbox = kv.Value.Item1;
+                Dictionary<string, object> featureProperties = kv.Value.Properties;
+                BoundingBox bbox = kv.Value.BoundingBox;
+                ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
                 if (downloadProcess != null)
                 {
-                    ThumbnailCoroutineRunner.Instance.StopCoroutine(downloadProcess);
+                    thumbnailService.StopCoroutine(downloadProcess);
                 }
-                downloadProcess = ThumbnailCoroutineRunner.Instance.StartCoroutine(GetFeatureThumbnail(bbox));
+                downloadProcess = thumbnailService.StartCoroutine(GetFeatureThumbnail(bbox));
                 PopulateAddresses(featureProperties);
                 break;
             }
@@ -119,9 +121,10 @@ namespace Netherlands3D.UI.Panels
         {
             yield return null;
 
+            ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
             //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
             Bounds currentObjectBounds = bbox.ToUnityBounds();
-            RenderTexture rTex = RenderedThumbnail.RenderThumbnail(currentObjectBounds);
+            RenderTexture rTex = thumbnailService.RenderThumbnail(currentObjectBounds);
             Texture2D tex = new Texture2D(rTex.width, rTex.height, TextureFormat.RGBA32, false);
 
             RenderTexture.active = rTex;
