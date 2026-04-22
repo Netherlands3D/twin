@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GG.Extensions;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
@@ -25,13 +26,13 @@ namespace Netherlands3D.UI.Panels
         {
              ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
              Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
-            return selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
+            return selectedMappings;
         }
 
         public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, params object[] constructorArgs)
         {
             base.SpawnFloatingPanelContent(floatingPanel);
-            content = new HideObjectPanel(constructorArgs[0] as Dictionary<string, object>);
+            content = new HideObjectPanel(constructorArgs[0] as Dictionary<string, IMapping>);
             HideObjectPanel panel = content as HideObjectPanel;
             panel.OnClose.AddListener(CloseFloatingPanel);
             return content;
