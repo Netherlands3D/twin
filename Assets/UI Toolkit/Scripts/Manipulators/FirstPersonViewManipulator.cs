@@ -42,8 +42,6 @@ public class FirstPersonViewManipulator : DragManipulator
 
     private void EnterFPVMode()
     {
-        Debug.Log("rYCASTING");
-
         OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
         Vector2 screenPoint = Pointer.current.position.ReadValue();
         raycaster.GetWorldPointAsync(screenPoint, OnRaycastHit, layers);
