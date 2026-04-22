@@ -14,7 +14,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class CredentialPanel : VisualElement
     {
-        public ICredentialHandler handler { get; set; }
+        public ICredentialHandler Handler { get; set; }
         
         private Button warningButton;
         private Button WarningButton => warningButton ??= this.Q<Button>("WarningButton");
@@ -82,9 +82,9 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
-            handler.UserName = UserNameField.value;
-            handler.PasswordOrKeyOrTokenOrCode = CodeField.value;
-            handler.ApplyCredentials();
+            Handler.UserName = UserNameField.value;
+            Handler.PasswordOrKeyOrTokenOrCode = CodeField.value;
+            Handler.ApplyCredentials();
         }
 
         private void InitializeDropdown()

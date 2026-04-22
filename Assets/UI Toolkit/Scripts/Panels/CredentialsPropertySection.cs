@@ -17,7 +17,6 @@ namespace Netherlands3D.UI.Panels
         private CredentialPanel credentialPanel;
         private CredentialPanel CredentialPanel => credentialPanel ??= this.Q<CredentialPanel>();  
         
-        private ICredentialHandler handler;
         
         public CredentialsPropertySection()
         {
@@ -26,27 +25,17 @@ namespace Netherlands3D.UI.Panels
             
             CredentialPanel.Show(true);
             
-            Handler = new CredentialPropertyHandler();
-            CredentialPanel.handler = handler;
+            credentialPanel.Handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
+            credentialPanel.Handler?.OnAuthorizationUnchanged.RemoveListener(OnCredentialsHandled);
+            credentialPanel.Handler = new CredentialPropertyHandler();
+            credentialPanel.Handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
+            credentialPanel.Handler.OnAuthorizationUnchanged.AddListener(OnCredentialsHandled);
             
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {
-                CredentialPropertyHandler propertyHandler = Handler as CredentialPropertyHandler;
-                propertyHandler.Destroy();
+                CredentialPropertyHandler propertyHandler = credentialPanel.Handler as CredentialPropertyHandler;
+                propertyHandler.Dispose();
             });
-        }
-
-        public ICredentialHandler Handler
-        {
-            get => handler;
-            set
-            {
-                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
-                handler?.OnAuthorizationUnchanged.RemoveListener(OnCredentialsHandled);
-                handler = value;
-                handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
-                handler.OnAuthorizationUnchanged.AddListener(OnCredentialsHandled);
-            }
         }
       
 
@@ -63,8 +52,8 @@ namespace Netherlands3D.UI.Panels
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            Handler.Uri = properties.Get<LayerURLPropertyData>().Url;
-            Handler.ApplyCredentials();
+            credentialPanel.Handler.Uri = properties.Get<LayerURLPropertyData>().Url;
+            credentialPanel.Handler.ApplyCredentials();
         }
     }
 }
