@@ -7,6 +7,7 @@ namespace Netherlands3D
     public class ThumbnailService : MonoBehaviour
     {
 	    private static RenderTexture temporaryThumbnailRenderTexture;
+	    private static Texture2D temporaryThumbnailTexture;
 	    private int width = 340;
 	    private int height = 200;
 
@@ -14,9 +15,10 @@ namespace Netherlands3D
 	    {
 			temporaryThumbnailRenderTexture = new RenderTexture(width, height, 24);
 		    temporaryThumbnailRenderTexture.Create();
+		    temporaryThumbnailTexture = new Texture2D(temporaryThumbnailRenderTexture.width, temporaryThumbnailRenderTexture.height, TextureFormat.RGBA32, false);
 	    }
 
-        public RenderTexture RenderThumbnail(Bounds targetBounds, bool orthographic = false)
+        public Texture2D RenderThumbnail(Bounds targetBounds, bool orthographic = false)
 		{
 			float margin = 1.5f;
 			float farClipPlaneCamera = 20000;
@@ -53,7 +55,12 @@ namespace Netherlands3D
             // Cleanup
             Destroy(temporaryThumbnailCamera.gameObject);
             
-            return temporaryThumbnailRenderTexture;
+            RenderTexture.active = temporaryThumbnailRenderTexture;
+            temporaryThumbnailTexture.ReadPixels(new Rect(0, 0, temporaryThumbnailRenderTexture.width, temporaryThumbnailRenderTexture.height), 0, 0);
+            temporaryThumbnailTexture.Apply();
+            RenderTexture.active = null;
+            
+            return temporaryThumbnailTexture;
 		}
     }
 }

@@ -58,10 +58,5 @@ namespace Netherlands3D.UI.Components
         {
             Application.OpenURL(url);
         }
-        
-        public void Click()
-        {
-            Application.OpenURL(url);
-        }
     }
 }

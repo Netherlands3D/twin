@@ -65,14 +65,8 @@ namespace Netherlands3D.UI.Panels
             buildingPropertyData.OnIdsChanged.AddListener(OnIdsChanged);
             
             Dictionary<string, Coordinate> buildingIds = buildingPropertyData.BuildingIds;
-            if (buildingIds == null || buildingIds.Count == 0)
-            {
-                Clear();
-                return;
-            }
-
-            LoadBagId(buildingIds.FirstOrDefault());
-            thumbnailContainer.schedule.Execute(() => {  });
+            OnIdsChanged(buildingIds);
+            
         }
 
         private void OnIdsChanged(Dictionary<string, Coordinate> buildingIds)
@@ -160,15 +154,9 @@ namespace Netherlands3D.UI.Panels
                 
                 //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
                 Bounds currentObjectBounds = new Bounds(coordinate.ToUnity(), Vector3.one * 50.0f);
-                RenderTexture rTex = thumbnailService.RenderThumbnail(currentObjectBounds);
-                Texture2D tex = new Texture2D(rTex.width, rTex.height, TextureFormat.RGBA32, false);
-
-                RenderTexture.active = rTex;
-                tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
-                tex.Apply();
-                RenderTexture.active = null;
+                Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
                 thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
-                float aspect = (float)rTex.height / rTex.width;
+                float aspect = (float)tex.height / tex.width;
                 float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
                 thumbnailContainer.style.height = newHeight;
             }

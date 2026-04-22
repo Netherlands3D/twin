@@ -53,12 +53,7 @@ namespace Netherlands3D.UI.Panels
             featurePropertyData.OnIdsChanged.AddListener(OnIdsChanged);
             
             Dictionary<string, FeaturePropertyData.FeatureData> featureIds = featurePropertyData.FeatureIds;
-            if (featureIds == null || featureIds.Count == 0)
-            {
-                Clear();
-                return;
-            }
-            LoadFeatureProperties(featureIds);
+            OnIdsChanged(featureIds);
         }
 
         private void OnIdsChanged(Dictionary<string, FeaturePropertyData.FeatureData> featureIds)
@@ -81,7 +76,6 @@ namespace Netherlands3D.UI.Panels
                 })
                 .ToList();
             PropertysListView.itemsSource = list;
-            
         }
         
         private VisualElement MakeListViewItem()
@@ -124,15 +118,9 @@ namespace Netherlands3D.UI.Panels
             ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
             //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
             Bounds currentObjectBounds = bbox.ToUnityBounds();
-            RenderTexture rTex = thumbnailService.RenderThumbnail(currentObjectBounds);
-            Texture2D tex = new Texture2D(rTex.width, rTex.height, TextureFormat.RGBA32, false);
-
-            RenderTexture.active = rTex;
-            tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
-            tex.Apply();
-            RenderTexture.active = null;
+            Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
             thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
-            float aspect = (float)rTex.height / rTex.width;
+            float aspect = (float)tex.height / tex.width;
             float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
             thumbnailContainer.style.height = newHeight;
         }

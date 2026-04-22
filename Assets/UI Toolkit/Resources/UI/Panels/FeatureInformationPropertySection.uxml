@@ -4,7 +4,7 @@
     xmlns:nl3d="Netherlands3D.UI.Components" 
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
     editor-extension-mode="False" 
-    name="BuildingInformationPropertySection"
+    name="FeatureInformationPropertySection"
     >
     
     <nl3d:ContentContainer leading-icon="SelectionPointer" text="Overige informatie">

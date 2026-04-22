@@ -1,4 +1,4 @@
-.object-information__divider{
+.building-information__divider{
     display: flex;
     flex-grow: 1;
     height: var(--spacing-0_5);
@@ -8,20 +8,20 @@
     border-radius: 0.5px;
 }
 
-.object-information-bagid__row {
+.building-information-bagid__row {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     margin-top: var(--spacing-3);
 }
 
-.object-information-bagid__label{
+.building-information-bagid__label{
     -unity-font-definition: var(--nl3d-default-font-semi-bold);
     margin: var(--spacing-3) 0 0 0;
     padding: 0;
 }
 
-.object-information-bagid__link-row {
+.building-information-bagid__link-row {
     flex-direction: row;
     align-items: center;
     border-width: var(--spacing-1);
@@ -30,14 +30,14 @@
     padding: var(--spacing-2);
 }
 
-.object-information-address__list-view{
+.building-information-address__list-view{
     margin-top: var(--spacing-3);
 }
 
-.object-information__container{
+.building-information__container{
     flex-shrink: 0;
 }
 
-.object-information-thumbnail__container{
+.building-information-thumbnail__container{
     flex-shrink: 0;
 }
