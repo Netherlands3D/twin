@@ -113,7 +113,7 @@ namespace Netherlands3D.UI.Panels
                 credentialContent.SetDropdownValue(index);
 
             warningContent.SetEnabled(state == ContentState.Warning);
-            credentialContent.SetEnabled(state == ContentState.Key | state == ContentState.UsernameAndPassword);
+            credentialContent.SetEnabled(state == ContentState.Key || state == ContentState.UsernameAndPassword);
             acceptedContent.SetEnabled(state == ContentState.Accepted);
             switch (state)
             {

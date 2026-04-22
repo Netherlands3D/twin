@@ -24,7 +24,6 @@ namespace Netherlands3D.Credentials
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
         }
 
-        //called in the inspector on button press
         public void ApplyCredentials()
         {
             // try to get credentials from keyVault
