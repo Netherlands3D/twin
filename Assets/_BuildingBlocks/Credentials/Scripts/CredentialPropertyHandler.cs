@@ -1,12 +1,11 @@
 using System;
 using Netherlands3D.Services;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Credentials
 {
     //this is the handler to query the keyvault and return the credentials object to be processed further
-    public class CredentialPropertyHandler : ICredentialHandler
+    public class CredentialPropertyHandler : ICredentialHandler, IDisposable
     {
         public Uri Uri { get; set; }
 
@@ -52,8 +51,8 @@ namespace Netherlands3D.Credentials
             Authorization = auth;
             OnAuthorizationHandled.Invoke(auth.SanitizeUrl(Uri), auth);
         }
-
-        public void Destroy()
+        
+        public void Dispose()
         {
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
