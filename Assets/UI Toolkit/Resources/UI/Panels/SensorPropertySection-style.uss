@@ -1,13 +1,21 @@
-.transform-property-section__row {
+.sensor-property-section__title{
+    -unity-font-definition: var(--nl3d-header-font);
+}
+
+.sensor-property-section__row {
     flex-direction: row;
     align-items: center;
     padding-bottom: var(--spacing-2);
 }
 
-.transform-property-section__row .transform-property-section__item{
+.sensor-property-section__row .unity-label{
+    width: 84px;
+}
+
+.sensor-property-section__row .sensor-property-section__item{
     margin-right: var(--spacing-2);
 }
 
-.transform-property-section__item.transform-property-section__item-last{
+.sensor-property-section__row.sensor-property-section__item-last{
     margin-right: 0;
 }
