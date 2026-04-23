@@ -18,33 +18,58 @@ namespace Netherlands3D.UI.Panels
     public partial class SensorPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private SensorPropertyData propertyData;
-        private Slider axisHeightSlider;
-        private Slider rotorDiameterSlider;
 
-        private XYZField position;
+        private XYZField startDateField;
+        private XYZField endDateField;
         
         public SensorPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");    
             
-            // axisHeightSlider = this.Q<Slider>("Ashoogte");
-            // rotorDiameterSlider = this.Q<Slider>("Rotordiameter");
-            //
-            // axisHeightSlider.RegisterValueChangedCallback(HandleAxisHeightChange);
-            // rotorDiameterSlider.RegisterValueChangedCallback(HandleRotorDiameterChange);
+            startDateField = this.Q<XYZField>("StartdatumField");
+            endDateField = this.Q<XYZField>("EnddatumField");
+            
+            startDateField.xField.InputField.RegisterCallback<BlurEvent>(_ => OnStartDateChanged());
+            startDateField.yField.InputField.RegisterCallback<BlurEvent>(_ => OnStartDateChanged());
+            startDateField.zField.InputField.RegisterCallback<BlurEvent>(_ => OnStartDateChanged());
+            endDateField.xField.InputField.RegisterCallback<BlurEvent>(_ => OnEndDateChanged());
+            endDateField.yField.InputField.RegisterCallback<BlurEvent>(_ => OnEndDateChanged());
+            endDateField.zField.InputField.RegisterCallback<BlurEvent>(_ => OnEndDateChanged());
+            
+            startDateField.xField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => startDateField.xField.Focus(), TrickleDown.TrickleDown);
+            startDateField.yField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => startDateField.yField.Focus(), TrickleDown.TrickleDown);
+            startDateField.zField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => startDateField.zField.Focus(), TrickleDown.TrickleDown);
+            endDateField.xField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => endDateField.xField.Focus(), TrickleDown.TrickleDown);
+            endDateField.yField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => endDateField.yField.Focus(), TrickleDown.TrickleDown);
+            endDateField.zField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => endDateField.zField.Focus(), TrickleDown.TrickleDown);
+        }
+        
+        private void OnStartDateChanged()
+        {
+            var date = GetDateTime(startDateField);
+            propertyData.StartDate = date;
+        }
+        
+        private void OnEndDateChanged()
+        {
+            var date = GetDateTime(endDateField);
+            propertyData.EndDate = date;
         }
 
-
-        // private void HandleAxisHeightChange(ChangeEvent<float> evt)
-        // {
-        //     propertyData.AxisHeight = evt.newValue;
-        // }
-        //
-        // private void HandleRotorDiameterChange(ChangeEvent<float> evt)
-        // {
-        //     propertyData.RotorDiameter = evt.newValue;
-        // }
+        private DateTime GetDateTime(XYZField field)
+        {
+            var x = field.xField.GetValueAsInt();
+            var y = field.yField.GetValueAsInt();
+            var z = field.zField.GetValueAsInt();
+            
+            z = Mathf.Clamp(z, 1, 9999);
+            y = Mathf.Clamp(y, 1, 12);
+            var maxDay = DateTime.DaysInMonth(z, y);
+            x = Mathf.Clamp(x, 1, maxDay);
+            
+            return new DateTime(z, y, x);
+        }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -54,37 +79,32 @@ namespace Netherlands3D.UI.Panels
             propertyData.OnMaxValueChanged.AddListener(UpdateMaximumSlider);
             propertyData.OnMinColorChanged.AddListener(UpdateMinimumColor);
             propertyData.OnMaxColorChanged.AddListener(UpdateMaximumColor);
-            propertyData.OnStartDateChanged.AddListener(UpdateStartDate);
-            propertyData.OnEndDateChanged.AddListener(UpdateEndDate);
+            propertyData.OnStartDateChanged.AddListener(UpdateStartDateField);
+            propertyData.OnEndDateChanged.AddListener(UpdateEndDateField);
             
-            UpdateStartDate(propertyData.StartDate);
-            UpdateEndDate(propertyData.EndDate);
+            UpdateStartDateField(propertyData.StartDate);
+            UpdateEndDateField(propertyData.EndDate);
             UpdateMinimumSlider(propertyData.MinValue);
             UpdateMaximumSlider(propertyData.MaxValue);
             UpdateMinimumColor(propertyData.MinColor);
             UpdateMaximumColor(propertyData.MaxColor);
         }
         
-        private void UpdateStartDate(DateTime startDate)
+        private void UpdateStartDateField(DateTime startDate)
         {
-            // startTimeYearField.text = startDate.Year.ToString();
-            // startTimeMonthField.text = startDate.Month.ToString();
-            // startTimeDayField.text = startDate.Day.ToString();
-            //
-            // startTimeYearInputField.text = startTimeYearField.text;
-            // startTimeMonthInputField.text = startTimeMonthField.text;
-            // startTimeDayInputField.text = startTimeDayField.text;
+            SetDate(startDateField, startDate);
         }
 
-        private void UpdateEndDate(DateTime endDate)
+        private void UpdateEndDateField(DateTime endDate)
         {
-            // endTimeYearField.text = endDate.Year.ToString();
-            // endTimeMonthField.text = endDate.Month.ToString();
-            // endTimeDayField.text = endDate.Day.ToString();
-            //
-            // endTimeYearInputField.text = endTimeYearField.text;
-            // endTimeMonthInputField.text = endTimeMonthField.text;
-            // endTimeDayInputField.text = endTimeDayField.text;
+            SetDate(endDateField, endDate);
+        }
+        
+        private void SetDate(XYZField field, DateTime date)
+        {
+            field.xField.SetValueWithoutNotify(date.Day);
+            field.yField.SetValueWithoutNotify(date.Month);
+            field.zField.SetValueWithoutNotify(date.Year);
         }
         
         private void UpdateMinimumSlider(float value)
@@ -107,5 +127,7 @@ namespace Netherlands3D.UI.Panels
                 // maximumColorPicker.color = color;
         }
 
+        
+        
     }
 }

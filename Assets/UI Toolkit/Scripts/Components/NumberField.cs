@@ -104,7 +104,6 @@ namespace Netherlands3D.UI.Components
             {
                 labelVisible = value;
                 LabelContainer.EnableInClassList(UtilityClassConstants.HIDDEN, !labelVisible);
-                Debug.Log(InputField);
                 InputField.EnableInClassList("no-label", !labelVisible);
             }
         }
@@ -209,6 +208,11 @@ namespace Netherlands3D.UI.Components
             double.TryParse(text, NumberStyles.Float, numberFormat, out var value);
 
             return value;
+        }
+        
+        public int GetValueAsInt()
+        {
+            return (int)GetValueAsDouble();
         }
         
         private static string GetFormatString(int decimals)
