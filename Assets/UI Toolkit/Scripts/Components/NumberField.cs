@@ -105,7 +105,7 @@ namespace Netherlands3D.UI.Components
                 labelVisible = value;
                 LabelContainer.EnableInClassList(UtilityClassConstants.HIDDEN, !labelVisible);
                 Debug.Log(InputField);
-                this.Q<TextField>("InputField").EnableInClassList("test", !labelVisible);
+                InputField.EnableInClassList("no-label", !labelVisible);
             }
         }
 

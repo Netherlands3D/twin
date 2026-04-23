@@ -18,6 +18,6 @@
 }
 
 .color-picker__text-field{
-    min-width: 85px;
-    max-width: 85px;
+    min-width: 84px;
+    max-width: 84px;
 }

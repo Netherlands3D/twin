@@ -50,7 +50,7 @@
     border-bottom-right-radius: var(--spacing-2);
 }
 
-.number-field.test {
+.number-field .textfield.no-label .unity-base-text-field__input {
     border-top-left-radius: var(--spacing-2);
     border-bottom-left-radius: var(--spacing-2);
     border-left-width: var(--spacing-0_5);
@@ -62,6 +62,10 @@
 
 .number-field .textfield TextElement {
     -unity-text-align: middle-right;
+}
+
+.number-field .textfield.no-label TextElement {
+    -unity-text-align: middle-center;
 }
 
 /* Disabled */
