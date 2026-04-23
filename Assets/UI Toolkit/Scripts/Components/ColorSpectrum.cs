@@ -104,9 +104,8 @@ namespace Netherlands3D.UI.Components
             if (Thumb == null)
                 return;
 
-            Thumb.style.left = SelectorPosition.x;
-            Thumb.style.top = SelectorPosition.y;
-
+            SetThumbPosition(SelectorPosition);
+            
             var top = new Vector2(0, -colorSpectrumRadius);
             var angle = Vector2.Angle(top, SelectorPosition - center);
 
@@ -132,8 +131,13 @@ namespace Netherlands3D.UI.Components
                 Mathf.Sin(angle) * distance
             );
 
-            Thumb.style.left = selectorPosition.x;
-            Thumb.style.top = selectorPosition.y;
+            SetThumbPosition(selectorPosition);
+        }
+
+        private void SetThumbPosition(Vector2 position)
+        {
+            Thumb.style.left = position.x;
+            Thumb.style.top = position.y;
         }
 
         private void ApplyOverlayTint()
