@@ -1,5 +1,7 @@
 using System.Globalization;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -29,6 +31,7 @@ namespace Netherlands3D.UI.Components
         private string unitCharacter = string.Empty;
         private string formatString;
         private int decimalCount;
+        private bool labelVisible;
 
         public VisualElement LabelContainer => labelContainer ??= this.Q<VisualElement>("LabelContainer");
         public Label LabelText => labelText ??= this.Q<Label>("LabelText");
@@ -92,7 +95,19 @@ namespace Netherlands3D.UI.Components
                 formatString = GetFormatString(value);
             }
         }
-
+        
+        [UxmlAttribute("label-visible")]
+        public bool LabelVisible
+        {
+            get => labelVisible;
+            set
+            {
+                labelVisible = value;
+                LabelContainer.EnableInClassList(UtilityClassConstants.HIDDEN, !labelVisible);
+                Debug.Log(InputField);
+                this.Q<TextField>("InputField").EnableInClassList("test", !labelVisible);
+            }
+        }
 
         public NumberField()
         {

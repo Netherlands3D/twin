@@ -50,6 +50,12 @@
     border-bottom-right-radius: var(--spacing-2);
 }
 
+.number-field.test {
+    border-top-left-radius: var(--spacing-2);
+    border-bottom-left-radius: var(--spacing-2);
+    border-left-width: var(--spacing-0_5);
+}
+
 .number-field .textfield .unity-base-text-field__input:hover {
     background-color: var(--color-blue-100);
 }

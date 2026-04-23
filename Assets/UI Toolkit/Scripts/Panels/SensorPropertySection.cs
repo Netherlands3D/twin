@@ -22,7 +22,6 @@ namespace Netherlands3D.UI.Panels
         private Slider rotorDiameterSlider;
 
         private XYZField position;
-
         
         public SensorPropertySection()
         {

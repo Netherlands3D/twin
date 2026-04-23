@@ -13,6 +13,7 @@ namespace Netherlands3D.UI.Components
 
         private NumberFieldStyle numberFieldStyle = NumberFieldStyle.Default;
         private int decimalCount = 0;
+        private bool labelsVisible = true;
         
         [UxmlAttribute("number-field-style")]
         public NumberFieldStyle Style
@@ -40,6 +41,20 @@ namespace Netherlands3D.UI.Components
                 zField.DecimalCount = decimalCount;
             }
         }        
+        
+        [UxmlAttribute("labels-visible")]
+        public bool LabelsVisible
+        {
+            get => labelsVisible;
+            set
+            {
+                labelsVisible = value;
+                xField.LabelVisible = value;
+                yField.LabelVisible = value;
+                zField.LabelVisible = value;
+            }
+        }
+        
         public XYZField()
         {            
             this.CloneComponentTree("Components");

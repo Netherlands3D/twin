@@ -3,9 +3,15 @@
         <ui:Label text="Bodemvochtigheid" />
         <ui:VisualElement class="sensor-property-section__row">
             <ui:Label text="Startdatum"/>
-            <nl3d:NumberField />
-            <nl3d:NumberField />
-            <nl3d:NumberField />
+            <nl3d:XYZField labels-visible="false"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="sensor-property-section__row">
+            <ui:Label text="Einddatum"/>
+            <nl3d:XYZField labels-visible="false"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="sensor-property-section__row">
+            <nl3d:Button LabelText="Standaard datums herstellen" />
+<!--            <ui:Label text="Standaard datums herstellen"/>-->
         </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
