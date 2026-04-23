@@ -9,6 +9,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 using Slider = UnityEngine.UIElements.Slider;
 
 namespace Netherlands3D.UI.Panels
@@ -21,6 +22,7 @@ namespace Netherlands3D.UI.Panels
 
         private XYZField startDateField;
         private XYZField endDateField;
+        private Button resetButton;
         
         public SensorPropertySection()
         {
@@ -43,8 +45,16 @@ namespace Netherlands3D.UI.Panels
             endDateField.xField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => endDateField.xField.Focus(), TrickleDown.TrickleDown);
             endDateField.yField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => endDateField.yField.Focus(), TrickleDown.TrickleDown);
             endDateField.zField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => endDateField.zField.Focus(), TrickleDown.TrickleDown);
+            
+            resetButton = this.Q<Button>();
+            resetButton.RegisterCallback<ClickEvent>(OnResetButtonClicked);
         }
-        
+
+        private void OnResetButtonClicked(ClickEvent evt)
+        {
+            propertyData.ResetDateValues();
+        }
+
         private void OnStartDateChanged()
         {
             var date = GetDateTime(startDateField);

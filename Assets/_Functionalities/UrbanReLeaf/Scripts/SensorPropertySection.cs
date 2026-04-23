@@ -104,7 +104,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
 
         private void HandleReset()
         {
-            propertyData.OnResetValues.Invoke();
+            // propertyData.OnResetValues.Invoke();
         }
 
         private void UpdateMinimumSlider(float value)
