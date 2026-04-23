@@ -3,112 +3,49 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
-public class FirstPersonViewManipulator : PointerManipulator
+public class FirstPersonViewManipulator : DragManipulator
 {
-    private Vector3 start;
-    private bool active;
-    private int pointerId;
-    private Vector2 startSize;
-
     private readonly LayerMask layers = LayerMask.GetMask(
-        "Default", 
-        "Terrain", 
+        "Default",
+        "Terrain",
         "Buildings"
     );
 
-    private readonly float movementDeadzone = 32f;
-
-    public FirstPersonViewManipulator()
+    protected override void OnDrag(Vector2 delta)
     {
-        pointerId = -1;
-        activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
-        active = false;
+        base.OnDrag(delta);
+        target.style.top = target.layout.y + delta.y;
+        target.style.left = target.layout.x + delta.x;
     }
 
-    protected override void RegisterCallbacksOnTarget()
+    protected override void OnDragEnded(Vector2 endPosition)
     {
-        target.RegisterCallback<PointerDownEvent>(OnPointerDown);
-        target.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-        target.RegisterCallback<PointerUpEvent>(OnPointerUp);
-    }
-
-    protected override void UnregisterCallbacksFromTarget()
-    {
-        target.UnregisterCallback<PointerDownEvent>(OnPointerDown);
-        target.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
-        target.UnregisterCallback<PointerUpEvent>(OnPointerUp);
-    }
-
-    protected void OnPointerDown(PointerDownEvent e)
-    {
-        if (active)
+        base.OnDragEnded(endPosition);
+        
+        if (!GuardPointerIsMovedOutsideOfDeadZone() && 
+            !Interface.PointerIsOverUI())
         {
-            e.StopImmediatePropagation();
-            return;
+            EnterFPVMode();
         }
 
-        if (!CanStartManipulation(e)) return;
-
-        StartDragging(e);
-        e.StopPropagation();
+        ResetTarget();
     }
 
-    protected void OnPointerMove(PointerMoveEvent e)
-    {
-        if (GuardPointerIsDragging()) return;
-
-        Vector2 diff = e.localPosition - start;
-
-        target.style.top = target.layout.y + diff.y;
-        target.style.left = target.layout.x + diff.x;
-
-        e.StopPropagation();
-    }
-
-    protected void OnPointerUp(PointerUpEvent e)
-    {
-        if (GuardPointerIsDragging() || !CanStopManipulation(e)) return;
-        
-        OnDrop();
-        StopDragging();
-        e.StopPropagation();
-    }
-
-    private void StartDragging(PointerDownEvent e)
-    {
-        start = e.localPosition;
-        pointerId = e.pointerId;
-
-        active = true;
-        target.CapturePointer(pointerId);
-    }
-
-    private void StopDragging()
+    private void ResetTarget()
     {
         target.style.top = 0;
         target.style.left = 0;
-
-        active = false;
-        target.ReleaseMouse();
     }
 
-    private void OnDrop()
+    private void EnterFPVMode()
     {
-        if (GuardPointerIsMovedOutsideOfDeadZone()) return;
-        if (Interface.PointerIsOverUI()) return;
-        
         OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-
         Vector2 screenPoint = Pointer.current.position.ReadValue();
-
         raycaster.GetWorldPointAsync(screenPoint, OnRaycastHit, layers);
     }
-
-    private bool GuardPointerIsDragging() => !active || !target.HasPointerCapture(pointerId);
-    private bool GuardPointerIsMovedOutsideOfDeadZone() => Mathf.Abs(target.style.top.value.value) < movementDeadzone || Mathf.Abs(target.style.left.value.value) < movementDeadzone;
 
     private void OnRaycastHit(Vector3 point, bool hit)
     {
@@ -122,5 +59,10 @@ public class FirstPersonViewManipulator : PointerManipulator
 
         fpv.SetPositionAndRotation(point, Quaternion.LookRotation(forward, Vector3.up));
         fpv.EnterViewer(null, null);
+    }
+
+    protected bool GuardPointerIsMovedOutsideOfDeadZone()
+    {
+        return Mathf.Abs(target.style.top.value.value) < movementDeadzone || Mathf.Abs(target.style.left.value.value) < movementDeadzone;
     }
 }
