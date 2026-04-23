@@ -157,7 +157,7 @@ namespace Netherlands3D.Twin.Projects
 
         private void OnOpenProjectAction(InputAction.CallbackContext obj)
         {
-            fileOpener.OpenFile();
+            fileOpener.OpenFile("nl3d");
         }
 
         private void OnSaveProjectAction(InputAction.CallbackContext obj)
