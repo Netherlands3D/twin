@@ -8,12 +8,13 @@
     padding-bottom: var(--spacing-2);
 }
 
-.sensor-property-section__row .unity-label{
-    width: 84px;
+.sensor-property-section__row .sensor-property-section__item{
+    
+    margin-right: var(--spacing-2);
 }
 
-.sensor-property-section__row .sensor-property-section__item{
-    margin-right: var(--spacing-2);
+.sensor-property-section__item-last {
+    flex-grow: 1;
 }
 
 .sensor-property-section__row.sensor-property-section__item-last{
