@@ -108,7 +108,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             OnResetDateValues.Invoke();
         }
         
-        public void ResetColorValues()
+        public void ResetMinMaxValues()
         {
             OnResetRangeValues.Invoke();
         }

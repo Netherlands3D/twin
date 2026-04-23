@@ -52,7 +52,7 @@ namespace Netherlands3D.UI.Panels
         private void SetColorTileColor(Color newColor)
         {
             string hex = ColorUtility.ToHtmlStringRGB(newColor);
-            colorTile.Color = hex;
+            colorTile.ColorHex = hex;
         }
 
         private void OnHexValueChanged(ChangeEvent<string> evt)

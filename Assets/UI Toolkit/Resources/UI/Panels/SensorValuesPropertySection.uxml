@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="SensorPropertySection" class="sensor-property-section">
+    <nl3d:ContentContainer leading-icon="UrbanReleaf" text="Urban Releaf">
+<!--        <ui:Label text="Minimum waarde" class="sensor-property-section__title"/>-->
+        <ui:VisualElement class="sensor-property-section__row">
+            <nl3d:ColorTile name="MinimumColorTile" class="sensor-property-section__item"/>
+            <nl3d:Slider name="MinimumValueSlider" text="Minimum waarde" class="sensor-property-section__item sensor-property-section__item-last"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="sensor-property-section__row">
+            <nl3d:ColorTile name="MaximumColorTile" class="sensor-property-section__item"/>
+            <nl3d:Slider name="MaximumValueSlider" text="Minimum waarde" class="sensor-property-section__item sensor-property-section__item-last"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="sensor-property-section__row">
+            <nl3d:Button button-style="IconOnly" icon="ResetTime" class="sensor-property-section__item" />
+            <ui:Label text="Standaard waardes herstellen" class="sensor-property-section__item sensor-property-section__item-last"/>
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
+</ui:UXML>

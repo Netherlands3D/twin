@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Netherlands3D.Functionalities.ObjectLibrary;
 using Netherlands3D.Functionalities.UrbanReLeaf;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
@@ -10,13 +8,12 @@ using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
-using Slider = UnityEngine.UIElements.Slider;
 
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     [PropertySection(typeof(SensorPropertyData))]
-    public partial class SensorPropertySection : VisualElement, IVisualizationWithPropertyData
+    public partial class SensorDatePropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private SensorPropertyData propertyData;
 
@@ -24,7 +21,7 @@ namespace Netherlands3D.UI.Panels
         private XYZField endDateField;
         private Button resetButton;
         
-        public SensorPropertySection()
+        public SensorDatePropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");    
@@ -85,19 +82,11 @@ namespace Netherlands3D.UI.Panels
         {
             propertyData = properties.Get<SensorPropertyData>();
 
-            propertyData.OnMinValueChanged.AddListener(UpdateMinimumSlider);
-            propertyData.OnMaxValueChanged.AddListener(UpdateMaximumSlider);
-            propertyData.OnMinColorChanged.AddListener(UpdateMinimumColor);
-            propertyData.OnMaxColorChanged.AddListener(UpdateMaximumColor);
             propertyData.OnStartDateChanged.AddListener(UpdateStartDateField);
             propertyData.OnEndDateChanged.AddListener(UpdateEndDateField);
             
             UpdateStartDateField(propertyData.StartDate);
             UpdateEndDateField(propertyData.EndDate);
-            UpdateMinimumSlider(propertyData.MinValue);
-            UpdateMaximumSlider(propertyData.MaxValue);
-            UpdateMinimumColor(propertyData.MinColor);
-            UpdateMaximumColor(propertyData.MaxColor);
         }
         
         private void UpdateStartDateField(DateTime startDate)
@@ -116,28 +105,5 @@ namespace Netherlands3D.UI.Panels
             field.yField.SetValueWithoutNotify(date.Month);
             field.zField.SetValueWithoutNotify(date.Year);
         }
-        
-        private void UpdateMinimumSlider(float value)
-        {
-                // minSlider.value = value;
-        }
-        
-        private void UpdateMaximumSlider(float value)
-        {
-                // maxSlider.value = value;
-        }
-
-        private void UpdateMinimumColor(Color color)
-        {
-                // minimumColorPicker.color = color;
-        }
-
-        private void UpdateMaximumColor(Color color)
-        {
-                // maximumColorPicker.color = color;
-        }
-
-        
-        
     }
 }
