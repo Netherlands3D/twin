@@ -16,6 +16,9 @@
                 <Netherlands3D.UI.Components.Button/>
                 <Netherlands3D.UI.Components.Toggle/>
                 <Netherlands3D.UI.Components.Icon/>
+                <Netherlands3D.UI.Components.ColorSpectrum/>
+                <Netherlands3D.UI.Components.ColorSlider/>
+                <Netherlands3D.UI.Components.ColorTile name="" show-label="true"/>
                 <Netherlands3D.UI.Components.Slider/>
                 <Netherlands3D.UI.Components.SliderRange/>
                 <Netherlands3D.UI.Components.CheckboxToggle/>
