@@ -15,9 +15,9 @@ namespace Netherlands3D.UI.Components
         private Vector2 dragStartPosition;
 
         private Vector2 center => new Vector2(resolvedStyle.width / 2, resolvedStyle.height / 2);
-        private float colorSpectrumRadius = 80f;
+        private const float colorSpectrumRadius = 80f;
 
-        private Vector2 selectorPosition = new Vector2(80f, 80f);
+        private Vector2 selectorPosition = new Vector2(colorSpectrumRadius, colorSpectrumRadius);
 
         [UxmlAttribute("selector-position")]
         public Vector2 SelectorPosition
@@ -66,7 +66,6 @@ namespace Netherlands3D.UI.Components
             set
             {
                 brightness = value;
-                Debug.Log(value);
                 ApplyOverlayTint();
             }
         }

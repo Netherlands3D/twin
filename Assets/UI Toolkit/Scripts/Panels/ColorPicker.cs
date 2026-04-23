@@ -61,6 +61,7 @@ namespace Netherlands3D.UI.Panels
                 return;
 
             if (!HexColorUtility.ParseHexColor(hexField.text, out var color)) return;
+            
             SetColorInputComponents(color);
         }
 
