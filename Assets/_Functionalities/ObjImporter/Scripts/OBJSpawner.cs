@@ -97,6 +97,10 @@ namespace Netherlands3D.Functionalities.OBJImporter
             // the copying can be removed after the code for the importer is changed
 
             string copiedObjFilename = objPath + ".temp";
+            if (File.Exists(copiedObjFilename))
+            {
+                File.Delete(copiedObjFilename);
+            }
             File.Copy(objPath, copiedObjFilename);
             importer.objFilePath = copiedObjFilename;
 

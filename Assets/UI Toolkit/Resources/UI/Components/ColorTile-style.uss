@@ -1,0 +1,22 @@
+.color-tile {
+    flex-direction: row;
+    align-items: center;
+}
+
+.color-tile__swatch {
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    min-width: var(--spacing-6);
+    min-height: var(--spacing-6);
+}
+
+.color-tile__shadow,
+.color-tile__fill {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--border-radius-sm);
+}
+
+.color-tile__label {
+    margin-left: var(--spacing-2);
+}

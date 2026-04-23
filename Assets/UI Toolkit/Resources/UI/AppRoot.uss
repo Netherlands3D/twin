@@ -1,4 +1,10 @@
-﻿.app__top-zone {
+﻿.app {
+    flex-grow: 1;
+    margin: 8px;
+    padding: 4px;
+}
+
+.app__top-zone {
     flex: 0 auto;
     position: absolute;
     left: 0;
