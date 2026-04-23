@@ -5,13 +5,6 @@
     min-height: var(--spacing-40);
 }
 
-.color-slider .unity-base-field__input {
-/*    align-items: center;
-    justify-content: center;
-    align-self: center;
-    align-content: center; */
-}
-
 .color-slider > .unity-base-field__label {
     display: none;
 }
