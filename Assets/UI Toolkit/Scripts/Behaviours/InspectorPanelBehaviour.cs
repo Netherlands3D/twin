@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Catalogs;
-using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Credentials;
-using Netherlands3D.Events;
+using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
@@ -39,7 +37,24 @@ namespace Netherlands3D.UI.Behaviours
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         
         private ICredentialHandler credentialHandler;
+
+        [Header("Deprecated tools until migration is completed")]
+        [SerializeField] private Tool Layer;
+        [SerializeField] private GameObject Search;
+        [SerializeField] private Tool SunPosition;
+        [SerializeField] private Tool DownloadTile;
+        [SerializeField] private Tool OpenProject;
+        [SerializeField] private Tool SaveProject;
         
+        [Header("Events")]
+        public UnityEvent AssetLibraryPanelOpened = new();
+        public UnityEvent AssetImportPanelOpened = new();
+        public UnityEvent LayerPanelOpened = new();
+        public UnityEvent SearchPanelOpened = new();
+        public UnityEvent SunPositionPanelOpened = new();
+        public UnityEvent DownloadTilePanelOpened = new();
+        public UnityEvent OpenProjectPanelOpened = new();
+        public UnityEvent SaveProjectPanelOpened = new();
 
         private void Awake()
         {
@@ -60,8 +75,6 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
             ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
-            
-            ToolbarMain.OnAddClicked += ToggleImportAssetPanel;
         }
 
         private void OnDisable()
@@ -71,8 +84,6 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
             ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
-            
-            ToolbarMain.OnAddClicked -= ToggleImportAssetPanel;
         }
 
         public void Open()
@@ -82,13 +93,16 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Close()
         {
+            // TODO: Remove as soon as search is implemented as a panel
+            Search.SetActive(false);
+            
             ToolbarMain.ClearWithoutNotify();
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             InspectorPanel.Close();
         }
 
         // TODO: Shouldn't this be in the InspectorPanel component?
-        public BaseInspectorContentPanel RegisterPanel<T>(params object[] args) where T : BaseInspectorContentPanel
+        private BaseInspectorContentPanel RegisterPanel<T>(params object[] args) where T : BaseInspectorContentPanel
         {
             var panel = (T)Activator.CreateInstance(typeof(T), args);
             panels.Add(panel);
@@ -99,7 +113,63 @@ namespace Netherlands3D.UI.Behaviours
             return panel;
         }
 
-        public void ShowPanel<T>() where T : BaseInspectorContentPanel
+        public void OpenAssetLibrary()
+        {
+            ShowPanel<AssetLibraryPanel>();
+            AssetLibraryPanelOpened.Invoke();
+        }
+
+        public void OpenAssetImport()
+        {
+            ShowPanel<ImportAssetPanel>();
+            AssetImportPanelOpened.Invoke();
+        }
+
+        public void OpenLayers()
+        {
+            OpenTool(Layer);
+            LayerPanelOpened.Invoke();
+        }
+
+        public void OpenSearch()
+        {
+            Close();
+            Search.SetActive(true);
+            SearchPanelOpened.Invoke();
+        }
+
+        public void OpenSunPosition()
+        {
+            OpenTool(SunPosition);
+            SunPositionPanelOpened.Invoke();
+        }
+
+        public void OpenDownloadTile()
+        {
+            OpenTool(DownloadTile);
+            DownloadTilePanelOpened.Invoke();
+        }
+
+        public void OpenLoadProject()
+        {
+            OpenTool(OpenProject);
+            OpenProjectPanelOpened.Invoke();
+        }
+        
+        public void OpenSaveProject()
+        {
+            OpenTool(SaveProject);
+            SaveProjectPanelOpened.Invoke();
+        }
+
+        [Obsolete("Tools are considered obsolete, as soon as we have migrated all panels this van be deleted")]
+        private void OpenTool(Tool tool)
+        {
+            Close();
+            tool.OpenInspector();
+        }
+
+        private void ShowPanel<T>() where T : BaseInspectorContentPanel
         {
             // only one panel can be open at a time
             HidePanel();
@@ -110,36 +180,15 @@ namespace Netherlands3D.UI.Behaviours
             activePanel.Show();
         }
 
-        public T GetPanel<T>() where T : BaseInspectorContentPanel
+        private T GetPanel<T>() where T : BaseInspectorContentPanel
         {
             return panels.OfType<T>().FirstOrDefault();
         }
 
-        public void HidePanel()
+        private void HidePanel()
         {
             activePanel?.Hide();
             activePanel = null;
-        }
-
-        public void OpenAssetLibrary()
-        {
-            ShowPanel<AssetLibraryPanel>();
-        }
-
-        public void ToggleImportAssetPanel()
-        {
-            if (inspectorPanel.IsOpen())
-            {
-                HidePanel();
-                //do not use Close here to avoid the toggle notification
-                InspectorPanel.Close(); 
-            }
-            else
-            {   
-                Open();
-                InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
-                ShowPanel<ImportAssetPanel>();
-            }
         }
 
         private void OnAddLayerToggled(ChangeEvent<bool> evt)

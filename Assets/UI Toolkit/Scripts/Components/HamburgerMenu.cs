@@ -59,6 +59,16 @@ namespace Netherlands3D.UI.Components
             });
         }
 
+        public void Open()
+        {
+            value = true;
+        }
+
+        public void Close()
+        {
+            value = false;
+        }
+
         private void OnFoldoutValueChanged(ChangeEvent<bool> evt)
         {
             if (evt.target != this) return;
