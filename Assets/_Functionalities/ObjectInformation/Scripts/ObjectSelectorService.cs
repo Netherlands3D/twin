@@ -29,6 +29,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent OnDeselect = new();
         public UnityEvent<LayerData> OnSelectDifferentLayer = new();
         public UnityEvent<LayerData> OnSelectLayer = new();
+        public UnityEvent OnNoLayerSelected = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -91,7 +92,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnEnable()
         {
-            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);;
             
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
@@ -143,6 +144,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Deselect();
                     lastSelectedLayerData = null;
                     lastSelectedMappingLayerData = null;
+                    
+                    OnNoLayerSelected.Invoke();
                 }
             }
         }

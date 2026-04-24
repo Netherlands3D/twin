@@ -35,6 +35,9 @@ namespace Netherlands3D.Twin.layers.properties
         private void OnDisable()
         {
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            if (selectorService == null) 
+                return;
+            
             selectorService.SelectFeature.RemoveListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.RemoveListener(ClearFeatureMappingsForLayer);
         }
