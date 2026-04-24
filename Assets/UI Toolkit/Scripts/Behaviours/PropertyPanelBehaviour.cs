@@ -31,12 +31,14 @@ namespace Netherlands3D.UI.Panels
             
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.OnSelectLayer.AddListener(SpawnPanel);
+            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel);
         }
 
         private void OnDestroy()
         {
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.OnSelectLayer.RemoveListener(SpawnPanel);
+            selectorService.OnNoLayerSelected.RemoveListener(ClearActivePanel);
         }
 
         public void ClearActivePanel()
