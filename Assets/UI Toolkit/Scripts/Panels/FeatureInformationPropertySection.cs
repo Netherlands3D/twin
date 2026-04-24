@@ -100,21 +100,14 @@ namespace Netherlands3D.UI.Panels
             {
                 Dictionary<string, object> featureProperties = kv.Value.Properties;
                 BoundingBox bbox = kv.Value.BoundingBox;
-                ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
-                if (downloadProcess != null)
-                {
-                    thumbnailService.StopCoroutine(downloadProcess);
-                }
-                downloadProcess = thumbnailService.StartCoroutine(GetFeatureThumbnail(bbox));
+                GetFeatureThumbnail(bbox);
                 PopulateAddresses(featureProperties);
                 break;
             }
         }
 
-        private IEnumerator GetFeatureThumbnail(BoundingBox bbox)
+        private void GetFeatureThumbnail(BoundingBox bbox)
         {
-            yield return null;
-
             ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
             //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
             Bounds currentObjectBounds = bbox.ToUnityBounds();
