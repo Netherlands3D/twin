@@ -5,10 +5,28 @@
     margin: var(--spacing-2) 0 0;
 }
 
+.toolbar-navigation__button,
 .toolbar-navigation__button.button,
 .toolbar-navigation__button.toggle {
     flex: 0 0 auto;
     margin-right: var(--spacing-2);
+}
+
+.toolbar-navigation__button.toolbar-navigation__fpv {
+    display: none;
+    flex: 0 0 auto;
+    align-items: center;
+
+    min-height: var(--spacing-11);
+    padding: var(--spacing-2);
+    background-color: transparent;
+    border-color: var(--color-white);
+    border-width: 2px;
+    border-radius: var(--spacing-2);
+}
+
+.app--functionality-first-person-viewer .toolbar-navigation__button.toolbar-navigation__fpv {
+    display: flex;
 }
 
 /* We need a deep hierarchy level because of the specificity in the button component */

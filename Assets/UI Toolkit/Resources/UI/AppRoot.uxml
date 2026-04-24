@@ -5,7 +5,8 @@
     xmlns:nl3d="Netherlands3D.UI.Components"
     editor-extension-mode="False"  
 >
-    <ui:VisualElement name="App" picking-mode="Ignore" class="app" style="flex-grow: 1; margin: 8px; padding: 4px;">
+    <ui:Style src="./AppRoot.uss"/>
+    <ui:VisualElement name="App" picking-mode="Ignore" class="app">
         <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
             <ui:VisualElement picking-mode="Ignore" name="LeftSection">
                 <nl3d:HamburgerMenu/>
