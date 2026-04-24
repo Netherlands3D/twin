@@ -386,6 +386,64 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b90594a975d054701bfdf28a1dff4ecc, type: 3}
+--- !u!1 &401822898
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 401822901}
+  - component: {fileID: 401822900}
+  - component: {fileID: 401822899}
+  m_Layer: 0
+  m_Name: ThumbnailService
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &401822899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401822898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
+  service: {fileID: 401822900}
+--- !u!114 &401822900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401822898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6cd41f1aa19ed3a1b3d3dd2f68fbd6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.ThumbnailService
+--- !u!4 &401822901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401822898}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -148.5702, y: -0, z: 0.65228}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &452902734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -800,64 +858,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2506052420223465944}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1204989375
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1204989379}
-  - component: {fileID: 1204989378}
-  - component: {fileID: 1204989377}
-  m_Layer: 0
-  m_Name: ThumbnailService
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1204989377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1204989375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
-  service: {fileID: 1204989378}
---- !u!114 &1204989378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1204989375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6cd41f1aa19ed3a1b3d3dd2f68fbd6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.ThumbnailCoroutineRunner
---- !u!4 &1204989379
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1204989375}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -302.2065, y: 261.5543, z: -68.58079}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1214385363
 GameObject:
   m_ObjectHideFlags: 0
@@ -1525,22 +1525,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.20579392
+      value: -0.7512772
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08769552
+      value: -0.6012348
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.89664197
+      value: 0.21253234
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.38208845
+      value: -0.17008613
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -5043,4 +5043,4 @@ SceneRoots:
   - {fileID: 2997518761711757160}
   - {fileID: 452902734}
   - {fileID: 4739918432538025027}
-  - {fileID: 1204989379}
+  - {fileID: 401822901}

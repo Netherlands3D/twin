@@ -6,8 +6,8 @@ namespace Netherlands3D
 {
     public class ThumbnailService : MonoBehaviour
     {
-	    private static RenderTexture temporaryThumbnailRenderTexture;
-	    private static Texture2D temporaryThumbnailTexture;
+	    private RenderTexture temporaryThumbnailRenderTexture;
+	    private Texture2D temporaryThumbnailTexture;
 	    private int width = 340;
 	    private int height = 200;
 
