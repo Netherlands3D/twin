@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -34,13 +35,13 @@ namespace Netherlands3D.UI.Panels
         public void ClearActivePanel()
         {
             propertySectionContainer.Clear();
-            propertiesPanel.SetEnabled(false);
+            propertiesPanel.SetVisible(false);
         }
 
         public void SpawnPanel(LayerData layer)
         {
             ClearActivePanel();
-            propertiesPanel.SetEnabled(true);
+            propertiesPanel.SetVisible(true);
 
             CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
             if (credentials != null && !layer.HasValidCredentials)
