@@ -17,11 +17,14 @@ namespace Netherlands3D.UI.Panels
         private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private VisualElement propertySectionContainer;
+        private ColorPicker colorPicker;
 
         private void Start()
         {
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
+            colorPicker = root.Q<ColorPicker>("PropertiesColorPicker");
+            colorPicker.SetVisible(false);
             propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
@@ -77,13 +80,12 @@ namespace Netherlands3D.UI.Panels
                     var panelTypes = PropertySectionRegistry.TypeRegistry[interfaceType];
                     foreach (var panelType in panelTypes)
                     {
-                        var propertySection = (VisualElement)Activator.CreateInstance(panelType);
-                        propertySectionContainer.Add(propertySection);
-                        ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
+                        CreatePanel(panelType, properties);
                         hasPanel = true;
                     }
                 }
             }
+
             return hasPanel;
         }
 
@@ -96,13 +98,22 @@ namespace Netherlands3D.UI.Panels
                 var panelTypes = PropertySectionRegistry.TypeRegistry[type];
                 foreach (var panelType in panelTypes)
                 {
-                    var propertySection = (VisualElement)Activator.CreateInstance(panelType);
-                    propertySectionContainer.Add(propertySection);
-                    ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
+                    CreatePanel(panelType, properties);
                 }
             }
 
             return hasPanels;
+        }
+
+        private void CreatePanel(Type panelType, List<LayerPropertyData> properties)
+        {
+            var propertySection = (VisualElement)Activator.CreateInstance(panelType);
+            propertySectionContainer.Add(propertySection);
+
+            if (propertySection is IPropertyPanelWithColorPicker propertyPanelWithColorPicker)
+                propertyPanelWithColorPicker.ColorPicker = colorPicker;
+            
+            ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
         }
     }
 }

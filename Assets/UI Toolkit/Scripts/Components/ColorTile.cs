@@ -15,6 +15,7 @@ namespace Netherlands3D.UI.Components
         private Label Label => labelField ??= this.Q<Label>("Label");
 
         private bool showLabel;
+
         [UxmlAttribute("show-label")]
         public bool ShowLabel
         {
@@ -38,13 +39,29 @@ namespace Netherlands3D.UI.Components
         }
 
         private string colorHex = "#FFC142";
+
         [UxmlAttribute("color")]
-        public string Color
+        public string ColorHex
         {
             get => colorHex;
             set
             {
-                colorHex = value;
+                if (HexColorUtility.ParseHexColor(colorHex, out var parsedColor))
+                {
+                    Color = parsedColor;
+                }
+            }
+        }
+
+        private Color color;
+
+        public Color Color
+        {
+            get => color;
+            set
+            {
+                color = value;
+                colorHex = ColorUtility.ToHtmlStringRGB(value);
                 ApplyColor();
             }
         }
@@ -76,10 +93,7 @@ namespace Netherlands3D.UI.Components
             if (Fill == null)
                 return;
 
-            if (HexColorUtility.ParseHexColor(colorHex, out var parsedColor))
-            {
-                Fill.style.backgroundColor = parsedColor;
-            }
+            Fill.style.backgroundColor = Color;
         }
     }
 }
