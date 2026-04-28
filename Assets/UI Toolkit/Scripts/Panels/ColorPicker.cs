@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -11,8 +10,7 @@ using TextField = Netherlands3D.UI.Components.TextField;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(ColorPropertyData))]
-    public partial class ColorPicker : VisualElement, IVisualizationWithPropertyData
+    public partial class ColorPicker : VisualElement
     {
         private ColorSpectrum colorSpectrum;
         private ColorSlider brightnessSlider;
@@ -90,8 +88,9 @@ namespace Netherlands3D.UI.Panels
             ColorSelected.Invoke(newColor);
         }
 
-        public void LoadProperties(List<LayerPropertyData> properties)
+        public void SetVisible(bool visible)
         {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
     }
 }
