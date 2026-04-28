@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="ColorPicker" class="color-picker">
-      <nl3d:ContentContainer leading-icon="Paint" text="Kleur aanpassen">
+<!--      <nl3d:ContentContainer leading-icon="Paint" text="Kleur aanpassen" show-close-button="true">-->
         <ui:VisualElement class="color-picker__row">
             <nl3d:ColorSpectrum class="color-picker__item"/>
             <nl3d:ColorSlider class="color-picker__item color-picker__item-last"/>
@@ -8,5 +8,5 @@
             <nl3d:ColorTile class="color-picker__item"/>
             <nl3d:TextField placeholder-text="######" max-length="7" class="color-picker__item color-picker__item-last color-picker__text-field"/>
         </ui:VisualElement>
-    </nl3d:ContentContainer>
+<!--    </nl3d:ContentContainer>-->
 </ui:UXML>

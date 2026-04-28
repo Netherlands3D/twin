@@ -74,7 +74,8 @@
 
 /* Header icons */
 .contentcontainer .leading-icon,
-.contentcontainer .help-button {
+.contentcontainer .help-button,
+.contentcontainer .close-button {
     width: var(--spacing-6);
     height: var(--spacing-6);
 }
@@ -86,3 +87,8 @@
 .contentcontainer .help-button { 
     margin-right: var(--container-icon-gap);
 }
+
+.contentcontainer .close-button {
+    margin-right: var(--container-icon-gap);
+}
+
