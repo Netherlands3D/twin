@@ -1,0 +1,12 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    class="secondary-properties-panel"
+>
+    <nl3d:ContentContainer leading-icon="Paint" text="Kleur aanpassen" show-close-button="true">
+        <nl3d:ColorPicker name="PropertiesColorPicker" class="properties-section-column"/>
+    </nl3d:ContentContainer>
+</ui:UXML>
