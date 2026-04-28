@@ -49,14 +49,26 @@ namespace Netherlands3D.UI.Panels
         {
             ColorPicker.ColorSelected.RemoveAllListeners();
             ColorPicker.SetVisible(true);
-            ColorPicker.ColorSelected.AddListener(UpdateMinimumColor);
+            ColorPicker.SetColorInputComponentsWithoutNotify(minimumColorTile.Color);
+            ColorPicker.ColorSelected.AddListener(SetMinimumColor);
         }
-        
+
         private void OnMaximumColorTileClicked(ClickEvent evt)
         {
             ColorPicker.ColorSelected.RemoveAllListeners();
             ColorPicker.SetVisible(true);
+            ColorPicker.SetColorInputComponentsWithoutNotify(maximumColorTile.Color);
             ColorPicker.ColorSelected.AddListener(UpdateMaximumColor);
+        }
+        
+        private void SetMinimumColor(Color newColor)
+        {
+            propertyData.MinColor = newColor;
+        }
+        
+        private void SetMaximumColor(Color newColor)
+        {
+            propertyData.MaxColor = newColor;
         }
 
         private void OnMinimumValueChanged(ChangeEvent<float> evt)
