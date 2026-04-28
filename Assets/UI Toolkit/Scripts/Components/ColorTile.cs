@@ -46,7 +46,7 @@ namespace Netherlands3D.UI.Components
             get => colorHex;
             set
             {
-                if (HexColorUtility.ParseHexColor(colorHex, out var parsedColor))
+                if (HexColorUtility.ParseHexColor(value, out var parsedColor))
                 {
                     Color = parsedColor;
                 }

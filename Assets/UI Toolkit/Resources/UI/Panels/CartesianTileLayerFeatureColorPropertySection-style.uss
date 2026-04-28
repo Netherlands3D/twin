@@ -1,11 +1,8 @@
-/*.polygon-property-section__shape-type-section:disabled{*/
-/*    display: none;*/
-/*}*/
+.cartesian-tile-layer-feature-color-property-section {
+    flex-direction: column;
+}
 
-/*.polygon-property-section__message-text{*/
-/*    white-space: pre-wrap;*/
-/*}*/
-
-/*.polygon-property-section__button{*/
-/*    align-self: flex-start;*/
-/*}*/
+.cartesian-tile-layer-feature-color-property-section__list-view{
+    flex-grow: 1;
+    height: auto;
+}
