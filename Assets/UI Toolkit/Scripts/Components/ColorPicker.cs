@@ -16,6 +16,7 @@ namespace Netherlands3D.UI.Components
         private ColorTile colorTile;
 
         public UnityEvent<Color> ColorChanged = new();
+        public UnityEvent<bool> ColorPickerVisibilityChanged = new();
 
         public ColorPicker()
         {
@@ -82,6 +83,7 @@ namespace Netherlands3D.UI.Components
         public void SetVisible(bool visible)
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+            ColorPickerVisibilityChanged.Invoke(visible);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace Netherlands3D.UI.Components
         private HelpButton helpButton => this.Q<HelpButton>("HelpButton");
         private DropDown dropDown => this.Q<DropDown>("DropDown");
         private CloseButton closeButton => this.Q<CloseButton>("CloseButton");
+        public UnityEvent CloseButtonClicked = new UnityEvent();
         
         public enum ContainerType
         {
@@ -133,6 +134,20 @@ namespace Netherlands3D.UI.Components
             }
         }
         
+        private bool showCheckmark = false;
+
+        [UxmlAttribute("show-checkmark")]
+        public bool ShowCheckmark
+        {
+            get => showCheckmark;
+            set
+            {
+                showCheckmark = value;
+                UpdateIcons();
+                ReorderHeaderChildren();
+            }
+        }
+        
         private bool showCloseButton = false;
 
         [UxmlAttribute("show-close-button")]
@@ -215,6 +230,8 @@ namespace Netherlands3D.UI.Components
                 if (!string.IsNullOrEmpty(helpUrl) && helpButton != null)
                     helpButton.HelpUrl = helpUrl;
             });
+            
+            closeButton.RegisterCallback<ClickEvent>(evt => CloseButtonClicked.Invoke());
         }
 
         /// <summary>
@@ -303,6 +320,9 @@ namespace Netherlands3D.UI.Components
             
             if(dropDown != null)
                 dropDown.style.display = showDropDown ? DisplayStyle.Flex : DisplayStyle.None;
+            
+            if(Checkmark != null)
+                Checkmark.style.display = showCheckmark ? DisplayStyle.Flex : DisplayStyle.None;
             
             if(closeButton != null)
                 closeButton.style.display = showCloseButton ? DisplayStyle.Flex : DisplayStyle.None;

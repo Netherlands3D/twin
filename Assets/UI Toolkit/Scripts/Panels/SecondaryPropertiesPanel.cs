@@ -1,29 +1,43 @@
 using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     public partial class SecondaryPropertiesPanel : VisualElement
     {
-        private Button propertiesHeaderCloseButton;
-        public Button PropertiesHeaderCloseButton => propertiesHeaderCloseButton ??= this.Q<Button>("PropertiesHeaderCloseButton");
-
-        // /// <summary>
-        // /// Header text pass-through so it can be set from UXML/Properties.
-        // /// </summary>
-        // [UxmlAttribute("header-text")]
-        // public string HeaderText
-        // {
-        //     get => Header?.LabelText;
-        //     set { if (Header != null) Header.LabelText = value; }
-        // }
+        private ContentContainer contentContainer;
+        
+        /// <summary>
+        /// Header text pass-through so it can be set from UXML/Properties.
+        /// </summary>
+        [UxmlAttribute("header-text")]
+        public string HeaderText
+        {
+            get => contentContainer.HeaderText;
+            set => contentContainer.HeaderText = value;
+        }
+        
+        [UxmlAttribute("icon")]
+        public IconImage Icon
+        {
+            get => contentContainer.LeadingIconImage;
+            set => contentContainer.LeadingIconImage = value;
+        }
 
         public SecondaryPropertiesPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
+            
+            contentContainer = this.Q<ContentContainer>();
+            contentContainer.CloseButtonClicked.AddListener(() => SetVisible(false));
+            
+            this.Q<ColorPicker>().ColorPickerVisibilityChanged.AddListener(SetVisible);
         }
 
         public void SetVisible(bool visible)

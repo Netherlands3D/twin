@@ -17,6 +17,7 @@ namespace Netherlands3D.UI.Panels
     {
         private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
+        private SecondaryPropertiesPanel secondaryPropertiesPanel;
         private VisualElement propertySectionContainer;
         private ColorPicker colorPicker;
 
@@ -25,7 +26,7 @@ namespace Netherlands3D.UI.Panels
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             colorPicker = root.Q<ColorPicker>("PropertiesColorPicker");
-            colorPicker.SetVisible(false);
+            secondaryPropertiesPanel.SetVisible(false);
             propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
