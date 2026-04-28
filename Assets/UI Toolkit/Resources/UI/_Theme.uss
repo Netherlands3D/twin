@@ -182,6 +182,7 @@
     --icon-warning: url("project://database/Assets/Sprites/UI/Icons/Type=Warning,%20Color=white,%20Size=medium.png");
     --icon-visibility: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visable.png");
     --icon-invisible: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=invisible.png");
+    --icon-colorfeatures: url("project://database/Assets/Sprites/UI/Icons/Type=ColorFeatures,%20Color=white,%20Size=large.png");
 
     /* Font */
     --unity-font: "Inter";
