@@ -4,7 +4,8 @@
     "references": [
         "GUID:b350e99bab43dcc4eb0c8ba8ceda5e79",
         "GUID:695cfc74c9224954aa861dffb1268400",
-        "GUID:33a0d05a98c744ae9baf0f37b6cd5e93"
+        "GUID:33a0d05a98c744ae9baf0f37b6cd5e93",
+        "com.kind-men.uxios"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
