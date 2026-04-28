@@ -13,7 +13,7 @@ namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     [PropertySection(typeof(SensorPropertyData))]
-    public partial class SensorValuesPropertySection : VisualElement, IVisualizationWithPropertyData
+    public partial class SensorValuesPropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
         private SensorPropertyData propertyData;
 
@@ -23,6 +23,8 @@ namespace Netherlands3D.UI.Panels
         private ColorTile maximumColorTile;
 
         private Button resetButton;
+        
+        public ColorPicker ColorPicker { get; set; }
 
         public SensorValuesPropertySection()
         {
@@ -36,9 +38,25 @@ namespace Netherlands3D.UI.Panels
 
             minimumValueSlider.RegisterValueChangedCallback(OnMinimumValueChanged);
             maximumValueSlider.RegisterValueChangedCallback(OnMaximumValueChanged);
+            minimumColorTile.RegisterCallback<ClickEvent>(OnMinimumColorTileClicked);
+            maximumColorTile.RegisterCallback<ClickEvent>(OnMaximumColorTileClicked);
 
             resetButton = this.Q<Button>();
             resetButton.RegisterCallback<ClickEvent>(OnResetButtonClicked);
+        }
+
+        private void OnMinimumColorTileClicked(ClickEvent evt)
+        {
+            ColorPicker.ColorSelected.RemoveAllListeners();
+            ColorPicker.SetVisible(true);
+            ColorPicker.ColorSelected.AddListener(UpdateMinimumColor);
+        }
+        
+        private void OnMaximumColorTileClicked(ClickEvent evt)
+        {
+            ColorPicker.ColorSelected.RemoveAllListeners();
+            ColorPicker.SetVisible(true);
+            ColorPicker.ColorSelected.AddListener(UpdateMaximumColor);
         }
 
         private void OnMinimumValueChanged(ChangeEvent<float> evt)
