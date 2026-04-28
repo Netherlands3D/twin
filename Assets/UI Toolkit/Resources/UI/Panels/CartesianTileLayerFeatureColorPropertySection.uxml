@@ -1,0 +1,18 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="CartesianTileLayerFeatureColorPropertySection" 
+    class="cartesian-tile-layer-feature-color-property-section"
+    >
+    <nl3d:ContentContainer leading-icon="Polygon" text="Tekengebied">
+        <ui:VisualElement name="LineProperties" class="polygon-property-section__shape-type-section">
+            <nl3d:Slider label="Lijnbreedte (in meter)" name="LineWidthSlider" low-value="0.01" high-value="200"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="GridProperties" class="polygon-property-section__shape-type-section">
+            <nl3d:Button name="EditGridButton" icon="OrthogonalView" LabelText="Grid bewerken" class="polygon-property-section__button"/>
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
+</ui:UXML>

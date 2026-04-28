@@ -1,19 +1,26 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Toggle = UnityEngine.UIElements.Toggle;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.UI.Panels
 {
+    [UxmlElement]
     [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData))]
-    public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
-    {  
+    public partial class CartesianTileLayerFeatureColorPropertySection : VisualElement, IVisualizationWithPropertyData
+    {
+        private ContentContainer contentContainer;
+        
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject colorSwatchPrefab;
         [SerializeField] private RectTransform layerContent;
@@ -27,6 +34,14 @@ namespace Netherlands3D.Twin.Layers.Properties
         public ISelectable FirstSelectedItem { get; set; }
 
         private CartesianTileLayerFeatureColorPropertyData stylingPropertyData;
+        
+        public CartesianTileLayerFeatureColorPropertySection()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
+            
+            contentContainer = this.Q<ContentContainer>();
+        }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -37,7 +52,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
             colorPicker.ColorWheel.colorChanged.AddListener(OnPickColor);
 
-            StartCoroutine(OnPropertySectionsLoaded());
+            HideColorPicker();
         }
 
         private void OnDestroy()
@@ -46,15 +61,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             colorPicker.ColorWheel.colorChanged.RemoveListener(OnPickColor);
         }
 
-        private IEnumerator OnPropertySectionsLoaded()
-        {
-            yield return new WaitForEndOfFrame(); 
-            
-            HideColorPicker();
-            // workaround to have a minimum height for the content loaded (because of scrollrects)
-            LayoutElement layout = GetComponent<LayoutElement>();
-            layout.minHeight = content.rect.height;
-        }
 
         private void CreateSwatches()
         {
@@ -70,7 +76,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                     //we need to expect a value here or else the stylingrule is not properly initialized
                     if (color.HasValue)
                     {
-                        swatches[index] = CreateSwatch(index);
+                        //swatches[index] = CreateSwatch(index);
                         SetSwatchColorFromFeature(index);
                     }
                     else
@@ -80,38 +86,38 @@ namespace Netherlands3D.Twin.Layers.Properties
             Items = swatches.Values.OfType<ISelectable>().ToList();
         }
 
-        private ColorSwatch CreateSwatch(int index)
-        {
-            GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
-            ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
-
-            string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
-                
-            swatch.SetLayerName(layerName);
-            swatch.SetInputText(layerName);
-
-            //because all ui elements will be destroyed on close an anonymous listener is fine here              
-            swatch.onClickDown.AddListener(pointer => OnClickedOnSwatch(pointer, swatch));
-
-            return swatch;
-        }
+        // private ColorSwatch CreateSwatch(int index)
+        // {
+        //     GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
+        //     ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
+        //
+        //     string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
+        //         
+        //     swatch.SetLayerName(layerName);
+        //     swatch.SetInputText(layerName);
+        //
+        //     //because all ui elements will be destroyed on close an anonymous listener is fine here              
+        //     swatch.onClickDown.AddListener(pointer => OnClickedOnSwatch(pointer, swatch));
+        //
+        //     return swatch;
+        // }
 
         private void OnClickedOnSwatch(PointerEventData _, ColorSwatch swatch)
         {
             //select layer
             SelectedButtonIndex = Items.IndexOf(swatch);
-            MultiSelectionUtility.ProcessLayerSelection(this, anySelected =>
-            {
-                if(anySelected)
-                {
-                    ShowColorPicker();
-                    colorPicker.PickColorWithoutNotify(((ColorSwatch)Items[SelectedButtonIndex]).Color);
-                }
-                else
-                {
-                    HideColorPicker();
-                }
-            });
+            // MultiSelectionUtility.ProcessLayerSelection(this, anySelected =>
+            // {
+            //     if(anySelected)
+            //     {
+            //         ShowColorPicker();
+            //         colorPicker.PickColorWithoutNotify(((ColorSwatch)Items[SelectedButtonIndex]).Color);
+            //     }
+            //     else
+            //     {
+            //         HideColorPicker();
+            //     }
+            // });
         }
 
         private void OnPickColor(Color color)
