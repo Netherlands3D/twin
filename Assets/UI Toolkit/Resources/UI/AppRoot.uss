@@ -3,3 +3,11 @@
     margin: 8px;
     padding: 4px;
 }
+
+.properties-section{
+    flex-direction: row;
+}
+
+.properties-section .properties-section-column{
+    margin-left: var(--spacing-2);
+}
