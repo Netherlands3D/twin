@@ -17,7 +17,7 @@ namespace Netherlands3D.UI.Panels
         private TextField hexField;
         private ColorTile colorTile;
 
-        public UnityEvent<Color> ColorSelected = new();
+        public UnityEvent<Color> ColorChanged = new();
 
         public ColorPicker()
         {
@@ -53,7 +53,7 @@ namespace Netherlands3D.UI.Panels
             if (!HexColorUtility.ParseHexColor(hexField.text, out var color)) return;
             
             SetColorInputComponentsWithoutNotify(color);
-            ColorSelected.Invoke(color);
+            ColorChanged.Invoke(color);
         }
 
         public void SetColorInputComponentsWithoutNotify(Color newColor)
@@ -78,7 +78,7 @@ namespace Netherlands3D.UI.Panels
         {
             var newColor = Color.HSVToRGB(colorSpectrum.Hue / 360f, colorSpectrum.Saturation, brightnessSlider.value / 255f);
             SetColorInputComponentsWithoutNotify(newColor);
-            ColorSelected.Invoke(newColor);
+            ColorChanged.Invoke(newColor);
         }
 
         public void SetVisible(bool visible)
