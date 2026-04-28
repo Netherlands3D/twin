@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
@@ -41,6 +42,12 @@ namespace Netherlands3D.UI.Panels
                 RegisterOutsidePanelClick();
             });
             
+            SwatchesListView.selectedIndicesChanged += indices =>
+            {
+                //show selection in world when items in panel are selected
+                ColorPicker.SetVisible(indices.Any());
+            };
+            
             RegisterCallback<DetachFromPanelEvent>(_ => 
             {
                 OnDestroy();  
@@ -70,25 +77,24 @@ namespace Netherlands3D.UI.Panels
         
         private VisualElement MakeListViewItem()
         {
-            ColorTile item = new();
-            item.ShowLabel = true;
+            ColorTileListViewItem item = new();
+            item.Tile.ShowLabel = true;
             item.RegisterCallback<PointerUpEvent>(evt =>
             {
-                ColorPicker.SetVisible(true);
-                ColorPicker.SetColorInputComponentsWithoutNotify(item.Color);
+                ColorPicker.SetColorInputComponentsWithoutNotify(item.Tile.Color);
             });
             return item;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not ColorTile listViewItem) return;
+            if (item is not ColorTileListViewItem listViewItem) return;
            
             string color = SwatchesListView.itemsSource[index] as string;
-            listViewItem.ColorHex = color;
+            listViewItem.Tile.ColorHex = color;
             
             string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
-            listViewItem.LabelText = layerName;
+            listViewItem.Tile.LabelText = layerName;
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -139,8 +145,9 @@ namespace Netherlands3D.UI.Panels
             foreach (int i in SwatchesListView.selectedIndices)
             {
                 string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(i);
-                stylingPropertyData.SetColorByMaterialIndex(i, layerName, color);
+                stylingPropertyData.SetColorByMaterialIndex(i, layerName, color, false);
             }
+            stylingPropertyData.OnStylingChanged.Invoke();
         }
     }
 }
