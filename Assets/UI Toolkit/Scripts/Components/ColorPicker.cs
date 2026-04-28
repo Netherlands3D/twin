@@ -1,13 +1,11 @@
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
-using TextField = Netherlands3D.UI.Components.TextField;
 
-namespace Netherlands3D.UI.Panels
+namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
     public partial class ColorPicker : VisualElement
@@ -21,8 +19,8 @@ namespace Netherlands3D.UI.Panels
 
         public ColorPicker()
         {
-            this.CloneComponentTree("Panels");
-            this.AddComponentStylesheet("Panels");
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
             colorSpectrum = this.Q<ColorSpectrum>();
             brightnessSlider = this.Q<ColorSlider>();

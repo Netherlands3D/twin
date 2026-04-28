@@ -22,7 +22,7 @@
             </ui:VisualElement>
             <ui:VisualElement name="PropertiesSection" class="properties-section">
                 <nl3d:ContentContainer leading-icon="Paint" text="Kleur aanpassen" show-close-button="true">
-                    <nl3dP:ColorPicker name="PropertiesColorPicker" class="properties-section-column"/>
+                    <nl3d:ColorPicker name="PropertiesColorPicker" class="properties-section-column"/>
                 </nl3d:ContentContainer>
                 <nl3d:PropertiesPanel name="PropertiesPanel" class="properties-section-column"/>
             </ui:VisualElement>
