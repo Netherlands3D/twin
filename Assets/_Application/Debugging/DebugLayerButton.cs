@@ -20,9 +20,12 @@ namespace Netherlands3D.Twin
 
         public void Spawn()
         {
-            handler.SetUri(url);
-            handler.OnAuthorizationHandled.AddListener(DetermineAdapter);
-            handler.ApplyCredentials();
+            if (!string.IsNullOrEmpty(url))
+            {
+                handler.Uri = new Uri(url);
+                handler.OnAuthorizationHandled.AddListener(DetermineAdapter);
+                handler.ApplyCredentials();
+            }
         }
 
         private void DetermineAdapter(Uri uri, StoredAuthorization auth)
