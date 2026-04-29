@@ -12,10 +12,10 @@
     - Hamburger icon uses Foldout's internal checkmark (unity-foldout__checkmark), restyled via USS.
   -->
 
-  <ui:ToggleButtonGroup name="ButtonGroup" class="hamburger-menu__group">
-    <nl3d:Button name="Open" button-type="Transparent" button-style="IconOnly" icon="UploadFolder" />
-    <nl3d:Button name="Save" button-type="Transparent" button-style="IconOnly" icon="Save" />
-    <nl3d:Button name="Settings" button-type="Transparent" button-style="IconOnly" icon="Settings" />
-    <nl3d:Button name="Help" button-type="Transparent" button-style="IconOnly" icon="Help" />
-  </ui:ToggleButtonGroup>
+  <ui:VisualElement name="ButtonGroup" class="hamburger-menu__group">
+    <nl3d:Button name="Open" button-type="transparent" button-style="IconOnly" icon="UploadFolder" />
+    <nl3d:Button name="Save" button-type="transparent" button-style="IconOnly" icon="Save" />
+    <nl3d:Button name="Settings" button-type="transparent" button-style="IconOnly" icon="Settings" />
+    <nl3d:Button name="Help" button-type="transparent" button-style="IconOnly" icon="Help" />
+  </ui:VisualElement>
 </ui:UXML>
