@@ -9,7 +9,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class HideObjectListViewItem : VisualElement
     {
-        public UnityEvent<bool> OnToggleVisibility = new();
+        public UnityEvent<string, bool> OnToggleVisibility = new();
         
         
         private Icon icon;
@@ -54,7 +54,7 @@ namespace Netherlands3D.UI.Components
         
         private void OnToggleValueChanged(ChangeEvent<bool> evt)
         {
-            OnToggleVisibility.Invoke(evt.newValue);
+            OnToggleVisibility.Invoke(id, evt.newValue);
         }
 
         public void ShowToggle(bool show)

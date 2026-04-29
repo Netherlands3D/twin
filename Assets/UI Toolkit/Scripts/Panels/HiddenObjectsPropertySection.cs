@@ -15,8 +15,6 @@ using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
 
@@ -52,7 +50,18 @@ namespace Netherlands3D.UI.Panels
             ListView.RegisterCallback<AttachToPanelEvent>(evt =>
             {
                 //when clicked outside the listview, deselect the current selection
-                RegisterOutsidePanelClick();
+                ListView.RegisterCallback<BlurEvent>(evt =>
+                {
+                    var pos = Pointer.current.position.ReadValue();
+                    var panelPos = RuntimePanelUtils.ScreenToPanel(
+                        ListView.panel,
+                        new Vector2(pos.x, Screen.height - pos.y)
+                    );
+                    if (!ListView.worldBound.Contains(panelPos))
+                    {
+                        ClearSelection();
+                    }
+                });
             });
             
             ListView.selectedIndicesChanged += indices =>
@@ -66,28 +75,7 @@ namespace Netherlands3D.UI.Panels
                 OnDestroy();  
             });
         }
-
-        private void RegisterOutsidePanelClick()
-        {
-            var pointerAction = new InputAction(binding: "<Pointer>/press");
-            pointerAction.performed += _ =>
-            {
-                var pos = Pointer.current.position.ReadValue();
-                var panelPos = RuntimePanelUtils.ScreenToPanel(
-                    ListView.panel,
-                    new Vector2(pos.x, Screen.height - pos.y)
-                );
-                    
-                if (!ListView.worldBound.Contains(panelPos))
-                {
-                    ClearSelection();
-                }
-            };
-            pointerAction.Enable();
-    
-            ListView.RegisterCallback<DetachFromPanelEvent>(_ => pointerAction.Dispose());
-        }
-
+        
         private void UpdateSelectionForIndices(IEnumerable<int> indices)
         {
             ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
@@ -111,13 +99,15 @@ namespace Netherlands3D.UI.Panels
         {
             HideObjectListViewItem item = new HideObjectListViewItem();
             item.ShowToggle(true);
-            item.OnToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(item.ID, visible));
-            item.RegisterCallback<PointerUpEvent>(evt =>
-            {
-               HiddenFeatureSelected(item.ID);
-               
-            });
+            item.OnToggleVisibility.AddListener(ToggleVisibilityForSelectedFeatures);
+            item.RegisterCallback<PointerUpEvent>(HiddenFeatureSelected);
             return item;
+        }
+        
+        private void HiddenFeatureSelected(PointerUpEvent evt)
+        {
+            var element = (HideObjectListViewItem)evt.currentTarget;
+            HiddenFeatureSelected(element.ID);
         }
         
         private void BindListViewItem(VisualElement item, int index)
