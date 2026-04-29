@@ -22,7 +22,7 @@ namespace Netherlands3D.UI.Panels
         private Hyperlink bagLink;
         private Label statusValue;
         private Label yearValue;
-        
+        private BagDataService.BagRequestHandle handle;
         private ListView addressListView;
         private ListView AddressListView => addressListView ??= this.Q<ListView>();
 
@@ -45,26 +45,23 @@ namespace Netherlands3D.UI.Panels
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
                 buildingPropertyData.OnIdsChanged.RemoveListener(OnIdsChanged);
-                BagDataService bagDataService = ServiceLocator.GetService<BagDataService>();
-                bagDataService.OnBagRequestFailed.RemoveListener(Clear);
-                bagDataService.OnBagAddressesRequestSucceeded.RemoveListener(PopulateAddresses);
-                bagDataService.OnBagDataRequestSucceeded.RemoveListener(UpdateThumbnail);
+                handle = null;
             });
         }
-
+        
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            BagDataService bagDataService = ServiceLocator.GetService<BagDataService>();
-            bagDataService.OnBagRequestFailed.AddListener(Clear);
-            bagDataService.OnBagAddressesRequestSucceeded.AddListener(PopulateAddresses);
-            bagDataService.OnBagDataRequestSucceeded.AddListener(UpdateThumbnail);
-            
+            handle = new BagDataService.BagRequestHandle
+            {
+                OnFailed = Clear,
+                OnAddresses = PopulateAddresses,
+                OnBagData = UpdateThumbnail
+            };
             buildingPropertyData = properties.Get<BuildingPropertyData>();
             buildingPropertyData.OnIdsChanged.AddListener(OnIdsChanged);
             
             Dictionary<string, Coordinate> buildingIds = buildingPropertyData.BuildingIds;
             OnIdsChanged(buildingIds);
-            
         }
 
         private void OnIdsChanged(Dictionary<string, Coordinate> buildingIds)
@@ -76,7 +73,7 @@ namespace Netherlands3D.UI.Panels
             }
             
             BagDataService bagDataService = ServiceLocator.GetService<BagDataService>();
-            bagDataService.LoadBagId(buildingIds.FirstOrDefault().Key);
+            bagDataService.LoadBagId(buildingIds.FirstOrDefault().Key, handle);
         }
         
         public void PopulateAddresses(List<string> addresses)
@@ -102,6 +99,10 @@ namespace Netherlands3D.UI.Panels
         {
             Dictionary<string, Coordinate> buildingIds = buildingPropertyData.BuildingIds;
             Coordinate coordinate = buildingIds[bagData.id];
+            bagLink.text = bagData.id;
+            bagLink.url = bagData.url;
+            statusValue.text = bagData.status;
+            yearValue.text = bagData.year;
             
             ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
             //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
@@ -112,8 +113,6 @@ namespace Netherlands3D.UI.Panels
             float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
             thumbnailContainer.style.height = newHeight;
         }
-
-       
 
         private void Clear()
         {

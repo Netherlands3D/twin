@@ -92,7 +92,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnEnable()
         {
-            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);;
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);

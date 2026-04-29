@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
@@ -18,6 +16,7 @@ namespace Netherlands3D.Twin.layers.properties
     {
         private LayerGameObject visualization;
         private Dictionary<string, FeaturePropertyData.FeatureData> featureIds = new();
+        private ObjectSelectorService selectorService;
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -27,17 +26,13 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void OnEnable()
         {
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.SelectFeature.AddListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.AddListener(ClearFeatureMappingsForLayer);
         }
 
         private void OnDisable()
         {
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            if (selectorService == null) 
-                return;
-            
             selectorService.SelectFeature.RemoveListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.RemoveListener(ClearFeatureMappingsForLayer);
         }
