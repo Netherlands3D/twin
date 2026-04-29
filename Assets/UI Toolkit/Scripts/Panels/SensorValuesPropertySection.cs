@@ -22,6 +22,8 @@ namespace Netherlands3D.UI.Panels
         private ColorTile minimumColorTile;
         private ColorTile maximumColorTile;
 
+        private ColorTile activeTile;
+
         private Button resetButton;
         
         public ColorPicker ColorPicker { get; set; }
@@ -59,10 +61,13 @@ namespace Netherlands3D.UI.Panels
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             SetColorPickerState(ColorPickerState.None);
+            ColorPicker.ColorSelected.RemoveListener(OnColorPicked);
         }
 
         private void OnMinimumColorTileClicked(ClickEvent evt)
         {
+            activeTile = minimumColorTile;
+
             if (colorPickerState == ColorPickerState.Minimum)
             {
                 SetColorPickerState(ColorPickerState.None);
@@ -70,13 +75,13 @@ namespace Netherlands3D.UI.Panels
             }
             
             SetColorPickerState(ColorPickerState.Minimum);
-            ColorPicker.ColorSelected.RemoveAllListeners();
             ColorPicker.SetColorInputComponentsWithoutNotify(minimumColorTile.Color);
-            ColorPicker.ColorSelected.AddListener(SetMinimumColor);
         }
 
         private void OnMaximumColorTileClicked(ClickEvent evt)
         {
+            activeTile = maximumColorTile;
+            
             if (colorPickerState == ColorPickerState.Maximum)
             {
                 SetColorPickerState(ColorPickerState.None);
@@ -84,19 +89,7 @@ namespace Netherlands3D.UI.Panels
             }
             
             SetColorPickerState(ColorPickerState.Maximum);
-            ColorPicker.ColorSelected.RemoveAllListeners();
             ColorPicker.SetColorInputComponentsWithoutNotify(maximumColorTile.Color);
-            ColorPicker.ColorSelected.AddListener(SetMaximumColor);
-        }
-        
-        private void SetMinimumColor(Color newColor)
-        {
-            propertyData.MinColor = newColor;
-        }
-        
-        private void SetMaximumColor(Color newColor)
-        {
-            propertyData.MaxColor = newColor;
         }
 
         private void OnMinimumValueChanged(ChangeEvent<float> evt)
@@ -127,6 +120,16 @@ namespace Netherlands3D.UI.Panels
             UpdateMaximumSlider(propertyData.MaxValue);
             UpdateMinimumColor(propertyData.MinColor);
             UpdateMaximumColor(propertyData.MaxColor);
+            
+            ColorPicker.ColorSelected.AddListener(OnColorPicked);
+        }
+
+        private void OnColorPicked(Color newColor)
+        {
+            if(activeTile == minimumColorTile)
+                propertyData.MinColor = newColor;
+            else if(activeTile == maximumColorTile)
+                propertyData.MaxColor = newColor;
         }
 
         private void UpdateMinimumSlider(float value)
