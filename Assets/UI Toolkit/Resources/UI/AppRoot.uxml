@@ -3,6 +3,7 @@
     xmlns:ui="UnityEngine.UIElements" 
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
     xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
     editor-extension-mode="False"  
 >
     <ui:Style src="./AppRoot.uss"/>
@@ -19,7 +20,10 @@
                 <nl3d:ToolbarToolbox picking-mode="Ignore" />
                 <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1;"/>
             </ui:VisualElement>
-            <nl3d:PropertiesPanel name="PropertiesPanel"/>
+            <ui:VisualElement name="PropertiesSection" class="app__properties-section">
+                <nl3dP:ColorPicker name="PropertiesColorPicker" class="app__properties-section-column"/>
+                <nl3d:PropertiesPanel name="PropertiesPanel" class="app__properties-section-column"/>
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="BottomSection" picking-mode="Ignore" style="align-items: flex-end; flex-direction: row;">
             <nl3d:Footer/>

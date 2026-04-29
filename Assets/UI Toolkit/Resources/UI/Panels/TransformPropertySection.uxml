@@ -2,21 +2,15 @@
     <nl3d:ContentContainer leading-icon="ScaleV1" text="Transformatie">
         <ui:VisualElement class="transform-property-section__row">
             <nl3d:Icon image="Move" class="transform-property-section__item"/>
-            <nl3d:NumberField name="PositionX" number-field-style="Small" label-text="X" decimal-count="2" class="transform-property-section__item"/>
-            <nl3d:NumberField name="PositionY" number-field-style="Small" label-text="Y" decimal-count="2" class="transform-property-section__item"/>
-            <nl3d:NumberField name="PositionZ" number-field-style="Small" label-text="Z" decimal-count="2" class="transform-property-section__item transform-property-section__item-last"/>
+            <nl3d:XYZField name="Position" number-field-style="Small" decimal-count="2" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="transform-property-section__row">
             <nl3d:Icon image="RotateV2" class="transform-property-section__item"/>
-            <nl3d:NumberField name="RotationX" number-field-style="Small" label-text="X" decimal-count="2" class="transform-property-section__item"/>
-            <nl3d:NumberField name="RotationY" number-field-style="Small" label-text="Y" decimal-count="2" class="transform-property-section__item"/>
-            <nl3d:NumberField name="RotationZ" number-field-style="Small" label-text="Z" decimal-count="2" class="transform-property-section__item transform-property-section__item-last"/>
+            <nl3d:XYZField name="Rotation" number-field-style="Small" decimal-count="2" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="transform-property-section__row">
             <nl3d:Icon image="ScaleV2" class="transform-property-section__item"/>
-            <nl3d:NumberField name="ScaleX" number-field-style="Small" label-text="X" decimal-count="2" class="transform-property-section__item"/>
-            <nl3d:NumberField name="ScaleY" number-field-style="Small" label-text="Y" decimal-count="2" class="transform-property-section__item"/>
-            <nl3d:NumberField name="ScaleZ" number-field-style="Small" label-text="Z" decimal-count="2" class="transform-property-section__item transform-property-section__item-last"/>
+            <nl3d:XYZField name="Scale" number-field-style="Small" decimal-count="2" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
