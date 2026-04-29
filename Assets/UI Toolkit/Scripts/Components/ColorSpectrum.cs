@@ -14,9 +14,8 @@ namespace Netherlands3D.UI.Components
         private VisualElement Spectrum => spectrum ??= this.Q<VisualElement>("Surface"); 
         private Vector2 dragStartPosition;
 
-        private Vector2 center => new Vector2(resolvedStyle.width / 2, resolvedStyle.height / 2);
         private const float colorSpectrumRadius = 80f;
-
+        private Vector2 center => new Vector2(colorSpectrumRadius, colorSpectrumRadius);
         private Vector2 selectorPosition = new Vector2(colorSpectrumRadius, colorSpectrumRadius);
 
         [UxmlAttribute("selector-position")]

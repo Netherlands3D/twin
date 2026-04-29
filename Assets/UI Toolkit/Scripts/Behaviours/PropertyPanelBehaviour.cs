@@ -25,7 +25,8 @@ namespace Netherlands3D.UI.Panels
         {
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
-            colorPicker = root.Q<ColorPicker>("PropertiesColorPicker");
+            secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
+            colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
             secondaryPropertiesPanel.SetVisible(false);
             propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
