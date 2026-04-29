@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.GeoJSON;
@@ -17,9 +18,9 @@ namespace Netherlands3D
 
         public class BagRequestHandle
         {
-            public System.Action<BagData> OnBagData;
-            public System.Action<List<string>> OnAddresses;
-            public System.Action OnFailed;
+            public Action<BagData> OnBagData;
+            public Action<List<string>> OnAddresses;
+            public Action OnFailed;
         }
 
         private class RequestState
