@@ -4,6 +4,14 @@
     padding: 4px;
 }
 
+.app__properties-section{
+    flex-direction: row;
+}
+
+.app__properties-section .app__properties-section-column{
+    margin-left: var(--spacing-2);
+}
+
 .app__top-zone {
     flex: 0 auto;
     position: absolute;
