@@ -16,6 +16,7 @@ namespace Netherlands3D.UI.Components
 
         private const float colorSpectrumRadius = 80f;
         private Vector2 center => new Vector2(colorSpectrumRadius, colorSpectrumRadius);
+
         private Vector2 selectorPosition = new Vector2(colorSpectrumRadius, colorSpectrumRadius);
 
         [UxmlAttribute("selector-position")]

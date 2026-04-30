@@ -137,3 +137,4 @@
 .icon.image-width { --icon-image: var(--icon-width); }
 .icon.image-visibility { --icon-image: var(--icon-visibility); }
 .icon.image-invisible { --icon-image: var(--icon-invisible); }
+.icon.image-urban-releaf { --icon-image: var(--icon-urbanreleaf); }

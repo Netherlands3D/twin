@@ -89,7 +89,8 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         [JsonIgnore] public readonly UnityEvent<Color> OnMaxColorChanged = new();
         [JsonIgnore] public readonly UnityEvent<DateTime> OnStartDateChanged = new();
         [JsonIgnore] public readonly UnityEvent<DateTime> OnEndDateChanged = new();
-        [JsonIgnore] public readonly UnityEvent OnResetValues = new();
+        [JsonIgnore] public readonly UnityEvent OnResetDateValues = new();
+        [JsonIgnore] public readonly UnityEvent OnResetRangeValues = new();
         
         [JsonConstructor]
         public SensorPropertyData(float defaultMin, float defaultMax, Color defaultMinColor, Color defaultMaxColor, DateTime defaultStartDate, DateTime defaultEndDate)
@@ -100,6 +101,16 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             maxColor = defaultMaxColor;
             startDate = defaultStartDate;
             endDate = defaultEndDate;
+        }
+
+        public void ResetDateValues()
+        {
+            OnResetDateValues.Invoke();
+        }
+        
+        public void ResetMinMaxValues()
+        {
+            OnResetRangeValues.Invoke();
         }
     }
 }
