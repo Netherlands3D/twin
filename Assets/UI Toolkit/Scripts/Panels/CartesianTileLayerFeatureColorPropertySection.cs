@@ -91,8 +91,7 @@ namespace Netherlands3D.UI.Panels
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             stylingPropertyData = properties.GetDefaultStylingPropertyData<CartesianTileLayerFeatureColorPropertyData>();
-            if (stylingPropertyData == null) return;
-            
+           
             UpdateSwatches();
             
             stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
