@@ -1,4 +1,5 @@
 using System;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -49,6 +50,11 @@ namespace Netherlands3D.UI.Components
                 Icon.Color = ThemeColor.Blue900;
             else
                 Icon.Color = ThemeColor.Blue200;
+        }
+
+        public void Show(bool show)
+        {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !show);
         }
     }
 }

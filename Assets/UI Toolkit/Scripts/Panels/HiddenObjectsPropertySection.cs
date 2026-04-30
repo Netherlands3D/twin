@@ -1,4 +1,3 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
@@ -6,65 +5,147 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.layers.properties;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+using ListView = Netherlands3D.UI.Components.ListView;
 
-namespace Netherlands3D.Twin.Layers.Properties
+namespace Netherlands3D.UI.Panels
 {
-    [PropertySection(typeof(HiddenObjectsPropertyData), Symbolizer.VisibilityProperty)]
-    public class HiddenObjectsPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
+    [UxmlElement]
+    [PropertySection(typeof(HiddenObjectsPropertyData))]
+    public partial class HiddenObjectsPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-        [SerializeField] private RectTransform content;
-        [SerializeField] private GameObject hiddenItemPrefab;
-        [SerializeField] private RectTransform layerContent;
-        [SerializeField] private float cameraDistance = 150f;
-        [SerializeField] private Material selectionMaterial;
-
+        private float cameraDistance = 150f;
+        private Material selectionMaterial;
         private GameObject selectedGhostObject;
         private UnityAction<IMapping> waitForMappingLoaded;
-        
-        public int SelectedButtonIndex { get; set; } = -1;
-        public List<ISelectable> SelectedItems { get; } = new();
-        public List<ISelectable> Items { get; set; } = new();
-        public ISelectable FirstSelectedItem { get; set; }
-
         private HiddenObjectsPropertyData stylingPropertyData;
+        private ListView listView;
+        private ListView ListView => listView ??= this.Q<ListView>();
+        private List<string> objectIds = new();
+        private List<string> toggledObjectIds = new();
+        private bool showSelection = true;
+        
+        public HiddenObjectsPropertySection()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");    
+            
+            ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            ListView.selectionType = SelectionType.Multiple;
+            
+            ListView.makeItem = MakeListViewItem;
+            ListView.bindItem = BindListViewItem;
+            
+            
+            ListView.RegisterCallback<AttachToPanelEvent>(evt =>
+            {
+                //when clicked outside the listview, deselect the current selection
+                ListView.RegisterCallback<BlurEvent>(evt =>
+                {
+                    var pos = Pointer.current.position.ReadValue();
+                    var panelPos = RuntimePanelUtils.ScreenToPanel(
+                        ListView.panel,
+                        new Vector2(pos.x, Screen.height - pos.y)
+                    );
+                    if (!ListView.worldBound.Contains(panelPos))
+                    {
+                        ClearSelection();
+                    }
+                });
+            });
+            
+            ListView.selectedIndicesChanged += indices =>
+            {
+                //show selection in world when items in panel are selected
+                UpdateSelectionForIndices(indices);
+            };
+            
+            RegisterCallback<DetachFromPanelEvent>(_ => 
+            {
+                OnDestroy();  
+            });
+        }
+        
+        private void UpdateSelectionForIndices(IEnumerable<int> indices)
+        {
+            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector.Deselect();
+            
+            if(!showSelection) return;
+            
+            foreach (int i in indices)
+            {
+                var id = ListView.itemsSource[i] as string;
+                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(id);
+                if (visibility == true)
+                {
+                    Coordinate coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(id);
+                    selector.SelectBagId(id, coord);
+                }
+            }
+        }
+        
+        private VisualElement MakeListViewItem()
+        {
+            HideObjectListViewItem item = new HideObjectListViewItem();
+            item.ShowToggle(true);
+            item.OnToggleVisibility.AddListener(ToggleVisibilityForSelectedFeatures);
+            item.RegisterCallback<PointerUpEvent>(HiddenFeatureSelected);
+            return item;
+        }
+        
+        private void HiddenFeatureSelected(PointerUpEvent evt)
+        {
+            var element = (HideObjectListViewItem)evt.currentTarget;
+            HiddenFeatureSelected(element.ID);
+        }
+        
+        private void BindListViewItem(VisualElement item, int index)
+        {
+            if (item is not HideObjectListViewItem listViewItem) return;
+           
+            string mapping = ListView.itemsSource[index] as string;
+            bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(mapping);
+            listViewItem.SetToggleValue(visibility == true);
+            listViewItem.ID = mapping;
+        }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             stylingPropertyData = properties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
             if (stylingPropertyData == null) return;
 
-            CreateItems();
+            selectionMaterial = stylingPropertyData.SelectionMaterial;
+            
+            objectIds.Clear();
             UpdateVisibility();
             stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
-
             ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
+        }
+
+        private void ClearSelection()
+        {
+            ListView.ClearSelection();
+            DestroyGhostMesh();
+        }
+
+        private void UpdateVisibility()
+        {
             //deselect any selected feature in the world when opening the hidden feature panel
             ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
             selector.Deselect();
-
-            StartCoroutine(OnPropertySectionsLoaded());
-        }
-
-        private IEnumerator OnPropertySectionsLoaded()
-        {
-            yield return new WaitForEndOfFrame();
-                       
-            // workaround to have a minimum height for the content loaded (because of scrollrects)
-            LayoutElement layout = GetComponent<LayoutElement>();
-            layout.minHeight = content.rect.height;
-        }
-
-        private void CreateItems()
-        {
-            layerContent.ClearAllChildren();
+            
+            //dont clear the list of id's because we want to keep them during the panels life
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
@@ -72,39 +153,23 @@ namespace Netherlands3D.Twin.Layers.Properties
                 {
                     string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);                    
                     bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
-                    if (visibility == false)
-                        CreateVisibilityItem(objectId);
+                    if (visibility == false && !objectIds.Contains(objectId))
+                        objectIds.Add(objectId);
+                    
+                    //select the recently toggled on building so we can actually see what was toggled on
+                    if (showSelection && visibility == true && toggledObjectIds.Contains(objectId))
+                    {
+                        Coordinate coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
+                        selector.SelectBagId(objectId, coord);
+                    }
                 }
             }
-        }
-
-        private void CreateVisibilityItem(string objectID)
-        {
-            foreach (HiddenObjectsVisibilityItem obj in Items.OfType<HiddenObjectsVisibilityItem>())
-                if (obj.ObjectId == objectID)
-                    return;
-
-            GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);            
-            HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
-            item.SetObjectId(objectID);
-            //because all ui elements will be destroyed on close an anonymous listener is fine here  
-            item.ToggleVisibility.AddListener(isOn => OnClickToggle(objectID));
-            item.ToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(objectID, visible));
-            item.OnSelectItem.AddListener(OnClickItem);
-            Items.Add(item);
-        }
-
-        private void UpdateVisibility()
-        {
-            //update the toggles based on visibility attributes in data
-            foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
-            {
-                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(item.ObjectId);
-                item.SetToggleState(visibility == true);
-            }
+           
+            ListView.itemsSource = objectIds;
+            listView.RefreshItems();
         }        
 
-        private void ToggleVisibilityForFeature(string objectId, bool visible)
+        private HiddenObjectsPropertyData.SubObjectData? ToggleVisibilityForFeature(string objectId, bool visible)
         {
             //the feature being changed should always have its coordinate within the styling rule!
             Coordinate? coord;
@@ -115,76 +180,57 @@ namespace Netherlands3D.Twin.Layers.Properties
                 if(coord == null)
                 {
                     Debug.LogError("the styling rule does not contain a coordinate for this feature!");
-                    return;
+                    return null;
                 }
-                stylingPropertyData.SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord);
-                return;
+                HiddenObjectsPropertyData.SubObjectData layerFeatureData = new HiddenObjectsPropertyData.SubObjectData();
+                layerFeatureData.layerFeature = layerFeature;
+                layerFeatureData.coord = (Coordinate)coord;
+                layerFeatureData.visible = visible;
+                return layerFeatureData;
             }
             coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
-                return;
+                return null;
             }
-            stylingPropertyData.SetVisibilityForSubObjectById(objectId, visible, (Coordinate)coord);            
+            HiddenObjectsPropertyData.SubObjectData subObjectData = new HiddenObjectsPropertyData.SubObjectData();
+            subObjectData.id = objectId;
+            subObjectData.coord = (Coordinate)coord;
+            subObjectData.visible = visible;
+            return subObjectData;
         }
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
         {
-            foreach (HiddenObjectsVisibilityItem item in SelectedItems.OfType<HiddenObjectsVisibilityItem>())
+            //is the new layer not selected yet and is no modifier pressed, then clear selection and select the new layer
+            int index = ListView.itemsSource.IndexOf(objectId);
+            if (index >= 0 && !ListView.selectedIndices.Contains(index))
             {
-                ToggleVisibilityForFeature(item.ObjectId, visible);
+                if(MultiSelectionUtility.NoModifierKeyPressed())
+                    ClearSelection();
+                
+                ListView.AddToSelection(index);
             }
-
+            
+            toggledObjectIds.Clear();
+            List<HiddenObjectsPropertyData.SubObjectData> stylingData = new();
+            //toggle the selection of items
+            foreach (int i in ListView.selectedIndices.ToList())
+            {
+                var id = ListView.itemsSource[i] as string;
+                if(visible)
+                    toggledObjectIds.Add(id);
+                var data = ToggleVisibilityForFeature(id, visible);
+                if(data.HasValue)
+                    stylingData.Add((HiddenObjectsPropertyData.SubObjectData)data);
+            }
+            stylingPropertyData.SetVisibilityForSubObjects(stylingData);
+           
             if (!visible)
                 ShowGhostMesh(objectId);
             else
                 DestroyGhostMesh();
-        }
-
-        private void UpdateSelectedButtonIndex(string objectId)
-        {
-            SelectedButtonIndex = -1;
-            foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
-                if (item.ObjectId == objectId)
-                {
-                    SelectedButtonIndex = Items.IndexOf(item);
-                    break;
-                }
-        }
-
-        private void OnClickItem(string objectId)
-        {        
-            //select layer
-            UpdateSelectedButtonIndex(objectId);
-            MultiSelectionUtility.ProcessLayerSelection(this, anythingSelected => 
-            { 
-                if(anythingSelected)
-                    HiddenFeatureSelected(objectId);
-            });
-        }
-
-        private void OnClickToggle(string objectId)
-        {
-            //if there was already a selection of layers,
-            //we should only toggle but not process a new selection of layers
-            //but if the selected toggle was outside the selection of layers then process a new selection and select that layer
-            UpdateSelectedButtonIndex(objectId);
-            if (SelectedItems.Count > 1)
-            {
-                if (!SelectedItems.Contains(Items[SelectedButtonIndex]))
-                {
-                    OnClickItem(objectId);
-                }
-                return;
-            }
-            //same item selected do nothing
-            if (SelectedItems.Count == 1 && SelectedItems[0] == Items[SelectedButtonIndex])
-            {
-                return;
-            }
-            //select the new layer
-            OnClickItem(objectId);
         }
 
         private void HiddenFeatureSelected(string objectId)
@@ -288,7 +334,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (selectedGhostObject != null)
             {
-                Destroy(selectedGhostObject);
+                MonoBehaviour.Destroy(selectedGhostObject);
                 selectedGhostObject = null;
             }
         }

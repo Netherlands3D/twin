@@ -55,6 +55,13 @@ namespace Netherlands3D.Twin.Layers.Properties
                 OnStylingChanged.Invoke();
         }
         
+        public void SetStylingRules(Dictionary<string, StylingRule> stylingRuleKeys)
+        {
+            foreach (KeyValuePair<string, StylingRule> pair in stylingRuleKeys)
+                StylingRules[pair.Key] = pair.Value;
+            OnStylingChanged.Invoke();
+        }
+        
         public string GetStylingRuleName(string stylingRuleKey)
         {
             return StylingRules[stylingRuleKey].Name;

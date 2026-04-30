@@ -67,7 +67,7 @@ namespace Netherlands3D.UI.Components
             if (makeItem == null) makeItem = CreateDefaultItem;
             if (base.bindItem == null) this.bindItem = DefaultBind;
             
-            RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
+            RegisterCallback<ClickEvent>(OnPointerDown, TrickleDown.TrickleDown);
         }
 
         /// <summary>
@@ -85,11 +85,12 @@ namespace Netherlands3D.UI.Components
         {
         }
         
-        private void OnPointerDown(PointerDownEvent evt)
+        private void OnPointerDown(ClickEvent evt)
         {
             if (selectionType != SelectionType.Multiple) return;
 
             var el = evt.target as VisualElement;
+            //find upwards in the tree until unitylistview item is not found which means we will have the listview parent
             while (el != null && !el.ClassListContains("unity-list-view__item"))
                 el = el.parent;
             if (el == null) return;
