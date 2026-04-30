@@ -40,7 +40,8 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             propertyData.OnMaxValueChanged.AddListener(RefreshTiles);
             propertyData.OnMinColorChanged.AddListener(RefreshTiles);
             propertyData.OnMaxColorChanged.AddListener(RefreshTiles);
-            propertyData.OnResetValues.AddListener(ResetValues);
+            propertyData.OnResetDateValues.AddListener(ResetDateValues);
+            propertyData.OnResetRangeValues.AddListener(ResetRangeValues);
 
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
         }
@@ -55,7 +56,8 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             propertyData.OnMaxValueChanged.RemoveListener(RefreshTiles);
             propertyData.OnMinColorChanged.RemoveListener(RefreshTiles);
             propertyData.OnMaxColorChanged.RemoveListener(RefreshTiles);
-            propertyData.OnResetValues.RemoveListener(ResetValues);
+            propertyData.OnResetDateValues.RemoveListener(ResetDateValues);
+            propertyData.OnResetRangeValues.RemoveListener(ResetRangeValues);
             
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
         }
@@ -78,15 +80,20 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             SensorProjectionLayer.SensorDataController.LoadProperties(properties);
         }
 
-        public void ResetValues()
+        private void ResetDateValues()
+        {
+            SensorPropertyData propertyData = LayerData.GetProperty<SensorPropertyData>();
+            propertyData.StartDate = SensorProjectionLayer.SensorDataController.DefaultStartDate;
+            propertyData.EndDate = SensorProjectionLayer.SensorDataController.DefaultEndDate;
+        }
+        
+        private void ResetRangeValues()
         {
             SensorPropertyData propertyData = LayerData.GetProperty<SensorPropertyData>();
             propertyData.MinValue = SensorProjectionLayer.SensorDataController.defaultMinValue;
             propertyData.MaxValue = SensorProjectionLayer.SensorDataController.defaultMaxValue;
             propertyData.MinColor = SensorProjectionLayer.SensorDataController.defaultMinColor;
             propertyData.MaxColor = SensorProjectionLayer.SensorDataController.defaultMaxColor;
-            propertyData.StartDate = SensorProjectionLayer.SensorDataController.DefaultStartDate;
-            propertyData.EndDate = SensorProjectionLayer.SensorDataController.DefaultEndDate;
         }
     }
 }

@@ -4,10 +4,10 @@
     padding: 4px;
 }
 
-.properties-section{
+.app__properties-section{
     flex-direction: row;
 }
 
-.properties-section .properties-section-column{
+.app__properties-section .app__properties-section-column{
     margin-left: var(--spacing-2);
 }

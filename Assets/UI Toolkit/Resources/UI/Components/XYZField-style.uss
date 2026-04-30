@@ -1,0 +1,12 @@
+.xyz-field {
+    flex-direction: row;
+    align-items: center;
+}
+
+.xyz-field .xyz-field__item{
+    margin-right: var(--spacing-2);
+}
+
+.xyz-field__item.xyz-field__item-last{
+    margin-right: 0;
+}
