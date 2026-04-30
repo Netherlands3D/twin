@@ -96,7 +96,7 @@ namespace Netherlands3D.UI.Panels
             UpdateSwatches();
             
             stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
-            ColorPicker.ColorSelected.AddListener(OnPickColor);
+            ColorPicker.ColorChanged.AddListener(OnPickColor);
 
             ColorPicker.SetVisible(false);
         }
@@ -104,7 +104,7 @@ namespace Netherlands3D.UI.Panels
         private void OnDestroy()
         {
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
-            ColorPicker.ColorSelected.RemoveListener(OnPickColor);
+            ColorPicker.ColorChanged.RemoveListener(OnPickColor);
         }
 
 
