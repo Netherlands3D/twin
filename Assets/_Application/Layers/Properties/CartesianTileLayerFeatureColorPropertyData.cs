@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             SetColorByMaterialIndex(materialIndexIdentifier, mat.name, color);
         }
         
-        public void SetColorByMaterialIndex(int index, string name, Color color)
+        public void SetColorByMaterialIndex(int index, string name, Color color, bool notify = true)
         {
             var stylingRuleName = name;
             var stylingRuleKey = ColorizationStyleRuleKey(index);
@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             );
             stylingRule.Symbolizer.SetFillColor(color);
 
-            SetStylingRule(stylingRuleKey, stylingRule);
+            SetStylingRule(stylingRuleKey, stylingRule, notify);
         }
         
         public Color? GetColor(LayerFeature layerFeature)
