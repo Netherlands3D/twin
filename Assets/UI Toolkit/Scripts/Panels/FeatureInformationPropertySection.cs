@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -108,14 +106,18 @@ namespace Netherlands3D.UI.Panels
 
         private void GetFeatureThumbnail(BoundingBox bbox)
         {
-            ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
-            //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
-            Bounds currentObjectBounds = bbox.ToUnityBounds();
-            Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
-            thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
-            float aspect = (float)tex.height / tex.width;
-            float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
-            thumbnailContainer.style.height = newHeight;
+            //schedule for next frame so the style is resolved
+            thumbnailContainer.schedule.Execute(_ => 
+            { 
+                ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
+                //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
+                Bounds currentObjectBounds = bbox.ToUnityBounds();
+                Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
+                thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
+                float aspect = (float)tex.height / tex.width;
+                float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
+                thumbnailContainer.style.height = newHeight;
+            });
         }
 
         private void Clear()

@@ -5,3 +5,7 @@
 .feature-information-address__list-view{
     margin-top: var(--spacing-3);
 }
+
+.feature-information-thumbnail__container{
+    flex-shrink: 0;
+}
