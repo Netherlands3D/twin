@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
@@ -22,6 +23,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             get => selectionMaterial;
             set => selectionMaterial = value;
         }
+
+        public struct SubObjectData
+        {
+            public LayerFeature layerFeature;
+            public string id;
+            public bool visible;
+            public Coordinate coord;
+        }
      
         public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate, bool notify = true)
         {
@@ -45,7 +54,32 @@ namespace Netherlands3D.Twin.Layers.Properties
             stylingRule.Symbolizer.SetVisibility(visible);
             stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
             
-            SetStylingRule(stylingRuleKey, stylingRule, notify);
+            SetStylingRule(stylingRuleKey, stylingRule);
+        }
+
+        private Dictionary<string, StylingRule>  stylingRuleKeys = new();
+        public void SetVisibilityForSubObjects(List<SubObjectData> objects)
+        {
+            stylingRuleKeys.Clear();
+            foreach (SubObjectData obj in objects)
+            {
+                var stylingRuleName = obj.layerFeature != null ? obj.layerFeature.Attributes[VisibilityAttributeIdentifier] : obj.id;
+                var stylingRuleKey = VisibilityStyleRuleKey(stylingRuleName);
+
+                // Add or set the colorization of this feature by its material index
+                var stylingRule = new StylingRule(
+                    stylingRuleName,
+                    Expression.EqualTo(
+                        Expression.Get(VisibilityAttributeIdentifier),
+                        obj.id
+                    )
+                );
+                stylingRule.Symbolizer.SetVisibility(obj.visible);
+                stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, obj.coord);
+                stylingRuleKeys.Add(stylingRuleKey, stylingRule);
+            }
+            
+            SetStylingRules(stylingRuleKeys);
         }
 
         public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
