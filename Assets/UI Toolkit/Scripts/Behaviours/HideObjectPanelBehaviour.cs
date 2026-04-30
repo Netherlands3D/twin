@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using GG.Extensions;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
