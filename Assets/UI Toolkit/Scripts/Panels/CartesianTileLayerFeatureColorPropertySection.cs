@@ -83,7 +83,9 @@ namespace Netherlands3D.UI.Panels
             listViewItem.Tile.ColorHex = color;
             
             string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
-            listViewItem.Tile.LabelText = layerName;
+            //layer names usually will look like Twin_Something, lets use only the second part of the split on _
+            string name = layerName.Contains('_') ? layerName.Split('_')[1] : layerName;
+            listViewItem.Tile.LabelText = name;
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
