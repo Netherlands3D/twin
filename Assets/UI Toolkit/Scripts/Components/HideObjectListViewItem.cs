@@ -50,6 +50,7 @@ namespace Netherlands3D.UI.Components
             {
                 visibilityToggle.UnregisterValueChangedCallback(OnToggleValueChanged);
             });
+            
         }
         
         private void OnToggleValueChanged(ChangeEvent<bool> evt)

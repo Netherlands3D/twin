@@ -169,7 +169,7 @@ namespace Netherlands3D.UI.Panels
             listView.RefreshItems();
         }        
 
-        private void ToggleVisibilityForFeature(string objectId, bool visible)
+        private HiddenObjectsPropertyData.SubObjectData? ToggleVisibilityForFeature(string objectId, bool visible)
         {
             //the feature being changed should always have its coordinate within the styling rule!
             Coordinate? coord;
@@ -180,18 +180,25 @@ namespace Netherlands3D.UI.Panels
                 if(coord == null)
                 {
                     Debug.LogError("the styling rule does not contain a coordinate for this feature!");
-                    return;
+                    return null;
                 }
-                stylingPropertyData.SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord, false);
-                return;
+                HiddenObjectsPropertyData.SubObjectData layerFeatureData = new HiddenObjectsPropertyData.SubObjectData();
+                layerFeatureData.layerFeature = layerFeature;
+                layerFeatureData.coord = (Coordinate)coord;
+                layerFeatureData.visible = visible;
+                return layerFeatureData;
             }
             coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
-                return;
+                return null;
             }
-            stylingPropertyData.SetVisibilityForSubObjectById(objectId, visible, (Coordinate)coord, false);
+            HiddenObjectsPropertyData.SubObjectData subObjectData = new HiddenObjectsPropertyData.SubObjectData();
+            subObjectData.id = objectId;
+            subObjectData.coord = (Coordinate)coord;
+            subObjectData.visible = visible;
+            return subObjectData;
         }
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
@@ -207,15 +214,18 @@ namespace Netherlands3D.UI.Panels
             }
             
             toggledObjectIds.Clear();
+            List<HiddenObjectsPropertyData.SubObjectData> stylingData = new();
             //toggle the selection of items
             foreach (int i in ListView.selectedIndices.ToList())
             {
                 var id = ListView.itemsSource[i] as string;
                 if(visible)
                     toggledObjectIds.Add(id);
-                ToggleVisibilityForFeature(id, visible);
+                var data = ToggleVisibilityForFeature(id, visible);
+                if(data.HasValue)
+                    stylingData.Add((HiddenObjectsPropertyData.SubObjectData)data);
             }
-            stylingPropertyData.OnStylingChanged.Invoke();
+            stylingPropertyData.SetVisibilityForSubObjects(stylingData);
            
             if (!visible)
                 ShowGhostMesh(objectId);
