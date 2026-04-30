@@ -16,6 +16,12 @@ namespace Netherlands3D.LayerStyles
         public const string VisibilityProperty = "visibility";
         public const string MaskLayerMaskProperty = "mask-layer-mask";
 
+        public static readonly Dictionary<string, string> DisplayPropertyNames = new()
+        {
+            { FillColorProperty, "Vulkleur" },
+            { StrokeColorProperty,  "Lijnkleur" }
+        };
+        
         //Constants for property values
         private const string VisibilityVisible = "visible";
         private const string VisibilityNone = "none";
