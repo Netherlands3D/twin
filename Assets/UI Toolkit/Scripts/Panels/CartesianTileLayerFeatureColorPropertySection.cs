@@ -22,6 +22,7 @@ namespace Netherlands3D.UI.Panels
         private ListView swatchesListView;
         private ListView SwatchesListView => swatchesListView ??= this.Q<ListView>();
         private List<string> colors = new();
+        private List<CartesianTileLayerFeatureColorPropertyData.ColorData> colorData = new();
         
         public CartesianTileLayerFeatureColorPropertySection()
         {
@@ -125,16 +126,21 @@ namespace Netherlands3D.UI.Panels
             SwatchesListView.itemsSource = colors;
             SwatchesListView.RefreshItems();
         }
-
+        
         private void OnPickColor(Color color)
         {
+            colorData.Clear();
             //since we apply styling to multiple stylingrules we have to use the notify == false and invoke styling changed afterwards
             foreach (int i in SwatchesListView.selectedIndices)
             {
                 string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(i);
-                stylingPropertyData.SetColorByMaterialIndex(i, layerName, color, false);
+                CartesianTileLayerFeatureColorPropertyData.ColorData data = new();
+                data.index = i;
+                data.name = layerName;
+                data.color = color;
+                colorData.Add(data);
             }
-            stylingPropertyData.OnStylingChanged.Invoke();
+            stylingPropertyData.SetColorsByMaterialIndices(colorData);
         }
     }
 }
