@@ -1,7 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -21,13 +25,17 @@ namespace Netherlands3D.UI.Panels
         private Button button;
         private Button Button => button ??= this.Q<Button>("HideButton");
 
+        private float cameraDistance = 150f;
+
+        private Dictionary<string, IMapping> mappings;
+
         public HideObjectPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
         }
         
-        public HideObjectPanel(Dictionary<string, object> data) :  this()
+        public HideObjectPanel(Dictionary<string, IMapping> data) :  this()
         {
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
@@ -37,10 +45,14 @@ namespace Netherlands3D.UI.Panels
            
             PopulateBagIds(data.Keys.ToList());
 
+            mappings = data;
+
             Button.clicked += OnClose.Invoke;
+            
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
         
-        ~HideObjectPanel()
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             Button.clicked -= OnClose.Invoke;
         }
@@ -53,7 +65,18 @@ namespace Netherlands3D.UI.Panels
         
         private VisualElement MakeListViewItem()
         {
-            return new HideObjectListViewItem();
+            HideObjectListViewItem listViewItem = new HideObjectListViewItem();
+            listViewItem.ShowToggle(false);
+            listViewItem.RegisterCallback<PointerDownEvent>(_ =>
+            {
+                //move to coord
+                string id = listViewItem.ID;
+                if (mappings[id] is not MeshMapping map) return;
+              
+                Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, map.ObjectMapping.items[id]);
+                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
+            });
+            return listViewItem;
         }
         
         private void BindListViewItem(VisualElement item, int index)
