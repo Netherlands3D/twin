@@ -4,8 +4,8 @@
          noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
          editor-extension-mode="False" 
          name="MTLImportPropertySection"
-         class="mtl-property-section">
+         class="color-styling-property-section">
     <nl3d:ContentContainer leading-icon="Paint" text="Kleur aanpassen">
-        <nl3d:ColorPicker />
+        <nl3d:ListView class="color-styling-property-section__list-view"/>
     </nl3d:ContentContainer>
 </ui:UXML>
