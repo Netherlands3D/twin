@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,7 +17,6 @@ namespace Netherlands3D.UI.Panels
         private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private SecondaryPropertiesPanel secondaryPropertiesPanel;
-        private VisualElement propertySectionContainer;
         private ColorPicker colorPicker;
 
         private void Start()
@@ -28,7 +26,6 @@ namespace Netherlands3D.UI.Panels
             secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
             secondaryPropertiesPanel.SetVisible(false);
-            propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
             ClearActivePanel();
@@ -36,7 +33,7 @@ namespace Netherlands3D.UI.Panels
 
         public void ClearActivePanel()
         {
-            propertySectionContainer.Clear();
+            propertiesPanel.ClearPropertySections();
             propertiesPanel.SetVisible(false);
         }
 
@@ -111,7 +108,7 @@ namespace Netherlands3D.UI.Panels
         private void CreatePanel(Type panelType, List<LayerPropertyData> properties)
         {
             var propertySection = (VisualElement)Activator.CreateInstance(panelType);
-            propertySectionContainer.Add(propertySection);
+            propertiesPanel.AddPropertySection(propertySection);
 
             if (propertySection is IPropertyPanelWithColorPicker propertyPanelWithColorPicker)
                 propertyPanelWithColorPicker.ColorPicker = colorPicker;

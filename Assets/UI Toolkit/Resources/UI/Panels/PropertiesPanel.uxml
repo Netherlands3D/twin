@@ -8,8 +8,10 @@
 >
     <ui:VisualElement name="Header" class="properties-panel__header">
         <nl3d:Header text="Eigenschappen" class="properties-panel__header-title"/>
-        <nl3d:Button name="PropertiesHeaderCloseButton" button-style="IconOnly" icon="close" class="properties-panel__header-button-close"/>
+        <nl3d:CloseButton />
     </ui:VisualElement>
     <nl3d:ToolbarProperties />
-    <nl3d:ScrollView class="properties-panel__content" name="Content" />
+    <nl3d:ScrollView class="properties-panel__content" name="InformationContent" />
+    <nl3d:ScrollView class="properties-panel__content" name="PropertiesContent" />
+    <nl3d:ScrollView class="properties-panel__content" name="StylingContent" />
 </ui:UXML>
