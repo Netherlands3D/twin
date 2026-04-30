@@ -23,13 +23,13 @@ namespace Netherlands3D.Twin.Layers.Properties
             set => selectionMaterial = value;
         }
      
-        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate)
+        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate, bool notify = true)
         {
             string id = layerFeature.Attributes[VisibilityAttributeIdentifier];
-            SetVisibilityForSubObjectById(id, visible, coordinate);
+            SetVisibilityForSubObjectById(id, visible, coordinate, notify);
         }   
         
-        public void SetVisibilityForSubObjectById(string objectId, bool visible, Coordinate coordinate)
+        public void SetVisibilityForSubObjectById(string objectId, bool visible, Coordinate coordinate, bool notify = true)
         {
             var stylingRuleName = objectId;
             var stylingRuleKey = VisibilityStyleRuleKey(objectId);
@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             stylingRule.Symbolizer.SetVisibility(visible);
             stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
             
-            SetStylingRule(stylingRuleKey, stylingRule);
+            SetStylingRule(stylingRuleKey, stylingRule, notify);
         }
 
         public bool? GetVisibilityForSubObject(LayerFeature layerFeature)

@@ -182,7 +182,7 @@ namespace Netherlands3D.UI.Panels
                     Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                     return;
                 }
-                stylingPropertyData.SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord);
+                stylingPropertyData.SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord, false);
                 return;
             }
             coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
@@ -191,7 +191,7 @@ namespace Netherlands3D.UI.Panels
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                 return;
             }
-            stylingPropertyData.SetVisibilityForSubObjectById(objectId, visible, (Coordinate)coord);
+            stylingPropertyData.SetVisibilityForSubObjectById(objectId, visible, (Coordinate)coord, false);
         }
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
@@ -215,6 +215,7 @@ namespace Netherlands3D.UI.Panels
                     toggledObjectIds.Add(id);
                 ToggleVisibilityForFeature(id, visible);
             }
+            stylingPropertyData.OnStylingChanged.Invoke();
            
             if (!visible)
                 ShowGhostMesh(objectId);
