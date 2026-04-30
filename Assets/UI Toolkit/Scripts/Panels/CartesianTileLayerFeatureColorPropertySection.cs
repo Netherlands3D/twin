@@ -19,7 +19,6 @@ namespace Netherlands3D.UI.Panels
         public ColorPicker ColorPicker { get; set; }
         
         private CartesianTileLayerFeatureColorPropertyData stylingPropertyData;
-        
         private ListView swatchesListView;
         private ListView SwatchesListView => swatchesListView ??= this.Q<ListView>();
         private List<string> colors = new();
@@ -39,7 +38,18 @@ namespace Netherlands3D.UI.Panels
             SwatchesListView.RegisterCallback<AttachToPanelEvent>(evt =>
             {
                 //when clicked outside the listview, deselect the current selection
-                RegisterOutsidePanelClick();
+                SwatchesListView.RegisterCallback<BlurEvent>(evt =>
+                {
+                    var pos = Pointer.current.position.ReadValue();
+                    var panelPos = RuntimePanelUtils.ScreenToPanel(
+                        SwatchesListView.panel,
+                        new Vector2(pos.x, Screen.height - pos.y)
+                    );
+                    if (!SwatchesListView.worldBound.Contains(panelPos) && !ColorPicker.worldBound.Contains(panelPos))
+                    {
+                        SwatchesListView.ClearSelection();
+                    }
+                });
             });
             
             SwatchesListView.selectedIndicesChanged += indices =>
@@ -54,32 +64,11 @@ namespace Netherlands3D.UI.Panels
             });
         }
         
-        private void RegisterOutsidePanelClick()
-        {
-            var pointerAction = new InputAction(binding: "<Pointer>/press");
-            pointerAction.performed += _ =>
-            {
-                var pos = Pointer.current.position.ReadValue();
-                var panelPos = RuntimePanelUtils.ScreenToPanel(
-                    SwatchesListView.panel,
-                    new Vector2(pos.x, Screen.height - pos.y)
-                );
-                    
-                if (!SwatchesListView.worldBound.Contains(panelPos) && !ColorPicker.worldBound.Contains(panelPos))
-                {
-                    SwatchesListView.ClearSelection();
-                }
-            };
-            pointerAction.Enable();
-    
-            SwatchesListView.RegisterCallback<DetachFromPanelEvent>(_ => pointerAction.Dispose());
-        }
-        
         private VisualElement MakeListViewItem()
         {
             ColorTileListViewItem item = new();
             item.Tile.ShowLabel = true;
-            item.RegisterCallback<PointerUpEvent>(evt =>
+            item.RegisterCallback<ClickEvent>(evt =>
             {
                 ColorPicker.SetColorInputComponentsWithoutNotify(item.Tile.Color);
             });
@@ -141,7 +130,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnPickColor(Color color)
         {
-            Debug.Log(color);
+            //since we apply styling to multiple stylingrules we have to use the notify == false and invoke styling changed afterwards
             foreach (int i in SwatchesListView.selectedIndices)
             {
                 string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(i);

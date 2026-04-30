@@ -14,7 +14,7 @@
 }
 
 .color-slider .unity-base-slider__drag-container {
-     position: relative;
+    position: relative;
     flex-grow: 1;
     flex-shrink: 0;    
     min-height: 0;
@@ -62,8 +62,8 @@
     min-height: var(--spacing-3);
     border-width: 0px;
     border-radius: 100%;
-     position: absolute;
-     left: 13px;
+    position: absolute;
+    left: 13px;
 }
 
 .color-slider__dragger-shadow{    
@@ -75,7 +75,7 @@
 }
 
 .color-slider__dragger-shadow.shadow-sm {
-     left: 3px;
-     top: 3px;
-     position: absolute;
+    left: 3px;
+    top: 3px;
+    position: absolute;
 }
