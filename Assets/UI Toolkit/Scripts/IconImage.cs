@@ -100,8 +100,11 @@
         VideoCamera = 18,
         Warning = 17,
         Width = 16,
+        
+        //todo the next values should be organized correctly in the future
         Visibility = 200,
         Invisible = 201,
-        VisibilityMixed = 202
+        VisibilityMixed = 202,
+        ColorFeatures = 203
     }
 }
