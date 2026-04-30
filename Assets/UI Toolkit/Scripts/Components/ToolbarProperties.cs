@@ -8,11 +8,11 @@ namespace Netherlands3D.UI.Components
     {
         public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
         public Button Information => this.Q<Button>("Information");
-        public Button Properties => this.Q<Button>("Properties");
+        public Button Settings => this.Q<Button>("Settings");
         public Button Styles => this.Q<Button>("Styles");
 
         public EventCallback<ChangeEvent<bool>> OnOpenInformationToggled { get; set; }
-        public EventCallback<ChangeEvent<bool>> OnPropertiesToggled { get; set; }
+        public EventCallback<ChangeEvent<bool>> OnSettingsToggled { get; set; }
         public EventCallback<ChangeEvent<bool>> OnStylesToggled { get; set; }
 
         public ToolbarProperties()

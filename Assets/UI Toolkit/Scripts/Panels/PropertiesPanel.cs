@@ -46,11 +46,11 @@ namespace Netherlands3D.UI.Panels
             stylingContent = this.Q<VisualElement>("StylingContent");
             
             toolbarProperties.Information.RegisterCallback<ClickEvent>(OnInformationButtonClicked);
-            toolbarProperties.Properties.RegisterCallback<ClickEvent>(OnPropertiesButtonClicked);
+            toolbarProperties.Settings.RegisterCallback<ClickEvent>(OnSettingsButtonClicked);
             toolbarProperties.Styles.RegisterCallback<ClickEvent>(OnStylesButtonClicked);
             propertiesHeaderCloseButton.RegisterCallback<ClickEvent>(OnCloseButtonClick);
-            
-            OnPropertiesButtonClicked(null);
+
+            SetCategoryPanelsActive(PropertySectionCategory.Information);
         }
 
         private void OnCloseButtonClick(ClickEvent evt)
@@ -61,23 +61,26 @@ namespace Netherlands3D.UI.Panels
         
         private void OnInformationButtonClicked(ClickEvent evt)
         {
-            informationContent.EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            settingsContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            stylingContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            SetCategoryPanelsActive(PropertySectionCategory.Information);
+
         }
         
-        private void OnPropertiesButtonClicked(ClickEvent evt)
+        private void OnSettingsButtonClicked(ClickEvent evt)
         {
-            informationContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            settingsContent.EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            stylingContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            SetCategoryPanelsActive(PropertySectionCategory.Settings);
+
         }
         
         private void OnStylesButtonClicked(ClickEvent evt)
         {
-            informationContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            settingsContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            stylingContent.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            SetCategoryPanelsActive(PropertySectionCategory.Styling);
+        }
+
+        private void SetCategoryPanelsActive(PropertySectionCategory category)
+        {
+            informationContent.EnableInClassList(UtilityClassConstants.HIDDEN, category != PropertySectionCategory.Information);
+            settingsContent.EnableInClassList(UtilityClassConstants.HIDDEN, category != PropertySectionCategory.Settings);
+            stylingContent.EnableInClassList(UtilityClassConstants.HIDDEN, category != PropertySectionCategory.Styling);
         }
 
         public void SetVisible(bool visible)
