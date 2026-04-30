@@ -107,16 +107,10 @@ namespace Netherlands3D
                 yield break;
             }
             List<string> addresses = new();
-            bool gotDistrict = false;
             var reader = new GeoJSONStreamReader(webRequest.downloadHandler.text);
             while (reader.GotoNextFeature())
             {
                 var properties = reader.GetProperties();
-                if (!gotDistrict)
-                {
-                    _ = properties["openbare_ruimte"];
-                    gotDistrict = true;
-                }
                 string address = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} " +
                                  $"{properties["huisletter"]}{properties["toevoeging"]}";
 
