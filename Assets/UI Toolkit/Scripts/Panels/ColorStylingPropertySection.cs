@@ -80,7 +80,6 @@ namespace Netherlands3D.UI.Panels
             listViewItem.Tile.LabelText = Symbolizer.DisplayPropertyNames[propertyName];
             var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
-            Debug.Log(propertyName + "\t" + color);
             listViewItem.Tile.Color = color;
         }
 
@@ -120,7 +119,6 @@ namespace Netherlands3D.UI.Panels
                 var element = swatchesListView.GetRootElementForIndex(index) as ColorTileListViewItem;
                 if (element != null)
                 {
-                    Debug.Log("updating tile color for: " + element.Tile.LabelText);
                     element.Tile.Color = color;
                 }
             }
@@ -130,7 +128,6 @@ namespace Netherlands3D.UI.Panels
         {
             foreach (var item in swatchesListView.selectedItems.OfType<string>())
             {
-                Debug.Log("setting color for " + item);
                 stylingPropertyData.ColorType = item;
                 stylingPropertyData.SetDefaultSymbolizerColor(color);
             }

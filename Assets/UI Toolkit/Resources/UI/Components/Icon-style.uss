@@ -139,3 +139,4 @@
 .icon.image-invisible { --icon-image: var(--icon-invisible); }
 .icon.image-color-features { --icon-image: var(--icon-colorfeatures); }
 .icon.image-urban-releaf { --icon-image: var(--icon-urbanreleaf); }
+.icon.image-visibility-mixed { --icon-image: var(--icon-visibilitymixed); }
