@@ -16,6 +16,9 @@ mergeInto(LibraryManager.library, {
         //Inject our required html input fields
         window.InjectHiddenFileInput = function InjectHiddenFileInput(inputFieldName, acceptedExtentions, multiFileSelect) {
 
+            var existing = document.getElementById(inputFieldName);
+            if (existing) existing.parentNode.removeChild(existing);
+            
             //Make sure file extentions start with a dot ([.jpg,.png] instead of [jpg,png] etc)
             var acceptedExtentionsArray = acceptedExtentions.split(",");
             for (var i = 0; i < acceptedExtentionsArray.length; i++) {

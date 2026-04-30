@@ -72,7 +72,7 @@ namespace Netherlands3D.UI.Panels
         public void SetCredentialHandler(ICredentialHandler handler)
         {
             credentialHandler = handler;
-            CredentialPanel.handler = handler;
+            CredentialPanel.Handler = handler;
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
 
