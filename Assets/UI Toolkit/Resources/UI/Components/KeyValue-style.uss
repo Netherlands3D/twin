@@ -12,15 +12,9 @@
 }
 
 .key-value__divider{
-    display: flex;
     flex-grow: 0;
     margin: var(--spacing-2) 0 var(--spacing-2) 0;
     border-color: var(--divider-bg-color);
     border-radius: 0.5px;
     border-bottom-width: 2px;
-}
-
-.key-value__divider.hidden
-{
-    display: none;
 }

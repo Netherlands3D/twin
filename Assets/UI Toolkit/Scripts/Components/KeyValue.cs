@@ -13,6 +13,8 @@ namespace Netherlands3D.UI.Components
         private Label valueField;
         private Label ValueField => valueField ??= this.Q<Label>("Value");
 
+        private VisualElement divider;
+
         [UxmlAttribute("key")]
         public string Key
         {
@@ -31,11 +33,12 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
+            divider = this.Q<VisualElement>("Divider");
         }
 
         public void ShowDivider(bool show)
         {
-            EnableInClassList(UtilityClassConstants.HIDDEN, !show);   
+            divider.EnableInClassList(UtilityClassConstants.HIDDEN, !show);   
         }
     }
 }
