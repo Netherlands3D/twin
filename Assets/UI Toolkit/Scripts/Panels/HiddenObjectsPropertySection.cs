@@ -21,7 +21,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(HiddenObjectsPropertyData))]
+    [PropertySection(typeof(HiddenObjectsPropertyData), PropertySectionCategory.Styling)]
     public partial class HiddenObjectsPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private float cameraDistance = 150f;
