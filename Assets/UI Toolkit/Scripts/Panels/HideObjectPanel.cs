@@ -48,9 +48,11 @@ namespace Netherlands3D.UI.Panels
             mappings = data;
 
             Button.clicked += OnClose.Invoke;
+            
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
         
-        ~HideObjectPanel()
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             Button.clicked -= OnClose.Invoke;
         }
