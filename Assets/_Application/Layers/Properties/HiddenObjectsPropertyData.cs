@@ -64,7 +64,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             foreach (SubObjectData obj in objects)
             {
                 var stylingRuleName = obj.layerFeature != null ? obj.layerFeature.Attributes[VisibilityAttributeIdentifier] : obj.id;
-                var stylingRuleKey = VisibilityStyleRuleKey(obj.id);
+                var stylingRuleKey = VisibilityStyleRuleKey(stylingRuleName);
 
                 // Add or set the colorization of this feature by its material index
                 var stylingRule = new StylingRule(
