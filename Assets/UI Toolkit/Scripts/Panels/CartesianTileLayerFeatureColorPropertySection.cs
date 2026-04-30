@@ -35,21 +35,18 @@ namespace Netherlands3D.UI.Panels
             SwatchesListView.bindItem = BindListViewItem;
             
             
-            SwatchesListView.RegisterCallback<AttachToPanelEvent>(evt =>
+            //when clicked outside the listview, deselect the current selection
+            SwatchesListView.RegisterCallback<BlurEvent>(evt =>
             {
-                //when clicked outside the listview, deselect the current selection
-                SwatchesListView.RegisterCallback<BlurEvent>(evt =>
+                var pos = Pointer.current.position.ReadValue();
+                var panelPos = RuntimePanelUtils.ScreenToPanel(
+                    SwatchesListView.panel,
+                    new Vector2(pos.x, Screen.height - pos.y)
+                );
+                if (!SwatchesListView.worldBound.Contains(panelPos) && !ColorPicker.worldBound.Contains(panelPos))
                 {
-                    var pos = Pointer.current.position.ReadValue();
-                    var panelPos = RuntimePanelUtils.ScreenToPanel(
-                        SwatchesListView.panel,
-                        new Vector2(pos.x, Screen.height - pos.y)
-                    );
-                    if (!SwatchesListView.worldBound.Contains(panelPos) && !ColorPicker.worldBound.Contains(panelPos))
-                    {
-                        SwatchesListView.ClearSelection();
-                    }
-                });
+                    SwatchesListView.ClearSelection();
+                }
             });
             
             SwatchesListView.selectedIndicesChanged += indices =>
