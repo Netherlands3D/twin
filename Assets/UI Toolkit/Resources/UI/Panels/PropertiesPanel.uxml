@@ -12,6 +12,6 @@
     </ui:VisualElement>
     <nl3d:ToolbarProperties />
     <nl3d:ScrollView class="properties-panel__content" name="InformationContent" />
-    <nl3d:ScrollView class="properties-panel__content" name="PropertiesContent" />
+    <nl3d:ScrollView class="properties-panel__content" name="SettingsContent" />
     <nl3d:ScrollView class="properties-panel__content" name="StylingContent" />
 </ui:UXML>

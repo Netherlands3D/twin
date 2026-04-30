@@ -1,5 +1,5 @@
-using GltfMeshFeatures;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -15,7 +15,7 @@ namespace Netherlands3D.UI.Panels
         private Button propertiesHeaderCloseButton;
         private ToolbarProperties toolbarProperties;
         private VisualElement informationContent;
-        private VisualElement propertiesContent;
+        private VisualElement settingsContent;
         private VisualElement stylingContent;
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Netherlands3D.UI.Panels
             header = this.Q<Header>(className: "properties-header-title");
             toolbarProperties = this.Q<ToolbarProperties>();
             informationContent = this.Q<VisualElement>("InformationContent");
-            propertiesContent = this.Q<VisualElement>("PropertiesContent");
+            settingsContent = this.Q<VisualElement>("SettingsContent");
             stylingContent = this.Q<VisualElement>("StylingContent");
             
             toolbarProperties.Information.RegisterCallback<ClickEvent>(OnInformationButtonClicked);
@@ -50,6 +50,7 @@ namespace Netherlands3D.UI.Panels
             toolbarProperties.Styles.RegisterCallback<ClickEvent>(OnStylesButtonClicked);
             propertiesHeaderCloseButton.RegisterCallback<ClickEvent>(OnCloseButtonClick);
             
+            OnPropertiesButtonClicked(null);
         }
 
         private void OnCloseButtonClick(ClickEvent evt)
@@ -61,21 +62,21 @@ namespace Netherlands3D.UI.Panels
         private void OnInformationButtonClicked(ClickEvent evt)
         {
             informationContent.EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            propertiesContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            settingsContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             stylingContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
         
         private void OnPropertiesButtonClicked(ClickEvent evt)
         {
             informationContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            propertiesContent.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            settingsContent.EnableInClassList(UtilityClassConstants.HIDDEN, false);
             stylingContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
         
         private void OnStylesButtonClicked(ClickEvent evt)
         {
             informationContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            propertiesContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            settingsContent.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             stylingContent.EnableInClassList(UtilityClassConstants.HIDDEN, false);
         }
 
@@ -84,14 +85,28 @@ namespace Netherlands3D.UI.Panels
             EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
 
-        public void AddPropertySection(VisualElement propertySection)
+        public void AddPropertySection(VisualElement propertySection, PropertySectionCategory category)
         {
-            informationContent.Add(propertySection);
+            switch (category)
+            {
+                case PropertySectionCategory.Information:
+                    informationContent.Add(propertySection);
+                    break;
+                case PropertySectionCategory.Settings:
+                    settingsContent.Add(propertySection);
+                    break;
+                case PropertySectionCategory.Styling:
+                    stylingContent.Add(propertySection);
+                    break;
+                
+            }
         }
 
         public void ClearPropertySections()
         {
             informationContent.Clear();
+            settingsContent.Clear();
+            stylingContent.Clear();
         }
     }
 }
