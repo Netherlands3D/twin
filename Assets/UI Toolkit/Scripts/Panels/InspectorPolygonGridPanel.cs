@@ -8,7 +8,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class InspectorPolygonGridPanel : BaseInspectorContentPanel
     {
-        public override string Title => "Gridselectie maken";
+        public override string Title => "Tekengebied grid selecteren";
         
         public InspectorPolygonGridPanel()
         {

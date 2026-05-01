@@ -8,6 +8,4 @@
 .inspector-polygon-grid-panel .contentcontainer {    
     margin-top: var(--spacing-0_5);
     margin-bottom: var(--spacing-0_5);
-
-    background-color: red;
 }
