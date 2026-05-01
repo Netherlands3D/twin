@@ -47,7 +47,7 @@ namespace Netherlands3D.UI.Panels
             { 
                 ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
                 //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
-                Texture2D tex = thumbnailService.RenderThumbnail(bounds);
+                Texture2D tex = thumbnailService.RenderThumbnail(bounds, true, 90, 3);
                 thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
                 float aspect = (float)tex.height / tex.width;
                 float newHeight = thumbnailContainer.resolvedStyle.width * aspect;

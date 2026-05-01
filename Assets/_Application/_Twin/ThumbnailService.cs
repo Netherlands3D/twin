@@ -18,11 +18,11 @@ namespace Netherlands3D
 		    temporaryThumbnailTexture = new Texture2D(temporaryThumbnailRenderTexture.width, temporaryThumbnailRenderTexture.height, TextureFormat.RGBA32, false);
 	    }
 
-        public Texture2D RenderThumbnail(Bounds targetBounds, bool orthographic = false)
+        public Texture2D RenderThumbnail(Bounds targetBounds, bool orthographic = false, float pitch = 60, int renderIndex = 2)
 		{
 			float margin = 1.5f;
 			float farClipPlaneCamera = 20000;
-			Vector3 cameraRotation = new Vector3(60, 0, 0);
+			Vector3 cameraRotation = new Vector3(pitch, 0, 0);
 			
 			var temporaryThumbnailCamera = new GameObject("ThumbnailCamera").AddComponent<Camera>();
 			temporaryThumbnailCamera.orthographic = orthographic;
@@ -46,7 +46,7 @@ namespace Netherlands3D
 
 			// add universal additional camera data, and set target renderer
 			var additionalCameraData = temporaryThumbnailCamera.gameObject.AddComponent<UniversalAdditionalCameraData>();
-			additionalCameraData.SetRenderer(2);
+			additionalCameraData.SetRenderer(renderIndex);
 
 			// Render to our thumbnail texture
 			temporaryThumbnailCamera.Render();
