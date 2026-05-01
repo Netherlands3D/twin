@@ -16,19 +16,18 @@
  *  permissions and limitations under the License.
  */
 
-using System.Collections;
 using System.Runtime.InteropServices;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.AreaDownload.UI
 {
-    public class DownloadInspector : MonoBehaviour
+    public class DownloadInspectorService : MonoBehaviour
     {
         [DllImport("__Internal")]
         private static extern void CopyToClipboard(string textToCopy);
@@ -39,7 +38,6 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         
         [Header("References")]
         [SerializeField] private AreaSelection areaSelection;
-        [SerializeField] private RenderedThumbnail renderedThumbnail;
         [SerializeField] private TMP_InputField northExtentTextField;
         [SerializeField] private TMP_InputField southExtentTextField;
         [SerializeField] private TMP_InputField eastExtentTextField;
@@ -50,11 +48,13 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         private TextPopout northEastTooltip;
         private TextPopout southWestTooltip;
+        
+        public UnityEvent<Bounds> OnSelectionBoundsChanged = new();
 
         private void OnEnable()
         {
             areaSelection.WhenSelectionAreaBoundsChanged.AddListener(WhenSelectionBoundsChanged);
-            areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged);
+            areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
             copyNorthEastExtentButton.onClick.AddListener(CopyNorthEastToClipboard);
             copySouthWestExtentButton.onClick.AddListener(CopySouthWestToClipboard);
 
@@ -67,7 +67,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         private void OnDisable()
         {
-            areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged);
+            areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged.Invoke);
             areaSelection.WhenSelectionAreaBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
             copyNorthEastExtentButton.onClick.RemoveListener(CopyNorthEastToClipboard);
             copySouthWestExtentButton.onClick.RemoveListener(CopySouthWestToClipboard);
@@ -87,18 +87,6 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
             southWestTooltip.Show($"X: {westExtentTextField.text}\nY: {southExtentTextField.text}", southWestAndNorthEast.Item1, true);
             northEastTooltip.Show($"X: {eastExtentTextField.text}\nY: {northExtentTextField.text}", southWestAndNorthEast.Item2, true);
-        }
-
-        private void OnSelectionBoundsChanged(Bounds selectedArea)
-        {
-            StartCoroutine(WaitFrameToRenderThumbnail(selectedArea));
-        }
-
-        private IEnumerator WaitFrameToRenderThumbnail(Bounds selectedArea)
-        {            
-            //wait a frame to ensure that the previous area is not rendered in the thumbnail
-            yield return null; 
-            renderedThumbnail.RenderThumbnail(selectedArea);
         }
 
         private void CopySouthWestToClipboard()

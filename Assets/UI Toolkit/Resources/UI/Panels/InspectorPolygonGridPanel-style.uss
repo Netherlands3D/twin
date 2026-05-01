@@ -9,3 +9,11 @@
     margin-top: var(--spacing-0_5);
     margin-bottom: var(--spacing-0_5);
 }
+
+.inspector-polygon-grid__container{
+    flex-shrink: 0;
+}
+
+.inspector-polygon-grid-thumbnail__container{
+    flex-shrink: 0;
+}
