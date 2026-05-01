@@ -27,7 +27,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
-        public UnityEvent OnSelectDifferentLayer = new();
+        public UnityEvent<LayerData> OnSelectDifferentLayer = new();
+        public UnityEvent<LayerData> OnSelectLayer = new();
+        public UnityEvent OnNoLayerSelected = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -91,7 +93,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
-
+            
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
             
@@ -126,7 +128,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (ProjectData.Current.RootLayer.SelectedLayers.Count > 0 && ProjectData.Current.RootLayer.SelectedLayers.Last() != data)
             {
                 Deselect();
-                OnSelectDifferentLayer.Invoke();
+                OnSelectDifferentLayer.Invoke(data);
             }
             lastSelectedLayerData = data;
         }
@@ -134,6 +136,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnRemoveSelectedLayer(LayerData data)
         {
             //we need to check this before Isclicked because it checks if its over the ui
+            //this is to deselect the layer when there is clicked outside of any selectable from this layer
             if(ProjectData.Current.RootLayer.SelectedLayers.Count == 0)
             {
                 if (lastSelectedLayerData != null || lastSelectedMappingLayerData != null)
@@ -141,10 +144,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Deselect();
                     lastSelectedLayerData = null;
                     lastSelectedMappingLayerData = null;
+                    
+                    OnNoLayerSelected.Invoke();
                 }
             }
         }
-
+        
         private void Start()
         {
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
@@ -154,6 +159,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 OnAddObjectMapping(mapping);
             }
         }
+
+       
 
         public bool IsAnyToolActive()
         {
@@ -248,6 +255,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 layerData.SelectLayer(true);
                     
             lastSelectedMappingLayerData = layerData;
+            OnSelectLayer.Invoke(layerData);
 
             if (!selectedMappings.ContainsKey(bagId) && previousBagId != bagId)
             {
@@ -260,11 +268,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 DeselectBagId(bagId);
                 selectedMappings.Remove(bagId);
                 SelectSubObjectWithBagId?.Invoke(selectedMappings.Count > 0 ? map : null, bagId);
-                if (selectedMappings.Count == 0)
-                {
-                    lastSelectedMappingLayerData.DeselectLayer();
-                    lastSelectedMappingLayerData = null;
-                }
             }
         }
 
@@ -281,11 +284,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void ProcessFeatureMappingSelection(FeatureMapping feature)
         {
-            LayerData layerData = feature.VisualisationParent.LayerData;
+            LayerData layerData = feature.VisualisationLayer.LayerData;
             if(!layerData.IsSelected)
                 layerData.SelectLayer(true);
                     
             lastSelectedMappingLayerData = layerData;
+            OnSelectLayer.Invoke(layerData);
             SelectFeatureMapping(feature);
 
             string key = feature.Id;
