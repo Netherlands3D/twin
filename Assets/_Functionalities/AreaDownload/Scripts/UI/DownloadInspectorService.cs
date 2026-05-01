@@ -38,12 +38,6 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         
         [Header("References")]
         [SerializeField] private AreaSelection areaSelection;
-        [SerializeField] private TMP_InputField northExtentTextField;
-        [SerializeField] private TMP_InputField southExtentTextField;
-        [SerializeField] private TMP_InputField eastExtentTextField;
-        [SerializeField] private TMP_InputField westExtentTextField;
-        [SerializeField] private Button copyNorthEastExtentButton;
-        [SerializeField] private Button copySouthWestExtentButton;
         [SerializeField] private TextPopout popoutPrefab;
 
         private TextPopout northEastTooltip;
@@ -55,8 +49,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             areaSelection.WhenSelectionAreaBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
-            copyNorthEastExtentButton.onClick.AddListener(CopyNorthEastToClipboard);
-            copySouthWestExtentButton.onClick.AddListener(CopySouthWestToClipboard);
+           
 
             var canvasTransform = transform.GetComponentInParent<Canvas>().transform;
             northEastTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleLeft);
@@ -69,8 +62,6 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged.Invoke);
             areaSelection.WhenSelectionAreaBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
-            copyNorthEastExtentButton.onClick.RemoveListener(CopyNorthEastToClipboard);
-            copySouthWestExtentButton.onClick.RemoveListener(CopySouthWestToClipboard);
             
             Destroy(northEastTooltip.gameObject);
             Destroy(southWestTooltip.gameObject);
@@ -80,33 +71,13 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
             
-            northExtentTextField.text = southWestAndNorthEast.northEast.northing.ToString("0");
-            southExtentTextField.text = southWestAndNorthEast.southWest.northing.ToString("0");
-            eastExtentTextField.text = southWestAndNorthEast.northEast.easting.ToString("0");
-            westExtentTextField.text = southWestAndNorthEast.southWest.easting.ToString("0");
+            string northExtentTextField = southWestAndNorthEast.northEast.northing.ToString("0");
+            string southExtentTextField = southWestAndNorthEast.southWest.northing.ToString("0");
+            string eastExtentTextField = southWestAndNorthEast.northEast.easting.ToString("0");
+            string westExtentTextField = southWestAndNorthEast.southWest.easting.ToString("0");
 
-            southWestTooltip.Show($"X: {westExtentTextField.text}\nY: {southExtentTextField.text}", southWestAndNorthEast.Item1, true);
-            northEastTooltip.Show($"X: {eastExtentTextField.text}\nY: {northExtentTextField.text}", southWestAndNorthEast.Item2, true);
-        }
-
-        private void CopySouthWestToClipboard()
-        {
-            var text = $"{westExtentTextField.text},{southExtentTextField.text}";
-#if UNITY_WEBGL && !UNITY_EDITOR
-            CopyToClipboard(text);
-#else
-            GUIUtility.systemCopyBuffer = text;
-#endif
-        }
-
-        private void CopyNorthEastToClipboard()
-        {
-            var text = $"{eastExtentTextField.text},{northExtentTextField.text}";
-#if UNITY_WEBGL && !UNITY_EDITOR
-            CopyToClipboard(text);
-#else
-            GUIUtility.systemCopyBuffer = text;
-#endif
+            southWestTooltip.Show($"X: {westExtentTextField}\nY: {southExtentTextField}", southWestAndNorthEast.Item1, true);
+            northEastTooltip.Show($"X: {eastExtentTextField}\nY: {northExtentTextField}", southWestAndNorthEast.Item2, true);
         }
 
         private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
