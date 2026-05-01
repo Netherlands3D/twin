@@ -42,6 +42,8 @@ namespace Netherlands3D.UI.Behaviours
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         
         private ICredentialHandler credentialHandler;
+
+        [SerializeField] private TriggerEvent OnDrawNewGrid;
         
 
         private void Awake()
@@ -67,8 +69,7 @@ namespace Netherlands3D.UI.Behaviours
             
             ToolbarMain.AddButton.clicked += ToggleImportAssetPanel;
             
-            
-            OpenPolgyonGridPanel();
+            OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
         }
 
         private void OnDisable()
@@ -80,6 +81,8 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
             
             ToolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
+            
+            OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
         }
 
         public void Open()
