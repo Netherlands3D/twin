@@ -1,0 +1,13 @@
+.inspector-polygon-grid-panel {
+    display: flex;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    opacity: 1;
+}
+
+.inspector-polygon-grid-panel .contentcontainer {    
+    margin-top: var(--spacing-0_5);
+    margin-bottom: var(--spacing-0_5);
+
+    background-color: red;
+}

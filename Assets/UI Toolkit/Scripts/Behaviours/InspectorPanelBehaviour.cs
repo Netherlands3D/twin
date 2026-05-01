@@ -31,6 +31,9 @@ namespace Netherlands3D.UI.Behaviours
         
         private ImportAssetPanel importAssetPanel;
         private ImportAssetPanel ImportAssetPanel => importAssetPanel ??= panels.OfType<ImportAssetPanel>().FirstOrDefault();
+        
+        private InspectorPolygonGridPanel polygonGridPanel;
+        private InspectorPolygonGridPanel PolygonGridPanel => polygonGridPanel ??= panels.OfType<InspectorPolygonGridPanel>().FirstOrDefault();
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
@@ -47,6 +50,7 @@ namespace Netherlands3D.UI.Behaviours
             credentialHandler = GetComponent<ICredentialHandler>();
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
+            RegisterPanel<InspectorPolygonGridPanel>();
             
             InspectorPanel.Close();
             
@@ -62,6 +66,9 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
             ToolbarMain.AddButton.clicked += ToggleImportAssetPanel;
+            
+            
+            OpenPolgyonGridPanel();
         }
 
         private void OnDisable()
@@ -105,7 +112,7 @@ namespace Netherlands3D.UI.Behaviours
             HidePanel();
             Open();
             activePanel = GetPanel<T>();
-            InspectorPanel.HeaderText = activePanel.GetTitle();
+            InspectorPanel.HeaderText = activePanel.Title;
             InspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
             activePanel.Show();
         }
@@ -124,6 +131,11 @@ namespace Netherlands3D.UI.Behaviours
         public void OpenAssetLibrary()
         {
             ShowPanel<AssetLibraryPanel>();
+        }
+
+        public void OpenPolgyonGridPanel()
+        {
+            ShowPanel<InspectorPolygonGridPanel>();
         }
 
         public void ToggleImportAssetPanel()
