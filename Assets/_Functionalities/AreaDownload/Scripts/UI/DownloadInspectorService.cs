@@ -49,12 +49,11 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             areaSelection.WhenSelectionAreaBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
-           
 
-            var canvasTransform = transform.GetComponentInParent<Canvas>().transform;
-            northEastTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleLeft);
+            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
+            northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
             northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);
-            southWestTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleRight);
+            southWestTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleRight);
             southWestTooltip.SetSnappingSide(TextPopout.SnappingSide.Right);
         }
 
