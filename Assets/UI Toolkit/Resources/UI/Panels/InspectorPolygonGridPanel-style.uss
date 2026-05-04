@@ -17,3 +17,20 @@
 .inspector-polygon-grid-thumbnail__container{
     flex-shrink: 0;
 }
+
+.inspector-polygon-grid__body{
+    flex-shrink: 0;
+}
+
+.inspector-polygon-grid__body-tip-text{
+    white-space: pre-wrap;
+}
+
+.inspector-polygon-grid__number-fields-row{
+    flex-direction: row;
+}
+
+.inspector-polygon-grid__button-copy.button{   
+    border-radius: 0;
+    border-width: 0;
+}
