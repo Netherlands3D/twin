@@ -13,13 +13,13 @@
     align-items: center;
 }
 
-.app__properties-section {
+.app__properties-zone {
     position: absolute;
     right: 0;
     top: 0;
     flex-direction: row;
 }
 
-.app__properties-section .app__properties-section-column {
+.app__properties-zone .app__properties-zone-column {
     margin-left: var(--spacing-2);
 }
