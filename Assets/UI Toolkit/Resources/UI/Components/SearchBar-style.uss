@@ -69,11 +69,19 @@
 }
 
 /* hover */
-.search-bar__list .listview-item .unity-collection-view__item:hover > .label {
+.search-bar__list .listview-item.unity-collection-view__item:hover > .label,
+.search-bar__list .listview-item.unity-list-view__item:hover > .label {
     color: var(--color-blue-900);
 }
 
-/* selected */
-.search-bar__list .listview-item .unity-collection-view__item--selected > .label {
+/* selected (keyboard + mouse selection) */
+.search-bar__list .listview-item.unity-collection-view__item--selected > .label,
+.search-bar__list .listview-item.unity-list-view__item--selected > .label,
+.search-bar__list .listview-item.unity-collection-view__item.unity-collection-view__item--selected > .label {
     color: var(--color-blue-900);
+}
+
+.search-bar__list .listview-item.unity-collection-view__item--selected,
+.search-bar__list .listview-item.unity-list-view__item--selected {
+    background-color: var(--color-blue-100);
 }

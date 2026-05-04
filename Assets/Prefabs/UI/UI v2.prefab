@@ -366,7 +366,7 @@ MonoBehaviour:
   bagWfsEndpoint: https://service.pdok.nl/lv/bag/wfs/v2_0
   locationSuggestionEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest
   locationLookupEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/lookup
-  searchWithinCity: Amsterdam
+  searchWithinCity: 
   typeFilter: 
   rows: 5
   charactersNeededBeforeSearch: 2
