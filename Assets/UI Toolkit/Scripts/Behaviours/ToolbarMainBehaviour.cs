@@ -1,5 +1,4 @@
-﻿using Netherlands3D.Twin.Configuration;
-using Netherlands3D.Twin.Tools;
+﻿using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -32,7 +31,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         #endregion
 
-        [SerializeField] private ScriptableObject SettingsWindow;
         [SerializeField] private string HelpUrl;
 
         private void OnEnable()
@@ -56,7 +54,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             AddOpenListener(searchTool, OnSearchPanelOpened);
             AddOpenListener(sunPositionTool, OnSunPositionPanelOpened);
             AddOpenListener(downloadTileTool, OnDownloadTilePanelOpened);
-            AddOpenListener(settingsTool, OnSettingsToolOpened);
             AddOpenListener(helpTool, OnHelpToolOpened);
         }
 
@@ -81,7 +78,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             RemoveOpenListener(searchTool, OnSearchPanelOpened);
             RemoveOpenListener(sunPositionTool, OnSunPositionPanelOpened);
             RemoveOpenListener(downloadTileTool, OnDownloadTilePanelOpened);
-            RemoveOpenListener(settingsTool, OnSettingsToolOpened);
             RemoveOpenListener(helpTool, OnHelpToolOpened);
         }
 
@@ -151,13 +147,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             OpenTool(helpTool);
         }
 
-        private void OnSettingsToolOpened()
-        {
-            HamburgerMenu.Close();
-            ((IWindow)SettingsWindow).Open();
-            CloseTool(settingsTool);
-        }
-
         private void OnHelpToolOpened()
         {
             HamburgerMenu.Close();
@@ -221,6 +210,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             CloseTool(downloadTileTool);
             CloseTool(openProjectTool);
             CloseTool(saveProjectTool);
+            CloseTool(settingsTool);
         }
 
         private static void AddOpenListener(Tool tool, UnityEngine.Events.UnityAction listener)

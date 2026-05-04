@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Credentials;
+using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -40,11 +41,15 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] private Tool AssetImport;
         [SerializeField] private Tool Layer;
         [SerializeField] private Tool SearchTool;
-        [SerializeField] private GameObject Search;
         [SerializeField] private Tool SunPosition;
         [SerializeField] private Tool DownloadTile;
         [SerializeField] private Tool OpenProject;
         [SerializeField] private Tool SaveProject;
+        [SerializeField] private Tool SettingsTool;
+
+        [Header("External Windows")]
+        [SerializeField] private GameObject Search;
+        [SerializeField] private ScriptableObject SettingsWindow;
 
         /// <summary>
         /// Pairs a Tool with its inspector open-action and a cached UnityAction delegate
@@ -143,6 +148,7 @@ namespace Netherlands3D.UI.Behaviours
             RegisterTool(DownloadTile, CloseInspectorForExternalTool);
             RegisterTool(OpenProject, CloseInspectorForExternalTool);
             RegisterTool(SaveProject, CloseInspectorForExternalTool);
+            RegisterTool(SettingsTool, OpenSettingsTool);
         }
 
         private void RegisterTool(Tool tool, Action onOpen)
@@ -221,9 +227,17 @@ namespace Netherlands3D.UI.Behaviours
             Search.SetActive(true);
         }
 
+        private void OpenSettingsTool()
+        {
+            CloseInspectorForExternalTool();
+            ((IWindow)SettingsWindow).Open();
+            SettingsTool?.CloseInspector();
+        }
+
         // External tools close the UI Toolkit inspector without clearing the main toolbar selection.
         private void CloseInspectorForExternalTool()
         {
+            ((IWindow)SettingsWindow).Close();
             Search.SetActive(false);
             HidePanel();
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();

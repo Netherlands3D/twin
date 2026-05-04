@@ -1988,15 +1988,21 @@ PrefabInstance:
       objectReference: {fileID: 104982521}
     - target: {fileID: 5715699707642146679, guid: 5ba1df40519b07e4c8a5b0993382af49,
         type: 3}
-      propertyPath: AssetImport
+      propertyPath: SettingsTool
       value: 
-      objectReference: {fileID: 11400000, guid: 8d401b0a5d410b24192a18882956371f,
+      objectReference: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde,
         type: 2}
     - target: {fileID: 6058517746134681627, guid: 5ba1df40519b07e4c8a5b0993382af49,
         type: 3}
       propertyPath: toolbar
       value: 
       objectReference: {fileID: 276249899}
+    - target: {fileID: 8246707263937376439, guid: 5ba1df40519b07e4c8a5b0993382af49,
+        type: 3}
+      propertyPath: settingsTool
+      value: 
+      objectReference: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde,
+        type: 2}
     - target: {fileID: 8246707263937376439, guid: 5ba1df40519b07e4c8a5b0993382af49,
         type: 3}
       propertyPath: DeprecatedSearchPanel
