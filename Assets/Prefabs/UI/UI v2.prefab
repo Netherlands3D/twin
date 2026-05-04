@@ -113,9 +113,11 @@ MonoBehaviour:
   DownloadTile: {fileID: 11400000, guid: 57df8a6e50ddc6b49b476f9f37700f8e, type: 2}
   OpenProject: {fileID: 11400000, guid: f44e97a104dca4c9b8a629ed07ec95f8, type: 2}
   SaveProject: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
-  SettingsTool: {fileID: 0}
+  SettingsTool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
+  HelpTool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
   Search: {fileID: 0}
   SettingsWindow: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
+  HelpUrl: https://netherlands3d.eu/
 --- !u!114 &873264101414426239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +315,5 @@ MonoBehaviour:
   downloadTileTool: {fileID: 11400000, guid: 57df8a6e50ddc6b49b476f9f37700f8e, type: 2}
   openProjectTool: {fileID: 11400000, guid: f44e97a104dca4c9b8a629ed07ec95f8, type: 2}
   saveProjectTool: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
-  settingsTool: {fileID: 0}
-  helpTool: {fileID: 0}
-  HelpUrl: https://netherlands3d.eu
+  settingsTool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
+  helpTool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}

@@ -46,10 +46,12 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] private Tool OpenProject;
         [SerializeField] private Tool SaveProject;
         [SerializeField] private Tool SettingsTool;
+        [SerializeField] private Tool HelpTool;
 
         [Header("External Windows")]
         [SerializeField] private GameObject Search;
         [SerializeField] private ScriptableObject SettingsWindow;
+        [SerializeField] private string HelpUrl;
 
         /// <summary>
         /// Pairs a Tool with its inspector open-action and a cached UnityAction delegate
@@ -149,6 +151,7 @@ namespace Netherlands3D.UI.Behaviours
             RegisterTool(OpenProject, CloseInspectorForExternalTool);
             RegisterTool(SaveProject, CloseInspectorForExternalTool);
             RegisterTool(SettingsTool, OpenSettingsTool);
+            RegisterTool(HelpTool, OpenHelpTool);
         }
 
         private void RegisterTool(Tool tool, Action onOpen)
@@ -232,6 +235,12 @@ namespace Netherlands3D.UI.Behaviours
             CloseInspectorForExternalTool();
             ((IWindow)SettingsWindow).Open();
             SettingsTool?.CloseInspector();
+        }
+
+        private void OpenHelpTool()
+        {
+            Application.OpenURL(HelpUrl);
+            HelpTool?.CloseInspector();
         }
 
         // External tools close the UI Toolkit inspector without clearing the main toolbar selection.

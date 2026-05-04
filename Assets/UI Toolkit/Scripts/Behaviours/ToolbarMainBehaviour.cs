@@ -31,8 +31,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         #endregion
 
-        [SerializeField] private string HelpUrl;
-
         private void OnEnable()
         {
             HamburgerMenu.OnOpenProjectSelected += OnOpenProjectSelected;
@@ -54,7 +52,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             AddOpenListener(searchTool, OnSearchPanelOpened);
             AddOpenListener(sunPositionTool, OnSunPositionPanelOpened);
             AddOpenListener(downloadTileTool, OnDownloadTilePanelOpened);
-            AddOpenListener(helpTool, OnHelpToolOpened);
         }
 
         private void OnDisable()
@@ -78,7 +75,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             RemoveOpenListener(searchTool, OnSearchPanelOpened);
             RemoveOpenListener(sunPositionTool, OnSunPositionPanelOpened);
             RemoveOpenListener(downloadTileTool, OnDownloadTilePanelOpened);
-            RemoveOpenListener(helpTool, OnHelpToolOpened);
         }
 
         private void OnLayerToolSelected()
@@ -146,13 +142,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             HamburgerMenu.Close();
             OpenTool(helpTool);
         }
-
-        private void OnHelpToolOpened()
-        {
-            HamburgerMenu.Close();
-            Application.OpenURL(HelpUrl);
-            CloseTool(helpTool);
-        }
         
         private void OnAssetLibraryPanelOpened()
         {
@@ -211,6 +200,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             CloseTool(openProjectTool);
             CloseTool(saveProjectTool);
             CloseTool(settingsTool);
+            CloseTool(helpTool);
         }
 
         private static void AddOpenListener(Tool tool, UnityEngine.Events.UnityAction listener)
