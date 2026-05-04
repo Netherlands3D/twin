@@ -5,9 +5,6 @@
     --properties-min-width: 320px;
     --properties-max-width: 520px;
 
-    position: absolute;
-    right: 0;
-    top: 0;
     min-width: var(--properties-min-width);
     width: var(--properties-width);
     max-width: var(--properties-max-width);
