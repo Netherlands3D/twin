@@ -18,7 +18,8 @@ namespace Netherlands3D.UI.Behaviours
     {
         private UIDocument appDocument;
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
-    
+        [SerializeField] private LocationSearchBehaviour locationSearchBehaviour;
+
         private VisualElement root;
         private VisualElement Root => root ??= appDocument?.rootVisualElement;
 
@@ -49,7 +50,6 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] private Tool HelpTool;
 
         [Header("External Windows")]
-        [SerializeField] private GameObject Search;
         [SerializeField] private ScriptableObject SettingsWindow;
         [SerializeField] private string HelpUrl;
 
@@ -133,7 +133,9 @@ namespace Netherlands3D.UI.Behaviours
             credentialHandler = GetComponent<ICredentialHandler>();
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
-            
+            RegisterPanel<LocationSearchPanel>();
+            locationSearchBehaviour?.Initialize(GetPanel<LocationSearchPanel>());
+
             InspectorPanel.Close();
             
             ImportAssetPanel.SetCredentialHandler(credentialHandler);
@@ -188,9 +190,6 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Close()
         {
-            // TODO: Remove as soon as search is implemented as a panel
-            Search.SetActive(false);
-            
             ToolbarMain.ClearWithoutNotify();
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             InspectorPanel.Close();
@@ -229,7 +228,7 @@ namespace Netherlands3D.UI.Behaviours
         private void OpenSearchTool()
         {
             CloseInspectorPanels();
-            Search.SetActive(true);
+            ShowPanel<LocationSearchPanel>();
         }
 
         private void OpenSettingsTool()
@@ -272,7 +271,6 @@ namespace Netherlands3D.UI.Behaviours
         private void CloseInspectorPanels()
         {
             ((IWindow)SettingsWindow).Close();
-            Search.SetActive(false);
             HidePanel();
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             InspectorPanel.Close();

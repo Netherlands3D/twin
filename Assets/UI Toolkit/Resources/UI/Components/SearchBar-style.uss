@@ -2,12 +2,11 @@
 
 .search-bar {
     flex-direction: column;
-    margin: 0px;
-    height: var(--spacing-10);
-    padding-left: var(--spacing-3);
-    padding-top: var(--spacing-2);
-    padding-right: var(--spacing-3);
-    padding-bottom: var(--spacing-2);
+    margin: 0;
+    min-height: var(--spacing-10);
+    height: auto;
+    justify-content: flex-start;
+    padding: var(--spacing-2) var(--spacing-3);
     background-color: var(--color-white);
     border-radius: var(--spacing-2);
     border-width: 2px;
@@ -22,7 +21,7 @@
 
 .search-bar .textfield .unity-base-text-field__input {
     background-color: var(--color-white);
-    padding: 0px;
+    padding: 0;
 }
 
 .search-bar .textfield .unity-base-text-field__input:hover {
