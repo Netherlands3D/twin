@@ -55,6 +55,7 @@ namespace Netherlands3D.UI.Panels
             OnHide += () =>
             {
                 EnableInClassList("active", false);
+                SetQueryText(string.Empty);
                 ClearSuggestions();
             };
 
