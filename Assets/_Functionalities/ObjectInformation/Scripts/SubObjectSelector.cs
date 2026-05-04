@@ -188,11 +188,33 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             return bagId;
         }
+        
+        public MeshMapping FindSubObjectAtCoordinate(Coordinate coordinate, string bagId)
+        {
+            List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coordinate);
+            foreach (MeshMapping mapping in mappings)
+            { 
+                LayerData data = mapping.LayerData;
+                if (data == null || !data.ActiveInHierarchy)
+                    continue;
+                
+                mapping.ObjectMapping.items.TryGetValue(bagId, out var item);
+                if (item != null)
+                {
+                    if (IsMappingVisible(mapping, item.objectID))
+                    {
+                        foundObject = mapping;
+                        return mapping;
+                    }
+                }
+            }
+            return null;
+        }
 
         public void HideSelectedMappings()
         {
             ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
-            foreach(KeyValuePair<MeshMapping, List<string>> selectedMapping in selectedMappings)
+            foreach(KeyValuePair<MeshMapping, List<string>> selectedMapping in selectedMappings.ToList())
             {
                 LayerGameObject layer;
                 MeshMapping mapping = selectedMapping.Key;

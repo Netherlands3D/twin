@@ -3,7 +3,7 @@
          xmlns:uie="UnityEditor.UIElements"
          noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd">
     <ui:VisualElement class="color-tile__swatch">
-        <ui:VisualElement name="Shadow" class="color-tile__shadow shadow-sm" />
+        <ui:VisualElement name="Shadow" class="color-tile__shadow"/>
         <ui:VisualElement name="Fill" class="color-tile__fill" />
     </ui:VisualElement>
     <ui:Label name="Label" class="color-tile__label text-base" text="Label" />
