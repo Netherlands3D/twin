@@ -10,7 +10,7 @@
     opacity: 0;
 }
 
-.location-search-panel .search-bar {
+.location-search-panel .auto-complete {
     margin-bottom: var(--field-spacing);
 }
 

@@ -10,20 +10,19 @@ namespace Netherlands3D.UI.Panels
 {
     /// <summary>
     /// Presentational inspector panel for location search.
-    /// Owns a <see cref="SearchBar"/> and exposes C# events for user interactions.
+    /// Owns a <see cref="AutoComplete"/> and exposes C# events for user interactions.
     /// </summary>
     [UxmlElement]
     public partial class LocationSearchPanel : BaseInspectorContentPanel
     {
-        private SearchBar searchBar;
-        private SearchBar SearchBar => searchBar ??= this.Q<SearchBar>("AddressSearchBar");
+        private AutoComplete addressSearch;
+        private AutoComplete AddressSearch => addressSearch ??= this.Q<AutoComplete>("AddressSearchBar");
         private NumberField coordinateXField;
         private NumberField CoordinateXField => coordinateXField ??= this.Q<NumberField>("CoordinateXField");
         private NumberField coordinateYField;
         private NumberField CoordinateYField => coordinateYField ??= this.Q<NumberField>("CoordinateYField");
 
         private List<SuggestionResult> currentSuggestions = new();
-        private bool callbacksRegistered;
 
         /// <summary>Fires when the query text changes.</summary>
         public event Action<string> QueryChanged;
@@ -56,7 +55,8 @@ namespace Netherlands3D.UI.Panels
                 ClearSuggestions();
             };
 
-            RegisterCallback<AttachToPanelEvent>(_ => SetupInputCallbacks());
+            RegisterCallback<AttachToPanelEvent>(_ => OnAttachToPanel());
+            RegisterCallback<DetachFromPanelEvent>(_ => OnDetachFromPanel());
         }
 
         public override string GetTitle() => "Zoeken";
@@ -65,20 +65,20 @@ namespace Netherlands3D.UI.Panels
         public void SetSuggestions(List<SuggestionResult> suggestions)
         {
             currentSuggestions = suggestions ?? new List<SuggestionResult>();
-            SearchBar.SetResults(currentSuggestions, suggestion => suggestion.Label);
+            AddressSearch.SetResults(currentSuggestions, suggestion => suggestion.Label);
         }
 
         /// <summary>Remove all result items and close the dropdown.</summary>
         public void ClearSuggestions()
         {
             currentSuggestions.Clear();
-            SearchBar.ClearResults();
+            AddressSearch.ClearResults();
         }
 
         /// <summary>Set the query field text without triggering <see cref="QueryChanged"/>.</summary>
         public void SetQueryText(string text)
         {
-            SearchBar.SetQueryText(text);
+            AddressSearch.SetQueryText(text);
         }
 
         /// <summary>Update both coordinate fields without triggering submit callbacks.</summary>
@@ -95,24 +95,30 @@ namespace Netherlands3D.UI.Panels
             CoordinateYField.EnableInClassList("invalid", !valid);
         }
 
-        private void SetupInputCallbacks()
+        private void OnAttachToPanel()
         {
-            if (callbacksRegistered) return;
-            callbacksRegistered = true;
-
-            SearchBar.QueryChanged += OnSearchBarQueryChanged;
-            SearchBar.SubmitRequested += OnSearchBarSubmitRequested;
-            SearchBar.ResultActivated += OnSearchBarResultActivated;
+            AddressSearch.QueryChanged += OnAddressSearchQueryChanged;
+            AddressSearch.SubmitRequested += OnAddressSearchSubmitRequested;
+            AddressSearch.ResultActivated += OnAddressSearchResultActivated;
 
             RegisterCoordinateCallbacks();
         }
 
-        private void OnSearchBarQueryChanged(string query)
+        private void OnDetachFromPanel()
+        {
+            AddressSearch.QueryChanged -= OnAddressSearchQueryChanged;
+            AddressSearch.SubmitRequested -= OnAddressSearchSubmitRequested;
+            AddressSearch.ResultActivated -= OnAddressSearchResultActivated;
+
+            UnregisterCoordinateCallbacks();
+        }
+
+        private void OnAddressSearchQueryChanged(string query)
         {
             QueryChanged?.Invoke(query);
         }
 
-        private void OnSearchBarSubmitRequested(string query, int? activeIndex)
+        private void OnAddressSearchSubmitRequested(string query, int? activeIndex)
         {
             SuggestionResult? activeSuggestion = null;
             if (activeIndex.HasValue && activeIndex.Value >= 0 && activeIndex.Value < currentSuggestions.Count)
@@ -121,7 +127,7 @@ namespace Netherlands3D.UI.Panels
             SubmitRequested?.Invoke(query, activeSuggestion);
         }
 
-        private void OnSearchBarResultActivated(int index)
+        private void OnAddressSearchResultActivated(int index)
         {
             if (index < 0 || index >= currentSuggestions.Count) return;
             SuggestionSelected?.Invoke(currentSuggestions[index]);
@@ -129,17 +135,38 @@ namespace Netherlands3D.UI.Panels
 
         private void RegisterCoordinateCallbacks()
         {
-            CoordinateXField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>
-                CoordinateXSubmitted?.Invoke(CoordinateXField.InputField.value), TrickleDown.TrickleDown);
-            CoordinateYField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>
-                CoordinateYSubmitted?.Invoke(CoordinateYField.InputField.value), TrickleDown.TrickleDown);
-
-            // Match UGUI onEndEdit behaviour when focus leaves the field.
-            CoordinateXField.InputField.RegisterCallback<FocusOutEvent>(_ =>
-                CoordinateXSubmitted?.Invoke(CoordinateXField.InputField.value));
-            CoordinateYField.InputField.RegisterCallback<FocusOutEvent>(_ =>
-                CoordinateYSubmitted?.Invoke(CoordinateYField.InputField.value));
+            CoordinateXField.InputField.RegisterCallback<NavigationSubmitEvent>(OnCoordinateXSubmit, TrickleDown.TrickleDown);
+            CoordinateYField.InputField.RegisterCallback<NavigationSubmitEvent>(OnCoordinateYSubmit, TrickleDown.TrickleDown);
+            CoordinateXField.InputField.RegisterCallback<FocusOutEvent>(OnCoordinateXFocusOut);
+            CoordinateYField.InputField.RegisterCallback<FocusOutEvent>(OnCoordinateYFocusOut);
         }
 
+        private void UnregisterCoordinateCallbacks()
+        {
+            CoordinateXField.InputField.UnregisterCallback<NavigationSubmitEvent>(OnCoordinateXSubmit, TrickleDown.TrickleDown);
+            CoordinateYField.InputField.UnregisterCallback<NavigationSubmitEvent>(OnCoordinateYSubmit, TrickleDown.TrickleDown);
+            CoordinateXField.InputField.UnregisterCallback<FocusOutEvent>(OnCoordinateXFocusOut);
+            CoordinateYField.InputField.UnregisterCallback<FocusOutEvent>(OnCoordinateYFocusOut);
+        }
+
+        private void OnCoordinateXSubmit(NavigationSubmitEvent _)
+        {
+            CoordinateXSubmitted?.Invoke(CoordinateXField.InputField.value);
+        }
+
+        private void OnCoordinateYSubmit(NavigationSubmitEvent _)
+        {
+            CoordinateYSubmitted?.Invoke(CoordinateYField.InputField.value);
+        }
+
+        private void OnCoordinateXFocusOut(FocusOutEvent _)
+        {
+            CoordinateXSubmitted?.Invoke(CoordinateXField.InputField.value);
+        }
+
+        private void OnCoordinateYFocusOut(FocusOutEvent _)
+        {
+            CoordinateYSubmitted?.Invoke(CoordinateYField.InputField.value);
+        }
     }
 }

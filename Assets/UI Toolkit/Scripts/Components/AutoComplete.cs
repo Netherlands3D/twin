@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
@@ -7,10 +7,10 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class SearchBar : VisualElement
+    public partial class AutoComplete : VisualElement
     {
-        private const string DefaultPlaceholder = "Zoeken naar adres";
-        private const string OpenClass = "search-bar--open";
+        private const string DefaultPlaceholder = "";
+        private const string OpenClass = "auto-complete--open";
 
         private TextField queryField;
         private TextField QueryField => queryField ??= this.Q<TextField>("QueryField");
@@ -23,9 +23,6 @@ namespace Netherlands3D.UI.Components
 
         private bool isOpen;
 
-        /// <summary>
-        /// Controls visibility of the results container via the "search-bar--open" state class.
-        /// </summary>
         [UxmlAttribute("is-open")]
         public bool IsOpen
         {
@@ -37,24 +34,18 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        // Backing field so inspector overrides persist and are applied on attach.
         private string placeholderText = DefaultPlaceholder;
 
-        /// <summary>
-        /// Placeholder text for the query field. Can be overridden in UI Builder Inspector.
-        /// If not set, defaults to "Zoeken naar adres".
-        /// </summary>
         [UxmlAttribute("placeholder-text")]
         public string PlaceholderText
         {
             get => placeholderText;
             set
             {
-                placeholderText = string.IsNullOrWhiteSpace(value) ? DefaultPlaceholder : value;
+                placeholderText = value ?? DefaultPlaceholder;
                 ApplyPlaceholder();
             }
         }
-
 
         public event Action<string> QueryChanged;
         public event Action<string, int?> SubmitRequested;
@@ -65,7 +56,7 @@ namespace Netherlands3D.UI.Components
         private int selectedResultIndex = -1;
         private bool callbacksRegistered;
 
-        public SearchBar()
+        public AutoComplete()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
@@ -90,9 +81,7 @@ namespace Netherlands3D.UI.Components
             if (items != null)
             {
                 for (int i = 0; i < items.Count; i++)
-                {
                     resultItems.Add(items[i]);
-                }
             }
 
             resultLabelSelector = labelSelector == null
@@ -149,12 +138,16 @@ namespace Netherlands3D.UI.Components
             int newSelection;
             switch (evt.keyCode)
             {
-                case KeyCode.DownArrow: newSelection = selectedResultIndex < 0 ? 0 : selectedResultIndex + 1; break;
-                case KeyCode.UpArrow: newSelection = selectedResultIndex < 0 ? resultItems.Count - 1 : selectedResultIndex - 1; break;
-                // Don't change selection if the key is not recognized
-                default: return;
+                case KeyCode.DownArrow:
+                    newSelection = selectedResultIndex < 0 ? 0 : selectedResultIndex + 1;
+                    break;
+                case KeyCode.UpArrow:
+                    newSelection = selectedResultIndex < 0 ? resultItems.Count - 1 : selectedResultIndex - 1;
+                    break;
+                default:
+                    return;
             }
-            
+
             ChangeSelectionTo(newSelection);
             evt.StopPropagation();
         }
@@ -179,11 +172,10 @@ namespace Netherlands3D.UI.Components
         private void BindResultItem(VisualElement element, int index)
         {
             if (index < 0 || index >= resultItems.Count) return;
+
             var label = element.Q<Label>();
             if (label != null)
-            {
                 label.text = resultLabelSelector(resultItems[index]);
-            }
 
             element.userData = index;
         }
@@ -200,8 +192,8 @@ namespace Netherlands3D.UI.Components
         private void ApplyPlaceholder()
         {
             if (QueryField?.textEdition == null) return;
-
             QueryField.textEdition.placeholder = placeholderText;
         }
     }
 }
+

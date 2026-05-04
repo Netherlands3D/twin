@@ -1,0 +1,20 @@
+﻿<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    class="auto-complete"
+>
+    <ui:VisualElement class="auto-complete__row" name="SearchRow">
+        <nl3d:TextField class="auto-complete__field" name="QueryField" label="" value="" />
+        <nl3d:IconButton class="auto-complete__button" name="SearchButton" button-style="IconOnly" icon="search" />
+    </ui:VisualElement>
+
+    <ui:VisualElement class="auto-complete__results" name="ResultsContainer">
+        <ui:VisualElement class="auto-complete__divider divider" name="ResultsDivider" />
+        <nl3d:ListView class="auto-complete__list" name="ResultsList" />
+    </ui:VisualElement>
+
+</ui:UXML>
+

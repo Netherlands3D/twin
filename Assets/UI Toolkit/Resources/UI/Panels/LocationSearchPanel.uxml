@@ -7,7 +7,7 @@
     name="LocationSearchPanel"
     class="location-search-panel"
 >
-    <nl3d:SearchBar name="AddressSearchBar" />
+    <nl3d:AutoComplete name="AddressSearchBar" placeholder-text="Zoeken naar adres" />
 
     <ui:VisualElement name="CoordinateContainer" class="location-search-panel__coordinates">
         <ui:VisualElement name="CoordinateFieldsRow" class="location-search-panel__coordinates-row">

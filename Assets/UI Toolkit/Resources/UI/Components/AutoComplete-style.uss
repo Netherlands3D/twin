@@ -1,0 +1,80 @@
+﻿@import url("TextField-style.uss");
+
+.auto-complete {
+    flex-direction: column;
+    margin: 0;
+    min-height: var(--spacing-10);
+    height: auto;
+    justify-content: flex-start;
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-white);
+    border-radius: var(--spacing-2);
+    border-width: 2px;
+    border-color: var(--color-blue-200);
+}
+
+.auto-complete__row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.auto-complete .textfield .unity-base-text-field__input {
+    background-color: var(--color-white);
+    padding: 0;
+}
+
+.auto-complete .textfield .unity-base-text-field__input:hover {
+    background-color: var(--color-white);
+}
+
+.auto-complete__results {
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.auto-complete--open .auto-complete__results {
+    display: flex;
+}
+
+.auto-complete__divider {
+    margin-top: var(--spacing-2);
+    height: 1.5px;
+    background-color: var(--color-blue-200);
+    border-radius: 0.75px;
+}
+
+.auto-complete:disabled {
+    opacity: 1;
+}
+
+.auto-complete .textfield:disabled .unity-base-text-field__input {
+    background-color: var(--color-white);
+    border-width: 0;
+}
+
+.auto-complete__list {
+    max-height: 200px;
+}
+
+.auto-complete__list .listview-item > .label {
+    color: var(--color-blue-300);
+}
+
+.auto-complete__list .listview-item.unity-collection-view__item:hover > .label,
+.auto-complete__list .listview-item.unity-list-view__item:hover > .label {
+    color: var(--color-blue-900);
+}
+
+.auto-complete__list .listview-item.unity-collection-view__item--selected > .label,
+.auto-complete__list .listview-item.unity-list-view__item--selected > .label,
+.auto-complete__list .listview-item.unity-collection-view__item.unity-collection-view__item--selected > .label {
+    color: var(--color-blue-900);
+}
+
+.auto-complete__list .listview-item.unity-collection-view__item--selected,
+.auto-complete__list .listview-item.unity-list-view__item--selected {
+    background-color: var(--color-blue-100);
+}
+
