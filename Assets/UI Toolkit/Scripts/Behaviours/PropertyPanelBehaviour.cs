@@ -67,6 +67,8 @@ namespace Netherlands3D.UI.Panels
             {
                 ClearActivePanel();
             }
+
+            propertiesPanel.SetButtonsActive();
         }
 
         private bool ShowPanelsForInterfaces(LayerPropertyData property, List<LayerPropertyData> properties)

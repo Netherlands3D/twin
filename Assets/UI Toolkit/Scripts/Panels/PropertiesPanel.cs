@@ -111,5 +111,15 @@ namespace Netherlands3D.UI.Panels
             settingsContent.Clear();
             stylingContent.Clear();
         }
+
+        public void SetButtonsActive()
+        {
+            Toolbar.Information.SetEnabled(informationContent.childCount > 0);
+            Toolbar.Settings.SetEnabled(settingsContent.childCount > 0);
+            Toolbar.Styles.SetEnabled(stylingContent.childCount > 0);
+
+            Toolbar.UpdateState();
+            SetCategoryPanelsActive(Toolbar.State);
+        }
     }
 }
