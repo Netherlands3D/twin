@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -11,8 +10,7 @@ using TextField = Netherlands3D.UI.Components.TextField;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(ColorPropertyData))]
-    public partial class ColorPicker : VisualElement, IVisualizationWithPropertyData
+    public partial class ColorPicker : VisualElement
     {
         private ColorSpectrum colorSpectrum;
         private ColorSlider brightnessSlider;
@@ -36,8 +34,6 @@ namespace Netherlands3D.UI.Panels
 
             colorSpectrum.SpectrumChanged.AddListener(OnColorInputChanged);
             brightnessSlider.RegisterValueChangedCallback(_ => OnColorInputChanged());
-
-            ColorSelected.AddListener(SetColorTileColor);
         }
 
         private void OnHexColorSubmitted(NavigationSubmitEvent evt)
@@ -49,12 +45,6 @@ namespace Netherlands3D.UI.Panels
             hexField.SetText($"#{hex}");
         }
 
-        private void SetColorTileColor(Color newColor)
-        {
-            string hex = ColorUtility.ToHtmlStringRGB(newColor);
-            colorTile.Color = hex;
-        }
-
         private void OnHexValueChanged(ChangeEvent<string> evt)
         {
             if (!hexField.hasFocusPseudoState) //don't trigger an infinite loop if the text is updated through the Spectrum or slider changing
@@ -62,16 +52,19 @@ namespace Netherlands3D.UI.Panels
 
             if (!HexColorUtility.ParseHexColor(hexField.text, out var color)) return;
             
-            SetColorInputComponents(color);
+            SetColorInputComponentsWithoutNotify(color);
+            ColorSelected.Invoke(color);
         }
 
-        private void SetColorInputComponents(Color newColor)
+        public void SetColorInputComponentsWithoutNotify(Color newColor)
         {
             Color.RGBToHSV(newColor, out float h, out float s, out float v);
             colorSpectrum.SetValueWithoutNotify(h * 360f, s);
             brightnessSlider.SetValueWithoutNotify(v * 255f);
             SetInputComponentsColorTint(colorSpectrum.Hue, colorSpectrum.Saturation, brightnessSlider.value / 255f);
-            ColorSelected.Invoke(newColor);
+            string hex = ColorUtility.ToHtmlStringRGB(newColor);
+            hexField.SetText($"#{hex}");
+            colorTile.Color = newColor;
         }
 
         private void SetInputComponentsColorTint(float h, float s, float v)
@@ -84,14 +77,13 @@ namespace Netherlands3D.UI.Panels
         private void OnColorInputChanged()
         {
             var newColor = Color.HSVToRGB(colorSpectrum.Hue / 360f, colorSpectrum.Saturation, brightnessSlider.value / 255f);
-            string hex = ColorUtility.ToHtmlStringRGB(newColor);
-            hexField.SetText($"#{hex}");
-            SetInputComponentsColorTint(colorSpectrum.Hue, colorSpectrum.Saturation, brightnessSlider.value / 255f);
+            SetColorInputComponentsWithoutNotify(newColor);
             ColorSelected.Invoke(newColor);
         }
 
-        public void LoadProperties(List<LayerPropertyData> properties)
+        public void SetVisible(bool visible)
         {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
     }
 }

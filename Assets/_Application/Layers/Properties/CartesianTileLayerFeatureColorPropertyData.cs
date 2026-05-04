@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
@@ -12,6 +13,15 @@ namespace Netherlands3D.Twin.Layers.Properties
         public const string MaterialIndexKey = "data-materialindex";
         public const string MaterialNameIdentifier = "data-materialname";
         public const string ColoringIdentifier = "colorize";
+        
+        private Dictionary<string, StylingRule> stylingRuleKeys = new();
+
+        public struct ColorData
+        {
+            public int index;
+            public string name;
+            public Color color;
+        }
         
         public void SetColor(LayerFeature layerFeature, Color color)
         {
@@ -38,6 +48,29 @@ namespace Netherlands3D.Twin.Layers.Properties
             stylingRule.Symbolizer.SetFillColor(color);
 
             SetStylingRule(stylingRuleKey, stylingRule);
+        }
+
+        
+        public void SetColorsByMaterialIndices(List<ColorData> colors)
+        {
+            stylingRuleKeys.Clear();
+            foreach (var colorData in colors)
+            {
+                var stylingRuleName = colorData.name;
+                var stylingRuleKey = ColorizationStyleRuleKey(colorData.index);
+
+                // Add or set the colorization of this feature by its material index
+                var stylingRule = new StylingRule(
+                    stylingRuleName,
+                    Expression.EqualTo(
+                        Expression.Get(MaterialIndexKey),
+                        colorData.index.ToString()
+                    )
+                );
+                stylingRule.Symbolizer.SetFillColor(colorData.color);
+                stylingRuleKeys.Add(stylingRuleKey, stylingRule);
+            }
+            SetStylingRules(stylingRuleKeys);
         }
         
         public Color? GetColor(LayerFeature layerFeature)

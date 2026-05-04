@@ -33,8 +33,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             layerTypeImage.sprite = ui.LayerTypeSprite;
             layerNameText.text = ui.LayerName;
 
-            var credentialsUI = GetComponent<LayerUICredentialsNeededListener>();
-            credentialsUI.layerUI = ui;
+            // var credentialsUI = GetComponent<LayerUICredentialsNeededListener>();
+            // credentialsUI.layerUI = ui;
         }
 
         void Update()
