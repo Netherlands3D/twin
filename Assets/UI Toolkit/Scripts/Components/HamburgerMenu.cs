@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -15,10 +16,15 @@ namespace Netherlands3D.UI.Components
         private VisualElement Checkmark => this.Q<VisualElement>(className: "unity-foldout__checkmark");
         private VisualElement ButtonGroup => this.Q<VisualElement>("ButtonGroup");
 
-        public Button OpenProjectButton => this.Q<Button>("Open");
-        public Button SaveProjectButton => this.Q<Button>("Save");
-        public Button SettingsButton => this.Q<Button>("Settings");
-        public Button HelpButton => this.Q<Button>("Help");
+        private Button OpenProjectButton => this.Q<Button>("Open");
+        private Button SaveProjectButton => this.Q<Button>("Save");
+        private Button SettingsButton => this.Q<Button>("Settings");
+        private Button HelpButton => this.Q<Button>("Help");
+
+        public event Action OnOpenProjectSelected;
+        public event Action OnSaveProjectSelected;
+        public event Action OnSettingsSelected;
+        public event Action OnHelpSelected;
         
         
         [UxmlAttribute("text")]
@@ -56,6 +62,11 @@ namespace Netherlands3D.UI.Components
 
                 // Mark last button (for override border radius)
                 schedule.Execute(UpdateLastButtonClass).ExecuteLater(0);
+
+                OpenProjectButton.RegisterCallback<ClickEvent>(_ => OnOpenProjectSelected?.Invoke());
+                SaveProjectButton.RegisterCallback<ClickEvent>(_ => OnSaveProjectSelected?.Invoke());
+                SettingsButton.RegisterCallback<ClickEvent>(_ => OnSettingsSelected?.Invoke());
+                HelpButton.RegisterCallback<ClickEvent>(_ => OnHelpSelected?.Invoke());
             });
         }
 

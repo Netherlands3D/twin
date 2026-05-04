@@ -7,7 +7,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarMain : VisualElement
     {
-        [Flags]
         public enum Tool
         {
             Layer = 0,
@@ -69,7 +68,8 @@ namespace Netherlands3D.UI.Components
 
         public void EnableToolWithoutNotify(Tool tool)
         {
-            Group.SetValueWithoutNotify(ToggleButtonGroupState.FromEnumFlags(tool));
+            var bits = 1ul << (int)tool;
+            Group.SetValueWithoutNotify(new ToggleButtonGroupState(bits, Group.value.length));
         }
     }
 }

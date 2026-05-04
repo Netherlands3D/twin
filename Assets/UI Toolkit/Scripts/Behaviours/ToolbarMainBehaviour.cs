@@ -1,5 +1,5 @@
 ﻿using Netherlands3D.Twin.Configuration;
-using Netherlands3D.UI.Behaviours;
+using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,7 +9,17 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
     public class ToolbarMainBehaviour : MonoBehaviour
     {
         [SerializeField] private UIDocument appDocument;
-        [SerializeField] private InspectorPanelBehaviour inspectorPanelBehaviour;
+        [Header("Tools")]
+        [SerializeField] private Tool layerTool;
+        [SerializeField] private Tool assetImportTool;
+        [SerializeField] private Tool assetLibraryTool;
+        [SerializeField] private Tool searchTool;
+        [SerializeField] private Tool sunPositionTool;
+        [SerializeField] private Tool downloadTileTool;
+        [SerializeField] private Tool openProjectTool;
+        [SerializeField] private Tool saveProjectTool;
+        [SerializeField] private Tool settingsTool;
+        [SerializeField] private Tool helpTool;
         
         #region UI Elements
         private VisualElement root;
@@ -27,10 +37,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnEnable()
         {
-            HamburgerMenu.OpenProjectButton.RegisterCallback<ClickEvent>(OnOpenProjectSelected);
-            HamburgerMenu.SaveProjectButton.RegisterCallback<ClickEvent>(OnSaveProjectAction);
-            HamburgerMenu.SettingsButton.RegisterCallback<ClickEvent>(OnOpenSettingsAction);
-            HamburgerMenu.HelpButton.RegisterCallback<ClickEvent>(OnHelpAction);
+            HamburgerMenu.OnOpenProjectSelected += OnOpenProjectSelected;
+            HamburgerMenu.OnSaveProjectSelected += OnSaveProjectAction;
+            HamburgerMenu.OnSettingsSelected += OnOpenSettingsAction;
+            HamburgerMenu.OnHelpSelected += OnHelpAction;
 
             ToolbarMain.OnLayerToolSelected += OnLayerToolSelected;
             ToolbarMain.OnAddToolSelected += OnAddToolSelected;
@@ -39,21 +49,23 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             ToolbarMain.OnSunPositionToolSelected += OnSunPositionToolSelected;
             ToolbarMain.OnDownloadToolSelected += OnDownloadToolSelected;
             ToolbarMain.OnToolDeselected += OnToolDeselected;
-            
-            inspectorPanelBehaviour.AssetLibraryPanelOpened.AddListener(OnAssetLibraryPanelOpened);
-            inspectorPanelBehaviour.AssetImportPanelOpened.AddListener(OnAssetImportPanelOpened);
-            inspectorPanelBehaviour.LayerPanelOpened.AddListener(OnLayerPanelOpened);
-            inspectorPanelBehaviour.SearchPanelOpened.AddListener(OnSearchPanelOpened);
-            inspectorPanelBehaviour.SunPositionPanelOpened.AddListener(OnSunPositionPanelOpened);
-            inspectorPanelBehaviour.DownloadTilePanelOpened.AddListener(OnDownloadTilePanelOpened);
+
+            AddOpenListener(layerTool, OnLayerPanelOpened);
+            AddOpenListener(assetImportTool, OnAssetImportPanelOpened);
+            AddOpenListener(assetLibraryTool, OnAssetLibraryPanelOpened);
+            AddOpenListener(searchTool, OnSearchPanelOpened);
+            AddOpenListener(sunPositionTool, OnSunPositionPanelOpened);
+            AddOpenListener(downloadTileTool, OnDownloadTilePanelOpened);
+            AddOpenListener(settingsTool, OnSettingsToolOpened);
+            AddOpenListener(helpTool, OnHelpToolOpened);
         }
 
         private void OnDisable()
         {
-            HamburgerMenu.OpenProjectButton.UnregisterCallback<ClickEvent>(OnOpenProjectSelected);
-            HamburgerMenu.SaveProjectButton.UnregisterCallback<ClickEvent>(OnSaveProjectAction);
-            HamburgerMenu.SettingsButton.UnregisterCallback<ClickEvent>(OnOpenSettingsAction);
-            HamburgerMenu.HelpButton.UnregisterCallback<ClickEvent>(OnHelpAction);
+            HamburgerMenu.OnOpenProjectSelected -= OnOpenProjectSelected;
+            HamburgerMenu.OnSaveProjectSelected -= OnSaveProjectAction;
+            HamburgerMenu.OnSettingsSelected -= OnOpenSettingsAction;
+            HamburgerMenu.OnHelpSelected -= OnHelpAction;
 
             ToolbarMain.OnLayerToolSelected -= OnLayerToolSelected;
             ToolbarMain.OnAddToolSelected -= OnAddToolSelected;
@@ -62,79 +74,95 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             ToolbarMain.OnSunPositionToolSelected -= OnSunPositionToolSelected;
             ToolbarMain.OnDownloadToolSelected -= OnDownloadToolSelected;
             ToolbarMain.OnToolDeselected -= OnToolDeselected;
-            
-            inspectorPanelBehaviour.AssetLibraryPanelOpened.RemoveListener(OnAssetLibraryPanelOpened);
-            inspectorPanelBehaviour.AssetImportPanelOpened.RemoveListener(OnAssetImportPanelOpened);
-            inspectorPanelBehaviour.LayerPanelOpened.RemoveListener(OnLayerPanelOpened);
-            inspectorPanelBehaviour.SearchPanelOpened.RemoveListener(OnSearchPanelOpened);
-            inspectorPanelBehaviour.SunPositionPanelOpened.RemoveListener(OnSunPositionPanelOpened);
-            inspectorPanelBehaviour.DownloadTilePanelOpened.RemoveListener(OnDownloadTilePanelOpened);
+
+            RemoveOpenListener(layerTool, OnLayerPanelOpened);
+            RemoveOpenListener(assetImportTool, OnAssetImportPanelOpened);
+            RemoveOpenListener(assetLibraryTool, OnAssetLibraryPanelOpened);
+            RemoveOpenListener(searchTool, OnSearchPanelOpened);
+            RemoveOpenListener(sunPositionTool, OnSunPositionPanelOpened);
+            RemoveOpenListener(downloadTileTool, OnDownloadTilePanelOpened);
+            RemoveOpenListener(settingsTool, OnSettingsToolOpened);
+            RemoveOpenListener(helpTool, OnHelpToolOpened);
         }
 
         private void OnLayerToolSelected()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.OpenLayers();
+            OpenTool(layerTool);
         }
 
         private void OnAddToolSelected()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.OpenAssetImport();
+            OpenTool(assetImportTool);
         }
 
         private void OnLibraryToolSelected()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.OpenAssetLibrary();
+            OpenTool(assetLibraryTool);
         }
 
         private void OnSearchToolSelected()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.OpenSearch();
+            OpenTool(searchTool);
         }
 
         private void OnSunPositionToolSelected()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.OpenSunPosition();
+            OpenTool(sunPositionTool);
         }
 
         private void OnDownloadToolSelected()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.OpenDownloadTile();
+            OpenTool(downloadTileTool);
         }
 
         private void OnToolDeselected()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.Close();
+            CloseAllToolbarTools();
         }
 
-        private void OnOpenProjectSelected(ClickEvent _)
+        private void OnOpenProjectSelected()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.OpenLoadProject();
+            OpenTool(openProjectTool);
         }
 
-        private void OnSaveProjectAction(ClickEvent _)
+        private void OnSaveProjectAction()
         {
             HamburgerMenu.Close();
-            inspectorPanelBehaviour.OpenSaveProject();
+            OpenTool(saveProjectTool);
         }
 
-        private void OnOpenSettingsAction(ClickEvent _)
+        private void OnOpenSettingsAction()
+        {
+            HamburgerMenu.Close();
+            OpenTool(settingsTool);
+        }
+
+        private void OnHelpAction()
+        {
+            HamburgerMenu.Close();
+            OpenTool(helpTool);
+        }
+
+        private void OnSettingsToolOpened()
         {
             HamburgerMenu.Close();
             ((IWindow)SettingsWindow).Open();
+            CloseTool(settingsTool);
         }
 
-        private void OnHelpAction(ClickEvent _)
+        private void OnHelpToolOpened()
         {
             HamburgerMenu.Close();
             Application.OpenURL(HelpUrl);
+            CloseTool(helpTool);
         }
         
         private void OnAssetLibraryPanelOpened()
@@ -171,6 +199,40 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         {
             HamburgerMenu.Close();
             ToolbarMain.EnableToolWithoutNotify(ToolbarMain.Tool.DownloadTile);
+        }
+
+        private static void OpenTool(Tool tool)
+        {
+            tool?.OpenInspector();
+        }
+
+        private static void CloseTool(Tool tool)
+        {
+            tool?.CloseInspector();
+        }
+
+        private void CloseAllToolbarTools()
+        {
+            CloseTool(layerTool);
+            CloseTool(assetImportTool);
+            CloseTool(assetLibraryTool);
+            CloseTool(searchTool);
+            CloseTool(sunPositionTool);
+            CloseTool(downloadTileTool);
+            CloseTool(openProjectTool);
+            CloseTool(saveProjectTool);
+        }
+
+        private static void AddOpenListener(Tool tool, UnityEngine.Events.UnityAction listener)
+        {
+            if (tool == null) return;
+            tool.onOpen.AddListener(listener);
+        }
+
+        private static void RemoveOpenListener(Tool tool, UnityEngine.Events.UnityAction listener)
+        {
+            if (tool == null) return;
+            tool.onOpen.RemoveListener(listener);
         }
     }
 }

@@ -105,7 +105,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
+  AssetLibrary: {fileID: 11400000, guid: 07a8740b7ad8fae49a77dbf2dc1abacc, type: 2}
+  AssetImport: {fileID: 0}
   Layer: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  SearchTool: {fileID: 11400000, guid: 6f5d9ca96571d424ca954f90542644a4, type: 2}
   Search: {fileID: 0}
   SunPosition: {fileID: 11400000, guid: f0477d7f987d93b46938af639648a21d, type: 2}
   DownloadTile: {fileID: 11400000, guid: 57df8a6e50ddc6b49b476f9f37700f8e, type: 2}
@@ -211,7 +214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Credentials.CredentialHandler
-  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!114 &4297113770841784289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,6 +303,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI_Toolkit.Scripts.Behaviours.ToolbarMainBehaviour
   appDocument: {fileID: 4399201792515060189}
-  inspectorPanelBehaviour: {fileID: 5715699707642146679}
+  layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  assetImportTool: {fileID: 11400000, guid: 8d401b0a5d410b24192a18882956371f, type: 2}
+  assetLibraryTool: {fileID: 11400000, guid: 07a8740b7ad8fae49a77dbf2dc1abacc, type: 2}
+  searchTool: {fileID: 11400000, guid: 6f5d9ca96571d424ca954f90542644a4, type: 2}
+  sunPositionTool: {fileID: 11400000, guid: f0477d7f987d93b46938af639648a21d, type: 2}
+  downloadTileTool: {fileID: 11400000, guid: 57df8a6e50ddc6b49b476f9f37700f8e, type: 2}
+  openProjectTool: {fileID: 11400000, guid: f44e97a104dca4c9b8a629ed07ec95f8, type: 2}
+  saveProjectTool: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
+  settingsTool: {fileID: 0}
+  helpTool: {fileID: 0}
   SettingsWindow: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
   HelpUrl: https://netherlands3d.eu

@@ -7,7 +7,6 @@ using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
@@ -38,23 +37,16 @@ namespace Netherlands3D.UI.Behaviours
         
         private ICredentialHandler credentialHandler;
 
-        [Header("Deprecated tools until migration is completed")]
+        [Header("Tools")]
+        [SerializeField] private Tool AssetLibrary;
+        [SerializeField] private Tool AssetImport;
         [SerializeField] private Tool Layer;
+        [SerializeField] private Tool SearchTool;
         [SerializeField] private GameObject Search;
         [SerializeField] private Tool SunPosition;
         [SerializeField] private Tool DownloadTile;
         [SerializeField] private Tool OpenProject;
         [SerializeField] private Tool SaveProject;
-        
-        [Header("Events")]
-        public UnityEvent AssetLibraryPanelOpened = new();
-        public UnityEvent AssetImportPanelOpened = new();
-        public UnityEvent LayerPanelOpened = new();
-        public UnityEvent SearchPanelOpened = new();
-        public UnityEvent SunPositionPanelOpened = new();
-        public UnityEvent DownloadTilePanelOpened = new();
-        public UnityEvent OpenProjectPanelOpened = new();
-        public UnityEvent SaveProjectPanelOpened = new();
 
         private void Awake()
         {
@@ -73,8 +65,26 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
-            ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
+            ImportAssetPanel.OpenAssetLibrary += OnOpenAssetLibraryClicked;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
+
+            AddOpenListener(AssetLibrary, OnAssetLibraryToolOpened);
+            AddOpenListener(AssetImport, OnAssetImportToolOpened);
+            AddOpenListener(Layer, OnLayerToolOpened);
+            AddOpenListener(SearchTool, OnSearchToolOpened);
+            AddOpenListener(SunPosition, OnSunPositionToolOpened);
+            AddOpenListener(DownloadTile, OnDownloadTileToolOpened);
+            AddOpenListener(OpenProject, OnOpenProjectToolOpened);
+            AddOpenListener(SaveProject, OnSaveProjectToolOpened);
+
+            AddCloseListener(AssetLibrary, OnToolClosed);
+            AddCloseListener(AssetImport, OnToolClosed);
+            AddCloseListener(Layer, OnToolClosed);
+            AddCloseListener(SearchTool, OnToolClosed);
+            AddCloseListener(SunPosition, OnToolClosed);
+            AddCloseListener(DownloadTile, OnToolClosed);
+            AddCloseListener(OpenProject, OnToolClosed);
+            AddCloseListener(SaveProject, OnToolClosed);
         }
 
         private void OnDisable()
@@ -82,8 +92,26 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
             InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
             InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
-            ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
+            ImportAssetPanel.OpenAssetLibrary -= OnOpenAssetLibraryClicked;
             ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
+
+            RemoveOpenListener(AssetLibrary, OnAssetLibraryToolOpened);
+            RemoveOpenListener(AssetImport, OnAssetImportToolOpened);
+            RemoveOpenListener(Layer, OnLayerToolOpened);
+            RemoveOpenListener(SearchTool, OnSearchToolOpened);
+            RemoveOpenListener(SunPosition, OnSunPositionToolOpened);
+            RemoveOpenListener(DownloadTile, OnDownloadTileToolOpened);
+            RemoveOpenListener(OpenProject, OnOpenProjectToolOpened);
+            RemoveOpenListener(SaveProject, OnSaveProjectToolOpened);
+
+            RemoveCloseListener(AssetLibrary, OnToolClosed);
+            RemoveCloseListener(AssetImport, OnToolClosed);
+            RemoveCloseListener(Layer, OnToolClosed);
+            RemoveCloseListener(SearchTool, OnToolClosed);
+            RemoveCloseListener(SunPosition, OnToolClosed);
+            RemoveCloseListener(DownloadTile, OnToolClosed);
+            RemoveCloseListener(OpenProject, OnToolClosed);
+            RemoveCloseListener(SaveProject, OnToolClosed);
         }
 
         public void Open()
@@ -113,60 +141,62 @@ namespace Netherlands3D.UI.Behaviours
             return panel;
         }
 
-        public void OpenAssetLibrary()
+        private void OnAssetLibraryToolOpened()
         {
+            CloseAllTrackedToolsExcept(AssetLibrary);
             ShowPanel<AssetLibraryPanel>();
-            AssetLibraryPanelOpened.Invoke();
         }
 
-        public void OpenAssetImport()
+        private void OnAssetImportToolOpened()
         {
+            CloseAllTrackedToolsExcept(AssetImport);
             ShowPanel<ImportAssetPanel>();
-            AssetImportPanelOpened.Invoke();
         }
 
-        public void OpenLayers()
+        private void OnLayerToolOpened()
         {
-            OpenTool(Layer);
-            LayerPanelOpened.Invoke();
+            CloseAllTrackedToolsExcept(Layer);
+            CloseInspectorForExternalTool();
         }
 
-        public void OpenSearch()
+        private void OnSearchToolOpened()
         {
-            Close();
+            CloseAllTrackedToolsExcept(SearchTool);
+            CloseInspectorForExternalTool();
             Search.SetActive(true);
-            SearchPanelOpened.Invoke();
         }
 
-        public void OpenSunPosition()
+        private void OnSunPositionToolOpened()
         {
-            OpenTool(SunPosition);
-            SunPositionPanelOpened.Invoke();
+            CloseAllTrackedToolsExcept(SunPosition);
+            CloseInspectorForExternalTool();
         }
 
-        public void OpenDownloadTile()
+        private void OnDownloadTileToolOpened()
         {
-            OpenTool(DownloadTile);
-            DownloadTilePanelOpened.Invoke();
+            CloseAllTrackedToolsExcept(DownloadTile);
+            CloseInspectorForExternalTool();
         }
 
-        public void OpenLoadProject()
+        private void OnOpenProjectToolOpened()
         {
-            OpenTool(OpenProject);
-            OpenProjectPanelOpened.Invoke();
-        }
-        
-        public void OpenSaveProject()
-        {
-            OpenTool(SaveProject);
-            SaveProjectPanelOpened.Invoke();
+            CloseAllTrackedToolsExcept(OpenProject);
+            CloseInspectorForExternalTool();
         }
 
-        [Obsolete("Tools are considered obsolete, as soon as we have migrated all panels this van be deleted")]
-        private void OpenTool(Tool tool)
+        private void OnSaveProjectToolOpened()
         {
-            Close();
-            tool.OpenInspector();
+            CloseAllTrackedToolsExcept(SaveProject);
+            CloseInspectorForExternalTool();
+        }
+
+        // External tools should close the UI Toolkit inspector without clearing the selected main toolbar button.
+        private void CloseInspectorForExternalTool()
+        {
+            Search.SetActive(false);
+            HidePanel();
+            InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
+            InspectorPanel.Close();
         }
 
         private void ShowPanel<T>() where T : BaseInspectorContentPanel
@@ -193,20 +223,93 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnAddLayerToggled(ChangeEvent<bool> evt)
         {
-            if (evt.newValue) ShowPanel<ImportAssetPanel>();
-            else Close();
+            if (evt.newValue) AssetImport?.OpenInspector();
+            else AssetImport?.CloseInspector();
         }
 
         private void OnOpenLibraryToggled(ChangeEvent<bool> evt)
         {
-            if (evt.newValue) ShowPanel<AssetLibraryPanel>();
-            else Close();
+            if (evt.newValue) AssetLibrary?.OpenInspector();
+            else AssetLibrary?.CloseInspector();
+        }
+
+        private void OnOpenAssetLibraryClicked()
+        {
+            AssetLibrary?.OpenInspector();
+        }
+
+        private void OnToolClosed()
+        {
+            if (!AnyToolOpen())
+            {
+                Close();
+            }
+        }
+
+        private bool AnyToolOpen()
+        {
+            return (AssetLibrary != null && AssetLibrary.Open)
+                   || (AssetImport != null && AssetImport.Open)
+                   || (Layer != null && Layer.Open)
+                   || (SearchTool != null && SearchTool.Open)
+                   || (SunPosition != null && SunPosition.Open)
+                   || (DownloadTile != null && DownloadTile.Open)
+                   || (OpenProject != null && OpenProject.Open)
+                   || (SaveProject != null && SaveProject.Open);
+        }
+
+        private static void AddOpenListener(Tool tool, UnityEngine.Events.UnityAction listener)
+        {
+            if (tool == null) return;
+            tool.onOpen.AddListener(listener);
+        }
+
+        private static void RemoveOpenListener(Tool tool, UnityEngine.Events.UnityAction listener)
+        {
+            if (tool == null) return;
+            tool.onOpen.RemoveListener(listener);
+        }
+
+        private static void AddCloseListener(Tool tool, UnityEngine.Events.UnityAction listener)
+        {
+            if (tool == null) return;
+            tool.onClose.AddListener(listener);
+        }
+
+        private static void RemoveCloseListener(Tool tool, UnityEngine.Events.UnityAction listener)
+        {
+            if (tool == null) return;
+            tool.onClose.RemoveListener(listener);
         }
 
         private void OnImportSucceeded()
         {
             InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(false);
             Close();
+        }
+
+        /// <summary>
+        /// Closes all tracked tools except the one that just opened,
+        /// so the inspector panel lifecycle stays consistent during tool switches.
+        /// Safe to call from within an onOpen handler: the exception tool is already
+        /// Open=true, so AnyToolOpen() remains true and Close() is not triggered.
+        /// </summary>
+        private void CloseAllTrackedToolsExcept(Tool exception)
+        {
+            CloseTrackedTool(AssetLibrary, exception);
+            CloseTrackedTool(AssetImport, exception);
+            CloseTrackedTool(Layer, exception);
+            CloseTrackedTool(SearchTool, exception);
+            CloseTrackedTool(SunPosition, exception);
+            CloseTrackedTool(DownloadTile, exception);
+            CloseTrackedTool(OpenProject, exception);
+            CloseTrackedTool(SaveProject, exception);
+        }
+
+        private static void CloseTrackedTool(Tool tool, Tool exception)
+        {
+            if (tool != null && tool != exception)
+                tool.CloseInspector();
         }
     }
 }
