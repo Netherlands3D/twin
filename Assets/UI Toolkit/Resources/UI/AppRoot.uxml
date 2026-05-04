@@ -3,10 +3,11 @@
     xmlns:ui="UnityEngine.UIElements" 
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
     xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
     editor-extension-mode="False"  
 >
     <ui:Style src="./AppRoot.uss"/>
-    <ui:VisualElement name="App" picking-mode="Ignore" class="app" style="flex-grow: 1; margin: 8px; padding: 4px;">
+    <ui:VisualElement name="App" picking-mode="Ignore" class="app">
         <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
             <ui:VisualElement picking-mode="Ignore" name="LeftSection">
                 <nl3d:HamburgerMenu/>
@@ -18,7 +19,10 @@
             <ui:VisualElement name="MidSection" class="app__top-zone" picking-mode="Ignore">
                 <nl3d:ToolbarToolbox picking-mode="Ignore" />
             </ui:VisualElement>
-            <nl3d:PropertiesPanel name="PropertiesPanel"/>
+            <ui:VisualElement name="PropertiesSection" class="app__properties-section">
+                <nl3dP:ColorPicker name="PropertiesColorPicker" class="app__properties-section-column"/>
+                <nl3d:PropertiesPanel name="PropertiesPanel" class="app__properties-section-column"/>
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="BottomSection" picking-mode="Ignore" style="align-items: flex-end; flex-direction: row;">
             <nl3d:Footer/>
