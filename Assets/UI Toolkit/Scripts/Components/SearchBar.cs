@@ -99,15 +99,11 @@ namespace Netherlands3D.UI.Components
                 ? item => item?.ToString() ?? string.Empty
                 : item => labelSelector((T)item);
 
-            selectedResultIndex = resultItems.Count > 0 ? 0 : -1;
+            selectedResultIndex = -1;
             ResultsList.itemsSource = resultItems;
             ResultsList.Rebuild();
             IsOpen = resultItems.Count > 0;
-
-            if (selectedResultIndex >= 0)
-            {
-                ResultsList.SetSelectionWithoutNotify(new[] { selectedResultIndex });
-            }
+            ResultsList.ClearSelection();
         }
 
         public void ClearResults()
@@ -130,7 +126,7 @@ namespace Netherlands3D.UI.Components
 
             SearchButton.RegisterCallback<ClickEvent>(_ =>
             {
-                int? selected = resultItems.Count == 0 ? null : selectedResultIndex;
+                int? selected = resultItems.Count == 0 || selectedResultIndex < 0 ? null : selectedResultIndex;
                 SubmitRequested?.Invoke(QueryField.value, selected);
             });
 
@@ -142,7 +138,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnQuerySubmit(NavigationSubmitEvent _)
         {
-            int? selected = resultItems.Count == 0 ? null : selectedResultIndex;
+            int? selected = resultItems.Count == 0 || selectedResultIndex < 0 ? null : selectedResultIndex;
             SubmitRequested?.Invoke(QueryField.value, selected);
         }
 
@@ -150,11 +146,11 @@ namespace Netherlands3D.UI.Components
         {
             if (resultItems.Count == 0) return;
 
-            int newSelection = 0;
+            int newSelection;
             switch (evt.keyCode)
             {
-                case KeyCode.DownArrow: newSelection = selectedResultIndex + 1; break;
-                case KeyCode.UpArrow: newSelection = selectedResultIndex - 1; break;
+                case KeyCode.DownArrow: newSelection = selectedResultIndex < 0 ? 0 : selectedResultIndex + 1; break;
+                case KeyCode.UpArrow: newSelection = selectedResultIndex < 0 ? resultItems.Count - 1 : selectedResultIndex - 1; break;
                 // Don't change selection if the key is not recognized
                 default: return;
             }

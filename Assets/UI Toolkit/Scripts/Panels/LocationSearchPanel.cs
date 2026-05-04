@@ -61,7 +61,7 @@ namespace Netherlands3D.UI.Panels
 
         public override string GetTitle() => "Zoeken";
 
-        /// <summary>Populate the results list. Highlights the first item automatically.</summary>
+        /// <summary>Populate the results list. Starts in an unselected state.</summary>
         public void SetSuggestions(List<SuggestionResult> suggestions)
         {
             currentSuggestions = suggestions ?? new List<SuggestionResult>();
