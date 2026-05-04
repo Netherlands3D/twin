@@ -4,8 +4,6 @@ using Netherlands3D.AddressSearch;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
-using Netherlands3D.UI.Behaviours;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -25,7 +23,6 @@ namespace Netherlands3D.UI.Panels
         private NumberField CoordinateYField => coordinateYField ??= this.Q<NumberField>("CoordinateYField");
 
         private List<SuggestionResult> currentSuggestions = new();
-        private int navigatedIndex = -1;
         private bool callbacksRegistered;
 
         /// <summary>Fires when the query text changes.</summary>
@@ -68,32 +65,20 @@ namespace Netherlands3D.UI.Panels
         public void SetSuggestions(List<SuggestionResult> suggestions)
         {
             currentSuggestions = suggestions ?? new List<SuggestionResult>();
-            navigatedIndex = currentSuggestions.Count > 0 ? 0 : -1;
-
-            SearchBar.ResultsList.itemsSource = currentSuggestions;
-            SearchBar.ResultsList.Rebuild();
-            SearchBar.IsOpen = currentSuggestions.Count > 0;
-
-            if (navigatedIndex >= 0)
-            {
-                SearchBar.ResultsList.SetSelectionWithoutNotify(new[] { navigatedIndex });
-            }
+            SearchBar.SetResults(currentSuggestions, suggestion => suggestion.Label);
         }
 
         /// <summary>Remove all result items and close the dropdown.</summary>
         public void ClearSuggestions()
         {
             currentSuggestions.Clear();
-            navigatedIndex = -1;
-            SearchBar.ResultsList.itemsSource = currentSuggestions;
-            SearchBar.ResultsList.Rebuild();
-            SearchBar.IsOpen = false;
+            SearchBar.ClearResults();
         }
 
         /// <summary>Set the query field text without triggering <see cref="QueryChanged"/>.</summary>
         public void SetQueryText(string text)
         {
-            SearchBar.QueryField.SetValueWithoutNotify(text);
+            SearchBar.SetQueryText(text);
         }
 
         /// <summary>Update both coordinate fields without triggering submit callbacks.</summary>
@@ -115,30 +100,31 @@ namespace Netherlands3D.UI.Panels
             if (callbacksRegistered) return;
             callbacksRegistered = true;
 
-            // Text value changed → notify behaviour
-            SearchBar.QueryField.RegisterValueChangedCallback(evt =>
-                QueryChanged?.Invoke(evt.newValue));
-
-            // Enter key → submit with the currently navigated suggestion (if any)
-            SearchBar.QueryField.RegisterCallback<NavigationSubmitEvent>(_ =>
-            {
-                SuggestionResult? active = navigatedIndex >= 0 && navigatedIndex < currentSuggestions.Count
-                    ? currentSuggestions[navigatedIndex]
-                    : null;
-                SubmitRequested?.Invoke(SearchBar.QueryField.value, active);
-            }, TrickleDown.TrickleDown);
-
-            // Arrow keys → navigate suggestion list while keeping focus in the text field
-
-            SearchBar.QueryField.RegisterCallback<KeyDownEvent>(OnQueryFieldKeyDown, TrickleDown.TrickleDown);
-
-            // Configure the results ListView
-            SearchBar.ResultsList.makeItem = MakeResultItem;
-            SearchBar.ResultsList.bindItem = BindResultItem;
-            SearchBar.ResultsList.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            SearchBar.ResultsList.selectionType = SelectionType.Single;
+            SearchBar.QueryChanged += OnSearchBarQueryChanged;
+            SearchBar.SubmitRequested += OnSearchBarSubmitRequested;
+            SearchBar.ResultActivated += OnSearchBarResultActivated;
 
             RegisterCoordinateCallbacks();
+        }
+
+        private void OnSearchBarQueryChanged(string query)
+        {
+            QueryChanged?.Invoke(query);
+        }
+
+        private void OnSearchBarSubmitRequested(string query, int? activeIndex)
+        {
+            SuggestionResult? activeSuggestion = null;
+            if (activeIndex.HasValue && activeIndex.Value >= 0 && activeIndex.Value < currentSuggestions.Count)
+                activeSuggestion = currentSuggestions[activeIndex.Value];
+
+            SubmitRequested?.Invoke(query, activeSuggestion);
+        }
+
+        private void OnSearchBarResultActivated(int index)
+        {
+            if (index < 0 || index >= currentSuggestions.Count) return;
+            SuggestionSelected?.Invoke(currentSuggestions[index]);
         }
 
         private void RegisterCoordinateCallbacks()
@@ -155,51 +141,5 @@ namespace Netherlands3D.UI.Panels
                 CoordinateYSubmitted?.Invoke(CoordinateYField.InputField.value));
         }
 
-        private void OnQueryFieldKeyDown(KeyDownEvent evt)
-        {
-            if (currentSuggestions.Count == 0) return;
-
-            if (evt.keyCode == KeyCode.DownArrow)
-            {
-                navigatedIndex = Mathf.Clamp(navigatedIndex + 1, 0, currentSuggestions.Count - 1);
-                SearchBar.ResultsList.SetSelectionWithoutNotify(new[] { navigatedIndex });
-                evt.StopPropagation();
-            }
-            else if (evt.keyCode == KeyCode.UpArrow)
-            {
-                navigatedIndex = Mathf.Clamp(navigatedIndex - 1, 0, currentSuggestions.Count - 1);
-                SearchBar.ResultsList.SetSelectionWithoutNotify(new[] { navigatedIndex });
-                evt.StopPropagation();
-            }
-        }
-
-        private VisualElement MakeResultItem()
-        {
-            var item = new ListViewItem();
-            var label = new Label();
-            label.AddToClassList("label");
-            item.Add(label);
-            item.RegisterCallback<ClickEvent>(OnResultItemClicked);
-            return item;
-        }
-
-        private void BindResultItem(VisualElement element, int index)
-        {
-            if (element.Q<Label>() is Label label && index < currentSuggestions.Count)
-                label.text = currentSuggestions[index].Label;
-
-            element.userData = index;
-        }
-
-        private void OnResultItemClicked(ClickEvent evt)
-        {
-            if (evt.currentTarget is VisualElement item &&
-                item.userData is int index &&
-                index >= 0 && index < currentSuggestions.Count)
-            {
-                navigatedIndex = index;
-                SuggestionSelected?.Invoke(currentSuggestions[index]);
-            }
-        }
     }
 }
