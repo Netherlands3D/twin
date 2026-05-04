@@ -141,15 +141,15 @@ namespace Netherlands3D.UI.Behaviours
             toolRepository = new ToolRepository(OnAnyToolOpened);
 
             // Register every tool once with its inspector open-action.
-            // External tools (not managed by the InspectorPanel) call CloseInspectorForExternalTool.
+            // External tools (not managed by the InspectorPanel) call CloseInspectorPanels.
             RegisterTool(AssetLibrary, OpenAssetLibraryPanel);
             RegisterTool(AssetImport, OpenAssetImportPanel);
-            RegisterTool(Layer, CloseInspectorForExternalTool);
+            RegisterTool(Layer, CloseInspectorPanels);
             RegisterTool(SearchTool, OpenSearchTool);
-            RegisterTool(SunPosition, CloseInspectorForExternalTool);
-            RegisterTool(DownloadTile, CloseInspectorForExternalTool);
-            RegisterTool(OpenProject, CloseInspectorForExternalTool);
-            RegisterTool(SaveProject, CloseInspectorForExternalTool);
+            RegisterTool(SunPosition, CloseInspectorPanels);
+            RegisterTool(DownloadTile, CloseInspectorPanels);
+            RegisterTool(OpenProject, CloseInspectorPanels);
+            RegisterTool(SaveProject, CloseInspectorPanels);
             RegisterTool(SettingsTool, OpenSettingsTool);
             RegisterTool(HelpTool, OpenHelpTool);
         }
@@ -216,23 +216,25 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OpenAssetLibraryPanel()
         {
+            CloseInspectorPanels();
             ShowPanel<AssetLibraryPanel>();
         }
 
         private void OpenAssetImportPanel()
         {
+            CloseInspectorPanels();
             ShowPanel<ImportAssetPanel>();
         }
 
         private void OpenSearchTool()
         {
-            CloseInspectorForExternalTool();
+            CloseInspectorPanels();
             Search.SetActive(true);
         }
 
         private void OpenSettingsTool()
         {
-            CloseInspectorForExternalTool();
+            CloseInspectorPanels();
             ((IWindow)SettingsWindow).Open();
             SettingsTool?.CloseInspector();
         }
@@ -244,14 +246,6 @@ namespace Netherlands3D.UI.Behaviours
         }
 
         // External tools close the UI Toolkit inspector without clearing the main toolbar selection.
-        private void CloseInspectorForExternalTool()
-        {
-            ((IWindow)SettingsWindow).Close();
-            Search.SetActive(false);
-            HidePanel();
-            InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
-            InspectorPanel.Close();
-        }
 
         private void ShowPanel<T>() where T : BaseInspectorContentPanel
         {
@@ -273,6 +267,15 @@ namespace Netherlands3D.UI.Behaviours
         {
             activePanel?.Hide();
             activePanel = null;
+        }
+
+        private void CloseInspectorPanels()
+        {
+            ((IWindow)SettingsWindow).Close();
+            Search.SetActive(false);
+            HidePanel();
+            InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
+            InspectorPanel.Close();
         }
 
         private void OnAddLayerToggled(ChangeEvent<bool> evt)
