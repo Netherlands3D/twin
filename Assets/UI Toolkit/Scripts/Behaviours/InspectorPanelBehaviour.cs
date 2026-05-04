@@ -7,6 +7,7 @@ using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
@@ -23,9 +24,6 @@ namespace Netherlands3D.UI.Behaviours
         private InspectorPanel inspectorPanel;
         private InspectorPanel InspectorPanel => inspectorPanel ??= Root?.Q<InspectorPanel>();
 
-        private AssetLibraryPanel assetLibraryPanel;
-        private AssetLibraryPanel AssetLibraryPanel => assetLibraryPanel ??= panels.OfType<AssetLibraryPanel>().FirstOrDefault();
-        
         private ImportAssetPanel importAssetPanel;
         private ImportAssetPanel ImportAssetPanel => importAssetPanel ??= panels.OfType<ImportAssetPanel>().FirstOrDefault();
 
@@ -48,6 +46,80 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] private Tool OpenProject;
         [SerializeField] private Tool SaveProject;
 
+        /// <summary>
+        /// Pairs a Tool with its inspector open-action and a cached UnityAction delegate
+        /// for symmetrical subscribe/unsubscribe without allocating new lambdas each cycle.
+        /// </summary>
+        private sealed class ToolEntry
+        {
+            public Tool Tool { get; }
+            public Action OnOpen { get; }
+            public UnityAction OpenListener { get; }
+
+            public ToolEntry(Tool tool, Action onOpen, Action<ToolEntry> dispatchOpen)
+            {
+                Tool = tool;
+                OnOpen = onOpen;
+                OpenListener = () => dispatchOpen(this);
+            }
+        }
+
+        /// <summary>
+        /// Small repository responsible for storing and iterating registered tools.
+        /// InspectorPanelBehaviour provides the actual tool-open behavior; this class
+        /// only manages the registrations and list-based queries/operations.
+        /// </summary>
+        private sealed class ToolRepository
+        {
+            private readonly List<ToolEntry> entries = new();
+            private readonly Action<ToolEntry> dispatchOpen;
+
+            public ToolRepository(Action<ToolEntry> dispatchOpen)
+            {
+                this.dispatchOpen = dispatchOpen;
+            }
+
+            public void Add(Tool tool, Action onOpen)
+            {
+                if (tool == null) return;
+                entries.Add(new ToolEntry(tool, onOpen, dispatchOpen));
+            }
+
+            public void SubscribeAll(UnityAction onToolClosed)
+            {
+                foreach (var entry in entries)
+                {
+                    entry.Tool.onOpen.AddListener(entry.OpenListener);
+                    entry.Tool.onClose.AddListener(onToolClosed);
+                }
+            }
+
+            public void UnsubscribeAll(UnityAction onToolClosed)
+            {
+                foreach (var entry in entries)
+                {
+                    entry.Tool.onOpen.RemoveListener(entry.OpenListener);
+                    entry.Tool.onClose.RemoveListener(onToolClosed);
+                }
+            }
+
+            public void CloseAllExcept(ToolEntry activeEntry)
+            {
+                foreach (var entry in entries)
+                {
+                    if (entry.Tool != activeEntry.Tool)
+                        entry.Tool.CloseInspector();
+                }
+            }
+
+            public bool HasOpenTools()
+            {
+                return entries.Any(entry => entry.Tool != null && entry.Tool.Open);
+            }
+        }
+
+        private ToolRepository toolRepository;
+
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
@@ -58,6 +130,24 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Close();
             
             ImportAssetPanel.SetCredentialHandler(credentialHandler);
+
+            toolRepository = new ToolRepository(OnAnyToolOpened);
+
+            // Register every tool once with its inspector open-action.
+            // External tools (not managed by the InspectorPanel) call CloseInspectorForExternalTool.
+            RegisterTool(AssetLibrary, OpenAssetLibraryPanel);
+            RegisterTool(AssetImport, OpenAssetImportPanel);
+            RegisterTool(Layer, CloseInspectorForExternalTool);
+            RegisterTool(SearchTool, OpenSearchTool);
+            RegisterTool(SunPosition, CloseInspectorForExternalTool);
+            RegisterTool(DownloadTile, CloseInspectorForExternalTool);
+            RegisterTool(OpenProject, CloseInspectorForExternalTool);
+            RegisterTool(SaveProject, CloseInspectorForExternalTool);
+        }
+
+        private void RegisterTool(Tool tool, Action onOpen)
+        {
+            toolRepository.Add(tool, onOpen);
         }
 
         private void OnEnable()
@@ -68,23 +158,7 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.OpenAssetLibrary += OnOpenAssetLibraryClicked;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
 
-            AddOpenListener(AssetLibrary, OnAssetLibraryToolOpened);
-            AddOpenListener(AssetImport, OnAssetImportToolOpened);
-            AddOpenListener(Layer, OnLayerToolOpened);
-            AddOpenListener(SearchTool, OnSearchToolOpened);
-            AddOpenListener(SunPosition, OnSunPositionToolOpened);
-            AddOpenListener(DownloadTile, OnDownloadTileToolOpened);
-            AddOpenListener(OpenProject, OnOpenProjectToolOpened);
-            AddOpenListener(SaveProject, OnSaveProjectToolOpened);
-
-            AddCloseListener(AssetLibrary, OnToolClosed);
-            AddCloseListener(AssetImport, OnToolClosed);
-            AddCloseListener(Layer, OnToolClosed);
-            AddCloseListener(SearchTool, OnToolClosed);
-            AddCloseListener(SunPosition, OnToolClosed);
-            AddCloseListener(DownloadTile, OnToolClosed);
-            AddCloseListener(OpenProject, OnToolClosed);
-            AddCloseListener(SaveProject, OnToolClosed);
+            toolRepository.SubscribeAll(OnToolClosed);
         }
 
         private void OnDisable()
@@ -95,23 +169,7 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.OpenAssetLibrary -= OnOpenAssetLibraryClicked;
             ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
 
-            RemoveOpenListener(AssetLibrary, OnAssetLibraryToolOpened);
-            RemoveOpenListener(AssetImport, OnAssetImportToolOpened);
-            RemoveOpenListener(Layer, OnLayerToolOpened);
-            RemoveOpenListener(SearchTool, OnSearchToolOpened);
-            RemoveOpenListener(SunPosition, OnSunPositionToolOpened);
-            RemoveOpenListener(DownloadTile, OnDownloadTileToolOpened);
-            RemoveOpenListener(OpenProject, OnOpenProjectToolOpened);
-            RemoveOpenListener(SaveProject, OnSaveProjectToolOpened);
-
-            RemoveCloseListener(AssetLibrary, OnToolClosed);
-            RemoveCloseListener(AssetImport, OnToolClosed);
-            RemoveCloseListener(Layer, OnToolClosed);
-            RemoveCloseListener(SearchTool, OnToolClosed);
-            RemoveCloseListener(SunPosition, OnToolClosed);
-            RemoveCloseListener(DownloadTile, OnToolClosed);
-            RemoveCloseListener(OpenProject, OnToolClosed);
-            RemoveCloseListener(SaveProject, OnToolClosed);
+            toolRepository.UnsubscribeAll(OnToolClosed);
         }
 
         public void Open()
@@ -141,56 +199,29 @@ namespace Netherlands3D.UI.Behaviours
             return panel;
         }
 
-        private void OnAssetLibraryToolOpened()
+        private void OnAnyToolOpened(ToolEntry entry)
         {
-            CloseAllTrackedToolsExcept(AssetLibrary);
+            toolRepository.CloseAllExcept(entry);
+            entry.OnOpen?.Invoke();
+        }
+
+        private void OpenAssetLibraryPanel()
+        {
             ShowPanel<AssetLibraryPanel>();
         }
 
-        private void OnAssetImportToolOpened()
+        private void OpenAssetImportPanel()
         {
-            CloseAllTrackedToolsExcept(AssetImport);
             ShowPanel<ImportAssetPanel>();
         }
 
-        private void OnLayerToolOpened()
+        private void OpenSearchTool()
         {
-            CloseAllTrackedToolsExcept(Layer);
-            CloseInspectorForExternalTool();
-        }
-
-        private void OnSearchToolOpened()
-        {
-            CloseAllTrackedToolsExcept(SearchTool);
             CloseInspectorForExternalTool();
             Search.SetActive(true);
         }
 
-        private void OnSunPositionToolOpened()
-        {
-            CloseAllTrackedToolsExcept(SunPosition);
-            CloseInspectorForExternalTool();
-        }
-
-        private void OnDownloadTileToolOpened()
-        {
-            CloseAllTrackedToolsExcept(DownloadTile);
-            CloseInspectorForExternalTool();
-        }
-
-        private void OnOpenProjectToolOpened()
-        {
-            CloseAllTrackedToolsExcept(OpenProject);
-            CloseInspectorForExternalTool();
-        }
-
-        private void OnSaveProjectToolOpened()
-        {
-            CloseAllTrackedToolsExcept(SaveProject);
-            CloseInspectorForExternalTool();
-        }
-
-        // External tools should close the UI Toolkit inspector without clearing the selected main toolbar button.
+        // External tools close the UI Toolkit inspector without clearing the main toolbar selection.
         private void CloseInspectorForExternalTool()
         {
             Search.SetActive(false);
@@ -240,76 +271,14 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnToolClosed()
         {
-            if (!AnyToolOpen())
-            {
+            if (!toolRepository.HasOpenTools())
                 Close();
-            }
-        }
-
-        private bool AnyToolOpen()
-        {
-            return (AssetLibrary != null && AssetLibrary.Open)
-                   || (AssetImport != null && AssetImport.Open)
-                   || (Layer != null && Layer.Open)
-                   || (SearchTool != null && SearchTool.Open)
-                   || (SunPosition != null && SunPosition.Open)
-                   || (DownloadTile != null && DownloadTile.Open)
-                   || (OpenProject != null && OpenProject.Open)
-                   || (SaveProject != null && SaveProject.Open);
-        }
-
-        private static void AddOpenListener(Tool tool, UnityEngine.Events.UnityAction listener)
-        {
-            if (tool == null) return;
-            tool.onOpen.AddListener(listener);
-        }
-
-        private static void RemoveOpenListener(Tool tool, UnityEngine.Events.UnityAction listener)
-        {
-            if (tool == null) return;
-            tool.onOpen.RemoveListener(listener);
-        }
-
-        private static void AddCloseListener(Tool tool, UnityEngine.Events.UnityAction listener)
-        {
-            if (tool == null) return;
-            tool.onClose.AddListener(listener);
-        }
-
-        private static void RemoveCloseListener(Tool tool, UnityEngine.Events.UnityAction listener)
-        {
-            if (tool == null) return;
-            tool.onClose.RemoveListener(listener);
         }
 
         private void OnImportSucceeded()
         {
             InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(false);
             Close();
-        }
-
-        /// <summary>
-        /// Closes all tracked tools except the one that just opened,
-        /// so the inspector panel lifecycle stays consistent during tool switches.
-        /// Safe to call from within an onOpen handler: the exception tool is already
-        /// Open=true, so AnyToolOpen() remains true and Close() is not triggered.
-        /// </summary>
-        private void CloseAllTrackedToolsExcept(Tool exception)
-        {
-            CloseTrackedTool(AssetLibrary, exception);
-            CloseTrackedTool(AssetImport, exception);
-            CloseTrackedTool(Layer, exception);
-            CloseTrackedTool(SearchTool, exception);
-            CloseTrackedTool(SunPosition, exception);
-            CloseTrackedTool(DownloadTile, exception);
-            CloseTrackedTool(OpenProject, exception);
-            CloseTrackedTool(SaveProject, exception);
-        }
-
-        private static void CloseTrackedTool(Tool tool, Tool exception)
-        {
-            if (tool != null && tool != exception)
-                tool.CloseInspector();
         }
     }
 }
