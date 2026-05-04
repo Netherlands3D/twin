@@ -1,6 +1,5 @@
-using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -14,8 +13,14 @@ namespace Netherlands3D.UI.Components
         private VisualElement HeaderInput => this.Q<VisualElement>(className: "unity-toggle__input");
         private Label HeaderLabel => this.Q<Label>(className: "unity-label");
         private VisualElement Checkmark => this.Q<VisualElement>(className: "unity-foldout__checkmark");
-        private ToggleButtonGroup ButtonGroup => this.Q<ToggleButtonGroup>("ButtonGroup");
+        private VisualElement ButtonGroup => this.Q<VisualElement>("ButtonGroup");
 
+        public Button OpenProjectButton => this.Q<Button>("Open");
+        public Button SaveProjectButton => this.Q<Button>("Save");
+        public Button SettingsButton => this.Q<Button>("Settings");
+        public Button HelpButton => this.Q<Button>("Help");
+        
+        
         [UxmlAttribute("text")]
         public string ProjectTitle
         {
@@ -49,17 +54,10 @@ namespace Netherlands3D.UI.Components
 
                 UpdateExpandedClass(value);
 
-                ApplyToggleButtonGroupDefaults();
-
                 // Mark last button (for override border radius)
                 schedule.Execute(UpdateLastButtonClass).ExecuteLater(0);
             });
         }
-
-        // TODO: Sync selection state with the MainToolbar.
-        // - When the menu closes: deselect any HamburgerMenu buttons.
-        // - When a MainToolbar button is selected: collapse the HamburgerMenu and clear its selection.
-        // Goal: HamburgerMenu should behave as if its hamburger toggle is part of the MainToolbar’s selection model.
 
         private void OnFoldoutValueChanged(ChangeEvent<bool> evt)
         {
@@ -72,20 +70,6 @@ namespace Netherlands3D.UI.Components
         private void UpdateExpandedClass(bool isExpanded)
         {
             EnableInClassList(ExpandedClassName, isExpanded);
-        }
-
-        private void ApplyToggleButtonGroupDefaults()
-        {
-            var group = ButtonGroup;
-            if (group == null) return;
-
-            // Defaults: single selection, empty selection allowed
-            group.allowEmptySelection = true;
-            group.isMultipleSelection = false;
-
-            // Clear selection: bitmask 0, length = number of options
-            int optionCount = group.childCount;
-            group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, optionCount));
         }
 
         // Move UXML button group to contentContainer inside the foldout
