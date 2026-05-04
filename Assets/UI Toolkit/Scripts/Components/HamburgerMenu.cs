@@ -53,6 +53,11 @@ namespace Netherlands3D.UI.Components
 
             RegisterCallback<ChangeEvent<bool>>(OnFoldoutValueChanged);
 
+            OpenProjectButton.RegisterCallback<ClickEvent>(_ => OnOpenProjectSelected?.Invoke());
+            SaveProjectButton.RegisterCallback<ClickEvent>(_ => OnSaveProjectSelected?.Invoke());
+            SettingsButton.RegisterCallback<ClickEvent>(_ => OnSettingsSelected?.Invoke());
+            HelpButton.RegisterCallback<ClickEvent>(_ => OnHelpSelected?.Invoke());
+
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 MoveButtonGroupIntoContent();
@@ -62,11 +67,6 @@ namespace Netherlands3D.UI.Components
 
                 // Mark last button (for override border radius)
                 schedule.Execute(UpdateLastButtonClass).ExecuteLater(0);
-
-                OpenProjectButton.RegisterCallback<ClickEvent>(_ => OnOpenProjectSelected?.Invoke());
-                SaveProjectButton.RegisterCallback<ClickEvent>(_ => OnSaveProjectSelected?.Invoke());
-                SettingsButton.RegisterCallback<ClickEvent>(_ => OnSettingsSelected?.Invoke());
-                HelpButton.RegisterCallback<ClickEvent>(_ => OnHelpSelected?.Invoke());
             });
         }
 
