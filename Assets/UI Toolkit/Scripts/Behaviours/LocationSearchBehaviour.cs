@@ -20,7 +20,6 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] private AddressSearchService service;
 
         public UnityEvent<Coordinate> onCoordinateFound = new();
-        public UnityEvent<List<string>> onSelectedBuildings = new();
 
         private LocationSearchPanel panel;
         private CameraService cameraService;
@@ -31,7 +30,6 @@ namespace Netherlands3D.UI.Behaviours
             cameraService = ServiceLocator.GetService<CameraService>();
 
             service.onCoordinateFound.AddListener(OnCoordinateFound);
-            service.onSelectedBuildings.AddListener(OnSelectedBuildings);
             service.SuggestionsReady += OnSuggestionsReady;
             service.SuggestionsCleared += OnSuggestionsCleared;
             service.SuggestionAutoSelected += OnSuggestionAutoSelected;
@@ -42,7 +40,6 @@ namespace Netherlands3D.UI.Behaviours
             if (service == null) return;
 
             service.onCoordinateFound.RemoveListener(OnCoordinateFound);
-            service.onSelectedBuildings.RemoveListener(OnSelectedBuildings);
             service.SuggestionsReady -= OnSuggestionsReady;
             service.SuggestionsCleared -= OnSuggestionsCleared;
             service.SuggestionAutoSelected -= OnSuggestionAutoSelected;
@@ -144,9 +141,7 @@ namespace Netherlands3D.UI.Behaviours
             SyncPanelToCoordinate(coord);
             onCoordinateFound.Invoke(coord);
         }
-
-        private void OnSelectedBuildings(List<string> ids) => onSelectedBuildings.Invoke(ids);
-
+        
         private void MoveMainCamera(Camera mainCamera, Coordinate targetCoordinate)
         {
             if (!mainCamera.TryGetComponent<WorldTransform>(out var worldTransform))
