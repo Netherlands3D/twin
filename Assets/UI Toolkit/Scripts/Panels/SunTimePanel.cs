@@ -16,6 +16,7 @@ namespace Netherlands3D.UI.Panels
         // SunTime stores speed as seconds/second internally.
         // The UI shows speed in hours/second so we apply this factor.
         private const float SecondsPerHour = 3600f;
+        private static readonly float[] SpeedStepsHours = { 0.5f, 1f, 2f, 3f };
 
         private SunTime sunTime;
 
@@ -68,8 +69,8 @@ namespace Netherlands3D.UI.Panels
 
             NowButton.RegisterCallback<ClickEvent>(_ => sunTime?.ResetToNow());
 
-            SlowDownButton.RegisterCallback<ClickEvent>(_ => sunTime?.MultiplyTimeSpeed(0.1f));
-            SpeedUpButton.RegisterCallback<ClickEvent>(_ => sunTime?.MultiplyTimeSpeed(10f));
+            SlowDownButton.RegisterCallback<ClickEvent>(_ => StepTimeSpeed(increase: false));
+            SpeedUpButton.RegisterCallback<ClickEvent>(_ => StepTimeSpeed(increase: true));
             PauseButton.RegisterCallback<ClickEvent>(_ => sunTime?.ToggleAnimation(false));
             PlayButton.RegisterCallback<ClickEvent>(_ => sunTime?.ToggleAnimation(true));
         }
@@ -156,6 +157,39 @@ namespace Netherlands3D.UI.Panels
             if (sunTime == null) return;
             var hoursPerSecond = (float)SpeedField.GetValueAsDouble();
             sunTime.SetTimeSpeed(hoursPerSecond * SecondsPerHour);
+        }
+
+        private void StepTimeSpeed(bool increase)
+        {
+            if (sunTime == null) return;
+
+            var current = (float)SpeedField.GetValueAsDouble();
+            var target = increase ? GetNextSpeedStep(current) : GetPreviousSpeedStep(current);
+
+            SpeedField.SetValueWithoutNotify(target);
+            sunTime.SetTimeSpeed(target * SecondsPerHour);
+        }
+
+        private static float GetNextSpeedStep(float current)
+        {
+            for (var i = 0; i < SpeedStepsHours.Length; i++)
+            {
+                if (current < SpeedStepsHours[i])
+                    return SpeedStepsHours[i];
+            }
+
+            return SpeedStepsHours[SpeedStepsHours.Length - 1];
+        }
+
+        private static float GetPreviousSpeedStep(float current)
+        {
+            for (var i = SpeedStepsHours.Length - 1; i >= 0; i--)
+            {
+                if (current > SpeedStepsHours[i])
+                    return SpeedStepsHours[i];
+            }
+
+            return SpeedStepsHours[0];
         }
     }
 }
