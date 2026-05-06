@@ -1,0 +1,92 @@
+﻿.sun-time-panel {
+    display: none;
+    flex-direction: column;
+    flex-shrink: 1;
+    flex-grow: 1;
+    opacity: 0;
+    padding: var(--spacing-3);
+}
+
+.sun-time-panel.active {
+    display: flex;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    opacity: 1;
+}
+
+.sun-time-panel__field-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: var(--spacing-8);
+    margin-bottom: var(--spacing-3);
+}
+
+.sun-time-panel__field-row--tall {
+    min-height: var(--spacing-10);
+    align-items: center;
+}
+
+.sun-time-panel__field-label {
+    width: var(--spacing-20);
+    flex-shrink: 0;
+    white-space: normal;
+    -unity-text-align: middle-left;
+    margin-right: var(--spacing-3);
+}
+
+.sun-time-panel__field-label.sun-time-panel__field-label--grow {
+    width: auto;
+    flex-grow: 1;
+}
+
+.sun-time-panel__time-field {
+    -unity-text-align: middle-center;
+}
+
+.sun-time-panel__time-field .unity-text-field__input {
+    -unity-text-align: middle-center;
+}
+
+.number-field.sun-time-panel__date-field {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    margin-right: var(--spacing-3);
+}
+
+.number-field.sun-time-panel__date-field--year {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin-right: 0;
+}
+
+.sun-time-panel__reset-button {
+    flex: 0 0 auto;
+}
+
+.sun-time-panel__section-header {
+    -unity-font-style: bold;
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-1);
+}
+
+.sun-time-panel__speed-input {
+    flex-basis: 60px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.sun-time-panel__unit-label {
+    flex-shrink: 1;
+    white-space: normal;
+    -unity-text-align: middle-left;
+}
+
+.button.sun-time-panel__control-button {
+    flex-shrink: 0;
+    margin-right: var(--spacing-2);
+}
+
+.sun-time-panel__control-button--active {
+    background-color: var(--color-primary, #1a6bc4);
+}

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Credentials;
+using Netherlands3D.Sun;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
@@ -18,6 +19,7 @@ namespace Netherlands3D.UI.Behaviours
     {
         private UIDocument appDocument;
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
+        [SerializeField] private SunTime sunTime;
     
         private VisualElement root;
         private VisualElement Root => root ??= appDocument?.rootVisualElement;
@@ -133,6 +135,7 @@ namespace Netherlands3D.UI.Behaviours
             credentialHandler = GetComponent<ICredentialHandler>();
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
+            RegisterPanel<SunTimePanel>(sunTime);
             
             InspectorPanel.Close();
             
@@ -146,7 +149,7 @@ namespace Netherlands3D.UI.Behaviours
             RegisterTool(AssetImport, OpenAssetImportPanel);
             RegisterTool(Layer, CloseInspectorPanels);
             RegisterTool(SearchTool, OpenSearchTool);
-            RegisterTool(SunPosition, CloseInspectorPanels);
+            RegisterTool(SunPosition, OpenSunTimePanel);
             RegisterTool(DownloadTile, CloseInspectorPanels);
             RegisterTool(OpenProject, CloseInspectorPanels);
             RegisterTool(SaveProject, CloseInspectorPanels);
@@ -224,6 +227,12 @@ namespace Netherlands3D.UI.Behaviours
         {
             CloseInspectorPanels();
             ShowPanel<ImportAssetPanel>();
+        }
+
+        private void OpenSunTimePanel()
+        {
+            CloseInspectorPanels();
+            ShowPanel<SunTimePanel>();
         }
 
         private void OpenSearchTool()
