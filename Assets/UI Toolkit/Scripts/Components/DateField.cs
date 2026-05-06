@@ -10,8 +10,9 @@ namespace Netherlands3D.UI.Components
         private NumberField dayInput;
         private NumberField monthInput;
         private NumberField yearInput;
+        private DateTime currentValue = DateTime.MinValue;
 
-        public event Action<int, int, int> ValueChanged;
+        public event Action<int, int, int> SubmitEvent;
 
         private NumberField DayInput => dayInput ??= this.Q<NumberField>("DayInput");
         private NumberField MonthInput => monthInput ??= this.Q<NumberField>("MonthInput");
@@ -22,25 +23,57 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            DayInput.InputField.RegisterValueChangedCallback(_ => NotifyValueChanged());
-            MonthInput.InputField.RegisterValueChangedCallback(_ => NotifyValueChanged());
-            YearInput.InputField.RegisterValueChangedCallback(_ => NotifyValueChanged());
+            RegisterSubmitCallbacks(DayInput);
+            RegisterSubmitCallbacks(MonthInput);
+            RegisterSubmitCallbacks(YearInput);
         }
 
         public void SetValueWithoutNotify(int day, int month, int year)
         {
-            DayInput.SetValueWithoutNotify(day);
-            MonthInput.SetValueWithoutNotify(month);
-            YearInput.SetValueWithoutNotify(year);
+            currentValue = ToDateTime(day, month, year);
+            ApplyCurrentValueToFields();
         }
 
-        public int GetDay() => DayInput.GetValueAsInt();
-        public int GetMonth() => MonthInput.GetValueAsInt();
-        public int GetYear() => YearInput.GetValueAsInt();
-
-        private void NotifyValueChanged()
+        private void NotifySubmitted()
         {
-            ValueChanged?.Invoke(GetDay(), GetMonth(), GetYear());
+            currentValue = ToDateTime(DayInput.GetValueAsInt(), MonthInput.GetValueAsInt(), YearInput.GetValueAsInt());
+            ApplyCurrentValueToFields();
+            SubmitEvent?.Invoke(currentValue.Day, currentValue.Month, currentValue.Year);
+        }
+
+        public static DateTime ToDateTime(int day, int month, int year)
+        {
+            var clamped = ClampDate(day, month, year);
+            return new DateTime(clamped.year, clamped.month, clamped.day);
+        }
+
+        private static (int day, int month, int year) ClampDate(int day, int month, int year)
+        {
+            year = Clamp(year, 1, 9999);
+            month = Clamp(month, 1, 12);
+            var maxDay = DateTime.DaysInMonth(year, month);
+            day = Clamp(day, 1, maxDay);
+            return (day, month, year);
+        }
+
+        private static int Clamp(int value, int min, int max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
+        }
+
+        private void ApplyCurrentValueToFields()
+        {
+            DayInput.SetValueWithoutNotify(currentValue.Day);
+            MonthInput.SetValueWithoutNotify(currentValue.Month);
+            YearInput.SetValueWithoutNotify(currentValue.Year);
+        }
+
+        private void RegisterSubmitCallbacks(NumberField field)
+        {
+            field.InputField.RegisterCallback<BlurEvent>(_ => NotifySubmitted());
+            field.InputField.RegisterCallback<NavigationSubmitEvent>(_ => NotifySubmitted(), TrickleDown.TrickleDown);
         }
     }
 }

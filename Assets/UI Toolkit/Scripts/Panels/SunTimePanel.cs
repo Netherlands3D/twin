@@ -63,7 +63,7 @@ namespace Netherlands3D.UI.Panels
 
             OnShow += OnShowAction;
             OnHide += OnHideAction;
-            DateField.ValueChanged += OnDateChanged;
+            DateField.SubmitEvent += OnDateChanged;
             TimeField.ValueChanged += OnTimeChanged;
             SpeedField.InputField.RegisterValueChangedCallback(_ => OnSpeedChanged());
 
