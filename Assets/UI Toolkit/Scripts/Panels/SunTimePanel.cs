@@ -20,23 +20,21 @@ namespace Netherlands3D.UI.Panels
 
         private SunTime sunTime;
 
-        // Date input
         private DateField dateField;
         private DateField DateField => dateField ??= this.Q<DateField>("DateField");
 
-        // Time input
+        private SunDial sunDial;
+        private SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
+
         private TimeField timeField;
         private TimeField TimeField => timeField ??= this.Q<TimeField>("TimeField");
 
-        // Reset button
         private Button nowButton;
         private Button NowButton => nowButton ??= this.Q<Button>("NowButton");
 
-        // Speed input (displayed in hours/second)
         private NumberField speedField;
         private NumberField SpeedField => speedField ??= this.Q<NumberField>("SpeedField");
 
-        // Playback control buttons
         private Button slowDownButton;
         private Button SlowDownButton => slowDownButton ??= this.Q<Button>("SlowDownButton");
 
@@ -64,6 +62,7 @@ namespace Netherlands3D.UI.Panels
             OnShow += OnShowAction;
             OnHide += OnHideAction;
             DateField.SubmitEvent += OnDateChanged;
+            SunDial.TimeChanged += OnSunDialTimeChanged;
             TimeField.ValueChanged += OnTimeChanged;
             SpeedField.InputField.RegisterValueChangedCallback(_ => OnSpeedChanged());
 
@@ -115,8 +114,15 @@ namespace Netherlands3D.UI.Panels
 
         private void OnTimeOfDayChanged(DateTime dt)
         {
+            SunDial.SetTimeWithoutNotify(dt.Hour, dt.Minute);
             DateField.SetValueWithoutNotify(dt.Day, dt.Month, dt.Year);
             TimeField.SetValueWithoutNotify(dt.ToString("HH:mm"));
+        }
+
+        private void OnSunDialTimeChanged(int hour, int minute)
+        {
+            if (sunTime == null) return;
+            sunTime.SetTime(hour, minute, 0);
         }
 
         /// <param name="speedSecondsPerSecond">Internal SunTime speed (seconds of sim-time per real second).</param>

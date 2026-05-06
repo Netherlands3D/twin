@@ -7,6 +7,9 @@
     name="SunTimePanel"
     class="sun-time-panel">
 
+    <!-- Sundial control -->
+    <nl3d:SunDial name="SunDial" class="sun-time-panel__sun-dial" />
+
     <!-- Time row: label | time-field -->
     <ui:VisualElement class="sun-time-panel__field-row">
         <ui:Label text="Tijd" class="sun-time-panel__field-label" />

@@ -1,0 +1,63 @@
+﻿.sun-dial {
+    width: var(--sun-dial-width, 120px);
+    height: var(--sun-dial-height, 64px);
+    min-width: 80px;
+    min-height: 44px;
+    align-self: center;
+    margin-bottom: var(--spacing-3);
+}
+
+.sun-dial__mask {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.sun-dial__track {
+    position: absolute;
+    left: 6.25%;
+    top: 0;
+    width: 87.5%;
+    height: 125%;
+    background-image: url("project://database/Assets/_Functionalities/Sun/Sprites/Vector 1967.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: contain;
+    -unity-background-image-tint-color: var(--color-blue-300);
+}
+
+.sun-dial__orbit {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 187.5%;
+}
+
+.sun-dial__moon,
+.sun-dial__sun {
+    position: absolute;
+    left: 50%;
+    width: 13.3333%;
+    height: 13.3333%;
+    margin-left: -6.6667%;
+}
+
+.sun-dial__moon {
+    top: 0;
+}
+
+.sun-dial__sun {
+    bottom: 0;
+}
+
+.sun-dial__horizon {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--color-blue-300);
+}
+

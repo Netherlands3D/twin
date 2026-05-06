@@ -14,6 +14,10 @@
     opacity: 1;
 }
 
+.sun-time-panel__sun-dial {
+    align-self: center;
+}
+
 .sun-time-panel__field-row {
     flex-direction: row;
     align-items: center;
