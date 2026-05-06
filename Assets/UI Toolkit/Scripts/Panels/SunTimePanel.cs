@@ -5,7 +5,6 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
-using TextField = Netherlands3D.UI.Components.TextField;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -20,19 +19,13 @@ namespace Netherlands3D.UI.Panels
 
         private SunTime sunTime;
 
-        // Date inputs
-        private NumberField dayField;
-        private NumberField DayField => dayField ??= this.Q<NumberField>("DayField");
-
-        private NumberField monthField;
-        private NumberField MonthField => monthField ??= this.Q<NumberField>("MonthField");
-
-        private NumberField yearField;
-        private NumberField YearField => yearField ??= this.Q<NumberField>("YearField");
+        // Date input
+        private DateField dateField;
+        private DateField DateField => dateField ??= this.Q<DateField>("DateField");
 
         // Time input
-        private TextField timeField;
-        private TextField TimeField => timeField ??= this.Q<TextField>("TimeField");
+        private TimeField timeField;
+        private TimeField TimeField => timeField ??= this.Q<TimeField>("TimeField");
 
         // Reset button
         private Button nowButton;
@@ -55,13 +48,6 @@ namespace Netherlands3D.UI.Panels
         private Button speedUpButton;
         private Button SpeedUpButton => speedUpButton ??= this.Q<Button>("SpeedUpButton");
 
-        // Focus tracking — prevents SunTime events from overwriting a field while the user is editing it
-        private bool dayFocused;
-        private bool monthFocused;
-        private bool yearFocused;
-        private bool timeFocused;
-        private bool speedFocused;
-
         /// <summary>Parameterless constructor required for UXML deserialization.</summary>
         public SunTimePanel()
         {
@@ -74,60 +60,11 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            OnShow += () =>
-            {
-                EnableInClassList("active", true);
-                Subscribe();
-                LoadInitialValues();
-            };
-
-            OnHide += () =>
-            {
-                EnableInClassList("active", false);
-                Unsubscribe();
-            };
-
-            DayField.RegisterCallback<FocusInEvent>(_ => dayFocused = true);
-            DayField.RegisterCallback<FocusOutEvent>(_ =>
-            {
-                dayFocused = false;
-                OnDayChanged();
-            });
-            DayField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => OnDayChanged(), TrickleDown.TrickleDown);
-
-            MonthField.RegisterCallback<FocusInEvent>(_ => monthFocused = true);
-            MonthField.RegisterCallback<FocusOutEvent>(_ =>
-            {
-                monthFocused = false;
-                OnMonthChanged();
-            });
-            MonthField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => OnMonthChanged(),
-                TrickleDown.TrickleDown);
-
-            YearField.RegisterCallback<FocusInEvent>(_ => yearFocused = true);
-            YearField.RegisterCallback<FocusOutEvent>(_ =>
-            {
-                yearFocused = false;
-                OnYearChanged();
-            });
-            YearField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => OnYearChanged(), TrickleDown.TrickleDown);
-
-            TimeField.RegisterCallback<FocusInEvent>(_ => timeFocused = true);
-            TimeField.RegisterCallback<FocusOutEvent>(_ =>
-            {
-                timeFocused = false;
-                OnTimeChanged();
-            });
-            TimeField.RegisterCallback<NavigationSubmitEvent>(_ => OnTimeChanged(), TrickleDown.TrickleDown);
-
-            SpeedField.RegisterCallback<FocusInEvent>(_ => speedFocused = true);
-            SpeedField.RegisterCallback<FocusOutEvent>(_ =>
-            {
-                speedFocused = false;
-                OnSpeedChanged();
-            });
-            SpeedField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => OnSpeedChanged(),
-                TrickleDown.TrickleDown);
+            OnShow += OnShowAction;
+            OnHide += OnHideAction;
+            DateField.ValueChanged += OnDateChanged;
+            TimeField.ValueChanged += OnTimeChanged;
+            SpeedField.InputField.RegisterValueChangedCallback(_ => OnSpeedChanged());
 
             NowButton.RegisterCallback<ClickEvent>(_ => sunTime?.ResetToNow());
 
@@ -136,7 +73,20 @@ namespace Netherlands3D.UI.Panels
             PauseButton.RegisterCallback<ClickEvent>(_ => sunTime?.ToggleAnimation(false));
             PlayButton.RegisterCallback<ClickEvent>(_ => sunTime?.ToggleAnimation(true));
         }
-        
+
+        private void OnHideAction()
+        {
+            EnableInClassList("active", false);
+            Unsubscribe();
+        }
+
+        private void OnShowAction()
+        {
+            EnableInClassList("active", true);
+            Subscribe();
+            LoadInitialValues();
+        }
+
         private void Subscribe()
         {
             if (sunTime == null) return;
@@ -164,20 +114,15 @@ namespace Netherlands3D.UI.Panels
 
         private void OnTimeOfDayChanged(DateTime dt)
         {
-            if (!dayFocused) DayField.SetValueWithoutNotify(dt.Day);
-            if (!monthFocused) MonthField.SetValueWithoutNotify(dt.Month);
-            if (!yearFocused) YearField.SetValueWithoutNotify(dt.Year);
-            if (!timeFocused) TimeField.SetValueWithoutNotify(dt.ToString("HH:mm"));
+            DateField.SetValueWithoutNotify(dt.Day, dt.Month, dt.Year);
+            TimeField.SetValueWithoutNotify(dt.ToString("HH:mm"));
         }
 
         /// <param name="speedSecondsPerSecond">Internal SunTime speed (seconds of sim-time per real second).</param>
         private void OnTimeSpeedChanged(float speedSecondsPerSecond)
         {
-            if (!speedFocused)
-            {
-                var hoursPerSecond = speedSecondsPerSecond / SecondsPerHour;
-                SpeedField.SetValueWithoutNotify(hoursPerSecond);
-            }
+            var hoursPerSecond = speedSecondsPerSecond / SecondsPerHour;
+            SpeedField.SetValueWithoutNotify(hoursPerSecond);
         }
 
         private void OnIsAnimatingChanged(bool animating)
@@ -187,14 +132,18 @@ namespace Netherlands3D.UI.Panels
             PlayButton.EnableInClassList("sun-time-panel__control-button--active", !animating);
         }
 
-        private void OnDayChanged() => sunTime?.SetDay(DayField.GetValueAsInt());
-        private void OnMonthChanged() => sunTime?.SetMonth(MonthField.GetValueAsInt());
-        private void OnYearChanged() => sunTime?.SetYear(YearField.GetValueAsInt());
-
-        private void OnTimeChanged()
+        private void OnDateChanged(int day, int month, int year)
         {
             if (sunTime == null) return;
-            var text = TimeField.value
+            sunTime.SetDay(day);
+            sunTime.SetMonth(month);
+            sunTime.SetYear(year);
+        }
+
+        private void OnTimeChanged(string value)
+        {
+            if (sunTime == null) return;
+            var text = value
                 .Replace('.', ':')
                 .Replace(';', ':')
                 .Replace(',', ':');

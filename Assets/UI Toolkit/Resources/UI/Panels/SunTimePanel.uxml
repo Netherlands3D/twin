@@ -10,15 +10,13 @@
     <!-- Time row: label | time-field -->
     <ui:VisualElement class="sun-time-panel__field-row">
         <ui:Label text="Tijd" class="sun-time-panel__field-label" />
-        <nl3d:TextField name="TimeField" textfield-style="Normal" class="sun-time-panel__time-field" />
+        <nl3d:TimeField name="TimeField" class="sun-time-panel__time-field time-field--centered" />
     </ui:VisualElement>
 
     <!-- Date row: label | day | month | year -->
     <ui:VisualElement class="sun-time-panel__field-row">
         <ui:Label text="Datum" class="sun-time-panel__field-label" />
-        <nl3d:NumberField name="DayField"   label-visible="false" decimal-count="0" scroll-step="1" class="sun-time-panel__date-field" />
-        <nl3d:NumberField name="MonthField" label-visible="false" decimal-count="0" scroll-step="1" class="sun-time-panel__date-field" />
-        <nl3d:NumberField name="YearField"  label-visible="false" decimal-count="0" scroll-step="1" class="sun-time-panel__date-field sun-time-panel__date-field--year" />
+        <nl3d:DateField name="DateField" class="sun-time-panel__date-field" />
     </ui:VisualElement>
 
     <!-- Reset button -->

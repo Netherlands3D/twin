@@ -39,25 +39,10 @@
     flex-grow: 1;
 }
 
-.sun-time-panel__time-field {
-    -unity-text-align: middle-center;
-}
 
-.sun-time-panel__time-field .unity-text-field__input {
-    -unity-text-align: middle-center;
-}
-
-.number-field.sun-time-panel__date-field {
+.sun-time-panel__date-field {
     flex-grow: 1;
     flex-shrink: 1;
-    flex-basis: 0;
-    margin-right: var(--spacing-3);
-}
-
-.number-field.sun-time-panel__date-field--year {
-    flex-grow: 1;
-    flex-basis: 0;
-    margin-right: 0;
 }
 
 .sun-time-panel__reset-button {

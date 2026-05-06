@@ -1,0 +1,12 @@
+.time-field {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.time-field .time-field__input .unity-base-text-field__input {
+    -unity-text-align: middle-left;
+}
+
+.time-field.time-field--centered .time-field__input .unity-base-text-field__input {
+    -unity-text-align: middle-center;
+}
