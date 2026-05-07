@@ -44,9 +44,7 @@ namespace Netherlands3D.SelectionTools
             Selected
         }
 
-        [Header("Input")]
-        [SerializeField] private InputActionAsset inputActionAsset;
-        private InputActionMap polygonSelectionActionMap;
+    
 
         [Header("Settings")]
         [SerializeField] Color lineColor = Color.red;
@@ -71,14 +69,6 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] protected DrawMode mode = DrawMode.CreateAndEdit;
         public DrawMode Mode => mode;
 
-        protected InputAction pointerAction;
-        protected InputAction tapAction;
-        protected InputAction escapeAction;
-        protected InputAction finishAction;
-        protected InputAction tapSecondaryAction;
-        protected InputAction clickAction;
-        protected InputAction modifierAction;
-
         [SerializeField] private LineRenderer polygonLineRenderer;
         [SerializeField] private LineRenderer previewLineRenderer;
 
@@ -87,6 +77,7 @@ namespace Netherlands3D.SelectionTools
 
         protected Vector3 lastAddedPoint = default;
         protected Vector3 selectionStartPosition = default;
+        protected Vector3 selectionEndPosition = default;
         protected Vector3 previousFrameWorldCoordinate = default;
         protected Vector2 previousFrameScreenCoordinate = default;
         protected Vector3 lastNormal = Vector3.zero;
@@ -133,14 +124,7 @@ namespace Netherlands3D.SelectionTools
             polygonLineRenderer.positionCount = 1;
             polygonLineRenderer.loop = false;
 
-            polygonSelectionActionMap = inputActionAsset.FindActionMap("PolygonSelection");
-            tapAction = polygonSelectionActionMap.FindAction("Tap");
-            escapeAction = polygonSelectionActionMap.FindAction("Escape");
-            finishAction = polygonSelectionActionMap.FindAction("Finish");
-            tapSecondaryAction = polygonSelectionActionMap.FindAction("TapSecondary");
-            clickAction = polygonSelectionActionMap.FindAction("Click");
-            pointerAction = polygonSelectionActionMap.FindAction("Point");
-            modifierAction = polygonSelectionActionMap.FindAction("Modifier");
+           
 
             worldPlane = new Plane(this.transform.up, this.transform.position);
 
@@ -153,12 +137,7 @@ namespace Netherlands3D.SelectionTools
                 if (createHandles) Debug.Log("Please set a handleTemplate reference to create handles.", this.gameObject);
             }
 
-            if (!polygonSelectionActionMap.enabled)
-            {
-                Debug.LogWarning("polygonSelectionActionMap was not enabled, but assigned as the input action map. Enabling the input action map", this);
-                polygonSelectionActionMap.Enable();
-            }
-
+           
             SetDrawMode(DrawMode.Edit);
         }
 
@@ -182,49 +161,14 @@ namespace Netherlands3D.SelectionTools
             {
                 ClearPolygon(true);
             }
-
-            tapAction.performed += TapAction_performed;
-            clickAction.performed += ClickAction_performed;
-            clickAction.canceled += ClickAction_canceled;
-            escapeAction.canceled += EscapeAction_canceled;
-            finishAction.performed += FinishAction_performed;
         }
 
         protected virtual void OnDisable()
         {
             blockCameraDrag.Invoke(false);
-
-            tapAction.performed -= TapAction_performed;
-            clickAction.performed -= ClickAction_performed;
-            clickAction.canceled -= ClickAction_canceled;
-            escapeAction.canceled -= EscapeAction_canceled;
-            finishAction.performed -= FinishAction_performed;
         }
 
-        private void TapAction_performed(InputAction.CallbackContext obj)
-        {
-            Tap();
-        }
-
-        private void ClickAction_performed(InputAction.CallbackContext obj)
-        {
-            StartClick();
-        }
-
-        private void ClickAction_canceled(InputAction.CallbackContext obj)
-        {
-            Release();
-        }
-
-        private void EscapeAction_canceled(InputAction.CallbackContext obj)
-        {
-            ClearPolygon(true);
-        }
-
-        private void FinishAction_performed(InputAction.CallbackContext obj)
-        {
-            CloseLoop(true);
-        }
+      
 
         public void SetCurrentInputPointsWithoutNotify(List<Vector3> points)
         {
@@ -267,22 +211,6 @@ namespace Netherlands3D.SelectionTools
             if (pointerRepresentation)
                 pointerRepresentation.position = currentWorldCoordinate;
 
-            DetermineIfShouldAutoDraw();
-
-            if (!requireReleaseBeforeRedraw && autoDrawPolygon)
-            {
-                AutoAddPoint();
-            }
-            else if (requireReleaseBeforeRedraw && !clickAction.IsPressed())
-            {
-                requireReleaseBeforeRedraw = false;
-            }
-
-            previousFrameWorldCoordinate = currentWorldCoordinate;
-        }
-
-        private void DetermineIfShouldAutoDraw()
-        {
             if (mode == DrawMode.Edit) //dont auto draw in edit mode
             {
                 if (autoDrawPolygon) // reset auto draw mode if mode changes to edit mode while auto drawing
@@ -305,6 +233,17 @@ namespace Netherlands3D.SelectionTools
                 autoDrawPolygon = false;
                 blockCameraDrag.Invoke(false);
             }
+
+            if (!requireReleaseBeforeRedraw && autoDrawPolygon)
+            {
+                AutoAddPoint();
+            }
+            else if (requireReleaseBeforeRedraw && !clickAction.IsPressed())
+            {
+                requireReleaseBeforeRedraw = false;
+            }
+
+            previousFrameWorldCoordinate = currentWorldCoordinate;
         }
 
         protected virtual void UpdateCurrentWorldCoordinate()
@@ -671,16 +610,14 @@ namespace Netherlands3D.SelectionTools
             }
         }
 
-        protected virtual void StartClick()
+        public virtual void SetSelectionStartPosition(Vector3 position)
         {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            selectionStartPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            selectionStartPosition = position;
         }
 
-        protected virtual void Release()
+        public virtual void SetSelectionEndPosition(Vector3 position)
         {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var selectionEndPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            selectionEndPosition =  position;
         }
 
         private void FinishPolygon(bool invokeNewPolygonEvent)

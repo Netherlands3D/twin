@@ -150,25 +150,14 @@ namespace Netherlands3D.SelectionTools
             MakeSelection();
         }
 
-        protected override void StartClick()
+        public override void SetSelectionStartPosition(Vector3 position)
         {
-            if (Interface.PointerIsOverUI())
-                return;
-
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-            selectionStartPosition = GetGridPosition(worldPosition);
+            selectionStartPosition = GetGridPosition(position);
         }
 
-        protected override void Release()
+        public override void SetSelectionEndPosition(Vector3 position)
         {
-            if (Interface.PointerIsOverUI())
-                return;
-
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-            var selectionEndPosition = GetGridPosition(worldPosition);
-
+            selectionEndPosition = GetGridPosition(position);
             if (drawingArea)
             {
                 DrawSelectionArea(selectionStartPosition, selectionEndPosition);

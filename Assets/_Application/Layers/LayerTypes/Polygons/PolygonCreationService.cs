@@ -9,6 +9,8 @@ using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -39,6 +41,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private TriggerEvent OnGridEdit;
         [SerializeField] private TriggerEvent OnGridSelect;
 
+        private ShapeType currentShapeType = ShapeType.Undefined;
 
         private void OnEnable()
         {
@@ -53,6 +56,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnGridCreate.AddListenerStarted(SetGridInputModeToCreate);
             OnGridEdit.AddListenerStarted(SetGridInputModeToEdit);
             OnGridSelect.AddListenerStarted(SetGridInputModeToSelected);
+            
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.PolygonTapAction.performed -= TapAction_performed;
+            inputService.PolygonClickAction.performed -= ClickAction_performed;
+            inputService.PolygonClickAction.canceled -= ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed -= FinishAction_performed;
         }
 
         private void OnDisable()
@@ -68,11 +78,73 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnGridCreate.RemoveListenerStarted(SetGridInputModeToCreate);
             OnGridEdit.RemoveListenerStarted(SetGridInputModeToEdit);
             OnGridSelect.RemoveListenerStarted(SetGridInputModeToSelected);
+            
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.PolygonTapAction.performed -= TapAction_performed;
+            inputService.PolygonClickAction.performed -= ClickAction_performed;
+            inputService.PolygonClickAction.canceled -= ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed -= FinishAction_performed;
+            
         }
 
         private void Start()
         {
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+        }
+        
+        private void TapAction_performed(InputAction.CallbackContext obj)
+        {
+            Tap();
+        }
+
+        private void ClickAction_performed(InputAction.CallbackContext obj)
+        {
+            StartClick();
+        }
+
+        private void ClickAction_canceled(InputAction.CallbackContext obj)
+        {
+            Release();
+        }
+
+        private void EscapeAction_canceled(InputAction.CallbackContext obj)
+        {
+            ClearPolygon(true);
+        }
+
+        private void FinishAction_performed(InputAction.CallbackContext obj)
+        {
+            CloseLoop(true);
+        }
+        
+        protected virtual void StartClick()
+        {
+            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            input.SetSelectionStartPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
+        }
+        
+        protected virtual void Release()
+        {
+            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            input.SetSelectionEndPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
+        }
+
+        private PolygonInput GetInputFromShapeType(ShapeType type)
+        {
+            switch (currentShapeType)
+            {
+                case ShapeType.Polygon:
+                    return polygonInput;
+                case ShapeType.Line:
+                    return lineInput;
+                case ShapeType.Grid:
+                    return gridInput;
+                default:
+                    return null;
+            }
         }
 
         /// <summary>
@@ -131,7 +203,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
-           
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
