@@ -44,24 +44,23 @@ namespace Netherlands3D.UI.Components
             PauseButton.RegisterCallback<ClickEvent>(OnPauseButtonClicked);
             SpeedUpButton.RegisterCallback<ClickEvent>(OnSpeedUpButtonClicked);
             SlowDownButton.RegisterCallback<ClickEvent>(OnSlowDownButtonClicked);
+            PlayToggled += OnPlayToggled;
         }
 
-        private void OnPlayButtonClicked(ClickEvent _) => PlayToggled?.Invoke(true);
-        private void OnPauseButtonClicked(ClickEvent _) => PlayToggled?.Invoke(false);
+        private void OnPlayButtonClicked(ClickEvent _) => Play();
+        private void OnPauseButtonClicked(ClickEvent _) => Pause();
         private void OnSpeedUpButtonClicked(ClickEvent _) => StepUp();
         private void OnSlowDownButtonClicked(ClickEvent _) => StepDown();
         private void OnSpeedFieldChanged() => SpeedChanged?.Invoke(GetCurrentSpeed());
+        private void OnPlayToggled(bool obj) => SetIsPlayingButtonStates(obj);
 
         public float GetCurrentSpeed() => (float)SpeedField.GetValueAsDouble();
         public void SetSpeedWithoutNotify(float speed) => SpeedField.SetValueWithoutNotify(speed);
 
-        public void SetIsPlaying(bool isPlaying)
-        {
-            PauseButton.EnableInClassList("simulation-speed-controls__control-button--active", !isPlaying);
-            PlayButton.EnableInClassList("simulation-speed-controls__control-button--active", isPlaying);
-        }
+        public void Play() => PlayToggled?.Invoke(true);
+        public void Pause() => PlayToggled?.Invoke(false);
 
-        private void StepUp()
+        public void StepUp()
         {
             var current = GetCurrentSpeed();
             var currentIndex = FindNearestStepIndex(current);
@@ -72,7 +71,7 @@ namespace Netherlands3D.UI.Components
             SpeedChanged?.Invoke(nextSpeed);
         }
 
-        private void StepDown()
+        public void StepDown()
         {
             var current = GetCurrentSpeed();
             var currentIndex = FindNearestStepIndex(current);
@@ -81,6 +80,12 @@ namespace Netherlands3D.UI.Components
 
             SetSpeedWithoutNotify(prevSpeed);
             SpeedChanged?.Invoke(prevSpeed);
+        }
+
+        private void SetIsPlayingButtonStates(bool isPlaying)
+        {
+            PauseButton.EnableInClassList("simulation-speed-controls__control-button--active", !isPlaying);
+            PlayButton.EnableInClassList("simulation-speed-controls__control-button--active", isPlaying);
         }
 
         private int FindNearestStepIndex(float value)

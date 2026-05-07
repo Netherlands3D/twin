@@ -48,14 +48,21 @@ namespace Netherlands3D.UI.Panels
 
             OnShow += OnShowAction;
             OnHide += OnHideAction;
-            DateField.SubmitEvent += OnDateChanged;
+            
             SunDial.TimeChanged += OnSunDialTimeChanged;
+            DateField.SubmitEvent += OnDateChanged;
             TimeField.TimeChanged += OnTimeChanged;
 
-            NowButton.RegisterCallback<ClickEvent>(_ => sunTime?.ResetToNow());
+            NowButton.RegisterCallback<ClickEvent>(OnNowButtonClicked);
 
             SimulationSpeedControls.SpeedChanged += OnSimulationSpeedChanged;
             SimulationSpeedControls.PlayToggled += OnPlayToggled;
+        }
+
+        void OnNowButtonClicked(ClickEvent _)
+        {
+            sunTime?.ResetToNow();
+            SimulationSpeedControls.Pause();
         }
 
         private void OnShowAction()
@@ -94,7 +101,8 @@ namespace Netherlands3D.UI.Panels
 
         private void OnIsAnimatingChanged(bool animating)
         {
-            SimulationSpeedControls.SetIsPlaying(animating);
+            if (animating) SimulationSpeedControls.Play();
+            else SimulationSpeedControls.Pause();
         }
 
         private void OnTimeSpeedChanged(float speedSecondsPerSecond)

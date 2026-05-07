@@ -35,12 +35,11 @@ namespace Netherlands3D.UI.Components
 
         public void SetValueWithoutNotify(string value)
         {
-            if (TryParseTime(value, out var hour, out var minute, out var normalizedValue))
+            if (TryParseTime(value, out _, out _, out var normalizedValue))
             {
                 lastValidValue = normalizedValue;
                 InputField.SetValueWithoutNotify(normalizedValue);
                 EnableInClassList(InvalidClassName, false);
-                TimeChanged?.Invoke(hour, minute);
                 return;
             }
 
