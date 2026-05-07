@@ -1,0 +1,23 @@
+﻿<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    class="simulation-speed-controls"
+>
+    <ui:VisualElement class="inspector__section">
+        <ui:Label text="Snelheid animatie" class="simulation-speed-controls__field-label" />
+        <nl3d:NumberField name="SpeedField" label-visible="false" decimal-count="2" scroll-step="0.1" class="simulation-speed-controls__speed-input" />
+        <ui:Label text="uur per seconde" class="simulation-speed-controls__unit-label" />
+    </ui:VisualElement>
+
+    <ui:VisualElement class="inspector__section">
+        <ui:Label text="Bediening" class="simulation-speed-controls__field-label" />
+        <nl3d:Button name="SlowDownButton" LabelText="" button-style="IconOnly" icon="Backward" class="simulation-speed-controls__control-button" />
+        <nl3d:Button name="PauseButton" LabelText="" button-style="IconOnly" icon="Pause"    class="simulation-speed-controls__control-button" />
+        <nl3d:Button name="PlayButton" LabelText="" button-style="IconOnly" icon="Play"     class="simulation-speed-controls__control-button" />
+        <nl3d:Button name="SpeedUpButton" LabelText="" button-style="IconOnly" icon="Forward"  class="simulation-speed-controls__control-button" />
+    </ui:VisualElement>
+</ui:UXML>
+

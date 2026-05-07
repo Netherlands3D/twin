@@ -28,19 +28,7 @@
 
         <ui:Label text="Animatie tijdverloop" class="inspector__section-header" />
 
-        <ui:VisualElement class="inspector__section sun-time-panel__field-row--tall">
-            <ui:Label text="Snelheid animatie" class="sun-time-panel__field-label" />
-            <nl3d:NumberField name="SpeedField" label-visible="false" decimal-count="2" scroll-step="0.1" class="sun-time-panel__speed-input" />
-            <ui:Label text="uur per seconde" class="sun-time-panel__unit-label" />
-        </ui:VisualElement>
-
-        <ui:VisualElement class="inspector__section">
-            <ui:Label text="Bediening" class="sun-time-panel__field-label" />
-            <nl3d:Button name="SlowDownButton" LabelText="" button-style="IconOnly" icon="Backward" class="sun-time-panel__control-button" />
-            <nl3d:Button name="PauseButton" LabelText="" button-style="IconOnly" icon="Pause"    class="sun-time-panel__control-button" />
-            <nl3d:Button name="PlayButton" LabelText="" button-style="IconOnly" icon="Play"     class="sun-time-panel__control-button" />
-            <nl3d:Button name="SpeedUpButton" LabelText="" button-style="IconOnly" icon="Forward"  class="sun-time-panel__control-button" />
-        </ui:VisualElement>
+        <nl3d:SimulationSpeedControls name="SimulationSpeedControls" />
     </nl3d:ContentContainer>
 
 </ui:UXML>

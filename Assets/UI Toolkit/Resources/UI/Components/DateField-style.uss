@@ -5,13 +5,10 @@
 }
 
 .date-field .number-field.date-field__item {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
+    flex: 1 1 auto;
     margin-right: var(--spacing-3);
 }
 
 .date-field .number-field.date-field__item.date-field__item--year {
-    flex-grow: 1;
     margin-right: 0;
 }
