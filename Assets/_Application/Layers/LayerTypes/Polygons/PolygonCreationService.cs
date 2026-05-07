@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Events;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
@@ -34,6 +35,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private PolygonSelectionService polygonSelectionService;
 
+        [SerializeField] private TriggerEvent OnGridCreate;
+        [SerializeField] private TriggerEvent OnGridEdit;
+        [SerializeField] private TriggerEvent OnGridSelect;
+
 
         private void OnEnable()
         {
@@ -44,6 +49,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.editedPolygonArea.AddListener(UpdateLayer);
 
             gridInput.whenAreaIsSelected.AddListener(CreateOrEditGridLayer);
+            
+            OnGridCreate.AddListenerStarted(SetGridInputModeToCreate);
+            OnGridEdit.AddListenerStarted(SetGridInputModeToEdit);
+            OnGridSelect.AddListenerStarted(SetGridInputModeToSelected);
         }
 
         private void OnDisable()
@@ -55,6 +64,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.editedPolygonArea.RemoveListener(UpdateLayer);
 
             gridInput.whenAreaIsSelected.RemoveListener(CreateOrEditGridLayer);
+            
+            OnGridCreate.RemoveListenerStarted(SetGridInputModeToCreate);
+            OnGridEdit.RemoveListenerStarted(SetGridInputModeToEdit);
+            OnGridSelect.RemoveListenerStarted(SetGridInputModeToSelected);
         }
 
         private void Start()
@@ -166,7 +179,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
-            gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+            OnGridEdit.InvokeStarted();
         }
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)
@@ -185,17 +198,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }
 
-        public void SetGridInputModeToCreate(bool active)
+        public void SetGridInputModeToCreate()
         {
             polygonSelectionService.ActiveLayer?.DeselectLayer();
-
             EnablePolygonInputByType(ShapeType.Grid);
-            gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Selected);
+            gridInput.SetDrawMode(PolygonInput.DrawMode.Create);
         }
 
-        public void SetGridInputModeToEdit(bool active)
+        public void SetGridInputModeToEdit()
         {
-            gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Edit : PolygonInput.DrawMode.Selected);
+            EnablePolygonInputByType(ShapeType.Grid);
+            gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+        }
+
+        public void SetGridInputModeToSelected()
+        {
+            EnablePolygonInputByType(ShapeType.Grid);
+            gridInput.SetDrawMode(PolygonInput.DrawMode.Selected);
         }
     }
 }

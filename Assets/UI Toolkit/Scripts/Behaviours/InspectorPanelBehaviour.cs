@@ -44,6 +44,7 @@ namespace Netherlands3D.UI.Behaviours
         private ICredentialHandler credentialHandler;
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
+        [SerializeField] private TriggerEvent OnGridConfirmed;
         
 
         private void Awake()
@@ -70,6 +71,8 @@ namespace Netherlands3D.UI.Behaviours
             ToolbarMain.AddButton.clicked += ToggleImportAssetPanel;
             
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
+            
+            PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
         }
 
         private void OnDisable()
@@ -83,6 +86,8 @@ namespace Netherlands3D.UI.Behaviours
             ToolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
             
             OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
+            
+            PolygonGridPanel.OnConfirmSelection.RemoveListener(OnGridConfirmed.InvokeStarted);
         }
 
         public void Open()

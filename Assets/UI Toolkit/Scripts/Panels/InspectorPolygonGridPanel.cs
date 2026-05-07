@@ -4,6 +4,7 @@ using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -12,9 +13,13 @@ namespace Netherlands3D.UI.Panels
     public partial class InspectorPolygonGridPanel : BaseInspectorContentPanel
     {
         public override string Title => "Tekengebied grid selecteren";
+
+        public UnityEvent OnConfirmSelection = new();
         
         private VisualElement thumbnailContainer;
         private DownloadInspectorService downloadInspectorService;
+        
+        private Button confirmButton;
         
         public InspectorPolygonGridPanel()
         {
@@ -22,12 +27,15 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
             
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
+            confirmButton = this.Q<Button>("ConfirmButton");
 
             OnShow += () => Show(true);
             OnHide += () => Show(false);
             
             // copyNorthEastExtentButton.onClick.AddListener(CopyNorthEastToClipboard);
             // copySouthWestExtentButton.onClick.AddListener(CopySouthWestToClipboard);
+
+            confirmButton.clicked += OnConfirmSelection.Invoke;
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {

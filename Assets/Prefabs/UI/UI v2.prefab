@@ -105,6 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
   OnDrawNewGrid: {fileID: 11400000, guid: 2725eb416725304468190dd92c09fdc3, type: 2}
+  OnGridConfirmed: {fileID: 11400000, guid: 1f0d8a518b80c13b6bd1c0a1e46b32a6, type: 2}
 --- !u!114 &873264101414426239
 MonoBehaviour:
   m_ObjectHideFlags: 0
