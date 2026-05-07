@@ -87,12 +87,23 @@ namespace Netherlands3D.SelectionTools
             get => worldPlane;
             set => worldPlane = value;
         }
+        public bool AutoDrawPolygon
+        {
+            get => autoDrawPolygon;
+            set => autoDrawPolygon = value;
+        }
 
+        public bool RequireReleaseBeforeRedraw
+        {
+            get => requireReleaseBeforeRedraw;
+            set => requireReleaseBeforeRedraw = value;
+        }
+
+        private bool autoDrawPolygon = false;
         private bool closedLoop = false;
         private bool snappingToStartPoint = false;
         private bool polygonFinished = false;
         private bool previewLineCrossed = false;
-        private bool autoDrawPolygon = false;
         private bool requireReleaseBeforeRedraw = false;
 
         [SerializeField] private Transform pointerRepresentation;
@@ -109,6 +120,8 @@ namespace Netherlands3D.SelectionTools
 
         [Tooltip("Contains the list of points the line is made of")]
         public UnityEvent<List<Vector3>> previewLineHasChanged;
+
+        public UnityEvent<PolygonDragHandle> OnHandleCreated = new();
 
         protected virtual void Awake()
         {
@@ -245,7 +258,7 @@ namespace Netherlands3D.SelectionTools
         /// <summary>
         /// Automatically add a new point if our pointer position changed direction (based on threshold) on the 2D plane 
         /// </summary>
-        private void AutoAddPoint()
+        public void AutoAddPoint(Vector3 previousFrameWorldCoordinate)
         {
             //Clear on fresh start
             if (polygonFinished) ClearPolygon(true);
@@ -253,7 +266,7 @@ namespace Netherlands3D.SelectionTools
             //automatically add a new point if pointer is far enough from last point, or edge normal is different enough from last line
             if (positions.Count == 0)
             {
-                AddPoint(selectionCurrentPosition);
+                AddPoint();
             }
             else
             {
@@ -450,6 +463,7 @@ namespace Netherlands3D.SelectionTools
             });
 
             handles.Add(lineHandle);
+            OnHandleCreated.Invoke(lineHandle);
         }
 
         private bool HandleAttachedLinesCross(PolygonDragHandle dragHandle)

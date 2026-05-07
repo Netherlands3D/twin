@@ -48,7 +48,12 @@ namespace Netherlands3D.SelectionTools
         public bool DrawingArea
         {
             get => drawingArea;
-            set => drawingArea = value;
+            set
+            {
+                drawingArea = value;
+                if(drawingArea)
+                    SetSelectionVisualEnabled(true);
+            }
         }
 
         public float GridSize => gridSize;
@@ -105,7 +110,15 @@ namespace Netherlands3D.SelectionTools
             if(triplanarGridMaterial)
                triplanarGridMaterial.SetFloat("GridSize", 1.0f / gridSize);
         }
-#endif       
+#endif
+
+        private void Update()
+        {
+            if (drawingArea)
+            {
+                DrawSelectionArea(selectionStartPosition, selectionCurrentPosition);
+            }
+        }
 
         protected override void OnDisable()
         {

@@ -14,14 +14,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             pointerToWorldPosition = GameObject.FindAnyObjectByType<PointerToWorldPosition>();
         }
 
-        protected override void UpdateCurrentWorldCoordinate()
+        public override void SetSelectionCurrentPosition(Vector3 position)
         {
             var point = pointerToWorldPosition.WorldPoint.ToUnity();
 
             if (point != Vector3.zero)
-                currentWorldCoordinate = point;
+                selectionCurrentPosition = point;
             else
-                base.UpdateCurrentWorldCoordinate();
+                base.SetSelectionCurrentPosition(position);
         }
     }
 }

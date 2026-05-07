@@ -37,11 +37,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private float defaultLineWidth = 10.0f;
         [SerializeField] protected float maxSelectionDistanceFromCamera = 10000;
         private float lastTapTime = 0;
-        protected Vector2 previousFrameScreenCoordinate = default;
+        private Vector2 previousFrameScreenCoordinate = default;
+        private Vector2 previousFrameWorldCoordinate = default;
         
         private PolygonSelectionService polygonSelectionService;
         private InputService inputService;
 
+        [SerializeField] private BoolEvent OnBlockCameraDragging;
         [SerializeField] private TriggerEvent OnGridCreate;
         [SerializeField] private TriggerEvent OnGridEdit;
         [SerializeField] private TriggerEvent OnGridSelect;
@@ -173,9 +175,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         protected void Update()
         {
             PolygonInput input = GetInputFromShapeType(currentShapeType);
-            if (currentShapeType == ShapeType.Undefined || currentShapeType == ShapeType.Undefined)
+            if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
-
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
                 Vector3 currentPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
                 input.SetSelectionCurrentPosition(currentPosition);
@@ -183,34 +184,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                 if (input.Mode == PolygonInput.DrawMode.Edit) //dont auto draw in edit mode
                 {
-                    if (autoDrawPolygon) // reset auto draw mode if mode changes to edit mode while auto drawing
-                    {
-                        autoDrawPolygon = false;
-                    }
+                    if (input.AutoDrawPolygon) // reset auto draw mode if mode changes to edit mode while auto drawing
+                        input.AutoDrawPolygon = false;
 
                     return;
                 }
 
                 //if mode is not edit mode, we check if we are not auto drawing, but we are clicking and the auto draw modifier is pressed 
-                if (!autoDrawPolygon && clickAction.IsPressed() && modifierAction.IsPressed())
-                {
-                    autoDrawPolygon = true;
-                }
-                else if (autoDrawPolygon && !clickAction.IsPressed()) // reset auto draw mode
-                {
-                    autoDrawPolygon = false;
-                }
+                if (!input.AutoDrawPolygon && inputService.PolygonClickAction.IsPressed() && inputService.PolygonModifierAction.IsPressed())
+                    input.AutoDrawPolygon = true;
+                else if (input.AutoDrawPolygon && !inputService.PolygonClickAction.IsPressed()) // reset auto draw mode
+                    input.AutoDrawPolygon = false;
 
-                if (!requireReleaseBeforeRedraw && autoDrawPolygon)
-                {
-                    AutoAddPoint();
-                }
-                else if (requireReleaseBeforeRedraw && !clickAction.IsPressed())
-                {
-                    requireReleaseBeforeRedraw = false;
-                }
+                if (!input.RequireReleaseBeforeRedraw && input.AutoDrawPolygon)
+                    input.AutoAddPoint(previousFrameScreenCoordinate);
+                else if (input.RequireReleaseBeforeRedraw && !inputService.PolygonClickAction.IsPressed())
+                    input.RequireReleaseBeforeRedraw = false;
 
-                previousFrameWorldCoordinate = selectionCurrentPosition;
+                previousFrameWorldCoordinate = currentPointerPosition;
             }
             else if (currentShapeType == ShapeType.Grid)
             {
@@ -223,16 +214,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     if (ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
 
                     gridInput.DrawingArea = true;
-                    SetSelectionVisualEnabled(true);
+                    OnBlockCameraDragging.InvokeStarted(true);
+                   
                 }
-                else if (drawingArea && !clickAction.IsPressed())
+                else if (gridInput.DrawingArea && !inputService.PolygonClickAction.IsPressed())
                 {
                     gridInput.DrawingArea = false;
-                }
-
-                if (drawingArea)
-                {
-                    DrawSelectionArea(selectionStartPosition, currentWorldCoordinate);
+                    OnBlockCameraDragging.InvokeStarted(false);
                 }
             }
         }
@@ -308,6 +296,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+            polygonInput.OnHandleCreated.AddListener(RegisterBlockingCameraForHandle);
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
@@ -327,6 +316,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
             lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+            lineInput.OnHandleCreated.AddListener(RegisterBlockingCameraForHandle);
+        }
+        
+        private void RegisterBlockingCameraForHandle(PolygonDragHandle handle)
+        {
+            handle.pointerDown.AddListener(()=> OnBlockCameraDragging.InvokeStarted(true));
+            handle.clicked.AddListener(() => OnBlockCameraDragging.InvokeStarted(false));
+            handle.endDrag.AddListener(() => OnBlockCameraDragging.InvokeStarted(false));
         }
 
         //called in the inspector
