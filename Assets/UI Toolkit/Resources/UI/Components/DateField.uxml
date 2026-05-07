@@ -4,7 +4,8 @@
     xmlns:nl3d="Netherlands3D.UI.Components"
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     editor-extension-mode="False"
-    class="date-field">
+    class="date-field"
+>
     <nl3d:NumberField name="DayInput" label-visible="false" decimal-count="0" scroll-step="1" class="date-field__item" />
     <nl3d:NumberField name="MonthInput" label-visible="false" decimal-count="0" scroll-step="1" class="date-field__item" />
     <nl3d:NumberField name="YearInput" label-visible="false" decimal-count="0" scroll-step="1" class="date-field__item date-field__item--year" />

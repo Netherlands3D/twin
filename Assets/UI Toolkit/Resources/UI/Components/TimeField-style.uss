@@ -1,6 +1,5 @@
 .time-field {
-    flex-grow: 1;
-    flex-shrink: 1;
+    flex: 1 1 auto;
 }
 
 .time-field .time-field__input .unity-base-text-field__input {

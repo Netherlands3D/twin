@@ -4,7 +4,8 @@
     xmlns:nl3d="Netherlands3D.UI.Components"
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     editor-extension-mode="False"
-    class="sun-dial">
+    class="sun-dial"
+>
     <ui:VisualElement name="DialFace" class="sun-dial__mask">
         <ui:VisualElement class="sun-dial__track" />
         <ui:VisualElement name="OrbitContainer" class="sun-dial__orbit">

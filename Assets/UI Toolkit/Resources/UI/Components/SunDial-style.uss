@@ -1,10 +1,12 @@
 ﻿.sun-dial {
+    /* USS does not support CSS' calc function (yet), so we need to define these by hand */
     --sun-dial-width: 250px;
     --sun-dial-height: 125px; /* equals width x 0.5 */
     --sun-dial-track-padding: 20px;
     --sun-dial-width-minus-padding: 210px; /* equals width - 2 x track-padding */
     --sun-dial-sun-and-moon-size: 20%;
     --sun-dial-sun-and-moon-position-offset: -10%; /* equals sun-and-moon-size x 0.5 x -1 */
+    --sun-dial-horizon-thickness: var(--spacing-1); 
     
     width: var(--sun-dial-width);
     height: var(--sun-dial-height);
@@ -64,7 +66,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 5px;
+    height: var(--sun-dial-horizon-thickness);
     background-color: var(--color-blue-300);
 }
 

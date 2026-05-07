@@ -14,10 +14,10 @@
 
     <ui:VisualElement class="inspector__section">
         <ui:Label text="Bediening" class="simulation-speed-controls__field-label" />
-        <nl3d:Button name="SlowDownButton" LabelText="" button-style="IconOnly" icon="Backward" class="simulation-speed-controls__control-button" />
-        <nl3d:Button name="PauseButton" LabelText="" button-style="IconOnly" icon="Pause"    class="simulation-speed-controls__control-button" />
-        <nl3d:Button name="PlayButton" LabelText="" button-style="IconOnly" icon="Play"     class="simulation-speed-controls__control-button" />
-        <nl3d:Button name="SpeedUpButton" LabelText="" button-style="IconOnly" icon="Forward"  class="simulation-speed-controls__control-button" />
+        <nl3d:Button name="SlowDownButton" button-style="IconOnly" icon="Backward" class="simulation-speed-controls__control-button" />
+        <nl3d:Button name="PauseButton" button-style="IconOnly" icon="Pause" class="simulation-speed-controls__control-button" />
+        <nl3d:Button name="PlayButton" button-style="IconOnly" icon="Play" class="simulation-speed-controls__control-button" />
+        <nl3d:Button name="SpeedUpButton" button-style="IconOnly" icon="Forward" class="simulation-speed-controls__control-button" />
     </ui:VisualElement>
 </ui:UXML>
 
