@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -6,37 +7,67 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarMain : VisualElement
     {
-        public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
-        public Button LayerButton => this.Q<Button>("Layer");
-        public Button LibraryButton => this.Q<Button>("Library");
-        public Button AddButton => this.Q<Button>("Add");
-        public Button SearchButton => this.Q<Button>("Search");
-        public Button SunPositionButton => this.Q<Button>("SunPosition");
-        public Button DownloadTileButton => this.Q<Button>("DownloadTile");
+        public enum Tool
+        {
+            Layer = 0,
+            Library = 1,
+            Add = 2,
+            Search = 3,
+            SunPosition = 4,
+            DownloadTile = 5
+        }
 
-        private VisualElement divider;
-        public VisualElement Divider => divider ??= this.Q<VisualElement>("Divider");
+        public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
+
+        public event Action OnLayerToolSelected;
+        public event Action OnLibraryToolSelected;
+        public event Action OnAddToolSelected;
+        public event Action OnSearchToolSelected;
+        public event Action OnSunPositionToolSelected;
+        public event Action OnDownloadToolSelected;
+        public event Action OnToolDeselected;
 
         public ToolbarMain()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            // TODO: Register events
 
-            RegisterCallback<AttachToPanelEvent>(_ =>
+            RegisterCallback<AttachToPanelEvent>(NotifyAttachedToPanel);
+        }
+
+        private void NotifyAttachedToPanel(AttachToPanelEvent _)
+        {
+            Group.RegisterValueChangedCallback(NotifyValueChanged);
+
+            ClearWithoutNotify();
+        }
+
+        private void NotifyValueChanged(ChangeEvent<ToggleButtonGroupState> evt)
+        {
+            var newValue = evt.newValue.GetActiveOptions(stackalloc int[Group.value.length]);
+            Tool? newButton = newValue.Length > 0 ? (Tool)newValue[0] : null;
+            
+            switch (newButton)
             {
-                // Defaults: single selection, empty selection allowed
-                Group.allowEmptySelection = true;
-                Group.isMultipleSelection = false;
-                
-                ClearWithoutNotify();
-            });
+                case Tool.Layer: OnLayerToolSelected?.Invoke(); break;
+                case Tool.Library: OnLibraryToolSelected?.Invoke(); break;
+                case Tool.Add: OnAddToolSelected?.Invoke(); break;
+                case Tool.Search: OnSearchToolSelected?.Invoke(); break;
+                case Tool.SunPosition: OnSunPositionToolSelected?.Invoke(); break;
+                case Tool.DownloadTile: OnDownloadToolSelected?.Invoke(); break;
+                case null: OnToolDeselected?.Invoke(); break;
+            }
         }
 
         public void ClearWithoutNotify()
         {
-            // Clear selection: bitmask 0, length = number of options
-            Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, Group.childCount));
+            Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, Group.value.length));
+        }
+
+        public void EnableToolWithoutNotify(Tool tool)
+        {
+            var bits = 1ul << (int)tool;
+            Group.SetValueWithoutNotify(new ToggleButtonGroupState(bits, Group.value.length));
         }
     }
 }

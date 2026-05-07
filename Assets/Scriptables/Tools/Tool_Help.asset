@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
-  m_Name: Tool_Search
+  m_Name: Tool_Help
   m_EditorClassIdentifier: 
-  code: search
-  title: Zoeken
+  code: help
+  title: Help
   functionGroups:
-  - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  - {fileID: 0}
   onAvailabilityChange:
     m_PersistentCalls:
       m_Calls: []
