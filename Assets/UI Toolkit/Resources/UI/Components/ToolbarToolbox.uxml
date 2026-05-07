@@ -6,8 +6,8 @@
     editor-extension-mode="False"  
     class="toolbar-toolbox"
 >
-    <nl3d:ToggleButtonGroupPassthrough name="ButtonGroup" class="toolbar-toolbox__group" picking-mode="Ignore">
-        <nl3d:Button name="Dome" button-type="Transparent" button-style="IconOnly" icon="SurfaceDome" />
-        <nl3d:Button name="Screenshot" button-type="Transparent" button-style="IconOnly" icon="Camera" />
-    </nl3d:ToggleButtonGroupPassthrough>
+    <ui:VisualElement class="toolbar-toolbox__group" picking-mode="Ignore">
+        <nl3d:Toggle name="Dome" toggle-type="transparent" toggle-style="IconOnly" icon="SurfaceDome" />
+        <nl3d:Button name="Screenshot" button-type="transparent" button-style="IconOnly" icon="Camera" />
+    </ui:VisualElement>
 </ui:UXML>

@@ -40,6 +40,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3547941427893458787}
+  - {fileID: 223785074132285952}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -317,3 +318,50 @@ MonoBehaviour:
   saveProjectTool: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
   settingsTool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
   helpTool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
+--- !u!1 &5306882516671821921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 223785074132285952}
+  - component: {fileID: 4494307842440609265}
+  m_Layer: 5
+  m_Name: TopToolbar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &223785074132285952
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5306882516671821921}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4494307842440609265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5306882516671821921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1a852118643daa48b5b3f2eaa0c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI_Toolkit.Scripts.Behaviours.ToolbarTopBehaviour
+  appDocument: {fileID: 4399201792515060189}
+  domeTool: {fileID: 11400000, guid: e184b14b2cc24f14e895ecc328e689e2, type: 2}
+  snapshotEvent: {fileID: 11400000, guid: b1c270f3fc728cc4ea719d048fa6ea7f, type: 2}
