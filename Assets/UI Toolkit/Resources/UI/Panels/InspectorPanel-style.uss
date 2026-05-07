@@ -47,12 +47,25 @@
 .inspector .inspector-header-button-close .icon {
     background-size: var(--spacing-6);
 }
+
 .inspector .inspector-content {
-    
     flex-grow: 1;
     flex-shrink: 1;
     margin-bottom: var(--spacing-5);
     padding: 0px;
+}
+
+.inspector__section {
+    flex-direction: row;
+    align-items: center;
+    min-height: var(--spacing-8);
+    margin-bottom: var(--spacing-3);
+}
+
+.inspector__section-header {
+    -unity-font-style: bold;
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-1);
 }
 
 .inspector.active {

@@ -134,7 +134,7 @@
     --icon-map: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=medium.png");
     --icon-measure: url("project://database/Assets/Sprites/UI/Icons/Type=Measure,%20Color=white,%20Size=medium.png");
     --icon-metadata: url("project://database/Assets/Sprites/UI/Icons/Type=MetaData,%20Color=white,%20Size=medium.png");
-    --icon-moon: url("project://database/Assets/Sprites/UI/Icons/Type=Moon,%20Color=white,%20Size=medium.png");
+    --icon-moon: url("project://database/Assets/Sprites/UI/Icons/Moon.svg");
     --icon-move: url("project://database/Assets/Sprites/UI/Icons/Type=Move,%20Color=white,%20Size=medium.png");
     --icon-next: url("project://database/Assets/Sprites/UI/Icons/Type=Next,%20Color=white,%20Size=medium.png");
     --icon-noedit: url("project://database/Assets/Sprites/UI/Icons/Type=NoEdit,%20Color=white,%20Size=medium.png");
@@ -168,7 +168,7 @@
     --icon-squares: url("project://database/Assets/Sprites/UI/Icons/Type=9Squares,%20Color=white,%20Size=medium.png");
     --icon-square: url("project://database/Assets/Sprites/UI/Icons/Type=Square,%20Color=white,%20Size=medium.png");
     --icon-surfacedome: url("project://database/Assets/Sprites/UI/Icons/Type=SurfaceDome,%20Color=white,%20Size=medium.png");
-    --icon-sun: url("project://database/Assets/Sprites/UI/Icons/Type=Sun,%20Color=white,%20Size=medium.png");
+    --icon-sun: url("project://database/Assets/Sprites/UI/Icons/Sun.svg");
     --icon-tile: url("project://database/Assets/Sprites/UI/Icons/Type=3Dtile,%20Color=white,%20Size=medium.png");
     --icon-tree: url("project://database/Assets/Sprites/UI/Icons/Type=Tree,%20Color=white,%20Size=medium.png");
     --icon-trash: url("project://database/Assets/Sprites/UI/Icons/Type=Trash,%20Color=white,%20Size=medium.png");

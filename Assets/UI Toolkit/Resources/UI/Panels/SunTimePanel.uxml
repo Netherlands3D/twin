@@ -5,46 +5,42 @@
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     editor-extension-mode="False"
     name="SunTimePanel"
-    class="sun-time-panel">
+    class="sun-time-panel"
+>
 
-    <!-- Sundial control -->
-    <nl3d:SunDial name="SunDial" class="sun-time-panel__sun-dial" />
+    <nl3d:ContentContainer text="Tijd en datum aanpassen" leading-icon="Sun">
+        <nl3d:SunDial name="SunDial" class="sun-time-panel__sun-dial" />
 
-    <!-- Time row: label | time-field -->
-    <ui:VisualElement class="sun-time-panel__field-row">
-        <ui:Label text="Tijd" class="sun-time-panel__field-label" />
-        <nl3d:TimeField name="TimeField" class="sun-time-panel__time-field time-field--centered" />
-    </ui:VisualElement>
+        <ui:VisualElement class="inspector__section">
+            <ui:Label text="Tijd" class="sun-time-panel__field-label" />
+            <nl3d:TimeField name="TimeField" class="sun-time-panel__time-field time-field--centered" />
+        </ui:VisualElement>
 
-    <!-- Date row: label | day | month | year -->
-    <ui:VisualElement class="sun-time-panel__field-row">
-        <ui:Label text="Datum" class="sun-time-panel__field-label" />
-        <nl3d:DateField name="DateField" class="sun-time-panel__date-field" />
-    </ui:VisualElement>
+        <ui:VisualElement class="inspector__section">
+            <ui:Label text="Datum" class="sun-time-panel__field-label" />
+            <nl3d:DateField name="DateField" class="sun-time-panel__date-field" />
+        </ui:VisualElement>
 
-    <!-- Reset button -->
-    <ui:VisualElement class="sun-time-panel__field-row">
-        <nl3d:Button name="NowButton" button-style="IconOnly" icon="ResetTime" class="sun-time-panel__reset-button" />
-        <ui:Label text="Herstel tijd en datum" class="sun-time-panel__field-label sun-time-panel__field-label--grow" />
-    </ui:VisualElement>
+        <ui:VisualElement class="inspector__section">
+            <nl3d:Button name="NowButton" button-style="IconOnly" icon="ResetTime" class="sun-time-panel__reset-button" />
+            <ui:Label text="Herstel tijd en datum" class="sun-time-panel__field-label sun-time-panel__field-label--grow" />
+        </ui:VisualElement>
 
-    <!-- Animation section header -->
-    <ui:Label text="Animatie tijdverloop" class="sun-time-panel__section-header" />
+        <ui:Label text="Animatie tijdverloop" class="inspector__section-header" />
 
-    <!-- Speed row: label | number-input | unit -->
-    <ui:VisualElement class="sun-time-panel__field-row sun-time-panel__field-row--tall">
-        <ui:Label text="Snelheid animatie" class="sun-time-panel__field-label" />
-        <nl3d:NumberField name="SpeedField" label-visible="false" decimal-count="2" scroll-step="0.1" class="sun-time-panel__speed-input" />
-        <ui:Label text="uur per seconde" class="sun-time-panel__unit-label" />
-    </ui:VisualElement>
+        <ui:VisualElement class="inspector__section sun-time-panel__field-row--tall">
+            <ui:Label text="Snelheid animatie" class="sun-time-panel__field-label" />
+            <nl3d:NumberField name="SpeedField" label-visible="false" decimal-count="2" scroll-step="0.1" class="sun-time-panel__speed-input" />
+            <ui:Label text="uur per seconde" class="sun-time-panel__unit-label" />
+        </ui:VisualElement>
 
-    <!-- Bediening row: label | slow | pause | play | fast -->
-    <ui:VisualElement class="sun-time-panel__field-row">
-        <ui:Label text="Bediening" class="sun-time-panel__field-label" />
-        <nl3d:Button name="SlowDownButton" LabelText="" button-style="IconOnly" icon="Backward" class="sun-time-panel__control-button" />
-        <nl3d:Button name="PauseButton"    LabelText="" button-style="IconOnly" icon="Pause"    class="sun-time-panel__control-button" />
-        <nl3d:Button name="PlayButton"     LabelText="" button-style="IconOnly" icon="Play"     class="sun-time-panel__control-button" />
-        <nl3d:Button name="SpeedUpButton"  LabelText="" button-style="IconOnly" icon="Forward"  class="sun-time-panel__control-button" />
-    </ui:VisualElement>
+        <ui:VisualElement class="inspector__section">
+            <ui:Label text="Bediening" class="sun-time-panel__field-label" />
+            <nl3d:Button name="SlowDownButton" LabelText="" button-style="IconOnly" icon="Backward" class="sun-time-panel__control-button" />
+            <nl3d:Button name="PauseButton" LabelText="" button-style="IconOnly" icon="Pause"    class="sun-time-panel__control-button" />
+            <nl3d:Button name="PlayButton" LabelText="" button-style="IconOnly" icon="Play"     class="sun-time-panel__control-button" />
+            <nl3d:Button name="SpeedUpButton" LabelText="" button-style="IconOnly" icon="Forward"  class="sun-time-panel__control-button" />
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
 
 </ui:UXML>

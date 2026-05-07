@@ -68,21 +68,21 @@ namespace Netherlands3D.UI.Panels
 
             NowButton.RegisterCallback<ClickEvent>(_ => sunTime?.ResetToNow());
 
-            SlowDownButton.RegisterCallback<ClickEvent>(_ => StepTimeSpeed(increase: false));
-            SpeedUpButton.RegisterCallback<ClickEvent>(_ => StepTimeSpeed(increase: true));
+            SpeedUpButton.RegisterCallback<ClickEvent>(_ => IncreaseSpeed());
+            SlowDownButton.RegisterCallback<ClickEvent>(_ => DecreaseSpeed());
             PauseButton.RegisterCallback<ClickEvent>(_ => sunTime?.ToggleAnimation(false));
             PlayButton.RegisterCallback<ClickEvent>(_ => sunTime?.ToggleAnimation(true));
         }
 
         private void OnHideAction()
         {
-            EnableInClassList("active", false);
+            EnableInClassList("hidden", true);
             Unsubscribe();
         }
 
         private void OnShowAction()
         {
-            EnableInClassList("active", true);
+            EnableInClassList("hidden", false);
             Subscribe();
             LoadInitialValues();
         }
@@ -134,7 +134,6 @@ namespace Netherlands3D.UI.Panels
 
         private void OnIsAnimatingChanged(bool animating)
         {
-            // Highlight the button that represents the current state
             PauseButton.EnableInClassList("sun-time-panel__control-button--active", animating);
             PlayButton.EnableInClassList("sun-time-panel__control-button--active", !animating);
         }
@@ -165,37 +164,50 @@ namespace Netherlands3D.UI.Panels
             sunTime.SetTimeSpeed(hoursPerSecond * SecondsPerHour);
         }
 
-        private void StepTimeSpeed(bool increase)
+        private void IncreaseSpeed()
         {
             if (sunTime == null) return;
 
             var current = (float)SpeedField.GetValueAsDouble();
-            var target = increase ? GetNextSpeedStep(current) : GetPreviousSpeedStep(current);
+            var currentIndex = FindNearestStepIndex(current);
+            ApplySpeedStep(currentIndex + 1);
+        }
+
+        private void DecreaseSpeed()
+        {
+            if (sunTime == null) return;
+
+            var current = (float)SpeedField.GetValueAsDouble();
+            var currentIndex = FindNearestStepIndex(current);
+            ApplySpeedStep(currentIndex - 1);
+        }
+
+        private void ApplySpeedStep(int stepIndex)
+        {
+            if (sunTime == null) return;
+
+            var clampedIndex = Math.Clamp(stepIndex, 0, SpeedStepsHours.Length - 1);
+            var target = SpeedStepsHours[clampedIndex];
 
             SpeedField.SetValueWithoutNotify(target);
             sunTime.SetTimeSpeed(target * SecondsPerHour);
         }
 
-        private static float GetNextSpeedStep(float current)
+        private int FindNearestStepIndex(float value)
         {
-            for (var i = 0; i < SpeedStepsHours.Length; i++)
+            var bestIndex = 0;
+            var bestDistance = Math.Abs(SpeedStepsHours[0] - value);
+
+            for (var i = 1; i < SpeedStepsHours.Length; i++)
             {
-                if (current < SpeedStepsHours[i])
-                    return SpeedStepsHours[i];
+                var distance = Math.Abs(SpeedStepsHours[i] - value);
+                if (distance >= bestDistance) continue;
+
+                bestDistance = distance;
+                bestIndex = i;
             }
 
-            return SpeedStepsHours[SpeedStepsHours.Length - 1];
-        }
-
-        private static float GetPreviousSpeedStep(float current)
-        {
-            for (var i = SpeedStepsHours.Length - 1; i >= 0; i--)
-            {
-                if (current > SpeedStepsHours[i])
-                    return SpeedStepsHours[i];
-            }
-
-            return SpeedStepsHours[0];
+            return bestIndex;
         }
     }
 }

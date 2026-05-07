@@ -1,10 +1,13 @@
 ﻿.sun-dial {
-    width: var(--sun-dial-width, 120px);
-    height: var(--sun-dial-height, 64px);
-    min-width: 80px;
-    min-height: 44px;
-    align-self: center;
-    margin-bottom: var(--spacing-3);
+    --sun-dial-width: 250px;
+    --sun-dial-height: 125px; /* equals width x 0.5 */
+    --sun-dial-track-padding: 20px;
+    --sun-dial-width-minus-padding: 210px; /* equals width - 2 x track-padding */
+    --sun-dial-sun-and-moon-size: 20%;
+    --sun-dial-sun-and-moon-position-offset: -10%; /* equals sun-and-moon-size x 0.5 x -1 */
+    
+    width: var(--sun-dial-width);
+    height: var(--sun-dial-height);
 }
 
 .sun-dial__mask {
@@ -12,44 +15,48 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    padding-top: var(--sun-dial-track-padding);
+    padding-left: var(--sun-dial-track-padding);
+    padding-right: var(--sun-dial-track-padding)
 }
 
 .sun-dial__track {
-    position: absolute;
-    left: 6.25%;
-    top: 0;
-    width: 87.5%;
-    height: 125%;
-    background-image: url("project://database/Assets/_Functionalities/Sun/Sprites/Vector 1967.png");
+    width: 100%;
+    height: 100%;
+    background-image: url("project://database/Assets/_Functionalities/Sun/Sprites/SunDialArc.svg");
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-size: contain;
+    background-size: 100% 100%;
     -unity-background-image-tint-color: var(--color-blue-300);
 }
 
 .sun-dial__orbit {
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 187.5%;
+    width: var(--sun-dial-width-minus-padding);
+    height: var(--sun-dial-width-minus-padding);
+    margin-bottom: -50%;
+
+    transform-origin: center center;
 }
 
-.sun-dial__moon,
-.sun-dial__sun {
+.icon.sun-dial__moon,
+.icon.sun-dial__sun {
     position: absolute;
     left: 50%;
-    width: 13.3333%;
-    height: 13.3333%;
-    margin-left: -6.6667%;
+    width: var(--sun-dial-sun-and-moon-size);
+    height: var(--sun-dial-sun-and-moon-size);
+    margin-left: var(--sun-dial-sun-and-moon-position-offset);
+    background-color: white;
 }
 
-.sun-dial__moon {
+.icon.sun-dial__moon {
     top: 0;
+    margin-top: var(--sun-dial-sun-and-moon-position-offset);
 }
 
-.sun-dial__sun {
+.icon.sun-dial__sun {
     bottom: 0;
+    margin-bottom: var(--sun-dial-sun-and-moon-position-offset);
 }
 
 .sun-dial__horizon {
@@ -57,7 +64,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 2px;
+    height: 5px;
     background-color: var(--color-blue-300);
 }
 
