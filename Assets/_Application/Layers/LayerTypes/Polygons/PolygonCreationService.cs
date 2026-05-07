@@ -8,6 +8,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -34,8 +35,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private PolygonInput lineInput;
 
         [SerializeField] private float defaultLineWidth = 10.0f;
+        [SerializeField] protected float maxSelectionDistanceFromCamera = 10000;
         
         private PolygonSelectionService polygonSelectionService;
+        private InputService inputService;
 
         [SerializeField] private TriggerEvent OnGridCreate;
         [SerializeField] private TriggerEvent OnGridEdit;
@@ -57,7 +60,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnGridEdit.AddListenerStarted(SetGridInputModeToEdit);
             OnGridSelect.AddListenerStarted(SetGridInputModeToSelected);
             
-            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService = ServiceLocator.GetService<InputService>();
             inputService.PolygonTapAction.performed -= TapAction_performed;
             inputService.PolygonClickAction.performed -= ClickAction_performed;
             inputService.PolygonClickAction.canceled -= ClickAction_canceled;
@@ -78,8 +81,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnGridCreate.RemoveListenerStarted(SetGridInputModeToCreate);
             OnGridEdit.RemoveListenerStarted(SetGridInputModeToEdit);
             OnGridSelect.RemoveListenerStarted(SetGridInputModeToSelected);
-            
-            InputService inputService = ServiceLocator.GetService<InputService>();
+           
             inputService.PolygonTapAction.performed -= TapAction_performed;
             inputService.PolygonClickAction.performed -= ClickAction_performed;
             inputService.PolygonClickAction.canceled -= ClickAction_canceled;
@@ -95,41 +97,151 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private void TapAction_performed(InputAction.CallbackContext obj)
         {
-            Tap();
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
+            {
+                if (input.Mode == PolygonInput.DrawMode.Edit)
+                {
+                    Debug.LogWarning("PolygonInput is in edit mode, cannot Add a new point in edit mode.", gameObject);
+                    return;
+                }
+
+                if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked())
+                    return;
+
+                var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+                Vector3 currentPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+                input.SetSelectionCurrentPosition(currentPosition);
+
+                if (doubleClickToCloseLoop)
+                {
+                    if ((Time.time - lastTapTime) < doubleClickTimer && Vector3.Distance(currentPointerPosition, previousFrameScreenCoordinate) < doubleClickDistance)
+                    {
+                        Debug.Log("Double click, closing loop.");
+                        CloseLoop(true);
+                        return;
+                    }
+                    else
+                    {
+                        lastTapTime = Time.time;
+                        previousFrameScreenCoordinate = currentPointerPosition;
+                    }
+                }
+
+                AddPoint(selectionCurrentPosition);
+            }
+            else if (currentShapeType == ShapeType.Grid)
+            {
+                if (Interface.PointerIsOverUI())
+                    return;
+
+                var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+                var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane,
+                    maxSelectionDistanceFromCamera);
+                var tappedPosition = GetGridPosition(worldPosition);
+                gridInput.DrawSelectionArea(tappedPosition, tappedPosition);
+                MakeSelection();
+            }
         }
 
         private void ClickAction_performed(InputAction.CallbackContext obj)
         {
-            StartClick();
+            var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            input.SetSelectionStartPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
         }
 
         private void ClickAction_canceled(InputAction.CallbackContext obj)
         {
-            Release();
+            var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            input.SetSelectionEndPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
         }
 
         private void EscapeAction_canceled(InputAction.CallbackContext obj)
         {
-            ClearPolygon(true);
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            input.ClearPolygon(true);
         }
 
         private void FinishAction_performed(InputAction.CallbackContext obj)
         {
-            CloseLoop(true);
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            input.CloseLoop(true);
         }
         
-        protected virtual void StartClick()
+        protected void Update()
         {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             PolygonInput input = GetInputFromShapeType(currentShapeType);
-            input.SetSelectionStartPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
-        }
-        
-        protected virtual void Release()
-        {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            PolygonInput input = GetInputFromShapeType(currentShapeType);
-            input.SetSelectionEndPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
+            if (currentShapeType == ShapeType.Undefined || currentShapeType == ShapeType.Undefined)
+            {
+
+                UpdateCurrentWorldCoordinate();
+                UpdatePreviewLine();
+
+                if (pointerRepresentation)
+                    pointerRepresentation.position = selectionCurrentPosition;
+
+                if (mode == DrawMode.Edit) //dont auto draw in edit mode
+                {
+                    if (autoDrawPolygon) // reset auto draw mode if mode changes to edit mode while auto drawing
+                    {
+                        autoDrawPolygon = false;
+                        blockCameraDrag.Invoke(false);
+                    }
+
+                    return;
+                }
+
+                //if mode is not edit mode, we check if we are not auto drawing, but we are clicking and the auto draw modifier is pressed 
+                if (!autoDrawPolygon && clickAction.IsPressed() && modifierAction.IsPressed())
+                {
+                    autoDrawPolygon = true;
+                    blockCameraDrag.Invoke(true);
+                }
+                else if (autoDrawPolygon && !clickAction.IsPressed()) // reset auto draw mode
+                {
+                    autoDrawPolygon = false;
+                    blockCameraDrag.Invoke(false);
+                }
+
+                if (!requireReleaseBeforeRedraw && autoDrawPolygon)
+                {
+                    AutoAddPoint();
+                }
+                else if (requireReleaseBeforeRedraw && !clickAction.IsPressed())
+                {
+                    requireReleaseBeforeRedraw = false;
+                }
+
+                previousFrameWorldCoordinate = selectionCurrentPosition;
+            }
+            else if (currentShapeType == ShapeType.Grid)
+            {
+                var currentPointerPosition = pointerAction.ReadValue<Vector2>();
+                var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+                var currentWorldCoordinate = GetGridPosition(worldPosition);
+                gridHighlight.transform.position = currentWorldCoordinate;
+
+                if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
+                {
+                    if (Interface.PointerIsOverUI() || mode == DrawMode.Selected) return;
+
+                    drawingArea = true;
+                    SetSelectionVisualEnabled(true);
+                    blockCameraDragging.Invoke(true);
+                }
+                else if (drawingArea && !clickAction.IsPressed())
+                {
+                    drawingArea = false;
+                    blockCameraDragging.Invoke(false);
+                }
+
+                if (drawingArea)
+                {
+                    DrawSelectionArea(selectionStartPosition, currentWorldCoordinate);
+                }
+            }
         }
 
         private PolygonInput GetInputFromShapeType(ShapeType type)

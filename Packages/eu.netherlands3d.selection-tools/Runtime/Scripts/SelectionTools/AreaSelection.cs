@@ -111,45 +111,6 @@ namespace Netherlands3D.SelectionTools
             SetSelectionVisualEnabled(false);
         }
 
-        protected override void Update()
-        {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-            var currentWorldCoordinate = GetGridPosition(worldPosition);
-            gridHighlight.transform.position = currentWorldCoordinate;
-
-            if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
-            {
-                if (Interface.PointerIsOverUI() || mode == DrawMode.Selected) return;
-
-                drawingArea = true;
-                SetSelectionVisualEnabled(true);
-                blockCameraDragging.Invoke(true);
-            }
-            else if (drawingArea && !clickAction.IsPressed())
-            {
-                drawingArea = false;
-                blockCameraDragging.Invoke(false);
-            }
-
-            if (drawingArea)
-            {
-                DrawSelectionArea(selectionStartPosition, currentWorldCoordinate);
-            }
-        }
-
-        protected override void Tap()
-        {
-            if (Interface.PointerIsOverUI())
-                return;
-
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-            var tappedPosition = GetGridPosition(worldPosition);
-            DrawSelectionArea(tappedPosition, tappedPosition);
-            MakeSelection();
-        }
-
         public override void SetSelectionStartPosition(Vector3 position)
         {
             selectionStartPosition = GetGridPosition(position);
@@ -207,7 +168,7 @@ namespace Netherlands3D.SelectionTools
         /// Draw selection area by scaling the block
         /// </summary>
         /// <param name="currentWorldCoordinate">Current pointer position in world</param>
-        private void DrawSelectionArea(Vector3 startWorldCoordinate, Vector3 currentWorldCoordinate)
+        public void DrawSelectionArea(Vector3 startWorldCoordinate, Vector3 currentWorldCoordinate)
         {
             var xDifference = (currentWorldCoordinate.x - startWorldCoordinate.x);
             var zDifference = (currentWorldCoordinate.z - startWorldCoordinate.z);
@@ -251,7 +212,6 @@ namespace Netherlands3D.SelectionTools
         {
             this.mode = mode;
             gridHighlight.gameObject.SetActive(mode != DrawMode.Selected);
-
         }
     }
 }

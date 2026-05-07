@@ -43,14 +43,12 @@ namespace Netherlands3D.SelectionTools
             Edit,
             Selected
         }
-
-    
-
+        
         [Header("Settings")]
         [SerializeField] Color lineColor = Color.red;
         [SerializeField] Color closedLoopLineColor = Color.red;
         [SerializeField] private float lineWidthMultiplier = 10.0f;
-        [SerializeField] protected float maxSelectionDistanceFromCamera = 10000;
+       
         [SerializeField] private bool snapToStart = true;
         [SerializeField, Tooltip("Closing a polygon shape is required. If set to false, you can output lines.")] private bool requireClosedPolygon = true;
         [SerializeField, Tooltip("If you click close to the starting point the loop will finish")] private bool closeLoopAtStartPoint = true;
@@ -71,13 +69,13 @@ namespace Netherlands3D.SelectionTools
 
         [SerializeField] private LineRenderer polygonLineRenderer;
         [SerializeField] private LineRenderer previewLineRenderer;
-
-        public Vector3 currentWorldCoordinate = default;
+       
         public List<Vector3> positions = new List<Vector3>();
 
         protected Vector3 lastAddedPoint = default;
         protected Vector3 selectionStartPosition = default;
         protected Vector3 selectionEndPosition = default;
+        protected Vector3 selectionCurrentPosition = default;
         protected Vector3 previousFrameWorldCoordinate = default;
         protected Vector2 previousFrameScreenCoordinate = default;
         protected Vector3 lastNormal = Vector3.zero;
@@ -95,7 +93,6 @@ namespace Netherlands3D.SelectionTools
         private bool previewLineCrossed = false;
         private bool autoDrawPolygon = false;
         private bool requireReleaseBeforeRedraw = false;
-        private Camera mainCamera;
 
         private float lastTapTime = 0;
 
@@ -118,13 +115,10 @@ namespace Netherlands3D.SelectionTools
 
         protected virtual void Awake()
         {
-            mainCamera = Camera.main;
             polygonLineRenderer.startColor = polygonLineRenderer.endColor = lineColor;
             polygonLineRenderer.widthMultiplier = lineWidthMultiplier;
             polygonLineRenderer.positionCount = 1;
             polygonLineRenderer.loop = false;
-
-           
 
             worldPlane = new Plane(this.transform.up, this.transform.position);
 
@@ -136,8 +130,6 @@ namespace Netherlands3D.SelectionTools
             {
                 if (createHandles) Debug.Log("Please set a handleTemplate reference to create handles.", this.gameObject);
             }
-
-           
             SetDrawMode(DrawMode.Edit);
         }
 
@@ -168,8 +160,6 @@ namespace Netherlands3D.SelectionTools
             blockCameraDrag.Invoke(false);
         }
 
-      
-
         public void SetCurrentInputPointsWithoutNotify(List<Vector3> points)
         {
             //Set positions to copy
@@ -186,7 +176,6 @@ namespace Netherlands3D.SelectionTools
                 Debug.LogWarning("PolygonInput is in create mode, cannot reselect polygon in edit mode.", gameObject);
                 return;
             }
-
             ClearPolygon(true);
             for (int i = 0; i < points.Count; i++)
             {
@@ -196,61 +185,12 @@ namespace Netherlands3D.SelectionTools
                     if (point == points[0])
                         continue;
                 }
-
                 AddPoint(point, false);
             }
-
             CloseLoop(false);
         }
 
-        protected virtual void Update()
-        {
-            UpdateCurrentWorldCoordinate();
-            UpdatePreviewLine();
-
-            if (pointerRepresentation)
-                pointerRepresentation.position = currentWorldCoordinate;
-
-            if (mode == DrawMode.Edit) //dont auto draw in edit mode
-            {
-                if (autoDrawPolygon) // reset auto draw mode if mode changes to edit mode while auto drawing
-                {
-                    autoDrawPolygon = false;
-                    blockCameraDrag.Invoke(false);
-                }
-
-                return;
-            }
-
-            //if mode is not edit mode, we check if we are not auto drawing, but we are clicking and the auto draw modifier is pressed 
-            if (!autoDrawPolygon && clickAction.IsPressed() && modifierAction.IsPressed())
-            {
-                autoDrawPolygon = true;
-                blockCameraDrag.Invoke(true);
-            }
-            else if (autoDrawPolygon && !clickAction.IsPressed()) // reset auto draw mode
-            {
-                autoDrawPolygon = false;
-                blockCameraDrag.Invoke(false);
-            }
-
-            if (!requireReleaseBeforeRedraw && autoDrawPolygon)
-            {
-                AutoAddPoint();
-            }
-            else if (requireReleaseBeforeRedraw && !clickAction.IsPressed())
-            {
-                requireReleaseBeforeRedraw = false;
-            }
-
-            previousFrameWorldCoordinate = currentWorldCoordinate;
-        }
-
-        protected virtual void UpdateCurrentWorldCoordinate()
-        {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            currentWorldCoordinate = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-        }
+       
 
         private float GetMinPointDistance(int handleIndex)
         {
@@ -274,15 +214,15 @@ namespace Netherlands3D.SelectionTools
             snappingToStartPoint = false;
             if (snapToStart && positions.Count > 2)
             {
-                if (Vector3.Distance(currentWorldCoordinate, positions[0]) < GetMinPointDistance(0))
+                if (Vector3.Distance(selectionCurrentPosition, positions[0]) < GetMinPointDistance(0))
                 {
-                    currentWorldCoordinate = positions[0];
+                    selectionCurrentPosition = positions[0];
                     snappingToStartPoint = true;
                 }
             }
 
             var previewLineFirstPoint = positions[positions.Count - 1];
-            var previewLineLastPoint = currentWorldCoordinate;
+            var previewLineLastPoint = selectionCurrentPosition;
             previewLineRenderer.SetPosition(0, previewLineFirstPoint);
             previewLineRenderer.SetPosition(1, previewLineLastPoint);
             previewLineCrossed = false;
@@ -317,11 +257,11 @@ namespace Netherlands3D.SelectionTools
             //automatically add a new point if pointer is far enough from last point, or edge normal is different enough from last line
             if (positions.Count == 0)
             {
-                AddPoint(currentWorldCoordinate);
+                AddPoint(selectionCurrentPosition);
             }
             else
             {
-                var normal = (currentWorldCoordinate - previousFrameWorldCoordinate);
+                var normal = (selectionCurrentPosition - previousFrameWorldCoordinate);
                 var distance = normal.sqrMagnitude;
                 var normalisedNormal = normal.normalized;
                 var directionThreshold = Vector3.Dot(normalisedNormal, lastNormal);
@@ -333,7 +273,7 @@ namespace Netherlands3D.SelectionTools
             }
         }
 
-        private void CloseLoop(bool isNewPolygon, bool checkPreviewLine = true)
+        public void CloseLoop(bool isNewPolygon, bool checkPreviewLine = true)
         {
             if (closedLoop)
                 return;
@@ -384,40 +324,6 @@ namespace Netherlands3D.SelectionTools
             }
 
             FinishPolygon(isNewPolygon);
-        }
-
-        protected virtual void Tap()
-        {
-            if (mode == DrawMode.Edit)
-            {
-                Debug.LogWarning("PolygonInput is in edit mode, cannot Add a new point in edit mode.", gameObject);
-                return;
-            }
-
-            var pointerRaycastResult = EventSystem.current.GetComponent<InputSystemUIInputModule>().GetLastRaycastResult(0);
-
-            if (pointerRaycastResult.gameObject && pointerRaycastResult.gameObject.IsInLayerMask(lockInputLayers))
-                return;
-
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            UpdateCurrentWorldCoordinate();
-
-            if (doubleClickToCloseLoop)
-            {
-                if ((Time.time - lastTapTime) < doubleClickTimer && Vector3.Distance(currentPointerPosition, previousFrameScreenCoordinate) < doubleClickDistance)
-                {
-                    Debug.Log("Double click, closing loop.");
-                    CloseLoop(true);
-                    return;
-                }
-                else
-                {
-                    lastTapTime = Time.time;
-                    previousFrameScreenCoordinate = currentPointerPosition;
-                }
-            }
-
-            AddPoint(currentWorldCoordinate);
         }
 
         public void ClearPolygon(bool redraw = false)
@@ -529,7 +435,7 @@ namespace Netherlands3D.SelectionTools
                     polygonLineRenderer.startColor = polygonLineRenderer.endColor = closedLoopLineColor;
 
                 var handlePositionBeforeCross = lineHandle.transform.position;
-                MoveHandle(lineHandle, currentWorldCoordinate);
+                MoveHandle(lineHandle, selectionCurrentPosition);
                 if (positions.Count > 2 && HandleAttachedLinesCross(lineHandle))
                 {
                     polygonLineRenderer.startColor = polygonLineRenderer.endColor = lineColor;
@@ -618,6 +524,11 @@ namespace Netherlands3D.SelectionTools
         public virtual void SetSelectionEndPosition(Vector3 position)
         {
             selectionEndPosition =  position;
+        }
+        
+        public virtual void SetSelectionCurrentPosition(Vector3 position)
+        {
+            selectionCurrentPosition = position;
         }
 
         private void FinishPolygon(bool invokeNewPolygonEvent)

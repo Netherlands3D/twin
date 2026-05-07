@@ -9,13 +9,21 @@ namespace Netherlands3D.Services
         [SerializeField] private InputActionAsset inputPolygonActionAsset;
         private InputActionMap polygonSelectionActionMap;
         
-        public InputAction PolygonPointerAction => polygonSelectionActionMap.FindAction("Point");
-        public InputAction PolygonTapAction => polygonSelectionActionMap.FindAction("Tap");
-        public InputAction PolygonEscapeAction => polygonSelectionActionMap.FindAction("Escape");
-        public InputAction PolygonFinishAction => polygonSelectionActionMap.FindAction("Finish");
-        public InputAction PolygonTapSecondaryAction => polygonSelectionActionMap.FindAction("TapSecondary");
-        public InputAction PolygonModifierAction => polygonSelectionActionMap.FindAction("Modifier");
-        public InputAction PolygonClickAction => polygonSelectionActionMap.FindAction("Click");
+        private InputAction polygonPointerAction;
+        private InputAction polygonTapAction;
+        private InputAction polygonEscapeAction;
+        private InputAction polygonFinishAction;
+        private InputAction polygonTapSecondaryAction;
+        private InputAction polygonModifierAction;
+        private InputAction polygonClickAction;
+
+        public InputAction PolygonPointerAction => polygonPointerAction ??= polygonSelectionActionMap.FindAction("Point");
+        public InputAction PolygonTapAction => polygonTapAction ??= polygonSelectionActionMap.FindAction("Tap");
+        public InputAction PolygonEscapeAction => polygonEscapeAction ??= polygonSelectionActionMap.FindAction("Escape");
+        public InputAction PolygonFinishAction => polygonFinishAction ??= polygonSelectionActionMap.FindAction("Finish");
+        public InputAction PolygonTapSecondaryAction => polygonTapSecondaryAction ??= polygonSelectionActionMap.FindAction("TapSecondary");
+        public InputAction PolygonModifierAction => polygonModifierAction ??= polygonSelectionActionMap.FindAction("Modifier");
+        public InputAction PolygonClickAction => polygonClickAction ??= polygonSelectionActionMap.FindAction("Click");
 
         void Awake()
         {
