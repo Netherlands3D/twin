@@ -39,7 +39,8 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            SpeedField.InputField.RegisterValueChangedCallback(_ => OnSpeedFieldChanged());
+            SpeedField.InputField.RegisterValueChangedCallback(OnSpeedFieldValueChanged);
+            SpeedField.RegisterCallback<NavigationSubmitEvent>(OnSpeedFieldSubmit);
             PlayButton.RegisterCallback<ClickEvent>(OnPlayButtonClicked);
             PauseButton.RegisterCallback<ClickEvent>(OnPauseButtonClicked);
             SpeedUpButton.RegisterCallback<ClickEvent>(OnSpeedUpButtonClicked);
@@ -53,6 +54,10 @@ namespace Netherlands3D.UI.Components
         private void OnSlowDownButtonClicked(ClickEvent _) => StepDown();
         private void OnSpeedFieldChanged() => SpeedChanged?.Invoke(GetCurrentSpeed());
         private void OnPlayToggled(bool obj) => SetIsPlayingButtonStates(obj);
+        
+        // Needs both because Scrolling of the value doesn't trigger a ValueChanged event
+        private void OnSpeedFieldSubmit(NavigationSubmitEvent _) => OnSpeedFieldChanged();
+        private void OnSpeedFieldValueChanged(ChangeEvent<string> _) => OnSpeedFieldChanged();
 
         public float GetCurrentSpeed() => (float)SpeedField.GetValueAsDouble();
         public void SetSpeedWithoutNotify(float speed) => SpeedField.SetValueWithoutNotify(speed);
