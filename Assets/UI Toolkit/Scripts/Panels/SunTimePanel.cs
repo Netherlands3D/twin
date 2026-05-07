@@ -63,7 +63,7 @@ namespace Netherlands3D.UI.Panels
             OnHide += OnHideAction;
             DateField.SubmitEvent += OnDateChanged;
             SunDial.TimeChanged += OnSunDialTimeChanged;
-            TimeField.ValueChanged += OnTimeChanged;
+            TimeField.TimeChanged += OnTimeChanged;
             SpeedField.InputField.RegisterValueChangedCallback(_ => OnSpeedChanged());
 
             NowButton.RegisterCallback<ClickEvent>(_ => sunTime?.ResetToNow());
@@ -146,15 +146,10 @@ namespace Netherlands3D.UI.Panels
             sunTime.SetYear(year);
         }
 
-        private void OnTimeChanged(string value)
+        private void OnTimeChanged(int hour, int minute)
         {
             if (sunTime == null) return;
-            var text = value
-                .Replace('.', ':')
-                .Replace(';', ':')
-                .Replace(',', ':');
-            if (DateTime.TryParse(text, out var parsed))
-                sunTime.SetTime(parsed.Hour, parsed.Minute, 0);
+            sunTime.SetTime(hour, minute, 0);
         }
 
         private void OnSpeedChanged()

@@ -10,3 +10,8 @@
 .time-field.time-field--centered .time-field__input .unity-base-text-field__input {
     -unity-text-align: middle-center;
 }
+
+.time-field.time-field--invalid .time-field__input .unity-base-text-field__input {
+    color: var(--color-warning);
+}
+
