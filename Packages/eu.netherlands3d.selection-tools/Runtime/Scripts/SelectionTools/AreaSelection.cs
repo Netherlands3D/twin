@@ -28,8 +28,6 @@ namespace Netherlands3D.SelectionTools
     {
         private MeshRenderer boundsMeshRenderer;
 
-        [Header("Invoke")]
-        public UnityEvent<bool> blockCameraDragging = new();
         [Tooltip("Fires while a new area is being drawn")]
         public UnityEvent<Bounds> whenDrawingArea = new();
         [FormerlySerializedAs("selectedAreaBounds")]
@@ -45,8 +43,13 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private GameObject selectionBlock;
         [SerializeField] private Material triplanarGridMaterial;
         
+        private bool drawingArea;
 
-        private bool drawingArea = false;
+        public bool DrawingArea
+        {
+            get => drawingArea;
+            set => drawingArea = value;
+        }
 
         public float GridSize => gridSize;
 
@@ -121,12 +124,23 @@ namespace Netherlands3D.SelectionTools
             selectionEndPosition = GetGridPosition(position);
             if (drawingArea)
             {
-                DrawSelectionArea(selectionStartPosition, selectionEndPosition);
-                MakeSelection();
+                DrawGridAtPosition(selectionStartPosition, selectionEndPosition);
             }
         }
 
-        private void MakeSelection()
+        public void DrawGridAtPosition(Vector3 start, Vector3 end)
+        {
+            DrawSelectionArea(GetGridPosition(start), GetGridPosition(end));
+            MakeSelection();
+        }
+
+        public void SetGridHighlightPosition(Vector3 position)
+        {
+            Vector3 pos = GetGridPosition(position);
+            gridHighlight.transform.position = pos;
+        }
+
+        public void MakeSelection()
         {
             if (mode == DrawMode.Selected) return;
 

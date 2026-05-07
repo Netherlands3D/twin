@@ -66,6 +66,9 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private LayerMask lockInputLayers = 32; //UI layer 5th bit is a 1
         [SerializeField] protected DrawMode mode = DrawMode.CreateAndEdit;
         public DrawMode Mode => mode;
+        public bool DoubleClickToCloseLoop => doubleClickToCloseLoop;
+        public float DoubleClickTimer => doubleClickTimer;
+        public float DoubleClickDistance => doubleClickDistance;
 
         [SerializeField] private LineRenderer polygonLineRenderer;
         [SerializeField] private LineRenderer previewLineRenderer;
@@ -76,8 +79,6 @@ namespace Netherlands3D.SelectionTools
         protected Vector3 selectionStartPosition = default;
         protected Vector3 selectionEndPosition = default;
         protected Vector3 selectionCurrentPosition = default;
-        protected Vector3 previousFrameWorldCoordinate = default;
-        protected Vector2 previousFrameScreenCoordinate = default;
         protected Vector3 lastNormal = Vector3.zero;
         protected Plane worldPlane;
 
@@ -94,17 +95,13 @@ namespace Netherlands3D.SelectionTools
         private bool autoDrawPolygon = false;
         private bool requireReleaseBeforeRedraw = false;
 
-        private float lastTapTime = 0;
-
         [SerializeField] private Transform pointerRepresentation;
         public bool showPointerInEditMode = false;
         public bool showPointerInCreateMode = true;
         public bool showPointerInCreateAndEditMode = true;
         [SerializeField] private PolygonDragHandle handleTemplate;
         private List<PolygonDragHandle> handles = new List<PolygonDragHandle>();
-
-        [Header("Invoke")]
-        public UnityEvent<bool> blockCameraDrag;
+       
         public UnityEvent<List<Vector3>> createdNewPolygonArea;
 
         [Header("Optional Invoke")]
@@ -157,7 +154,6 @@ namespace Netherlands3D.SelectionTools
 
         protected virtual void OnDisable()
         {
-            blockCameraDrag.Invoke(false);
         }
 
         public void SetCurrentInputPointsWithoutNotify(List<Vector3> points)
@@ -206,7 +202,7 @@ namespace Netherlands3D.SelectionTools
         /// <summary>
         /// Draw the preview line between last placed point and current pointer position
         /// </summary>
-        private void UpdatePreviewLine()
+        public void UpdatePreviewLine()
         {
             if (positions.Count == 0 || closedLoop)
                 return;
@@ -280,7 +276,8 @@ namespace Netherlands3D.SelectionTools
 
             if (positions.Count == minPointsToCloseLoop - 1) // add an extra point at the current mouse position to attempt to create a valid shape
             {
-                Tap();
+                //todo update teh selection current position properly here
+                AddPoint(selectionCurrentPosition);
             }
 
             if (requireClosedPolygon)
@@ -410,6 +407,11 @@ namespace Netherlands3D.SelectionTools
             UpdateLine();
         }
 
+        public void AddPoint()
+        {
+            AddPoint(selectionCurrentPosition);
+        }
+
         /// <summary>
         /// Create a drag handle for line vertex position with index for changing its position
         /// </summary>
@@ -420,12 +422,10 @@ namespace Netherlands3D.SelectionTools
             lineHandle.gameObject.SetActive(true);
             lineHandle.pointIndex = positionIndex;
             lineHandle.transform.position = positions[positionIndex];
-
-            lineHandle.pointerDown.AddListener(() => { blockCameraDrag.Invoke(true); });
+            
 
             lineHandle.clicked.AddListener(() =>
             {
-                blockCameraDrag.Invoke(false);
                 if (!closedLoop && lineHandle.pointIndex == 0)
                     CloseLoop(true);
             });
@@ -444,8 +444,6 @@ namespace Netherlands3D.SelectionTools
             });
             lineHandle.endDrag.AddListener(() =>
             {
-                blockCameraDrag.Invoke(false);
-
                 if (!polygonFinished) return;
 
                 FinishPolygon(false);
@@ -529,6 +527,8 @@ namespace Netherlands3D.SelectionTools
         public virtual void SetSelectionCurrentPosition(Vector3 position)
         {
             selectionCurrentPosition = position;
+            if (pointerRepresentation)
+                pointerRepresentation.position = selectionCurrentPosition;
         }
 
         private void FinishPolygon(bool invokeNewPolygonEvent)
