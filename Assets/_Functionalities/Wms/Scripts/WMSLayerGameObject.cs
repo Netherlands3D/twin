@@ -8,8 +8,10 @@ using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
+using Netherlands3D.UI_Toolkit.Scripts.Behaviours;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -54,7 +56,7 @@ namespace Netherlands3D.Functionalities.Wms
             if (!LayerData.HasValidCredentials)
                 active = false;
             
-            Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), active);
+            ServiceLocator.GetService<WMSLegendBehaviour>().ShowLegend(urlPropertyData.Url.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
@@ -127,7 +129,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
+            ServiceLocator.GetService<WMSLegendBehaviour>().RegisterUrl(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
         }
 
         protected override void UnregisterEventListeners()
@@ -136,7 +138,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            Legend.Instance.UnregisterUrl(urlPropertyData.Url.ToString());
+            ServiceLocator.GetService<WMSLegendBehaviour>().UnregisterUrl(urlPropertyData.Url.ToString());
         }
 
         public override void OnSelect(LayerData layer)
@@ -160,7 +162,7 @@ namespace Netherlands3D.Functionalities.Wms
             //we need to parse the layertype from the getmap request url
             var wmsUrl = urlPropertyData.Url.ToString();
             if(OgcWebServicesUtility.GetLayerNameFromURL(wmsUrl, out var layerName))
-                Legend.Instance.ToggleLayer(layerName, isActive);
+                ServiceLocator.GetService<WMSLegendBehaviour>().ToggleLayer(layerName, isActive);
             
             if (wmsProjectionLayer.isEnabled == isActive) return;
 
