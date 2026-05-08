@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
@@ -11,7 +10,7 @@ namespace Netherlands3D.UI.Panels
     public partial class WMSLegendPanel : VisualElement
     {
         private Label emptyTextLabel;
-        private VisualElement imageContainer;
+        private ScrollView imageContainer;
 
         public string activeUrl => activeLegendUrlContainer?.GetCapabilitiesUrl;
         public LegendUrlContainer activeLegendUrlContainer;
@@ -23,7 +22,7 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
 
             emptyTextLabel = this.Q<Label>("EmptyText");
-            imageContainer = this.Q<VisualElement>("ImageListView");
+            imageContainer = this.Q<ScrollView>("ImageListView");
         }
 
         public void SetVisible(bool show)
@@ -44,24 +43,22 @@ namespace Netherlands3D.UI.Panels
                 AddImage(entry.LayerName, entry.Texture);
             }
         }
-
-        public void RefreshImage(string layerName, Texture2D texture)
-        {
-            var image = imageContainer.Q<Image>(layerName);
-            if (image == null) return;
-    
-            Debug.Log("refresh image " + layerName + "\t " + texture);
-            
-            image.image = texture;
-            image.style.height = texture.height;
-        }
-        public void AddImage(string layerName, Texture2D texture)
+        
+        private void AddImage(string layerName, Texture2D texture)
         {
             var image = new Image();
             image.name = layerName;
             image.image = texture;
             image.scaleMode = ScaleMode.ScaleToFit;
+            image.AddToClassList("wms-legend-panel__image");
             imageContainer.Add(image);
+        }
+        
+        public void RefreshImage(string layerName, Texture2D texture)
+        {
+            var image = imageContainer.Q<Image>(layerName);
+            if (image == null) return;
+            image.image = texture;
         }
 
         public void SetImageActive(string layerName, bool isActive)
