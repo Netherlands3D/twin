@@ -49,13 +49,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
         }
         
-        private void EnablePolygonSelection()
+        public void EnablePolygonSelection()
         {
             polygonSelectionEnabled = true;
             OnPolygonSelectionEnabled.Invoke(true);
         }
 
-        private void DisablePolygonSelection()
+        public void DisablePolygonSelection()
         {
             polygonSelectionEnabled = false;
             OnPolygonSelectionEnabled.Invoke(false);

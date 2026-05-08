@@ -73,6 +73,7 @@ namespace Netherlands3D.UI.Behaviours
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
             
             PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
+            
         }
 
         private void OnDisable()

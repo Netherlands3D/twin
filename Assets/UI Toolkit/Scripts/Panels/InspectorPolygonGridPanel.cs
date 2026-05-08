@@ -1,5 +1,6 @@
 using Netherlands3D.Functionalities.AreaDownload.UI;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.ExtensionMethods;
@@ -31,6 +32,12 @@ namespace Netherlands3D.UI.Panels
 
             OnShow += () => Show(true);
             OnHide += () => Show(false);
+            
+            //TODO now we subscribe to the panel being shown to show actual polygons, this should probably not be the way
+            //discuss why we hide polygons in the first place
+            PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            OnShow += selectionService.EnablePolygonSelection;
+            OnHide += selectionService.DisablePolygonSelection;
             
             // copyNorthEastExtentButton.onClick.AddListener(CopyNorthEastToClipboard);
             // copySouthWestExtentButton.onClick.AddListener(CopySouthWestToClipboard);
