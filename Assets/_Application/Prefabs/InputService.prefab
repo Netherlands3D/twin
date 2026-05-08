@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba74c62330f335385b7073d0849a9d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.InputService
+  inputPolygonActionAsset: {fileID: -944628639613478452, guid: 445da62e811e3254c927570f340ea56d,
+    type: 3}
 --- !u!114 &7182869950344535394
 MonoBehaviour:
   m_ObjectHideFlags: 0

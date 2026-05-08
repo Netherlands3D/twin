@@ -159,7 +159,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 return;
             
             //Do not allow selecting a new polygon if we are still creating one
-            if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create || polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create)
+            if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create ||
+                polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create ||
+                polygonCreationService.GridInput.Mode == PolygonInput.DrawMode.Create || 
+                polygonCreationService.GridInput.Mode == PolygonInput.DrawMode.Edit)
                 return;
 
             polygonCreationService.ClearInputs();

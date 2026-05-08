@@ -66,11 +66,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnGridSelect.AddListenerStarted(SetGridInputModeToSelected);
             
             inputService = ServiceLocator.GetService<InputService>();
-            inputService.PolygonTapAction.performed -= TapAction_performed;
-            inputService.PolygonClickAction.performed -= ClickAction_performed;
-            inputService.PolygonClickAction.canceled -= ClickAction_canceled;
-            inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
-            inputService.PolygonFinishAction.performed -= FinishAction_performed;
+            inputService.PolygonTapAction.performed += TapAction_performed;
+            inputService.PolygonClickAction.performed += ClickAction_performed;
+            inputService.PolygonClickAction.canceled += ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed += FinishAction_performed;
         }
 
         private void OnDisable()
@@ -103,6 +103,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void TapAction_performed(InputAction.CallbackContext obj)
         {
             PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
                 if (input.Mode == PolygonInput.DrawMode.Edit)
@@ -150,6 +152,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
             PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
             input.SetSelectionStartPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
         }
 
@@ -157,24 +161,32 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
             PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
             input.SetSelectionEndPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
         }
 
         private void EscapeAction_canceled(InputAction.CallbackContext obj)
         {
             PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
             input.ClearPolygon(true);
         }
 
         private void FinishAction_performed(InputAction.CallbackContext obj)
         {
             PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
             input.CloseLoop(true);
         }
         
         protected void Update()
         {
             PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -266,6 +278,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void EnablePolygonInputByType(ShapeType type)
         {
+            currentShapeType = type;
             switch (type)
             {
                 case ShapeType.Undefined: break;
