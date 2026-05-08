@@ -107,13 +107,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
-                if (input.Mode == PolygonInput.DrawMode.Edit)
-                {
-                    Debug.LogWarning("PolygonInput is in edit mode, cannot Add a new point in edit mode.", gameObject);
-                    return;
-                }
-
-                if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked())
+                if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked() || input.Mode == PolygonInput.DrawMode.Edit)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -139,7 +133,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             else if (currentShapeType == ShapeType.Grid)
             {
-                if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked())
+                if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked() || input.Mode == PolygonInput.DrawMode.Selected)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -187,11 +181,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonInput input = GetInputFromShapeType(currentShapeType);
             if(input == null) return;
             
+            var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            input.SetSelectionCurrentPosition(worldPosition);
+            
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
-                var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
-                Vector3 currentPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-                input.SetSelectionCurrentPosition(currentPosition);
                 input.UpdatePreviewLine();
 
                 if (input.Mode == PolygonInput.DrawMode.Edit) //dont auto draw in edit mode
@@ -217,8 +212,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             else if (currentShapeType == ShapeType.Grid)
             {
-                var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
-                var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
                 gridInput.SetGridHighlightPosition(worldPosition);
 
                 if (!gridInput.DrawingArea && inputService.PolygonClickAction.IsPressed() && inputService.PolygonModifierAction.IsPressed())

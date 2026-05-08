@@ -116,7 +116,7 @@ namespace Netherlands3D.SelectionTools
         {
             if (drawingArea)
             {
-                DrawSelectionArea(selectionStartPosition, selectionCurrentPosition);
+                DrawSelectionArea(GetGridPosition(selectionStartPosition), GetGridPosition(selectionCurrentPosition));
             }
         }
 

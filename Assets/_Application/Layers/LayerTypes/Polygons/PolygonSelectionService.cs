@@ -24,6 +24,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private Tool layerTool;
 
         public UnityEvent<bool> OnPolygonSelectionEnabled = new();
+        public UnityEvent OnDeselectActivePolygon = new();
         
         private bool polygonSelectionEnabled = false;
         
@@ -169,6 +170,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             activeLayer = null;
             ReselectLayerPolygon(null);
+            OnDeselectActivePolygon.Invoke();
         }
         
         private void ProcessPolygonSelection(LayerData layer)

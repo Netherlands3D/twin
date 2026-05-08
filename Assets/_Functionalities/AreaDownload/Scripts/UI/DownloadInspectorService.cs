@@ -19,6 +19,8 @@
 using System.Runtime.InteropServices;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.UI;
 using TMPro;
 using UnityEngine;
@@ -50,6 +52,9 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
             areaSelection.WhenSelectionAreaBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
 
+            PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            selectionService.OnDeselectActivePolygon.AddListener(WhenDeselected);
+
             Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
             northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
             northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);
@@ -61,6 +66,9 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged.Invoke);
             areaSelection.WhenSelectionAreaBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
+            
+            PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            selectionService.OnDeselectActivePolygon.RemoveListener(WhenDeselected);
             
             Destroy(northEastTooltip.gameObject);
             Destroy(southWestTooltip.gameObject);
@@ -77,6 +85,12 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
             southWestTooltip.Show($"X: {westExtentTextField}\nY: {southExtentTextField}", southWestAndNorthEast.Item1, true);
             northEastTooltip.Show($"X: {eastExtentTextField}\nY: {northExtentTextField}", southWestAndNorthEast.Item2, true);
+        }
+
+        private void WhenDeselected()
+        {
+            southWestTooltip.Hide();
+            northEastTooltip.Hide();
         }
 
         private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
