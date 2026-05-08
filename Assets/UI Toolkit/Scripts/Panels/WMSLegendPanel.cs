@@ -48,17 +48,33 @@ namespace Netherlands3D.UI.Panels
         {
             var image = new Image();
             image.name = layerName;
-            image.image = texture;
-            image.scaleMode = ScaleMode.ScaleToFit;
+            image.scaleMode = ScaleMode.StretchToFill;
             image.AddToClassList("wms-legend-panel__image");
+    
+            if (texture != null)
+                SetImageSize(image, texture);
+    
             imageContainer.Add(image);
         }
-        
+
         public void RefreshImage(string layerName, Texture2D texture)
         {
             var image = imageContainer.Q<Image>(layerName);
             if (image == null) return;
             image.image = texture;
+            SetImageSize(image, texture);
+        }
+
+        private void SetImageSize(Image image, Texture2D texture)
+        {
+            image.image = texture;
+            float aspectRatio = (float)texture.height / texture.width;
+            image.style.width = Length.Percent(100);
+            image.style.height = new StyleLength(StyleKeyword.Auto);
+            image.RegisterCallbackOnce<GeometryChangedEvent>(e =>
+            {
+                image.style.height = e.newRect.width * aspectRatio;
+            });
         }
 
         public void SetImageActive(string layerName, bool isActive)

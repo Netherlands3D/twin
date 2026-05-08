@@ -4,6 +4,7 @@
     max-width: var(--inspector-max-width);
     margin-left: var(--spacing-2);
     align-self: flex-start;
+    max-height: 100%;
 }
 
 .wms-legend-panel__image{
