@@ -35,6 +35,7 @@ namespace Netherlands3D.UI.Panels
             
             //TODO now we subscribe to the panel being shown to show actual polygons, this should probably not be the way
             //discuss why we hide polygons in the first place
+            //this is now needed because the layerpanel is not opened anymore when creating a grid polygon and thus not firing the layertool on open
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
             OnShow += selectionService.EnablePolygonSelection;
             OnHide += selectionService.DisablePolygonSelection;

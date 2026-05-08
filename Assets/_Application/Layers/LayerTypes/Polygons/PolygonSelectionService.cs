@@ -40,6 +40,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
             
+            //todo this doesnt work properly now because the layerpanel is not opened when opening library to create a polygon
+            //but it still should work openening the layerpanel.
             layerTool?.onOpen.AddListener(EnablePolygonSelection);
             layerTool?.onClose.AddListener(DisablePolygonSelection);
         }
