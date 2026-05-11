@@ -1,6 +1,6 @@
-using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI.ExtensionMethods;
+using System;
 using System.Collections.Generic;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -14,8 +14,19 @@ namespace Netherlands3D.UI.Components
         private VisualElement HeaderInput => this.Q<VisualElement>(className: "unity-toggle__input");
         private Label HeaderLabel => this.Q<Label>(className: "unity-label");
         private VisualElement Checkmark => this.Q<VisualElement>(className: "unity-foldout__checkmark");
-        private ToggleButtonGroup ButtonGroup => this.Q<ToggleButtonGroup>("ButtonGroup");
+        private VisualElement ButtonGroup => this.Q<VisualElement>("ButtonGroup");
 
+        private Button OpenProjectButton => this.Q<Button>("Open");
+        private Button SaveProjectButton => this.Q<Button>("Save");
+        private Button SettingsButton => this.Q<Button>("Settings");
+        private Button HelpButton => this.Q<Button>("Help");
+
+        public event Action OnOpenProjectSelected;
+        public event Action OnSaveProjectSelected;
+        public event Action OnSettingsSelected;
+        public event Action OnHelpSelected;
+        
+        
         [UxmlAttribute("text")]
         public string ProjectTitle
         {
@@ -42,6 +53,11 @@ namespace Netherlands3D.UI.Components
 
             RegisterCallback<ChangeEvent<bool>>(OnFoldoutValueChanged);
 
+            OpenProjectButton.RegisterCallback<ClickEvent>(_ => OnOpenProjectSelected?.Invoke());
+            SaveProjectButton.RegisterCallback<ClickEvent>(_ => OnSaveProjectSelected?.Invoke());
+            SettingsButton.RegisterCallback<ClickEvent>(_ => OnSettingsSelected?.Invoke());
+            HelpButton.RegisterCallback<ClickEvent>(_ => OnHelpSelected?.Invoke());
+
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 MoveButtonGroupIntoContent();
@@ -49,17 +65,20 @@ namespace Netherlands3D.UI.Components
 
                 UpdateExpandedClass(value);
 
-                ApplyToggleButtonGroupDefaults();
-
                 // Mark last button (for override border radius)
                 schedule.Execute(UpdateLastButtonClass).ExecuteLater(0);
             });
         }
 
-        // TODO: Sync selection state with the MainToolbar.
-        // - When the menu closes: deselect any HamburgerMenu buttons.
-        // - When a MainToolbar button is selected: collapse the HamburgerMenu and clear its selection.
-        // Goal: HamburgerMenu should behave as if its hamburger toggle is part of the MainToolbar’s selection model.
+        public void Open()
+        {
+            value = true;
+        }
+
+        public void Close()
+        {
+            value = false;
+        }
 
         private void OnFoldoutValueChanged(ChangeEvent<bool> evt)
         {
@@ -72,20 +91,6 @@ namespace Netherlands3D.UI.Components
         private void UpdateExpandedClass(bool isExpanded)
         {
             EnableInClassList(ExpandedClassName, isExpanded);
-        }
-
-        private void ApplyToggleButtonGroupDefaults()
-        {
-            var group = ButtonGroup;
-            if (group == null) return;
-
-            // Defaults: single selection, empty selection allowed
-            group.allowEmptySelection = true;
-            group.isMultipleSelection = false;
-
-            // Clear selection: bitmask 0, length = number of options
-            int optionCount = group.childCount;
-            group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, optionCount));
         }
 
         // Move UXML button group to contentContainer inside the foldout

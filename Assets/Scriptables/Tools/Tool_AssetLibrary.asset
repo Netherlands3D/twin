@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
-  m_Name: Tool_Layers
+  m_Name: Tool_AssetLibrary
   m_EditorClassIdentifier: 
-  code: layers
-  title: Lagen
+  code: asset-library
+  title: Asset Bibiliotheek
   functionGroups:
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
   onAvailabilityChange:
@@ -22,7 +22,7 @@ MonoBehaviour:
   onOpen:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
+      - m_Target: {fileID: 11400000, guid: 6e1951c1f4825a64e8bd337dc0a50df3, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
         m_MethodName: InvokeStarted
         m_Mode: 6
@@ -37,7 +37,7 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
+      - m_Target: {fileID: 11400000, guid: 6e1951c1f4825a64e8bd337dc0a50df3, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
         m_MethodName: InvokeStarted
         m_Mode: 6
@@ -55,7 +55,6 @@ MonoBehaviour:
   onSpawnedPrefab:
     m_PersistentCalls:
       m_Calls: []
-  inspectorPrefab: {fileID: 4151227325010422218, guid: c9c980a6d72fe49d6b1b7e465edd594f,
-    type: 3}
+  inspectorPrefab: {fileID: 0}
   functionalityPrefabs: []
-  open: 1
+  open: 0
