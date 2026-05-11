@@ -37,8 +37,6 @@ namespace Netherlands3D.UI.Components
 
         private void NotifyAttachedToPanel(AttachToPanelEvent _)
         {
-            Group.allowEmptySelection = true;
-            Group.isMultipleSelection = false;
             Group.RegisterValueChangedCallback(NotifyValueChanged);
 
             ClearWithoutNotify();

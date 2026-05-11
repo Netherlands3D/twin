@@ -7,7 +7,12 @@
     class="toolbar-main"
 >
     <ui:VisualElement name="Divider" class="divider" />
-    <ui:ToggleButtonGroup name="ButtonGroup" class="toolbar-main__group">
+    <ui:ToggleButtonGroup 
+        name="ButtonGroup" 
+        class="toolbar-main__group" 
+        allow-empty-selection="true" 
+        is-multiple-selection="false"
+    >
         <nl3d:Button name="Layer" button-type="transparent" button-style="IconOnly" icon="Sheets" />
         <nl3d:Button name="Library" button-type="transparent" button-style="IconOnly" icon="Library" />
         <nl3d:Button name="Add" button-type="transparent" button-style="IconOnly" icon="Plus" />
