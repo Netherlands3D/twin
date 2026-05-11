@@ -1,0 +1,19 @@
+﻿<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    name="LocationSearchPanel"
+    class="location-search-panel"
+>
+    <nl3d:AutoComplete name="AddressSearchBar" placeholder-text="Zoeken naar adres" />
+
+    <ui:VisualElement name="CoordinateContainer" class="location-search-panel__coordinates">
+        <ui:VisualElement name="CoordinateFieldsRow" class="location-search-panel__coordinates-row">
+            <nl3d:NumberField name="CoordinateXField" class="location-search-panel__coordinate-field location-search-panel__coordinate-field-x" label-text="X" decimal-count="0" placeholder-text="X" />
+            <nl3d:NumberField name="CoordinateYField" class="location-search-panel__coordinate-field location-search-panel__coordinate-field-y" label-text="Y" decimal-count="0" placeholder-text="Y" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
+

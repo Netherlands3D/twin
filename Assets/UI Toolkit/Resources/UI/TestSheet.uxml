@@ -24,7 +24,7 @@
                 <Netherlands3D.UI.Components.CheckboxToggle/>
                 <Netherlands3D.UI.Components.RadioButtonGroup label="Header label lange tekst check of dit goed gaat" choices="Label,Label"/>
                 <Netherlands3D.UI.Components.MapViewport/>
-                <Netherlands3D.UI.Components.SearchBar/>
+                <Netherlands3D.UI.Components.AutoComplete/>
                 <Netherlands3D.UI.Components.NumberField/>
                 <Netherlands3D.UI.Components.TextField/>
                 <Netherlands3D.UI.Components.TextCallOut/>
