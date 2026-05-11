@@ -5,6 +5,8 @@ using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Credentials;
 using Netherlands3D.Events;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
@@ -45,6 +47,9 @@ namespace Netherlands3D.UI.Behaviours
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
         [SerializeField] private TriggerEvent OnGridConfirmed;
+
+        public UnityEvent OnInspectorPanelOpen = new();
+        public UnityEvent OnInspectorPanelClose = new();
       
 
         private void Awake()
@@ -74,6 +79,10 @@ namespace Netherlands3D.UI.Behaviours
             
             PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
             
+            PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            OnInspectorPanelOpen.AddListener(polygonSelectionService.EnablePolygonSelection);
+            OnInspectorPanelClose.AddListener(polygonSelectionService.DisablePolygonSelection);
+            
         }
 
         private void OnDisable()
@@ -89,11 +98,16 @@ namespace Netherlands3D.UI.Behaviours
             OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
             
             PolygonGridPanel.OnConfirmSelection.RemoveListener(OnGridConfirmed.InvokeStarted);
+            
+            PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            OnInspectorPanelOpen.RemoveListener(polygonSelectionService.EnablePolygonSelection);
+            OnInspectorPanelClose.RemoveListener(polygonSelectionService.DisablePolygonSelection);
         }
 
         public void Open()
         {
             InspectorPanel.Open();
+            OnInspectorPanelOpen.Invoke();
         }
 
         public void Close()
@@ -101,6 +115,7 @@ namespace Netherlands3D.UI.Behaviours
             ToolbarMain.ClearWithoutNotify();
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             InspectorPanel.Close();
+            OnInspectorPanelClose.Invoke();
         }
 
         // TODO: Shouldn't this be in the InspectorPanel component?
@@ -154,6 +169,7 @@ namespace Netherlands3D.UI.Behaviours
                 HidePanel();
                 //do not use Close here to avoid the toggle notification
                 InspectorPanel.Close(); 
+                OnInspectorPanelClose.Invoke();
             }
             else
             {   

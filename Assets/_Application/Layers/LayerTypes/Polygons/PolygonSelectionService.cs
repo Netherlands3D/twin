@@ -25,6 +25,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public UnityEvent<bool> OnPolygonSelectionEnabled = new();
         public UnityEvent OnDeselectActivePolygon = new();
+        public UnityEvent OnSelectActivePolygon = new();
         
         private bool polygonSelectionEnabled = false;
         
@@ -185,6 +186,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 activeLayer = layer;
                 polygonCreationService.UpdateInputByType(layer);
                 polygonCreationService.GridInput.SetSelectionVisualEnabled(true);
+                OnSelectActivePolygon.Invoke();
                 return;
             }
 
@@ -192,10 +194,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create || polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create)
                 return;
 
+            
             polygonCreationService.ClearInputs();
-
             activeLayer = layer;
             ReselectLayerPolygon(layer);
+            OnSelectActivePolygon.Invoke();
         }
         
         private void ReselectLayerPolygon(LayerData layer)
