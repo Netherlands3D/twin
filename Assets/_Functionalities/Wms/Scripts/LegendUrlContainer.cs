@@ -13,18 +13,22 @@ namespace Netherlands3D.Functionalities.Wms
         public sealed class LegendEntry
         {
             public readonly string LayerName;
-            public readonly string Url;
-
+            public string ImageUrl { get; private set; }
             public Texture2D Texture { get; private set; }
             public bool Active { get; private set; }
 
             public UnityEvent<string, bool> LayerActiveChanged = new();
 
-            public LegendEntry(string layerName, string url)
+            public LegendEntry(string layerName, string imageUrl, bool active)
             {
                 LayerName = layerName;
-                Url = url;
-                Active = true;
+                ImageUrl = imageUrl;
+                Active = active;
+            }
+            
+            public void SetImageUrl(string imageUrl)
+            {
+                ImageUrl = imageUrl;
             }
 
             public void SetTexture(Texture2D texture)
@@ -39,12 +43,12 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
-        public LegendUrlContainer(string getCapabilitiesUrl, Dictionary<string, string> legendDictionary)
+        public LegendUrlContainer(string getCapabilitiesUrl)
         {
             GetCapabilitiesUrl = getCapabilitiesUrl;
-            foreach(KeyValuePair<string, string> kv in  legendDictionary)
-                LayerNameLegendUrlDictionary.Add(kv.Key, new LegendEntry(kv.Key, kv.Value));
-            ActiveLayerCount = 1; // when creating a new object, we assume it has been created by one layer
+            // foreach(KeyValuePair<string, string> kv in  legendDictionary)
+            //     LayerNameLegendUrlDictionary.Add(kv.Key, new LegendEntry(kv.Key, kv.Value));
+            ActiveLayerCount = 0; // when creating a new object, we assume it has been created by one layer
         }
 
         public void IncrementLayerCount()
@@ -64,7 +68,21 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void RegisterActiveLayer(string layerName, bool active)
         {
-            LayerNameLegendUrlDictionary[layerName].SetActive(active);
+            if(LayerNameLegendUrlDictionary.ContainsKey(layerName))
+                LayerNameLegendUrlDictionary[layerName].SetActive(active);
+            else
+               LayerNameLegendUrlDictionary.Add(layerName, new LegendEntry(layerName, null, active));
+        }
+        
+        public void PopulateUrls(Dictionary<string, string> legendDictionary)
+        {
+            foreach (KeyValuePair<string, string> kv in legendDictionary)
+            {
+                if (LayerNameLegendUrlDictionary.TryGetValue(kv.Key, out var entry))
+                    entry.SetImageUrl(kv.Value); // layer already registered with active state, just set the url
+                else
+                    LayerNameLegendUrlDictionary.Add(kv.Key, new LegendEntry(kv.Key, kv.Value, true)); // layer not yet known, add with default active state
+            }
         }
     }
     

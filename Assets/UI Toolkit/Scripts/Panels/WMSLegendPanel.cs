@@ -46,12 +46,12 @@ namespace Netherlands3D.UI.Panels
             
             foreach (var entry in container.LayerNameLegendUrlDictionary.Values)
             {
-                AddImage(entry.LayerName, entry.Texture, entry.Active);
+                AddImageComponent(entry.LayerName, entry.Texture, entry.Active);
                 entry.LayerActiveChanged.AddListener(SetImageActive);
             }
         }
         
-        private void AddImage(string layerName, Texture2D texture, bool isActive)
+        private void AddImageComponent(string layerName, Texture2D texture, bool isActive)
         {
             var image = new Image();
             image.name = layerName;
