@@ -1,5 +1,6 @@
 ﻿using System;
 using Netherlands3D.Sun;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -67,7 +68,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnShowAction()
         {
-            EnableInClassList("hidden", false);
+            EnableInClassList(UtilityClassConstants.HIDDEN, false);
             
             if (sunTime == null) return;
             sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
@@ -79,7 +80,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnHideAction()
         {
-            EnableInClassList("hidden", true);
+            EnableInClassList(UtilityClassConstants.HIDDEN, true);
             
             if (sunTime == null) return;
             sunTime.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
