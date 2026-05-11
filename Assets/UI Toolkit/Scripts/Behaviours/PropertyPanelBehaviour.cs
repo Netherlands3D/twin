@@ -34,7 +34,7 @@ namespace Netherlands3D.UI.Panels
             
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.OnSelectLayer.AddListener(SpawnPanel);
-            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel);
+            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
         }
 
         private void OnDestroy()
