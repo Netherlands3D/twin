@@ -39,7 +39,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         {
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
-        
+
+        private void Start()
+        {
+            legendPanel.SetVisible(false);
+        }
+
         /// <summary>
         /// Called by a layer when it is created or its URL changes.
         /// Registers the layer with the shared container for its GetCapabilities URL
@@ -249,13 +254,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             foreach (var kv in container.LayerNameLegendUrlDictionary)
             {
                 var entry = kv.Value;
-
-                // if (entry.Texture != null)
-                // {
-                //     // Already cached — let the panel read active state from the entry.
-                //     legendPanel.RefreshImage(entry.LayerName, entry.Texture);
-                //     continue;
-                // }
 
                 if (!entry.Active)
                     continue; // No texture yet and inactive — nothing to show or download.
