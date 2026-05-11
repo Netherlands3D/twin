@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -14,8 +15,10 @@ namespace Netherlands3D.Functionalities.Wms
             public readonly string LayerName;
             public readonly string Url;
 
-            public Texture2D Texture;
-            public bool Active;
+            public Texture2D Texture { get; private set; }
+            public bool Active { get; private set; }
+
+            public UnityEvent<string, bool> LayerActiveChanged = new();
 
             public LegendEntry(string layerName, string url)
             {
@@ -23,9 +26,17 @@ namespace Netherlands3D.Functionalities.Wms
                 Url = url;
                 Active = true;
             }
-            
-            public void SetTexture(Texture2D texture) => Texture = texture;
-            public void SetActive(bool active) => Active = active;
+
+            public void SetTexture(Texture2D texture)
+            {
+                Texture = texture;
+            }
+
+            public void SetActive(bool active)
+            {
+                Active = active;
+                LayerActiveChanged.Invoke(LayerName, active);
+            }
         }
 
         public LegendUrlContainer(string getCapabilitiesUrl, Dictionary<string, string> legendDictionary)
@@ -49,12 +60,11 @@ namespace Netherlands3D.Functionalities.Wms
         public void RegisterImage(Texture2D texture, string layerName)
         {
             LayerNameLegendUrlDictionary[layerName].SetTexture(texture);
-
         }
 
         public void RegisterActiveLayer(string layerName, bool active)
         {
-            LayerNameLegendUrlDictionary[layerName].Active = active;
+            LayerNameLegendUrlDictionary[layerName].SetActive(active);
         }
     }
     

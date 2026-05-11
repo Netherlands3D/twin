@@ -33,6 +33,12 @@ namespace Netherlands3D.UI.Panels
         public void SetContainer(LegendUrlContainer container)
         {
             ClearGraphics();
+            
+            foreach (var entry in container?.LayerNameLegendUrlDictionary.Values)
+            {
+                entry.LayerActiveChanged.RemoveListener(SetImageActive);
+            }
+            
             activeLegendUrlContainer = container;
             
             bool isEmpty = container.LayerNameLegendUrlDictionary.Count == 0;
@@ -40,17 +46,19 @@ namespace Netherlands3D.UI.Panels
             
             foreach (var entry in container.LayerNameLegendUrlDictionary.Values)
             {
-                AddImage(entry.LayerName, entry.Texture);
+                AddImage(entry.LayerName, entry.Texture, entry.Active);
+                entry.LayerActiveChanged.AddListener(SetImageActive);
             }
         }
         
-        private void AddImage(string layerName, Texture2D texture)
+        private void AddImage(string layerName, Texture2D texture, bool isActive)
         {
             var image = new Image();
             image.name = layerName;
             image.image = texture;
             image.AddToClassList("wms-legend-panel__image");
             imageContainer.Add(image);
+            SetImageActive(layerName, isActive);
         }
 
         public void RefreshImage(string layerName, Texture2D texture)
@@ -60,19 +68,7 @@ namespace Netherlands3D.UI.Panels
             image.image = texture;
         }
 
-        // private void SetImageSize(Image image, Texture2D texture)
-        // {
-        //     image.image = texture;
-        //     float aspectRatio = (float)texture.height / texture.width;
-        //     image.style.width = Length.Percent(100);
-        //     image.style.height = new StyleLength(StyleKeyword.Auto);
-        //     image.RegisterCallbackOnce<GeometryChangedEvent>(e =>
-        //     {
-        //         image.style.height = e.newRect.width * aspectRatio;
-        //     });
-        // }
-
-        public void SetImageActive(string layerName, bool isActive)
+        private void SetImageActive(string layerName, bool isActive)
         {
             imageContainer.Q<Image>(layerName).EnableInClassList(UtilityClassConstants.HIDDEN, !isActive);
         }
@@ -82,7 +78,7 @@ namespace Netherlands3D.UI.Panels
             emptyTextLabel.EnableInClassList(UtilityClassConstants.HIDDEN, !show);
         }
 
-        public void ClearGraphics()
+        private void ClearGraphics()
         {
             imageContainer.Clear();
         }

@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.LegendBehaviour
   uiDocument: {fileID: 4399201792515060189}
-  log: 1
+  log: 0
 --- !u!114 &4059851635121094241
 MonoBehaviour:
   m_ObjectHideFlags: 0

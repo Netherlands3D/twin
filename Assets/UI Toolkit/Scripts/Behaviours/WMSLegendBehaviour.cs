@@ -24,7 +24,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private static readonly Dictionary<string, LegendUrlContainer> legendUrlDictionary = new(); //key: getCapabilities url, Value: legend urls for that GetCapabilities
         private Dictionary<string, Coroutine> pendingUrlRequests = new();
         private string requestedLegendUrl; //the url requested to show the legend of
-        // private string activeLegendUrl; //the currently visible legend url in the panel
         private Coroutine runningCoroutine;
         
         private void Awake()
@@ -173,7 +172,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 var urls = getCapabilities.GetLegendUrls();
                 var newContainer = new LegendUrlContainer(getCapabilitiesUri.ToString(), urls); //already add an empty container to keep track of the amount of layers
                 legendUrlDictionary.Add(newContainer.GetCapabilitiesUrl, newContainer);
-                var a = pendingUrlRequests.Remove(newContainer.GetCapabilitiesUrl);
+                pendingUrlRequests.Remove(newContainer.GetCapabilitiesUrl);
                 if(log) Debug.Log("Successfully downloaded " + urls.Count + " legend urls");
                 ShowLegend(requestedLegendUrl, legendPanel.LegendVisible); //update the legend graphics if we were waiting for the legend urls
             });
@@ -188,9 +187,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             {
                 StopCoroutine(runningCoroutine);
             }
-        
-            // legendPanel.ClearGraphics();
-        
+            
             if (!legendUrlDictionary.ContainsKey(getCapabilitiesUri.ToString()))
             {
                 Debug.LogError("Could not find legend urls for the given WMS service " + getCapabilitiesUri);
@@ -205,8 +202,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private IEnumerator DownloadLegendGraphics(LegendUrlContainer urlContainer, StoredAuthorization auth)
         {
             if(log) Debug.Log("Downloading " + urlContainer.LayerNameLegendUrlDictionary.Count + "legend graphics " + urlContainer.GetCapabilitiesUrl);
-            // legendPanel.SetContainer(urlContainer);
-            // legendPanel.ShowEmptyText(urlContainer.LayerNameLegendUrlDictionary.Count == 0);
+
             if (urlContainer.LayerNameLegendUrlDictionary.Count == 0)
             {
                 yield break;
@@ -249,19 +245,15 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         
         public void ToggleLayer(string layerName, bool isActive)
         {
-            
-            // if (legendUrlDictionary.TryGetValue(activeLegendUrl, out var container))
-            // {
             var container = legendPanel.activeLegendUrlContainer;
             if(container == null) return;
                 if(!container.LayerNameLegendUrlDictionary.ContainsKey(layerName)) return;
                 
                 LegendUrlContainer.LegendEntry entry = container.LayerNameLegendUrlDictionary[layerName]; 
                 if(entry.Texture != null)
-                    legendPanel.SetImageActive(layerName, isActive);
+                    entry.SetActive(isActive);
                 else if(isActive)
                     RequestAndCreateImage(container, entry, credentialHandler.Authorization);
-            // }
         }
     }
 }
