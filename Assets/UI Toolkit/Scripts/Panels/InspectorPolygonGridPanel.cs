@@ -46,20 +46,32 @@ namespace Netherlands3D.UI.Panels
             OnHide += () => Show(false);
 
             confirmButton.clicked += OnConfirmSelection.Invoke;
-            copyZW.RegisterCallback<ClickEvent>(CopySouthWestToClipboard);
-            copyNO.RegisterCallback<ClickEvent>(CopyNorthEastToClipboard);
+            
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
                 downloadInspectorService = ServiceLocator.GetService<DownloadInspectorService>();
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(GetFeatureThumbnail); 
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(UpdateFields);
+                
+                copyZW.RegisterCallback<ClickEvent>(CopySouthWest);
+                copyNO.RegisterCallback<ClickEvent>(CopyNorthEast);
             });
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(GetFeatureThumbnail);
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(UpdateFields);
             });
+        }
+
+        private void CopySouthWest(ClickEvent evt)
+        {
+            downloadInspectorService.CopySouthWestToClipboard();
+        }
+
+        private void CopyNorthEast(ClickEvent evt)
+        {
+            downloadInspectorService.CopyNorthEastToClipboard();
         }
         
         private void GetFeatureThumbnail(Bounds bounds)
@@ -91,26 +103,6 @@ namespace Netherlands3D.UI.Panels
         }
         
         
-        private void CopySouthWestToClipboard(ClickEvent evt)
-        {
-            DownloadInspectorService downloadService = ServiceLocator.GetService<DownloadInspectorService>();
-            var text = $"{downloadService.WestExtent},{downloadService.SouthExtent}";
-#if UNITY_WEBGL && !UNITY_EDITOR
-            CopyToClipboard(text);
-#else
-            GUIUtility.systemCopyBuffer = text;
-#endif
-        }
-
-        private void CopyNorthEastToClipboard(ClickEvent evt)
-        {
-            DownloadInspectorService downloadService = ServiceLocator.GetService<DownloadInspectorService>();
-            var text = $"{downloadService.EastExtent},{downloadService.NorthExtent}";
-#if UNITY_WEBGL && !UNITY_EDITOR
-            CopyToClipboard(text);
-#else
-            GUIUtility.systemCopyBuffer = text;
-#endif
-        }
+       
     }
 }

@@ -120,5 +120,25 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
             return (southWest, northEast);
         }
+        
+        public void CopySouthWestToClipboard()
+        {
+            var text = $"{WestExtent},{SouthExtent}";
+#if UNITY_WEBGL && !UNITY_EDITOR
+            CopyToClipboard(text);
+#else
+            GUIUtility.systemCopyBuffer = text;
+#endif
+        }
+
+        public void CopyNorthEastToClipboard()
+        {
+            var text = $"{EastExtent},{NorthExtent}";
+#if UNITY_WEBGL && !UNITY_EDITOR
+            CopyToClipboard(text);
+#else
+            GUIUtility.systemCopyBuffer = text;
+#endif
+        }
     }
 }
