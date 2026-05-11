@@ -21,8 +21,8 @@ namespace Netherlands3D.UI.Panels
         
         private VisualElement thumbnailContainer;
         private DownloadInspectorService downloadInspectorService;
-        private Icon copyZW;
-        private Icon copyNO;
+        private Button copyZW;
+        private Button copyNO;
         private NumberField zw_x, zw_y;
         private NumberField no_x, no_y;
         
@@ -35,8 +35,8 @@ namespace Netherlands3D.UI.Panels
             
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
             confirmButton = this.Q<Button>("ConfirmButton");
-            copyZW = this.Q<Icon>("ButtonCopyZw");
-            copyNO = this.Q<Icon>("ButtonCopyNo");
+            copyZW = this.Q<Button>("ButtonCopyZw");
+            copyNO = this.Q<Button>("ButtonCopyNo");
             zw_x = this.Q<NumberField>("ZW_X");
             zw_y = this.Q<NumberField>("ZW_Y");
             no_x = this.Q<NumberField>("NO_X");

@@ -15,13 +15,13 @@
         <ui:Label text="&lt;b&gt;Tip: &lt;/b&gt; met de combinatie shift-klik+sleep kunt u meerdere tegels selecteren." class="inspector-polygon-grid__body-tip-text"/>
         <ui:VisualElement class="inspector-polygon-grid__number-fields-row">
             <ui:Label text="Hoekpunt ZW" class="inspector-polygon-grid__number-fields-text inspector-polygon-grid__item"/>
-            <nl3d:Icon name="ButtonCopyZw" class="inspector-polygon-grid__item" icon="CopyPaste"/>
+            <nl3d:Button name="ButtonCopyZw" class="inspector-polygon-grid__button-copy inspector-polygon-grid__item" icon="CopyPaste" button-style="IconOnly"/>
             <nl3d:NumberField name="ZW_X" number-field-style="Small" class="inspector-polygon-grid__item"/>
             <nl3d:NumberField name="ZW_Y" number-field-style="Small" class="inspector-polygon-grid__item inspector-polygon-grid__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="inspector-polygon-grid__number-fields-row">
             <ui:Label text="Hoekpunt NO" class="inspector-polygon-grid__number-fields-text inspector-polygon-grid__item"/>
-            <nl3d:Icon name="ButtonCopyNo" class="inspector-polygon-grid__item" icon="CopyPaste"/>
+            <nl3d:Button name="ButtonCopyNo" class="inspector-polygon-grid__button-copy inspector-polygon-grid__item" icon="CopyPaste" button-style="IconOnly"/>
             <nl3d:NumberField name="NO_X" number-field-style="Small" class="inspector-polygon-grid__item"/>
             <nl3d:NumberField name="NO_Y" number-field-style="Small" class="inspector-polygon-grid__item inspector-polygon-grid__item-last"/>
         </ui:VisualElement>
