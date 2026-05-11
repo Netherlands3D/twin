@@ -41,9 +41,19 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         [Header("References")]
         [SerializeField] private AreaSelection areaSelection;
         [SerializeField] private TextPopout popoutPrefab;
+        
+        private Coordinate NorthEast => ConvertBoundsToCoordinates(selectedArea).northEast;
+        private Coordinate SouthWest => ConvertBoundsToCoordinates(selectedArea).southWest;
+
+        public string NorthExtent => NorthEast.northing.ToString("0");
+        public string SouthExtent => SouthWest.northing.ToString("0");
+        public string EastExtent => NorthEast.easting.ToString("0");
+        public string WestExtent => SouthWest.easting.ToString("0");
 
         private TextPopout northEastTooltip;
         private TextPopout southWestTooltip;
+
+        private Bounds selectedArea;
         
         public UnityEvent<Bounds> OnSelectionBoundsChanged = new();
 
@@ -76,15 +86,9 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         private void WhenSelectionBoundsChanged(Bounds selectedArea)
         {
-            var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
-            
-            string northExtentTextField = southWestAndNorthEast.northEast.northing.ToString("0");
-            string southExtentTextField = southWestAndNorthEast.southWest.northing.ToString("0");
-            string eastExtentTextField = southWestAndNorthEast.northEast.easting.ToString("0");
-            string westExtentTextField = southWestAndNorthEast.southWest.easting.ToString("0");
-
-            southWestTooltip.Show($"X: {westExtentTextField}\nY: {southExtentTextField}", southWestAndNorthEast.Item1, true);
-            northEastTooltip.Show($"X: {eastExtentTextField}\nY: {northExtentTextField}", southWestAndNorthEast.Item2, true);
+            this.selectedArea = selectedArea;
+            southWestTooltip.Show($"X: {WestExtent}\nY: {SouthExtent}", SouthWest, true);
+            northEastTooltip.Show($"X: {EastExtent}\nY: {NorthExtent}", NorthEast, true);
         }
 
         private void WhenDeselected()
