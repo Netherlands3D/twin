@@ -7,17 +7,19 @@ using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.UI.Behaviours
 {
     /// <summary>
     /// Behaviour bridge between <see cref="AddressSearchService"/> and <see cref="LocationSearchPanel"/>.
-    /// Subscribes to panel UI events, drives the service, and forwards coordinate/building results
+    /// Subscribes to panel UI events, drives the addressSearchService, and forwards coordinate/building results
     /// to outer consumers via UnityEvents.
     /// </summary>
+    [RequireComponent(typeof(AddressSearchService))]
     public class LocationSearchBehaviour : MonoBehaviour
     {
-        [SerializeField] private AddressSearchService service;
+        private AddressSearchService addressSearchService;
 
         public UnityEvent<Coordinate> onCoordinateFound = new();
 
@@ -26,23 +28,23 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnEnable()
         {
-            if (service == null) return;
+            if (!addressSearchService) addressSearchService = GetComponent<AddressSearchService>();
             cameraService = ServiceLocator.GetService<CameraService>();
 
-            service.onCoordinateFound.AddListener(OnCoordinateFound);
-            service.SuggestionsReady += OnSuggestionsReady;
-            service.SuggestionsCleared += OnSuggestionsCleared;
-            service.SuggestionAutoSelected += OnSuggestionAutoSelected;
+            addressSearchService.onCoordinateFound.AddListener(OnCoordinateFound);
+            addressSearchService.SuggestionsReady += OnSuggestionsReady;
+            addressSearchService.SuggestionsCleared += OnSuggestionsCleared;
+            addressSearchService.SuggestionAutoSelected += OnSuggestionAutoSelected;
         }
 
         private void OnDisable()
         {
-            if (service == null) return;
+            if (addressSearchService == null) return;
 
-            service.onCoordinateFound.RemoveListener(OnCoordinateFound);
-            service.SuggestionsReady -= OnSuggestionsReady;
-            service.SuggestionsCleared -= OnSuggestionsCleared;
-            service.SuggestionAutoSelected -= OnSuggestionAutoSelected;
+            addressSearchService.onCoordinateFound.RemoveListener(OnCoordinateFound);
+            addressSearchService.SuggestionsReady -= OnSuggestionsReady;
+            addressSearchService.SuggestionsCleared -= OnSuggestionsCleared;
+            addressSearchService.SuggestionAutoSelected -= OnSuggestionAutoSelected;
         }
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnQueryChanged(string text)
         {
-            service?.FetchSuggestions(text);
+            addressSearchService?.FetchSuggestions(text);
         }
 
         private void OnSubmitRequested(string text, SuggestionResult? active)
@@ -76,7 +78,7 @@ namespace Netherlands3D.UI.Behaviours
             else if (!string.IsNullOrWhiteSpace(text))
             {
                 // No suggestions open yet – fetch and auto-pick the first result
-                service?.FetchSuggestionsForced(text);
+                addressSearchService?.FetchSuggestionsForced(text);
             }
         }
 
@@ -123,7 +125,7 @@ namespace Netherlands3D.UI.Behaviours
         {
             panel?.SetQueryText(result.Label);
             panel?.ClearSuggestions();
-            service?.SelectSuggestion(result.Id, result.Label);
+            addressSearchService?.SelectSuggestion(result.Id, result.Label);
         }
 
         private void OnSuggestionsReady(List<SuggestionResult> suggestions)

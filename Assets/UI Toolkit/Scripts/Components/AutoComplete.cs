@@ -112,17 +112,17 @@ namespace Netherlands3D.UI.Components
             QueryField.RegisterValueChangedCallback(evt => QueryChanged?.Invoke(evt.newValue));
             QueryField.RegisterCallback<NavigationSubmitEvent>(OnQuerySubmit, TrickleDown.TrickleDown);
             QueryField.RegisterCallback<KeyDownEvent>(OnQueryFieldKeyDown, TrickleDown.TrickleDown);
-
-            SearchButton.RegisterCallback<ClickEvent>(_ =>
-            {
-                int? selected = resultItems.Count == 0 || selectedResultIndex < 0 ? null : selectedResultIndex;
-                SubmitRequested?.Invoke(QueryField.value, selected);
-            });
+            SearchButton.RegisterCallback<ClickEvent>(OnSearchButtonClick);
 
             ResultsList.makeItem = MakeResultItem;
             ResultsList.bindItem = BindResultItem;
             ResultsList.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ResultsList.selectionType = SelectionType.Single;
+        }
+
+        private void OnSearchButtonClick(ClickEvent _)
+        {
+            OnQuerySubmit(null);
         }
 
         private void OnQuerySubmit(NavigationSubmitEvent _)

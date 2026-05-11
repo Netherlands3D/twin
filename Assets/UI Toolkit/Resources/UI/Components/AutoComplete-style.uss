@@ -1,16 +1,24 @@
 ﻿@import url("TextField-style.uss");
 
 .auto-complete {
+    --auto-complete-height: var(--spacing-10);
+    --auto-complete-list-height: 200px;
+    --auto-complete-padding-x: var(--spacing-3);
+    --auto-complete-padding-y: var(--spacing-2);
+    --auto-complete-border-radius: var(--border-radius-lg);
+    --auto-complete-border-width: var(--spacing-0_5);
+    --auto-complete-border-color: var(--color-blue-200);
+    
     flex-direction: column;
     margin: 0;
-    min-height: var(--spacing-10);
+    min-height: var(--auto-complete-height);
     height: auto;
     justify-content: flex-start;
-    padding: var(--spacing-2) var(--spacing-3);
+    padding: var(--auto-complete-padding-y) var(--auto-complete-padding-x);
     background-color: var(--color-white);
-    border-radius: var(--spacing-2);
-    border-width: 2px;
-    border-color: var(--color-blue-200);
+    border-radius: var(--auto-complete-border-radius);
+    border-width: var(--auto-complete-border-width);
+    border-color: var(--auto-complete-border-color);
 }
 
 .auto-complete__row {
@@ -40,9 +48,8 @@
 
 .auto-complete__divider {
     margin-top: var(--spacing-2);
-    height: 1.5px;
+    height: var(--spacing-0_5);
     background-color: var(--color-blue-200);
-    border-radius: 0.75px;
 }
 
 .auto-complete:disabled {
@@ -55,7 +62,7 @@
 }
 
 .auto-complete__list {
-    max-height: 200px;
+    max-height: var(--auto-complete-list-height);
 }
 
 .auto-complete__list .listview-item > .label {

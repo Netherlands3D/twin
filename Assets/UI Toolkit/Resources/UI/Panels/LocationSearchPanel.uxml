@@ -11,8 +11,8 @@
 
     <ui:VisualElement name="CoordinateContainer" class="location-search-panel__coordinates">
         <ui:VisualElement name="CoordinateFieldsRow" class="location-search-panel__coordinates-row">
-            <nl3d:NumberField name="CoordinateXField" class="location-search-panel__coordinate-field location-search-panel__coordinate-field--x" label-text="X" decimal-count="0" placeholder-text="X" />
-            <nl3d:NumberField name="CoordinateYField" class="location-search-panel__coordinate-field location-search-panel__coordinate-field--y" label-text="Y" decimal-count="0" placeholder-text="Y" />
+            <nl3d:NumberField name="CoordinateXField" class="location-search-panel__coordinate-field location-search-panel__coordinate-field-x" label-text="X" decimal-count="0" placeholder-text="X" />
+            <nl3d:NumberField name="CoordinateYField" class="location-search-panel__coordinate-field location-search-panel__coordinate-field-y" label-text="Y" decimal-count="0" placeholder-text="Y" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -7,7 +7,7 @@
     class="auto-complete"
 >
     <ui:VisualElement class="auto-complete__row" name="SearchRow">
-        <nl3d:TextField class="auto-complete__field" name="QueryField" label="" value="" />
+        <nl3d:TextField class="auto-complete__field" name="QueryField" />
         <nl3d:IconButton class="auto-complete__button" name="SearchButton" button-style="IconOnly" icon="search" />
     </ui:VisualElement>
 
