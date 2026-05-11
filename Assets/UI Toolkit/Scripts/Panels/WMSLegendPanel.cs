@@ -51,7 +51,7 @@ namespace Netherlands3D.UI.Panels
                 entry.LayerActiveChanged.AddListener(SetImageActive);
             }
         }
-        
+
         private void AddImageComponent(string layerName, Texture2D texture, bool isActive)
         {
             var image = new Image();
@@ -60,6 +60,10 @@ namespace Netherlands3D.UI.Panels
             image.AddToClassList("wms-legend-panel__image");
             imageContainer.Add(image);
             SetImageActive(layerName, isActive);
+            image.RegisterCallback<GeometryChangedEvent>(e =>
+            {
+                image.style.marginTop = StyleKeyword.Auto; //For some reason the image component gets an inline margin top style that we have to reset
+            });
         }
 
         public void RefreshImage(string layerName, Texture2D texture)
