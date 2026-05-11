@@ -22,9 +22,28 @@
 
 .inspector-polygon-grid__number-fields-row{
     flex-direction: row;
+    align-items: center;
 }
 
-.inspector-polygon-grid__button-copy.button{   
-    border-radius: 0;
-    border-width: 0;
+.inspector-polygon-grid__number-fields-row .number-field{
+    /*align-self:center;*/
 }
+
+.inspector-polygon-grid__number-fields-row .inspector-polygon-grid__item{
+    margin-right: var(--spacing-2);
+}
+
+.inspector-polygon-grid__item.inspector-polygon-grid__item-last{
+    margin-right: 0;
+}
+
+.inspector-polygon-grid__number-fields-text{
+    flex-grow: 1;
+}
+
+/*.inspector-polygon-grid__button-copy.button{   */
+/*    border-radius: 0;*/
+/*    border-width: 0;*/
+/*}*/
+
+

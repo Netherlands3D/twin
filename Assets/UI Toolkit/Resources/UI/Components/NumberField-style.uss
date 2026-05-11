@@ -83,7 +83,7 @@
 
 /* Variant for Small style */
 .number-field.number-field--style-small {
-    align-self: flex-start;
+    /*align-self: flex-start;*/
     width: var(--spacing-24);
     min-width: var(--spacing-12);
     height: var(--spacing-7);

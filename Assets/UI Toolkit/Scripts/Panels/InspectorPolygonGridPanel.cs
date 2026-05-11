@@ -21,8 +21,8 @@ namespace Netherlands3D.UI.Panels
         
         private VisualElement thumbnailContainer;
         private DownloadInspectorService downloadInspectorService;
-        private Button copyZW;
-        private Button copyNO;
+        private Icon copyZW;
+        private Icon copyNO;
         private NumberField zw_x, zw_y;
         private NumberField no_x, no_y;
         
@@ -35,8 +35,8 @@ namespace Netherlands3D.UI.Panels
             
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
             confirmButton = this.Q<Button>("ConfirmButton");
-            copyZW = this.Q<Button>("ButtonCopyZw");
-            copyNO = this.Q<Button>("ButtonCopyNo");
+            copyZW = this.Q<Icon>("ButtonCopyZw");
+            copyNO = this.Q<Icon>("ButtonCopyNo");
             zw_x = this.Q<NumberField>("ZW_X");
             zw_y = this.Q<NumberField>("ZW_Y");
             no_x = this.Q<NumberField>("NO_X");
@@ -46,8 +46,8 @@ namespace Netherlands3D.UI.Panels
             OnHide += () => Show(false);
 
             confirmButton.clicked += OnConfirmSelection.Invoke;
-            copyZW.clicked += CopySouthWestToClipboard;
-            copyNO.clicked += CopyNorthEastToClipboard;
+            copyZW.RegisterCallback<ClickEvent>(CopySouthWestToClipboard);
+            copyNO.RegisterCallback<ClickEvent>(CopyNorthEastToClipboard);
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
@@ -91,7 +91,7 @@ namespace Netherlands3D.UI.Panels
         }
         
         
-        private void CopySouthWestToClipboard()
+        private void CopySouthWestToClipboard(ClickEvent evt)
         {
             DownloadInspectorService downloadService = ServiceLocator.GetService<DownloadInspectorService>();
             var text = $"{downloadService.WestExtent},{downloadService.SouthExtent}";
@@ -102,7 +102,7 @@ namespace Netherlands3D.UI.Panels
 #endif
         }
 
-        private void CopyNorthEastToClipboard()
+        private void CopyNorthEastToClipboard(ClickEvent evt)
         {
             DownloadInspectorService downloadService = ServiceLocator.GetService<DownloadInspectorService>();
             var text = $"{downloadService.EastExtent},{downloadService.NorthExtent}";
