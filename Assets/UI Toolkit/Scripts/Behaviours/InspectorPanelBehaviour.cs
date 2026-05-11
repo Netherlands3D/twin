@@ -45,7 +45,7 @@ namespace Netherlands3D.UI.Behaviours
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
         [SerializeField] private TriggerEvent OnGridConfirmed;
-        
+      
 
         private void Awake()
         {

@@ -47,6 +47,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private TriggerEvent OnGridCreate;
         [SerializeField] private TriggerEvent OnGridEdit;
         [SerializeField] private TriggerEvent OnGridSelect;
+        [SerializeField] private TriggerEvent OnLineCreate;
+        [SerializeField] private TriggerEvent OnLineEdit;
+        [SerializeField] private TriggerEvent OnPolygonCreate;
+        [SerializeField] private TriggerEvent OnPolygonEdit;
 
         private ShapeType currentShapeType = ShapeType.Undefined;
         private Plane worldPlane = new(Vector3.up, Vector3.zero);
@@ -64,6 +68,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnGridCreate.AddListenerStarted(SetGridInputModeToCreate);
             OnGridEdit.AddListenerStarted(SetGridInputModeToEdit);
             OnGridSelect.AddListenerStarted(SetGridInputModeToSelected);
+            OnLineCreate.AddListenerStarted(SetLineInputToCreate);
+            OnLineEdit.AddListenerStarted(SetLineInputToEdit);
+            OnPolygonCreate.AddListenerStarted(SetPolygonToCreate);
+            OnPolygonEdit.AddListenerStarted(SetPolygonToEdit);
             
             inputService = ServiceLocator.GetService<InputService>();
             inputService.PolygonTapAction.performed += TapAction_performed;
@@ -86,6 +94,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnGridCreate.RemoveListenerStarted(SetGridInputModeToCreate);
             OnGridEdit.RemoveListenerStarted(SetGridInputModeToEdit);
             OnGridSelect.RemoveListenerStarted(SetGridInputModeToSelected);
+            OnLineCreate.RemoveListenerStarted(SetLineInputToCreate);
+            OnLineEdit.RemoveListenerStarted(SetLineInputToEdit);
+            OnPolygonCreate.RemoveListenerStarted(SetPolygonToCreate);
+            OnPolygonEdit.RemoveListenerStarted(SetPolygonToEdit);
            
             inputService.PolygonTapAction.performed -= TapAction_performed;
             inputService.PolygonClickAction.performed -= ClickAction_performed;
@@ -301,8 +313,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
-            polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
             polygonInput.OnHandleCreated.AddListener(RegisterBlockingCameraForHandle);
+            OnPolygonEdit.InvokeStarted();
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
@@ -321,8 +333,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
-            lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
             lineInput.OnHandleCreated.AddListener(RegisterBlockingCameraForHandle);
+            OnLineEdit.InvokeStarted();
         }
         
         private void RegisterBlockingCameraForHandle(PolygonDragHandle handle)
@@ -361,20 +373,32 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnGridEdit.InvokeStarted();
         }
 
-        public void SetPolygonInputModeToCreate(bool isCreateMode)
+        public void SetPolygonToCreate()
         {
             polygonSelectionService.ActiveLayer?.DeselectLayer();
-
             EnablePolygonInputByType(ShapeType.Polygon);
-            polygonInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
+            polygonInput.SetDrawMode(PolygonInput.DrawMode.Create);
+        }
+        
+        public void SetPolygonToEdit()
+        {
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
+            EnablePolygonInputByType(ShapeType.Polygon);
+            polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
         }
 
-        public void SetLineInputModeToCreate(bool isCreateMode)
+        public void SetLineInputToCreate()
         {
             polygonSelectionService.ActiveLayer?.DeselectLayer();
-
             EnablePolygonInputByType(ShapeType.Line);
-            lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
+            lineInput.SetDrawMode(PolygonInput.DrawMode.Create);
+        }
+
+        public void SetLineInputToEdit()
+        {
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
+            EnablePolygonInputByType(ShapeType.Line);
+            lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
         }
 
         public void SetGridInputModeToCreate()
