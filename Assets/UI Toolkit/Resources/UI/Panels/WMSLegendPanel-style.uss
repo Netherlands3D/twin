@@ -8,5 +8,9 @@
 }
 
 .wms-legend-panel__image{
-    width: 100%;
+    
+}
+
+.wms-legend-panel__content .unity-scroll-view__content-container{
+    align-items: flex-start;
 }
