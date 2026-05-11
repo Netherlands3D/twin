@@ -129,7 +129,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            ServiceLocator.GetService<WMSLegendBehaviour>().RegisterUrl(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
+            ServiceLocator.GetService<WMSLegendBehaviour>().RegisterLayer(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
         }
 
         protected override void UnregisterEventListeners()
@@ -138,7 +138,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            ServiceLocator.GetService<WMSLegendBehaviour>().UnregisterUrl(urlPropertyData.Url.ToString());
+            ServiceLocator.GetService<WMSLegendBehaviour>().UnregisterLayer(urlPropertyData.Url.ToString());
         }
 
         public override void OnSelect(LayerData layer)
@@ -162,7 +162,7 @@ namespace Netherlands3D.Functionalities.Wms
             //we need to parse the layertype from the getmap request url
             var wmsUrl = urlPropertyData.Url.ToString();
             if(OgcWebServicesUtility.GetLayerNameFromURL(wmsUrl, out var layerName))
-                ServiceLocator.GetService<WMSLegendBehaviour>().ToggleLayer(layerName, isActive);
+                ServiceLocator.GetService<WMSLegendBehaviour>().SetLayerActive(layerName, isActive);
             
             if (wmsProjectionLayer.isEnabled == isActive) return;
 

@@ -66,12 +66,25 @@ namespace Netherlands3D.Functionalities.Wms
             LayerNameLegendUrlDictionary[layerName].SetTexture(texture);
         }
 
-        public void RegisterActiveLayer(string layerName, bool active)
+        public void SetLayerActive(string layerName, bool active)
+        {
+            if (LayerNameLegendUrlDictionary.TryGetValue(layerName, out var entry))
+                entry.SetActive(active);
+            else
+                Debug.LogWarning($"[LegendUrlContainer] SetLayerActive: layer '{layerName}' not found.");
+        }
+
+        public void RegisterLayer(string layerName, bool isActive)
         {
             if(LayerNameLegendUrlDictionary.ContainsKey(layerName))
-                LayerNameLegendUrlDictionary[layerName].SetActive(active);
+                LayerNameLegendUrlDictionary[layerName].SetActive(isActive);
             else
-               LayerNameLegendUrlDictionary.Add(layerName, new LegendEntry(layerName, null, active));
+               LayerNameLegendUrlDictionary.Add(layerName, new LegendEntry(layerName, null, isActive));
+        }
+        
+        public void UnregisterLayer(string layerName)
+        {
+            LayerNameLegendUrlDictionary.Remove(layerName);
         }
         
         public void PopulateUrls(Dictionary<string, string> legendDictionary)

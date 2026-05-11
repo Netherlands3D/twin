@@ -33,17 +33,18 @@ namespace Netherlands3D.UI.Panels
         public void SetContainer(LegendUrlContainer container)
         {
             ClearGraphics();
-            
-            foreach (var entry in container?.LayerNameLegendUrlDictionary.Values)
+
+            if (activeLegendUrlContainer != null)
             {
-                entry.LayerActiveChanged.RemoveListener(SetImageActive);
+                foreach (var entry in activeLegendUrlContainer.LayerNameLegendUrlDictionary.Values)
+                    entry.LayerActiveChanged.RemoveListener(SetImageActive);
             }
-            
+
             activeLegendUrlContainer = container;
-            
+
             bool isEmpty = container.LayerNameLegendUrlDictionary.Count == 0;
             ShowEmptyText(isEmpty);
-            
+
             foreach (var entry in container.LayerNameLegendUrlDictionary.Values)
             {
                 AddImageComponent(entry.LayerName, entry.Texture, entry.Active);
