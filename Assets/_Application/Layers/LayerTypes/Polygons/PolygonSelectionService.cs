@@ -41,10 +41,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
             
-            //todo this doesnt work properly now because the layerpanel is not opened when opening library to create a polygon
-            //but it still should work openening the layerpanel.
-            layerTool?.onOpen.AddListener(EnablePolygonSelection);
-            layerTool?.onClose.AddListener(DisablePolygonSelection);
+            //todo leaving this commented code because the inspectorpanelbehaviour will now be responsible for enabling/disabling the polygon selection/visibility
+            //double check if this is correct when ui toolkit is fully implemented specifically the layerpanel
+            // layerTool?.onOpen.AddListener(EnablePolygonSelection);
+            // layerTool?.onClose.AddListener(DisablePolygonSelection);
         }
 
         private void OnDisable()
@@ -62,6 +62,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             polygonSelectionEnabled = false;
             OnPolygonSelectionEnabled.Invoke(false);
+
+            //clear any selected polygon when selectio is disabled
+            polygonCreationService.ClearInputs();
+
+            activeLayer = null;
+            ReselectLayerPolygon(null);
+            OnDeselectActivePolygon.Invoke();
         }
 
         public void RegisterPolygon(LayerData layer)
@@ -116,7 +123,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             foreach (var layer in layers)
             {               
                 bool wasSelected = PolygonWasSelected(layer, frustumPlanes, worldPoint);
-                if (wasSelected)
+                if (wasSelected && polygonSelectionEnabled)
                 {
                     layer.SelectLayer(true);
                     return; //select only one
