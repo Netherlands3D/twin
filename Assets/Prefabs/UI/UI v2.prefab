@@ -40,6 +40,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3547941427893458787}
+  - {fileID: 1319537119612692894}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -105,6 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
+  locationSearchBehaviour: {fileID: 898252592541998064}
   AssetLibrary: {fileID: 11400000, guid: 07a8740b7ad8fae49a77dbf2dc1abacc, type: 2}
   AssetImport: {fileID: 11400000, guid: 8d401b0a5d410b24192a18882956371f, type: 2}
   Layer: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
@@ -115,7 +117,6 @@ MonoBehaviour:
   SaveProject: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
   SettingsTool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
   HelpTool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
-  Search: {fileID: 0}
   SettingsWindow: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
   HelpUrl: https://netherlands3d.eu/
 --- !u!114 &873264101414426239
@@ -317,3 +318,90 @@ MonoBehaviour:
   saveProjectTool: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
   settingsTool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
   helpTool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
+--- !u!1 &6344507626500150337
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1319537119612692894}
+  - component: {fileID: 6593711217680136199}
+  - component: {fileID: 898252592541998064}
+  m_Layer: 5
+  m_Name: SearchInspectorPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1319537119612692894
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344507626500150337}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6593711217680136199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344507626500150337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d999095a8b46476b9de493bb50d17afc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.address-search.Runtime::Netherlands3D.AddressSearch.AddressSearchService
+  bagWfsEndpoint: https://service.pdok.nl/lv/bag/wfs/v2_0
+  locationSuggestionEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest
+  locationLookupEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/lookup
+  searchWithinCity: 
+  typeFilter: 
+  rows: 5
+  charactersNeededBeforeSearch: 2
+  moveCamera: 1
+  easeCamera: 0
+  mainCamera: {fileID: 0}
+  targetCameraRotation: {x: 0.38268346, y: 0, z: 0, w: 0.9238795}
+  cameraMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  onCoordinateFound:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelectedBuildings:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &898252592541998064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344507626500150337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf8936b39ddd43d7bf59ff93f16d9898, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.AddressSearchBehaviour
+  service: {fileID: 6593711217680136199}
+  onCoordinateFound:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelectedBuildings:
+    m_PersistentCalls:
+      m_Calls: []
