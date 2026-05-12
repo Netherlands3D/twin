@@ -22,33 +22,21 @@ namespace Netherlands3D.UI.Behaviours
         private UIDocument appDocument;
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
     
-        private VisualElement root;
-        private VisualElement Root => root ??= appDocument?.rootVisualElement;
-
-        private InspectorPanel inspectorPanel;
-        private InspectorPanel InspectorPanel => inspectorPanel ??= Root?.Q<InspectorPanel>();
-
-        private AssetLibraryPanel assetLibraryPanel;
-        private AssetLibraryPanel AssetLibraryPanel => assetLibraryPanel ??= panels.OfType<AssetLibraryPanel>().FirstOrDefault();
-        
-        private ImportAssetPanel importAssetPanel;
-        private ImportAssetPanel ImportAssetPanel => importAssetPanel ??= panels.OfType<ImportAssetPanel>().FirstOrDefault();
-        
-        private InspectorPolygonGridPanel polygonGridPanel;
-        private InspectorPolygonGridPanel PolygonGridPanel => polygonGridPanel ??= panels.OfType<InspectorPolygonGridPanel>().FirstOrDefault();
+        private VisualElement root => appDocument?.rootVisualElement;
+        private InspectorPanel inspectorPanel => root?.Q<InspectorPanel>();
+        private AssetLibraryPanel assetLibraryPanel => panels.OfType<AssetLibraryPanel>().FirstOrDefault();
+        private ImportAssetPanel importAssetPanel => panels.OfType<ImportAssetPanel>().FirstOrDefault();
+        private InspectorPolygonGridPanel polygonGridPanel => panels.OfType<InspectorPolygonGridPanel>().FirstOrDefault();
+        private InspectorDownloadGridPanel downloadGridPanel => panels.OfType<InspectorDownloadGridPanel>().FirstOrDefault();
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
-        
-        private ToolbarMain toolbarMain;
-        private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
+        private ToolbarMain toolbarMain => root?.Q<ToolbarMain>();
         
         private ICredentialHandler credentialHandler;
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
         [SerializeField] private TriggerEvent OnGridConfirmed;
-     
-      
 
         private void Awake()
         {
@@ -58,54 +46,54 @@ namespace Netherlands3D.UI.Behaviours
             RegisterPanel<ImportAssetPanel>();
             RegisterPanel<InspectorPolygonGridPanel>();
             
-            InspectorPanel.Close();
+            inspectorPanel.Close();
             
-            ImportAssetPanel.SetCredentialHandler(credentialHandler);
+            importAssetPanel.SetCredentialHandler(credentialHandler);
         }
 
         private void OnEnable()
         {
-            InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
-            InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
-            InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
-            ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
-            ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
+            inspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
+            inspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
+            inspectorPanel.InspectorHeaderCloseButton.clicked += Close;
+            importAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
+            importAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
-            ToolbarMain.AddButton.clicked += ToggleImportAssetPanel;
+            toolbarMain.AddButton.clicked += ToggleImportAssetPanel;
             
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
             
-            PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
+            polygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
             //TODO ongridconfirmed -> open layerpanel and close the gridpanel (if its not automatically happening)
 
         }
 
         private void OnDisable()
         {
-            InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
-            InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
-            InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
-            ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
-            ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
+            inspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
+            inspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
+            inspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
+            importAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
+            importAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
             
-            ToolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
+            toolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
             
             OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
             
-            PolygonGridPanel.OnConfirmSelection.RemoveListener(OnGridConfirmed.InvokeStarted);
+            polygonGridPanel.OnConfirmSelection.RemoveListener(OnGridConfirmed.InvokeStarted);
         }
 
         public void Open()
         {
-            InspectorPanel.Open();
+            inspectorPanel.Open();
         }
 
         public void Close()
         {
-            ToolbarMain.ClearWithoutNotify();
-            InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
+            toolbarMain.ClearWithoutNotify();
+            inspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             HidePanel();
-            InspectorPanel.Close();
+            inspectorPanel.Close();
         }
 
         // TODO: Shouldn't this be in the InspectorPanel component?
@@ -113,10 +101,8 @@ namespace Netherlands3D.UI.Behaviours
         {
             var panel = (T)Activator.CreateInstance(typeof(T), args);
             panels.Add(panel);
-
-            InspectorPanel.Content.Add(panel);
+            inspectorPanel.Content.Add(panel);
             panel.Hide();
-
             return panel;
         }
 
@@ -126,8 +112,8 @@ namespace Netherlands3D.UI.Behaviours
             HidePanel();
             Open();
             activePanel = GetPanel<T>();
-            InspectorPanel.HeaderText = activePanel.Title;
-            InspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
+            inspectorPanel.HeaderText = activePanel.Title;
+            inspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
             activePanel.Show();
         }
 
@@ -158,12 +144,12 @@ namespace Netherlands3D.UI.Behaviours
             {
                 HidePanel();
                 //do not use Close here to avoid the toggle notification
-                InspectorPanel.Close(); 
+                inspectorPanel.Close(); 
             }
             else
             {   
                 Open();
-                InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
+                inspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
                 ShowPanel<ImportAssetPanel>();
             }
         }
@@ -182,7 +168,7 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnImportSucceeded()
         {
-            InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(false);
+            inspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(false);
             Close();
         }
     }
