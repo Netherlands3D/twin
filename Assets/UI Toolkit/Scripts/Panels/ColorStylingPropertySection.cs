@@ -66,8 +66,7 @@ namespace Netherlands3D.UI.Panels
             item.RegisterCallback<ClickEvent>(evt =>
             {
                 stylingPropertyData.ColorType = item.Tile.LabelText;
-                var defaultSymbolizerColor = stylingPropertyData.GetDefaultSymbolizerColor();
-                var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
+                var color = GetColorFromPropertyData();
                 ColorPicker.SetColorInputComponentsWithoutNotify(color);
             });
             return item;
@@ -112,9 +111,9 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateColorFromProperty()
         {
-            Color? colorValue = stylingPropertyData.GetDefaultSymbolizerColor();
-            var color = colorValue.HasValue ? colorValue.Value : defaultColor;
+            var color = GetColorFromPropertyData();
             ColorPicker.SetColorInputComponentsWithoutNotify(color);
+
             foreach (var index in swatchesListView.selectedIndices)
             {
                 var element = swatchesListView.GetRootElementForIndex(index) as ColorTileListViewItem;
@@ -123,6 +122,13 @@ namespace Netherlands3D.UI.Panels
                     element.Tile.Color = color;
                 }
             }
+        }
+
+        private Color GetColorFromPropertyData()
+        {
+            Color? defaultSymbolizerColor = stylingPropertyData.GetDefaultSymbolizerColor();
+            var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
+            return color;
         }
 
         private void OnColorPicked(Color color)
