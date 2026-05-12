@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
 using UnityEngine;
 
