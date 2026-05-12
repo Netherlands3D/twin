@@ -299,6 +299,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.ClearPolygon(true);
             polygonInput.ClearPolygon(true);
             gridInput.SetSelectionVisualEnabled(false);
+            currentShapeType =  ShapeType.Undefined;
         }
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
