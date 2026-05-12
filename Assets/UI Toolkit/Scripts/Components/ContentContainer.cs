@@ -134,22 +134,7 @@ namespace Netherlands3D.UI.Components
             }
         }
         
-        private bool showCheckmark = true;
-
-        [UxmlAttribute("show-checkmark")]
-        public bool ShowCheckmark
-        {
-            get => showCheckmark;
-            set
-            {
-                showCheckmark = value;
-                UpdateIcons();
-                ReorderHeaderChildren();
-            }
-        }
-        
         private bool showCloseButton = false;
-
         [UxmlAttribute("show-close-button")]
         public bool ShowCloseButton
         {
@@ -320,9 +305,8 @@ namespace Netherlands3D.UI.Components
             
             if(dropDown != null)
                 dropDown.EnableInClassList(UtilityClassConstants.HIDDEN, !showDropDown);
-            
-            if(Checkmark != null)
-                Checkmark.EnableInClassList(UtilityClassConstants.HIDDEN, !showCheckmark);
+
+            ApplyContainerType();
             
             if(closeButton != null)
                 closeButton.EnableInClassList(UtilityClassConstants.HIDDEN, !showCloseButton);
