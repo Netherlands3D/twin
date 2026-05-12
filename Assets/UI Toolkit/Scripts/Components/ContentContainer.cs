@@ -134,7 +134,7 @@ namespace Netherlands3D.UI.Components
             }
         }
         
-        private bool showCheckmark = false;
+        private bool showCheckmark = true;
 
         [UxmlAttribute("show-checkmark")]
         public bool ShowCheckmark
