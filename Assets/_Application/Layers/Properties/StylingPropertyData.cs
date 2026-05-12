@@ -13,6 +13,12 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class StylingPropertyData : LayerPropertyData
     {
         public const string NameOfDefaultStyle = "default";
+        
+        public static readonly Dictionary<string, string> DisplayPropertyNames = new()
+        {
+            { Symbolizer.FillColorProperty, "Vulkleur" },
+            { Symbolizer.StrokeColorProperty,  "Lijnkleur" }
+        };
 
         [DataMember] private string styleName = NameOfDefaultStyle;
         

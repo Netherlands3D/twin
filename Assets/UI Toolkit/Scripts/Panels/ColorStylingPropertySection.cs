@@ -77,7 +77,7 @@ namespace Netherlands3D.UI.Panels
             if (item is not ColorTileListViewItem listViewItem) return;
 
             string propertyName = swatchesListView.itemsSource[index] as string;
-            listViewItem.Tile.LabelText = Symbolizer.DisplayPropertyNames[propertyName];
+            listViewItem.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
             var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
             listViewItem.Tile.Color = color;
