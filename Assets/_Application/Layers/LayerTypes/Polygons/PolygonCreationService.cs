@@ -59,10 +59,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             polygonInput.createdNewPolygonArea.AddListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.AddListener(UpdateLayer);
-
             lineInput.createdNewPolygonArea.AddListener(CreateLineLayer);
             lineInput.editedPolygonArea.AddListener(UpdateLayer);
-
             gridInput.whenAreaIsSelected.AddListener(CreateOrEditGridLayer);
             
             OnGridCreate.AddListenerStarted(SetGridInputModeToCreate);
@@ -72,23 +70,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnLineEdit.AddListenerStarted(SetLineInputToEdit);
             OnPolygonCreate.AddListenerStarted(SetPolygonToCreate);
             OnPolygonEdit.AddListenerStarted(SetPolygonToEdit);
-            
-            inputService = ServiceLocator.GetService<InputService>();
-            inputService.PolygonTapAction.performed += TapAction_performed;
-            inputService.PolygonClickAction.performed += ClickAction_performed;
-            inputService.PolygonClickAction.canceled += ClickAction_canceled;
-            inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
-            inputService.PolygonFinishAction.performed += FinishAction_performed;
         }
 
         private void OnDisable()
         {
             polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.RemoveListener(UpdateLayer);
-
             lineInput.createdNewPolygonArea.RemoveListener(CreateLineLayer);
             lineInput.editedPolygonArea.RemoveListener(UpdateLayer);
-
             gridInput.whenAreaIsSelected.RemoveListener(CreateOrEditGridLayer);
             
             OnGridCreate.RemoveListenerStarted(SetGridInputModeToCreate);
@@ -98,20 +87,29 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnLineEdit.RemoveListenerStarted(SetLineInputToEdit);
             OnPolygonCreate.RemoveListenerStarted(SetPolygonToCreate);
             OnPolygonEdit.RemoveListenerStarted(SetPolygonToEdit);
-           
-            inputService.PolygonTapAction.performed -= TapAction_performed;
-            inputService.PolygonClickAction.performed -= ClickAction_performed;
-            inputService.PolygonClickAction.canceled -= ClickAction_canceled;
-            inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
-            inputService.PolygonFinishAction.performed -= FinishAction_performed;
-            
         }
 
         private void Start()
         {
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            //we have to listen to inputservice after it is initialized
+            inputService = ServiceLocator.GetService<InputService>();
+            inputService.PolygonTapAction.performed += TapAction_performed;
+            inputService.PolygonClickAction.performed += ClickAction_performed;
+            inputService.PolygonClickAction.canceled += ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed += FinishAction_performed;
         }
-        
+
+        private void OnDestroy()
+        {
+            inputService.PolygonTapAction.performed -= TapAction_performed;
+            inputService.PolygonClickAction.performed -= ClickAction_performed;
+            inputService.PolygonClickAction.canceled -= ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed -= FinishAction_performed;
+        }
+
         private void TapAction_performed(InputAction.CallbackContext obj)
         {
             PolygonInput input = GetInputFromShapeType(currentShapeType);
