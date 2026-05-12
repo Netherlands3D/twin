@@ -1,1 +1,5 @@
 @import url("IconButton-style.uss");
+
+.iconbutton.close-button{
+    margin: 0;
+}

@@ -6,7 +6,7 @@
     editor-extension-mode="False" 
     class="secondary-properties-panel"
 >
-    <nl3d:ContentContainer leading-icon="Paint" text="Kleur aanpassen" show-close-button="true" show-checkmark="false">
+    <nl3d:ContentContainer leading-icon="Paint" text="Kleur aanpassen" show-close-button="true" container-type="NoFoldout">
         <nl3d:ColorPicker name="PropertiesColorPicker" class="properties-section-column"/>
     </nl3d:ContentContainer>
 </ui:UXML>

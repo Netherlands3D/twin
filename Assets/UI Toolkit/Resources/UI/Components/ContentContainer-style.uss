@@ -45,10 +45,6 @@
     background-image: var(--icon-chevrondown);
 }
 
-.contentcontainer .hide-checkmark { 
-    display: none; 
-}
-
 .contentcontainer .unity-toggle__input > .unity-label {
     flex-grow: 1;
     margin: 0;

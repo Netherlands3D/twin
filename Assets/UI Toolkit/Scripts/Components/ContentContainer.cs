@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
@@ -38,7 +39,6 @@ namespace Netherlands3D.UI.Components
         }
 
         private ContainerType containerType = ContainerType.Foldout;
-        private const string HideCheckmarkClass = "hide-checkmark";
 
         public enum ContainerStyle
         {
@@ -134,22 +134,7 @@ namespace Netherlands3D.UI.Components
             }
         }
         
-        private bool showCheckmark = false;
-
-        [UxmlAttribute("show-checkmark")]
-        public bool ShowCheckmark
-        {
-            get => showCheckmark;
-            set
-            {
-                showCheckmark = value;
-                UpdateIcons();
-                ReorderHeaderChildren();
-            }
-        }
-        
         private bool showCloseButton = false;
-
         [UxmlAttribute("show-close-button")]
         public bool ShowCloseButton
         {
@@ -279,7 +264,7 @@ namespace Netherlands3D.UI.Components
             // Mouse-interaction off when NoFoldout
             var check = Checkmark;
             if (check != null)
-                check.EnableInClassList(HideCheckmarkClass, containerType == ContainerType.NoFoldout);
+                check.EnableInClassList(UtilityClassConstants.HIDDEN, containerType == ContainerType.NoFoldout);
         }
 
         /// <summary>
@@ -313,19 +298,18 @@ namespace Netherlands3D.UI.Components
         {
             bool showLeading = (containerStyle == ContainerStyle.WithIcon);
             if (leadingIcon != null)
-                leadingIcon.style.display = showLeading ? DisplayStyle.Flex : DisplayStyle.None;
+                leadingIcon.EnableInClassList(UtilityClassConstants.HIDDEN, !showLeading);
 
             if (helpButton != null)
-                helpButton.style.display = showHelpIcon ? DisplayStyle.Flex : DisplayStyle.None;
+                helpButton.EnableInClassList(UtilityClassConstants.HIDDEN, !showHelpIcon);
             
             if(dropDown != null)
-                dropDown.style.display = showDropDown ? DisplayStyle.Flex : DisplayStyle.None;
-            
-            if(Checkmark != null)
-                Checkmark.style.display = showCheckmark ? DisplayStyle.Flex : DisplayStyle.None;
+                dropDown.EnableInClassList(UtilityClassConstants.HIDDEN, !showDropDown);
+
+            ApplyContainerType();
             
             if(closeButton != null)
-                closeButton.style.display = showCloseButton ? DisplayStyle.Flex : DisplayStyle.None;
+                closeButton.EnableInClassList(UtilityClassConstants.HIDDEN, !showCloseButton);
         }
     }
 }

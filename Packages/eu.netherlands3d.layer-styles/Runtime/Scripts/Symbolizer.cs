@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -15,12 +14,6 @@ namespace Netherlands3D.LayerStyles
         public const string StrokeColorProperty = "stroke-color";
         public const string VisibilityProperty = "visibility";
         public const string MaskLayerMaskProperty = "mask-layer-mask";
-
-        public static readonly Dictionary<string, string> DisplayPropertyNames = new()
-        {
-            { FillColorProperty, "Vulkleur" },
-            { StrokeColorProperty,  "Lijnkleur" }
-        };
         
         //Constants for property values
         private const string VisibilityVisible = "visible";
@@ -39,7 +32,6 @@ namespace Netherlands3D.LayerStyles
         /// As such: we simply use `dictionary with string,string` and use getters and setters to transform properties.
         /// </summary>
         [DataMember(Name = "properties")] private Dictionary<string, string> properties = new();
-
         #region Styles
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
@@ -49,7 +41,17 @@ namespace Netherlands3D.LayerStyles
         public Color? GetFillColor() => GetAndNormalizeColor(FillColorProperty);
 
         public void ClearFillColor() => ClearProperty(FillColorProperty);
-
+        
+        public List<string> GetUsedColorProperties()
+        {
+            List<string> usedColorProperties = new List<string>(2);
+            if(GetProperty(FillColorProperty) != null)
+                usedColorProperties.Add(FillColorProperty);
+            if(GetProperty(StrokeColorProperty) != null)
+                usedColorProperties.Add(StrokeColorProperty);
+            return usedColorProperties;
+        }
+        
         public Color? GetColor(string property)
         {
             switch (property)
