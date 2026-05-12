@@ -24,10 +24,10 @@ namespace Netherlands3D.UI.Behaviours
     
         private VisualElement root => appDocument?.rootVisualElement;
         private InspectorPanel inspectorPanel => root?.Q<InspectorPanel>();
-        private AssetLibraryPanel assetLibraryPanel => panels.OfType<AssetLibraryPanel>().FirstOrDefault();
-        private ImportAssetPanel importAssetPanel => panels.OfType<ImportAssetPanel>().FirstOrDefault();
-        private InspectorPolygonGridPanel polygonGridPanel => panels.OfType<InspectorPolygonGridPanel>().FirstOrDefault();
-        private InspectorDownloadGridPanel downloadGridPanel => panels.OfType<InspectorDownloadGridPanel>().FirstOrDefault();
+        private AssetLibraryPanel assetLibraryPanel;
+        private ImportAssetPanel importAssetPanel;
+        private InspectorPolygonGridPanel polygonGridPanel;
+        private InspectorDownloadGridPanel downloadGridPanel;
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
@@ -37,35 +37,39 @@ namespace Netherlands3D.UI.Behaviours
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
         [SerializeField] private TriggerEvent OnGridConfirmed;
+        
+        private Action AddButtonClickedCallback;
 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
             credentialHandler = GetComponent<ICredentialHandler>();
-            RegisterPanel<AssetLibraryPanel>(assetLibrary);
-            RegisterPanel<ImportAssetPanel>();
-            RegisterPanel<InspectorPolygonGridPanel>();
-            
-            inspectorPanel.Close();
-            
+            assetLibraryPanel = RegisterPanel<AssetLibraryPanel>(assetLibrary);
+            importAssetPanel = RegisterPanel<ImportAssetPanel>();
             importAssetPanel.SetCredentialHandler(credentialHandler);
+            polygonGridPanel = RegisterPanel<InspectorPolygonGridPanel>();
+            downloadGridPanel = RegisterPanel<InspectorDownloadGridPanel>();
+            inspectorPanel.Close();
         }
 
         private void OnEnable()
         {
             inspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             inspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
+            
             inspectorPanel.InspectorHeaderCloseButton.clicked += Close;
             importAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
             importAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
-            toolbarMain.AddButton.clicked += ToggleImportAssetPanel;
+            toolbarMain.AddButton.clicked += TogglePanel<ImportAssetPanel>;
+            AddButtonClickedCallback = () => inspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(activePanel == importAssetPanel);
+            toolbarMain.AddButton.clicked += AddButtonClickedCallback;
+            toolbarMain.DownloadButton.clicked += TogglePanel<InspectorDownloadGridPanel>;
             
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
             
             polygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
             //TODO ongridconfirmed -> open layerpanel and close the gridpanel (if its not automatically happening)
-
         }
 
         private void OnDisable()
@@ -75,8 +79,10 @@ namespace Netherlands3D.UI.Behaviours
             inspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             importAssetPanel.OpenAssetLibrary -= OpenAssetLibrary;
             importAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
-            
-            toolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
+
+            toolbarMain.AddButton.clicked -= TogglePanel<ImportAssetPanel>;
+            toolbarMain.AddButton.clicked -= AddButtonClickedCallback;
+            toolbarMain.DownloadButton.clicked -= TogglePanel<InspectorDownloadGridPanel>;
             
             OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
             
@@ -97,7 +103,7 @@ namespace Netherlands3D.UI.Behaviours
         }
 
         // TODO: Shouldn't this be in the InspectorPanel component?
-        public BaseInspectorContentPanel RegisterPanel<T>(params object[] args) where T : BaseInspectorContentPanel
+        public T RegisterPanel<T>(params object[] args) where T : BaseInspectorContentPanel
         {
             var panel = (T)Activator.CreateInstance(typeof(T), args);
             panels.Add(panel);
@@ -138,7 +144,7 @@ namespace Netherlands3D.UI.Behaviours
             ShowPanel<InspectorPolygonGridPanel>();
         }
 
-        public void ToggleImportAssetPanel()
+        public void TogglePanel<T>() where T : BaseInspectorContentPanel
         {
             if (inspectorPanel.IsOpen())
             {
@@ -149,8 +155,7 @@ namespace Netherlands3D.UI.Behaviours
             else
             {   
                 Open();
-                inspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
-                ShowPanel<ImportAssetPanel>();
+                ShowPanel<T>();
             }
         }
 

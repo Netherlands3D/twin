@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Components
         public Button AddButton => this.Q<Button>("Add");
         public Button SearchButton => this.Q<Button>("Search");
         public Button SunPositionButton => this.Q<Button>("SunPosition");
-        public Button DownloadTileButton => this.Q<Button>("DownloadTile");
+        public Button DownloadButton => this.Q<Button>("DownloadTile");
 
         private VisualElement divider;
         public VisualElement Divider => divider ??= this.Q<VisualElement>("Divider");
