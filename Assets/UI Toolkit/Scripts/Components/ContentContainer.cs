@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
@@ -28,7 +29,9 @@ namespace Netherlands3D.UI.Components
         private Icon leadingIcon => this.Q<Icon>("LeadingIcon");
         private HelpButton helpButton => this.Q<HelpButton>("HelpButton");
         private DropDown dropDown => this.Q<DropDown>("DropDown");
-
+        private CloseButton closeButton => this.Q<CloseButton>("CloseButton");
+        public UnityEvent CloseButtonClicked = new UnityEvent();
+        
         public enum ContainerType
         {
             Foldout,
@@ -36,7 +39,6 @@ namespace Netherlands3D.UI.Components
         }
 
         private ContainerType containerType = ContainerType.Foldout;
-        private const string HideCheckmarkClass = "hide-checkmark";
 
         public enum ContainerStyle
         {
@@ -132,6 +134,19 @@ namespace Netherlands3D.UI.Components
             }
         }
         
+        private bool showCloseButton = false;
+        [UxmlAttribute("show-close-button")]
+        public bool ShowCloseButton
+        {
+            get => showCloseButton;
+            set
+            {
+                showCloseButton = value;
+                UpdateIcons();
+                ReorderHeaderChildren();
+            }
+        }
+        
         public int DropDownValue => dropDown.choices.IndexOf(dropDown.value);
 
         public void SetDropdownValues(List<IconImage> values)
@@ -200,6 +215,8 @@ namespace Netherlands3D.UI.Components
                 if (!string.IsNullOrEmpty(helpUrl) && helpButton != null)
                     helpButton.HelpUrl = helpUrl;
             });
+            
+            closeButton.RegisterCallback<ClickEvent>(evt => CloseButtonClicked.Invoke());
         }
 
         /// <summary>
@@ -218,13 +235,15 @@ namespace Netherlands3D.UI.Components
             if (helpButton != null && helpButton.parent != input) input.Add(helpButton);
             if(dropDown != null && dropDown.parent != input) input.Add(dropDown);
             if (check.parent != input) input.Add(check);
+            if(closeButton != null && closeButton.parent != input) input.Add(closeButton);
 
             int i = 0;
             if (leadingIcon != null) input.Insert(i++, leadingIcon);
             if (label != null) input.Insert(i++, label);
             if (helpButton != null) input.Insert(i++, helpButton);
             if(dropDown != null) input.Insert(i++, dropDown);
-            input.Insert(i, check);
+            input.Insert(i++, check);
+            if (closeButton != null) input.Insert(i++, closeButton);
         }
 
         /// <summary>
@@ -245,7 +264,7 @@ namespace Netherlands3D.UI.Components
             // Mouse-interaction off when NoFoldout
             var check = Checkmark;
             if (check != null)
-                check.EnableInClassList(HideCheckmarkClass, containerType == ContainerType.NoFoldout);
+                check.EnableInClassList(UtilityClassConstants.HIDDEN, containerType == ContainerType.NoFoldout);
         }
 
         /// <summary>
@@ -279,13 +298,18 @@ namespace Netherlands3D.UI.Components
         {
             bool showLeading = (containerStyle == ContainerStyle.WithIcon);
             if (leadingIcon != null)
-                leadingIcon.style.display = showLeading ? DisplayStyle.Flex : DisplayStyle.None;
+                leadingIcon.EnableInClassList(UtilityClassConstants.HIDDEN, !showLeading);
 
             if (helpButton != null)
-                helpButton.style.display = showHelpIcon ? DisplayStyle.Flex : DisplayStyle.None;
+                helpButton.EnableInClassList(UtilityClassConstants.HIDDEN, !showHelpIcon);
             
             if(dropDown != null)
-                dropDown.style.display = showDropDown ? DisplayStyle.Flex : DisplayStyle.None;
+                dropDown.EnableInClassList(UtilityClassConstants.HIDDEN, !showDropDown);
+
+            ApplyContainerType();
+            
+            if(closeButton != null)
+                closeButton.EnableInClassList(UtilityClassConstants.HIDDEN, !showCloseButton);
         }
     }
 }
