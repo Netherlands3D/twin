@@ -5,7 +5,7 @@
          editor-extension-mode="False" 
          name="WMSLegendPanel"
          class="wms-legend-panel">
-    <nl3d:ContentContainer leading-icon="Legend" text="Legenda">
+    <nl3d:ContentContainer leading-icon="Legend" text="Legenda" container-type="NoFoldout" show-close-button="true">
         <ui:Label name="EmptyText" text="Er is geen legenda beschikbaar voor deze bron" />
         <nl3d:ScrollView name="ImageListView" class="wms-legend-panel__content"/>
     </nl3d:ContentContainer>

@@ -1,8 +1,10 @@
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ScrollView = UnityEngine.UIElements.ScrollView;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -12,7 +14,6 @@ namespace Netherlands3D.UI.Panels
         private Label emptyTextLabel;
         private ScrollView imageContainer;
 
-        public string activeUrl => activeLegendUrlContainer?.GetCapabilitiesUrl;
         public LegendUrlContainer activeLegendUrlContainer;
         public bool LegendVisible => !ClassListContains(UtilityClassConstants.HIDDEN);
 
@@ -23,6 +24,8 @@ namespace Netherlands3D.UI.Panels
 
             emptyTextLabel = this.Q<Label>("EmptyText");
             imageContainer = this.Q<ScrollView>("ImageListView");
+            
+            this.Q<ContentContainer>().CloseButtonClicked.AddListener(Close);
         }
 
         public void SetVisible(bool show)
@@ -86,6 +89,11 @@ namespace Netherlands3D.UI.Panels
         private void ClearGraphics()
         {
             imageContainer.Clear();
+        }
+
+        private void Close()
+        {
+            SetVisible(false);
         }
     }
 }
