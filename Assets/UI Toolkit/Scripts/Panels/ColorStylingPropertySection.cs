@@ -63,7 +63,7 @@ namespace Netherlands3D.UI.Panels
             item.Tile.ShowLabel = true;
             item.RegisterCallback<ClickEvent>(evt =>
             {
-                stylingPropertyData.ColorType = item.name;
+                stylingPropertyData.ColorType = item.userData as string;
                 var color = GetColorFromPropertyData();
                 ColorPicker.SetColorInputComponentsWithoutNotify(color);
             });
@@ -75,7 +75,7 @@ namespace Netherlands3D.UI.Panels
             if (item is not ColorTileListViewItem listViewItem) return;
 
             string propertyName = swatchesListView.itemsSource[index] as string;
-            item.name = propertyName;
+            item.userData = propertyName;
             listViewItem.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
             var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
