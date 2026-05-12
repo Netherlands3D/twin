@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
@@ -19,7 +18,6 @@ namespace Netherlands3D.UI.Panels
         private Color defaultColor = Color.white;
         private ColorPropertyData stylingPropertyData;
         private ListView swatchesListView;
-        private List<string> colorOptions = new List<string>() { Symbolizer.FillColorProperty, Symbolizer.StrokeColorProperty };
 
         public ColorPicker ColorPicker { get; set; }
 
@@ -65,7 +63,7 @@ namespace Netherlands3D.UI.Panels
             item.Tile.ShowLabel = true;
             item.RegisterCallback<ClickEvent>(evt =>
             {
-                stylingPropertyData.ColorType = item.Tile.LabelText;
+                stylingPropertyData.ColorType = item.name;
                 var color = GetColorFromPropertyData();
                 ColorPicker.SetColorInputComponentsWithoutNotify(color);
             });
@@ -77,6 +75,7 @@ namespace Netherlands3D.UI.Panels
             if (item is not ColorTileListViewItem listViewItem) return;
 
             string propertyName = swatchesListView.itemsSource[index] as string;
+            item.name = propertyName;
             listViewItem.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
             var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
@@ -104,10 +103,9 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateSwatches()
         {
-            swatchesListView.itemsSource = colorOptions;
+            swatchesListView.itemsSource = stylingPropertyData.GetUsedColorTypes();
             swatchesListView.RefreshItems();
         }
-
 
         private void UpdateColorFromProperty()
         {

@@ -1,10 +1,7 @@
-using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -70,6 +67,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         public string GetStylingRuleName(string stylingRuleKey)
         {
             return StylingRules[stylingRuleKey].Name;
+        }
+        
+        public virtual List<string> GetUsedColorTypes()
+        {
+            return null; //todo: CartesianTyleLayerFeaturePropertyData should maybe become a subclass of ColorPropertyData so this function does not exist here but in ColorPropertyData
         }
     }
 }

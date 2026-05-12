@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
@@ -21,7 +20,6 @@ namespace Netherlands3D.UI.Panels
         private CartesianTileLayerFeatureColorPropertyData stylingPropertyData;
         private ListView swatchesListView;
         private ListView SwatchesListView => swatchesListView ??= this.Q<ListView>();
-        private List<string> colors = new();
         private List<CartesianTileLayerFeatureColorPropertyData.ColorData> colorData = new();
         
         public CartesianTileLayerFeatureColorPropertySection()
@@ -107,23 +105,7 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateSwatches()
         {
-            colors.Clear();
-            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
-            {
-                if(kv.Key.Contains(CartesianTileLayerFeatureColorPropertyData.ColoringIdentifier))
-                {
-                    int index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(kv.Key);                    
-                    Color? color = stylingPropertyData.GetColorByMaterialIndex(index);
-                    //we need to expect a value here or else the stylingrule is not properly initialized
-                    if (color.HasValue)
-                    {
-                        colors.Add(ColorUtility.ToHtmlStringRGB(color.Value));
-                    }
-                    else
-                        Debug.LogError("stylingrule not initialized because the colorvalue is missing");
-                }
-            }
-            SwatchesListView.itemsSource = colors;
+            SwatchesListView.itemsSource = stylingPropertyData.GetUsedColorTypes();
             SwatchesListView.RefreshItems();
         }
         
