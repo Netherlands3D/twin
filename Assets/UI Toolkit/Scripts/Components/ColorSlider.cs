@@ -15,10 +15,7 @@ namespace Netherlands3D.UI.Components
         }
 
         private VisualElement tracker;
-        private VisualElement Tracker => tracker ??= this.Q<VisualElement>(className: "unity-base-slider__tracker");
-
         private VisualElement dragger;
-        private VisualElement Dragger => dragger ??= this.Q<VisualElement>(className: "unity-base-slider__dragger");
 
         private VisualElement backgroundLayer;
         private VisualElement overlayLayer;
@@ -51,9 +48,11 @@ namespace Netherlands3D.UI.Components
         public ColorSlider()
         {
             this.AddComponentStylesheet("Components");
-
             AddToClassList("color-slider");
-
+            
+            dragger = this.Q<VisualElement>(className: "unity-base-slider__dragger");
+            tracker = this.Q<VisualElement>(className: "unity-base-slider__tracker");
+            
             direction = SliderDirection.Vertical;
             showInputField = false;
             fill = false;
@@ -80,7 +79,7 @@ namespace Netherlands3D.UI.Components
 
         private void BuildTrackerLayers()
         {
-            if (Tracker == null || backgroundLayer != null || overlayLayer != null)
+            if (tracker == null || backgroundLayer != null || overlayLayer != null)
                 return;
 
             backgroundLayer = new VisualElement();
@@ -89,16 +88,16 @@ namespace Netherlands3D.UI.Components
             overlayLayer = new VisualElement();
             overlayLayer.AddToClassList("color-slider__overlay");
 
-            Tracker.Add(backgroundLayer);
-            Tracker.Add(overlayLayer);
+            tracker.Add(backgroundLayer);
+            tracker.Add(overlayLayer);
         }
 
         private void BuildDraggerShadow()
         {
-            if (Dragger == null || draggerShadow != null)
+            if (dragger == null || draggerShadow != null)
                 return;
 
-            var draggerParent = Dragger.parent;
+            var draggerParent = dragger.parent;
             if (draggerParent == null)
                 return;
 
@@ -107,7 +106,7 @@ namespace Netherlands3D.UI.Components
             draggerShadow.AddToClassList("shadow-sm");
             draggerShadow.pickingMode = PickingMode.Ignore;
 
-            int draggerIndex = draggerParent.IndexOf(Dragger);
+            int draggerIndex = draggerParent.IndexOf(dragger);
             draggerParent.Insert(draggerIndex, draggerShadow);
         }
 
@@ -128,6 +127,13 @@ namespace Netherlands3D.UI.Components
             {
                 overlayLayer.style.unityBackgroundImageTintColor = parsedColor;
             }
+        }
+
+        public override void SetValueWithoutNotify(float newValue)
+        {
+            base.SetValueWithoutNotify(newValue);
+            if(draggerShadow != null && dragger != null)
+                draggerShadow.style.translate = dragger.resolvedStyle.translate;
         }
     }
 }

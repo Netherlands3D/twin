@@ -1,7 +1,10 @@
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 
-namespace Netherlands3D.UI.Components
+namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     public partial class PropertiesPanel : VisualElement
@@ -32,14 +35,9 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Panels");
         }
 
-        public void Open()
+        public void SetVisible(bool visible)
         {
-            EnableInClassList("active", true);
-        }
-
-        public void Close()
-        {
-            EnableInClassList("active", false);
+            EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
     }
 }

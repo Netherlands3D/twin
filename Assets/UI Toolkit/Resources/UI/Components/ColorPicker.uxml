@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="ColorPicker" class="color-picker">
+    <ui:VisualElement class="color-picker__row">
+        <nl3d:ColorSpectrum class="color-picker__item"/>
+        <nl3d:ColorSlider class="color-picker__item color-picker__item-last"/>
+    </ui:VisualElement>
+    <ui:VisualElement class="color-picker__row color-picker__row-last">
+        <nl3d:ColorTile class="color-picker__item"/>
+        <nl3d:TextField placeholder-text="######" max-length="7" class="color-picker__item color-picker__item-last color-picker__text-field"/>
+    </ui:VisualElement>
+</ui:UXML>
