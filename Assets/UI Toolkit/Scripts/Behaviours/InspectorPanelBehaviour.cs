@@ -76,7 +76,7 @@ namespace Netherlands3D.UI.Behaviours
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
             
             PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
-            //TODO ongridconfirmed -> open layerpanel
+            //TODO ongridconfirmed -> open layerpanel and close the gridpanel (if its not automatically happening)
 
         }
 
