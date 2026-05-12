@@ -7,7 +7,7 @@
     class="properties-panel"
 >
     <ui:VisualElement name="Header" class="properties-panel__header">
-        <nl3d:Header text="Eigenschappen" class="properties-panel__header-title"/>
+        <nl3d:Header icon="AdjustmentsHorizontal" text="Eigenschappen" class="properties-panel__header-title"/>
         <nl3d:CloseButton />
     </ui:VisualElement>
     <nl3d:ToolbarProperties />
