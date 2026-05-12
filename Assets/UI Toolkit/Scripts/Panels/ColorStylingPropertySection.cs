@@ -19,6 +19,7 @@ namespace Netherlands3D.UI.Panels
         private Color defaultColor = Color.white;
         private ColorPropertyData stylingPropertyData;
         private ListView swatchesListView;
+        private List<string> colorOptions = new List<string>() { Symbolizer.FillColorProperty, Symbolizer.StrokeColorProperty };
 
         public ColorPicker ColorPicker { get; set; }
 
@@ -104,7 +105,7 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateSwatches()
         {
-            swatchesListView.itemsSource = new List<string>() { Symbolizer.FillColorProperty, Symbolizer.StrokeColorProperty };
+            swatchesListView.itemsSource = colorOptions;
             swatchesListView.RefreshItems();
         }
 
