@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
@@ -31,6 +33,17 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
             ClearActivePanel();
+            
+            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            selectorService.OnSelectLayer.AddListener(SpawnPanel);
+            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
+        }
+
+        private void OnDestroy()
+        {
+            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            selectorService.OnSelectLayer.RemoveListener(SpawnPanel);
+            selectorService.OnNoLayerSelected.RemoveListener(ClearActivePanel);
         }
 
         public void ClearActivePanel()
