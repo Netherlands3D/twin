@@ -27,7 +27,6 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
-            secondaryPropertiesPanel.SetVisible(false);
             propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
@@ -38,6 +37,7 @@ namespace Netherlands3D.UI.Panels
         {
             propertySectionContainer.Clear();
             propertiesPanel.SetVisible(false);
+            secondaryPropertiesPanel.SetVisible(false);
         }
 
         public void SpawnPanel(LayerData layer)
