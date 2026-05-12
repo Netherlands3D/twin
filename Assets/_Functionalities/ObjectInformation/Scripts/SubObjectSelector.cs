@@ -131,7 +131,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (mapping is FeatureMapping featureMapping)
             {
-                return featureMapping.VisualisationParent;
+                return featureMapping.VisualisationLayer as LayerGameObject;
             }
 
             if (mapping is MeshMapping meshMapping)

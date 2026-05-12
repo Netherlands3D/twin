@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -5733166687025956999}
   - component: {fileID: 4062645045739546207}
   - component: {fileID: -2785417149522329819}
+  - component: {fileID: 7130922166693220745}
   m_Layer: 12
   m_Name: GeoJsonPointLayer
   m_TagString: Untagged
@@ -51,28 +52,6 @@ MonoBehaviour:
   prefabIdentifier: 267c8f33152cac142b8e40a7bdc54523
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
-  PropertySections:
-  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 1
-  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
-  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
   pointRenderer3D: {fileID: -4723935055048165154}
   selectionPointRenderer3D: {fileID: -5733166687025956999}
 --- !u!114 &-4723935055048165154
@@ -160,3 +139,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7130922166693220745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764337386758102018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d965efdbd7af0fac9bb44622e1e20db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.FeatureObject
