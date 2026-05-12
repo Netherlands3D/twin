@@ -1,0 +1,34 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="BuildingInformationPropertySection"
+    >
+    
+    <nl3d:ContentContainer leading-icon="SelectionPointer" text="Informatie gebouw">
+        <ui:VisualElement class="building-information__container">
+            <ui:VisualElement class="building-information-thumbnail__container" name="ThumbnailContainer" />
+            <ui:Label name="InformatieLabel" text="Praktische informatie:" class="building-information-bagid__label"/>  
+            <ui:VisualElement class="building-information-bagid__row">
+                <ui:Label name="BagIdLabel" text="BAG ID" class="building-information-bagid__label"/>
+                <ui:VisualElement name="LinkRow" class="building-information-bagid__link-row">
+                    <nl3d:Icon name="LinkIcon" image="Link" class="building-information-bagid__link-icon"/>
+                    <nl3d:Hyperlink name="Link"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="StatusRow" class="building-information-bagid__row">
+                <ui:Label name="StatusLabel" text="Status" class="building-information-bagid__label"/>
+                <ui:Label name="StatusValue" class="building-information-bagid__label-value"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="YearRow" class="building-information-bagid__row">
+                <ui:Label name="YearLabel" text="Bouwjaar" class="building-information-bagid__label"/>
+                <ui:Label name="YearValue" class="building-information-bagid__label-value"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="Divider" class="building-information__divider" />
+        </ui:VisualElement>
+        <ui:Label name="AddressLabel" text="Adres(sen):" class="building-information-bagid__label"/>
+        <nl3d:ListView name="AddressListView" class="building-information-address__list-view"/>
+    </nl3d:ContentContainer>
+</ui:UXML>
