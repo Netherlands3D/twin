@@ -4,9 +4,9 @@
   xmlns:nl3d="Netherlands3D.UI.Components" 
   noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
   editor-extension-mode="False" 
-  class="toolbar-properties"
+  class="property-panel-toolbar"
 >
-    <ui:ToggleButtonGroup name="ButtonGroup" class="toolbar-properties__group" allow-empty-selection="false">
+    <ui:ToggleButtonGroup name="ButtonGroup" class="property-panel-toolbar__group" allow-empty-selection="false">
         <nl3d:Button name="Information" button-style="IconOnly" icon="SelectionPointer" />
         <nl3d:Button name="Settings" button-style="IconOnly" icon="AdjustmentsHorizontal" />
         <nl3d:Button name="Styles" button-style="IconOnly" icon="Paint" />

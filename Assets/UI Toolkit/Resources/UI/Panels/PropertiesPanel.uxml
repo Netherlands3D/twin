@@ -10,7 +10,7 @@
         <nl3d:Header icon="AdjustmentsHorizontal" text="Eigenschappen" class="properties-panel__header-title"/>
         <nl3d:CloseButton />
     </ui:VisualElement>
-    <nl3d:ToolbarProperties />
+    <nl3d:PropertyPanelToolbar />
     <nl3d:ScrollView class="properties-panel__content" name="InformationContent" />
     <nl3d:ScrollView class="properties-panel__content" name="SettingsContent" />
     <nl3d:ScrollView class="properties-panel__content" name="StylingContent" />

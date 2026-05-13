@@ -13,7 +13,7 @@ namespace Netherlands3D.UI.Panels
     {
         private Header header;
         private Button propertiesHeaderCloseButton;
-        private ToolbarProperties toolbarProperties;
+        private PropertyPanelToolbar propertyPanelToolbar;
         private VisualElement informationContent;
         private VisualElement settingsContent;
         private VisualElement stylingContent;
@@ -24,12 +24,9 @@ namespace Netherlands3D.UI.Panels
         [UxmlAttribute("header-text")]
         public string HeaderText
         {
-            get => header?.LabelText;
+            get => header.LabelText;
             set => header.LabelText = value;
         }
-
-        private ToolbarProperties toolbar;
-        public ToolbarProperties Toolbar => toolbar ??= this.Q<ToolbarProperties>();
 
         public VisualElement Content => this.Q("Content");
 
@@ -40,14 +37,14 @@ namespace Netherlands3D.UI.Panels
             
             propertiesHeaderCloseButton = this.Q<CloseButton>();
             header = this.Q<Header>(className: "properties-header-title");
-            toolbarProperties = this.Q<ToolbarProperties>();
+            propertyPanelToolbar = this.Q<PropertyPanelToolbar>();
             informationContent = this.Q<VisualElement>("InformationContent");
             settingsContent = this.Q<VisualElement>("SettingsContent");
             stylingContent = this.Q<VisualElement>("StylingContent");
             
-            toolbarProperties.Information.RegisterCallback<ClickEvent>(OnInformationButtonClicked);
-            toolbarProperties.Settings.RegisterCallback<ClickEvent>(OnSettingsButtonClicked);
-            toolbarProperties.Styles.RegisterCallback<ClickEvent>(OnStylesButtonClicked);
+            propertyPanelToolbar.Information.RegisterCallback<ClickEvent>(OnInformationButtonClicked);
+            propertyPanelToolbar.Settings.RegisterCallback<ClickEvent>(OnSettingsButtonClicked);
+            propertyPanelToolbar.Styles.RegisterCallback<ClickEvent>(OnStylesButtonClicked);
             propertiesHeaderCloseButton.RegisterCallback<ClickEvent>(OnCloseButtonClick);
 
             SetCategoryPanelsActive(PropertySectionCategory.Information);
@@ -114,12 +111,12 @@ namespace Netherlands3D.UI.Panels
 
         public void SetButtonsActive()
         {
-            Toolbar.Information.SetEnabled(informationContent.childCount > 0);
-            Toolbar.Settings.SetEnabled(settingsContent.childCount > 0);
-            Toolbar.Styles.SetEnabled(stylingContent.childCount > 0);
+            propertyPanelToolbar.Information.SetEnabled(informationContent.childCount > 0);
+            propertyPanelToolbar.Settings.SetEnabled(settingsContent.childCount > 0);
+            propertyPanelToolbar.Styles.SetEnabled(stylingContent.childCount > 0);
 
-            Toolbar.UpdateState();
-            SetCategoryPanelsActive(Toolbar.State);
+            propertyPanelToolbar.UpdateState();
+            SetCategoryPanelsActive(propertyPanelToolbar.State);
         }
     }
 }

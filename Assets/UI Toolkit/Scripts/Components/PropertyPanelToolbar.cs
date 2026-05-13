@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class ToolbarProperties : VisualElement
+    public partial class PropertyPanelToolbar : VisualElement
     {
         public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
         public Button Information => this.Q<Button>("Information");
@@ -13,7 +13,7 @@ namespace Netherlands3D.UI.Components
         public Button Styles => this.Q<Button>("Styles");
         public PropertySectionCategory State => (PropertySectionCategory)Group.value.GetActiveOptions(new int[Group.value.length])[0];
 
-        public ToolbarProperties()
+        public PropertyPanelToolbar()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
