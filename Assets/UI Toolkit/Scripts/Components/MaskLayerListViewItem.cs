@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -35,9 +37,26 @@ namespace Netherlands3D.UI.Components
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var layerPropertyData = layerData.GetProperty<MaskingLayerPropertyData>();
-            var isOn = GetIsMaskingBitSet(layerPropertyData);
-            MaskActiveToggle.value = isOn;
+            var maskingLayerPropertyData = properties.Get<MaskingLayerPropertyData>();
+            bool isFolder = (properties.Get<FolderPropertyData>() != null) || 
+                            (properties.Get<ScenarioPropertyData>() != null);
+
+            if (maskingLayerPropertyData != null)
+            {
+                var isOn = GetIsMaskingBitSet(maskingLayerPropertyData);
+                MaskActiveToggle.value = isOn;
+                return;
+            }
+            
+            if (isFolder)
+            {
+                MaskActiveToggle.SetEnabled(false); 
+            }
+            
+            if (maskingLayerPropertyData == null && !isFolder)
+            {
+                EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            }
         }
 
         public void Initialize(LayerData layerData, int maskingBitIndex)
