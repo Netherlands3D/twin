@@ -1,1 +1,28 @@
 @import url("ScrollView-style.uss");
+
+.treeview{
+    
+}
+
+.unity-tree-view__item{
+    border-width: var(--spacing-0_5);
+    border-radius: var(--spacing-2);
+}
+
+.unity-tree-view__item:hover {
+    background-color: var(--color-blue-50);
+}
+
+.unity-tree-view__item:checked {
+    background-color: var(--color-blue-50);
+    border-color: var(--color-blue-700);
+    border-width: var(--spacing-0_5);
+}
+
+.unity-tree-view__item-toggle .unity-toggle__checkmark{
+    background-image: var(--icon-chevronright);
+}
+
+.unity-tree-view__item-toggle:checked .unity-toggle__checkmark{
+    background-image: var(--icon-chevrondown);
+}
