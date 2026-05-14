@@ -116,7 +116,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             enabledToggle.onValueChanged.AddListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
             layerNameField.onEndEdit.AddListener(OnInputFieldChanged);
-            propertyToggle.onValueChanged.AddListener(ToggleProperties);
+            // propertyToggle.onValueChanged.AddListener(ToggleProperties);
 
         }
 
@@ -125,7 +125,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
             layerNameField.onEndEdit.RemoveListener(OnInputFieldChanged);
-            propertyToggle.onValueChanged.RemoveListener(ToggleProperties);
+            // propertyToggle.onValueChanged.RemoveListener(ToggleProperties);
         }
 
         private void OnEnabledToggleValueChanged(bool isOn)
@@ -190,7 +190,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
             UpdateColor(Layer.Color);
-            RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
+            // RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
         }
 
         private void OnNameChanged(LayerData data, string newName)
@@ -755,7 +755,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.OnPrefabIdChanged.RemoveListener(RebuildUI);
             Layer.PropertySet.RemoveListener(OnPropertiesChanged);
             Layer.PropertyRemoved.RemoveListener(OnPropertiesChanged);
-            propertyToggle.onValueChanged.RemoveListener(ToggleProperties);
+            // propertyToggle.onValueChanged.RemoveListener(ToggleProperties);
         }
         
         private void OnPropertiesChanged(LayerPropertyData propertyData)
@@ -766,42 +766,42 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void RebuildUI()
         {
             MarkLayerUIAsDirty();
-            var properties = ServiceLocator.GetService<Properties.Properties>();
-            RegisterWithPropertiesPanel(properties);
+            // var properties = ServiceLocator.GetService<Properties.Properties>();
+            // RegisterWithPropertiesPanel(properties);
         }
 
-        private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
-        {
-            var hasPropertiesWithPanel = propertiesPanel.HasPropertiesWithPanel(Layer);
-            propertyToggle.gameObject.SetActive(hasPropertiesWithPanel);
+        // private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
+        // {
+        //     var hasPropertiesWithPanel = propertiesPanel.HasPropertiesWithPanel(Layer);
+        //     propertyToggle.gameObject.SetActive(hasPropertiesWithPanel);
+        //
+        //     if (!hasPropertiesWithPanel)
+        //         return;
+        //
+        //     propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
+        //     ToggleProperties(propertyToggle.isOn);
+        // }
 
-            if (!hasPropertiesWithPanel)
-                return;
-
-            propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
-            ToggleProperties(propertyToggle.isOn);
-        }
-
-        public void ToggleProperties(bool onOrOff)
-        {
-            var properties = ServiceLocator.GetService<Properties.Properties>();
-            
-            var hasPropertiesWithPanel = properties.HasPropertiesWithPanel(Layer);
-            if (!hasPropertiesWithPanel) return; // no properties, no action
-
-            if (!onOrOff)
-            {
-                properties.Hide();
-                return;
-            }
-
-            properties.Show(Layer);
-
-            if (!Layer.IsSelected)
-            {
-                // To prevent confusion with the user, also immediately select this layer.
-                Layer.SelectLayer(true);
-            }
-        }
+        // public void ToggleProperties(bool onOrOff)
+        // {
+        //     var properties = ServiceLocator.GetService<Properties.Properties>();
+        //     
+        //     var hasPropertiesWithPanel = properties.HasPropertiesWithPanel(Layer);
+        //     if (!hasPropertiesWithPanel) return; // no properties, no action
+        //
+        //     if (!onOrOff)
+        //     {
+        //         properties.Hide();
+        //         return;
+        //     }
+        //
+        //     properties.Show(Layer);
+        //
+        //     if (!Layer.IsSelected)
+        //     {
+        //         // To prevent confusion with the user, also immediately select this layer.
+        //         Layer.SelectLayer(true);
+        //     }
+        // }
     }
 }
