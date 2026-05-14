@@ -71,7 +71,12 @@ namespace Netherlands3D.UI.Panels
             foreach (var layer in layers)
             {
                 var children = BuildRecursive(layer.ChildrenLayers, ref counter);
-                bool isMaskable = layer.GetProperty<MaskingLayerPropertyData>() != null;
+                var maskingPropertyData = layer.GetProperty<MaskingLayerPropertyData>();
+                bool isMaskable = maskingPropertyData != null;
+                if (isMaskable)
+                {
+                    maskingPropertyData.OnStylingChanged.AddListener(treeView.RefreshItems); //when masking changes, refresh the panel so all the toggles get the correct visibility state
+                }
 
                 if (isMaskable || children.Count > 0)
                     result.Add(new TreeViewItemData<LayerData>(
@@ -83,7 +88,7 @@ namespace Netherlands3D.UI.Panels
 
             return result;
         }
-
+        
         public void SetHeader(string headerText)
         {
             this.Q<Header>().LabelText = headerText;

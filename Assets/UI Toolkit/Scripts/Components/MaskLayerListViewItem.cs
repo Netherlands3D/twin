@@ -3,7 +3,6 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -14,13 +13,13 @@ namespace Netherlands3D.UI.Components
     public partial class MaskLayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
         private int maskingBitIndex;
-        
+
         private VisibilityToggle MaskActiveToggle => this.Q<VisibilityToggle>("MaskActiveToggle");
         private Label LayerNameLabel => this.Q<Label>("LayerNameLabel");
-        
+
         private Icon layerTypeIcon;
         private Icon LayerTypeIcon => layerTypeIcon ??= this.Q<Icon>("LayerTypeIcon");
-        
+
         private LayerData layerData => userData as LayerData;
 
         public MaskLayerListViewItem()
@@ -29,7 +28,7 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
             MaskActiveToggle.RegisterValueChangedCallback(OnToggleChanged);
         }
-        
+
         private void OnToggleChanged(ChangeEvent<bool> evt)
         {
             SetMaskingBit(evt.newValue);
@@ -39,7 +38,7 @@ namespace Netherlands3D.UI.Components
         {
             var maskingLayerPropertyData = properties.Get<MaskingLayerPropertyData>();
             var isMaskable = maskingLayerPropertyData != null;
-            
+
             if (isMaskable)
             {
                 var isOn = GetIsMaskingBitSet(maskingLayerPropertyData);
@@ -47,8 +46,37 @@ namespace Netherlands3D.UI.Components
             }
             else
             {
-                MaskActiveToggle.SetEnabled(false); 
+                MaskActiveToggle.SetEnabled(false);
+                UpdateToggleFromChildren();
             }
+        }
+        
+        private void UpdateToggleFromChildren()
+        {
+            if (layerData.ChildrenLayers.Count == 0)
+                return;
+
+            bool anyOn = false;
+            bool anyOff = false;
+
+            foreach (var child in layerData.ChildrenLayers)
+            {
+                var childMasking = child.GetProperty<MaskingLayerPropertyData>();
+                if (childMasking == null) continue;
+                
+                bool isOn = GetIsMaskingBitSet(childMasking);
+                if (isOn)
+                    anyOn = true;
+                else
+                    anyOff = true;
+            }
+            
+            if (anyOn && anyOff)
+                MaskActiveToggle.SetState(VisibilityState.PartiallyVisible);
+            else if (anyOn)
+                MaskActiveToggle.SetState(VisibilityState.Visible);
+            else
+                MaskActiveToggle.SetState(VisibilityState.Invisible);
         }
 
         public void Initialize(LayerData layerData, int maskingBitIndex)
