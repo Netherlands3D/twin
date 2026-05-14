@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
@@ -6,6 +7,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI.Panels;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -14,8 +16,10 @@ namespace Netherlands3D.UI.Components
     public partial class LayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
         private VisibilityToggle isActiveToggle;
+        private VisualElement colorBar;
         private Icon layerTypeIcon;
-        private Label layerNameLabel;
+        private Label nameLabel;
+        private Toggle propertyToggle;
         
         private LayerData layerData => userData as LayerData;
 
@@ -24,10 +28,19 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
             isActiveToggle = this.Q<VisibilityToggle>("IsActiveToggle");
-            layerTypeIcon = this.Q<Icon>("LayerTypeIcon");
-            layerNameLabel = this.Q<Label>("LayerNameLabel");
+            layerTypeIcon = this.Q<Icon>("TypeIcon");
+            colorBar = this.Q<VisualElement>("ColorBar");
+            nameLabel = this.Q<Label>("NameLabel");
+            propertyToggle = this.Q<Toggle>("PropertyToggle");
             
             isActiveToggle.RegisterValueChangedCallback(OnIsActiveToggleChanged);
+            propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
+        }
+
+        private void OnPropertyToggleValueChanged(ChangeEvent<bool> evt)
+        {
+            var propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
+            propertyPanelBehaviour.SpawnPanel(layerData);
         }
 
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
@@ -37,20 +50,7 @@ namespace Netherlands3D.UI.Components
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            // var maskingLayerPropertyData = properties.Get<MaskingLayerPropertyData>();
-            // var isMaskable = maskingLayerPropertyData != null;
-            //
-            // if (isMaskable)
-            // {
-            //     var isOn = GetIsMaskingBitSet(maskingLayerPropertyData);
-            //     isActiveToggle.value = isOn;
-            // }
-            // else
-            // {
-            //     UpdateToggleFromChildren();
-            // }
-            //
-            // isActiveToggle.EnableInClassList(UtilityClassConstants.HIDDEN, !isMaskable);
+            propertyToggle.EnableInClassList(UtilityClassConstants.HIDDEN, !HasPropertiesWithPanel(properties));
         }
 
         // private void UpdateToggleFromChildren()
@@ -84,14 +84,36 @@ namespace Netherlands3D.UI.Components
         public void Initialize(LayerData layerData)
         {
             userData = layerData;
-            layerNameLabel.text = layerData.Name;
-            LoadProperties(layerData.LayerProperties);
+            // isActiveToggle.SetState(layerData.);
             layerTypeIcon.Image = GetImage(layerData);
+            nameLabel.text = layerData.Name;
+            
+            LoadProperties(layerData.LayerProperties);
         }
 
         private static IconImage GetImage(LayerData layerData)
         {
             return LayerTypeSpriteLibrary.GetIconImage(layerData);
+        }
+        
+        public bool HasPropertiesWithPanel(List<LayerPropertyData> properties)
+        {
+            foreach (var property in properties)
+            {
+                var type = property.GetType();
+                if (PropertySectionRegistry.TypeRegistry.ContainsKey(type))
+                    return true;
+
+                foreach (var interfaceType in type.GetInterfaces())
+                {
+                    if (PropertySectionRegistry.TypeRegistry.ContainsKey(interfaceType))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

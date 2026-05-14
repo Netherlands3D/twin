@@ -30,7 +30,6 @@ namespace Netherlands3D.UI.Panels
 
         public void PopulateLayerPanel(LayerData rootLayer)
         {
-            Debug.Log(rootLayer.Name);
             var tree = rootLayer.ToTreeViewItems();
             treeView.SetRootItems(tree);
             treeView.RefreshItems();
