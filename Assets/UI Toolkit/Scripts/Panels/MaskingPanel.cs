@@ -52,9 +52,14 @@ namespace Netherlands3D.UI.Panels
         
         private void PopulateMaskLayerPanel(LayerData rootLayer)
         {
-            var tree = rootLayer.ToTreeViewItems();
+            var tree = rootLayer.ToTreeViewItems(IsMaskableOrHasChildren);
             treeView.SetRootItems(tree);
             treeView.RefreshItems();
+        }
+
+        private bool IsMaskableOrHasChildren(LayerData layer)
+        {
+            return layer.ChildrenLayers.Any(IsMaskableOrHasChildren) || layer.GetProperty<MaskingLayerPropertyData>() != null;
         }
 
         public void SetHeader(string headerText)

@@ -38,24 +38,16 @@ namespace Netherlands3D.UI.Components
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             var maskingLayerPropertyData = properties.Get<MaskingLayerPropertyData>();
-            bool isFolder = (properties.Get<FolderPropertyData>() != null) || 
-                            (properties.Get<ScenarioPropertyData>() != null);
-
-            if (maskingLayerPropertyData != null)
+            var isMaskable = maskingLayerPropertyData != null;
+            
+            if (isMaskable)
             {
                 var isOn = GetIsMaskingBitSet(maskingLayerPropertyData);
                 MaskActiveToggle.value = isOn;
-                return;
             }
-            
-            if (isFolder)
+            else
             {
                 MaskActiveToggle.SetEnabled(false); 
-            }
-            
-            if (maskingLayerPropertyData == null && !isFolder)
-            {
-                EnableInClassList(UtilityClassConstants.HIDDEN, true);
             }
         }
 
