@@ -6,7 +6,6 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,9 +13,9 @@ using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
-    [RequireComponent(typeof(UIDocument))]
     public class PropertyPanelBehaviour : MonoBehaviour
     {
+        [SerializeField] private UIDocument uiDocument;
         private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private SecondaryPropertiesPanel secondaryPropertiesPanel;
@@ -25,7 +24,7 @@ namespace Netherlands3D.UI.Panels
 
         private void Start()
         {
-            root = GetComponent<UIDocument>().rootVisualElement;
+            root = uiDocument.rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
