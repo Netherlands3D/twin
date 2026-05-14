@@ -38,5 +38,4 @@
 .visibility-toggle:disabled {
     opacity: 1;
     border-color: var(--toggle-disabled-color);
-    background-color: var(--toggle-disabled-color);
 }

@@ -3,6 +3,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -46,11 +47,12 @@ namespace Netherlands3D.UI.Components
             }
             else
             {
-                MaskActiveToggle.SetEnabled(false);
                 UpdateToggleFromChildren();
             }
+
+            MaskActiveToggle.EnableInClassList(UtilityClassConstants.HIDDEN, !isMaskable);
         }
-        
+
         private void UpdateToggleFromChildren()
         {
             if (layerData.ChildrenLayers.Count == 0)
@@ -63,14 +65,14 @@ namespace Netherlands3D.UI.Components
             {
                 var childMasking = child.GetProperty<MaskingLayerPropertyData>();
                 if (childMasking == null) continue;
-                
+
                 bool isOn = GetIsMaskingBitSet(childMasking);
                 if (isOn)
                     anyOn = true;
                 else
                     anyOff = true;
             }
-            
+
             if (anyOn && anyOff)
                 MaskActiveToggle.SetState(VisibilityState.PartiallyVisible);
             else if (anyOn)
