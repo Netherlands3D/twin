@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Credentials;
 using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -131,6 +132,7 @@ namespace Netherlands3D.UI.Behaviours
         {
             appDocument = GetComponent<UIDocument>();
             credentialHandler = GetComponent<ICredentialHandler>();
+            RegisterPanel<LayerPanel>();
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
             RegisterPanel<LocationSearchPanel>();
@@ -146,7 +148,7 @@ namespace Netherlands3D.UI.Behaviours
             // External tools (not managed by the InspectorPanel) call CloseInspectorPanels.
             RegisterTool(AssetLibrary, OpenAssetLibraryPanel);
             RegisterTool(AssetImport, OpenAssetImportPanel);
-            RegisterTool(Layer, CloseInspectorPanels);
+            RegisterTool(Layer, OpenLayerPanel);
             RegisterTool(SearchTool, OpenSearchTool);
             RegisterTool(SunPosition, CloseInspectorPanels);
             RegisterTool(DownloadTile, CloseInspectorPanels);
@@ -213,6 +215,13 @@ namespace Netherlands3D.UI.Behaviours
             entry.OnOpen?.Invoke();
         }
 
+        private void OpenLayerPanel()
+        {
+            CloseInspectorPanels();
+            ShowPanel<LayerPanel>();
+            GetPanel<LayerPanel>().PopulateLayerPanel(ProjectData.Current.RootLayer);
+        }
+        
         private void OpenAssetLibraryPanel()
         {
             CloseInspectorPanels();
@@ -275,7 +284,7 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             InspectorPanel.Close();
         }
-
+        
         private void OnAddLayerToggled(ChangeEvent<bool> evt)
         {
             if (evt.newValue) AssetImport?.OpenInspector();
