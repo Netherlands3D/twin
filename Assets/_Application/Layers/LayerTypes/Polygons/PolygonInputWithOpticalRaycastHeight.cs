@@ -11,17 +11,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         protected override void Awake()
         {
             base.Awake();
-            pointerToWorldPosition = GameObject.FindAnyObjectByType<PointerToWorldPosition>();
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
         }
 
         public override void SetSelectionCurrentPosition(Vector3 position)
         {
             var point = pointerToWorldPosition.WorldPoint.ToUnity();
-
             if (point != Vector3.zero)
-                selectionCurrentPosition = point;
+                base.SetSelectionCurrentPosition(point);
             else
-                base.SetSelectionCurrentPosition(position);
+                base.SetSelectionCurrentPosition(selectionCurrentPosition);
         }
     }
 }

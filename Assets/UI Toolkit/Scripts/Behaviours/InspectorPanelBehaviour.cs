@@ -63,11 +63,17 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.SetCredentialHandler(credentialHandler);
         }
 
+        private void Start()
+        {
+            InspectorPanel.Initialize();
+        }
+
         private void OnEnable()
         {
             InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
+            
             ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             

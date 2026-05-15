@@ -289,7 +289,6 @@ namespace Netherlands3D.SelectionTools
 
             if (positions.Count == minPointsToCloseLoop - 1) // add an extra point at the current mouse position to attempt to create a valid shape
             {
-                //todo update teh selection current position properly here
                 AddPoint(selectionCurrentPosition);
             }
 
