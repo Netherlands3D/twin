@@ -16,6 +16,7 @@
  *  permissions and limitations under the License.
  */
 
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
@@ -49,17 +50,18 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         public string SouthExtent => SouthWest.northing.ToString("0");
         public string EastExtent => NorthEast.easting.ToString("0");
         public string WestExtent => SouthWest.easting.ToString("0");
-
+        
         private TextPopout northEastTooltip;
         private TextPopout southWestTooltip;
 
         private Bounds selectedArea;
+        private List<Vector3> selectedAreaPoints = new();
         
         public UnityEvent<Bounds> OnSelectionBoundsChanged = new();
 
         private void OnEnable()
         {
-            areaSelection.WhenSelectionAreaBoundsChanged.AddListener(WhenSelectionBoundsChanged);
+            OnSelectionBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
 
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
@@ -75,13 +77,61 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         private void OnDisable()
         {
             areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged.Invoke);
-            areaSelection.WhenSelectionAreaBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
+            OnSelectionBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
             
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
             selectionService.OnDeselectActivePolygon.RemoveListener(WhenDeselected);
             
             Destroy(northEastTooltip.gameObject);
             Destroy(southWestTooltip.gameObject);
+        }
+
+        public void SetNorthValue(int value)
+        {
+            Coordinate newCoord = new Coordinate(DisplayCrs, NorthEast.easting, value);
+            Vector3 pos = newCoord.ToUnity();
+            Vector3 newMax = new Vector3(selectedArea.max.x, selectedArea.max.y, pos.z);
+            selectedArea.SetMinMax(selectedArea.min, newMax);
+            ApplyBounds();
+        }
+
+        public void SetSouthValue(int value)
+        {
+            Coordinate newCoord = new Coordinate(DisplayCrs, NorthEast.easting, value);
+            Vector3 pos = newCoord.ToUnity();
+            Vector3 newMin = new Vector3(selectedArea.min.x, selectedArea.min.y, pos.z);
+            selectedArea.SetMinMax(newMin, selectedArea.max);
+            ApplyBounds();
+        }
+
+        public void SetEastValue(int value)
+        {
+            Coordinate newCoord = new Coordinate(DisplayCrs, value, NorthEast.northing);
+            Vector3 pos = newCoord.ToUnity();
+            Vector3 newMax = new Vector3(pos.x, selectedArea.max.y, selectedArea.max.z);
+            selectedArea.SetMinMax(selectedArea.min, newMax);
+            ApplyBounds();
+        }
+
+        public void SetWestValue(int value)
+        {
+            Coordinate newCoord = new Coordinate(DisplayCrs, value, NorthEast.northing); 
+            Vector3 pos = newCoord.ToUnity();
+            Vector3 newMin = new Vector3(pos.x, selectedArea.min.y, selectedArea.min.z);
+            selectedArea.SetMinMax(newMin, selectedArea.max);
+            ApplyBounds();
+        }
+
+        private void ApplyBounds()
+        {
+            areaSelection.SetSelectionAreaBounds(selectedArea);
+            PolygonCreationService creationService = ServiceLocator.GetService<PolygonCreationService>();
+            selectedAreaPoints.Clear();
+            selectedAreaPoints.Add(new Vector3(selectedArea.min.x, selectedArea.center.y, selectedArea.max.z));
+            selectedAreaPoints.Add(new Vector3(selectedArea.max.x, selectedArea.center.y, selectedArea.max.z));
+            selectedAreaPoints.Add(new Vector3(selectedArea.max.x, selectedArea.center.y, selectedArea.min.z));
+            selectedAreaPoints.Add(new Vector3(selectedArea.min.x, selectedArea.center.y, selectedArea.min.z));
+            creationService.UpdateGridSelectionFromPoints(selectedAreaPoints);
         }
 
         private void WhenSelectionBoundsChanged(Bounds selectedArea)
@@ -112,7 +162,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             var minUnityPosition = new Vector3(bounds.min.x, bounds.center.y, bounds.min.z);
             var min = new Coordinate(minUnityPosition);
-            var southWest = min.Convert(DisplayCrs); ;
+            var southWest = min.Convert(DisplayCrs);
 
             var maxUnityPosition = new Vector3(bounds.max.x, bounds.center.y, bounds.max.z);
             var max = new Coordinate(maxUnityPosition);

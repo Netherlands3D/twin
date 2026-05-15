@@ -149,6 +149,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
+        public void UpdateGridSelectionFromPoints(List<Vector3> points)
+        {
+            gridInput.SetAreaFromPolygon(points);
+            gridInput.MakeSelection();
+        }
+
         private void ClickAction_performed(InputAction.CallbackContext obj)
         {
             var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
