@@ -15,7 +15,7 @@ namespace Netherlands3D.UI.Panels
         private ScrollView imageContainer;
 
         public LegendUrlContainer activeLegendUrlContainer;
-        public bool LegendVisible => !ClassListContains(UtilityClassConstants.HIDDEN);
+        public bool Visible => !ClassListContains(UtilityClassConstants.HIDDEN);
 
         public WMSLegendPanel()
         {

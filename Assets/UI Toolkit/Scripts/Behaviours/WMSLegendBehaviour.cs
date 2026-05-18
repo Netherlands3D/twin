@@ -120,7 +120,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 container.SetLayerActive(layerName, isActive);
                 if (log) Debug.Log($"[WMSLegend] Layer '{layerName}' set active={isActive}");
 
-                if (legendPanel.activeLegendUrlContainer == container && legendPanel.LegendVisible)
+                if (legendPanel.activeLegendUrlContainer == container && legendPanel.Visible)
                     DownloadMissingImages(container);
 
                 return;
@@ -173,7 +173,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 if (log) Debug.Log($"[WMSLegend] Populated {imageUrls.Count} image URLs for {url}");
 
                 // If the panel is already waiting to show this container, start downloading images now.
-                if (legendPanel.activeLegendUrlContainer == container && legendPanel.LegendVisible)
+                if (legendPanel.activeLegendUrlContainer == container && legendPanel.Visible)
                     DownloadMissingImages(container);
             });
 
