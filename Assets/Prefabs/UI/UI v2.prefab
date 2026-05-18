@@ -38,7 +38,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children: [{fileID: 3547941427893458787}, {fileID: 1319537119612692894}]
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -55,8 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 9f7be72ae5639dd469eb35ed8bd40f63, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 6647caf475c8b1c4d997f363bebbaf1e,
-    type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 6647caf475c8b1c4d997f363bebbaf1e, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -104,6 +103,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
+  locationSearchBehaviour: {fileID: 898252592541998064}
+  AssetLibrary: {fileID: 11400000, guid: 07a8740b7ad8fae49a77dbf2dc1abacc, type: 2}
+  AssetImport: {fileID: 11400000, guid: 8d401b0a5d410b24192a18882956371f, type: 2}
+  Layer: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  SearchTool: {fileID: 11400000, guid: 6f5d9ca96571d424ca954f90542644a4, type: 2}
+  SunPosition: {fileID: 11400000, guid: f0477d7f987d93b46938af639648a21d, type: 2}
+  DownloadTile: {fileID: 11400000, guid: 57df8a6e50ddc6b49b476f9f37700f8e, type: 2}
+  OpenProject: {fileID: 11400000, guid: f44e97a104dca4c9b8a629ed07ec95f8, type: 2}
+  SaveProject: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
+  SettingsTool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
+  HelpTool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
+  SettingsWindow: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
+  HelpUrl: https://netherlands3d.eu/
   OnDrawNewGrid: {fileID: 11400000, guid: 2725eb416725304468190dd92c09fdc3, type: 2}
   OnGridConfirmed: {fileID: 11400000, guid: 1f0d8a518b80c13b6bd1c0a1e46b32a6, type: 2}
 --- !u!114 &873264101414426239
@@ -118,10 +130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3adb988a4a3c4e4ea91fac29b0a7601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.FooterBehaviour
-  ShowAttributionEvent: {fileID: 11400000, guid: ed0a4e76488b45c46a5bf90e6d680af3,
-    type: 2}
-  OnCameraPositionChangedEvent: {fileID: 11400000, guid: d4a74b03cccc58345974ac5fcbc59d0c,
-    type: 2}
+  ShowAttributionEvent: {fileID: 11400000, guid: ed0a4e76488b45c46a5bf90e6d680af3, type: 2}
+  OnCameraPositionChangedEvent: {fileID: 11400000, guid: d4a74b03cccc58345974ac5fcbc59d0c, type: 2}
   OnOrientToNorth:
     m_PersistentCalls:
       m_Calls:
@@ -164,8 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78da410b8ae506f2689c101c958c6956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
-    type: 3}
+  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6, type: 3}
   panelBehaviours:
   - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
   - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
@@ -250,3 +259,145 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &2914665156813818336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3547941427893458787}
+  - component: {fileID: 8246707263937376439}
+  m_Layer: 5
+  m_Name: MainToolbar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3547941427893458787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2914665156813818336}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8246707263937376439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2914665156813818336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bce206dfe9447b1ae209f2df8320b1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI_Toolkit.Scripts.Behaviours.ToolbarMainBehaviour
+  appDocument: {fileID: 4399201792515060189}
+  layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  assetImportTool: {fileID: 11400000, guid: 8d401b0a5d410b24192a18882956371f, type: 2}
+  assetLibraryTool: {fileID: 11400000, guid: 07a8740b7ad8fae49a77dbf2dc1abacc, type: 2}
+  searchTool: {fileID: 11400000, guid: 6f5d9ca96571d424ca954f90542644a4, type: 2}
+  sunPositionTool: {fileID: 11400000, guid: f0477d7f987d93b46938af639648a21d, type: 2}
+  downloadTileTool: {fileID: 11400000, guid: 57df8a6e50ddc6b49b476f9f37700f8e, type: 2}
+  openProjectTool: {fileID: 11400000, guid: f44e97a104dca4c9b8a629ed07ec95f8, type: 2}
+  saveProjectTool: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
+  settingsTool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
+  helpTool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
+--- !u!1 &6344507626500150337
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1319537119612692894}
+  - component: {fileID: 6593711217680136199}
+  - component: {fileID: 898252592541998064}
+  m_Layer: 5
+  m_Name: SearchInspectorPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1319537119612692894
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344507626500150337}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6593711217680136199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344507626500150337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d999095a8b46476b9de493bb50d17afc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.address-search.Runtime::Netherlands3D.AddressSearch.AddressSearchService
+  bagWfsEndpoint: https://service.pdok.nl/lv/bag/wfs/v2_0
+  locationSuggestionEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest
+  locationLookupEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/lookup
+  searchWithinCity: 
+  typeFilter: 
+  rows: 5
+  charactersNeededBeforeSearch: 2
+  moveCamera: 1
+  easeCamera: 0
+  mainCamera: {fileID: 0}
+  targetCameraRotation: {x: 0.38268346, y: 0, z: 0, w: 0.9238795}
+  cameraMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  onCoordinateFound:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelectedBuildings:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &898252592541998064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344507626500150337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf8936b39ddd43d7bf59ff93f16d9898, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.AddressSearchBehaviour
+  service: {fileID: 6593711217680136199}
+  onCoordinateFound:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelectedBuildings:
+    m_PersistentCalls:
+      m_Calls: []

@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,6 +19,7 @@ namespace Netherlands3D.UI.Panels
     {
         private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
+        private SecondaryPropertiesPanel secondaryPropertiesPanel;
         private VisualElement propertySectionContainer;
         private ColorPicker colorPicker;
 
@@ -25,8 +27,8 @@ namespace Netherlands3D.UI.Panels
         {
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
-            colorPicker = root.Q<ColorPicker>("PropertiesColorPicker");
-            colorPicker.SetVisible(false);
+            secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
+            colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
             propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
@@ -34,7 +36,7 @@ namespace Netherlands3D.UI.Panels
             
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.OnSelectLayer.AddListener(SpawnPanel);
-            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel);
+            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
         }
 
         private void OnDestroy()
@@ -47,13 +49,14 @@ namespace Netherlands3D.UI.Panels
         public void ClearActivePanel()
         {
             propertySectionContainer.Clear();
-            propertiesPanel.SetEnabled(false);
+            propertiesPanel.SetVisible(false);
+            secondaryPropertiesPanel.SetVisible(false);
         }
 
         public void SpawnPanel(LayerData layer)
         {
             ClearActivePanel();
-            propertiesPanel.SetEnabled(true);
+            propertiesPanel.SetVisible(true);
 
             CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
             if (credentials != null && !layer.HasValidCredentials)

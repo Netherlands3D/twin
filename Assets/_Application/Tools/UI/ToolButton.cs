@@ -66,8 +66,8 @@ namespace Netherlands3D.Twin.Tools.UI
 
         public void UpdateVisuals()
         {
-            enabledObjects.SetActive(Tool.Open);
-            disabledObjects.SetActive(!Tool.Open);
+            if (enabledObjects) enabledObjects.SetActive(Tool.Open);
+            if (disabledObjects) disabledObjects.SetActive(!Tool.Open);
         }
     }
 }

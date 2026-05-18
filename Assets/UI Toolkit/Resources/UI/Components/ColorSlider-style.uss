@@ -14,9 +14,9 @@
 }
 
 .color-slider .unity-base-slider__drag-container {
+    position: relative;
     flex-grow: 1;
-    flex-shrink: 0;
-    align-items: center;
+    flex-shrink: 0;    
     min-height: 0;
     width: 100%;
     height: 100%;
@@ -62,6 +62,12 @@
     min-height: var(--spacing-3);
     border-width: 0px;
     border-radius: 100%;
+    position: absolute;
+    left: 13px;
+}
+
+.color-slider__dragger-shadow{    
+    background-color: rgba(0, 0, 0, 0.25);
 }
 
 .color-slider .unity-base-slider__dragger {
@@ -69,5 +75,7 @@
 }
 
 .color-slider__dragger-shadow.shadow-sm {
-    left: 5px;
+    left: 3px;
+    top: 3px;
+    position: absolute;
 }
