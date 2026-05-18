@@ -187,8 +187,6 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.OpenAssetLibrary += OnOpenAssetLibraryClicked;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
-            ToolbarMain.AddButton.clicked += ToggleImportAssetPanel;
-            
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
             
             PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
@@ -205,8 +203,6 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             ImportAssetPanel.OpenAssetLibrary -= OnOpenAssetLibraryClicked;
             ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
-            
-            ToolbarMain.AddButton.clicked -= ToggleImportAssetPanel;
             
             OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
             
