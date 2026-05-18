@@ -109,7 +109,7 @@ namespace Netherlands3D.UI.Panels
             stylingContent.Clear();
         }
 
-        public void SetButtonsActive()
+        public void UpdateButtonActiveStates()
         {
             propertyPanelToolbar.Information.SetEnabled(informationContent.childCount > 0);
             propertyPanelToolbar.Settings.SetEnabled(settingsContent.childCount > 0);

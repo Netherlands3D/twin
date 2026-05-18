@@ -60,7 +60,7 @@ namespace Netherlands3D.UI.Panels
             if (credentials != null && !layer.HasValidCredentials)
             {
                 bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
-                propertiesPanel.SetButtonsActive();
+                propertiesPanel.UpdateButtonActiveStates();
                 if (showingCredentials) return;
             }
 
@@ -83,7 +83,7 @@ namespace Netherlands3D.UI.Panels
                 ClearActivePanel();
             }
 
-            propertiesPanel.SetButtonsActive();
+            propertiesPanel.UpdateButtonActiveStates();
         }
 
         private bool ShowPanelsForInterfaces(LayerPropertyData property, List<LayerPropertyData> properties)
