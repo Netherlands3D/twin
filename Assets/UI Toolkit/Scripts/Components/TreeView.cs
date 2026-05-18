@@ -11,7 +11,9 @@ namespace Netherlands3D.UI.Components
     public partial class TreeView : UnityEngine.UIElements.TreeView
     {
         private Action<VisualElement, int> _userBind;
-        private int _firstSelectedIndex = -1;
+        
+        private int firstSelectedIndex = -1;
+        private List<int> lastSelectedIndices = new();
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
         
         /// <summary>
@@ -29,8 +31,13 @@ namespace Netherlands3D.UI.Components
 
         private void OnBindItem(VisualElement ve, int id)
         {
+            var collectionViewItem = ve;
+            while (collectionViewItem != null && !collectionViewItem.ClassListContains("unity-collection-view__item"))
+                collectionViewItem = collectionViewItem.parent;
+            if (collectionViewItem != null) 
+                indexDictionary[collectionViewItem] = id;
+    
             _userBind?.Invoke(ve, id);
-            indexDictionary[ve] = id;
         }
 
         
@@ -53,48 +60,27 @@ namespace Netherlands3D.UI.Components
             if (el == null) return;
 
             var index = indexDictionary[el];
+            Debug.Log("index for element:" + index);
             var clickedIndex = viewController.GetIndexForId(index);
             
             if (!evt.shiftKey)
             {
-                _firstSelectedIndex = clickedIndex;
+                firstSelectedIndex = clickedIndex;
                 return;
             }
-            
-            ProcessSelectionWithShift(evt, clickedIndex);
-        }
-        
-        private void ProcessSelectionWithShift(ClickEvent evt, int clickedIndex)
-        {
-            var selectedIndices = this.selectedIndices.ToList();
-            if (selectedIndices.Count == 0)
-            {
-                _firstSelectedIndex = clickedIndex;
-                this.SetSelectionWithoutNotify(new[] { clickedIndex });
-                evt.StopPropagation();
-                return;
-            }
-            
-            int firstIndex = _firstSelectedIndex;
+
+            int firstIndex = firstSelectedIndex;
             int targetIndex = clickedIndex;
-            Debug.Log();
-            int lastSelectedIndex = selectedIndices.Max();
-
-            bool addSelection = !selectedIndices.Contains(targetIndex);
-
             var newSelection = selectedIndices.ToList();
 
-            if (!addSelection)
+            if (selectedIndices.Contains(targetIndex))
             {
-                //Items need to be sequentially removed until the cursor 
-                if (firstIndex < targetIndex)
-                    for (int i = targetIndex + 1; i <= lastSelectedIndex; i++)
+                if (firstIndex <= targetIndex)
+                    for (int i = targetIndex + 1; i <= selectedIndices.Max(); i++)
                         newSelection.Remove(i);
-                else if (firstIndex > targetIndex)
+                if (firstIndex >= targetIndex)
                     for (int i = selectedIndices.Min(); i < targetIndex; i++)
                         newSelection.Remove(i);
-                else if (firstIndex == targetIndex)
-                    newSelection.RemoveAll(i => i != targetIndex);
             }
             else
             {
@@ -111,8 +97,18 @@ namespace Netherlands3D.UI.Components
                             newSelection.Add(i);
                 }
             }
-
+            
+            if(lastSelectedIndices.Count > 0 && !lastSelectedIndices.Contains(targetIndex))
+            {
+                if (firstIndex < targetIndex)
+                    firstSelectedIndex = newSelection.Min();
+                else if (firstIndex > targetIndex)
+                    firstSelectedIndex = newSelection.Max();
+            }
+        
             SetSelection(newSelection);
+            lastSelectedIndices.Clear();
+            lastSelectedIndices.AddRange(newSelection);
             evt.StopPropagation();
         }
     }

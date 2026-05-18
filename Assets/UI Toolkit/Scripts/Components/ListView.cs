@@ -14,6 +14,7 @@ namespace Netherlands3D.UI.Components
         
         private int firstSelectedIndex = -1;
         private List<int> lastSelectedIndices = new();
+        private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
 
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
@@ -24,14 +25,15 @@ namespace Netherlands3D.UI.Components
             set
             {
                 _userBind = value;
-                base.bindItem = (ve, i) =>
-                {
-                    _userBind?.Invoke(ve, i);
-                    ve.userData = i;
-                };
+                base.bindItem = OnBindItem;
             }
         }
 
+        private void OnBindItem(VisualElement ve, int id)
+        {
+            indexDictionary[ve] = id;
+            _userBind?.Invoke(ve, id);
+        }
 
         [UxmlAttribute("fixed-item-height")]
         public float FixedItemHeight
@@ -70,7 +72,7 @@ namespace Netherlands3D.UI.Components
             if (makeItem == null) makeItem = CreateDefaultItem;
             if (base.bindItem == null) this.bindItem = DefaultBind;
             
-            RegisterCallback<ClickEvent>(OnPointerDown, TrickleDown.TrickleDown);
+            RegisterCallback<ClickEvent>(OnClick, TrickleDown.TrickleDown);
         }
 
         /// <summary>
@@ -88,17 +90,17 @@ namespace Netherlands3D.UI.Components
         {
         }
         
-        private void OnPointerDown(ClickEvent evt)
+        private void OnClick(ClickEvent evt)
         {
             if (selectionType != SelectionType.Multiple) return;
 
             var el = evt.target as VisualElement;
             //find upwards in the tree until unitylistview item is not found which means we will have the listview parent
-            while (el != null && !el.ClassListContains("unity-list-view__item"))
+            while (el != null && !el.ClassListContains("unity-collection-view__item"))
                 el = el.parent;
             if (el == null) return;
 
-            var clickedIndex = (int)el.userData;
+            var clickedIndex = indexDictionary[el];
             if (!evt.shiftKey)
             {
                 firstSelectedIndex = clickedIndex;
