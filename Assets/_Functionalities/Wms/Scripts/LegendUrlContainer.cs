@@ -8,7 +8,6 @@ namespace Netherlands3D.Functionalities.Wms
     {
         public string GetCapabilitiesUrl;
         public Dictionary<string, LegendEntry> LayerNameLegendUrlDictionary = new();
-        public int ActiveLayerCount;
         
         public sealed class LegendEntry
         {
@@ -46,21 +45,8 @@ namespace Netherlands3D.Functionalities.Wms
         public LegendUrlContainer(string getCapabilitiesUrl)
         {
             GetCapabilitiesUrl = getCapabilitiesUrl;
-            // foreach(KeyValuePair<string, string> kv in  legendDictionary)
-            //     LayerNameLegendUrlDictionary.Add(kv.Key, new LegendEntry(kv.Key, kv.Value));
-            ActiveLayerCount = 0; // when creating a new object, we assume it has been created by one layer
         }
-
-        public void IncrementLayerCount()
-        {
-            ActiveLayerCount++;
-        }
-
-        public void DecrementLayerCount()
-        {
-            ActiveLayerCount--;
-        }
-
+        
         public void RegisterImage(Texture2D texture, string layerName)
         {
             LayerNameLegendUrlDictionary[layerName].SetTexture(texture);
