@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -10,7 +11,9 @@ namespace Netherlands3D.UI.Components
     {
         // Keep user bind so we can call it first.
         private Action<VisualElement, int> _userBind;
-        private int _firstSelectedIndex = -1;
+        
+        private int firstSelectedIndex = -1;
+        private List<int> lastSelectedIndices = new();
 
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
@@ -96,40 +99,24 @@ namespace Netherlands3D.UI.Components
             if (el == null) return;
 
             var clickedIndex = (int)el.userData;
-
             if (!evt.shiftKey)
             {
-                _firstSelectedIndex = clickedIndex;
+                firstSelectedIndex = clickedIndex;
                 return;
             }
 
-            var selectedIndices = this.selectedIndices.ToList();
-            if (selectedIndices.Count == 0)
-            {
-                _firstSelectedIndex = clickedIndex;
-                this.SetSelectionWithoutNotify(new[] { clickedIndex });
-                evt.StopPropagation();
-                return;
-            }
-
-            int firstIndex = _firstSelectedIndex;
+            int firstIndex = firstSelectedIndex;
             int targetIndex = clickedIndex;
-            int lastSelectedIndex = selectedIndices.Max();
-
-            bool addSelection = !selectedIndices.Contains(targetIndex);
-
             var newSelection = selectedIndices.ToList();
 
-            if (!addSelection)
+            if (selectedIndices.Contains(targetIndex))
             {
-                if (firstIndex < targetIndex)
-                    for (int i = targetIndex + 1; i <= lastSelectedIndex; i++)
+                if (firstIndex <= targetIndex)
+                    for (int i = targetIndex + 1; i <= selectedIndices.Max(); i++)
                         newSelection.Remove(i);
-                else if (firstIndex > targetIndex)
+                if (firstIndex >= targetIndex)
                     for (int i = selectedIndices.Min(); i < targetIndex; i++)
                         newSelection.Remove(i);
-                else if (firstIndex == targetIndex)
-                    newSelection.RemoveAll(i => i != targetIndex);
             }
             else
             {
@@ -146,8 +133,18 @@ namespace Netherlands3D.UI.Components
                             newSelection.Add(i);
                 }
             }
-
+            
+            if(lastSelectedIndices.Count > 0 && !lastSelectedIndices.Contains(targetIndex))
+            {
+                if (firstIndex < targetIndex)
+                    firstSelectedIndex = newSelection.Min();
+                else if (firstIndex > targetIndex)
+                    firstSelectedIndex = newSelection.Max();
+            }
+        
             SetSelection(newSelection);
+            lastSelectedIndices.Clear();
+            lastSelectedIndices.AddRange(newSelection);
             evt.StopPropagation();
         }
     }
