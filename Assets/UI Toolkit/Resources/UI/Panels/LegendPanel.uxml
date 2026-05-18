@@ -3,10 +3,10 @@
          xmlns:nl3d="Netherlands3D.UI.Components"
          noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
          editor-extension-mode="False" 
-         name="WMSLegendPanel"
-         class="wms-legend-panel">
+         name="LegendPanel"
+         class="legend-panel">
     <nl3d:ContentContainer leading-icon="Legend" text="Legenda" container-type="NoFoldout" show-close-button="true">
         <ui:Label name="EmptyText" text="Er is geen legenda beschikbaar voor deze bron" />
-        <nl3d:ScrollView name="ImageListView" class="wms-legend-panel__content"/>
+        <nl3d:ScrollView name="ImageListView" class="legend-panel__content"/>
     </nl3d:ContentContainer>
 </ui:UXML>

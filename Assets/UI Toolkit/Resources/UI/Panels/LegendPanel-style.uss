@@ -1,4 +1,4 @@
-.wms-legend-panel{
+.legend-panel{
     min-width: var(--inspector-min-width);
     width: var(--inspector-width);
     max-width: var(--inspector-max-width);
@@ -7,6 +7,6 @@
     max-height: 100%;
 }
 
-.wms-legend-panel__content .unity-scroll-view__content-container{
+.legend-panel__content .unity-scroll-view__content-container{
     align-items: flex-start;
 }

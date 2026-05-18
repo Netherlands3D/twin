@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Legend
 {
     public class LegendUrlContainer
     {

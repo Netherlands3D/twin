@@ -6,20 +6,19 @@ using KindMen.Uxios.ExpectedTypesOfResponse;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
-using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.UI.Panels;
 using RSG;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
+namespace Netherlands3D.Legend
 {
-    public class WMSLegendBehaviour : MonoBehaviour
+    public class LegendBehaviour : MonoBehaviour
     {
         [SerializeField] private UIDocument uiDocument;
         [SerializeField] private bool log = false;
 
-        private WMSLegendPanel legendPanel;
+        private LegendPanel legendPanel;
         private ICredentialHandler credentialHandler;
 
         // One container per GetCapabilities URL.
@@ -30,7 +29,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void Awake()
         {
-            legendPanel = uiDocument.rootVisualElement.Q<WMSLegendPanel>();
+            legendPanel = uiDocument.rootVisualElement.Q<LegendPanel>();
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
@@ -67,25 +66,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 layerName = wmsUrl;
             }
 
-            bool containerExists = containers.ContainsKey(getCapabilitiesUrl);
-
-            if (!containerExists)
-            {
-                containers.Add(getCapabilitiesUrl, new LegendUrlContainer(getCapabilitiesUrl));
-                if (log) Debug.Log($"[WMSLegend] New container created for: {getCapabilitiesUrl}");
-            }
-
             containers[getCapabilitiesUrl].RegisterLayer(layerName, isActive);
             if (log) Debug.Log($"[WMSLegend] Registered layer '{layerName}' (active={isActive}) under {getCapabilitiesUrl}");
-
-            // Only request credentials (and therefore start phase 2) for new containers.
-            // HandleCredentials will route to DownloadImageUrls when auth comes back.
-            if (!containerExists)
-            {
-                pendingGetCapabilitiesRequests.Add(getCapabilitiesUrl);
-                credentialHandler.Uri = new Uri(getCapabilitiesUrl);
-                credentialHandler.ApplyCredentials();
-            }
         }
 
         /// <summary>
@@ -137,51 +119,28 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             var url = uri.ToString();
             if (log) Debug.Log($"[WMSLegend] Credentials received for: {url}");
 
-            if (pendingGetCapabilitiesRequests.Contains(url))
-            {
-                // we are waiting to fetch getCapability URLs for this container.
-                pendingGetCapabilitiesRequests.Remove(url);
-                StartCoroutine(DownloadImageUrls(uri, auth));
-            }
-            else
-            {
-                // Image URLs are already known, download images.
-                if (containers.TryGetValue(url, out var container))
-                    DownloadMissingImages(container);
-            }
+
+            if (containers.TryGetValue(url, out var container))
+                DownloadMissingImages(container);
         }
-        
-        private IEnumerator DownloadImageUrls(Uri getCapabilitesUrl, StoredAuthorization auth)
+
+        public void SetLegendUrls(string containerUrl, Dictionary<string, string> imageUrls)
         {
-            var url = getCapabilitesUrl.ToString();
-            if (log) Debug.Log($"[WMSLegend] Fetching GetCapability URLs: {url}");
-
-            var config = Config.Default();
-            config = auth.AddToConfig(config);
-
-            var promise = Uxios.DefaultInstance.Get<string>(getCapabilitesUrl, config);
-
-            promise.Then(response =>
+            if (!containers.TryGetValue(containerUrl, out var container))
             {
-                var parsed = new WmsGetCapabilities(getCapabilitesUrl, response.Data as string);
-                var imageUrls = parsed.GetLegendUrls();
+                container = new LegendUrlContainer(containerUrl);
+                containers.Add(containerUrl, container);
+                if (log) Debug.Log($"[WMSLegend] New container created for: {containerUrl}");
+            }
 
-                if (!containers.TryGetValue(url, out var container))
-                    return;
+            container.PopulateUrls(imageUrls);
+            if (log) Debug.Log($"[WMSLegend] Populated {imageUrls.Count} image URLs for {containerUrl}");
 
-                container.PopulateUrls(imageUrls);
-                if (log) Debug.Log($"[WMSLegend] Populated {imageUrls.Count} image URLs for {url}");
-
-                // If the panel is already waiting to show this container, start downloading images now.
-                if (legendPanel.activeLegendUrlContainer == container && legendPanel.Visible)
-                    DownloadMissingImages(container);
-            });
-
-            promise.Catch(ex => Debug.LogWarning($"[WMSLegend] Failed to fetch GetCapabilities at {url}: {ex.Message}"));
-
-            yield return Uxios.WaitForRequest(promise);
+            // If the panel is already waiting to show this container, start downloading images now.
+            if (legendPanel.activeLegendUrlContainer == container && legendPanel.Visible)
+                DownloadMissingImages(container);
         }
-        
+
         /// <summary>
         /// Shows or hides the legend panel. When showing, sets the container for
         /// the given WMS URL as active and downloads any missing images.

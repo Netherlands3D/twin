@@ -1,4 +1,4 @@
-using Netherlands3D.Functionalities.Wms;
+using Netherlands3D.Legend;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -9,7 +9,7 @@ using ScrollView = UnityEngine.UIElements.ScrollView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    public partial class WMSLegendPanel : VisualElement
+    public partial class LegendPanel : VisualElement
     {
         private Label emptyTextLabel;
         private ScrollView imageContainer;
@@ -17,7 +17,7 @@ namespace Netherlands3D.UI.Panels
         public LegendUrlContainer activeLegendUrlContainer;
         public bool Visible => !ClassListContains(UtilityClassConstants.HIDDEN);
 
-        public WMSLegendPanel()
+        public LegendPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
