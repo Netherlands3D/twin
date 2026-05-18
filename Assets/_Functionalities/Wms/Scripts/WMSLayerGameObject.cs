@@ -1,7 +1,6 @@
 using System;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
-using KindMen.Uxios;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
