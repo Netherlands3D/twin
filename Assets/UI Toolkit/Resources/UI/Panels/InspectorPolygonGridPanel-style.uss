@@ -6,6 +6,7 @@
 
 .inspector-polygon-grid__container{
     flex-shrink: 0;
+    margin-bottom: var(--spacing-2);
 }
 
 .inspector-polygon-grid-thumbnail__container{
@@ -14,6 +15,14 @@
 
 .inspector-polygon-grid__body{
     flex-shrink: 0;
+    align-items: flex-start;
+    
+}
+
+.inspector-polygon-grid__body > .button{
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-4);
+
 }
 
 .inspector-polygon-grid__body-tip-text{
@@ -22,9 +31,25 @@
 
 .inspector-polygon-grid__number-fields-row{
     flex-direction: row;
+    align-items: center;
+    align-self: stretch;
+}
+
+.inspector-polygon-grid__number-fields-row .inspector-polygon-grid__item{
+    margin-right: var(--spacing-2);
+}
+
+.inspector-polygon-grid__item.inspector-polygon-grid__item-last{
+    margin-right: 0;
+}
+
+.inspector-polygon-grid__number-fields-text{
+    flex-grow: 1;
 }
 
 .inspector-polygon-grid__button-copy.button{   
     border-radius: 0;
     border-width: 0;
+    padding: 0;
+    min-height: auto;
 }

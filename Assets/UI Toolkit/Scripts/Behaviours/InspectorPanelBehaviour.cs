@@ -5,6 +5,8 @@ using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Credentials;
 using Netherlands3D.Events;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
@@ -45,7 +47,8 @@ namespace Netherlands3D.UI.Behaviours
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
         [SerializeField] private TriggerEvent OnGridConfirmed;
-        
+     
+      
 
         private void Awake()
         {
@@ -60,11 +63,17 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.SetCredentialHandler(credentialHandler);
         }
 
+        private void Start()
+        {
+            InspectorPanel.Initialize();
+        }
+
         private void OnEnable()
         {
             InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
+            
             ImportAssetPanel.OpenAssetLibrary += OpenAssetLibrary;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
@@ -73,6 +82,8 @@ namespace Netherlands3D.UI.Behaviours
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
             
             PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
+            //TODO ongridconfirmed -> open layerpanel and close the gridpanel (if its not automatically happening)
+
         }
 
         private void OnDisable()
@@ -99,6 +110,7 @@ namespace Netherlands3D.UI.Behaviours
         {
             ToolbarMain.ClearWithoutNotify();
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
+            HidePanel();
             InspectorPanel.Close();
         }
 

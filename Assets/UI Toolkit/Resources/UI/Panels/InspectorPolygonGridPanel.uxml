@@ -14,16 +14,16 @@
     <ui:VisualElement class="inspector-polygon-grid__body">
         <ui:Label text="&lt;b&gt;Tip: &lt;/b&gt; met de combinatie shift-klik+sleep kunt u meerdere tegels selecteren." class="inspector-polygon-grid__body-tip-text"/>
         <ui:VisualElement class="inspector-polygon-grid__number-fields-row">
-            <ui:Label text="Hoekpunt ZW" class="inspector-polygon-grid__number-fields-text"/>
-            <nl3d:Button name="ButtonCopyZw" class="inspector-polygon-grid__button-copy" button-style="IconOnly" icon="CopyPaste"/>
-            <nl3d:NumberField name="ZW_X"/>
-            <nl3d:NumberField name="ZW_Y"/>
+            <ui:Label text="Hoekpunt ZW" class="inspector-polygon-grid__number-fields-text inspector-polygon-grid__item"/>
+            <nl3d:Button name="ButtonCopyZw" class="inspector-polygon-grid__button-copy inspector-polygon-grid__item" icon="CopyPaste" button-style="IconOnly"/>
+            <nl3d:NumberField name="ZW_X" label-text="X" number-field-style="Small" class="inspector-polygon-grid__item"/>
+            <nl3d:NumberField name="ZW_Y" label-text="Y" number-field-style="Small" class="inspector-polygon-grid__item inspector-polygon-grid__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="inspector-polygon-grid__number-fields-row">
-            <ui:Label text="Hoekpunt NO" class="inspector-polygon-grid__number-fields-text"/>
-            <nl3d:Button name="ButtonCopyNo" class="inspector-polygon-grid__button-copy" button-style="IconOnly" icon="CopyPaste"/>
-            <nl3d:NumberField name="NO_X"/>
-            <nl3d:NumberField name="NO_Y"/>
+            <ui:Label text="Hoekpunt NO" class="inspector-polygon-grid__number-fields-text inspector-polygon-grid__item"/>
+            <nl3d:Button name="ButtonCopyNo" class="inspector-polygon-grid__button-copy inspector-polygon-grid__item" icon="CopyPaste" button-style="IconOnly"/>
+            <nl3d:NumberField name="NO_X" label-text="X" number-field-style="Small" class="inspector-polygon-grid__item"/>
+            <nl3d:NumberField name="NO_Y" label-text="Y" number-field-style="Small" class="inspector-polygon-grid__item inspector-polygon-grid__item-last"/>
         </ui:VisualElement>
         <nl3d:Button name="ConfirmButton" LabelText="Selectie opslaan" button-style="Normal" class="inspector-polygon-grid__button"/>
         <nl3d:TextCallOut text="Met deze tool kan je tegels selecteren en het gebied opslaan als polygoon. Vervolgens kunt u in het eigenschappen paneel het gebied uitsnijden." class="inspector-polygon-grid__text-call-out"/>

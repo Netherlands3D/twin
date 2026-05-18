@@ -16,9 +16,12 @@
  *  permissions and limitations under the License.
  */
 
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.UI;
 using TMPro;
 using UnityEngine;
@@ -39,16 +42,30 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         [Header("References")]
         [SerializeField] private AreaSelection areaSelection;
         [SerializeField] private TextPopout popoutPrefab;
+        
+        private Coordinate NorthEast => ConvertBoundsToCoordinates(selectedArea).northEast;
+        private Coordinate SouthWest => ConvertBoundsToCoordinates(selectedArea).southWest;
 
+        public string NorthExtent => NorthEast.northing.ToString("0");
+        public string SouthExtent => SouthWest.northing.ToString("0");
+        public string EastExtent => NorthEast.easting.ToString("0");
+        public string WestExtent => SouthWest.easting.ToString("0");
+        
         private TextPopout northEastTooltip;
         private TextPopout southWestTooltip;
+
+        private Bounds selectedArea;
+        private List<Vector3> selectedAreaPoints = new();
         
         public UnityEvent<Bounds> OnSelectionBoundsChanged = new();
 
         private void OnEnable()
         {
-            areaSelection.WhenSelectionAreaBoundsChanged.AddListener(WhenSelectionBoundsChanged);
+            OnSelectionBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
+
+            PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            selectionService.OnDeselectActivePolygon.AddListener(WhenDeselected);
 
             Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
             northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
@@ -60,23 +77,74 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         private void OnDisable()
         {
             areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged.Invoke);
-            areaSelection.WhenSelectionAreaBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
+            OnSelectionBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
+            
+            PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            selectionService.OnDeselectActivePolygon.RemoveListener(WhenDeselected);
             
             Destroy(northEastTooltip.gameObject);
             Destroy(southWestTooltip.gameObject);
         }
 
+        public void SetNorthValue(int value)
+        {
+            Coordinate newCoord = new Coordinate(DisplayCrs, NorthEast.easting, value);
+            Vector3 pos = newCoord.ToUnity();
+            Vector3 newMax = new Vector3(selectedArea.max.x, selectedArea.max.y, pos.z);
+            selectedArea.SetMinMax(selectedArea.min, newMax);
+            ApplyBounds();
+        }
+
+        public void SetSouthValue(int value)
+        {
+            Coordinate newCoord = new Coordinate(DisplayCrs, NorthEast.easting, value);
+            Vector3 pos = newCoord.ToUnity();
+            Vector3 newMin = new Vector3(selectedArea.min.x, selectedArea.min.y, pos.z);
+            selectedArea.SetMinMax(newMin, selectedArea.max);
+            ApplyBounds();
+        }
+
+        public void SetEastValue(int value)
+        {
+            Coordinate newCoord = new Coordinate(DisplayCrs, value, NorthEast.northing);
+            Vector3 pos = newCoord.ToUnity();
+            Vector3 newMax = new Vector3(pos.x, selectedArea.max.y, selectedArea.max.z);
+            selectedArea.SetMinMax(selectedArea.min, newMax);
+            ApplyBounds();
+        }
+
+        public void SetWestValue(int value)
+        {
+            Coordinate newCoord = new Coordinate(DisplayCrs, value, NorthEast.northing); 
+            Vector3 pos = newCoord.ToUnity();
+            Vector3 newMin = new Vector3(pos.x, selectedArea.min.y, selectedArea.min.z);
+            selectedArea.SetMinMax(newMin, selectedArea.max);
+            ApplyBounds();
+        }
+
+        private void ApplyBounds()
+        {
+            areaSelection.SetSelectionAreaBounds(selectedArea);
+            PolygonCreationService creationService = ServiceLocator.GetService<PolygonCreationService>();
+            selectedAreaPoints.Clear();
+            selectedAreaPoints.Add(new Vector3(selectedArea.min.x, selectedArea.center.y, selectedArea.max.z));
+            selectedAreaPoints.Add(new Vector3(selectedArea.max.x, selectedArea.center.y, selectedArea.max.z));
+            selectedAreaPoints.Add(new Vector3(selectedArea.max.x, selectedArea.center.y, selectedArea.min.z));
+            selectedAreaPoints.Add(new Vector3(selectedArea.min.x, selectedArea.center.y, selectedArea.min.z));
+            creationService.UpdateGridSelectionFromPoints(selectedAreaPoints);
+        }
+
         private void WhenSelectionBoundsChanged(Bounds selectedArea)
         {
-            var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
-            
-            string northExtentTextField = southWestAndNorthEast.northEast.northing.ToString("0");
-            string southExtentTextField = southWestAndNorthEast.southWest.northing.ToString("0");
-            string eastExtentTextField = southWestAndNorthEast.northEast.easting.ToString("0");
-            string westExtentTextField = southWestAndNorthEast.southWest.easting.ToString("0");
+            this.selectedArea = selectedArea;
+            southWestTooltip.Show($"X: {WestExtent}\nY: {SouthExtent}", SouthWest, true);
+            northEastTooltip.Show($"X: {EastExtent}\nY: {NorthExtent}", NorthEast, true);
+        }
 
-            southWestTooltip.Show($"X: {westExtentTextField}\nY: {southExtentTextField}", southWestAndNorthEast.Item1, true);
-            northEastTooltip.Show($"X: {eastExtentTextField}\nY: {northExtentTextField}", southWestAndNorthEast.Item2, true);
+        private void WhenDeselected()
+        {
+            southWestTooltip.Hide();
+            northEastTooltip.Hide();
         }
 
         private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
@@ -94,13 +162,33 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             var minUnityPosition = new Vector3(bounds.min.x, bounds.center.y, bounds.min.z);
             var min = new Coordinate(minUnityPosition);
-            var southWest = min.Convert(DisplayCrs); ;
+            var southWest = min.Convert(DisplayCrs);
 
             var maxUnityPosition = new Vector3(bounds.max.x, bounds.center.y, bounds.max.z);
             var max = new Coordinate(maxUnityPosition);
             var northEast = max.Convert(DisplayCrs);
 
             return (southWest, northEast);
+        }
+        
+        public void CopySouthWestToClipboard()
+        {
+            var text = $"{WestExtent},{SouthExtent}";
+#if UNITY_WEBGL && !UNITY_EDITOR
+            CopyToClipboard(text);
+#else
+            GUIUtility.systemCopyBuffer = text;
+#endif
+        }
+
+        public void CopyNorthEastToClipboard()
+        {
+            var text = $"{EastExtent},{NorthExtent}";
+#if UNITY_WEBGL && !UNITY_EDITOR
+            CopyToClipboard(text);
+#else
+            GUIUtility.systemCopyBuffer = text;
+#endif
         }
     }
 }

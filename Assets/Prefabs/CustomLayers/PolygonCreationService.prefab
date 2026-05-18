@@ -326,10 +326,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8252544850299417775}
   - component: {fileID: 6970481386311860828}
-  - component: {fileID: 6055517019102079451}
-  - component: {fileID: 5075749786647668795}
-  - component: {fileID: 5204133725323682888}
-  - component: {fileID: 4084062005155970036}
   - component: {fileID: -7824704156598368423}
   m_Layer: 0
   m_Name: PolygonCreationService
@@ -373,134 +369,16 @@ MonoBehaviour:
   polygonInput: {fileID: 2971444630074657358}
   lineInput: {fileID: 6819746166564945398}
   defaultLineWidth: 10
+  maxSelectionDistanceFromCamera: 10000
+  OnBlockCameraDragging: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220,
+    type: 2}
   OnGridCreate: {fileID: 11400000, guid: 2725eb416725304468190dd92c09fdc3, type: 2}
   OnGridEdit: {fileID: 11400000, guid: 6d8cfdb4bf975bef1baa308dd907ba40, type: 2}
   OnGridSelect: {fileID: 11400000, guid: 1f0d8a518b80c13b6bd1c0a1e46b32a6, type: 2}
---- !u!114 &6055517019102079451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4543035819173704079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: 030d68968a84647ae8d3129f06405c26, type: 2}
-  onTriggered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6970481386311860828}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.PolygonInputToLayer, Assembly-CSharp
-        m_MethodName: SetPolygonInputModeToCreate
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  onTrue:
-    m_PersistentCalls:
-      m_Calls: []
-  onFalse:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &5075749786647668795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4543035819173704079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: df2dcc26fa84f5842a74724ed1f7095d, type: 2}
-  onTriggered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6970481386311860828}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.PolygonInputToLayer,
-          Assembly-CSharp
-        m_MethodName: SetLineInputModeToCreate
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  onTrue:
-    m_PersistentCalls:
-      m_Calls: []
-  onFalse:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &5204133725323682888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4543035819173704079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b7e70441345c14ab89bfbaf4f57f18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: 44b770b681b65f34d9a14c6bfd441176, type: 2}
-  trigger:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: df2dcc26fa84f5842a74724ed1f7095d, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
---- !u!114 &4084062005155970036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4543035819173704079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b7e70441345c14ab89bfbaf4f57f18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: dd074cc6e46cd6e4e88d82ad7e59adba, type: 2}
-  trigger:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 030d68968a84647ae8d3129f06405c26, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+  OnLineCreate: {fileID: 11400000, guid: 44b770b681b65f34d9a14c6bfd441176, type: 2}
+  OnLineEdit: {fileID: 11400000, guid: 2f1892377ee87bbc5b34af841a97ebba, type: 2}
+  OnPolygonCreate: {fileID: 11400000, guid: dd074cc6e46cd6e4e88d82ad7e59adba, type: 2}
+  OnPolygonEdit: {fileID: 11400000, guid: 1b16cbed8b04c10cfb3cee04c2190b3e, type: 2}
 --- !u!114 &-7824704156598368423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -719,12 +597,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc1c2cc6fac734b8eac771ad4ae62c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: 445da62e811e3254c927570f340ea56d,
-    type: 3}
   lineColor: {r: 1, g: 0.72156864, b: 0, a: 1}
   closedLoopLineColor: {r: 0, g: 1, b: 0, a: 1}
   lineWidthMultiplier: 1
-  maxSelectionDistanceFromCamera: 10000
   snapToStart: 1
   requireClosedPolygon: 1
   closeLoopAtStartPoint: 1
@@ -745,28 +620,12 @@ MonoBehaviour:
   mode: 0
   polygonLineRenderer: {fileID: 5035265957184785308}
   previewLineRenderer: {fileID: 190626057916171551}
-  currentWorldCoordinate: {x: 0, y: 0, z: 0}
   positions: []
   pointerRepresentation: {fileID: 2125279392852574923}
   showPointerInEditMode: 0
   showPointerInCreateMode: 1
   showPointerInCreateAndEditMode: 1
   handleTemplate: {fileID: 6158935657860185988}
-  blockCameraDrag:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   createdNewPolygonArea:
     m_PersistentCalls:
       m_Calls:
@@ -810,6 +669,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   previewLineHasChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHandleCreated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &2247364823442731689
@@ -1358,12 +1220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc1c2cc6fac734b8eac771ad4ae62c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: 445da62e811e3254c927570f340ea56d,
-    type: 3}
   lineColor: {r: 1, g: 0.72156864, b: 0, a: 1}
   closedLoopLineColor: {r: 0, g: 1, b: 0, a: 1}
   lineWidthMultiplier: 1
-  maxSelectionDistanceFromCamera: 10000
   snapToStart: 0
   requireClosedPolygon: 0
   closeLoopAtStartPoint: 0
@@ -1384,28 +1243,12 @@ MonoBehaviour:
   mode: 2
   polygonLineRenderer: {fileID: 5614695549320686730}
   previewLineRenderer: {fileID: 8128767761093916846}
-  currentWorldCoordinate: {x: 0, y: 0, z: 0}
   positions: []
   pointerRepresentation: {fileID: 6146125509947394895}
   showPointerInEditMode: 0
   showPointerInCreateMode: 1
   showPointerInCreateAndEditMode: 1
   handleTemplate: {fileID: 7769445394417945697}
-  blockCameraDrag:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   createdNewPolygonArea:
     m_PersistentCalls:
       m_Calls:
@@ -1449,6 +1292,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   previewLineHasChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHandleCreated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4442034151604228432
