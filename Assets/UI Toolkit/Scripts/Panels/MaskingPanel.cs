@@ -1,13 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
-using ListView = Netherlands3D.UI.Components.ListView;
-using TreeView = UnityEngine.UIElements.TreeView;
+using TreeView = Netherlands3D.UI.Components.TreeView;
 
 
 namespace Netherlands3D.UI.Panels
@@ -22,12 +19,12 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");    
+            treeView = this.Q<TreeView>();
         }
         
         public MaskingPanel(LayerData rootLayer, int maskBitIndex) : this()
         {
             this.maskBitIndex = maskBitIndex;
-            treeView = this.Q<TreeView>();
             treeView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             treeView.selectionType = SelectionType.Multiple;
         
