@@ -15,7 +15,7 @@ namespace Netherlands3D.Legend
 {
     public class LegendBehaviour : MonoBehaviour
     {
-        [SerializeField] private UIDocument uiDocument;
+        [SerializeField] private UIDocument uiDocument; //todo ui-toolkit: use App.UIRoot when this is merged (also for other behaviours that have this reference)
         [SerializeField] private bool log = false;
 
         private LegendPanel legendPanel;
