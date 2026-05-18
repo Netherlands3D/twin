@@ -11,8 +11,9 @@ namespace Netherlands3D.UI.Components
     {
         // Keep user bind so we can call it first.
         private Action<VisualElement, int> _userBind;
-        private int _firstSelectedIndex = -1;
-        private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
+        
+        private int firstSelectedIndex = -1;
+        private List<int> lastSelectedIndices = new();
 
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
@@ -23,14 +24,12 @@ namespace Netherlands3D.UI.Components
             set
             {
                 _userBind = value;
-                base.bindItem = OnBindItem;
+                base.bindItem = (ve, i) =>
+                {
+                    _userBind?.Invoke(ve, i);
+                    ve.userData = i;
+                };
             }
-        }
-        
-        private void OnBindItem(VisualElement ve, int i)
-        {
-            indexDictionary[ve] = i;
-            _userBind?.Invoke(ve, i);
         }
 
 
@@ -71,7 +70,7 @@ namespace Netherlands3D.UI.Components
             if (makeItem == null) makeItem = CreateDefaultItem;
             if (base.bindItem == null) this.bindItem = DefaultBind;
             
-            RegisterCallback<ClickEvent>(OnClick, TrickleDown.TrickleDown);
+            RegisterCallback<ClickEvent>(OnPointerDown, TrickleDown.TrickleDown);
         }
 
         /// <summary>
@@ -89,57 +88,35 @@ namespace Netherlands3D.UI.Components
         {
         }
         
-        private void OnClick(ClickEvent evt)
+        private void OnPointerDown(ClickEvent evt)
         {
             if (selectionType != SelectionType.Multiple) return;
 
             var el = evt.target as VisualElement;
             //find upwards in the tree until unitylistview item is not found which means we will have the listview parent
-            while (el != null && !el.ClassListContains("unity-collection-view__item"))
-               el = el.parent;
+            while (el != null && !el.ClassListContains("unity-list-view__item"))
+                el = el.parent;
             if (el == null) return;
 
-            var clickedIndex = indexDictionary[el];
-            
+            var clickedIndex = (int)el.userData;
             if (!evt.shiftKey)
             {
-                _firstSelectedIndex = clickedIndex;
+                firstSelectedIndex = clickedIndex;
                 return;
             }
-            
-            ProcessSelectionWithShift(evt, clickedIndex);
-        }
-        
-        private void ProcessSelectionWithShift(ClickEvent evt, int clickedIndex)
-        {
-            var selectedIndices = this.selectedIndices.ToList();
-            if (selectedIndices.Count == 0)
-            {
-                _firstSelectedIndex = clickedIndex;
-                this.SetSelectionWithoutNotify(new[] { clickedIndex });
-                evt.StopPropagation();
-                return;
-            }
-            
-            int firstIndex = _firstSelectedIndex;
+
+            int firstIndex = firstSelectedIndex;
             int targetIndex = clickedIndex;
-            int lastSelectedIndex = selectedIndices.Max();
-
-            bool addSelection = !selectedIndices.Contains(targetIndex);
-
             var newSelection = selectedIndices.ToList();
 
-            if (!addSelection)
+            if (selectedIndices.Contains(targetIndex))
             {
-                //Items need to be sequentially removed until the cursor 
-                if (firstIndex < targetIndex)
-                    for (int i = targetIndex + 1; i <= lastSelectedIndex; i++)
+                if (firstIndex <= targetIndex)
+                    for (int i = targetIndex + 1; i <= selectedIndices.Max(); i++)
                         newSelection.Remove(i);
-                else if (firstIndex > targetIndex)
+                if (firstIndex >= targetIndex)
                     for (int i = selectedIndices.Min(); i < targetIndex; i++)
                         newSelection.Remove(i);
-                else if (firstIndex == targetIndex)
-                    newSelection.RemoveAll(i => i != targetIndex);
             }
             else
             {
@@ -156,8 +133,18 @@ namespace Netherlands3D.UI.Components
                             newSelection.Add(i);
                 }
             }
-
+            
+            if(lastSelectedIndices.Count > 0 && !lastSelectedIndices.Contains(targetIndex))
+            {
+                if (firstIndex < targetIndex)
+                    firstSelectedIndex = newSelection.Min();
+                else if (firstIndex > targetIndex)
+                    firstSelectedIndex = newSelection.Max();
+            }
+        
             SetSelection(newSelection);
+            lastSelectedIndices.Clear();
+            lastSelectedIndices.AddRange(newSelection);
             evt.StopPropagation();
         }
     }
