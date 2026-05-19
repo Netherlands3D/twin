@@ -23,11 +23,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
     public class PolygonCreationService : MonoBehaviour
     {
-        public AreaSelection GridInput => gridInput;
+        public GridInput GridInput => gridInput;
         public PolygonInput PolygonInput => polygonInput;
         public PolygonInput LineInput => lineInput;
         
-        [SerializeField] private AreaSelection gridInput;
+        [SerializeField] private GridInput gridInput;
         [SerializeField] private PolygonInput polygonInput;
         [SerializeField] private PolygonInput lineInput;
 

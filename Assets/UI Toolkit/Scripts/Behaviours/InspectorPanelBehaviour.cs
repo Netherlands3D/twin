@@ -181,8 +181,8 @@ namespace Netherlands3D.UI.Behaviours
             importAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
             toolbarMain.OnAddToolSelected += TogglePanel<ImportAssetPanel>;
-            AddButtonClickedCallback = () => inspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(activePanel == importAssetPanel);
-            toolbarMain.OnAddToolSelected += AddButtonClickedCallback;
+           // AddButtonClickedCallback = () => inspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(activePanel == importAssetPanel);
+           // toolbarMain.OnAddToolSelected += AddButtonClickedCallback;
             toolbarMain.OnDownloadToolSelected += TogglePanel<InspectorDownloadGridPanel>;
             
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
@@ -202,7 +202,7 @@ namespace Netherlands3D.UI.Behaviours
             importAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
 
             toolbarMain.OnAddToolSelected -= TogglePanel<ImportAssetPanel>;
-            toolbarMain.OnAddToolSelected -= AddButtonClickedCallback;
+           // toolbarMain.OnAddToolSelected -= AddButtonClickedCallback;
             toolbarMain.OnDownloadToolSelected -= TogglePanel<InspectorDownloadGridPanel>;
             
             OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);

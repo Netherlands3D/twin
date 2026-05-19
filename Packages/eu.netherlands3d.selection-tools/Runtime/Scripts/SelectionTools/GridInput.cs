@@ -24,7 +24,7 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.SelectionTools
 {
-    public class AreaSelection : PolygonInput
+    public class GridInput : PolygonInput
     {
         private MeshRenderer boundsMeshRenderer;
 
@@ -92,10 +92,10 @@ namespace Netherlands3D.SelectionTools
         //when spawned from a tool for instance, we need to override the drawmode from initialization
         public void SetEditModeForSpawnedInstance(GameObject instance)
         {
-            AreaSelection areaSelection = instance.GetComponent<AreaSelection>();
-            if (areaSelection == null) return;
+            GridInput gridInput = instance.GetComponent<GridInput>();
+            if (gridInput == null) return;
             
-            areaSelection.SetDrawMode(DrawMode.Edit);
+            gridInput.SetDrawMode(DrawMode.Edit);
         }
         
 #if UNITY_EDITOR

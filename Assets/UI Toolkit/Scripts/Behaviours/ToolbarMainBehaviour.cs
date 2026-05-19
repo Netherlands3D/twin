@@ -86,7 +86,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void OnAddToolSelected()
         {
             HamburgerMenu.Close();
-            OpenTool(assetImportTool);
+           // OpenTool(assetImportTool);
         }
 
         private void OnLibraryToolSelected()
@@ -110,7 +110,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void OnDownloadToolSelected()
         {
             HamburgerMenu.Close();
-            OpenTool(downloadTileTool);
+            //OpenTool(downloadTileTool);
         }
 
         private void OnToolDeselected()
