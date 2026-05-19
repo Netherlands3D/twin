@@ -123,6 +123,8 @@ namespace Netherlands3D.UI.Components
             {
                 //update the selection start reference
                 firstSelectedIndex = targetIndex;
+                if(!lastSelectedIndices.Contains(targetIndex))
+                    lastSelectedIndices.Add(targetIndex);
                 return;
             }
 
