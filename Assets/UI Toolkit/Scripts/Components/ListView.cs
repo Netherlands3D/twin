@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEditor.Graphs;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -13,6 +15,7 @@ namespace Netherlands3D.UI.Components
         private Action<VisualElement, int> _userBind;
         
         private int firstSelectedIndex = -1;
+        private int lastDirection = 0;
         private List<int> lastSelectedIndices = new();
 
         /// <summary>
@@ -71,6 +74,25 @@ namespace Netherlands3D.UI.Components
             if (base.bindItem == null) this.bindItem = DefaultBind;
             
             RegisterCallback<ClickEvent>(OnPointerDown, TrickleDown.TrickleDown);
+            selectedIndicesChanged += indices =>
+            {
+                List<int> newSelection = indices.ToList();
+                // for (int i = 0; i < itemsSource.Count; i++)
+                // {
+                //     DebugIndex(i, false);
+                // }
+                //
+                // foreach (int i in lastSelectedIndices)
+                // {
+                //     DebugIndex(i, true, Color.green);
+                // }
+                // foreach (int index in indices)
+                // {
+                //     if (!lastSelectedIndices.Contains(index))
+                //         newSelection.Remove(index);
+                // }
+                //SetSelection(newSelection);
+            };
         }
 
         /// <summary>
@@ -87,6 +109,43 @@ namespace Netherlands3D.UI.Components
         private void DefaultBind(VisualElement item, int index)
         {
         }
+
+        private void ClearDebug()
+        {
+            for (int i = 0; i < itemsSource.Count; i++)
+            {
+                GetRootElementForIndex(i).style.borderBottomColor = Color.clear;
+                GetRootElementForIndex(i).style.borderBottomWidth = 0;
+            }
+        }
+        
+        private void ClearDebug2()
+        {
+            for (int i = 0; i < itemsSource.Count; i++)
+            {
+                GetRootElementForIndex(i).style.borderLeftColor = Color.clear;
+                GetRootElementForIndex(i).style.borderLeftWidth = 0;
+            }
+        }
+        
+        private void DebugIndex(int index, Color debugColor = default)
+        {
+            GetRootElementForIndex(index).style.borderBottomColor = debugColor;
+            GetRootElementForIndex(index).style.borderBottomWidth = 2;
+        }
+        
+        private void DebugIndex2(int index, Color debugColor = default)
+        {
+            GetRootElementForIndex(index).style.borderLeftColor = debugColor;
+            GetRootElementForIndex(index).style.borderLeftWidth = 2;
+        }
+
+        private void SetFirstSelectedIndex(int index)
+        {
+            ClearDebug();
+            firstSelectedIndex = index;
+            DebugIndex(index, Color.red);
+        }
         
         private void OnPointerDown(ClickEvent evt)
         {
@@ -98,53 +157,78 @@ namespace Netherlands3D.UI.Components
                 el = el.parent;
             if (el == null) return;
 
-            var clickedIndex = (int)el.userData;
+            int targetIndex = (int)el.userData;
             if (!evt.shiftKey)
             {
-                firstSelectedIndex = clickedIndex;
+                SetFirstSelectedIndex(targetIndex);   
                 return;
             }
 
+            
             int firstIndex = firstSelectedIndex;
-            int targetIndex = clickedIndex;
             var newSelection = selectedIndices.ToList();
 
-            if (selectedIndices.Contains(targetIndex))
+            if (lastSelectedIndices.Contains(targetIndex))
             {
-                if (firstIndex <= targetIndex)
-                    for (int i = targetIndex + 1; i <= selectedIndices.Max(); i++)
-                        newSelection.Remove(i);
-                if (firstIndex >= targetIndex)
-                    for (int i = selectedIndices.Min(); i < targetIndex; i++)
-                        newSelection.Remove(i);
-            }
-            else
-            {
-                if (firstIndex < targetIndex)
+                if (firstIndex < targetIndex || (firstIndex == targetIndex && lastDirection > 0))
                 {
-                    for (int i = firstIndex; i <= targetIndex; i++)
-                        if (!newSelection.Contains(i))
-                            newSelection.Add(i);
+                    for(int i = firstIndex + 1; i < itemsSource.Count; i++)
+                        if (lastSelectedIndices.Contains(i))
+                            lastSelectedIndices.Remove(i);
+                        else
+                            break;
                 }
-                else if (firstIndex > targetIndex)
+                if (firstIndex > targetIndex || (firstIndex == targetIndex && lastDirection < 0))
                 {
-                    for (int i = targetIndex; i <= firstIndex; i++)
-                        if (!newSelection.Contains(i))
-                            newSelection.Add(i);
+                    for (int i = firstIndex - 1; i >= 0; i--)
+                        if (lastSelectedIndices.Contains(i))
+                            lastSelectedIndices.Remove(i);
+                        else
+                            break;
                 }
             }
             
-            if(lastSelectedIndices.Count > 0 && !lastSelectedIndices.Contains(targetIndex))
+            int min = Mathf.Min(firstIndex, targetIndex);
+            int max = Mathf.Max(firstIndex, targetIndex);
+            for (int i = 0; i < itemsSource.Count; i++)
             {
-                if (firstIndex < targetIndex)
-                    firstSelectedIndex = newSelection.Min();
-                else if (firstIndex > targetIndex)
-                    firstSelectedIndex = newSelection.Max();
+                if (i < min || i > max)
+                {
+                    if (!lastSelectedIndices.Contains(i))
+                        newSelection.Remove(i);
+                }
+            }
+            
+            if (firstIndex < targetIndex)
+            {
+                lastDirection = 1;
+                for (int i = targetIndex - 1; i >= 0; i--)
+                    if (!newSelection.Contains(i))
+                    {
+                        SetFirstSelectedIndex(i + 1);
+                        break;
+                    }
+                
+            }
+            else if (firstIndex > targetIndex)
+            {
+                lastDirection = -1;
+                for(int i = targetIndex + 1; i < itemsSource.Count; i++)
+                
+                    if (!newSelection.Contains(i))
+                    {
+                        SetFirstSelectedIndex(i - 1);
+                        break;
+                    }
             }
         
             SetSelection(newSelection);
             lastSelectedIndices.Clear();
             lastSelectedIndices.AddRange(newSelection);
+            ClearDebug2();
+            foreach (int i in lastSelectedIndices)
+                DebugIndex2(i, Color.green);
+            
             evt.StopPropagation();
         }
     }
