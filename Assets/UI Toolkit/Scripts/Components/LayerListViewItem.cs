@@ -20,27 +20,41 @@ namespace Netherlands3D.UI.Components
         private Icon layerTypeIcon;
         private Label nameLabel;
         private Toggle propertyToggle;
-        
+
+        PropertyPanelBehaviour propertyPanelBehaviour;
+
         private LayerData layerData => userData as LayerData;
 
         public LayerListViewItem()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
+
+            propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
+            propertyPanelBehaviour.PropertySectionClosed.AddListener(UncheckPropertyToggle);
+
             isActiveToggle = this.Q<VisibilityToggle>("IsActiveToggle");
             layerTypeIcon = this.Q<Icon>("TypeIcon");
             colorBar = this.Q<VisualElement>("ColorBar");
             nameLabel = this.Q<Label>("NameLabel");
             propertyToggle = this.Q<Toggle>("PropertyToggle");
-            
+
             isActiveToggle.RegisterValueChangedCallback(OnIsActiveToggleChanged);
             propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
         }
 
+        private void UncheckPropertyToggle(LayerData layerData)
+        {
+            if(layerData == this.layerData)
+                propertyToggle.SetValueWithoutNotify(false);
+        }
+
         private void OnPropertyToggleValueChanged(ChangeEvent<bool> evt)
         {
-            var propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
-            propertyPanelBehaviour.SpawnPanel(layerData);
+            if(evt.newValue)
+                propertyPanelBehaviour.SpawnPanel(layerData);
+            else
+                propertyPanelBehaviour.ClearActivePanel();
         }
 
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
@@ -87,7 +101,7 @@ namespace Netherlands3D.UI.Components
             // isActiveToggle.SetState(layerData.);
             layerTypeIcon.Image = GetImage(layerData);
             nameLabel.text = layerData.Name;
-            
+
             LoadProperties(layerData.LayerProperties);
         }
 
@@ -95,7 +109,7 @@ namespace Netherlands3D.UI.Components
         {
             return LayerTypeSpriteLibrary.GetIconImage(layerData);
         }
-        
+
         public bool HasPropertiesWithPanel(List<LayerPropertyData> properties)
         {
             foreach (var property in properties)

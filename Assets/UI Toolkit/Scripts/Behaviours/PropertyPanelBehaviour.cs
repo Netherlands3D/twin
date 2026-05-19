@@ -8,6 +8,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
 
@@ -21,6 +22,10 @@ namespace Netherlands3D.UI.Panels
         private SecondaryPropertiesPanel secondaryPropertiesPanel;
         private VisualElement propertySectionContainer;
         private ColorPicker colorPicker;
+
+        public LayerData activeLayer;
+        public UnityEvent<LayerData> PropertySectionOpened;
+        public UnityEvent<LayerData> PropertySectionClosed;
 
         private void Start()
         {
@@ -50,6 +55,8 @@ namespace Netherlands3D.UI.Panels
             propertySectionContainer.Clear();
             propertiesPanel.SetVisible(false);
             secondaryPropertiesPanel.SetVisible(false);
+            PropertySectionClosed.Invoke(activeLayer);
+            activeLayer = null;
         }
 
         public void SpawnPanel(LayerData layer)
@@ -77,6 +84,9 @@ namespace Netherlands3D.UI.Panels
                 hasPanels |= ShowPanelsForProperty(property, layer.LayerProperties);
                 hasPanels |= ShowPanelsForInterfaces(property, layer.LayerProperties);
             }
+
+            activeLayer = layer;
+            PropertySectionOpened.Invoke(activeLayer);
 
             if (!hasPanels)
             {
