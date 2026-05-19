@@ -14,7 +14,7 @@ using Slider = UnityEngine.UIElements.Slider;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(ToggleScatterPropertyData))]
+    [PropertySection(typeof(ToggleScatterPropertyData), PropertySectionCategory.Settings)]
     public partial class ScatterPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private ToggleScatterPropertyData convertToScatterPropertyData;
