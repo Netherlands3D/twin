@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(PolygonSelectionLayerPropertyData))]
+    [PropertySection(typeof(PolygonSelectionLayerPropertyData), PropertySectionCategory.Settings)]
     public partial class PolygonPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private PolygonSelectionLayerPropertyData polygonPropertyData;
