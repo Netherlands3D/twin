@@ -74,25 +74,6 @@ namespace Netherlands3D.UI.Components
             if (base.bindItem == null) this.bindItem = DefaultBind;
             
             RegisterCallback<ClickEvent>(OnPointerDown, TrickleDown.TrickleDown);
-            selectedIndicesChanged += indices =>
-            {
-                List<int> newSelection = indices.ToList();
-                // for (int i = 0; i < itemsSource.Count; i++)
-                // {
-                //     DebugIndex(i, false);
-                // }
-                //
-                // foreach (int i in lastSelectedIndices)
-                // {
-                //     DebugIndex(i, true, Color.green);
-                // }
-                // foreach (int index in indices)
-                // {
-                //     if (!lastSelectedIndices.Contains(index))
-                //         newSelection.Remove(index);
-                // }
-                //SetSelection(newSelection);
-            };
         }
 
         /// <summary>
@@ -142,9 +123,9 @@ namespace Netherlands3D.UI.Components
 
         private void SetFirstSelectedIndex(int index)
         {
-            ClearDebug();
+            //ClearDebug();
             firstSelectedIndex = index;
-            DebugIndex(index, Color.red);
+            //DebugIndex(index, Color.red);
         }
         
         private void OnPointerDown(ClickEvent evt)
@@ -160,16 +141,20 @@ namespace Netherlands3D.UI.Components
             int targetIndex = (int)el.userData;
             if (!evt.shiftKey)
             {
+                //update the selection start reference
                 SetFirstSelectedIndex(targetIndex);   
                 return;
             }
-
             
             int firstIndex = firstSelectedIndex;
+            //new selection indices from the listview selection
             var newSelection = selectedIndices.ToList();
 
+            //did the previous selection have the new clicked element? if so then deselect elements until the start reference
             if (lastSelectedIndices.Contains(targetIndex))
             {
+                //we need to know the last selected direction in case the clicked position is equal to the start reference
+                //is the start reference index lower than the clicked index OR was the previous direction ascending and clicked at same position as the start
                 if (firstIndex < targetIndex || (firstIndex == targetIndex && lastDirection > 0))
                 {
                     for(int i = firstIndex + 1; i < itemsSource.Count; i++)
@@ -178,6 +163,7 @@ namespace Netherlands3D.UI.Components
                         else
                             break;
                 }
+                //is the start reference index higher than the clicked index OR was the previous direction descending and clicked at same position as the start
                 if (firstIndex > targetIndex || (firstIndex == targetIndex && lastDirection < 0))
                 {
                     for (int i = firstIndex - 1; i >= 0; i--)
@@ -188,6 +174,7 @@ namespace Netherlands3D.UI.Components
                 }
             }
             
+            //the listview selected indices dont match the current selection (it wants to select everything no matter what we do, so we need to bring back the current selection)
             int min = Mathf.Min(firstIndex, targetIndex);
             int max = Mathf.Max(firstIndex, targetIndex);
             for (int i = 0; i < itemsSource.Count; i++)
@@ -199,6 +186,8 @@ namespace Netherlands3D.UI.Components
                 }
             }
             
+            //cache the lastdirection in case the next selection is clicked at the same position as the starting reference
+            //update the start reference within the bounds of the newest selection group, so we dont select the whole selection and keep the gaps
             if (firstIndex < targetIndex)
             {
                 lastDirection = 1;
@@ -225,9 +214,9 @@ namespace Netherlands3D.UI.Components
             SetSelection(newSelection);
             lastSelectedIndices.Clear();
             lastSelectedIndices.AddRange(newSelection);
-            ClearDebug2();
-            foreach (int i in lastSelectedIndices)
-                DebugIndex2(i, Color.green);
+            // ClearDebug2();
+            // foreach (int i in lastSelectedIndices)
+            //     DebugIndex2(i, Color.green);
             
             evt.StopPropagation();
         }
