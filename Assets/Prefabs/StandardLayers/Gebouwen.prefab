@@ -182,6 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040e59742c03762f891b4749d60c2b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectionMaterial: {fileID: 2100000, guid: 32d66cb461963494c8545032b6d11bd0, type: 2}
   debugFeatures: 0
 --- !u!114 &8885966354490939882
 MonoBehaviour:

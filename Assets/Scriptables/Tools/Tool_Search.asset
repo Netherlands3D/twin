@@ -12,24 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
   m_Name: Tool_Search
   m_EditorClassIdentifier: 
-  code: 
+  code: search
   title: Zoeken
   functionGroups:
-  - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  - {fileID: 0}
   onAvailabilityChange:
     m_PersistentCalls:
       m_Calls: []
-  onActivate:
+  onOpen:
     m_PersistentCalls:
       m_Calls: []
-  onDeactivate:
+  onClose:
     m_PersistentCalls:
       m_Calls: []
   onToggleInspector:
     m_PersistentCalls:
       m_Calls: []
-  activateToolOnInspectorToggle: 1
-  inspectorPrefab: {fileID: 2485776787059987519, guid: 26acc1a51cea69a408f60ca422a3cb29,
-    type: 3}
+  onSpawnedPrefab:
+    m_PersistentCalls:
+      m_Calls: []
+  inspectorPrefab: {fileID: 0}
   functionalityPrefabs: []
   open: 0

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components

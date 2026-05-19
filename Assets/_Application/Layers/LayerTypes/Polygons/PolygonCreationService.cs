@@ -7,10 +7,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
@@ -117,7 +114,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
-                if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked() || input.Mode == PolygonInput.DrawMode.Edit)
+                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Edit)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -143,13 +140,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             else if (currentShapeType == ShapeType.Grid)
             {
-                if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked() || input.Mode == PolygonInput.DrawMode.Selected)
+                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Selected)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
                 var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
                 gridInput.DrawGridAtPosition(worldPosition, worldPosition);
             }
+        }
+
+        public void UpdateGridSelectionFromPoints(List<Vector3> points)
+        {
+            gridInput.SetAreaFromPolygon(points);
+            gridInput.MakeSelection();
         }
 
         private void ClickAction_performed(InputAction.CallbackContext obj)
@@ -226,7 +229,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                 if (!gridInput.DrawingArea && inputService.PolygonClickAction.IsPressed() && inputService.PolygonModifierAction.IsPressed())
                 {
-                    if (ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
+                    if (App.UIRoot.IsUIClicked() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
 
                     gridInput.DrawingArea = true;
                     OnBlockCameraDragging.InvokeStarted(true);

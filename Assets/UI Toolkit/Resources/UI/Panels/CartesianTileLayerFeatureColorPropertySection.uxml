@@ -1,0 +1,13 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="CartesianTileLayerFeatureColorPropertySection" 
+    class="cartesian-tile-layer-feature-color-property-section"
+    >
+    <nl3d:ContentContainer leading-icon="ColorFeatures" text="Maaiveld stijl aanpassen">
+        <nl3d:ListView class="cartesian-tile-layer-feature-color-property-section__list-view"/>
+    </nl3d:ContentContainer>
+</ui:UXML>

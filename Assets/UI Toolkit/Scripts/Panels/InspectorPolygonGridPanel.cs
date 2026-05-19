@@ -7,6 +7,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
 
@@ -41,13 +42,9 @@ namespace Netherlands3D.UI.Panels
             zw_y = this.Q<NumberField>("ZW_Y");
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
-
-            PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             
             OnShow += () => Show(true);
             OnHide += () => Show(false);
-            OnShow += polygonSelectionService.EnablePolygonSelection;
-            OnHide += polygonSelectionService.DisablePolygonSelection;
 
             confirmButton.clicked += OnConfirmSelection.Invoke;
 
@@ -59,6 +56,10 @@ namespace Netherlands3D.UI.Panels
                 
                 copyZW.RegisterCallback<ClickEvent>(CopySouthWest);
                 copyNO.RegisterCallback<ClickEvent>(CopyNorthEast);
+                zw_x.InputField.RegisterCallback<NavigationSubmitEvent>(evt => downloadInspectorService.SetWestValue(zw_x.GetValueAsInt()), TrickleDown.TrickleDown);
+                zw_y.InputField.RegisterCallback<NavigationSubmitEvent>(evt => downloadInspectorService.SetSouthValue(zw_y.GetValueAsInt()), TrickleDown.TrickleDown);
+                no_x.InputField.RegisterCallback<NavigationSubmitEvent>(evt => downloadInspectorService.SetEastValue(no_x.GetValueAsInt()), TrickleDown.TrickleDown);
+                no_y.InputField.RegisterCallback<NavigationSubmitEvent>(evt => downloadInspectorService.SetNorthValue(no_y.GetValueAsInt()), TrickleDown.TrickleDown); 
             });
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {

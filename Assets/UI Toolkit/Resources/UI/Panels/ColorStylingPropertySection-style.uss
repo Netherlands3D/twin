@@ -1,0 +1,8 @@
+.color-styling-property-section {
+    flex-direction: column;
+}
+
+.color-styling__list-view{
+    flex-grow: 1;
+    height: auto;
+}
