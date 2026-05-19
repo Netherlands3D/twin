@@ -107,6 +107,43 @@ namespace Netherlands3D.UI.Components
         private void DefaultBind(VisualElement item, int index)
         {
         }
+        
+        private void ClearDebug()
+        {
+            for (int i = 0; i < itemsSource.Count; i++)
+            {
+                GetRootElementForIndex(i).style.borderBottomColor = Color.clear;
+                GetRootElementForIndex(i).style.borderBottomWidth = 0;
+            }
+        }
+        
+        private void ClearDebug2()
+        {
+            for (int i = 0; i < itemsSource.Count; i++)
+            {
+                GetRootElementForIndex(i).style.borderLeftColor = Color.clear;
+                GetRootElementForIndex(i).style.borderLeftWidth = 0;
+            }
+        }
+        
+        private void DebugIndex(int index, Color debugColor = default)
+        {
+            GetRootElementForIndex(index).style.borderBottomColor = debugColor;
+            GetRootElementForIndex(index).style.borderBottomWidth = 2;
+        }
+        
+        private void DebugIndex2(int index, Color debugColor = default)
+        {
+            GetRootElementForIndex(index).style.borderLeftColor = debugColor;
+            GetRootElementForIndex(index).style.borderLeftWidth = 2;
+        }
+
+        private void SetFirstSelectedIndex(int index)
+        {
+            ClearDebug();
+            firstSelectedIndex = index;
+            DebugIndex(index, Color.red);
+        }
 
         private void OnSelectionChanged(IEnumerable<object> obj)
         {
@@ -122,9 +159,17 @@ namespace Netherlands3D.UI.Components
             if (!Keyboard.current.shiftKey.isPressed)
             {
                 //update the selection start reference
-                firstSelectedIndex = targetIndex;
+                SetFirstSelectedIndex(targetIndex);
                 if(!lastSelectedIndices.Contains(targetIndex))
                     lastSelectedIndices.Add(targetIndex);
+                else if(lastSelectedIndices.Contains(targetIndex))
+                    lastSelectedIndices.Remove(targetIndex);
+            
+                int closest = selectedIndices
+                    .OrderBy(i => Math.Abs(i - targetIndex))
+                    .FirstOrDefault();
+    
+                SetFirstSelectedIndex(closest);
                 return;
             }
 
@@ -171,26 +216,29 @@ namespace Netherlands3D.UI.Components
 
             //cache the lastdirection in case the next selection is clicked at the same position as the starting reference
             //update the start reference within the bounds of the newest selection group, so we dont select the whole selection and keep the gaps
-            if (firstIndex < targetIndex)
+            if (firstIndex < targetIndex) //clicked further down
             {
                 lastDirection = 1;
                 for (int i = targetIndex - 1; i >= 0; i--)
                     if (!newSelection.Contains(i))
                     {
-                        firstSelectedIndex = (i + 1);
+                        SetFirstSelectedIndex(i + 1);
                         break;
                     }
+                    else if (i == 0)
+                        SetFirstSelectedIndex(0);
             }
-            else if (firstIndex > targetIndex)
+            else if (firstIndex > targetIndex) //clicked higher up
             {
                 lastDirection = -1;
                 for (int i = targetIndex + 1; i < itemsSource.Count; i++)
-
                     if (!newSelection.Contains(i))
                     {
-                        firstSelectedIndex = (i - 1);
+                        SetFirstSelectedIndex(i - 1);
                         break;
                     }
+                    else if(i == itemsSource.Count - 1)
+                        SetFirstSelectedIndex(itemsSource.Count - 1);
             }
 
             SetSelection(newSelection);
