@@ -71,12 +71,8 @@ namespace Netherlands3D.UI.Components
             // while (el != null && !el.ClassListContains("unity-collection-view__item"))
             //     el = el.parent;
             // if (el == null) return;
+            var targetIndex = indexDictionary[hoveredElement];
 
-            var index = indexDictionary[hoveredElement];
-            // Debug.Log("index for element:" + index);
-            // var clickedIndex = viewController.GetIndexForId(index);
-            int targetIndex = viewController.GetIndexForId(index);
-            
             if (!Keyboard.current.shiftKey.isPressed)
             {
                 //update the selection start reference
