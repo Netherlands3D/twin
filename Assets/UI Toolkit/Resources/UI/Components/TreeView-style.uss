@@ -19,10 +19,10 @@
     border-width: var(--spacing-0_5);
 }
 
-.unity-tree-view__item-toggle .unity-toggle__checkmark{
+.unity-tree-view__item-toggle .unity-foldout__checkmark{
     background-image: var(--icon-chevronright);
 }
 
-.unity-tree-view__item-toggle:checked .unity-toggle__checkmark{
+.unity-tree-view__item-toggle:checked .unity-foldout__checkmark{
     background-image: var(--icon-chevrondown);
 }

@@ -6,8 +6,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
-using ListView = Netherlands3D.UI.Components.ListView;
-using TreeView = UnityEngine.UIElements.TreeView;
+using TreeView = Netherlands3D.UI.Components.TreeView;
 
 
 namespace Netherlands3D.UI.Panels
@@ -17,26 +16,36 @@ namespace Netherlands3D.UI.Panels
     {
         private int maskBitIndex;
         private TreeView treeView;
+        private bool refreshAtEndOfFrame;
 
         public MaskingPanel()
         {
             this.CloneComponentTree("Panels");
-            this.AddComponentStylesheet("Panels");    
+            this.AddComponentStylesheet("Panels");
+            treeView = this.Q<TreeView>();
+
+            
+            schedule.Execute(() =>
+            {
+                if (!refreshAtEndOfFrame) return;
+                
+                refreshAtEndOfFrame = false;
+                treeView.RefreshItems();
+            }).Every(0);  // 0ms = runs every frame
         }
-        
+
         public MaskingPanel(LayerData rootLayer, int maskBitIndex) : this()
         {
             this.maskBitIndex = maskBitIndex;
-            treeView = this.Q<TreeView>();
             treeView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             treeView.selectionType = SelectionType.Multiple;
-        
+
             treeView.makeItem = MakeItem;
             treeView.bindItem = BindItem;
-            
+
             PopulateMaskLayerPanel(rootLayer);
         }
-        
+
         private VisualElement MakeItem()
         {
             return new MaskLayerListViewItem();
@@ -45,18 +54,33 @@ namespace Netherlands3D.UI.Panels
         private void BindItem(VisualElement item, int index)
         {
             if (item is not MaskLayerListViewItem maskLayerRowElement) return;
-    
+
+            maskLayerRowElement.VisibilityToggleChanged.RemoveListener(ToggleSelection);
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             maskLayerRowElement.Initialize(layerData, maskBitIndex);
+            maskLayerRowElement.VisibilityToggleChanged.AddListener(ToggleSelection);
         }
-        
+
+        private void ToggleSelection(bool active)
+        {
+            Debug.Log("ToggleSelection");
+            foreach (var index in treeView.selectedIndices.ToList()) //make a copy of the indices, because they might change
+            {
+                var layerData = treeView.GetItemDataForIndex<LayerData>(index);
+                MaskingLayerPropertyData propertyData = layerData.GetProperty<MaskingLayerPropertyData>();
+                propertyData.SetMaskBit(maskBitIndex, active);
+            }
+
+            RefreshAtEndOfFrame();
+        }
+
         private void PopulateMaskLayerPanel(LayerData rootLayer)
         {
             var tree = ToTreeViewItems(rootLayer);
             treeView.SetRootItems(tree);
-            treeView.RefreshItems();
+            RefreshAtEndOfFrame();
         }
-        
+
         private List<TreeViewItemData<LayerData>> ToTreeViewItems(LayerData rootLayer)
         {
             var counter = 0;
@@ -75,7 +99,9 @@ namespace Netherlands3D.UI.Panels
                 bool isMaskable = maskingPropertyData != null;
                 if (isMaskable)
                 {
-                    maskingPropertyData.OnStylingChanged.AddListener(treeView.RefreshItems); //when masking changes, refresh the panel so all the toggles get the correct visibility state
+                    //when masking changes, refresh the panel so all the toggles get the correct visibility state.
+                    //We do not call RefreshItems directly because when a multiselect toggles multiple items, we need only 1 refresh
+                    maskingPropertyData.OnStylingChanged.AddListener(RefreshAtEndOfFrame); 
                 }
 
                 if (isMaskable || children.Count > 0)
@@ -88,7 +114,12 @@ namespace Netherlands3D.UI.Panels
 
             return result;
         }
-        
+
+        private void RefreshAtEndOfFrame()
+        {
+            refreshAtEndOfFrame = true;
+        }
+
         public void SetHeader(string headerText)
         {
             this.Q<Header>().LabelText = headerText;
