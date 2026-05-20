@@ -12,13 +12,13 @@ namespace Netherlands3D.UI.Components
     public partial class TreeView : UnityEngine.UIElements.TreeView
     {
         private Action<VisualElement, int> _userBind;
-        
+
         private int firstSelectedIndex = -1;
         private int lastDirection = 0;
         private VisualElement hoveredElement;
         private List<int> lastSelectedIndices = new();
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
-        
+
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
         /// </summary>
@@ -34,12 +34,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnBindItem(VisualElement ve, int id)
         {
-            // var collectionViewItem = ve;
-            // while (collectionViewItem != null && !collectionViewItem.ClassListContains("unity-collection-view__item"))
-            //     collectionViewItem = collectionViewItem.parent;
-            // if (collectionViewItem != null) 
-                indexDictionary[ve] = id;
-    
+            indexDictionary[ve] = id;
             ve.RegisterCallback<PointerEnterEvent>(SetActiveElement);
 
             _userBind?.Invoke(ve, id);
@@ -47,41 +42,33 @@ namespace Netherlands3D.UI.Components
 
         private void SetActiveElement(PointerEnterEvent evt)
         {
-            if(hoveredElement != null)
-                hoveredElement.style.backgroundColor = StyleKeyword.Null;
             hoveredElement = evt.target as VisualElement;
-            hoveredElement.style.backgroundColor = Color.red;
         }
-        
+
         public TreeView()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            
+
             selectionChanged += OnSelectionChanged;
         }
-        
+
 
         private void OnSelectionChanged(IEnumerable<object> obj)
         {
             if (selectionType != SelectionType.Multiple) return;
 
-            // var el = evt.target as VisualElement;
-            //find upwards in the tree until unitylistview item is not found which means we will have the listview parent
-            // while (el != null && !el.ClassListContains("unity-collection-view__item"))
-            //     el = el.parent;
-            // if (el == null) return;
             var targetIndex = indexDictionary[hoveredElement];
 
             if (!Keyboard.current.shiftKey.isPressed)
             {
                 //update the selection start reference
                 firstSelectedIndex = targetIndex;
-                if(!lastSelectedIndices.Contains(targetIndex))
+                if (!lastSelectedIndices.Contains(targetIndex))
                     lastSelectedIndices.Add(targetIndex);
-                else if(lastSelectedIndices.Contains(targetIndex))
+                else if (lastSelectedIndices.Contains(targetIndex))
                     lastSelectedIndices.Remove(targetIndex);
-            
+
                 //if the element was deselected with for example ctrl, we need to find the new closest selected element
                 int closest = selectedIndices
                     .OrderBy(i => Math.Abs(i - targetIndex))
@@ -155,7 +142,7 @@ namespace Netherlands3D.UI.Components
                         firstSelectedIndex = i - 1;
                         break;
                     }
-                    else if(i == itemsSource.Count - 1)
+                    else if (i == itemsSource.Count - 1)
                         firstSelectedIndex = itemsSource.Count - 1;
             }
 
