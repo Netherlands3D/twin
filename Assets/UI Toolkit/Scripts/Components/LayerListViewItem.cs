@@ -115,15 +115,15 @@ namespace Netherlands3D.UI.Components
             foreach (var property in properties)
             {
                 var type = property.GetType();
-                if (PropertySectionRegistry.TypeRegistry.ContainsKey(type))
-                    return true;
+                foreach(var collection in PropertySectionRegistry.TypeRegistry.Values)
+                    if (collection.Collection.ContainsKey(type))
+                        return true;
 
                 foreach (var interfaceType in type.GetInterfaces())
                 {
-                    if (PropertySectionRegistry.TypeRegistry.ContainsKey(interfaceType))
-                    {
-                        return true;
-                    }
+                    foreach(var collection in PropertySectionRegistry.TypeRegistry.Values)
+                        if (collection.Collection.ContainsKey(interfaceType))
+                            return true;
                 }
             }
 

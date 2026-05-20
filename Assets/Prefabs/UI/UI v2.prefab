@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 873264101414426239}
   - component: {fileID: 6449633652433648055}
   - component: {fileID: 2679958399476094032}
-  - component: {fileID: 9090450019030462779}
   - component: {fileID: 5188715498986471469}
   - component: {fileID: 4297113770841784289}
   m_Layer: 5
@@ -42,6 +41,7 @@ Transform:
   - {fileID: 3547941427893458787}
   - {fileID: 1319537119612692894}
   - {fileID: 8724700332731692420}
+  - {fileID: 2885198027678354357}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -196,18 +196,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
   service: {fileID: 6449633652433648055}
---- !u!114 &9090450019030462779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891704482898673965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84023e9768a59483ea04c3ace772cec9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Panels.PropertyPanelBehaviour
 --- !u!114 &5188715498986471469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,3 +463,80 @@ MonoBehaviour:
   onCoordinateFound:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &8586416442532236147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2885198027678354357}
+  - component: {fileID: 7303043910021017333}
+  - component: {fileID: 5283672446108559908}
+  m_Layer: 5
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2885198027678354357
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8586416442532236147}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7303043910021017333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8586416442532236147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84023e9768a59483ea04c3ace772cec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Panels.PropertyPanelBehaviour
+  uiDocument: {fileID: 4399201792515060189}
+  activeLayer:
+    name: 
+    activeSelf: 0
+    color: {r: 0, g: 0, b: 0, a: 0}
+    children: []
+    layerProperties: []
+    OnPrefabIdChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    LayerDoubleClicked:
+      m_PersistentCalls:
+        m_Calls: []
+  PropertySectionOpened:
+    m_PersistentCalls:
+      m_Calls: []
+  PropertySectionClosed:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &5283672446108559908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8586416442532236147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
+  service: {fileID: 7303043910021017333}
