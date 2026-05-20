@@ -12,7 +12,7 @@ using Slider = Netherlands3D.UI.Components.Slider;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(SensorPropertyData))]
+    [PropertySection(typeof(SensorPropertyData), PropertySectionCategory.Styling)]
     public partial class SensorValuesPropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
         private SensorPropertyData propertyData;

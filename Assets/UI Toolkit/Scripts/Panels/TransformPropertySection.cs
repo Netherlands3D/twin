@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(TransformLayerPropertyData))]
+    [PropertySection(typeof(TransformLayerPropertyData), PropertySectionCategory.Settings)]
     public partial class TransformPropertySection : VisualElement, IVisualizationWithPropertyData
     {
 

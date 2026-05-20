@@ -9,7 +9,7 @@ using Slider = UnityEngine.UIElements.Slider;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(WindmillPropertyData))]
+    [PropertySection(typeof(WindmillPropertyData), PropertySectionCategory.Settings)]
     public partial class WindmillPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private WindmillPropertyData propertyData;
