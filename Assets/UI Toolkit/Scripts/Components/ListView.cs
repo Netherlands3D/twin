@@ -89,7 +89,6 @@ namespace Netherlands3D.UI.Components
             if (makeItem == null) makeItem = CreateDefaultItem;
             if (base.bindItem == null) this.bindItem = DefaultBind;
 
-            // RegisterCallback<PointerDownEvent>(OnClick, TrickleDown.TrickleDown);
             selectionChanged += OnSelectionChanged;
         }
 
@@ -107,69 +106,27 @@ namespace Netherlands3D.UI.Components
         private void DefaultBind(VisualElement item, int index)
         {
         }
-        
-        private void ClearDebug()
-        {
-            for (int i = 0; i < itemsSource.Count; i++)
-            {
-                GetRootElementForIndex(i).style.borderBottomColor = Color.clear;
-                GetRootElementForIndex(i).style.borderBottomWidth = 0;
-            }
-        }
-        
-        private void ClearDebug2()
-        {
-            for (int i = 0; i < itemsSource.Count; i++)
-            {
-                GetRootElementForIndex(i).style.borderLeftColor = Color.clear;
-                GetRootElementForIndex(i).style.borderLeftWidth = 0;
-            }
-        }
-        
-        private void DebugIndex(int index, Color debugColor = default)
-        {
-            GetRootElementForIndex(index).style.borderBottomColor = debugColor;
-            GetRootElementForIndex(index).style.borderBottomWidth = 2;
-        }
-        
-        private void DebugIndex2(int index, Color debugColor = default)
-        {
-            GetRootElementForIndex(index).style.borderLeftColor = debugColor;
-            GetRootElementForIndex(index).style.borderLeftWidth = 2;
-        }
-
-        private void SetFirstSelectedIndex(int index)
-        {
-            ClearDebug();
-            firstSelectedIndex = index;
-            DebugIndex(index, Color.red);
-        }
 
         private void OnSelectionChanged(IEnumerable<object> obj)
         {
             if (selectionType != SelectionType.Multiple) return;
 
-            // var el = activeElement as VisualElement;
-            // //find upwards in the tree until unitylistview item is not found which means we will have the listview parent
-            // while (el != null && !el.ClassListContains("unity-collection-view__item"))
-            //     el = el.parent;
-            // if (el == null) return;
-
             int targetIndex = indexDictionary[hoveredElement];
             if (!Keyboard.current.shiftKey.isPressed)
             {
                 //update the selection start reference
-                SetFirstSelectedIndex(targetIndex);
+                firstSelectedIndex = targetIndex;
                 if(!lastSelectedIndices.Contains(targetIndex))
                     lastSelectedIndices.Add(targetIndex);
                 else if(lastSelectedIndices.Contains(targetIndex))
                     lastSelectedIndices.Remove(targetIndex);
             
+                //if the element was deselected with for example ctrl, we need to find the new closest selected element
                 int closest = selectedIndices
                     .OrderBy(i => Math.Abs(i - targetIndex))
                     .FirstOrDefault();
-    
-                SetFirstSelectedIndex(closest);
+
+                firstSelectedIndex = closest;
                 return;
             }
 
@@ -220,13 +177,13 @@ namespace Netherlands3D.UI.Components
             {
                 lastDirection = 1;
                 for (int i = targetIndex - 1; i >= 0; i--)
-                    if (!newSelection.Contains(i))
+                    if (!newSelection.Contains(i)) //check until unselected and take the previous
                     {
-                        SetFirstSelectedIndex(i + 1);
+                        firstSelectedIndex = i + 1;
                         break;
                     }
-                    else if (i == 0)
-                        SetFirstSelectedIndex(0);
+                    else if (i == 0) //at minimum we cant check the next so set it to the min bounds
+                        firstSelectedIndex = 0;
             }
             else if (firstIndex > targetIndex) //clicked higher up
             {
@@ -234,11 +191,11 @@ namespace Netherlands3D.UI.Components
                 for (int i = targetIndex + 1; i < itemsSource.Count; i++)
                     if (!newSelection.Contains(i))
                     {
-                        SetFirstSelectedIndex(i - 1);
+                        firstSelectedIndex = i - 1;
                         break;
                     }
                     else if(i == itemsSource.Count - 1)
-                        SetFirstSelectedIndex(itemsSource.Count - 1);
+                        firstSelectedIndex = itemsSource.Count - 1;
             }
 
             SetSelection(newSelection);
