@@ -12,7 +12,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(ColorPropertyData))]
+    [PropertySection(typeof(ColorPropertyData), PropertySectionCategory.Styling)]
     public partial class ColorStylingPropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
         private Color defaultColor = Color.white;

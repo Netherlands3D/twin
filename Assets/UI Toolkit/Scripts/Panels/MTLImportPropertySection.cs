@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(OBJPropertyData))]
+    [PropertySection(typeof(OBJPropertyData), PropertySectionCategory.Settings)]
     public partial class MTLImportPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private enum ViewState

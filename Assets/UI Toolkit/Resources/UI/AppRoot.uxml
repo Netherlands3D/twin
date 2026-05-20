@@ -14,14 +14,15 @@
                 <ui:VisualElement picking-mode="Ignore" class="app" style="flex-grow: 1; flex-direction: row;">
                     <nl3d:ToolbarMain/>
                     <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
+                    <nl3dP:LegendPanel />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="MidSection" class="app__top-zone" picking-mode="Ignore">
                 <nl3d:ToolbarToolbox picking-mode="Ignore" />
             </ui:VisualElement>
-            <ui:VisualElement name="PropertiesSection" class="app__properties-section">
-                <nl3dP:SecondaryPropertiesPanel name="SecondaryPropertiesPanel" class="app__properties-section-column"/>
-                <nl3dP:PropertiesPanel name="PropertiesPanel" class="app__properties-section-column"/>
+            <ui:VisualElement name="PropertiesZone" class="app__properties-zone">
+                <nl3dP:SecondaryPropertiesPanel name="SecondaryPropertiesPanel" class="app__properties-zone-column"/>
+                <nl3dP:PropertiesPanel name="PropertiesPanel" class="app__properties-zone-column"/>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="BottomSection" picking-mode="Ignore" style="align-items: flex-end; flex-direction: row;">
