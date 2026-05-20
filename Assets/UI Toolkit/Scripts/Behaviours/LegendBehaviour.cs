@@ -126,15 +126,16 @@ namespace Netherlands3D.Legend
 
         public void SetLegendUrls(string containerUrl, Dictionary<string, string> imageUrls)
         {
-            if (!containers.TryGetValue(containerUrl, out var container))
+            var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(containerUrl, ServiceType.Wms); //ensure the same formatting so the keys match exactly
+            if (!containers.TryGetValue(getCapabilitiesUrl, out var container))
             {
-                container = new LegendUrlContainer(containerUrl);
-                containers.Add(containerUrl, container);
-                if (log) Debug.Log($"[WMSLegend] New container created for: {containerUrl}");
+                container = new LegendUrlContainer(getCapabilitiesUrl);
+                containers.Add(getCapabilitiesUrl, container);
+                if (log) Debug.Log($"[WMSLegend] New container created for: {getCapabilitiesUrl}");
             }
 
             container.PopulateUrls(imageUrls);
-            if (log) Debug.Log($"[WMSLegend] Populated {imageUrls.Count} image URLs for {containerUrl}");
+            if (log) Debug.Log($"[WMSLegend] Populated {imageUrls.Count} image URLs for {getCapabilitiesUrl}");
 
             // If the panel is already waiting to show this container, start downloading images now.
             if (legendPanel.activeLegendUrlContainer == container && legendPanel.Visible)
