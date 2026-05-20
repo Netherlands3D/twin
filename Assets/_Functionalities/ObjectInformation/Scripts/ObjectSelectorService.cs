@@ -51,6 +51,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         [SerializeField] private InputActionAsset inputActionAsset;
         private InputAction leftClickAction;
+        private RaycastHit[] selectedColliderHits = new RaycastHit[4];
 
 
         public void BlockBagId(string bagId, bool block)
@@ -161,21 +162,50 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return false;
         }
         
+        
+        
+        
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
             //TODO this should be refactored when UITOOLKIT will be implemented fully
             //is the click on any other button than the excluded ui elements then deselect
             if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
             {
-                Transform t = clickedObject.transform;
-                foreach (var excluded in excludedUIForDeselection)
+                if (clickedObject != null)
                 {
-                    if (t.IsChildOf(excluded))
-                        return;
+                    Transform t = clickedObject.transform;
+                    foreach (var excluded in excludedUIForDeselection)
+                    {
+                        if (t.IsChildOf(excluded))
+                            return;
+                    }
+
+                    Deselect();
+                    return;
                 }
-                
-                Deselect();
-                return;
+            }
+            
+            //TODO this should be refactored when UITOOLKIT will be implemented fully
+            //is the click on any collider in the world that should be selected first then deselect
+            //also if turns out that this logic is needed after, this could be improved on,
+            //because now the object most in front of the raycasted position is not clicked first,
+            //colliders are prioritized first instead of features (runtime handles)
+            Vector2 screenPoint = Pointer.current.position.ReadValue();
+            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+            int hitCount = Physics.RaycastNonAlloc(ray, selectedColliderHits, Mathf.Infinity);
+            if (hitCount > 0)
+            {
+                for (int i = 0; i < hitCount; i++)
+                {
+                    //todo discuss if filter for clicknothingplane should be checked and excluded?
+                    var hit = selectedColliderHits[i];
+                    Collider col = hit.collider;
+                    if (col != null)
+                    {
+                        Deselect();
+                        return;
+                    }
+                }
             }
             
             //is the layerpanel or objectinspector tool active?
