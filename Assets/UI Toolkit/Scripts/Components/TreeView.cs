@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -13,6 +14,8 @@ namespace Netherlands3D.UI.Components
         private Action<VisualElement, int> _userBind;
         
         private int firstSelectedIndex = -1;
+        private int lastDirection = 0;
+        private VisualElement hoveredElement;
         private List<int> lastSelectedIndices = new();
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
         
@@ -31,85 +34,138 @@ namespace Netherlands3D.UI.Components
 
         private void OnBindItem(VisualElement ve, int id)
         {
-            var collectionViewItem = ve;
-            while (collectionViewItem != null && !collectionViewItem.ClassListContains("unity-collection-view__item"))
-                collectionViewItem = collectionViewItem.parent;
-            if (collectionViewItem != null) 
-                indexDictionary[collectionViewItem] = id;
+            // var collectionViewItem = ve;
+            // while (collectionViewItem != null && !collectionViewItem.ClassListContains("unity-collection-view__item"))
+            //     collectionViewItem = collectionViewItem.parent;
+            // if (collectionViewItem != null) 
+                indexDictionary[ve] = id;
     
+            ve.RegisterCallback<PointerEnterEvent>(SetActiveElement);
+
             _userBind?.Invoke(ve, id);
         }
 
+        private void SetActiveElement(PointerEnterEvent evt)
+        {
+            if(hoveredElement != null)
+                hoveredElement.style.backgroundColor = StyleKeyword.Null;
+            hoveredElement = evt.target as VisualElement;
+            hoveredElement.style.backgroundColor = Color.red;
+        }
         
         public TreeView()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
             
-            RegisterCallback<ClickEvent>(OnClick, TrickleDown.TrickleDown);
+            selectionChanged += OnSelectionChanged;
         }
         
-        private void OnClick(ClickEvent evt)
+
+        private void OnSelectionChanged(IEnumerable<object> obj)
         {
             if (selectionType != SelectionType.Multiple) return;
 
-            var el = evt.target as VisualElement;
+            // var el = evt.target as VisualElement;
             //find upwards in the tree until unitylistview item is not found which means we will have the listview parent
-            while (el != null && !el.ClassListContains("unity-collection-view__item"))
-                el = el.parent;
-            if (el == null) return;
+            // while (el != null && !el.ClassListContains("unity-collection-view__item"))
+            //     el = el.parent;
+            // if (el == null) return;
 
-            var index = indexDictionary[el];
-            Debug.Log("index for element:" + index);
-            var clickedIndex = viewController.GetIndexForId(index);
+            var index = indexDictionary[hoveredElement];
+            // Debug.Log("index for element:" + index);
+            // var clickedIndex = viewController.GetIndexForId(index);
+            int targetIndex = viewController.GetIndexForId(index);
             
-            if (!evt.shiftKey)
+            if (!Keyboard.current.shiftKey.isPressed)
             {
-                firstSelectedIndex = clickedIndex;
+                //update the selection start reference
+                firstSelectedIndex = targetIndex;
+                if(!lastSelectedIndices.Contains(targetIndex))
+                    lastSelectedIndices.Add(targetIndex);
+                else if(lastSelectedIndices.Contains(targetIndex))
+                    lastSelectedIndices.Remove(targetIndex);
+            
+                //if the element was deselected with for example ctrl, we need to find the new closest selected element
+                int closest = selectedIndices
+                    .OrderBy(i => Math.Abs(i - targetIndex))
+                    .FirstOrDefault();
+
+                firstSelectedIndex = closest;
                 return;
             }
 
             int firstIndex = firstSelectedIndex;
-            int targetIndex = clickedIndex;
+            //new selection indices from the listview selection
             var newSelection = selectedIndices.ToList();
 
-            if (selectedIndices.Contains(targetIndex))
+            //did the previous selection have the new clicked element? if so then deselect elements until the start reference
+            if (lastSelectedIndices.Contains(targetIndex))
             {
-                if (firstIndex <= targetIndex)
-                    for (int i = targetIndex + 1; i <= selectedIndices.Max(); i++)
-                        newSelection.Remove(i);
-                if (firstIndex >= targetIndex)
-                    for (int i = selectedIndices.Min(); i < targetIndex; i++)
-                        newSelection.Remove(i);
-            }
-            else
-            {
-                if (firstIndex < targetIndex)
+                //we need to know the last selected direction in case the clicked position is equal to the start reference
+                //is the start reference index lower than the clicked index OR was the previous direction ascending and clicked at same position as the start
+                if (firstIndex < targetIndex || (firstIndex == targetIndex && lastDirection > 0))
                 {
-                    for (int i = firstIndex; i <= targetIndex; i++)
-                        if (!newSelection.Contains(i))
-                            newSelection.Add(i);
+                    for (int i = firstIndex + 1; i < itemsSource.Count; i++)
+                        if (lastSelectedIndices.Contains(i))
+                            lastSelectedIndices.Remove(i);
+                        else
+                            break;
                 }
-                else if (firstIndex > targetIndex)
+
+                //is the start reference index higher than the clicked index OR was the previous direction descending and clicked at same position as the start
+                if (firstIndex > targetIndex || (firstIndex == targetIndex && lastDirection < 0))
                 {
-                    for (int i = targetIndex; i <= firstIndex; i++)
-                        if (!newSelection.Contains(i))
-                            newSelection.Add(i);
+                    for (int i = firstIndex - 1; i >= 0; i--)
+                        if (lastSelectedIndices.Contains(i))
+                            lastSelectedIndices.Remove(i);
+                        else
+                            break;
                 }
             }
-            
-            if(lastSelectedIndices.Count > 0 && !lastSelectedIndices.Contains(targetIndex))
+
+            //the listview selected indices dont match the current selection (it wants to select everything no matter what we do, so we need to bring back the current selection)
+            int min = Mathf.Min(firstIndex, targetIndex);
+            int max = Mathf.Max(firstIndex, targetIndex);
+            for (int i = 0; i < itemsSource.Count; i++)
             {
-                if (firstIndex < targetIndex)
-                    firstSelectedIndex = newSelection.Min();
-                else if (firstIndex > targetIndex)
-                    firstSelectedIndex = newSelection.Max();
+                if (i < min || i > max)
+                {
+                    if (!lastSelectedIndices.Contains(i))
+                        newSelection.Remove(i);
+                }
             }
-        
+
+            //cache the lastdirection in case the next selection is clicked at the same position as the starting reference
+            //update the start reference within the bounds of the newest selection group, so we dont select the whole selection and keep the gaps
+            if (firstIndex < targetIndex) //clicked further down
+            {
+                lastDirection = 1;
+                for (int i = targetIndex - 1; i >= 0; i--)
+                    if (!newSelection.Contains(i)) //check until unselected and take the previous
+                    {
+                        firstSelectedIndex = i + 1;
+                        break;
+                    }
+                    else if (i == 0) //at minimum we cant check the next so set it to the min bounds
+                        firstSelectedIndex = 0;
+            }
+            else if (firstIndex > targetIndex) //clicked higher up
+            {
+                lastDirection = -1;
+                for (int i = targetIndex + 1; i < itemsSource.Count; i++)
+                    if (!newSelection.Contains(i))
+                    {
+                        firstSelectedIndex = i - 1;
+                        break;
+                    }
+                    else if(i == itemsSource.Count - 1)
+                        firstSelectedIndex = itemsSource.Count - 1;
+            }
+
             SetSelection(newSelection);
             lastSelectedIndices.Clear();
             lastSelectedIndices.AddRange(newSelection);
-            evt.StopPropagation();
         }
     }
 }
