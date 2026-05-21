@@ -15,8 +15,6 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(TransformLayerPropertyData), PropertySectionCategory.Settings)]
     public partial class TransformPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-
-
         private XYZField position;
         private XYZField rotation;
         private XYZField scale;
