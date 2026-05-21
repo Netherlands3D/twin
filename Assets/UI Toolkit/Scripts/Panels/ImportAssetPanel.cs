@@ -57,7 +57,7 @@ namespace Netherlands3D.UI.Panels
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
             UriImportFailed += ErrorPanel.Show;
-            
+            ErrorPanel.Hide();
             CredentialPanel.SetEnabled(false);
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
