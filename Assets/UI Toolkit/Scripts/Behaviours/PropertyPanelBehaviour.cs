@@ -20,7 +20,6 @@ namespace Netherlands3D.UI.Panels
         private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private SecondaryPropertiesPanel secondaryPropertiesPanel;
-        private VisualElement propertySectionContainer;
         private ColorPicker colorPicker;
 
         private void Start()
@@ -29,7 +28,6 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
-            propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
             ClearActivePanel();
@@ -48,7 +46,7 @@ namespace Netherlands3D.UI.Panels
 
         public void ClearActivePanel()
         {
-            propertySectionContainer.Clear();
+            propertiesPanel.ClearPropertySections();
             propertiesPanel.SetVisible(false);
             secondaryPropertiesPanel.SetVisible(false);
         }
@@ -62,6 +60,7 @@ namespace Netherlands3D.UI.Panels
             if (credentials != null && !layer.HasValidCredentials)
             {
                 bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
+                propertiesPanel.UpdateButtonActiveStates();
                 if (showingCredentials) return;
             }
 
@@ -83,6 +82,8 @@ namespace Netherlands3D.UI.Panels
             {
                 ClearActivePanel();
             }
+
+            propertiesPanel.UpdateButtonActiveStates();
         }
 
         private bool ShowPanelsForInterfaces(LayerPropertyData property, List<LayerPropertyData> properties)
@@ -91,15 +92,7 @@ namespace Netherlands3D.UI.Panels
             var hasPanel = false;
             foreach (var interfaceType in interfaces)
             {
-                if (PropertySectionRegistry.TypeRegistry.ContainsKey(interfaceType))
-                {
-                    var panelTypes = PropertySectionRegistry.TypeRegistry[interfaceType];
-                    foreach (var panelType in panelTypes)
-                    {
-                        CreatePanel(panelType, properties);
-                        hasPanel = true;
-                    }
-                }
+                hasPanel |= CreatePanelForType(interfaceType, properties);
             }
 
             return hasPanel;
@@ -108,27 +101,39 @@ namespace Netherlands3D.UI.Panels
         private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
         {
             var type = property.GetType();
-            var hasPanels = PropertySectionRegistry.TypeRegistry.ContainsKey(type);
-            if (hasPanels)
+            var hasPanels = CreatePanelForType(type, properties);
+
+            return hasPanels;
+        }
+        
+        private bool CreatePanelForType(Type type, List<LayerPropertyData> properties)
+        {
+            var hasPanels = false;
+            foreach (var categoryCollection in PropertySectionRegistry.TypeRegistry)
             {
-                var panelTypes = PropertySectionRegistry.TypeRegistry[type];
-                foreach (var panelType in panelTypes)
+                var hasPanelsInCatogory = categoryCollection.Value.Collection.ContainsKey(type);
+                if (hasPanelsInCatogory)
                 {
-                    CreatePanel(panelType, properties);
+                    hasPanels = true;
+                    var panelTypes = categoryCollection.Value.Collection[type];
+                    foreach (var panelType in panelTypes)
+                    {
+                        CreatePanel(panelType, categoryCollection.Key, properties);
+                    }
                 }
             }
 
             return hasPanels;
         }
 
-        private void CreatePanel(Type panelType, List<LayerPropertyData> properties)
+        private void CreatePanel(Type panelType, PropertySectionCategory category, List<LayerPropertyData> properties)
         {
             var propertySection = (VisualElement)Activator.CreateInstance(panelType);
-            propertySectionContainer.Add(propertySection);
+            propertiesPanel.AddPropertySection(propertySection, category);
 
             if (propertySection is IPropertyPanelWithColorPicker propertyPanelWithColorPicker)
                 propertyPanelWithColorPicker.ColorPicker = colorPicker;
-            
+
             ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
         }
     }

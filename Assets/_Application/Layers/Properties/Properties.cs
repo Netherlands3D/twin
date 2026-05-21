@@ -31,41 +31,21 @@ namespace Netherlands3D.Twin.Layers.Properties
             card.SetActive(true);
             sections.ClearAllChildren();
 
-            CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
-            if (credentials != null && !layer.HasValidCredentials)
-            {
-                bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
-                if (showingCredentials) return;
-            }
-
-            foreach (var property in layer.LayerProperties)
-            {
-                if (property.IsEditable == false) continue;
-
-                ShowPanelsForProperty(property, layer.LayerProperties);
-            }
-        }
-
-        private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
-        {
-            var type = property.GetType();
-            var panelExists = PropertySectionRegistry.TypeRegistry.ContainsKey(type);
-            if(!panelExists)
-                Debug.LogError("Missing PropertySection for: " + type + " UI toolkit work in progress, if these errors show up the transition of property panels to UI toolkit is not complete yet");
-            return panelExists;
-
-            // var prefabs = registry.GetPanelPrefabs(type, property);                
-            // if (prefabs.Count > 0)
+            // CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
+            // if (credentials != null && !layer.HasValidCredentials)
             // {
-            //     foreach(var prefab in prefabs)
-            //     {
-            //         var panel = Instantiate(prefab, sections);
-            //         panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(properties);
-            //     }
-            //     return true;
+            //     bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
+            //     if (showingCredentials) return;
             // }
-            // return false;
+            //
+            // foreach (var property in layer.LayerProperties)
+            // {
+            //     if (property.IsEditable == false) continue;
+            //
+            //     ShowPanelsForProperty(property, layer.LayerProperties);
+            // }
         }
+
 
         public void Hide()
         {
@@ -83,15 +63,18 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 var type = property.GetType();
                 // if (registry.HasPanel(type))
-                if (PropertySectionRegistry.TypeRegistry.ContainsKey(type))
-                    return true;
-
-                foreach (var interfaceType in type.GetInterfaces())
+                foreach (var categoryCollection in PropertySectionRegistry.TypeRegistry)
                 {
-                    // if (registry.HasPanel(interfaceType))
-                    if (PropertySectionRegistry.TypeRegistry.ContainsKey(interfaceType))
-                    {
+                    if (categoryCollection.Value.Collection.ContainsKey(type))
                         return true;
+
+                    foreach (var interfaceType in type.GetInterfaces())
+                    {
+                        // if (registry.HasPanel(interfaceType))
+                        if (categoryCollection.Value.Collection.ContainsKey(interfaceType))
+                        {
+                            return true;
+                        }
                     }
                 }
             }

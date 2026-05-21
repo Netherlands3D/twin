@@ -194,4 +194,9 @@
     --nl3d-default-font-bold: url("project://database/Assets/Fonts/Inter-Bold.ttf?fileID=12800000&guid=746cabee1610bda42b4d03f49eeb6e09&type=3#Inter-Bold");
     --nl3d-header-font: var(--nl3d-default-font-semi-bold);
     --nl3d-inspector-header-font: var(--nl3d-default-font-bold);
+
+    --inspector-border-radius: var(--spacing-2);
+    --inspector-min-width: 320px;
+    --inspector-width: 400px;
+    --inspector-max-width: 520px;
 }

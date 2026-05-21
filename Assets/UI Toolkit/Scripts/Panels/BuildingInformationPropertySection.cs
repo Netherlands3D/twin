@@ -14,7 +14,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(BuildingPropertyData))]
+    [PropertySection(typeof(BuildingPropertyData), PropertySectionCategory.Information)]
     public partial class BuildingInformationPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private BuildingPropertyData buildingPropertyData;
