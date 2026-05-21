@@ -108,6 +108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
   locationSearchBehaviour: {fileID: 898252592541998064}
+  OnDrawNewGrid: {fileID: 11400000, guid: 2725eb416725304468190dd92c09fdc3, type: 2}
+  OnGridConfirmed: {fileID: 11400000, guid: 1f0d8a518b80c13b6bd1c0a1e46b32a6, type: 2}
   AssetLibrary: {fileID: 11400000, guid: 07a8740b7ad8fae49a77dbf2dc1abacc, type: 2}
   AssetImport: {fileID: 11400000, guid: 8d401b0a5d410b24192a18882956371f, type: 2}
   Layer: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
@@ -195,7 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
-  service: {fileID: 6449633652433648055}
+  service: {fileID: 4429096078737367381}
 --- !u!114 &9090450019030462779
 MonoBehaviour:
   m_ObjectHideFlags: 0
