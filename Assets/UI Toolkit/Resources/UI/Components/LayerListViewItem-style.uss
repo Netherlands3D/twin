@@ -9,7 +9,7 @@
     background-color: transparent;
 }
 
-.layer-list-view-item .layer-list-view-item__cell {
+.layer-list-view-item__cell {
     margin-right: var(--spacing-3);
 }
 

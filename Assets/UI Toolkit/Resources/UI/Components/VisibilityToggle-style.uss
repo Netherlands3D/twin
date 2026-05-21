@@ -4,7 +4,7 @@
     --toggle-active-contrast-color: var(--toggle-bg-color);
     --toggle-disabled-color: var(--color-blue-200);
     --toggle-padding: var(--spacing-2);
-    --toggle-margin: 0px;
+    /*--toggle-margin: 0px;*/
     --toggle-border-color: var(--color-blue-200);
     --toggle-border-width: var(--spacing-0_5);
     --toggle-border-radius: var(--spacing-2);
@@ -15,7 +15,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    margin: var(--toggle-margin);
+    /*margin: var(--toggle-margin);*/
     background-color: var(--toggle-bg-color);
     border-color: var(--toggle-border-color);
     border-width: var(--toggle-border-width);
