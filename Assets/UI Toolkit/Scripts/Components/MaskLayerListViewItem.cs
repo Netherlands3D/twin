@@ -15,7 +15,8 @@ namespace Netherlands3D.UI.Components
     public partial class MaskLayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
         private int maskingBitIndex;
-
+        private int treeIndex;
+        
         private VisibilityToggle MaskActiveToggle => this.Q<VisibilityToggle>("MaskActiveToggle");
         private Label LayerNameLabel => this.Q<Label>("LayerNameLabel");
 
@@ -24,7 +25,7 @@ namespace Netherlands3D.UI.Components
 
         private LayerData layerData => userData as LayerData;
         
-        public UnityEvent<bool> VisibilityToggleChanged = new UnityEvent<bool>();
+        public UnityEvent<int, bool> VisibilityToggleChanged = new UnityEvent<int, bool>();
 
         public MaskLayerListViewItem()
         {
@@ -35,7 +36,8 @@ namespace Netherlands3D.UI.Components
 
         private void OnToggleChanged(ChangeEvent<bool> evt)
         {
-            VisibilityToggleChanged.Invoke(evt.newValue); //invoke an event instead of setting the bit directly, because we need to account for multi-selected items
+            SetMaskingBit(evt.newValue); //always toggle self
+            VisibilityToggleChanged.Invoke(treeIndex, evt.newValue); //invoke an event to allow toggling of multi-selected items
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -86,10 +88,11 @@ namespace Netherlands3D.UI.Components
                 MaskActiveToggle.SetState(VisibilityState.Invisible);
         }
 
-        public void Initialize(LayerData layerData, int maskingBitIndex)
+        public void Initialize(int index, LayerData layerData, int maskingBitIndex)
         {
-            this.maskingBitIndex = maskingBitIndex;
+            treeIndex = index;
             userData = layerData;
+            this.maskingBitIndex = maskingBitIndex;
             LayerNameLabel.text = layerData.Name;
             LoadProperties(layerData.LayerProperties);
             LayerTypeIcon.Image = GetImage(layerData);
@@ -106,6 +109,12 @@ namespace Netherlands3D.UI.Components
             int maskBitToCheck = 1 << maskingBitIndex;
             bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
             return isBitSet;
+        }
+        
+        private void SetMaskingBit(bool active)
+        {
+            MaskingLayerPropertyData propertyData = layerData.GetProperty<MaskingLayerPropertyData>();
+            propertyData.SetMaskBit(maskingBitIndex, active);
         }
     }
 }

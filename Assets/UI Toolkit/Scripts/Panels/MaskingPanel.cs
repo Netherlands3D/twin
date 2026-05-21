@@ -57,14 +57,17 @@ namespace Netherlands3D.UI.Panels
 
             maskLayerRowElement.VisibilityToggleChanged.RemoveListener(ToggleSelection);
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
-            maskLayerRowElement.Initialize(layerData, maskBitIndex);
+            maskLayerRowElement.Initialize(index, layerData, maskBitIndex);
             maskLayerRowElement.VisibilityToggleChanged.AddListener(ToggleSelection);
         }
 
-        private void ToggleSelection(bool active)
+        private void ToggleSelection(int clickedIndex, bool active)
         {
-            Debug.Log("ToggleSelection");
-            foreach (var index in treeView.selectedIndices.ToList()) //make a copy of the indices, because they might change
+            var selectedIndices = treeView.selectedIndices.ToList();
+            if(!selectedIndices.Contains(clickedIndex)) //we toggled a different layer than the selected layers, don't toggle the selected layers
+                return;
+            
+            foreach (var index in selectedIndices) //make a copy of the indices, because they might change
             {
                 var layerData = treeView.GetItemDataForIndex<LayerData>(index);
                 MaskingLayerPropertyData propertyData = layerData.GetProperty<MaskingLayerPropertyData>();
