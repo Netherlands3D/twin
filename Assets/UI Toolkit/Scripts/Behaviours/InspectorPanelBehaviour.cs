@@ -32,14 +32,13 @@ namespace Netherlands3D.UI.Behaviours
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
-        
+
         private ToolbarMain toolbarMain;
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
-        
+
         private ICredentialHandler credentialHandler;
 
-        [Header("Tools")]
-        [SerializeField] private Tool AssetLibrary;
+        [Header("Tools")] [SerializeField] private Tool AssetLibrary;
         [SerializeField] private Tool AssetImport;
         [SerializeField] private Tool Layer;
         [SerializeField] private Tool SearchTool;
@@ -50,8 +49,9 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] private Tool SettingsTool;
         [SerializeField] private Tool HelpTool;
 
-        [Header("External Windows")]
-        [SerializeField] private ScriptableObject SettingsWindow;
+        [Header("External Windows")] [SerializeField]
+        private ScriptableObject SettingsWindow;
+
         [SerializeField] private string HelpUrl;
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Netherlands3D.UI.Behaviours
             locationSearchBehaviour?.Initialize(GetPanel<LocationSearchPanel>());
 
             InspectorPanel.Close();
-            
+
             ImportAssetPanel.SetCredentialHandler(credentialHandler);
 
             toolRepository = new ToolRepository(OnAnyToolOpened);
@@ -218,10 +218,18 @@ namespace Netherlands3D.UI.Behaviours
         private void OpenLayerPanel()
         {
             CloseInspectorPanels();
+            var oldPanel = GetPanel<LayerPanel>();
+            
+            if (panels.Remove(oldPanel))
+                InspectorPanel.Content.Remove(oldPanel);
+            RegisterPanel<LayerPanel>();
+            var newPanel = GetPanel<LayerPanel>();
             ShowPanel<LayerPanel>();
-            GetPanel<LayerPanel>().PopulateLayerPanel(ProjectData.Current.RootLayer);
+
+            newPanel.PopulateLayerPanel(ProjectData.Current.RootLayer);
+            // newPanel.Show();
         }
-        
+
         private void OpenAssetLibraryPanel()
         {
             CloseInspectorPanels();
@@ -284,7 +292,7 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             InspectorPanel.Close();
         }
-        
+
         private void OnAddLayerToggled(ChangeEvent<bool> evt)
         {
             if (evt.newValue) AssetImport?.OpenInspector();
