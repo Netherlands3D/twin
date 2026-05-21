@@ -62,6 +62,9 @@ namespace Netherlands3D.UI.Panels
             ErrorPanel.Hide();
             CredentialPanel.SetEnabled(false);
             
+            //we dont want to show the warning first but immediately start with the input of credentials instead
+            CredentialPanel.StartWithInput();
+            
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
                 UriImportFailed -= ErrorPanel.Show;
@@ -80,14 +83,19 @@ namespace Netherlands3D.UI.Panels
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
-            if (auth is FailedOrUnsupported)
+            var accepted = auth != null && auth is not FailedOrUnsupported;
+            //we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
+            if (accepted)
+            {
+                CredentialPanel.SetAcceptedState();
+                credentialPanel.SetEnabled(false);
+                AddLayerFromUrl(uri, auth);
+            }
+            else
             {
                 credentialPanel.SetEnabled(true);
-                return;
+                credentialPanel.ShowError(true);
             }
-
-            credentialPanel.SetEnabled(false);
-            AddLayerFromUrl(uri, auth);
         }
 
         private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke();

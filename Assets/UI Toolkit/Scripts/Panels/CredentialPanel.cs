@@ -64,16 +64,21 @@ namespace Netherlands3D.UI.Panels
             warningContent = this.Q<ContentContainer>("WarningContent");
             credentialContent = this.Q<ContentContainer>("CredentialContent");
             acceptedContent = this.Q<ContentContainer>("AcceptedContent");
-
+            
             InitializeDropdown();
-
             SetContentState(ContentState.Warning);
+         
             WarningButton.clicked += () => { SetContentState(ContentState.Key); };
             AcceptedButton.clicked += () => { SetContentState(ContentState.Key); };
             CredentialButton.clicked += OnConfirm;
             CodeField.RegisterCallback<NavigationSubmitEvent>(evt => OnConfirm(), TrickleDown.TrickleDown);
             
             ErrorPanel.Hide();
+        }
+
+        public void StartWithInput()
+        {
+            SetContentState(ContentState.Key);
         }
 
         private void OnConfirm()
@@ -137,6 +142,14 @@ namespace Netherlands3D.UI.Panels
         public void Show(bool show)
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+        }
+
+        public void ShowError(bool show)
+        {
+            if(show)
+                ErrorPanel.Show();
+            else
+                ErrorPanel.Hide();
         }
     }
 }
