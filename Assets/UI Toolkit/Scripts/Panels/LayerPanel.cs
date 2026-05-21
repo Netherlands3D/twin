@@ -5,7 +5,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
-using TreeView = UnityEngine.UIElements.TreeView;
+using TreeView = Netherlands3D.UI.Components.TreeView;
 
 namespace Netherlands3D.UI.Panels
 {

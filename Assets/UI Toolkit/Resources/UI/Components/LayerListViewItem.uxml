@@ -6,7 +6,7 @@
     <ui:VisualElement class="layer-list-view-item">
         <nl3d:VisibilityToggle name="IsActiveToggle" toggle-style="IconOnly" icon="Visibility" class="layer-list-view-item__cell" />
         <nl3d:Icon name="TypeIcon" class="layer-list-view-item__cell" />
-        <ui:VisualElement name="ColorBar" class="layer-list-view-item__cell"/>
+        <ui:VisualElement name="ColorBar" class="layer-list-view-item__cell layer-list-view-item__color-bar"/>
         <ui:Label name="NameLabel" text="LayerName" class="layer-list-view-item__cell layer-list-view-item__name-label" />
         <nl3d:Toggle name="PropertyToggle" icon="AdjustmentsHorizontal" toggle-style="IconOnly" class="layer-list-view-item__cell layer-list-view-item__property-toggle"/>
     </ui:VisualElement>

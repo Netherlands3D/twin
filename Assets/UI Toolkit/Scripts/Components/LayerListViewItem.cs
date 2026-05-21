@@ -8,6 +8,7 @@ using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -38,6 +39,25 @@ namespace Netherlands3D.UI.Components
             colorBar = this.Q<VisualElement>("ColorBar");
             nameLabel = this.Q<Label>("NameLabel");
             propertyToggle = this.Q<Toggle>("PropertyToggle");
+
+            VisualElement el = this;
+            while (el != null && !el.ClassListContains("unity-tree-view__item"))
+                el = el.parent;
+            if (el == null) return;
+
+            var itemRoot = hierarchy.parent;
+            if (itemRoot != null)
+            {
+                Debug.Log(itemRoot.name);
+                // Find the index of the unity tree view toggle
+                var treeToggle = itemRoot.Q<Toggle>(className: "unity-tree-view__item-toggle");
+                if (treeToggle != null)
+                {
+                    int toggleIndex = itemRoot.hierarchy.IndexOf(treeToggle);
+                    itemRoot.hierarchy.Insert(toggleIndex, colorBar);
+                    itemRoot.hierarchy.Insert(toggleIndex, isActiveToggle);
+                }
+            }
 
             isActiveToggle.RegisterValueChangedCallback(OnIsActiveToggleChanged);
             propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
@@ -99,10 +119,17 @@ namespace Netherlands3D.UI.Components
         {
             userData = layerData;
             // isActiveToggle.SetState(layerData.);
+            UpdateColorBar(layerData.Color);
+            layerData.ColorChanged.AddListener(UpdateColorBar);
             layerTypeIcon.Image = GetImage(layerData);
             nameLabel.text = layerData.Name;
 
             LoadProperties(layerData.LayerProperties);
+        }
+
+        private void UpdateColorBar(Color newColor)
+        {
+            colorBar.style.backgroundColor = newColor;
         }
 
         private static IconImage GetImage(LayerData layerData)
