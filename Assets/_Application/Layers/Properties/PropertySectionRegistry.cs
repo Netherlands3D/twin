@@ -58,9 +58,6 @@ namespace Netherlands3D.Twin.Layers.Properties
                     }
                 }
             }
-            foreach (var collection in TypeRegistry.Values)
-                foreach (var list in collection.Collection.Values)
-                    list.Sort((a, b) => a.Order.CompareTo(b.Order));
         }
     }
 }
