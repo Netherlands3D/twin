@@ -18,6 +18,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class AssetLibraryPanel : BaseInspectorContentPanel
     {
+        public override string Title => "Toevoegen";
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.Library;
         
         private AssetLibrary.AssetLibrary assetLibrary;
@@ -45,8 +46,6 @@ namespace Netherlands3D.UI.Panels
             ListView.bindItem = BindListViewItem;
             Breadcrumb.CrumbClicked += OnBreadcrumbClicked;
         }
-
-        public override string GetTitle() => "Toevoegen";
 
         public async void LoadCatalog(ICatalog catalog)
         {

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Credentials;
+using Netherlands3D.Events;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
@@ -28,6 +31,9 @@ namespace Netherlands3D.UI.Behaviours
 
         private ImportAssetPanel importAssetPanel;
         private ImportAssetPanel ImportAssetPanel => importAssetPanel ??= panels.OfType<ImportAssetPanel>().FirstOrDefault();
+        
+        private InspectorPolygonGridPanel polygonGridPanel;
+        private InspectorPolygonGridPanel PolygonGridPanel => polygonGridPanel ??= panels.OfType<InspectorPolygonGridPanel>().FirstOrDefault();
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
@@ -36,6 +42,11 @@ namespace Netherlands3D.UI.Behaviours
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         
         private ICredentialHandler credentialHandler;
+
+        [SerializeField] private TriggerEvent OnDrawNewGrid;
+        [SerializeField] private TriggerEvent OnGridConfirmed;
+     
+      
 
         [Header("Tools")]
         [SerializeField] private Tool AssetLibrary;
@@ -133,6 +144,8 @@ namespace Netherlands3D.UI.Behaviours
             credentialHandler = GetComponent<ICredentialHandler>();
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
+            RegisterPanel<InspectorPolygonGridPanel>();
+            
             RegisterPanel<LocationSearchPanel>();
             locationSearchBehaviour?.Initialize(GetPanel<LocationSearchPanel>());
 
@@ -161,6 +174,11 @@ namespace Netherlands3D.UI.Behaviours
             toolRepository.Add(tool, onOpen);
         }
 
+        private void Start()
+        {
+            InspectorPanel.Initialize();
+        }
+
         private void OnEnable()
         {
             InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
@@ -168,6 +186,12 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
             ImportAssetPanel.OpenAssetLibrary += OnOpenAssetLibraryClicked;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
+            
+            OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
+            
+            PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
+            //TODO ongridconfirmed -> open layerpanel and close the gridpanel (if its not automatically happening)
+
 
             toolRepository.SubscribeAll(OnToolClosed);
         }
@@ -179,6 +203,10 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             ImportAssetPanel.OpenAssetLibrary -= OnOpenAssetLibraryClicked;
             ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
+            
+            OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
+            
+            PolygonGridPanel.OnConfirmSelection.RemoveListener(OnGridConfirmed.InvokeStarted);
 
             toolRepository.UnsubscribeAll(OnToolClosed);
         }
@@ -192,6 +220,7 @@ namespace Netherlands3D.UI.Behaviours
         {
             ToolbarMain.ClearWithoutNotify();
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
+            HidePanel();
             InspectorPanel.Close();
         }
 
@@ -207,6 +236,38 @@ namespace Netherlands3D.UI.Behaviours
             return panel;
         }
 
+        public void ShowPanel<T>() where T : BaseInspectorContentPanel
+        {
+            // only one panel can be open at a time
+            HidePanel();
+            Open();
+            activePanel = GetPanel<T>();
+            InspectorPanel.HeaderText = activePanel.Title;
+            InspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
+            activePanel.Show();
+        }
+
+        private T GetPanel<T>() where T : BaseInspectorContentPanel
+        {
+            return panels.OfType<T>().FirstOrDefault();
+        }
+
+        private void HidePanel()
+        {
+            activePanel?.Hide();
+            activePanel = null;
+        }
+
+        public void OpenAssetLibrary()
+        {
+            ShowPanel<AssetLibraryPanel>();
+        }
+
+        public void OpenPolgyonGridPanel()
+        {
+            ShowPanel<InspectorPolygonGridPanel>();
+        }
+        
         private void OnAnyToolOpened(ToolEntry entry)
         {
             toolRepository.CloseAllExcept(entry);
@@ -244,30 +305,22 @@ namespace Netherlands3D.UI.Behaviours
             HelpTool?.CloseInspector();
         }
 
-        // External tools close the UI Toolkit inspector without clearing the main toolbar selection.
-
-        private void ShowPanel<T>() where T : BaseInspectorContentPanel
+        public void ToggleImportAssetPanel()
         {
-            // only one panel can be open at a time
-            HidePanel();
-            Open();
-            activePanel = GetPanel<T>();
-            InspectorPanel.HeaderText = activePanel.GetTitle();
-            InspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
-            activePanel.Show();
+            if (inspectorPanel.IsOpen())
+            {
+                HidePanel();
+                //do not use Close here to avoid the toggle notification
+                InspectorPanel.Close(); 
+            }
+            else
+            {   
+                Open();
+                InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
+                ShowPanel<ImportAssetPanel>();
+            }
         }
-
-        private T GetPanel<T>() where T : BaseInspectorContentPanel
-        {
-            return panels.OfType<T>().FirstOrDefault();
-        }
-
-        private void HidePanel()
-        {
-            activePanel?.Hide();
-            activePanel = null;
-        }
-
+        
         private void CloseInspectorPanels()
         {
             ((IWindow)SettingsWindow).Close();

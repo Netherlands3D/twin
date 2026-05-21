@@ -14,6 +14,7 @@
                 <ui:VisualElement picking-mode="Ignore" class="app" style="flex-grow: 1; flex-direction: row;">
                     <nl3d:ToolbarMain/>
                     <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
+                    <nl3dP:LegendPanel />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="MidSection" class="app__top-zone" picking-mode="Ignore">

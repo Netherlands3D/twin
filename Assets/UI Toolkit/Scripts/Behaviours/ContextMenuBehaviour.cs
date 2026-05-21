@@ -63,14 +63,14 @@ namespace Netherlands3D.UI.Panels
 
         private void OnRightClick(InputAction.CallbackContext ctx)
         {
-            Vector2 panelPos = GetPanelClickPosition();
-            ClickedUI(panelPos);
+            Vector2 panelPos = App.UIRoot.GetPanelClickPosition();
+            App.UIRoot.ClickedUI(panelPos);
             
             if(IsActivePanelClicked(panelPos))
                 return;
             
             ClearActivePanel();
-            if(ClickedUI(panelPos))
+            if(App.UIRoot.ClickedUI(panelPos))
                 return;
             
             CheckAndSpawnPanel(panelPos);
@@ -78,54 +78,14 @@ namespace Netherlands3D.UI.Panels
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
-            Vector2 panelPos = GetPanelClickPosition();
+            Vector2 panelPos = App.UIRoot.GetPanelClickPosition();
             if(IsActivePanelClicked(panelPos))
                 return;
             
             ClearActivePanel();
         }
 
-        private Vector2 GetPanelClickPosition()
-        {
-            var screenPos = Pointer.current.position.ReadValue();
-            screenPos.y = Screen.height - screenPos.y;
-            return RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
-        }
-
-        private bool ClickedUI(Vector2 screenPos)
-        {
-            var picked = root.panel.Pick(screenPos);
-            // block if we hit something other than the root background
-            if (picked != null && picked != root)
-                return true;
-            
-            var pointerPos = Pointer.current.position.ReadValue();
-            // block if we hit anything except the ClickNothingPanel . todo: remove this once transition to UI Toolkit is completed
-            var pointerData = new PointerEventData(EventSystem.current);
-            pointerData.position = pointerPos;
-            var results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerData, results);
-            bool clickedInWorld = false;
-            foreach (var result in results)
-            {
-                if (result.gameObject.layer == LayerMask.NameToLayer("UI"))
-                    break;
-                if (result.gameObject.GetComponent<ClickNothingPlane>())
-                    clickedInWorld = true;
-            }
-
-            if (clickedInWorld)
-            {
-                return false;
-            }
-            
-            return true;
-        }
-
-        public bool IsUIClicked()
-        {
-            return ClickedUI(GetPanelClickPosition());
-        }
+       
 
         private bool IsActivePanelClicked(Vector2 screenPos)
         {

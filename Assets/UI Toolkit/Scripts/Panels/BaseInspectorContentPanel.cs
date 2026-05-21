@@ -10,7 +10,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Panels
         public Action OnShow;
         public Action OnHide;
 
-        public abstract string GetTitle();
+        public abstract string Title { get; }
         public virtual ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.Normal;
         public void Show() => OnShow?.Invoke();
         public void Hide() => OnHide?.Invoke();
