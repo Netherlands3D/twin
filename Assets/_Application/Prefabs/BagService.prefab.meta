@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/_Application/Prefabs/BagService.prefab.meta
 guid: e1cd2fb13d091d6988ecf1056cbfe6e6
-========
-guid: 2ba64f6f8bfc9eaedbd0a87dd54c9e67
->>>>>>>> feature/ui-toolkit-componenten:Assets/_BuildingBlocks/Credentials/Prefabs/KeyVaultService.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

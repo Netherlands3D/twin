@@ -12,7 +12,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData))]
+    [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData), PropertySectionCategory.Styling)]
     public partial class CartesianTileLayerFeatureColorPropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
         public ColorPicker ColorPicker { get; set; }
