@@ -140,45 +140,15 @@ namespace Netherlands3D.UI.Components
         {
             isActiveToggle.SetValueWithoutNotify(activeInHierarchy);
             RecalculateState();
-            // RecalculateCurrentTreeStates();
-            // SetEnabledToggleInteractiveState();
+            SetEnabledToggleInteractiveState();
         }
         
-        // private void RecalculateCurrentTreeStates()
-        // {
-        //     RecalculateState();
-        //     RecalculateChildrenStates();
-        //     RecalculateParentStates();
-        // }
-        //
-        // private void RecalculateParentStates()
-        // {
-        //     if (LayerPanel.uiDictionary[layerData.ParentLayer] is LayerListViewItem parentUI)
-        //     {
-        //         parentUI.RecalculateState();
-        //         parentUI.RecalculateParentStates();
-        //     }
-        // }
-        //
-        // private void RecalculateChildrenStates()
-        // {
-        //     foreach (var child in layerData.ChildrenLayers)
-        //     {
-        //         var childUI = LayerPanel.uiDictionary[child];
-        //         childUI.RecalculateState();
-        //         childUI.RecalculateChildrenStates();
-        //     }
-        // }
-        //
-        // private void SetEnabledToggleInteractiveStateRecursive()
-        // {
-        //     var parent = layerData.ParentLayer;
-        //     var enabled = parent is RootLayer || (parent != null && parent.ActiveInHierarchy);
-        //
-        //     isActiveToggle.SetEnabled(enabled); 
-        //     foreach (var child in layerData.ChildrenLayers)
-        //         LayerPanel.uiDictionary[child].SetEnabledToggleInteractiveStateRecursive();
-        // }
+        private void SetEnabledToggleInteractiveState()
+        {
+            var parent = layerData.ParentLayer;
+            var interactable = parent is RootLayer || (parent != null && parent.ActiveInHierarchy);
+            isActiveToggle.SetEnabled(interactable);
+        }
         
         private void RecalculateState()
         {
