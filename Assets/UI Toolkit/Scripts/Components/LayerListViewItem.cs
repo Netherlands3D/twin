@@ -182,8 +182,8 @@ namespace Netherlands3D.UI.Components
         
         private void RecalculateState()
         {
-            VisibilityState s;
             var allChildrenActive = true;
+            
             foreach (var child in layerData.ChildrenLayers)
             {
                 allChildrenActive &= child.ActiveSelf;
@@ -191,36 +191,22 @@ namespace Netherlands3D.UI.Components
         
             if (!layerData.ActiveSelf)
             {
-                s = VisibilityState.Invisible;
                 isActiveToggle.SetState(VisibilityState.Invisible);
             }
             else if (layerData.ActiveSelf && !layerData.ActiveInHierarchy)
             {
-                s = VisibilityState.VisibleInInvisible;
                 isActiveToggle.SetState(VisibilityState.VisibleInInvisible);
             }
             else if (allChildrenActive)
             {
-                s = VisibilityState.Visible;
                 isActiveToggle.SetState(VisibilityState.Visible);
             }
             else
             {
-                s = VisibilityState.PartiallyVisible;
                 isActiveToggle.SetState(VisibilityState.PartiallyVisible);
             }
-            Debug.Log(layerData.Name + "\tset state to: " + s);
-            nameLabel.text = s.ToString();
         }
-
-        // private void SetEnabledToggleInteractiveState()
-        // {
-        //     var enabled = layerData.ParentLayer is RootLayer || layerData.ParentLayer.ActiveInHierarchy;
-        //     isActiveToggle.SetEnabled(enabled);
-        //
-        //     // foreach (var child in ChildrenUI)
-        //     //     child.SetEnabledToggleInteractiveStateRecursive();
-        // }
+        
         
         private void UpdateColorBar(Color newColor)
         {
@@ -239,7 +225,7 @@ namespace Netherlands3D.UI.Components
         
         private void UpdateNameLabel(LayerData layerData, string newName)
         {
-            // nameLabel.text = newName;
+            nameLabel.text = newName;
         }
 
         public bool HasPropertiesWithPanel(List<LayerPropertyData> properties)
