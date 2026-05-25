@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 using TreeView = Netherlands3D.UI.Components.TreeView;
 
@@ -27,6 +30,24 @@ namespace Netherlands3D.UI.Panels
         
             treeView.makeItem = MakeItem;
             treeView.bindItem = BindItem;
+            
+            RegisterCallback<KeyDownEvent>(OnKeyDown);
+        }
+
+        private void OnKeyDown(KeyDownEvent evt)
+        {
+            if (evt.keyCode == KeyCode.Delete)
+            {
+                DeleteSelectedLayers();
+            }
+        }
+
+        private void DeleteSelectedLayers()
+        {
+            foreach (LayerData layer in treeView.selectedItems.ToList()) //to list makes a copy and avoids a collectionmodified error
+            {
+                App.Layers.Remove(layer);
+            }
         }
 
         private void RebuildTree()
