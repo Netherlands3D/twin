@@ -68,13 +68,20 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 activeSelf = value;
-                foreach (var child in ChildrenLayers)
-                {
-                    child.ActiveSelf = child.ActiveSelf; //set the values again to recursively call the events.
-                }
-
-                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
+                ActiveSelfChanged.Invoke(value);
+                UpdateActiveInHierarchy();
             }
+        }
+
+        private void UpdateActiveInHierarchy()
+        {
+            foreach (var child in ChildrenLayers)
+            {
+                child.UpdateActiveInHierarchy();
+                // child.ActiveSelf = child.ActiveSelf; //set the values again to recursively call the events.
+            }
+
+            LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
         }
 
         [JsonIgnore]
@@ -156,6 +163,7 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public readonly UnityEvent<LayerData, string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
+        [JsonIgnore] public readonly UnityEvent<bool> ActiveSelfChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
         [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();

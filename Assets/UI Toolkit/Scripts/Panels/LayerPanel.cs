@@ -1,9 +1,8 @@
+using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 using TreeView = Netherlands3D.UI.Components.TreeView;
 
@@ -37,7 +36,9 @@ namespace Netherlands3D.UI.Panels
 
         private VisualElement MakeItem()
         {
-            return new LayerListViewItem();
+            var layerRowElement = new LayerListViewItem();
+            layerRowElement.RequestTreeRefresh.AddListener(treeView.RefreshItems);
+            return layerRowElement;
         }
 
         private void BindItem(VisualElement item, int index)
@@ -47,7 +48,7 @@ namespace Netherlands3D.UI.Panels
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             layerRowElement.Initialize(layerData);
         }
-        
+
         public override string GetTitle()
         {
             return "Lagen";

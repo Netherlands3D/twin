@@ -11,7 +11,7 @@ namespace Netherlands3D.UI.Components
         Visible = IconImage.Visibility, 
         Invisible = IconImage.Invisible, 
         PartiallyVisible = IconImage.VisibilityMixed,
-        VisibleInInvisible //todo: not implemented yet
+        VisibleInInvisible = IconImage.VisibleInInvisible
     }
     
     [UxmlElement]
@@ -33,7 +33,6 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
             
-            
             this.RegisterValueChangedCallback(OnValueChanged);
             SetImage(value);
         }
@@ -46,10 +45,6 @@ namespace Netherlands3D.UI.Components
         private void SetImage(bool newValue)
         {
             Image = newValue ? VisibilityState.Visible : VisibilityState.Invisible;
-            if (newValue)
-                Icon.Color = ThemeColor.Blue900;
-            else
-                Icon.Color = ThemeColor.Blue200;
         }
 
         public void Show(bool show)

@@ -8,7 +8,7 @@ using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -25,6 +25,7 @@ namespace Netherlands3D.UI.Components
         PropertyPanelBehaviour propertyPanelBehaviour;
 
         private LayerData layerData => userData as LayerData;
+        public UnityEvent RequestTreeRefresh { get; } = new();
 
         public LayerListViewItem()
         {
@@ -44,12 +45,6 @@ namespace Netherlands3D.UI.Components
             propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel); // we can only update the layout after attaching to the panel
-            nameLabel.RegisterCallback<ClickEvent>(Test);
-        }
-
-        private void Test(ClickEvent evt)
-        {
-            // UpdateLayout();
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
@@ -57,8 +52,7 @@ namespace Netherlands3D.UI.Components
             UpdateLayout();
         }
         
-
-        public void UpdateLayout()
+        private void UpdateLayout()
         {
             VisualElement itemRoot = this;
             while (itemRoot != null && !itemRoot.ClassListContains("unity-tree-view__item"))
@@ -79,6 +73,11 @@ namespace Netherlands3D.UI.Components
                 itemRoot.hierarchy.Insert(toggleIndex, isActiveToggle);
             }
         }
+        
+        private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
+        {
+            layerData.ActiveSelf = evt.newValue;
+        }
 
         private void UncheckPropertyToggle(LayerData layerData)
         {
@@ -88,71 +87,159 @@ namespace Netherlands3D.UI.Components
 
         private void OnPropertyToggleValueChanged(ChangeEvent<bool> evt)
         {
-            Debug.Log(evt.newValue);
             if (evt.newValue)
                 propertyPanelBehaviour.SpawnPanel(layerData);
             else
                 propertyPanelBehaviour.ClearActivePanel();
         }
 
-        private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
-        {
-            layerData.ActiveSelf = evt.newValue;
-        }
-
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             propertyToggle.EnableInClassList(UtilityClassConstants.HIDDEN, !HasPropertiesWithPanel(properties));
         }
-
-        // private void UpdateToggleFromChildren()
-        // {
-        //     if (layerData.ChildrenLayers.Count == 0)
-        //         return;
-        //
-        //     bool anyOn = false;
-        //     bool anyOff = false;
-        //
-        //     foreach (var child in layerData.ChildrenLayers)
-        //     {
-        //         var childMasking = child.GetProperty<MaskingLayerPropertyData>();
-        //         if (childMasking == null) continue;
-        //
-        //         bool isOn = GetIsMaskingBitSet(childMasking);
-        //         if (isOn)
-        //             anyOn = true;
-        //         else
-        //             anyOff = true;
-        //     }
-        //
-        //     if (anyOn && anyOff)
-        //         isActiveToggle.SetState(VisibilityState.PartiallyVisible);
-        //     else if (anyOn)
-        //         isActiveToggle.SetState(VisibilityState.Visible);
-        //     else
-        //         isActiveToggle.SetState(VisibilityState.Invisible);
-        // }
+        
 
         public void Initialize(LayerData layerData)
         {
+            if(layerData == null) return;
+            
+            var previous = this.layerData;
             userData = layerData;
-            // isActiveToggle.SetState(layerData.);
+            
+            //visibility toggle
+            previous?.ActiveSelfChanged.RemoveListener(OnActiveSelfChanged);
+            UpdateEnabledToggle(layerData.ActiveInHierarchy);
+            layerData.ActiveSelfChanged.AddListener(OnActiveSelfChanged);
+            
+            //Color bar
+            previous?.ColorChanged.RemoveListener(UpdateColorBar);
             UpdateColorBar(layerData.Color);
             layerData.ColorChanged.AddListener(UpdateColorBar);
-            layerTypeIcon.Image = GetImage(layerData);
-            nameLabel.text = layerData.Name;
+            
+            //LayerTypeIcon
+            previous?.OnPrefabIdChanged.RemoveListener(UpdateLayerTypeIcon);
+            UpdateLayerTypeIcon();
+            layerData.OnPrefabIdChanged.AddListener(UpdateLayerTypeIcon);
+            
+            //Layer Name
+            previous?.NameChanged.RemoveListener(UpdateNameLabel);
+            UpdateNameLabel(layerData, layerData.Name);
+            layerData.NameChanged.AddListener(UpdateNameLabel);
 
+            //properties
             LoadProperties(layerData.LayerProperties);
         }
 
+        private void OnActiveSelfChanged(bool activeSelf)
+        {
+            Debug.Log("updating visibility toggle "+ layerData.Name);
+            RequestTreeRefresh.Invoke();
+        }
+
+        private void UpdateEnabledToggle(bool activeInHierarchy)
+        {
+            isActiveToggle.SetValueWithoutNotify(activeInHierarchy);
+            RecalculateState();
+            // RecalculateCurrentTreeStates();
+            // SetEnabledToggleInteractiveState();
+        }
+        
+        // private void RecalculateCurrentTreeStates()
+        // {
+        //     RecalculateState();
+        //     RecalculateChildrenStates();
+        //     RecalculateParentStates();
+        // }
+        //
+        // private void RecalculateParentStates()
+        // {
+        //     if (LayerPanel.uiDictionary[layerData.ParentLayer] is LayerListViewItem parentUI)
+        //     {
+        //         parentUI.RecalculateState();
+        //         parentUI.RecalculateParentStates();
+        //     }
+        // }
+        //
+        // private void RecalculateChildrenStates()
+        // {
+        //     foreach (var child in layerData.ChildrenLayers)
+        //     {
+        //         var childUI = LayerPanel.uiDictionary[child];
+        //         childUI.RecalculateState();
+        //         childUI.RecalculateChildrenStates();
+        //     }
+        // }
+        //
+        // private void SetEnabledToggleInteractiveStateRecursive()
+        // {
+        //     var parent = layerData.ParentLayer;
+        //     var enabled = parent is RootLayer || (parent != null && parent.ActiveInHierarchy);
+        //
+        //     isActiveToggle.SetEnabled(enabled); 
+        //     foreach (var child in layerData.ChildrenLayers)
+        //         LayerPanel.uiDictionary[child].SetEnabledToggleInteractiveStateRecursive();
+        // }
+        
+        private void RecalculateState()
+        {
+            VisibilityState s;
+            var allChildrenActive = true;
+            foreach (var child in layerData.ChildrenLayers)
+            {
+                allChildrenActive &= child.ActiveSelf;
+            }
+        
+            if (!layerData.ActiveSelf)
+            {
+                s = VisibilityState.Invisible;
+                isActiveToggle.SetState(VisibilityState.Invisible);
+            }
+            else if (layerData.ActiveSelf && !layerData.ActiveInHierarchy)
+            {
+                s = VisibilityState.VisibleInInvisible;
+                isActiveToggle.SetState(VisibilityState.VisibleInInvisible);
+            }
+            else if (allChildrenActive)
+            {
+                s = VisibilityState.Visible;
+                isActiveToggle.SetState(VisibilityState.Visible);
+            }
+            else
+            {
+                s = VisibilityState.PartiallyVisible;
+                isActiveToggle.SetState(VisibilityState.PartiallyVisible);
+            }
+            Debug.Log(layerData.Name + "\tset state to: " + s);
+            nameLabel.text = s.ToString();
+        }
+
+        // private void SetEnabledToggleInteractiveState()
+        // {
+        //     var enabled = layerData.ParentLayer is RootLayer || layerData.ParentLayer.ActiveInHierarchy;
+        //     isActiveToggle.SetEnabled(enabled);
+        //
+        //     // foreach (var child in ChildrenUI)
+        //     //     child.SetEnabledToggleInteractiveStateRecursive();
+        // }
+        
         private void UpdateColorBar(Color newColor)
         {
             colorBar.style.backgroundColor = newColor;
         }
 
+        private void UpdateLayerTypeIcon()
+        {
+            layerTypeIcon.Image = GetImage(layerData);
+        }
+
         private static IconImage GetImage(LayerData layerData)
         {
             return LayerTypeSpriteLibrary.GetIconImage(layerData);
+        }
+        
+        private void UpdateNameLabel(LayerData layerData, string newName)
+        {
+            // nameLabel.text = newName;
         }
 
         public bool HasPropertiesWithPanel(List<LayerPropertyData> properties)
