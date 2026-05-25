@@ -16,6 +16,8 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class LayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
+        private bool layoutReordered = false; //needs to happen the first time, but not after rebinding the element
+        
         private VisibilityToggle isActiveToggle;
         private VisualElement colorBar;
         private Icon layerTypeIcon;
@@ -26,6 +28,7 @@ namespace Netherlands3D.UI.Components
 
         private LayerData layerData => userData as LayerData;
         public UnityEvent RequestTreeRefresh { get; } = new();
+        public UnityEvent RequestTreeRebuild { get; } = new();
 
         public LayerListViewItem()
         {
@@ -49,7 +52,8 @@ namespace Netherlands3D.UI.Components
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            UpdateLayout();
+            if(!layoutReordered)
+                UpdateLayout();
         }
         
         private void UpdateLayout()
@@ -72,6 +76,7 @@ namespace Netherlands3D.UI.Components
                 itemRoot.hierarchy.Insert(toggleIndex, colorBar);
                 itemRoot.hierarchy.Insert(toggleIndex, isActiveToggle);
             }
+            layoutReordered = true;
         }
         
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
@@ -110,6 +115,9 @@ namespace Netherlands3D.UI.Components
             previous?.ActiveSelfChanged.RemoveListener(OnActiveSelfChanged);
             UpdateEnabledToggle(layerData.ActiveInHierarchy);
             layerData.ActiveSelfChanged.AddListener(OnActiveSelfChanged);
+
+            layerData.ParentOrSiblingIndexChanged.RemoveListener(OnParentChanged);
+            layerData.ParentOrSiblingIndexChanged.AddListener(OnParentChanged);
             
             //Color bar
             previous?.ColorChanged.RemoveListener(UpdateColorBar);
@@ -132,8 +140,12 @@ namespace Netherlands3D.UI.Components
 
         private void OnActiveSelfChanged(bool activeSelf)
         {
-            Debug.Log("updating visibility toggle "+ layerData.Name);
             RequestTreeRefresh.Invoke();
+        }
+        
+        private void OnParentChanged(int newIndex)
+        {
+            RequestTreeRebuild.Invoke(); //todo: test if this updates the visibility toggle correctly
         }
 
         private void UpdateEnabledToggle(bool activeInHierarchy)
@@ -180,7 +192,10 @@ namespace Netherlands3D.UI.Components
         
         private void UpdateColorBar(Color newColor)
         {
-            colorBar.style.backgroundColor = newColor;
+            var opaqueColor = newColor;
+            opaqueColor.a = 1;
+            
+            colorBar.style.backgroundColor = opaqueColor;
         }
 
         private void UpdateLayerTypeIcon()

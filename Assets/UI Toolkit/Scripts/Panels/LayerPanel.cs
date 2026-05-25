@@ -12,7 +12,8 @@ namespace Netherlands3D.UI.Panels
     public partial class LayerPanel : BaseInspectorContentPanel
     {
         private TreeView treeView;
-
+        private LayerData rootLayer;
+        
         public LayerPanel()
         {
             this.CloneComponentTree("Panels");
@@ -27,8 +28,14 @@ namespace Netherlands3D.UI.Panels
             treeView.bindItem = BindItem;
         }
 
+        private void RebuildTree()
+        {
+            PopulateLayerPanel(rootLayer);
+        }
+        
         public void PopulateLayerPanel(LayerData rootLayer)
         {
+            this.rootLayer = rootLayer;
             var tree = rootLayer.ToTreeViewItems();
             treeView.SetRootItems(tree);
             treeView.RefreshItems();
@@ -38,6 +45,7 @@ namespace Netherlands3D.UI.Panels
         {
             var layerRowElement = new LayerListViewItem();
             layerRowElement.RequestTreeRefresh.AddListener(treeView.RefreshItems);
+            layerRowElement.RequestTreeRebuild.AddListener(RebuildTree);
             return layerRowElement;
         }
 
