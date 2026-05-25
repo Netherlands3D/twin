@@ -12,3 +12,7 @@
 .mask-layer-list-view-item .mask-layer-list-view-item__cell {
     margin-right: var(--spacing-3);
 }
+
+.layer-list-view-item__name-label{
+    border-width: 0;
+}

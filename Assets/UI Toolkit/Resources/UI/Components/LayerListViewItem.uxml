@@ -8,6 +8,7 @@
         <ui:VisualElement name="ColorBar" class="layer-list-view-item__cell layer-list-view-item__color-bar"/>
         <nl3d:Icon name="TypeIcon" class="layer-list-view-item__cell layer-list-view-item__icon" />
         <ui:Label name="NameLabel" text="LayerName" class="layer-list-view-item__cell layer-list-view-item__name-label" />
+        <nl3d:TextField name="NameInputField" text="LayerName" class="layer-list-view-item__cell layer-list-view-item__name-label" />
         <nl3d:Toggle name="PropertyToggle" icon="AdjustmentsHorizontal" toggle-style="IconOnly" class="layer-list-view-item__cell layer-list-view-item__property-toggle"/>
     </ui:VisualElement>
 </ui:UXML>

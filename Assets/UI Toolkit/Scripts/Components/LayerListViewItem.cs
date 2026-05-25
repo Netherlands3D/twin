@@ -17,11 +17,12 @@ namespace Netherlands3D.UI.Components
     public partial class LayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
         private bool layoutReordered = false; //needs to happen the first time, but not after rebinding the element
-        
+
         private VisibilityToggle isActiveToggle;
         private VisualElement colorBar;
         private Icon layerTypeIcon;
-        private Label nameLabel;
+        private Label nameLabel; // we will switch between label and input field
+        private TextField nameInputField;
         private Toggle propertyToggle;
 
         PropertyPanelBehaviour propertyPanelBehaviour;
@@ -42,27 +43,62 @@ namespace Netherlands3D.UI.Components
             layerTypeIcon = this.Q<Icon>("TypeIcon");
             colorBar = this.Q<VisualElement>("ColorBar");
             nameLabel = this.Q<Label>("NameLabel");
+            nameInputField = this.Q<TextField>("NameInputField");
             propertyToggle = this.Q<Toggle>("PropertyToggle");
 
             isActiveToggle.RegisterValueChangedCallback(OnIsActiveToggleChanged);
+            // nameLabel.RegisterCallback<PointerDownEvent>();
+            nameLabel.RegisterCallback<ClickEvent>(OnNameLabelClicked, TrickleDown.TrickleDown);
+
+            nameInputField.RegisterCallback<BlurEvent>(OnNameInputFieldBlur, TrickleDown.TrickleDown);
+            nameInputField.RegisterCallback<NavigationSubmitEvent>(OnNavigationSubmitted, TrickleDown.TrickleDown);
+
+            nameInputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
-            
+
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel); // we can only update the layout after attaching to the panel
+        }
+
+        private void OnNameLabelClicked(ClickEvent evt)
+        {
+            if(!IsSelected())
+                return;
+            
+            nameLabel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            nameInputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            nameInputField.Focus();
+        }
+
+        private bool IsSelected()
+        {
+            VisualElement item = GetTreeViewItemRoot();
+
+            return item != null && item.ClassListContains("unity-collection-view__item--selected");
+        }
+
+        private void OnNameInputFieldBlur(BlurEvent evt)
+        {
+            nameLabel.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            nameInputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            layerData.Name = nameInputField.text;
+        }
+
+        private void OnNavigationSubmitted(NavigationSubmitEvent evt)
+        {
+            nameLabel.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            nameInputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            layerData.Name = nameInputField.text;
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            if(!layoutReordered)
+            if (!layoutReordered)
                 UpdateLayout();
         }
-        
+
         private void UpdateLayout()
         {
-            VisualElement itemRoot = this;
-            while (itemRoot != null && !itemRoot.ClassListContains("unity-tree-view__item"))
-            {
-                itemRoot = itemRoot.parent;
-            }
+            VisualElement itemRoot = GetTreeViewItemRoot();
 
             if (itemRoot == null) return;
             itemRoot.AddComponentStylesheetByType(GetType());
@@ -72,13 +108,25 @@ namespace Netherlands3D.UI.Components
             if (treeToggle != null)
             {
                 int toggleIndex = itemRoot.hierarchy.IndexOf(treeToggle);
-                
+
                 itemRoot.hierarchy.Insert(toggleIndex, colorBar);
                 itemRoot.hierarchy.Insert(toggleIndex, isActiveToggle);
             }
+
             layoutReordered = true;
         }
-        
+
+        private VisualElement GetTreeViewItemRoot()
+        {
+            VisualElement itemRoot = this;
+            while (itemRoot != null && !itemRoot.ClassListContains("unity-tree-view__item"))
+            {
+                itemRoot = itemRoot.parent;
+            }
+
+            return itemRoot;
+        }
+
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
         {
             layerData.ActiveSelf = evt.newValue;
@@ -102,44 +150,44 @@ namespace Netherlands3D.UI.Components
         {
             propertyToggle.EnableInClassList(UtilityClassConstants.HIDDEN, !HasPropertiesWithPanel(properties));
         }
-        
+
 
         public void Initialize(LayerData layerData)
         {
-            if(layerData == null) return;
-            
+            if (layerData == null) return;
+
             var previous = this.layerData;
             userData = layerData;
-            
+
             //visibility toggle
             previous?.ActiveSelfChanged.RemoveListener(OnActiveSelfChanged);
             UpdateEnabledToggle(layerData.ActiveInHierarchy);
             layerData.ActiveSelfChanged.AddListener(OnActiveSelfChanged);
 
-            previous.ParentOrSiblingIndexChanged.RemoveListener(OnParentChanged);
+            previous?.ParentOrSiblingIndexChanged.RemoveListener(OnParentChanged);
             layerData.ParentOrSiblingIndexChanged.AddListener(OnParentChanged);
-            
-            previous.LayerDestroyed.RemoveListener(OnLayerDestroyed);
+
+            previous?.LayerDestroyed.RemoveListener(OnLayerDestroyed);
             layerData.LayerDestroyed.AddListener(OnLayerDestroyed);
-            
+
             //Color bar
             previous?.ColorChanged.RemoveListener(UpdateColorBar);
             UpdateColorBar(layerData.Color);
             layerData.ColorChanged.AddListener(UpdateColorBar);
-            
+
             //LayerTypeIcon
             previous?.OnPrefabIdChanged.RemoveListener(UpdateLayerTypeIcon);
             UpdateLayerTypeIcon();
             layerData.OnPrefabIdChanged.AddListener(UpdateLayerTypeIcon);
-            
+
             //Layer Name
-            previous?.NameChanged.RemoveListener(UpdateNameLabel);
-            UpdateNameLabel(layerData, layerData.Name);
-            layerData.NameChanged.AddListener(UpdateNameLabel);
+            previous?.NameChanged.RemoveListener(UpdateNameLabels);
+            UpdateNameLabels(layerData, layerData.Name);
+            layerData.NameChanged.AddListener(UpdateNameLabels);
 
             //properties
-            previous.PropertySet.RemoveListener(OnPropertiesChanged);
-            previous.PropertyRemoved.RemoveListener(OnPropertiesChanged);
+            previous?.PropertySet.RemoveListener(OnPropertiesChanged);
+            previous?.PropertyRemoved.RemoveListener(OnPropertiesChanged);
             LoadProperties(layerData.LayerProperties);
             layerData.PropertySet.AddListener(OnPropertiesChanged);
             layerData.PropertyRemoved.AddListener(OnPropertiesChanged);
@@ -154,7 +202,7 @@ namespace Netherlands3D.UI.Components
         {
             RequestTreeRefresh.Invoke();
         }
-        
+
         private void OnParentChanged(int newIndex)
         {
             RequestTreeRebuild.Invoke();
@@ -162,6 +210,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnLayerDestroyed()
         {
+            propertyToggle.value = false; //this closes the property panel if it was open
             RequestTreeRebuild.Invoke();
         }
 
@@ -171,23 +220,23 @@ namespace Netherlands3D.UI.Components
             RecalculateState();
             SetEnabledToggleInteractiveState();
         }
-        
+
         private void SetEnabledToggleInteractiveState()
         {
             var parent = layerData.ParentLayer;
             var interactable = parent is RootLayer || (parent != null && parent.ActiveInHierarchy);
             isActiveToggle.SetEnabled(interactable);
         }
-        
+
         private void RecalculateState()
         {
             var allChildrenActive = true;
-            
+
             foreach (var child in layerData.ChildrenLayers)
             {
                 allChildrenActive &= child.ActiveSelf;
             }
-        
+
             if (!layerData.ActiveSelf)
             {
                 isActiveToggle.SetState(VisibilityState.Invisible);
@@ -205,13 +254,13 @@ namespace Netherlands3D.UI.Components
                 isActiveToggle.SetState(VisibilityState.PartiallyVisible);
             }
         }
-        
-        
+
+
         private void UpdateColorBar(Color newColor)
         {
             var opaqueColor = newColor;
             opaqueColor.a = 1;
-            
+
             colorBar.style.backgroundColor = opaqueColor;
         }
 
@@ -224,10 +273,11 @@ namespace Netherlands3D.UI.Components
         {
             return LayerTypeSpriteLibrary.GetIconImage(layerData);
         }
-        
-        private void UpdateNameLabel(LayerData layerData, string newName)
+
+        private void UpdateNameLabels(LayerData layerData, string newName)
         {
             nameLabel.text = newName;
+            nameInputField.SetValueWithoutNotify(newName);
         }
 
         public bool HasPropertiesWithPanel(List<LayerPropertyData> properties)
@@ -249,5 +299,10 @@ namespace Netherlands3D.UI.Components
 
             return false;
         }
+        
+        //todo: make component for name label, fix activation after clicking
+        //todo: drag reordering
+        //todo: vertical gap between tree items
+        //todo: cleanup old scripts
     }
 }
