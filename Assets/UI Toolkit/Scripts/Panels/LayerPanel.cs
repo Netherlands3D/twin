@@ -20,6 +20,7 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
             
             treeView = this.Q<TreeView>();
+            treeView.autoExpand = true;
             
             treeView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             treeView.selectionType = SelectionType.Multiple;

@@ -116,8 +116,11 @@ namespace Netherlands3D.UI.Components
             UpdateEnabledToggle(layerData.ActiveInHierarchy);
             layerData.ActiveSelfChanged.AddListener(OnActiveSelfChanged);
 
-            layerData.ParentOrSiblingIndexChanged.RemoveListener(OnParentChanged);
+            previous.ParentOrSiblingIndexChanged.RemoveListener(OnParentChanged);
             layerData.ParentOrSiblingIndexChanged.AddListener(OnParentChanged);
+            
+            previous.LayerDestroyed.RemoveListener(OnLayerDestroyed);
+            layerData.LayerDestroyed.AddListener(OnLayerDestroyed);
             
             //Color bar
             previous?.ColorChanged.RemoveListener(UpdateColorBar);
@@ -135,6 +138,15 @@ namespace Netherlands3D.UI.Components
             layerData.NameChanged.AddListener(UpdateNameLabel);
 
             //properties
+            previous.PropertySet.RemoveListener(OnPropertiesChanged);
+            previous.PropertyRemoved.RemoveListener(OnPropertiesChanged);
+            LoadProperties(layerData.LayerProperties);
+            layerData.PropertySet.AddListener(OnPropertiesChanged);
+            layerData.PropertyRemoved.AddListener(OnPropertiesChanged);
+        }
+
+        private void OnPropertiesChanged(LayerPropertyData propertyData)
+        {
             LoadProperties(layerData.LayerProperties);
         }
 
@@ -145,7 +157,12 @@ namespace Netherlands3D.UI.Components
         
         private void OnParentChanged(int newIndex)
         {
-            RequestTreeRebuild.Invoke(); //todo: test if this updates the visibility toggle correctly
+            RequestTreeRebuild.Invoke();
+        }
+
+        private void OnLayerDestroyed()
+        {
+            RequestTreeRebuild.Invoke();
         }
 
         private void UpdateEnabledToggle(bool activeInHierarchy)
@@ -200,7 +217,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLayerTypeIcon()
         {
-            layerTypeIcon.Image = GetImage(layerData);
+            layerTypeIcon.Image = GetImage(layerData); //todo test if the icon updates when setting prefab (scatter)
         }
 
         private static IconImage GetImage(LayerData layerData)
