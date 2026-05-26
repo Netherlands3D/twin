@@ -270,7 +270,6 @@ namespace Netherlands3D.UI.Components
             return false;
         }
         
-        //todo: make component for name label, fix activation after clicking
         //todo: drag reordering
         //todo: vertical gap between tree items
         //todo: cleanup old scripts
