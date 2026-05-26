@@ -44,20 +44,8 @@ public class DragManipulator : PointerManipulator
 
     private void OnPointerDown(PointerDownEvent e)
     {
-        if (active)
-        {
-            e.StopImmediatePropagation();
-            return;
-        }
-
         if (!CanStartManipulation(e)) return;
-
-        StartDragging(e);
-        e.StopPropagation();
-    }
-
-    private void StartDragging(PointerDownEvent e)
-    {
+        
         start = e.localPosition;
         previousPosition = e.localPosition;
         pointerId = e.pointerId;
@@ -95,7 +83,7 @@ public class DragManipulator : PointerManipulator
         OnDrag(delta);
         Dragging.Invoke(delta);
 
-        e.StopPropagation();
+        // e.StopPropagation();
     }
     
     private void OnPointerUp(PointerUpEvent e)
@@ -107,7 +95,7 @@ public class DragManipulator : PointerManipulator
         active = false;
         deadzonePassed = false;
         target.ReleaseMouse();
-        e.StopPropagation();
+        // e.StopPropagation();
 
         if (!wasDragging) return;
         
