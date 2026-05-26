@@ -83,7 +83,7 @@ namespace Netherlands3D.UI.Components
             AddToClassList("color-spectrum");
             RegisterCallback<AttachToPanelEvent>(_ => ApplySelectorPosition());
 
-            var dragManipulator = new DragManipulator();
+            var dragManipulator = new DragManipulator(0);
             dragManipulator.DragStarted.AddListener(OnDragStarted);
             dragManipulator.Dragging.AddListener(OnDragging);
             this.AddManipulator(dragManipulator);

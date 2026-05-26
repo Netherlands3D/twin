@@ -9,7 +9,7 @@ public class DragManipulator : PointerManipulator
     private int pointerId;
     private Vector2 startSize;
 
-    protected float movementDeadzone = 32f;
+    protected float movementDeadzone;
     protected MouseButton dragMouseButton = MouseButton.LeftMouse;
     
     public UnityEvent<Vector2> DragStarted = new(); //parameter is startPosition
@@ -17,9 +17,11 @@ public class DragManipulator : PointerManipulator
     public UnityEvent<Vector2> DragEnded = new(); //parameter is endPosition
     
     private Vector2 previousPosition;
+    private bool deadzonePassed;
     
-    public DragManipulator()
+    public DragManipulator(float deadzone = 32f)
     {
+        this.movementDeadzone = deadzone;
         pointerId = -1;
         activators.Add(new ManipulatorActivationFilter { button = dragMouseButton });
         active = false;
@@ -57,20 +59,36 @@ public class DragManipulator : PointerManipulator
     private void StartDragging(PointerDownEvent e)
     {
         start = e.localPosition;
-        previousPosition = e.localPosition; // initialise here
+        previousPosition = e.localPosition;
         pointerId = e.pointerId;
-
+        deadzonePassed = movementDeadzone <= 0;
+            
         active = true;
         target.CapturePointer(pointerId);
-
-        OnDragStarted(start);
-        DragStarted.Invoke(start);
+        
+        if (deadzonePassed)
+        {
+            OnDragStarted(start);
+            DragStarted.Invoke(start);
+        }
     }
 
     private void OnPointerMove(PointerMoveEvent e)
     {
         if (GuardPointerIsDragging()) return;
 
+        if (!deadzonePassed)
+        {
+            var totalMove = (Vector2)e.localPosition - (Vector2)start;
+            if (totalMove.magnitude < movementDeadzone) return;
+
+            deadzonePassed = true;
+            previousPosition = e.localPosition;
+            OnDragStarted(start);
+            DragStarted.Invoke(start);
+            return;
+        }
+        
         Vector2 delta = (Vector2)e.localPosition - previousPosition; // frame delta, not start delta
         previousPosition = e.localPosition;
 
@@ -84,26 +102,18 @@ public class DragManipulator : PointerManipulator
     {
         if (GuardPointerIsDragging() || !CanStopManipulation(e)) return;
         
-        OnDragEnded(e.localPosition);
-        
+        bool wasDragging = deadzonePassed;
+    
         active = false;
+        deadzonePassed = false;
         target.ReleaseMouse();
-        
         e.StopPropagation();
+
+        if (!wasDragging) return;
+        
+        OnDragEnded(e.localPosition);
         DragEnded.Invoke(e.localPosition);
     }
-    
-    // private void StartDragging(PointerDownEvent e)
-    // {
-    //     start = e.localPosition;
-    //     pointerId = e.pointerId;
-    //
-    //     active = true;
-    //     target.CapturePointer(pointerId);
-    //     
-    //     OnDragStarted(start);
-    //     DragStarted.Invoke(start);
-    // }
 
     protected virtual void OnDragStarted(Vector2 startPosition)
     {
@@ -118,4 +128,5 @@ public class DragManipulator : PointerManipulator
     }
 
     protected bool GuardPointerIsDragging() => !active || !target.HasPointerCapture(pointerId);
+    
 }
