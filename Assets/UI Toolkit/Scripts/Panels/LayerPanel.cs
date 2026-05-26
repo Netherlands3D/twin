@@ -16,6 +16,7 @@ namespace Netherlands3D.UI.Panels
     {
         private TreeView treeView;
         private LayerData rootLayer;
+        private LayerDragGhost dragGhost;
         
         public LayerPanel()
         {
@@ -68,6 +69,9 @@ namespace Netherlands3D.UI.Panels
             var layerRowElement = new LayerListViewItem();
             layerRowElement.RequestTreeRefresh.AddListener(treeView.RefreshItems);
             layerRowElement.RequestTreeRebuild.AddListener(RebuildTree);
+            layerRowElement.DragStarted.AddListener(OnDraggingLayerItemStarted);
+            layerRowElement.Dragging.AddListener(OnDraggingLayerItem);
+            layerRowElement.DragEnded.AddListener(OnDraggingLayerItemEnded);
             return layerRowElement;
         }
 
@@ -82,6 +86,27 @@ namespace Netherlands3D.UI.Panels
         public override string GetTitle()
         {
             return "Lagen";
+        }
+        
+        private void OnDraggingLayerItemStarted(Vector2 startPosition, LayerListViewItem source)
+        {
+            if (dragGhost != null)
+                dragGhost.RemoveFromHierarchy();
+
+            dragGhost = new LayerDragGhost();
+            Add(dragGhost); // LayerPanel is the containing VisualElement
+            dragGhost.Initialize(startPosition, source);
+        }
+
+        private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)
+        {
+            dragGhost.UpdatePosition(delta);
+        }
+
+        private void OnDraggingLayerItemEnded(Vector2 delta, LayerListViewItem source)
+        {
+            dragGhost.RemoveFromHierarchy();
+            dragGhost = null;
         }
     }
 }

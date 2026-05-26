@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ui="UnityEngine.UIElements"
+         xmlns:nl3d="Netherlands3D.UI.Components"
+         noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+    <ui:VisualElement class="layer-list-view-item">
+        <nl3d:Icon name="IsActiveIcon" icon="Visibility" class="layer-list-view-item__cell layer-list-view-item__visibility-toggle" />
+        <nl3d:Icon name="FoldoutImage" icon="ChevronDown" class="layer-list-view-item__cell layer-list-view-item__visibility-toggle" />
+        <ui:VisualElement name="ColorBar" class="layer-list-view-item__cell layer-list-view-item__color-bar"/>
+        <nl3d:Icon name="TypeIcon" class="layer-list-view-item__cell layer-list-view-item__icon" />
+        <ui:Label name="NameInputField" text="LayerName" class="layer-list-view-item__cell layer-list-view-item__name-label" />
+<!--        <nl3d:Toggle name="PropertyToggle" icon="AdjustmentsHorizontal" toggle-style="IconOnly" class="layer-list-view-item__cell layer-list-view-item__property-toggle"/>-->
+    </ui:VisualElement>
+</ui:UXML>

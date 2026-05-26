@@ -24,14 +24,20 @@ namespace Netherlands3D.UI.Components
         private EditableNameField nameInputField;
         private Toggle propertyToggle;
 
-        PropertyPanelBehaviour propertyPanelBehaviour;
+        private PropertyPanelBehaviour propertyPanelBehaviour;
 
-        private LayerData layerData => userData as LayerData;
+        public LayerData layerData => userData as LayerData;
         public UnityEvent RequestTreeRefresh { get; } = new();
         public UnityEvent RequestTreeRebuild { get; } = new();
 
+        
         private IVisualElementScheduledItem clickTimer;
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
+        private bool waitingForClick = false;
+        
+        public UnityEvent<Vector2, LayerListViewItem> DragStarted { get; } = new();
+        public UnityEvent<Vector2, LayerListViewItem> Dragging { get; } = new();
+        public UnityEvent<Vector2, LayerListViewItem> DragEnded { get; } = new();
         
         public LayerListViewItem()
         {
@@ -48,16 +54,20 @@ namespace Netherlands3D.UI.Components
             propertyToggle = this.Q<Toggle>("PropertyToggle");
 
             RegisterCallback<ClickEvent>(OnClick);
+            var dragManipulator = new DragManipulator();
+            dragManipulator.DragStarted.AddListener(OnDragStarted);
+            dragManipulator.Dragging.AddListener(OnDragging);
+            dragManipulator.DragEnded.AddListener(OnDragEnded);
+            this.AddManipulator(dragManipulator);
 
             isActiveToggle.RegisterValueChangedCallback(OnIsActiveToggleChanged);
             nameInputField.RegisterValueChangedCallback(OnNameChanged);
             propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel); // we can only update the layout after attaching to the panel
+            
         }
-
-        private bool waitingForClick = false;
-
+        
         private void OnClick(ClickEvent evt)
         {
             if (nameInputField.IsEditing)
@@ -82,6 +92,21 @@ namespace Netherlands3D.UI.Components
         private void OnDoubleClick()
         {
             layerData.DoubleClickLayer();
+        }
+        
+        private void OnDragStarted(Vector2 startPosition)
+        {
+            DragStarted.Invoke(startPosition, this);
+        }
+
+        private void OnDragging(Vector2 delta)
+        {
+            Dragging.Invoke(delta, this);
+        }
+
+        private void OnDragEnded(Vector2 endPosition)
+        {
+            DragEnded.Invoke(endPosition, this);
         }
 
         private void OnNameChanged(ChangeEvent<string> evt)
@@ -300,6 +325,7 @@ namespace Netherlands3D.UI.Components
 
         //todo: drag reordering
         //todo: vertical gap between tree items
+        //todo: root.Selectedlayers
         //todo: cleanup old scripts
     }
 }
