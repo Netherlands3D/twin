@@ -16,6 +16,8 @@ public class DragManipulator : PointerManipulator
     public UnityEvent<Vector2> Dragging = new(); //parameter is delta
     public UnityEvent<Vector2> DragEnded = new(); //parameter is endPosition
     
+    private Vector2 previousPosition;
+    
     public DragManipulator()
     {
         pointerId = -1;
@@ -37,6 +39,7 @@ public class DragManipulator : PointerManipulator
         target.UnregisterCallback<PointerUpEvent>(OnPointerUp);
     }
 
+
     private void OnPointerDown(PointerDownEvent e)
     {
         if (active)
@@ -46,22 +49,37 @@ public class DragManipulator : PointerManipulator
         }
 
         if (!CanStartManipulation(e)) return;
-        
+
         StartDragging(e);
         e.StopPropagation();
+    }
+
+    private void StartDragging(PointerDownEvent e)
+    {
+        start = e.localPosition;
+        previousPosition = e.localPosition; // initialise here
+        pointerId = e.pointerId;
+
+        active = true;
+        target.CapturePointer(pointerId);
+
+        OnDragStarted(start);
+        DragStarted.Invoke(start);
     }
 
     private void OnPointerMove(PointerMoveEvent e)
     {
         if (GuardPointerIsDragging()) return;
 
-        Vector2 diff = e.localPosition - start;
+        Vector2 delta = (Vector2)e.localPosition - previousPosition; // frame delta, not start delta
+        previousPosition = e.localPosition;
 
-        OnDrag(diff);
-        Dragging.Invoke(diff);
+        OnDrag(delta);
+        Dragging.Invoke(delta);
 
         e.StopPropagation();
     }
+    
     private void OnPointerUp(PointerUpEvent e)
     {
         if (GuardPointerIsDragging() || !CanStopManipulation(e)) return;
@@ -75,17 +93,17 @@ public class DragManipulator : PointerManipulator
         DragEnded.Invoke(e.localPosition);
     }
     
-    private void StartDragging(PointerDownEvent e)
-    {
-        start = e.localPosition;
-        pointerId = e.pointerId;
-
-        active = true;
-        target.CapturePointer(pointerId);
-        
-        OnDragStarted(start);
-        DragStarted.Invoke(start);
-    }
+    // private void StartDragging(PointerDownEvent e)
+    // {
+    //     start = e.localPosition;
+    //     pointerId = e.pointerId;
+    //
+    //     active = true;
+    //     target.CapturePointer(pointerId);
+    //     
+    //     OnDragStarted(start);
+    //     DragStarted.Invoke(start);
+    // }
 
     protected virtual void OnDragStarted(Vector2 startPosition)
     {

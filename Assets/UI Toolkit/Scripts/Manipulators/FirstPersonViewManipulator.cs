@@ -8,17 +8,25 @@ using UnityEngine.InputSystem;
 
 public class FirstPersonViewManipulator : DragManipulator
 {
+    private Vector2 totalDrag; // track cumulative movement ourselves
     private readonly LayerMask layers = LayerMask.GetMask(
         "Default",
         "Terrain",
         "Buildings"
     );
+    
+    protected override void OnDragStarted(Vector2 startPosition)
+    {
+        base.OnDragStarted(startPosition);
+        totalDrag = Vector2.zero;
+    }
 
     protected override void OnDrag(Vector2 delta)
     {
         base.OnDrag(delta);
-        target.style.top = target.layout.y + delta.y;
-        target.style.left = target.layout.x + delta.x;
+        totalDrag += delta;
+        target.style.top = target.layout.y + totalDrag.y;
+        target.style.left = target.layout.x + totalDrag.x;
     }
 
     protected override void OnDragEnded(Vector2 endPosition)
@@ -38,6 +46,7 @@ public class FirstPersonViewManipulator : DragManipulator
     {
         target.style.top = 0;
         target.style.left = 0;
+        totalDrag = Vector2.zero;
     }
 
     private void EnterFPVMode()
