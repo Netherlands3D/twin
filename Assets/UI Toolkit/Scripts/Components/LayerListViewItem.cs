@@ -21,8 +21,6 @@ namespace Netherlands3D.UI.Components
         private VisibilityToggle isActiveToggle;
         private VisualElement colorBar;
         private Icon layerTypeIcon;
-        // private Label nameLabel; // we will switch between label and input field
-        // private TextField nameInputField;
         private EditableNameField nameInputField;
         private Toggle propertyToggle;
 
@@ -32,8 +30,9 @@ namespace Netherlands3D.UI.Components
         public UnityEvent RequestTreeRefresh { get; } = new();
         public UnityEvent RequestTreeRebuild { get; } = new();
 
+        private IVisualElementScheduledItem clickTimer;
+        [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
         
-        private bool wasSelectedOnPointerDown = false;
         public LayerListViewItem()
         {
             this.CloneComponentTree("Components");
@@ -45,15 +44,44 @@ namespace Netherlands3D.UI.Components
             isActiveToggle = this.Q<VisibilityToggle>("IsActiveToggle");
             layerTypeIcon = this.Q<Icon>("TypeIcon");
             colorBar = this.Q<VisualElement>("ColorBar");
-            // nameLabel = this.Q<Label>("NameLabel");
             nameInputField = this.Q<EditableNameField>("NameInputField");
             propertyToggle = this.Q<Toggle>("PropertyToggle");
+
+            RegisterCallback<ClickEvent>(OnClick);
 
             isActiveToggle.RegisterValueChangedCallback(OnIsActiveToggleChanged);
             nameInputField.RegisterValueChangedCallback(OnNameChanged);
             propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel); // we can only update the layout after attaching to the panel
+        }
+
+        private bool waitingForClick = false;
+
+        private void OnClick(ClickEvent evt)
+        {
+            if (nameInputField.IsEditing)
+            {
+                waitingForClick = false;
+                clickTimer.Pause();
+                return;
+            }
+            
+            if (waitingForClick)
+            {
+                OnDoubleClick();
+                waitingForClick = false;
+                clickTimer.Pause();
+                return;
+            }
+            waitingForClick = true;
+            clickTimer = schedule.Execute(() => waitingForClick = false);
+            clickTimer.ExecuteLater((long)(ClickInterval * 1000));
+        }
+
+        private void OnDoubleClick()
+        {
+            layerData.DoubleClickLayer();
         }
 
         private void OnNameChanged(ChangeEvent<string> evt)
@@ -269,7 +297,7 @@ namespace Netherlands3D.UI.Components
 
             return false;
         }
-        
+
         //todo: drag reordering
         //todo: vertical gap between tree items
         //todo: cleanup old scripts

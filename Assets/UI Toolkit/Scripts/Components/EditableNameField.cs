@@ -11,9 +11,11 @@ namespace Netherlands3D.UI.Components
     {
         private Label label; // we will switch between label and input field
         private TextField inputField;
+        
         private bool firstClickDone;
         private bool intervalExpired;
         private IVisualElementScheduledItem clickTimer;
+        [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
         
         [UxmlAttribute("value")]
         public string value
@@ -30,8 +32,8 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
-
+        public bool IsEditing => label.ClassListContains(UtilityClassConstants.HIDDEN);
+        
         public void SetValueWithoutNotify(string newValue)
         {
             label.text = newValue;
