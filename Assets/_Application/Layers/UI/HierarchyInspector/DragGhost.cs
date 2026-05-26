@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void CopyAppearance(LayerUI ui)
         {
-            layerVisibilityImage.sprite = ui.VisibilitySprite;
+            // layerVisibilityImage.sprite = ui.VisibilitySprite;
             colorImage.color = ui.Layer.Color;
             foldoutImage.enabled = ui.hasChildren;
             layerTypeImage.sprite = ui.LayerTypeSprite;
