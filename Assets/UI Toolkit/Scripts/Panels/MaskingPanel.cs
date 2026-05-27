@@ -43,7 +43,9 @@ namespace Netherlands3D.UI.Panels
             treeView.bindItem = BindItem;
             treeView.unbindItem = UnbindItem;
 
-            PopulateMaskLayerPanel(rootLayer);
+            var tree = rootLayer.ToTreeViewItems(IsMaskable, false);
+            treeView.SetRootItems(tree);
+            RefreshAtEndOfFrame();
         }
 
         private VisualElement MakeItem()
@@ -98,18 +100,9 @@ namespace Netherlands3D.UI.Panels
             RefreshAtEndOfFrame();
         }
 
-        private void PopulateMaskLayerPanel(LayerData rootLayer)
-        {
-            var tree = rootLayer.ToTreeViewItems(IsMaskable, false);
-            treeView.SetRootItems(tree);
-            RefreshAtEndOfFrame();
-        }
-
         private bool IsMaskable(LayerData layer)
         {
             var maskingPropertyData = layer.GetProperty<MaskingLayerPropertyData>();
-            // if(maskingPropertyData != null)
-            //     maskingPropertyData.OnStylingChanged.AddListener(RefreshAtEndOfFrame); 
             return maskingPropertyData != null;
         }
 
