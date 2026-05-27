@@ -9,7 +9,7 @@ using RadioButtonGroup = UnityEngine.UIElements.RadioButtonGroup;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(ILayerPropertyDataWithCRS))]
+    [PropertySection(typeof(ILayerPropertyDataWithCRS), PropertySectionCategory.Settings)]
     public partial class VerticalDatumPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private RadioButtonGroup referenceHeightOptions;

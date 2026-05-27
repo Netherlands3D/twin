@@ -7,7 +7,7 @@ namespace Netherlands3D.Twin.UI
     public class TransformHandleButtonsPanel : MonoBehaviour
     {
         [SerializeField] private RectTransform buttonsPanel;
-        [SerializeField] private RectTransform visibilityPanel;
+        //[SerializeField] private RectTransform visibilityPanel;
         [SerializeField] private ToggleGroupItem positionToggle;
         [SerializeField] private ToggleGroupItem rotationToggle;
         [SerializeField] private ToggleGroupItem scaleToggle;
@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.UI
         private void Start()
         {
             buttonsPanel.gameObject.SetActive(false);
-            visibilityPanel.gameObject.SetActive(false);
+            //visibilityPanel.gameObject.SetActive(false);
 
         }
 
@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin.UI
 
         public void ShowVisibilityPanel(bool show)
         {
-            visibilityPanel.gameObject.SetActive(show);
+            //visibilityPanel.gameObject.SetActive(show);
         }
 
         public void SetLocks(TransformAxes transformLocks)

@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(CredentialsRequiredPropertyData))]
+    [PropertySection(typeof(CredentialsRequiredPropertyData), PropertySectionCategory.Settings)]
     public partial class CredentialsPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private CredentialPanel credentialPanel;

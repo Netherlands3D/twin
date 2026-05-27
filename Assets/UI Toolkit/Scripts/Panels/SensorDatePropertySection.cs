@@ -11,7 +11,7 @@ using Button = UnityEngine.UIElements.Button;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(SensorPropertyData))]
+    [PropertySection(typeof(SensorPropertyData), PropertySectionCategory.Settings)]
     public partial class SensorDatePropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private SensorPropertyData propertyData;

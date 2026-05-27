@@ -24,6 +24,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private Tool layerTool;
 
         public UnityEvent<bool> OnPolygonSelectionEnabled = new();
+        public UnityEvent OnDeselectActivePolygon = new();
+        public UnityEvent OnSelectActivePolygon = new();
         
         private bool polygonSelectionEnabled = false;
         
@@ -39,8 +41,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
             
-            layerTool?.onOpen.AddListener(EnablePolygonSelection);
-            layerTool?.onClose.AddListener(DisablePolygonSelection);
+            //todo leaving this commented code because the inspectorpanelbehaviour will now be responsible for enabling/disabling the polygon selection/visibility
+            //double check if this is correct when ui toolkit is fully implemented specifically the layerpanel
+            // layerTool?.onOpen.AddListener(EnablePolygonSelection);
+            // layerTool?.onClose.AddListener(DisablePolygonSelection);
         }
 
         private void OnDisable()
@@ -48,16 +52,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
         }
         
-        private void EnablePolygonSelection()
+        public void EnablePolygonSelection()
         {
             polygonSelectionEnabled = true;
             OnPolygonSelectionEnabled.Invoke(true);
         }
 
-        private void DisablePolygonSelection()
+        public void DisablePolygonSelection()
         {
             polygonSelectionEnabled = false;
             OnPolygonSelectionEnabled.Invoke(false);
+
+            //clear any selected polygon when selectio is disabled
+            polygonCreationService.ClearInputs();
+
+            activeLayer = null;
+            ReselectLayerPolygon(null);
+            OnDeselectActivePolygon.Invoke();
         }
 
         public void RegisterPolygon(LayerData layer)
@@ -112,7 +123,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             foreach (var layer in layers)
             {               
                 bool wasSelected = PolygonWasSelected(layer, frustumPlanes, worldPoint);
-                if (wasSelected)
+                if (wasSelected && polygonSelectionEnabled)
                 {
                     layer.SelectLayer(true);
                     return; //select only one
@@ -159,13 +170,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 return;
             
             //Do not allow selecting a new polygon if we are still creating one
-            if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create || polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create)
+            if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create ||
+                polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create ||
+                polygonCreationService.GridInput.Mode == PolygonInput.DrawMode.Create || 
+                polygonCreationService.GridInput.Mode == PolygonInput.DrawMode.Edit)
                 return;
 
             polygonCreationService.ClearInputs();
 
             activeLayer = null;
             ReselectLayerPolygon(null);
+            OnDeselectActivePolygon.Invoke();
         }
         
         private void ProcessPolygonSelection(LayerData layer)
@@ -178,6 +193,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 activeLayer = layer;
                 polygonCreationService.UpdateInputByType(layer);
                 polygonCreationService.GridInput.SetSelectionVisualEnabled(true);
+                OnSelectActivePolygon.Invoke();
                 return;
             }
 
@@ -185,10 +201,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create || polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create)
                 return;
 
+            
             polygonCreationService.ClearInputs();
-
             activeLayer = layer;
             ReselectLayerPolygon(layer);
+            OnSelectActivePolygon.Invoke();
         }
         
         private void ReselectLayerPolygon(LayerData layer)

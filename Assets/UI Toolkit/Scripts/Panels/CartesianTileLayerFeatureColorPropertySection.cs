@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
@@ -13,7 +12,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData))]
+    [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData), PropertySectionCategory.Styling)]
     public partial class CartesianTileLayerFeatureColorPropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
         public ColorPicker ColorPicker { get; set; }
@@ -21,7 +20,6 @@ namespace Netherlands3D.UI.Panels
         private CartesianTileLayerFeatureColorPropertyData stylingPropertyData;
         private ListView swatchesListView;
         private ListView SwatchesListView => swatchesListView ??= this.Q<ListView>();
-        private List<string> colors = new();
         private List<CartesianTileLayerFeatureColorPropertyData.ColorData> colorData = new();
         
         public CartesianTileLayerFeatureColorPropertySection()
@@ -93,7 +91,7 @@ namespace Netherlands3D.UI.Panels
             UpdateSwatches();
             
             stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
-            ColorPicker.ColorSelected.AddListener(OnPickColor);
+            ColorPicker.ColorChanged.AddListener(OnPickColor);
 
             ColorPicker.SetVisible(false);
         }
@@ -101,29 +99,13 @@ namespace Netherlands3D.UI.Panels
         private void OnDestroy()
         {
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
-            ColorPicker.ColorSelected.RemoveListener(OnPickColor);
+            ColorPicker.ColorChanged.RemoveListener(OnPickColor);
         }
 
 
         private void UpdateSwatches()
         {
-            colors.Clear();
-            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
-            {
-                if(kv.Key.Contains(CartesianTileLayerFeatureColorPropertyData.ColoringIdentifier))
-                {
-                    int index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(kv.Key);                    
-                    Color? color = stylingPropertyData.GetColorByMaterialIndex(index);
-                    //we need to expect a value here or else the stylingrule is not properly initialized
-                    if (color.HasValue)
-                    {
-                        colors.Add(ColorUtility.ToHtmlStringRGB(color.Value));
-                    }
-                    else
-                        Debug.LogError("stylingrule not initialized because the colorvalue is missing");
-                }
-            }
-            SwatchesListView.itemsSource = colors;
+            SwatchesListView.itemsSource = stylingPropertyData.GetUsedColorTypes();
             SwatchesListView.RefreshItems();
         }
         

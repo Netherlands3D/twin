@@ -15,7 +15,7 @@ using Toggle = UnityEngine.UIElements.Toggle;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(PolygonSelectionLayerPropertyData))]
+    [PropertySection(typeof(PolygonSelectionLayerPropertyData), PropertySectionCategory.Styling)]
     public partial class PolygonMaskingPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private PolygonSelectionLayerPropertyData polygonPropertyData;
