@@ -1,3 +1,6 @@
+using System;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -7,6 +10,9 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class InspectorPanel : VisualElement
     {
+        public Action OnShow;
+        public Action OnHide;
+        
         private Label header;
         private Label Header => header ??= this.Q<Label>(className: "inspector-header-title");
         private Button inspectorHeaderCloseButton;
@@ -53,14 +59,23 @@ namespace Netherlands3D.UI.Components
             });
         }
 
+        public void Initialize()
+        {
+            PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            OnShow += polygonSelectionService.EnablePolygonSelection;
+            OnHide += polygonSelectionService.DisablePolygonSelection;
+        }
+
         public void Open()
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            OnShow?.Invoke();
         }
 
         public void Close()
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            OnHide?.Invoke();
         }
 
         public bool IsOpen() => !ClassListContains(UtilityClassConstants.HIDDEN);

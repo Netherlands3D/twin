@@ -17,6 +17,8 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class ImportAssetPanel : BaseInspectorContentPanel
     {
+        public override string Title => "Importeren";
+
         public const string supportedFileTypes = "obj,csv,json,geojson,glb";
         
         private Button uploadButton;
@@ -87,8 +89,6 @@ namespace Netherlands3D.UI.Panels
             credentialPanel.SetEnabled(false);
             AddLayerFromUrl(uri, auth);
         }
-
-        public override string GetTitle() => "Importeren";
 
         private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke();
         private void OnUploadStarted(ClickEvent evt)

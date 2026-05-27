@@ -53,11 +53,3 @@
     flex-shrink: 1;
     padding: 0;
 }
-
-.properties-panel.active {
-    display: flex;
-}
-
-.properties-panel:disabled {
-    display: none;
-}

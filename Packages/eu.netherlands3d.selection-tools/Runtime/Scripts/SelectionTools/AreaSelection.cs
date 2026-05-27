@@ -28,8 +28,6 @@ namespace Netherlands3D.SelectionTools
     {
         private MeshRenderer boundsMeshRenderer;
 
-        [Header("Invoke")]
-        public UnityEvent<bool> blockCameraDragging = new();
         [Tooltip("Fires while a new area is being drawn")]
         public UnityEvent<Bounds> whenDrawingArea = new();
         [FormerlySerializedAs("selectedAreaBounds")]
@@ -45,8 +43,18 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private GameObject selectionBlock;
         [SerializeField] private Material triplanarGridMaterial;
         
+        private bool drawingArea;
 
-        private bool drawingArea = false;
+        public bool DrawingArea
+        {
+            get => drawingArea;
+            set
+            {
+                drawingArea = value;
+                if(drawingArea)
+                    SetSelectionVisualEnabled(true);
+            }
+        }
 
         public float GridSize => gridSize;
 
@@ -102,7 +110,15 @@ namespace Netherlands3D.SelectionTools
             if(triplanarGridMaterial)
                triplanarGridMaterial.SetFloat("GridSize", 1.0f / gridSize);
         }
-#endif       
+#endif
+
+        private void Update()
+        {
+            if (drawingArea)
+            {
+                DrawSelectionArea(GetGridPosition(selectionStartPosition), GetGridPosition(selectionCurrentPosition));
+            }
+        }
 
         protected override void OnDisable()
         {
@@ -111,72 +127,33 @@ namespace Netherlands3D.SelectionTools
             SetSelectionVisualEnabled(false);
         }
 
-        protected override void Update()
+        public override void SetSelectionStartPosition(Vector3 position)
         {
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-            var currentWorldCoordinate = GetGridPosition(worldPosition);
-            gridHighlight.transform.position = currentWorldCoordinate;
+            selectionStartPosition = GetGridPosition(position);
+        }
 
-            if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
-            {
-                if (Interface.PointerIsOverUI() || mode == DrawMode.Selected) return;
-
-                drawingArea = true;
-                SetSelectionVisualEnabled(true);
-                blockCameraDragging.Invoke(true);
-            }
-            else if (drawingArea && !clickAction.IsPressed())
-            {
-                drawingArea = false;
-                blockCameraDragging.Invoke(false);
-            }
-
+        public override void SetSelectionEndPosition(Vector3 position)
+        {
+            selectionEndPosition = GetGridPosition(position);
             if (drawingArea)
             {
-                DrawSelectionArea(selectionStartPosition, currentWorldCoordinate);
+                DrawGridAtPosition(selectionStartPosition, selectionEndPosition);
             }
         }
 
-        protected override void Tap()
+        public void DrawGridAtPosition(Vector3 start, Vector3 end)
         {
-            if (Interface.PointerIsOverUI())
-                return;
-
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-            var tappedPosition = GetGridPosition(worldPosition);
-            DrawSelectionArea(tappedPosition, tappedPosition);
+            DrawSelectionArea(GetGridPosition(start), GetGridPosition(end));
             MakeSelection();
         }
 
-        protected override void StartClick()
+        public void SetGridHighlightPosition(Vector3 position)
         {
-            if (Interface.PointerIsOverUI())
-                return;
-
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-            selectionStartPosition = GetGridPosition(worldPosition);
+            Vector3 pos = GetGridPosition(position);
+            gridHighlight.transform.position = pos;
         }
 
-        protected override void Release()
-        {
-            if (Interface.PointerIsOverUI())
-                return;
-
-            var currentPointerPosition = pointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
-            var selectionEndPosition = GetGridPosition(worldPosition);
-
-            if (drawingArea)
-            {
-                DrawSelectionArea(selectionStartPosition, selectionEndPosition);
-                MakeSelection();
-            }
-        }
-
-        private void MakeSelection()
+        public void MakeSelection()
         {
             if (mode == DrawMode.Selected) return;
 
@@ -218,7 +195,7 @@ namespace Netherlands3D.SelectionTools
         /// Draw selection area by scaling the block
         /// </summary>
         /// <param name="currentWorldCoordinate">Current pointer position in world</param>
-        private void DrawSelectionArea(Vector3 startWorldCoordinate, Vector3 currentWorldCoordinate)
+        public void DrawSelectionArea(Vector3 startWorldCoordinate, Vector3 currentWorldCoordinate)
         {
             var xDifference = (currentWorldCoordinate.x - startWorldCoordinate.x);
             var zDifference = (currentWorldCoordinate.z - startWorldCoordinate.z);
@@ -262,7 +239,6 @@ namespace Netherlands3D.SelectionTools
         {
             this.mode = mode;
             gridHighlight.gameObject.SetActive(mode != DrawMode.Selected);
-
         }
     }
 }

@@ -12,7 +12,7 @@ using Slider = Netherlands3D.UI.Components.Slider;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(SensorPropertyData))]
+    [PropertySection(typeof(SensorPropertyData), PropertySectionCategory.Styling)]
     public partial class SensorValuesPropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
         private SensorPropertyData propertyData;
@@ -61,7 +61,7 @@ namespace Netherlands3D.UI.Panels
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             SetColorPickerState(ColorPickerState.None);
-            ColorPicker.ColorSelected.RemoveListener(OnColorPicked);
+            ColorPicker.ColorChanged.RemoveListener(OnColorPicked);
         }
 
         private void OnMinimumColorTileClicked(ClickEvent evt)
@@ -121,7 +121,7 @@ namespace Netherlands3D.UI.Panels
             UpdateMinimumColor(propertyData.MinColor);
             UpdateMaximumColor(propertyData.MaxColor);
             
-            ColorPicker.ColorSelected.AddListener(OnColorPicked);
+            ColorPicker.ColorChanged.AddListener(OnColorPicked);
         }
 
         private void OnColorPicked(Color newColor)

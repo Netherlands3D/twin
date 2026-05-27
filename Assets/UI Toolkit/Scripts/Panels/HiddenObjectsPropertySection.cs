@@ -21,7 +21,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(HiddenObjectsPropertyData))]
+    [PropertySection(typeof(HiddenObjectsPropertyData), PropertySectionCategory.Styling)]
     public partial class HiddenObjectsPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private float cameraDistance = 150f;
@@ -34,6 +34,8 @@ namespace Netherlands3D.UI.Panels
         private List<string> objectIds = new();
         private List<string> toggledObjectIds = new();
         private bool showSelection = true;
+        private ObjectSelectorService selector;
+        
         
         public HiddenObjectsPropertySection()
         {
@@ -78,7 +80,6 @@ namespace Netherlands3D.UI.Panels
         
         private void UpdateSelectionForIndices(IEnumerable<int> indices)
         {
-            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
             selector.Deselect();
             
             if(!showSelection) return;
@@ -122,6 +123,7 @@ namespace Netherlands3D.UI.Panels
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
+            selector = ServiceLocator.GetService<ObjectSelectorService>();
             stylingPropertyData = properties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
             if (stylingPropertyData == null) return;
 
@@ -130,6 +132,7 @@ namespace Netherlands3D.UI.Panels
             objectIds.Clear();
             UpdateVisibility();
             stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateSelection);
             ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
         }
 
@@ -141,10 +144,6 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateVisibility()
         {
-            //deselect any selected feature in the world when opening the hidden feature panel
-            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
-            selector.Deselect();
-            
             //dont clear the list of id's because we want to keep them during the panels life
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
@@ -155,7 +154,22 @@ namespace Netherlands3D.UI.Panels
                     bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
                     if (visibility == false && !objectIds.Contains(objectId))
                         objectIds.Add(objectId);
-                    
+                }
+            }
+            ListView.itemsSource = objectIds;
+            listView.RefreshItems();
+        }
+
+        private void UpdateSelection()
+        {
+            //deselect any selected feature in the world when opening the hidden feature panel
+            selector.Deselect();
+            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
+            {
+                if(kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
+                {
+                    string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);                    
+                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
                     //select the recently toggled on building so we can actually see what was toggled on
                     if (showSelection && visibility == true && toggledObjectIds.Contains(objectId))
                     {
@@ -164,10 +178,7 @@ namespace Netherlands3D.UI.Panels
                     }
                 }
             }
-           
-            ListView.itemsSource = objectIds;
-            listView.RefreshItems();
-        }        
+        }
 
         private HiddenObjectsPropertyData.SubObjectData? ToggleVisibilityForFeature(string objectId, bool visible)
         {
@@ -343,6 +354,7 @@ namespace Netherlands3D.UI.Panels
         {
             DestroyGhostMesh();
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateVisibility);
+            stylingPropertyData.OnStylingChanged.RemoveListener(UpdateSelection);
             ObjectSelectorService.MappingTree.OnMappingRemoved.RemoveListener(OnMappingRemoved);
 
             //remove all visibility data for features that became visible
