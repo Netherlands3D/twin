@@ -24,7 +24,6 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
             treeView = this.Q<TreeView>();
 
-
             schedule.Execute(() =>
             {
                 if (!refreshAtEndOfFrame) return;

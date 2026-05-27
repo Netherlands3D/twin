@@ -10,6 +10,6 @@
     <nl3d:Header icon="LayerMask" text="Uitsnijden lagen"/>
     <ui:Label name="Description" text="Kies hieronder welke lagen zichtbaar zijn binnen het tekengebied. Verborgen lagen worden niet meegenomen in de uitsnede." class="masking-panel__message-text"/>
     <ui:VisualElement name="Content" class="masking-panel__body">
-        <nl3d:TreeView name="ItemListView" class="masking-panel__list-view"/>
+        <nl3d:TreeView name="ItemTreeView" class="masking-panel__list-view"/>
     </ui:VisualElement>
 </ui:UXML>
