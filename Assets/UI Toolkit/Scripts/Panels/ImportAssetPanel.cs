@@ -84,7 +84,6 @@ namespace Netherlands3D.UI.Panels
         private void OnSubmit(NavigationSubmitEvent evt)
         {
             OnImport(importUriField.value);
-            CredentialPanel.ShowError(false);
         }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
@@ -113,11 +112,12 @@ namespace Netherlands3D.UI.Panels
         private void OnInportUriButtonClicked(ClickEvent evt)
         {
             OnImport(importUriField.value);
-            CredentialPanel.ShowError(false);
         }
 
         private void OnImport(string value)
         {
+            //hide the credential error as we dont want to show this on inputting the uri without credentials when they are required
+            CredentialPanel.ShowError(false);
             try
             {
                 credentialHandler.ClearCredentials();
