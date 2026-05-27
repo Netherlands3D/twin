@@ -116,13 +116,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             layerToSelectAtEndOfFrame = null;
         }
 
-        private void OnRectTransformDimensionsChange()
-        {
-            foreach (var layer in LayerUIsVisibleInInspector)
-            {
-                layer.MarkLayerUIAsDirty();
-            }
-        }
+        // private void OnRectTransformDimensionsChange()
+        // {
+        //     foreach (var layer in LayerUIsVisibleInInspector)
+        //     {
+        //         layer.MarkLayerUIAsDirty();
+        //     }
+        // }
 
         public void StartDragLayer(LayerUI layerUI)
         {
@@ -199,16 +199,16 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             return layerUIDictionary[layer];
         }
 
-        public void HighlightLayerUI(LayerData layer, bool isOn)
-        {
-            if (layer.IsSelected)
-                return;
-
-            var layerState = isOn ? InteractionState.Hover : InteractionState.Default;
-            var ui = GetLayerUI(layer);
-            ui.SetHighlight(layerState);
-            ui.MarkLayerUIAsDirty();
-        }
+        // public void HighlightLayerUI(LayerData layer, bool isOn)
+        // {
+        //     if (layer.IsSelected)
+        //         return;
+        //
+        //     var layerState = isOn ? InteractionState.Hover : InteractionState.Default;
+        //     var ui = GetLayerUI(layer);
+        //     ui.SetHighlight(layerState);
+        //     ui.MarkLayerUIAsDirty();
+        // }
 
         public List<LayerData> GetLayersSortedByUI()
         {

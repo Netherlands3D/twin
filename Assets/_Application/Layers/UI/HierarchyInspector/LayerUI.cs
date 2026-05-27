@@ -25,15 +25,15 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         Selected
     }
 
-    public enum LayerActiveState
-    {
-        Enabled = 0,
-        Disabled = 1,
-        Mixed = 2,
-        EnabledInDisabled = 3
-    }
+    // public enum LayerActiveState
+    // {
+    //     Enabled = 0,
+    //     Disabled = 1,
+    //     Mixed = 2,
+    //     EnabledInDisabled = 3
+    // }
 
-    public class LayerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+    public class LayerUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler//, IPointerEnterHandler, IPointerExitHandler
     {
         public LayerData Layer { get; set; }
 
@@ -86,10 +86,10 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private bool isDirty;
         private float lastClickTime = 0f;
 
-        public LayerActiveState State { get; set; }
+        // public LayerActiveState State { get; set; }
         public InteractionState InteractionState { get; set; }
 
-        public Sprite VisibilitySprite => visibilitySprites[(int)State];
+        // public Sprite VisibilitySprite => visibilitySprites[(int)State];
 
         public bool hasChildren => childrenPanel.childCount > 0;
         public Sprite LayerTypeSprite => layerTypeImage.sprite;
@@ -98,8 +98,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private int Depth => ParentUI ? ParentUI.Depth + 1 : 0;
 
-        public static float DoubleClickLayerThreshold => doubleClickLayerThreshold;
-        private static float doubleClickLayerThreshold;
+        // public static float DoubleClickLayerThreshold => doubleClickLayerThreshold;
+        // private static float doubleClickLayerThreshold;
 
         private void Awake()
         {
@@ -108,7 +108,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             childVerticalLayoutGroup = childrenPanel.GetComponent<VerticalLayoutGroup>();
             spacerStartWidth = spacer.sizeDelta.x;
 
-            doubleClickLayerThreshold = doubleClickThreshold;
+            // doubleClickLayerThreshold = doubleClickThreshold;
         }
 
         private void OnEnable()
@@ -135,8 +135,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void OnFoldoutToggleValueChanged(bool isOn)
         {
-            UpdateFoldout();
-            RecalculateVisibleHierarchyRecursive();
+            // UpdateFoldout();
+            // RecalculateVisibleHierarchyRecursive();
         }
 
         private void OnSelectInputField()
@@ -170,64 +170,29 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void Start()
         {
-            Layer.NameChanged.AddListener(OnNameChanged);
-            Layer.LayerActiveInHierarchyChanged.AddListener(UpdateEnabledToggle);
-            Layer.ColorChanged.AddListener(UpdateColor);
-            Layer.LayerSelected.AddListener(OnLayerSelected);
-            Layer.LayerDeselected.AddListener(OnLayerDeselected);
-            Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
-            Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
-            Layer.LayerDestroyed.AddListener(DestroyUI);
-            Layer.OnPrefabIdChanged.AddListener(RebuildUI);
-            Layer.PropertySet.AddListener(OnPropertiesChanged);
-            Layer.PropertyRemoved.AddListener(OnPropertiesChanged);
+            // Layer.NameChanged.AddListener(OnNameChanged);
+            // Layer.LayerActiveInHierarchyChanged.AddListener(UpdateEnabledToggle);
+            // Layer.ColorChanged.AddListener(UpdateColor);
+            // Layer.LayerSelected.AddListener(OnLayerSelected);
+            // Layer.LayerDeselected.AddListener(OnLayerDeselected);
+            // Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
+            // Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
+            // Layer.LayerDestroyed.AddListener(DestroyUI);
+            // Layer.OnPrefabIdChanged.AddListener(RebuildUI);
+            // Layer.PropertySet.AddListener(OnPropertiesChanged);
+            // Layer.PropertyRemoved.AddListener(OnPropertiesChanged);
 
-            MarkLayerUIAsDirty();
+            // MarkLayerUIAsDirty();
 
             //Match initial layer states
             SetParent(layerUIManager.GetLayerUI(Layer.ParentLayer), Layer.SiblingIndex); // needed because eventListener is not assigned yet when calling layer.SetParent immediately after creating a layer object
-            if (Layer.IsSelected)
-                SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
-            enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
-            UpdateColor(Layer.Color);
+            // if (Layer.IsSelected)
+            //     SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
+            // enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
+            // UpdateColor(Layer.Color);
             // RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
         }
-
-        private void OnNameChanged(LayerData data, string newName)
-        {
-            gameObject.name = newName;
-        }
-
-        private void UpdateEnabledToggle(bool isOn)
-        {
-            enabledToggle.SetIsOnWithoutNotify(isOn);
-            RecalculateCurrentTreeStates();
-            SetEnabledToggleInteractiveStateRecursive();
-        }
-
-        private void UpdateColor(Color newColor)
-        {
-            var opaqueColor = newColor;
-            opaqueColor.a = 1;
-
-            colorButton.targetGraphic.color = opaqueColor;
-        }
-
-        private void OnLayerSelected(LayerData layer)
-        {
-            SelectUI();
-        }
-
-        private void OnLayerDeselected(LayerData layer)
-        {
-            DeselectUI();
-        }
-
-        private void OnLayerChildrenChanged()
-        {
-            RecalculateCurrentTreeStates();
-        }
-
+        
         private void OnParentOrSiblingIndexChanged(int newSiblingIndex)
         {
             SetParent(layerUIManager.GetLayerUI(Layer.ParentLayer), newSiblingIndex);
@@ -249,75 +214,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (ParentUI)
                 ParentUI.RecalculateParentAndChildren();
 
-            RecalculateParentStates();
         }
 
-        private void RecalculateCurrentTreeStates()
-        {
-            RecalculateState();
-            RecalculateChildrenStates();
-            RecalculateParentStates();
-        }
-
-        private void RecalculateParentStates()
-        {
-            if (ParentUI)
-            {
-                ParentUI.RecalculateState();
-                ParentUI.RecalculateParentStates();
-            }
-        }
-
-        private void RecalculateChildrenStates()
-        {
-            foreach (var child in ChildrenUI)
-            {
-                child.RecalculateState();
-                child.RecalculateChildrenStates();
-            }
-        }
-
-        private void SetEnabledToggleInteractiveStateRecursive()
-        {
-            enabledToggle.interactable = !ParentUI || (ParentUI && Layer.ParentLayer.ActiveInHierarchy);
-
-            foreach (var child in ChildrenUI)
-                child.SetEnabledToggleInteractiveStateRecursive();
-        }
-
-        private void SetVisibilitySprite()
-        {
-            debugIndexText.text = State.ToString();
-            enabledToggle.targetGraphic.GetComponent<Image>().sprite = VisibilitySprite;
-        }
-
-        private void RecalculateState()
-        {
-            var allChildrenActive = true;
-            foreach (var child in ChildrenUI)
-            {
-                allChildrenActive &= child.Layer.ActiveSelf;
-            }
-
-            if (!Layer.ActiveSelf)
-            {
-                State = LayerActiveState.Disabled;
-            }
-            else if (Layer.ActiveSelf && !Layer.ActiveInHierarchy)
-            {
-                State = LayerActiveState.EnabledInDisabled;
-            }
-            else if (allChildrenActive)
-            {
-                State = LayerActiveState.Enabled;
-            }
-            else
-            {
-                State = LayerActiveState.Mixed;
-            }
-
-            SetVisibilitySprite();
-        }
 
         public void SetParent(LayerUI newParent, int siblingIndex = -1)
         {
@@ -336,7 +234,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (oldParent)
             {
                 oldParent.RecalculateParentAndChildren();
-                oldParent.RecalculateCurrentTreeStates();
+                // oldParent.RecalculateCurrentTreeStates();
             }
 
             if (newParent)
@@ -346,14 +244,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             }
 
             RecalculateParentAndChildren();
-            RecalculateVisibleHierarchyRecursive();
-            RecalculateCurrentTreeStates();
-        }
-
-        private void RecalculateVisibleHierarchyRecursive()
-        {
-            layerUIManager.RecalculateLayersVisibleInInspector();
-            MarkLayerUIAsDirty();
+            // RecalculateVisibleHierarchyRecursive();
+            // RecalculateCurrentTreeStates();
         }
 
         private void RecalculateParentAndChildren()
@@ -368,224 +260,17 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             }
 
             ChildrenUI = list.ToArray();
-            UpdateFoldout(); //update the foldout because the children are recalculated
+            // UpdateFoldout(); //update the foldout because the children are recalculated
         }
 
-        public void MarkLayerUIAsDirty()
-        {
-            isDirty = true;
-            foreach (var child in ChildrenUI)
-            {
-                child.MarkLayerUIAsDirty();
-            }
-        }
-
-        private void LateUpdate()
-        {
-            if (isDirty)
-            {
-                UpdateLayerUI();
-                isDirty = false;
-            }
-        }
-
-        private void UpdateLayerUI()
-        {
-            UpdateName();
-            RecalculateIndent(Depth);
-            SetLayerTypeImage();
-            UpdateFoldout();
-            RecalculateNameWidth();
-        }
-
-        private void SetLayerTypeImage()
-        {
-            var sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(Layer);
-            layerTypeImage.sprite = sprite.PrimarySprite;
-        }
-
-        private void UpdateFoldout()
-        {
-            foldoutToggle.gameObject.SetActive(ChildrenUI.Length > 0);
-            childrenPanel.gameObject.SetActive(foldoutToggle.isOn && (ChildrenUI.Length > 0));
-            int index = foldoutToggle.isOn ? 1 : 0;
-            foldoutToggle.targetGraphic.GetComponent<Image>().sprite = foldoutSprites[index];
-        }
-
-        private void RecalculateIndent(int childDepth)
-        {
-            var spacerRectTransform = spacer.transform as RectTransform;
-            spacerRectTransform.sizeDelta = new Vector2((childDepth * indentWidth) + spacerStartWidth, spacerRectTransform.sizeDelta.y);
-        }
-
-        private void UpdateName()
-        {
-            layerNameText.text = Layer.Name;
-            layerNameField.text = Layer.Name;
-        }
-
-        private void RecalculateNameWidth()
-        {
-            var layerPanelRectTransform = LayerBaseTransform.GetComponent<RectTransform>();
-            var layerPanelRight = layerPanelRectTransform.offsetMax.x;
-            var maxWidth = layerPanelRectTransform.rect.width;
-
-            var layoutGroup = parentRowRectTransform.GetComponent<HorizontalLayoutGroup>();
-
-            var layerNameFieldRectTransform = layerNameField.GetComponent<RectTransform>();
-
-            var width = maxWidth;
-            width -= layerNameFieldRectTransform.anchoredPosition.x;
-            width -= spacer.rect.width;
-            width -= layoutGroup.padding.left; // Subtract horizontal padding
-            width -= layoutGroup.padding.right; // Subtract horizontal padding
-            width -= layoutGroup.spacing; // Subtract spacing to create spacing between name field and buttons
-            width += layerPanelRight; // Negative number, so we invert it by adding
-            width -= buttonGroupWidth; // Subtract ButtonGroupWidth because they partly influence the layout
-
-            layerNameFieldRectTransform.sizeDelta = new Vector2(width, layerNameFieldRectTransform.rect.height);
-
-            // The text holder component - which is the parent of the layerNameText - needs to be re-scaled
-            var textHolder = layerNameText.transform.parent;
-            textHolder.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (eventData.button == PointerEventData.InputButton.Left)
-                OnLeftButtonDown(eventData);
-            if (eventData.button == PointerEventData.InputButton.Right)
-                OnRightButtonDown(eventData);
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (!layerUIManager.DragGhost && !Layer.IsSelected)
-                SetHighlight(InteractionState.Hover);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (!Layer.IsSelected)
-                SetHighlight(InteractionState.Default);
-        }
-
-        private void OnLeftButtonDown(PointerEventData eventData)
-        {
-            layerUIManager.DragStartOffset = (Vector2)transform.position - eventData.position;
-            referenceLayerUnderMouse = this;
-
-            //if the layer under mouse is already selected, this can be the beginning of a drag, so don't deselect anything yet. wait for the pointer up event that is not a drag
-            waitForFullClickToDeselect = false; //reset value to be sure no false positives are processed
-            if (Layer.IsSelected)
-            {
-                //only one extra click on a selected layer should initiate the layer name editing
-                float timeSinceLastClick = Time.time - lastClickTime;
-
-                if (timeSinceLastClick <= doubleClickThreshold)
-                {
-                    // Detected double-click
-                    Layer.DoubleClickLayer();
-                }
-                else if (eventData.pointerEnter == layerNameText.gameObject)
-                {
-                    OnSelectInputField();
-                }
-
-                waitForFullClickToDeselect = true;
-            }
-            else
-            {
-                ProcessLayerSelection();
-            }
-
-            lastClickTime = Time.time;
-        }
-
-        private void OnRightButtonDown(PointerEventData eventData)
-        {
-            referenceLayerUnderMouse = this;
-            if (!Layer.IsSelected)
-            {
-                ProcessLayerSelection();
-            }
-
-            // layerManager.EnableContextMenu(true, eventData.position);  //disabled context menu until UI is ready
-        }
-
-        private void ProcessLayerSelection()
-        {
-            if (MultiSelectionUtility.SequentialSelectionModifierKeyIsPressed() && Layer.Root.SelectedLayers.Count > 0) //if no layers are selected, there will be no reference layer to add to
-            {
-                // add all layers between the currently selected layer and the reference layer
-                var referenceLayer = Layer.Root.SelectedLayers.Last(); //last element is always the last selected layer
-                var myIndex = layerUIManager.LayerUIsVisibleInInspector.IndexOf(this);
-                var referenceIndex = layerUIManager.LayerUIsVisibleInInspector.IndexOf(layerUIManager.GetLayerUI(referenceLayer));
-
-                var startIndex = referenceIndex > myIndex ? myIndex + 1 : referenceIndex + 1;
-                var endIndex = referenceIndex > myIndex ? referenceIndex - 1 : myIndex - 1;
-
-                var addLayers = !Layer.IsSelected; //add or subtract layers?
-
-                for (int i = startIndex; i <= endIndex; i++)
-                {
-                    var ui = layerUIManager.LayerUIsVisibleInInspector[i];
-
-                    if (addLayers && !ui.Layer.IsSelected)
-                    {
-                        ui.Layer.SelectLayer();
-                    }
-                    else if (!addLayers && ui.Layer.IsSelected)
-                    {
-                        ui.Layer.DeselectLayer();
-                    }
-                }
-
-                if (!addLayers)
-                {
-                    // referenceLayer.DeselectUI();
-                    // DeselectUI();
-                    referenceLayer.DeselectLayer();
-                    Layer.DeselectLayer();
-                }
-            }
-
-            if (MultiSelectionUtility.NoModifierKeyPressed())
-                Layer.Root.DeselectAllLayers();
-
-            if (Layer.IsSelected)
-            {
-                Layer.DeselectLayer();
-            }
-            else
-            {
-                Layer.SelectLayer();
-            }
-        }
-
-        private void SelectUI()
-        {
-            SetHighlight(InteractionState.Selected);
-        }
-
-        private void DeselectUI()
-        {
-            if (propertyToggle.isOn) propertyToggle.isOn = false;
-            SetHighlight(InteractionState.Default);
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (eventData.button != PointerEventData.InputButton.Left)
-                return;
-
-            if (waitForFullClickToDeselect)
-            {
-                ProcessLayerSelection();
-            }
-
-            waitForFullClickToDeselect = false;
-        }
+        // public void MarkLayerUIAsDirty()
+        // {
+        //     isDirty = true;
+        //     foreach (var child in ChildrenUI)
+        //     {
+        //         child.MarkLayerUIAsDirty();
+        //     }
+        // }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -611,7 +296,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
             }
 
-            RemoveHoverHighlight(referenceLayerUnderMouse);
+            // RemoveHoverHighlight(referenceLayerUnderMouse);
 
             layerUIManager.EndDragLayer();
         }
@@ -621,7 +306,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
-            RemoveHoverHighlight(referenceLayerUnderMouse);
+            // RemoveHoverHighlight(referenceLayerUnderMouse);
 
             referenceLayerUnderMouse = CalculateLayerUnderMouse(out float relativeYValue);
             if (referenceLayerUnderMouse)
@@ -682,7 +367,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
                 else
                 {
-                    referenceLayerUnderMouse.SetHighlight(InteractionState.DragHover);
+                    // referenceLayerUnderMouse.SetHighlight(InteractionState.DragHover);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerUIManager.DragLine.gameObject.SetActive(false);
 
@@ -691,22 +376,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
             }
         }
-
-        private void RemoveHoverHighlight(LayerUI ui)
-        {
-            if (!ui) return;
-
-            var state = InteractionState.Default;
-            if (ui.Layer.IsSelected)
-                state = InteractionState.Selected;
-            ui.SetHighlight(state);
-        }
-
-        public void SetHighlight(InteractionState state)
-        {
-            GetComponentInChildren<Image>().sprite = backgroundSprites[(int)state];
-        }
-
+        
         private LayerUI CalculateLayerUnderMouse(out float relativeYValue)
         {
             var ghostRectTransform = layerUIManager.DragGhost.GetComponent<RectTransform>();
@@ -739,69 +409,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             relativeYValue = (mousePos.y - lastLayer.parentRowRectTransform.position.y) / firstLayer.parentRowRectTransform.lossyScale.y;
             return lastLayer; //below last
         }
-
         
-
-        private void OnDestroy()
-        {
-            Layer.NameChanged.RemoveListener(OnNameChanged);
-            Layer.LayerActiveInHierarchyChanged.RemoveListener(UpdateEnabledToggle);
-            Layer.ColorChanged.RemoveListener(UpdateColor);
-            Layer.LayerSelected.RemoveListener(OnLayerSelected);
-            Layer.LayerDeselected.RemoveListener(OnLayerDeselected);
-            Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
-            Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
-            Layer.LayerDestroyed.RemoveListener(DestroyUI);
-            Layer.OnPrefabIdChanged.RemoveListener(RebuildUI);
-            Layer.PropertySet.RemoveListener(OnPropertiesChanged);
-            Layer.PropertyRemoved.RemoveListener(OnPropertiesChanged);
-            // propertyToggle.onValueChanged.RemoveListener(ToggleProperties);
-        }
-        
-        private void OnPropertiesChanged(LayerPropertyData propertyData)
-        {
-            RebuildUI();
-        }
-        
-        private void RebuildUI()
-        {
-            MarkLayerUIAsDirty();
-            // var properties = ServiceLocator.GetService<Properties.Properties>();
-            // RegisterWithPropertiesPanel(properties);
-        }
-
-        // private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
-        // {
-        //     var hasPropertiesWithPanel = propertiesPanel.HasPropertiesWithPanel(Layer);
-        //     propertyToggle.gameObject.SetActive(hasPropertiesWithPanel);
-        //
-        //     if (!hasPropertiesWithPanel)
-        //         return;
-        //
-        //     propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
-        //     ToggleProperties(propertyToggle.isOn);
-        // }
-
-        // public void ToggleProperties(bool onOrOff)
-        // {
-        //     var properties = ServiceLocator.GetService<Properties.Properties>();
-        //     
-        //     var hasPropertiesWithPanel = properties.HasPropertiesWithPanel(Layer);
-        //     if (!hasPropertiesWithPanel) return; // no properties, no action
-        //
-        //     if (!onOrOff)
-        //     {
-        //         properties.Hide();
-        //         return;
-        //     }
-        //
-        //     properties.Show(Layer);
-        //
-        //     if (!Layer.IsSelected)
-        //     {
-        //         // To prevent confusion with the user, also immediately select this layer.
-        //         Layer.SelectLayer(true);
-        //     }
-        // }
     }
 }
