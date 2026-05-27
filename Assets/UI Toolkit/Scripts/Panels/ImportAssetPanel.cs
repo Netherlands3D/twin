@@ -71,7 +71,7 @@ namespace Netherlands3D.UI.Panels
                 credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             });
             
-            ImportUriField.RegisterCallback<NavigationSubmitEvent>(evt => OnImport(importUriField.value), TrickleDown.TrickleDown);
+            ImportUriField.RegisterCallback<NavigationSubmitEvent>(OnSubmit, TrickleDown.TrickleDown);
         }
 
         public void SetCredentialHandler(ICredentialHandler handler)
@@ -79,6 +79,12 @@ namespace Netherlands3D.UI.Panels
             credentialHandler = handler;
             CredentialPanel.Handler = handler;
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+        }
+
+        private void OnSubmit(NavigationSubmitEvent evt)
+        {
+            OnImport(importUriField.value);
+            CredentialPanel.ShowError(false);
         }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
@@ -107,6 +113,7 @@ namespace Netherlands3D.UI.Panels
         private void OnInportUriButtonClicked(ClickEvent evt)
         {
             OnImport(importUriField.value);
+            CredentialPanel.ShowError(false);
         }
 
         private void OnImport(string value)
@@ -117,6 +124,10 @@ namespace Netherlands3D.UI.Panels
                 Uri uri = new Uri(value);
 
                 credentialHandler.Uri = uri;
+
+                //credentialPanel.UserNameField.value = credentialHandler.UserName;
+                //credentialPanel.CodeField.value = credentialHandler.PasswordOrKeyOrTokenOrCode;
+
                 credentialHandler.ApplyCredentials();
             }
             catch (Exception e)

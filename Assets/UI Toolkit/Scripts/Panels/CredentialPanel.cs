@@ -83,7 +83,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnConfirm()
         {
-            if (string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value))
+            if (IsInputEmpty())
             {
                 ErrorPanel.Show();
                 return;
@@ -138,6 +138,9 @@ namespace Netherlands3D.UI.Panels
         public void ResetState() => SetContentState(ContentState.Warning);
         
         public void SetAcceptedState() => SetContentState(ContentState.Accepted);
+
+        public bool IsInputEmpty() => string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value);
+
         
         public void Show(bool show)
         {
