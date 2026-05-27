@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -92,10 +93,12 @@ namespace Netherlands3D.UI.Panels
         {
             if (dragGhost != null)
                 dragGhost.RemoveFromHierarchy();
+            
+            var panelPosition = source.LocalToWorld(startPosition);
 
             dragGhost = new LayerDragGhost();
-            Add(dragGhost); // LayerPanel is the containing VisualElement
-            dragGhost.Initialize(startPosition, source);
+            Add(dragGhost);
+            dragGhost.Initialize(panelPosition, source);
         }
 
         private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)
@@ -103,8 +106,21 @@ namespace Netherlands3D.UI.Panels
             dragGhost.UpdatePosition(delta);
         }
 
-        private void OnDraggingLayerItemEnded(Vector2 delta, LayerListViewItem source)
+        private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
         {
+            var panelPosition = source.LocalToWorld(endPosition);
+            Debug.Log(panelPosition);
+            
+            var hitElement = panel.Pick(panelPosition);
+            var targetItem = hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
+            
+            if (targetItem != null)
+            {
+                var layer = targetItem.userData as LayerData;
+                Debug.Log(layer == null);
+                Debug.Log(layer.Name);
+            }
+
             dragGhost.RemoveFromHierarchy();
             dragGhost = null;
         }
