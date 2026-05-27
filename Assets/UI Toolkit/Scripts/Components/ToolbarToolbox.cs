@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -6,24 +7,39 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarToolbox : VisualElement
     {
-        public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
-        public Button Screenshot => this.Q<Button>("Screenshot");
-        public Button Dome => this.Q<Button>("Dome");
+        private Toggle Dome => this.Q<Toggle>("Dome");
+        private Button Screenshot => this.Q<Button>("Screenshot");
+
+        public event Action<bool> OnDomeToggled;
+        public event Action OnScreenshotClicked;
+
         public ToolbarToolbox()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                // Defaults: single selection, empty selection allowed
-                Group.allowEmptySelection = true;
-                Group.isMultipleSelection = false;
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
 
-                // Clear selection: bitmask 0, length = number of options
-                int optionCount = Group.childCount;
-                Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, optionCount));
-            });
+        private void OnAttachToPanel(AttachToPanelEvent _)
+        {
+            Dome.RegisterValueChangedCallback(OnDomeValueChanged);
+            Screenshot.RegisterCallback<ClickEvent>(OnScreenshotClick);
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent _)
+        {
+            Dome.UnregisterValueChangedCallback(OnDomeValueChanged);
+            Screenshot.UnregisterCallback<ClickEvent>(OnScreenshotClick);
+        }
+
+        private void OnDomeValueChanged(ChangeEvent<bool> evt) => OnDomeToggled?.Invoke(evt.newValue);
+        private void OnScreenshotClick(ClickEvent _) => OnScreenshotClicked?.Invoke();
+
+        public void SetDomeValueWithoutNotify(bool isOn)
+        {
+            Dome.SetValueWithoutNotify(isOn);
         }
     }
 }
