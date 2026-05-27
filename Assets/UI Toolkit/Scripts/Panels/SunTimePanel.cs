@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class SunTimePanel : BaseInspectorContentPanel
     {
-        public override string GetTitle() => "Zonpositie";
+        public override string Title => "Zonpositie";
 
         // SunTime stores speed as seconds/second internally.
         // The UI shows speed in hours/second so we apply this factor.
