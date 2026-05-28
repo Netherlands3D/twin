@@ -31,7 +31,8 @@
     max-height: var(--spacing-0_5);
     background-color: var(--color-white);
     border-radius: 1px;
-    align-self: center;
+    align-self: flex-start;
+    margin-left: var(--spacing-2_5); /* todo: find better way to center this in the group*/
     margin-bottom: var(--spacing-2);
 }
 

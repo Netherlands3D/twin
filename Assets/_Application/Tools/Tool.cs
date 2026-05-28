@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin.Tools.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,7 +27,12 @@ namespace Netherlands3D.Twin.Tools
         [Header("Content")]
         [Tooltip("Prefab to show in the UI Inspector when this tool is activated")]
         [SerializeField] private GameObject inspectorPrefab;
+        [SerializeField] private InspectorPanelType panelType;
 
+        public Type PanelType => panelType.Type;
+        [SerializeField] private object[] panelArgs;
+        public object[] PanelArgs => panelArgs;
+        
         [Tooltip("GameObjects to spawn in the World when this tool is activated")]
         [FormerlySerializedAs("featurePrefabs")]
         [SerializeField] private GameObject[] functionalityPrefabs;

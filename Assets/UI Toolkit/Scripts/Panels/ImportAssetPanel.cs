@@ -15,6 +15,7 @@ using TextField = Netherlands3D.UI.Components.TextField;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
+    [InspectorPanel]
     public partial class ImportAssetPanel : BaseInspectorContentPanel
     {
         public override string Title => "Importeren";
@@ -40,7 +41,7 @@ namespace Netherlands3D.UI.Panels
 
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.AddLayer;
 
-        private ICredentialHandler credentialHandler;
+        private ICredentialHandler credentialHandler = new CredentialPropertyHandler();
         private CredentialPanel credentialPanel;
         private CredentialPanel CredentialPanel => credentialPanel ??= this.Q<CredentialPanel>();
 
@@ -53,8 +54,8 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            OnShow += () => EnableInClassList("active", true);
-            OnHide += () => EnableInClassList("active", false);
+            // OnShow += () => EnableInClassList("active", true);
+            // OnHide += () => EnableInClassList("active", false);
             GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
@@ -130,6 +131,7 @@ namespace Netherlands3D.UI.Panels
 
                 ImportUriField.value = string.Empty;
                 importSucceeded.Invoke();
+                Hide(); //todo should this be a listener on importSucceeded?
             }
             catch (Exception e)
             {

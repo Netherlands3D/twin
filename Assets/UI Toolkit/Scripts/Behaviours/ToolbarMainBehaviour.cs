@@ -43,16 +43,22 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
             tools = ServiceLocator.GetService<ToolService>();
             
-            hamburgerMenu.OnToolSelected.AddListener(OnToolNotified);
-            tools.onNotifyAny.AddListener(OnToolNotified);
-            tools.onOpenAny.AddListener(OnPanelOpen);
+            // hamburgerMenu.OnToolSelected.AddListener(OnToolNotified);
+            // tools.onNotifyAny.AddListener(OnToolNotified);
+            tools.AnyToolOpened.AddListener(OnAnyToolOpened);
+        }
+
+        private void OnAnyToolOpened(Tool tool)
+        {
+            hamburgerMenu.Close();
         }
 
         private void OnDisable()
         {
-            hamburgerMenu.OnToolSelected.RemoveListener(OnToolNotified);
-            tools.onNotifyAny.RemoveListener(OnToolNotified);
-            tools.onOpenAny.RemoveListener(OnPanelOpen);
+            // hamburgerMenu.OnToolSelected.RemoveListener(OnToolNotified);
+            tools.AnyToolOpened.RemoveListener(OnAnyToolOpened);
+            // tools.onNotifyAny.RemoveListener(OnToolNotified);
+            // tools.onOpenAny.RemoveListener(OnPanelOpen);
         }
         //
         //
@@ -111,15 +117,15 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         //     // tools.RemoveOpenListener(ToolType.DownloadTile, OnDownloadTilePanelOpened);
         // }
 
-        private void OnToolNotified(ToolType toolType)
-        {
-            hamburgerMenu.Close();
-            
-            if(toolType == ToolType.None)
-                tools.CloseAllTools();
-            else
-                tools.OpenTool(toolType);
-        }
+        // private void OnToolNotified(ToolType toolType)
+        // {
+        //     hamburgerMenu.Close();
+        //     
+        //     if(toolType == ToolType.None)
+        //         tools.CloseAllTools();
+        //     else
+        //         tools.OpenTool(toolType);
+        // }
         
         private void OnPanelOpen(ToolType toolType)
         {

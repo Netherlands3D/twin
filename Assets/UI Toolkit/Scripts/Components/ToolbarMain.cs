@@ -27,7 +27,7 @@ namespace Netherlands3D.UI.Components
         // public event Action OnDownloadToolSelected;
         // public event Action OnToolDeselected;
         
-        private ToolService tools;
+        // private ToolService tools;
 
         public ToolbarMain()
         {
@@ -40,19 +40,21 @@ namespace Netherlands3D.UI.Components
         {
             Group.RegisterValueChangedCallback(NotifyValueChanged);
             ClearWithoutNotify();
-            schedule.Execute(() =>
-            {
-                tools = Services.ServiceLocator.GetService<ToolService>();
-                tools.ClearWithoutNotify.AddListener(ClearWithoutNotify);
-            }).StartingIn(0);
-            RegisterCallback<DetachFromPanelEvent>(evt => tools.ClearWithoutNotify.RemoveListener(ClearWithoutNotify));
+            // schedule.Execute(() =>
+            // {
+                // tools = Services.ServiceLocator.GetService<ToolService>();
+                // tools.ClearWithoutNotify.AddListener(ClearWithoutNotify);
+            // }).StartingIn(0);
+            // RegisterCallback<DetachFromPanelEvent>(evt => tools.ClearWithoutNotify.RemoveListener(ClearWithoutNotify));
         }
 
         private void NotifyValueChanged(ChangeEvent<ToggleButtonGroupState> evt)
         {
             var newValue = evt.newValue.GetActiveOptions(stackalloc int[Group.value.length]);
             ToolType type = newValue.Length > 0 ? (ToolType)newValue[0] : ToolType.None;
-            Services.ServiceLocator.GetService<ToolService>().NotifyTool(type);
+            var tool = Services.ServiceLocator.GetService<ToolService>().GetTool(type);
+            tool?.OpenInspector();
+            
             // switch (newButton)
             // {
             //     case Tool.Layer: OnLayerToolSelected?.Invoke(); break;

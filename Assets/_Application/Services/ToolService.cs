@@ -46,23 +46,27 @@ namespace Netherlands3D
 
         public Tool GetTool(ToolType type) => ToolMap[type];
         
-        public UnityEvent<ToolType> onPreNotifyAny;
-        public UnityEvent<ToolType> onNotifyAny;
-        public UnityEvent<ToolType> onOpenAny;
-        public UnityEvent ClearWithoutNotify = new();
+        // public UnityEvent<ToolType> onPreNotifyAny;
+        // public UnityEvent<ToolType> onNotifyAny;
+        public UnityEvent<Tool> AnyToolOpened;
+        // public UnityEvent ClearWithoutNotify = new(); //todo: delete this?
 
-        public void NotifyTool(ToolType type)
-        {
-            onPreNotifyAny.Invoke(type);
-            onNotifyAny.Invoke(type);
-        }
+        // public void NotifyTool(ToolType type)
+        // {
+        //     onPreNotifyAny.Invoke(type);
+        //     onNotifyAny.Invoke(type);
+        // }
 
         public void OpenTool(ToolType type)
         {
-            GetTool(type)?.OpenInspector();
-            onOpenAny.Invoke(type);
+            var tool = GetTool(type);
+            if (tool != null)
+            {
+                tool.OpenInspector();
+                AnyToolOpened.Invoke(tool);
+            }
         }
-        
+
         public void AddOpenListener(ToolType type, UnityAction listener)
         {
             GetTool(type)?.onOpen.AddListener(listener);
@@ -77,6 +81,19 @@ namespace Netherlands3D
         {
             foreach (var tool in tools)
                 tool.tool.CloseInspector();
+        }
+
+        public List<Tool> GetAllToolsWithPanel()
+        {
+            List<Tool> toolsWithPanel = new List<Tool>();
+            foreach (var tool in tools){
+                if (tool.tool.PanelType != null)
+                {
+                    toolsWithPanel.Add(tool.tool);
+                }
+            }
+
+            return toolsWithPanel;
         }
     }
     

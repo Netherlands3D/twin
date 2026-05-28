@@ -13,7 +13,7 @@ namespace Netherlands3D.UI.Panels
     /// Presentational inspector panel for location search.
     /// Owns a <see cref="AutoComplete"/> and exposes C# events for user interactions.
     /// </summary>
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class LocationSearchPanel : BaseInspectorContentPanel
     {
         public override string Title => "Zoeken";
@@ -50,16 +50,16 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            OnShow += () => EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            OnHide += () =>
-            {
-                EnableInClassList(UtilityClassConstants.HIDDEN, true);
-                SetQueryText(string.Empty);
-                ClearSuggestions();
-            };
+            // OnShow += () => EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            // OnHide += () =>
+            // {
+            //     EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            //     SetQueryText(string.Empty);
+            //     ClearSuggestions();
+            // };
 
-            RegisterCallback<AttachToPanelEvent>(_ => OnAttachToPanel());
-            RegisterCallback<DetachFromPanelEvent>(_ => OnDetachFromPanel());
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
         /// <summary>Populate the results list. Starts in an unselected state.</summary>
@@ -96,7 +96,7 @@ namespace Netherlands3D.UI.Panels
             CoordinateYField.EnableInClassList("invalid", !valid);
         }
 
-        private void OnAttachToPanel()
+        private void OnAttachToPanel(AttachToPanelEvent _)
         {
             AddressSearch.QueryChanged += OnAddressSearchQueryChanged;
             AddressSearch.SubmitRequested += OnAddressSearchSubmitRequested;
@@ -105,7 +105,7 @@ namespace Netherlands3D.UI.Panels
             RegisterCoordinateCallbacks();
         }
 
-        private void OnDetachFromPanel()
+        private void OnDetachFromPanel(DetachFromPanelEvent _)
         {
             AddressSearch.QueryChanged -= OnAddressSearchQueryChanged;
             AddressSearch.SubmitRequested -= OnAddressSearchSubmitRequested;

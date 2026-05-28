@@ -34,9 +34,10 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            OnShow += () => EnableInClassList("active", true);
-            OnHide += () => EnableInClassList("active", false);
-            OnShow += () => LoadCatalog(assetLibrary.Catalog);
+            // OnShow += () => EnableInClassList("active", true);
+            // OnHide += () => EnableInClassList("active", false);
+            
+            LoadCatalog(assetLibrary.Catalog);
 
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;

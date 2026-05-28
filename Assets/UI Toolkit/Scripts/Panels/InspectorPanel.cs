@@ -59,13 +59,6 @@ namespace Netherlands3D.UI.Components
             });
         }
 
-        public void Initialize()
-        {
-            PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            OnShow += polygonSelectionService.EnablePolygonSelection;
-            OnHide += polygonSelectionService.DisablePolygonSelection;
-        }
-
         public void Open()
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, false);

@@ -14,6 +14,8 @@ using Button = UnityEngine.UIElements.Button;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
+    [InspectorPanel]
+
     public partial class InspectorPolygonGridPanel : BaseInspectorContentPanel
     {
         public override string Title => "Tekengebied grid selecteren";
@@ -43,8 +45,8 @@ namespace Netherlands3D.UI.Panels
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
             
-            OnShow += () => Show(true);
-            OnHide += () => Show(false);
+            // OnShow += () => Show(true);
+            // OnHide += () => Show(false);
 
             confirmButton.clicked += OnConfirmSelection.Invoke;
 
