@@ -8,7 +8,6 @@ namespace Netherlands3D.Twin.Layers
     public static class LayerDataExtensions
     {
         private static int _idCounter;
-        private static List<TreeViewItemData<LayerData>> tempResult = new List<TreeViewItemData<LayerData>>();
 
         public static List<TreeViewItemData<LayerData>> ToTreeViewItems(this LayerData rootLayer, Func<LayerData, bool> filter = null, bool keepEmptyBranches = true)
         {
@@ -18,8 +17,8 @@ namespace Netherlands3D.Twin.Layers
 
         private static List<TreeViewItemData<LayerData>> BuildRecursive(List<LayerData> layers, Func<LayerData, bool> filter = null, bool keepEmptyBranches = true)
         {
-            tempResult.Clear();
-            if (layers == null) return tempResult;
+            var result = new List<TreeViewItemData<LayerData>>();
+            if (layers == null) return result;
 
             foreach (var layer in layers)
             {
@@ -33,11 +32,11 @@ namespace Netherlands3D.Twin.Layers
                     includeBranch = children.Count > 0;
                 
                 if (include || includeBranch)
-                    tempResult.Add(new TreeViewItemData<LayerData>(_idCounter++, layer, children.Count > 0 ? children : null
+                    result.Add(new TreeViewItemData<LayerData>(_idCounter++, layer, children.Count > 0 ? children : null
                     ));
             }
 
-            return tempResult;
+            return result;
         }
     }
 }
