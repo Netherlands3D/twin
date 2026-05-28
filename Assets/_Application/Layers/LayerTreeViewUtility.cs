@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public static class LayerDataExtensions
+    public static class LayerTreeViewUtility
     {
         private static int _idCounter;
 
-        private static void ReleaseListsToPool(TreeView tree)
+        public static void ReleaseListsToPool(TreeView tree)
         {
             ReleaseListsToPool(tree?.itemsSource as List<TreeViewItemData<LayerData>>);
         }
@@ -25,7 +24,7 @@ namespace Netherlands3D.Twin.Layers
             ListPool<TreeViewItemData<LayerData>>.Release(items);
         }
 
-        public static List<TreeViewItemData<LayerData>> ToTreeViewItems(this LayerData rootLayer, TreeView oldTree, Func<LayerData, bool> filter = null, bool keepEmptyBranches = true)
+        public static List<TreeViewItemData<LayerData>> ToTreeViewItems(LayerData rootLayer, TreeView oldTree, Func<LayerData, bool> filter = null, bool keepEmptyBranches = true)
         {
             _idCounter = 0;
             ReleaseListsToPool(oldTree);

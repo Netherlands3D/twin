@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -43,11 +44,11 @@ namespace Netherlands3D.UI.Panels
             treeView.bindItem = BindItem;
             treeView.unbindItem = UnbindItem;
 
-            var tree = rootLayer.ToTreeViewItems(treeView, IsMaskable, false);
+            var tree = LayerTreeViewUtility.ToTreeViewItems(rootLayer, treeView, IsMaskable, false);
             treeView.SetRootItems(tree);
             RefreshAtEndOfFrame();
         }
-
+        
         private VisualElement MakeItem()
         {
             return new MaskLayerListViewItem();

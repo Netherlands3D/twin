@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -51,8 +52,12 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             selectionChanged += OnSelectionChanged;
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
-
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            LayerTreeViewUtility.ReleaseListsToPool(this);
+        }
 
         private void OnSelectionChanged(IEnumerable<object> obj)
         {
