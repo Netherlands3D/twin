@@ -6,6 +6,7 @@ using Netherlands3D.Events;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -142,6 +143,7 @@ namespace Netherlands3D.UI.Behaviours
         {
             appDocument = GetComponent<UIDocument>();
             credentialHandler = GetComponent<ICredentialHandler>();
+            RegisterPanel<LayerPanel>();
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
             RegisterPanel<InspectorPolygonGridPanel>();
@@ -159,7 +161,7 @@ namespace Netherlands3D.UI.Behaviours
             // External tools (not managed by the InspectorPanel) call CloseInspectorPanels.
             RegisterTool(AssetLibrary, OpenAssetLibraryPanel);
             RegisterTool(AssetImport, OpenAssetImportPanel);
-            RegisterTool(Layer, CloseInspectorPanels);
+            RegisterTool(Layer, OpenLayerPanel);
             RegisterTool(SearchTool, OpenSearchTool);
             RegisterTool(SunPosition, CloseInspectorPanels);
             RegisterTool(DownloadTile, CloseInspectorPanels);
@@ -256,6 +258,13 @@ namespace Netherlands3D.UI.Behaviours
         {
             activePanel?.Hide();
             activePanel = null;
+        }
+
+        private void OpenLayerPanel()
+        {
+            var layerPanel = GetPanel<LayerPanel>();
+            layerPanel.Show();
+            layerPanel.PopulateLayerPanel(ProjectData.Current.RootLayer);
         }
 
         public void OpenAssetLibrary()
