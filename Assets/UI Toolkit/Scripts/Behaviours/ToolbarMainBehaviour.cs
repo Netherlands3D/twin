@@ -49,75 +49,87 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private UnityAction[] panelListeners;
 
-        
         private void OnEnable()
         {
-            // hamburgerMenu.OnOpenProjectSelected += OnOpenProjectSelected;
-            // hamburgerMenu.OnSaveProjectSelected += OnSaveProjectAction;
-            // hamburgerMenu.OnSettingsSelected += OnOpenSettingsAction;
-            // hamburgerMenu.OnHelpSelected += OnHelpAction;
-            
             hamburgerMenu = App.UIRoot.Root.Q<HamburgerMenu>();
             toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
             tools = ServiceLocator.GetService<ToolService>();
             
             hamburgerMenu.OnToolSelected.AddListener(OnToolNotified);
             tools.onNotify.AddListener(OnToolNotified);
-
-            // toolbarMain.OnLayerToolSelected += OnLayerToolSelected;
-            // toolbarMain.OnAddToolSelected += OnAddToolSelected;
-            // toolbarMain.OnLibraryToolSelected += OnLibraryToolSelected;
-            // toolbarMain.OnSearchToolSelected += OnSearchToolSelected;
-            // toolbarMain.OnSunPositionToolSelected += OnSunPositionToolSelected;
-            // toolbarMain.OnDownloadToolSelected += OnDownloadToolSelected;
-            //toolbarMain.OnToolDeselected += OnToolDeselected;
-
             panelListeners = new UnityAction[listenerGroup.Count];
             for (int i = 0; i < listenerGroup.Count; i++)
             {
                 panelListeners[i] = CreateOnPanelOpenedListener(listenerGroup[i]);
                 tools.AddOpenListener(listenerGroup[i], panelListeners[i]);
             }
-                
-            
-            // tools.AddOpenListener(ToolType.Layer, OnLayerPanelOpened);
-            // tools.AddOpenListener(ToolType.AssetImport, OnAssetImportPanelOpened);
-            // tools.AddOpenListener(ToolType.AssetLibrary, OnAssetLibraryPanelOpened);
-            // tools.AddOpenListener(ToolType.Search, OnSearchPanelOpened);
-            // tools.AddOpenListener(ToolType.SunPosition, OnSunPositionPanelOpened);
-            // tools.AddOpenListener(ToolType.DownloadTile, OnDownloadTilePanelOpened);
         }
 
         private void OnDisable()
         {
-            // hamburgerMenu.OnOpenProjectSelected -= OnOpenProjectSelected;
-            // hamburgerMenu.OnSaveProjectSelected -= OnSaveProjectAction;
-            // hamburgerMenu.OnSettingsSelected -= OnOpenSettingsAction;
-            // hamburgerMenu.OnHelpSelected -= OnHelpAction;
-
             hamburgerMenu.OnToolSelected.RemoveListener(OnToolNotified);
             tools.onNotify.RemoveListener(OnToolNotified);
-            
-            // toolbarMain.OnLayerToolSelected -= OnLayerToolSelected;
-            // toolbarMain.OnAddToolSelected -= OnAddToolSelected;
-            // toolbarMain.OnLibraryToolSelected -= OnLibraryToolSelected;
-            // toolbarMain.OnSearchToolSelected -= OnSearchToolSelected;
-            // toolbarMain.OnSunPositionToolSelected -= OnSunPositionToolSelected;
-            // toolbarMain.OnDownloadToolSelected -= OnDownloadToolSelected;
-            // toolbarMain.OnToolDeselected -= OnToolDeselected;
-
             for (int i = 0; i < listenerGroup.Count; i++)
             {
                 tools.RemoveOpenListener(listenerGroup[i], panelListeners[i]);
             }
-
-            // tools.RemoveOpenListener(ToolType.Layer, OnPanelOpened(ToolType.Layer));
-            // tools.RemoveOpenListener(ToolType.AssetImport, OnAssetImportPanelOpened);
-            // tools.RemoveOpenListener(ToolType.AssetLibrary, OnAssetLibraryPanelOpened);
-            // tools.RemoveOpenListener(ToolType.Search, OnSearchPanelOpened);
-            // tools.RemoveOpenListener(ToolType.SunPosition, OnSunPositionPanelOpened);
-            // tools.RemoveOpenListener(ToolType.DownloadTile, OnDownloadTilePanelOpened);
         }
+        //
+        //
+        // private void OnEnable()
+        // {
+        //     // hamburgerMenu.OnOpenProjectSelected += OnOpenProjectSelected;
+        //     // hamburgerMenu.OnSaveProjectSelected += OnSaveProjectAction;
+        //     // hamburgerMenu.OnSettingsSelected += OnOpenSettingsAction;
+        //     // hamburgerMenu.OnHelpSelected += OnHelpAction;
+        //     
+        //  
+        //
+        //     // toolbarMain.OnLayerToolSelected += OnLayerToolSelected;
+        //     // toolbarMain.OnAddToolSelected += OnAddToolSelected;
+        //     // toolbarMain.OnLibraryToolSelected += OnLibraryToolSelected;
+        //     // toolbarMain.OnSearchToolSelected += OnSearchToolSelected;
+        //     // toolbarMain.OnSunPositionToolSelected += OnSunPositionToolSelected;
+        //     // toolbarMain.OnDownloadToolSelected += OnDownloadToolSelected;
+        //     //toolbarMain.OnToolDeselected += OnToolDeselected;
+        //
+        //    
+        //         
+        //     
+        //     // tools.AddOpenListener(ToolType.Layer, OnLayerPanelOpened);
+        //     // tools.AddOpenListener(ToolType.AssetImport, OnAssetImportPanelOpened);
+        //     // tools.AddOpenListener(ToolType.AssetLibrary, OnAssetLibraryPanelOpened);
+        //     // tools.AddOpenListener(ToolType.Search, OnSearchPanelOpened);
+        //     // tools.AddOpenListener(ToolType.SunPosition, OnSunPositionPanelOpened);
+        //     // tools.AddOpenListener(ToolType.DownloadTile, OnDownloadTilePanelOpened);
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     // hamburgerMenu.OnOpenProjectSelected -= OnOpenProjectSelected;
+        //     // hamburgerMenu.OnSaveProjectSelected -= OnSaveProjectAction;
+        //     // hamburgerMenu.OnSettingsSelected -= OnOpenSettingsAction;
+        //     // hamburgerMenu.OnHelpSelected -= OnHelpAction;
+        //
+        //     
+        //     
+        //     // toolbarMain.OnLayerToolSelected -= OnLayerToolSelected;
+        //     // toolbarMain.OnAddToolSelected -= OnAddToolSelected;
+        //     // toolbarMain.OnLibraryToolSelected -= OnLibraryToolSelected;
+        //     // toolbarMain.OnSearchToolSelected -= OnSearchToolSelected;
+        //     // toolbarMain.OnSunPositionToolSelected -= OnSunPositionToolSelected;
+        //     // toolbarMain.OnDownloadToolSelected -= OnDownloadToolSelected;
+        //     // toolbarMain.OnToolDeselected -= OnToolDeselected;
+        //
+        //     
+        //
+        //     // tools.RemoveOpenListener(ToolType.Layer, OnPanelOpened(ToolType.Layer));
+        //     // tools.RemoveOpenListener(ToolType.AssetImport, OnAssetImportPanelOpened);
+        //     // tools.RemoveOpenListener(ToolType.AssetLibrary, OnAssetLibraryPanelOpened);
+        //     // tools.RemoveOpenListener(ToolType.Search, OnSearchPanelOpened);
+        //     // tools.RemoveOpenListener(ToolType.SunPosition, OnSunPositionPanelOpened);
+        //     // tools.RemoveOpenListener(ToolType.DownloadTile, OnDownloadTilePanelOpened);
+        // }
 
         private void OnToolNotified(ToolType toolType)
         {

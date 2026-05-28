@@ -2612,6 +2612,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8246707263937376439, guid: 5ba1df40519b07e4c8a5b0993382af49,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8246707263937376439, guid: 5ba1df40519b07e4c8a5b0993382af49,
+        type: 3}
       propertyPath: DeprecatedSearchPanel
       value: 
       objectReference: {fileID: 0}
