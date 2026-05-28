@@ -187,7 +187,7 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnEnable()
         {
-            tools.onPreNotifyAny.AddListener(CloseInspectorPanels);
+            //tools.onPreNotifyAny.AddListener(CloseInspectorPanels);
             tools.AddOpenListener(ToolType.Settings, ((IWindow)SettingsWindow).Open);
             tools.AddOpenListener(ToolType.Help, OpenHelp);
             tools.AddOpenListener(ToolType.AssetLibrary, ShowPanel<AssetLibraryPanel>);
@@ -322,6 +322,7 @@ namespace Netherlands3D.UI.Behaviours
         //
         // private void OpenHelpTool()
         // {
+        
         //     Application.OpenURL(HelpUrl);
         //     //HelpTool?.CloseInspector();
         // }

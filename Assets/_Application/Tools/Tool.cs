@@ -99,16 +99,6 @@ namespace Netherlands3D.Twin.Tools
             functionalityInstances = null;
         }
 
-        /// <summary>
-        /// Let inspector(s) know that this tool is opened or closed
-        /// </summary>
-        public void ToggleInspector(){
-            Open = !Open;
-            onToggleInspector.Invoke(this);
-
-            if(!Open) DestroyPrefabInstances();
-        }
-
         public void OpenInspector()
         {
             if(Open) return;

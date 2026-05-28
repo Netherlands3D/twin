@@ -33,17 +33,19 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-
-            tools = Services.ServiceLocator.GetService<ToolService>();
             RegisterCallback<AttachToPanelEvent>(NotifyAttachedToPanel);
-            RegisterCallback<DetachFromPanelEvent>(evt => tools.ClearWithoutNotify.RemoveListener(ClearWithoutNotify));
         }
 
         private void NotifyAttachedToPanel(AttachToPanelEvent _)
         {
             Group.RegisterValueChangedCallback(NotifyValueChanged);
-            tools.ClearWithoutNotify.AddListener(ClearWithoutNotify);
             ClearWithoutNotify();
+            schedule.Execute(() =>
+            {
+                tools = Services.ServiceLocator.GetService<ToolService>();
+                tools.ClearWithoutNotify.AddListener(ClearWithoutNotify);
+            }).StartingIn(0);
+            RegisterCallback<DetachFromPanelEvent>(evt => tools.ClearWithoutNotify.RemoveListener(ClearWithoutNotify));
         }
 
         private void NotifyValueChanged(ChangeEvent<ToggleButtonGroupState> evt)

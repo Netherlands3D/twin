@@ -46,12 +46,12 @@ namespace Netherlands3D.Twin.Tools.UI
 
         public void Toggle()
         {
-            Tool.ToggleInspector();
-
-            if (toolbar)
-            {
-                toolbar.DisableOutsideToolGroup(Tool);
-            }
+            // Tool.ToggleInspector();
+            //
+            // if (toolbar)
+            // {
+            //     toolbar.DisableOutsideToolGroup(Tool);
+            // }
         }
 
         public void ToggleWithoutNotify(bool active, bool destroySpawnedPrefabs = false)
