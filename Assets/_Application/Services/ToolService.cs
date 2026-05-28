@@ -28,20 +28,18 @@ namespace Netherlands3D
             public Tool tool;
         }
         
+        public Tool GetTool(ToolType type) => toolMap[type];
+        
         [SerializeField] private List<ToolEntry> tools;
 
-        private Dictionary<ToolType, Tool> _toolMap;
+        private Dictionary<ToolType, Tool> toolMap;
 
         private void Awake()
         {
-            _toolMap = new Dictionary<ToolType, Tool>();
+            toolMap = new Dictionary<ToolType, Tool>();
             foreach (var entry in tools)
-                _toolMap[entry.type] = entry.tool;
+                toolMap[entry.type] = entry.tool;
         }
-
-        public Tool GetTool(ToolType type) => _toolMap[type];
-
-        public bool TryGetTool(ToolType type, out Tool tool) => _toolMap.TryGetValue(type, out tool);
     }
     
     [Serializable]
@@ -53,18 +51,14 @@ namespace Netherlands3D
         [SerializeField] private List<TKey> keys = new();
         [SerializeField] private List<TValue> values = new();
 
-        private Dictionary<TKey, TValue> _dict = new();
-
-        public TValue this[TKey key] => _dict[key];
-
-        public bool TryGetValue(TKey key, out TValue value) => _dict.TryGetValue(key, out value);
+        private Dictionary<TKey, TValue> dictionary = new();
 
         //hooks into unity pipeline when about to write to disk
         public void OnBeforeSerialize()
         {
             keys.Clear();
             values.Clear();
-            foreach (var kvp in _dict)
+            foreach (var kvp in dictionary)
             {
                 keys.Add(kvp.Key);
                 values.Add(kvp.Value);
@@ -74,9 +68,9 @@ namespace Netherlands3D
         //hooks into unity pipeline when data is read from disk
         public void OnAfterDeserialize()
         {
-            _dict.Clear();
+            dictionary.Clear();
             for (int i = 0; i < Math.Min(keys.Count, values.Count); i++)
-                _dict[keys[i]] = values[i];
+                dictionary[keys[i]] = values[i];
         }
     }
 }
