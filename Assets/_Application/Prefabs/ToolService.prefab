@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7259778933588991131}
   - component: {fileID: 8210424234355100317}
+  - component: {fileID: 5508215877957218700}
   m_Layer: 0
   m_Name: ToolService
   m_TagString: Untagged
@@ -68,3 +69,16 @@ MonoBehaviour:
   onNotify:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5508215877957218700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5718263121395483888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
+  service: {fileID: 8210424234355100317}
