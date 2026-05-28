@@ -91,11 +91,12 @@ namespace Netherlands3D.UI.Panels
             if (dragGhost != null)
                 dragGhost.RemoveFromHierarchy();
             
-            var panelPosition = source.LocalToWorld(startPosition);
-
+            var worldPosition = source.LocalToWorld(startPosition); // layer item to world
+            var localPosition = this.WorldToLocal(worldPosition); // world to LayerPanel
+            
             dragGhost = new LayerDragGhost();
             Add(dragGhost);
-            dragGhost.Initialize(panelPosition, source);
+            dragGhost.Initialize(localPosition, source);
         }
 
         private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)

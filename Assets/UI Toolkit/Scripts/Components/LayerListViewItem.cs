@@ -54,7 +54,7 @@ namespace Netherlands3D.UI.Components
             propertyToggle = this.Q<Toggle>("PropertyToggle");
 
             RegisterCallback<ClickEvent>(OnClick);
-            var dragManipulator = new DragManipulator();
+            var dragManipulator = new DragManipulator(8);
             dragManipulator.DragStarted.AddListener(OnDragStarted);
             dragManipulator.Dragging.AddListener(OnDragging);
             dragManipulator.DragEnded.AddListener(OnDragEnded);

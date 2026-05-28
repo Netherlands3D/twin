@@ -67,7 +67,6 @@ public class DragManipulator : PointerManipulator
         if (!isDragging)
         {
             var totalMove = (Vector2)e.localPosition - (Vector2)start;
-            Debug.Log(totalMove.magnitude);
             if (totalMove.magnitude < movementDeadzone) return;
 
             isDragging = true;

@@ -24,10 +24,14 @@ namespace Netherlands3D.UI.Components
 
             colorImage = this.Q<VisualElement>("ColorBar");
             layerNameText = this.Q<Label>("NameInputField");
+            
+            style.position = Position.Absolute;
+            pickingMode = PickingMode.Ignore;
         }
 
         public void Initialize(Vector2 dragStartPosition, LayerListViewItem ui)
         {
+            Debug.Log( dragStartPosition.ToString() );
             currentPosition = dragStartPosition;
             ApplyPosition();
             CopyAppearance(ui);
@@ -61,8 +65,8 @@ namespace Netherlands3D.UI.Components
 
         private void ApplyPosition()
         {
-            style.left = currentPosition.x;
-            style.top = currentPosition.y;
+            // style.left = currentPosition.x;
+            style.top = currentPosition.y - resolvedStyle.height / 2; //todo ui-toolkit: not the correct height offset yet
         }
     }
 }
