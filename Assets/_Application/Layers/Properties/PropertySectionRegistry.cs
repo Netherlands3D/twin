@@ -5,9 +5,21 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
+    public readonly struct RegisteredPropertySectionType
+    {
+        public readonly Type SectionType;
+        public readonly int Order;
+
+        public RegisteredPropertySectionType(Type sectionType, int order)
+        {
+            SectionType = sectionType;
+            Order = order;
+        }
+    }
+    
     public class PropertySectionTypeCollection
     {
-        public Dictionary<Type, List<Type>> Collection = new Dictionary<Type, List<Type>>();
+        public Dictionary<Type, List<RegisteredPropertySectionType>> Collection = new ();
     }
     
     public static class PropertySectionRegistry
@@ -33,13 +45,15 @@ namespace Netherlands3D.Twin.Layers.Properties
                             TypeRegistry.Add(attr.Category, new ());
                         }
                         
+                        var entry = new RegisteredPropertySectionType(type, attr.Order);
+                        
                         if (TypeRegistry[attr.Category].Collection.ContainsKey(attr.RequiredPropertyType))
                         {
-                            TypeRegistry[attr.Category].Collection[attr.RequiredPropertyType].Add(type);
+                            TypeRegistry[attr.Category].Collection[attr.RequiredPropertyType].Add(entry);
                         }
                         else
                         {
-                            TypeRegistry[attr.Category].Collection.Add(attr.RequiredPropertyType, new List<Type>() { type });
+                            TypeRegistry[attr.Category].Collection.Add(attr.RequiredPropertyType, new() { entry });
                         }
                     }
                 }

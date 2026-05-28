@@ -35,16 +35,19 @@ namespace Netherlands3D.Twin.Tools
         public GameObject[] FunctionalityPrefabs { get => functionalityPrefabs; private set => functionalityPrefabs = value; }
         private GameObject[] functionalityInstances;
 
+        // Runtime configuration to prevent SO changes in editor
+        private bool? runtimeOpen = false;
+        
+        // Configuration setting, this way you can preconfigure the state of the tool
         [SerializeField] private bool open = false;
+        
         private bool available = false;
 
         public bool Open { 
-            get{
-                return open;
-            }
+            get => runtimeOpen ?? open;
             set{
-                open = value;
-                if(open)
+                runtimeOpen = value;
+                if(runtimeOpen.Value)
                 {
                     onOpen.Invoke();
                 }

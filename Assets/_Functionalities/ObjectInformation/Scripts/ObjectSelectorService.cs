@@ -16,6 +16,7 @@ using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Netherlands3D.Twin;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -173,7 +174,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
             //TODO this should be refactored when UITOOLKIT will be implemented fully
-            if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked())
+            if(App.UIRoot.IsUIClicked())
                 return;
             
             //TODO this should be refactored when UITOOLKIT will be implemented fully
