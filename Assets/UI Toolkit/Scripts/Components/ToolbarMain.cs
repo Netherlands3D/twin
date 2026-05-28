@@ -26,6 +26,8 @@ namespace Netherlands3D.UI.Components
         // public event Action OnSunPositionToolSelected;
         // public event Action OnDownloadToolSelected;
         // public event Action OnToolDeselected;
+        
+        private ToolService tools;
 
         public ToolbarMain()
         {
@@ -33,12 +35,14 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             RegisterCallback<AttachToPanelEvent>(NotifyAttachedToPanel);
+            RegisterCallback<DetachFromPanelEvent>(evt => tools.ClearWithoutNotify.RemoveListener(ClearWithoutNotify));
         }
 
         private void NotifyAttachedToPanel(AttachToPanelEvent _)
         {
             Group.RegisterValueChangedCallback(NotifyValueChanged);
-
+            tools = Services.ServiceLocator.GetService<ToolService>();
+            tools.ClearWithoutNotify.AddListener(ClearWithoutNotify);
             ClearWithoutNotify();
         }
 

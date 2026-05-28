@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using Netherlands3D.Twin.Tools;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D
 {
     public enum ToolType
     {
         Layer,
-        AssetImport,
         AssetLibrary,
+        AssetImport,
         Search,
         SunPosition,
         DownloadTile,
@@ -45,16 +46,21 @@ namespace Netherlands3D
 
         public Tool GetTool(ToolType type) => ToolMap[type];
         
-        public UnityEvent<ToolType> onNotify;
+        public UnityEvent<ToolType> onPreNotifyAny;
+        public UnityEvent<ToolType> onNotifyAny;
+        public UnityEvent<ToolType> onOpenAny;
+        public UnityEvent ClearWithoutNotify = new();
 
         public void NotifyTool(ToolType type)
         {
-            onNotify.Invoke(type);
+            onPreNotifyAny.Invoke(type);
+            onNotifyAny.Invoke(type);
         }
 
         public void OpenTool(ToolType type)
         {
             GetTool(type)?.OpenInspector();
+            onOpenAny.Invoke(type);
         }
         
         public void AddOpenListener(ToolType type, UnityAction listener)

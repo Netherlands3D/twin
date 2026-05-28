@@ -36,18 +36,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         // private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         //#endregion
         private ToolService tools;
-        
-        private List<ToolType> listenerGroup = new() 
-        {  
-            ToolType.Layer,  
-            ToolType.AssetImport, 
-            ToolType.AssetLibrary, 
-            ToolType.Search,  
-            ToolType.SunPosition, 
-            ToolType.DownloadTile 
-        };
-
-        private UnityAction[] panelListeners;
 
         private void OnEnable()
         {
@@ -56,23 +44,15 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             tools = ServiceLocator.GetService<ToolService>();
             
             hamburgerMenu.OnToolSelected.AddListener(OnToolNotified);
-            tools.onNotify.AddListener(OnToolNotified);
-            panelListeners = new UnityAction[listenerGroup.Count];
-            for (int i = 0; i < listenerGroup.Count; i++)
-            {
-                panelListeners[i] = CreateOnPanelOpenedListener(listenerGroup[i]);
-                tools.AddOpenListener(listenerGroup[i], panelListeners[i]);
-            }
+            tools.onNotifyAny.AddListener(OnToolNotified);
+            tools.onOpenAny.AddListener(OnPanelOpen);
         }
 
         private void OnDisable()
         {
             hamburgerMenu.OnToolSelected.RemoveListener(OnToolNotified);
-            tools.onNotify.RemoveListener(OnToolNotified);
-            for (int i = 0; i < listenerGroup.Count; i++)
-            {
-                tools.RemoveOpenListener(listenerGroup[i], panelListeners[i]);
-            }
+            tools.onNotifyAny.RemoveListener(OnToolNotified);
+            tools.onOpenAny.RemoveListener(OnPanelOpen);
         }
         //
         //
@@ -141,13 +121,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 tools.OpenTool(toolType);
         }
         
-        private UnityAction CreateOnPanelOpenedListener(ToolType toolType)
+        private void OnPanelOpen(ToolType toolType)
         {
-            return () =>
-            {
-                hamburgerMenu.Close();
-                toolbarMain.EnableToolWithoutNotify(toolType);
-            };
+            hamburgerMenu.Close();
+            toolbarMain.EnableToolWithoutNotify(toolType);
         }
 
         // private void OnLayerToolSelected()

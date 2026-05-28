@@ -38,8 +38,8 @@ namespace Netherlands3D.UI.Behaviours
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
         
-        private ToolbarMain toolbarMain;
-        private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
+        // private ToolbarMain toolbarMain;
+        // private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         
         private ICredentialHandler credentialHandler;
         private ToolService tools;
@@ -187,8 +187,11 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnEnable()
         {
-            tools.AddOpenListener(ToolType.Settings, OpenSettingsTool);
-            tools.AddOpenListener(ToolType.Help, OpenHelpTool);
+            tools.onPreNotifyAny.AddListener(CloseInspectorPanels);
+            tools.AddOpenListener(ToolType.Settings, ((IWindow)SettingsWindow).Open);
+            tools.AddOpenListener(ToolType.Help, OpenHelp);
+            tools.AddOpenListener(ToolType.AssetLibrary, ShowPanel<AssetLibraryPanel>);
+            tools.AddOpenListener(ToolType.AssetImport, ShowPanel<ImportAssetPanel>);
             
             
             // InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
@@ -210,8 +213,11 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnDisable()
         {
-            tools.RemoveOpenListener(ToolType.Settings, OpenSettingsTool);
-            tools.RemoveOpenListener(ToolType.Help, OpenHelpTool);
+            tools.onPreNotifyAny.RemoveListener(CloseInspectorPanels);
+            tools.RemoveOpenListener(ToolType.Settings, ((IWindow)SettingsWindow).Open);
+            tools.RemoveOpenListener(ToolType.Help, OpenHelp);
+            tools.RemoveOpenListener(ToolType.AssetLibrary, ShowPanel<AssetLibraryPanel>);
+            tools.RemoveOpenListener(ToolType.AssetImport, ShowPanel<ImportAssetPanel>);
             
             // InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
@@ -233,7 +239,7 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Close()
         {
-            ToolbarMain.ClearWithoutNotify();
+            tools.ClearWithoutNotify.Invoke();
             InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
             HidePanel();
             InspectorPanel.Close();
@@ -307,18 +313,22 @@ namespace Netherlands3D.UI.Behaviours
         //     ShowPanel<LocationSearchPanel>();
         // }
         //
-        private void OpenSettingsTool()
-        {
-            CloseInspectorPanels();
-            ((IWindow)SettingsWindow).Open();
-            //SettingsTool?.CloseInspector();
-        }
-       
-        private void OpenHelpTool()
-        {
-            Application.OpenURL(HelpUrl);
-            //HelpTool?.CloseInspector();
-        }
+        // private void OpenSettingsTool()
+        // {
+        //   
+        //    
+        //     //SettingsTool?.CloseInspector();
+        // }
+        //
+        // private void OpenHelpTool()
+        // {
+        //     Application.OpenURL(HelpUrl);
+        //     //HelpTool?.CloseInspector();
+        // }
+
+        private void OpenHelp() => Application.OpenURL(HelpUrl);
+  
+        
         //
         //
         // public void ToggleImportAssetPanel()
@@ -337,7 +347,9 @@ namespace Netherlands3D.UI.Behaviours
         //     }
         // }
         
-        private void CloseInspectorPanels()
+        
+        
+        private void CloseInspectorPanels(ToolType toolType)
         {
             ((IWindow)SettingsWindow).Close();
             HidePanel();

@@ -49,9 +49,9 @@ MonoBehaviour:
   - type: 0
     tool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
   - type: 1
-    tool: {fileID: 11400000, guid: 8d401b0a5d410b24192a18882956371f, type: 2}
-  - type: 2
     tool: {fileID: 11400000, guid: 07a8740b7ad8fae49a77dbf2dc1abacc, type: 2}
+  - type: 2
+    tool: {fileID: 11400000, guid: 8d401b0a5d410b24192a18882956371f, type: 2}
   - type: 3
     tool: {fileID: 11400000, guid: 6f5d9ca96571d424ca954f90542644a4, type: 2}
   - type: 4
@@ -66,7 +66,13 @@ MonoBehaviour:
     tool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
   - type: 9
     tool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
-  onNotify:
+  onPreNotifyAny:
+    m_PersistentCalls:
+      m_Calls: []
+  onNotifyAny:
+    m_PersistentCalls:
+      m_Calls: []
+  onOpenAny:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &5508215877957218700
