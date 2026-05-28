@@ -49,19 +49,17 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private UnityAction[] panelListeners;
 
-        private void Start()
-        {
-            hamburgerMenu = App.UIRoot.Root.Q<HamburgerMenu>();
-            toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
-            tools = ServiceLocator.GetService<ToolService>();
-        }
-
+        
         private void OnEnable()
         {
             // hamburgerMenu.OnOpenProjectSelected += OnOpenProjectSelected;
             // hamburgerMenu.OnSaveProjectSelected += OnSaveProjectAction;
             // hamburgerMenu.OnSettingsSelected += OnOpenSettingsAction;
             // hamburgerMenu.OnHelpSelected += OnHelpAction;
+            
+            hamburgerMenu = App.UIRoot.Root.Q<HamburgerMenu>();
+            toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
+            tools = ServiceLocator.GetService<ToolService>();
             
             hamburgerMenu.OnToolSelected.AddListener(OnToolNotified);
             tools.onNotify.AddListener(OnToolNotified);
@@ -142,7 +140,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         // private void OnLayerToolSelected()
         // {
-        //     
+        //     HamburgerMenu.Close();
         //     OpenTool(layerTool);
         // }
         //
