@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class MaskLayerListViewItem : VisualElement, IVisualizationWithPropertyData
+    public partial class MaskLayerTreeViewItem : VisualElement, IVisualizationWithPropertyData
     {
         private int maskingBitIndex;
         private int treeIndex;
@@ -27,7 +27,7 @@ namespace Netherlands3D.UI.Components
         
         public UnityEvent<int, bool> VisibilityToggleChanged = new UnityEvent<int, bool>();
 
-        public MaskLayerListViewItem()
+        public MaskLayerTreeViewItem()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");

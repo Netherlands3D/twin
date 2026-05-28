@@ -51,12 +51,12 @@ namespace Netherlands3D.UI.Panels
         
         private VisualElement MakeItem()
         {
-            return new MaskLayerListViewItem();
+            return new MaskLayerTreeViewItem();
         }
 
         private void BindItem(VisualElement item, int index)
         {
-            if (item is not MaskLayerListViewItem maskLayerRowElement) return;
+            if (item is not MaskLayerTreeViewItem maskLayerRowElement) return;
 
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             maskLayerRowElement.Initialize(index, layerData, maskBitIndex);
@@ -72,7 +72,7 @@ namespace Netherlands3D.UI.Panels
         
         private void UnbindItem(VisualElement item, int index)
         {
-            if (item is not MaskLayerListViewItem maskLayerRowElement) return;
+            if (item is not MaskLayerTreeViewItem maskLayerRowElement) return;
             
             var layerData = item.userData as LayerData;
             
