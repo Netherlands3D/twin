@@ -34,6 +34,7 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
+            tools = Services.ServiceLocator.GetService<ToolService>();
             RegisterCallback<AttachToPanelEvent>(NotifyAttachedToPanel);
             RegisterCallback<DetachFromPanelEvent>(evt => tools.ClearWithoutNotify.RemoveListener(ClearWithoutNotify));
         }
@@ -41,7 +42,6 @@ namespace Netherlands3D.UI.Components
         private void NotifyAttachedToPanel(AttachToPanelEvent _)
         {
             Group.RegisterValueChangedCallback(NotifyValueChanged);
-            tools = Services.ServiceLocator.GetService<ToolService>();
             tools.ClearWithoutNotify.AddListener(ClearWithoutNotify);
             ClearWithoutNotify();
         }
