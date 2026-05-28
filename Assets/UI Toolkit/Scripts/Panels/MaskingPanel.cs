@@ -43,7 +43,7 @@ namespace Netherlands3D.UI.Panels
             treeView.bindItem = BindItem;
             treeView.unbindItem = UnbindItem;
 
-            var tree = rootLayer.ToTreeViewItems(IsMaskable, false);
+            var tree = rootLayer.ToTreeViewItems(treeView, IsMaskable, false);
             treeView.SetRootItems(tree);
             RefreshAtEndOfFrame();
         }
@@ -108,7 +108,6 @@ namespace Netherlands3D.UI.Panels
 
         private void RefreshAtEndOfFrame()
         {
-            Debug.Log("RefreshAtEndOfFrame");
             refreshAtEndOfFrame = true;
         }
 

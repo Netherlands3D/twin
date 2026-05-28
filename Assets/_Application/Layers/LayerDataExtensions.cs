@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers
@@ -9,15 +10,31 @@ namespace Netherlands3D.Twin.Layers
     {
         private static int _idCounter;
 
-        public static List<TreeViewItemData<LayerData>> ToTreeViewItems(this LayerData rootLayer, Func<LayerData, bool> filter = null, bool keepEmptyBranches = true)
+        private static void ReleaseListsToPool(TreeView tree)
+        {
+            ReleaseListsToPool(tree?.itemsSource as List<TreeViewItemData<LayerData>>);
+        }
+        
+        private static void ReleaseListsToPool(List<TreeViewItemData<LayerData>> items)
+        {
+            if (items == null) return;
+    
+            foreach (var item in items)
+                ReleaseListsToPool(item.children as List<TreeViewItemData<LayerData>>);
+    
+            ListPool<TreeViewItemData<LayerData>>.Release(items);
+        }
+
+        public static List<TreeViewItemData<LayerData>> ToTreeViewItems(this LayerData rootLayer, TreeView oldTree, Func<LayerData, bool> filter = null, bool keepEmptyBranches = true)
         {
             _idCounter = 0;
+            ReleaseListsToPool(oldTree);
             return BuildRecursive(rootLayer.ChildrenLayers, filter, keepEmptyBranches);
         }
 
         private static List<TreeViewItemData<LayerData>> BuildRecursive(List<LayerData> layers, Func<LayerData, bool> filter = null, bool keepEmptyBranches = true)
         {
-            var result = new List<TreeViewItemData<LayerData>>();
+            var result = ListPool<TreeViewItemData<LayerData>>.Get();
             if (layers == null) return result;
 
             foreach (var layer in layers)
