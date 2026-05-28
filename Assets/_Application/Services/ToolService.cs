@@ -30,20 +30,22 @@ namespace Netherlands3D
             public Tool tool;
         }
         
-        public Tool GetTool(ToolType type) => toolMap[type];
-        
         [SerializeField] private List<ToolEntry> tools;
 
         private Dictionary<ToolType, Tool> toolMap;
-        
-        public UnityEvent<ToolType> onNotify;
+        private Dictionary<ToolType, Tool> ToolMap => toolMap ??= BuildToolMap();
 
-        private void Awake()
+        private Dictionary<ToolType, Tool> BuildToolMap()
         {
             toolMap = new Dictionary<ToolType, Tool>();
             foreach (var entry in tools)
                 toolMap[entry.type] = entry.tool;
+            return toolMap;
         }
+
+        public Tool GetTool(ToolType type) => ToolMap[type];
+        
+        public UnityEvent<ToolType> onNotify;
 
         public void NotifyTool(ToolType type)
         {

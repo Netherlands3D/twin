@@ -42,106 +42,109 @@ namespace Netherlands3D.UI.Behaviours
         private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
         
         private ICredentialHandler credentialHandler;
+        private ToolService tools;
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
         [SerializeField] private TriggerEvent OnGridConfirmed;
      
       
-
-        [Header("Tools")]
-        [SerializeField] private Tool AssetLibrary;
-        [SerializeField] private Tool AssetImport;
-        [SerializeField] private Tool Layer;
-        [SerializeField] private Tool SearchTool;
-        [SerializeField] private Tool SunPosition;
-        [SerializeField] private Tool DownloadTile;
-        [SerializeField] private Tool OpenProject;
-        [SerializeField] private Tool SaveProject;
-        [SerializeField] private Tool SettingsTool;
-        [SerializeField] private Tool HelpTool;
+        //
+        // [Header("Tools")]
+        // [SerializeField] private Tool AssetLibrary;
+        // [SerializeField] private Tool AssetImport;
+        // [SerializeField] private Tool Layer;
+        // [SerializeField] private Tool SearchTool;
+        // [SerializeField] private Tool SunPosition;
+        // [SerializeField] private Tool DownloadTile;
+        // [SerializeField] private Tool OpenProject;
+        // [SerializeField] private Tool SaveProject;
+        // [SerializeField] private Tool SettingsTool;
+        // [SerializeField] private Tool HelpTool;
 
         [Header("External Windows")]
         [SerializeField] private ScriptableObject SettingsWindow;
         [SerializeField] private string HelpUrl;
 
-        /// <summary>
-        /// Pairs a Tool with its inspector open-action and a cached UnityAction delegate
-        /// for symmetrical subscribe/unsubscribe without allocating new lambdas each cycle.
-        /// </summary>
-        private sealed class ToolEntry
-        {
-            public Tool Tool { get; }
-            public Action OnOpen { get; }
-            public UnityAction OpenListener { get; }
+        // /// <summary>
+        // /// Pairs a Tool with its inspector open-action and a cached UnityAction delegate
+        // /// for symmetrical subscribe/unsubscribe without allocating new lambdas each cycle.
+        // /// </summary>
+        // private sealed class ToolEntry
+        // {
+        //     public Tool Tool { get; }
+        //     public Action OnOpen { get; }
+        //     public UnityAction OpenListener { get; }
+        //
+        //     public ToolEntry(Tool tool, Action onOpen, Action<ToolEntry> dispatchOpen)
+        //     {
+        //         Tool = tool;
+        //         OnOpen = onOpen;
+        //         OpenListener = () => dispatchOpen(this);
+        //     }
+        // }
 
-            public ToolEntry(Tool tool, Action onOpen, Action<ToolEntry> dispatchOpen)
-            {
-                Tool = tool;
-                OnOpen = onOpen;
-                OpenListener = () => dispatchOpen(this);
-            }
-        }
-
-        /// <summary>
-        /// Small repository responsible for storing and iterating registered tools.
-        /// InspectorPanelBehaviour provides the actual tool-open behavior; this class
-        /// only manages the registrations and list-based queries/operations.
-        /// </summary>
-        private sealed class ToolRepository
-        {
-            private readonly List<ToolEntry> entries = new();
-            private readonly Action<ToolEntry> dispatchOpen;
-
-            public ToolRepository(Action<ToolEntry> dispatchOpen)
-            {
-                this.dispatchOpen = dispatchOpen;
-            }
-
-            public void Add(Tool tool, Action onOpen)
-            {
-                if (tool == null) return;
-                entries.Add(new ToolEntry(tool, onOpen, dispatchOpen));
-            }
-
-            public void SubscribeAll(UnityAction onToolClosed)
-            {
-                foreach (var entry in entries)
-                {
-                    entry.Tool.onOpen.AddListener(entry.OpenListener);
-                    entry.Tool.onClose.AddListener(onToolClosed);
-                }
-            }
-
-            public void UnsubscribeAll(UnityAction onToolClosed)
-            {
-                foreach (var entry in entries)
-                {
-                    entry.Tool.onOpen.RemoveListener(entry.OpenListener);
-                    entry.Tool.onClose.RemoveListener(onToolClosed);
-                }
-            }
-
-            public void CloseAllExcept(ToolEntry activeEntry)
-            {
-                foreach (var entry in entries)
-                {
-                    if (entry.Tool != activeEntry.Tool)
-                        entry.Tool.CloseInspector();
-                }
-            }
-
-            public bool HasOpenTools()
-            {
-                return entries.Any(entry => entry.Tool != null && entry.Tool.Open);
-            }
-        }
-
-        private ToolRepository toolRepository;
+        // /// <summary>
+        // /// Small repository responsible for storing and iterating registered tools.
+        // /// InspectorPanelBehaviour provides the actual tool-open behavior; this class
+        // /// only manages the registrations and list-based queries/operations.
+        // /// </summary>
+        // private sealed class ToolRepository
+        // {
+        //     private readonly List<ToolEntry> entries = new();
+        //     private readonly Action<ToolEntry> dispatchOpen;
+        //
+        //     public ToolRepository(Action<ToolEntry> dispatchOpen)
+        //     {
+        //         this.dispatchOpen = dispatchOpen;
+        //     }
+        //
+        //     public void Add(Tool tool, Action onOpen)
+        //     {
+        //         if (tool == null) return;
+        //         entries.Add(new ToolEntry(tool, onOpen, dispatchOpen));
+        //     }
+        //
+        //     public void SubscribeAll(UnityAction onToolClosed)
+        //     {
+        //         foreach (var entry in entries)
+        //         {
+        //             entry.Tool.onOpen.AddListener(entry.OpenListener);
+        //             entry.Tool.onClose.AddListener(onToolClosed);
+        //         }
+        //     }
+        //
+        //     public void UnsubscribeAll(UnityAction onToolClosed)
+        //     {
+        //         foreach (var entry in entries)
+        //         {
+        //             entry.Tool.onOpen.RemoveListener(entry.OpenListener);
+        //             entry.Tool.onClose.RemoveListener(onToolClosed);
+        //         }
+        //     }
+        //
+        //     public void CloseAllExcept(ToolEntry activeEntry)
+        //     {
+        //         foreach (var entry in entries)
+        //         {
+        //             if (entry.Tool != activeEntry.Tool)
+        //                 entry.Tool.CloseInspector();
+        //         }
+        //     }
+        //
+        //     public bool HasOpenTools()
+        //     {
+        //         return entries.Any(entry => entry.Tool != null && entry.Tool.Open);
+        //     }
+        // }
+        //
+        // private ToolRepository toolRepository;
 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
             credentialHandler = GetComponent<ICredentialHandler>();
+            tools = ServiceLocator.GetService<ToolService>();
+            
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
             RegisterPanel<InspectorPolygonGridPanel>();
@@ -152,39 +155,46 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Close();
             
             ImportAssetPanel.SetCredentialHandler(credentialHandler);
+            
+          
 
-            toolRepository = new ToolRepository(OnAnyToolOpened);
-
-            // Register every tool once with its inspector open-action.
-            // External tools (not managed by the InspectorPanel) call CloseInspectorPanels.
-            RegisterTool(AssetLibrary, OpenAssetLibraryPanel);
-            RegisterTool(AssetImport, OpenAssetImportPanel);
-            RegisterTool(Layer, CloseInspectorPanels);
-            RegisterTool(SearchTool, OpenSearchTool);
-            RegisterTool(SunPosition, CloseInspectorPanels);
-            RegisterTool(DownloadTile, CloseInspectorPanels);
-            RegisterTool(OpenProject, CloseInspectorPanels);
-            RegisterTool(SaveProject, CloseInspectorPanels);
-            RegisterTool(SettingsTool, OpenSettingsTool);
-            RegisterTool(HelpTool, OpenHelpTool);
+            // // toolRepository = new ToolRepository(OnAnyToolOpened);
+            //
+            // // Register every tool once with its inspector open-action.
+            // // External tools (not managed by the InspectorPanel) call CloseInspectorPanels.
+            // RegisterTool(AssetLibrary, OpenAssetLibraryPanel);
+            // RegisterTool(AssetImport, OpenAssetImportPanel);
+            // RegisterTool(Layer, CloseInspectorPanels);
+            // RegisterTool(SearchTool, OpenSearchTool);
+            // RegisterTool(SunPosition, CloseInspectorPanels);
+            // RegisterTool(DownloadTile, CloseInspectorPanels);
+            // RegisterTool(OpenProject, CloseInspectorPanels);
+            // RegisterTool(SaveProject, CloseInspectorPanels);
+            // RegisterTool(SettingsTool, OpenSettingsTool);
+            // RegisterTool(HelpTool, OpenHelpTool);
         }
 
-        private void RegisterTool(Tool tool, Action onOpen)
-        {
-            toolRepository.Add(tool, onOpen);
-        }
+        // private void RegisterTool(Tool tool, Action onOpen)
+        // {
+        //     toolRepository.Add(tool, onOpen);
+        // }
 
         private void Start()
         {
+           
             InspectorPanel.Initialize();
         }
 
         private void OnEnable()
         {
-            InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
-            InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
+            tools.AddOpenListener(ToolType.Settings, OpenSettingsTool);
+            tools.AddOpenListener(ToolType.Help, OpenHelpTool);
+            
+            
+            // InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
+            // InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
-            ImportAssetPanel.OpenAssetLibrary += OnOpenAssetLibraryClicked;
+            ImportAssetPanel.OpenAssetLibrary += tools.GetTool(ToolType.AssetLibrary).OpenInspector;
             ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
             OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel);
@@ -193,22 +203,27 @@ namespace Netherlands3D.UI.Behaviours
             //TODO ongridconfirmed -> open layerpanel and close the gridpanel (if its not automatically happening)
 
 
-            toolRepository.SubscribeAll(OnToolClosed);
+           
+            
+           // toolRepository.SubscribeAll(OnToolClosed);
         }
 
         private void OnDisable()
         {
-            InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
-            InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
+            tools.RemoveOpenListener(ToolType.Settings, OpenSettingsTool);
+            tools.RemoveOpenListener(ToolType.Help, OpenHelpTool);
+            
+            // InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
+            // InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
             InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
-            ImportAssetPanel.OpenAssetLibrary -= OnOpenAssetLibraryClicked;
+            ImportAssetPanel.OpenAssetLibrary -= tools.GetTool(ToolType.AssetLibrary).OpenInspector;
             ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
             
             OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
             
             PolygonGridPanel.OnConfirmSelection.RemoveListener(OnGridConfirmed.InvokeStarted);
 
-            toolRepository.UnsubscribeAll(OnToolClosed);
+           // toolRepository.UnsubscribeAll(OnToolClosed);
         }
 
         public void Open()
@@ -258,68 +273,69 @@ namespace Netherlands3D.UI.Behaviours
             activePanel = null;
         }
 
-        public void OpenAssetLibrary()
-        {
-            ShowPanel<AssetLibraryPanel>();
-        }
+        // public void OpenAssetLibrary()
+        // {
+        //     ShowPanel<AssetLibraryPanel>();
+        // }
 
         public void OpenPolgyonGridPanel()
         {
             ShowPanel<InspectorPolygonGridPanel>();
         }
         
-        private void OnAnyToolOpened(ToolEntry entry)
-        {
-            toolRepository.CloseAllExcept(entry);
-            entry.OnOpen?.Invoke();
-        }
+        // private void OnAnyToolOpened(ToolEntry entry)
+        // {
+        //     toolRepository.CloseAllExcept(entry);
+        //     entry.OnOpen?.Invoke();
+        // }
 
-        private void OpenAssetLibraryPanel()
-        {
-            CloseInspectorPanels();
-            ShowPanel<AssetLibraryPanel>();
-        }
-
-        private void OpenAssetImportPanel()
-        {
-            CloseInspectorPanels();
-            ShowPanel<ImportAssetPanel>();
-        }
-
-        private void OpenSearchTool()
-        {
-            CloseInspectorPanels();
-            ShowPanel<LocationSearchPanel>();
-        }
-
+        // private void OpenAssetLibraryPanel()
+        // {
+        //     CloseInspectorPanels();
+        //     ShowPanel<AssetLibraryPanel>();
+        // }
+        //
+        // private void OpenAssetImportPanel()
+        // {
+        //     CloseInspectorPanels();
+        //     ShowPanel<ImportAssetPanel>();
+        // }
+        //
+        // private void OpenSearchTool()
+        // {
+        //     CloseInspectorPanels();
+        //     ShowPanel<LocationSearchPanel>();
+        // }
+        //
         private void OpenSettingsTool()
         {
             CloseInspectorPanels();
             ((IWindow)SettingsWindow).Open();
-            SettingsTool?.CloseInspector();
+            //SettingsTool?.CloseInspector();
         }
-
+       
         private void OpenHelpTool()
         {
             Application.OpenURL(HelpUrl);
-            HelpTool?.CloseInspector();
+            //HelpTool?.CloseInspector();
         }
-
-        public void ToggleImportAssetPanel()
-        {
-            if (inspectorPanel.IsOpen())
-            {
-                HidePanel();
-                //do not use Close here to avoid the toggle notification
-                InspectorPanel.Close(); 
-            }
-            else
-            {   
-                Open();
-                InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
-                ShowPanel<ImportAssetPanel>();
-            }
-        }
+        //
+        //
+        // public void ToggleImportAssetPanel()
+        // {
+        //     if (inspectorPanel.IsOpen())
+        //     {
+        //         HidePanel();
+        //         //do not use Close here to avoid the toggle notification
+        //         InspectorPanel.Close(); 
+        //     }
+        //     else
+        //     {   
+        //         Open();
+        //         InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(true);
+        //         ShowPanel<ImportAssetPanel>();
+        //     }
+        // }
         
         private void CloseInspectorPanels()
         {
@@ -329,28 +345,28 @@ namespace Netherlands3D.UI.Behaviours
             InspectorPanel.Close();
         }
 
-        private void OnAddLayerToggled(ChangeEvent<bool> evt)
-        {
-            if (evt.newValue) AssetImport?.OpenInspector();
-            else AssetImport?.CloseInspector();
-        }
-
-        private void OnOpenLibraryToggled(ChangeEvent<bool> evt)
-        {
-            if (evt.newValue) AssetLibrary?.OpenInspector();
-            else AssetLibrary?.CloseInspector();
-        }
-
-        private void OnOpenAssetLibraryClicked()
-        {
-            AssetLibrary?.OpenInspector();
-        }
-
-        private void OnToolClosed()
-        {
-            if (!toolRepository.HasOpenTools())
-                Close();
-        }
+        // private void OnAddLayerToggled(ChangeEvent<bool> evt)
+        // {
+        //     if (evt.newValue) AssetImport?.OpenInspector();
+        //     else AssetImport?.CloseInspector();
+        // }
+        //
+        // private void OnOpenLibraryToggled(ChangeEvent<bool> evt)
+        // {
+        //     if (evt.newValue) AssetLibrary?.OpenInspector();
+        //     else AssetLibrary?.CloseInspector();
+        // }
+        //
+        // private void OnOpenAssetLibraryClicked()
+        // {
+        //     AssetLibrary?.OpenInspector();
+        // }
+        //
+        // private void OnToolClosed()
+        // {
+        //     if (!toolRepository.HasOpenTools())
+        //         Close();
+        // }
 
         private void OnImportSucceeded()
         {

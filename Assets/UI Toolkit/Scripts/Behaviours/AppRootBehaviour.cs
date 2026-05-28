@@ -17,6 +17,7 @@ namespace Netherlands3D
         private UIDocument appDocument;
         private VisualElement appRoot;
 
+        //the excuted order of this script should be executed very early to ensure the presence of the approot. 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
