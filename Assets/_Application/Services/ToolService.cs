@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Twin.Tools;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D
 {
@@ -16,7 +17,8 @@ namespace Netherlands3D
         OpenProject,
         SaveProject,
         Settings,
-        Help
+        Help,
+        None
     }
     
     public class ToolService : MonoBehaviour
@@ -33,12 +35,40 @@ namespace Netherlands3D
         [SerializeField] private List<ToolEntry> tools;
 
         private Dictionary<ToolType, Tool> toolMap;
+        
+        public UnityEvent<ToolType> onNotify;
 
         private void Awake()
         {
             toolMap = new Dictionary<ToolType, Tool>();
             foreach (var entry in tools)
                 toolMap[entry.type] = entry.tool;
+        }
+
+        public void NotifyTool(ToolType type)
+        {
+            onNotify.Invoke(type);
+        }
+
+        public void OpenTool(ToolType type)
+        {
+            GetTool(type)?.OpenInspector();
+        }
+        
+        public void AddOpenListener(ToolType type, UnityAction listener)
+        {
+            GetTool(type)?.onOpen.AddListener(listener);
+        }
+
+        public void RemoveOpenListener(ToolType type, UnityAction listener)
+        {
+            GetTool(type)?.onOpen.RemoveListener(listener);
+        }
+
+        public void CloseAllTools()
+        {
+            foreach (var tool in tools)
+                tool.tool.CloseInspector();
         }
     }
     

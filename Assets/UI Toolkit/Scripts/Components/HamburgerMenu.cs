@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -21,10 +22,12 @@ namespace Netherlands3D.UI.Components
         private Button SettingsButton => this.Q<Button>("Settings");
         private Button HelpButton => this.Q<Button>("Help");
 
-        public event Action OnOpenProjectSelected;
-        public event Action OnSaveProjectSelected;
-        public event Action OnSettingsSelected;
-        public event Action OnHelpSelected;
+        // public event Action OnOpenProjectSelected;
+        // public event Action OnSaveProjectSelected;
+        // public event Action OnSettingsSelected;
+        // public event Action OnHelpSelected;
+
+        public UnityEvent<ToolType> OnToolSelected = new();
         
         
         [UxmlAttribute("text")]
@@ -53,10 +56,15 @@ namespace Netherlands3D.UI.Components
 
             RegisterCallback<ChangeEvent<bool>>(OnFoldoutValueChanged);
 
-            OpenProjectButton.RegisterCallback<ClickEvent>(_ => OnOpenProjectSelected?.Invoke());
-            SaveProjectButton.RegisterCallback<ClickEvent>(_ => OnSaveProjectSelected?.Invoke());
-            SettingsButton.RegisterCallback<ClickEvent>(_ => OnSettingsSelected?.Invoke());
-            HelpButton.RegisterCallback<ClickEvent>(_ => OnHelpSelected?.Invoke());
+            // OpenProjectButton.RegisterCallback<ClickEvent>(_ => OnOpenProjectSelected?.Invoke());
+            // SaveProjectButton.RegisterCallback<ClickEvent>(_ => OnSaveProjectSelected?.Invoke());
+            // SettingsButton.RegisterCallback<ClickEvent>(_ => OnSettingsSelected?.Invoke());
+            // HelpButton.RegisterCallback<ClickEvent>(_ => OnHelpSelected?.Invoke());
+            
+            OpenProjectButton.RegisterCallback<ClickEvent>(_ => OnToolSelected.Invoke(ToolType.OpenProject));
+            SaveProjectButton.RegisterCallback<ClickEvent>(_ => OnToolSelected.Invoke(ToolType.SaveProject));
+            SettingsButton.RegisterCallback<ClickEvent>(_ => OnToolSelected.Invoke(ToolType.Settings));
+            HelpButton.RegisterCallback<ClickEvent>(_ => OnToolSelected.Invoke(ToolType.Help));
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {

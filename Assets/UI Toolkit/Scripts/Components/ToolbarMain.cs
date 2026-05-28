@@ -7,25 +7,25 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarMain : VisualElement
     {
-        public enum Tool
-        {
-            Layer = 0,
-            Library = 1,
-            Add = 2,
-            Search = 3,
-            SunPosition = 4,
-            DownloadTile = 5
-        }
+        // public enum Tool
+        // {
+        //     Layer = 0,
+        //     Library = 1,
+        //     Add = 2,
+        //     Search = 3,
+        //     SunPosition = 4,
+        //     DownloadTile = 5
+        // }
 
         public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
 
-        public event Action OnLayerToolSelected;
-        public event Action OnLibraryToolSelected;
-        public event Action OnAddToolSelected;
-        public event Action OnSearchToolSelected;
-        public event Action OnSunPositionToolSelected;
-        public event Action OnDownloadToolSelected;
-        public event Action OnToolDeselected;
+        // public event Action OnLayerToolSelected;
+        // public event Action OnLibraryToolSelected;
+        // public event Action OnAddToolSelected;
+        // public event Action OnSearchToolSelected;
+        // public event Action OnSunPositionToolSelected;
+        // public event Action OnDownloadToolSelected;
+        // public event Action OnToolDeselected;
 
         public ToolbarMain()
         {
@@ -45,18 +45,18 @@ namespace Netherlands3D.UI.Components
         private void NotifyValueChanged(ChangeEvent<ToggleButtonGroupState> evt)
         {
             var newValue = evt.newValue.GetActiveOptions(stackalloc int[Group.value.length]);
-            Tool? newButton = newValue.Length > 0 ? (Tool)newValue[0] : null;
-            
-            switch (newButton)
-            {
-                case Tool.Layer: OnLayerToolSelected?.Invoke(); break;
-                case Tool.Library: OnLibraryToolSelected?.Invoke(); break;
-                case Tool.Add: OnAddToolSelected?.Invoke(); break;
-                case Tool.Search: OnSearchToolSelected?.Invoke(); break;
-                case Tool.SunPosition: OnSunPositionToolSelected?.Invoke(); break;
-                case Tool.DownloadTile: OnDownloadToolSelected?.Invoke(); break;
-                case null: OnToolDeselected?.Invoke(); break;
-            }
+            ToolType type = newValue.Length > 0 ? (ToolType)newValue[0] : ToolType.None;
+            Services.ServiceLocator.GetService<ToolService>().NotifyTool(type);
+            // switch (newButton)
+            // {
+            //     case Tool.Layer: OnLayerToolSelected?.Invoke(); break;
+            //     case Tool.Library: OnLibraryToolSelected?.Invoke(); break;
+            //     case Tool.Add: OnAddToolSelected?.Invoke(); break;
+            //     case Tool.Search: OnSearchToolSelected?.Invoke(); break;
+            //     case Tool.SunPosition: OnSunPositionToolSelected?.Invoke(); break;
+            //     case Tool.DownloadTile: OnDownloadToolSelected?.Invoke(); break;
+            //     default: OnToolDeselected?.Invoke(); break;
+            // }
         }
 
         public void ClearWithoutNotify()
@@ -64,7 +64,7 @@ namespace Netherlands3D.UI.Components
             Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, Group.value.length));
         }
 
-        public void EnableToolWithoutNotify(Tool tool)
+        public void EnableToolWithoutNotify(ToolType tool)
         {
             var bits = 1ul << (int)tool;
             Group.SetValueWithoutNotify(new ToggleButtonGroupState(bits, Group.value.length));
