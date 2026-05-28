@@ -60,7 +60,7 @@ namespace Netherlands3D.UI.Panels
         public void PopulateLayerPanel(LayerData rootLayer)
         {
             this.rootLayer = rootLayer;
-            var tree = rootLayer.ToTreeViewItems();
+            var tree = LayerTreeViewUtility.ToTreeViewItems(rootLayer, treeView);
             treeView.SetRootItems(tree);
             treeView.RefreshItems();
         }
@@ -84,10 +84,7 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.Initialize(layerData);
         }
 
-        public override string GetTitle()
-        {
-            return "Lagen";
-        }
+        public override string Title => "Lagen";
         
         private void OnDraggingLayerItemStarted(Vector2 startPosition, LayerListViewItem source)
         {
