@@ -1,0 +1,18 @@
+.mask-layer-tree-view-item {
+    align-items: center;
+    flex-direction: row;
+    flex-grow: 1;
+    margin-bottom: var(--spacing-1);
+}
+
+.mask-layer-tree-view-item:hover {
+    background-color: transparent;
+}
+
+.mask-layer-tree-view-item .mask-layer-tree-view-item__cell {
+    margin-right: var(--spacing-3);
+}
+
+.layer-list-view-item__name-label{
+    border-width: 0;
+}

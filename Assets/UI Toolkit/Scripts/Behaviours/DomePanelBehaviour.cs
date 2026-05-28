@@ -18,8 +18,6 @@ namespace Netherlands3D.UI.Panels
         
         public override object GetData()
         {
-            // var layers = ProjectData.Current.RootLayer.GetFlatHierarchy();
-            // return layers.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToList(); //keep only the maskable layers
             return ProjectData.Current.RootLayer;
         }
         

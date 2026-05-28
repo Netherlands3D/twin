@@ -28,7 +28,7 @@ namespace Netherlands3D.UI.Panels
 
         private void Start()
         {
-            root = uiDocument.rootVisualElement;
+            root = uiDocument.rootVisualElement;  //todo ui-toolkit: lets refactor this to use App.UIRoot when implemented fully
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
@@ -38,7 +38,7 @@ namespace Netherlands3D.UI.Panels
             
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.OnSelectLayer.AddListener(SpawnPanel);
-            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
+            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo ui-toolkit: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
         }
 
         private void OnDestroy()
@@ -57,7 +57,7 @@ namespace Netherlands3D.UI.Panels
             activeLayer = null;
         }
 
-        public void SpawnPanel(LayerData layer)
+       public void SpawnPanel(LayerData layer)
         {
             ClearActivePanel();
             propertiesPanel.SetVisible(true);
@@ -65,9 +65,10 @@ namespace Netherlands3D.UI.Panels
             CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
             if (credentials != null && !layer.HasValidCredentials)
             {
-                bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
+                var credentialPanels = CollectPanelsForType(credentials.GetType());
+                SpawnCollectedPanels(credentialPanels, layer.LayerProperties);
                 propertiesPanel.UpdateButtonActiveStates();
-                if (showingCredentials) return;
+                if (credentialPanels.Count > 0) return;
             }
 
             CheckAndSpawnPropertyPanels(layer);
@@ -75,64 +76,49 @@ namespace Netherlands3D.UI.Panels
 
         private void CheckAndSpawnPropertyPanels(LayerData layer)
         {
-            var hasPanels = false;
+            var allPanels = new List<(RegisteredPropertySectionType panelType, PropertySectionCategory category)>();
+
             foreach (var property in layer.LayerProperties)
             {
                 if (property.IsEditable == false) continue;
 
-                hasPanels |= ShowPanelsForProperty(property, layer.LayerProperties);
-                hasPanels |= ShowPanelsForInterfaces(property, layer.LayerProperties);
+                Type propertyType = property.GetType();
+                allPanels.AddRange(CollectPanelsForType(propertyType));
+
+                foreach (var interfaceType in propertyType.GetInterfaces())
+                    allPanels.AddRange(CollectPanelsForType(interfaceType));
             }
+            
+            allPanels.Sort((a, b) => a.panelType.Order.CompareTo(b.panelType.Order));
+            SpawnCollectedPanels(allPanels, layer.LayerProperties);
 
             activeLayer = layer;
             PropertySectionOpened.Invoke(activeLayer);
-
-            if (!hasPanels)
-            {
+            
+            if (allPanels.Count == 0)
                 ClearActivePanel();
-            }
 
             propertiesPanel.UpdateButtonActiveStates();
         }
 
-        private bool ShowPanelsForInterfaces(LayerPropertyData property, List<LayerPropertyData> properties)
+        private List<(RegisteredPropertySectionType panelType, PropertySectionCategory category)> CollectPanelsForType(Type type)
         {
-            var interfaces = property.GetType().GetInterfaces();
-            var hasPanel = false;
-            foreach (var interfaceType in interfaces)
-            {
-                hasPanel |= CreatePanelForType(interfaceType, properties);
-            }
-
-            return hasPanel;
-        }
-
-        private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
-        {
-            var type = property.GetType();
-            var hasPanels = CreatePanelForType(type, properties);
-
-            return hasPanels;
-        }
-        
-        private bool CreatePanelForType(Type type, List<LayerPropertyData> properties)
-        {
-            var hasPanels = false;
+            var result = new List<(RegisteredPropertySectionType, PropertySectionCategory)>();
             foreach (var categoryCollection in PropertySectionRegistry.TypeRegistry)
             {
-                var hasPanelsInCatogory = categoryCollection.Value.Collection.ContainsKey(type);
-                if (hasPanelsInCatogory)
-                {
-                    hasPanels = true;
-                    var panelTypes = categoryCollection.Value.Collection[type];
-                    foreach (var panelType in panelTypes)
-                    {
-                        CreatePanel(panelType, categoryCollection.Key, properties);
-                    }
-                }
-            }
+                if (!categoryCollection.Value.Collection.TryGetValue(type, out var panelTypes))
+                    continue;
 
-            return hasPanels;
+                foreach (var panelType in panelTypes)
+                    result.Add((panelType, categoryCollection.Key));
+            }
+            return result;
+        }
+
+        private void SpawnCollectedPanels(List<(RegisteredPropertySectionType panelType, PropertySectionCategory category)> panels, List<LayerPropertyData> properties)
+        {
+            foreach (var (panelType, category) in panels)
+                CreatePanel(panelType.SectionType, category, properties);
         }
 
         private void CreatePanel(Type panelType, PropertySectionCategory category, List<LayerPropertyData> properties)

@@ -16,6 +16,8 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class LocationSearchPanel : BaseInspectorContentPanel
     {
+        public override string Title => "Zoeken";
+        
         private AutoComplete addressSearch;
         private AutoComplete AddressSearch => addressSearch ??= this.Q<AutoComplete>("AddressSearchBar");
         private NumberField coordinateXField;
@@ -59,8 +61,6 @@ namespace Netherlands3D.UI.Panels
             RegisterCallback<AttachToPanelEvent>(_ => OnAttachToPanel());
             RegisterCallback<DetachFromPanelEvent>(_ => OnDetachFromPanel());
         }
-
-        public override string GetTitle() => "Zoeken";
 
         /// <summary>Populate the results list. Starts in an unselected state.</summary>
         public void SetSuggestions(List<SuggestionResult> suggestions)

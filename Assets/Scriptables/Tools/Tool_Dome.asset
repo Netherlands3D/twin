@@ -52,7 +52,9 @@ MonoBehaviour:
   onToggleInspector:
     m_PersistentCalls:
       m_Calls: []
-  inspectorPrefab: {fileID: 5529894738576217112, guid: c917a5f78a8bda54ab5f591f82ecb585,
-    type: 3}
+  onSpawnedPrefab:
+    m_PersistentCalls:
+      m_Calls: []
+  inspectorPrefab: {fileID: 0}
   functionalityPrefabs: []
-  open: 1
+  open: 0

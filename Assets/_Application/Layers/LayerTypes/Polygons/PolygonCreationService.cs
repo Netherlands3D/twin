@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Events;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
-using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -31,35 +32,230 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private PolygonInput lineInput;
 
         [SerializeField] private float defaultLineWidth = 10.0f;
+        [SerializeField] protected float maxSelectionDistanceFromCamera = 10000;
+        private float lastTapTime = 0;
+        private Vector2 previousFrameScreenCoordinate = default;
+        private Vector2 previousFrameWorldCoordinate = default;
         
         private PolygonSelectionService polygonSelectionService;
+        private InputService inputService;
 
+        [SerializeField] private BoolEvent OnBlockCameraDragging;
+        [SerializeField] private TriggerEvent OnGridCreate;
+        [SerializeField] private TriggerEvent OnGridEdit;
+        [SerializeField] private TriggerEvent OnGridSelect;
+        [SerializeField] private TriggerEvent OnLineCreate;
+        [SerializeField] private TriggerEvent OnLineEdit;
+        [SerializeField] private TriggerEvent OnPolygonCreate;
+        [SerializeField] private TriggerEvent OnPolygonEdit;
+
+        private ShapeType currentShapeType = ShapeType.Undefined;
+        private Plane worldPlane = new(Vector3.up, Vector3.zero);
 
         private void OnEnable()
         {
             polygonInput.createdNewPolygonArea.AddListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.AddListener(UpdateLayer);
-
             lineInput.createdNewPolygonArea.AddListener(CreateLineLayer);
             lineInput.editedPolygonArea.AddListener(UpdateLayer);
-
             gridInput.whenAreaIsSelected.AddListener(CreateOrEditGridLayer);
+            
+            OnGridCreate.AddListenerStarted(SetGridInputModeToCreate);
+            OnGridEdit.AddListenerStarted(SetGridInputModeToEdit);
+            OnGridSelect.AddListenerStarted(SetGridInputModeToSelected);
+            OnLineCreate.AddListenerStarted(SetLineInputToCreate);
+            OnLineEdit.AddListenerStarted(SetLineInputToEdit);
+            OnPolygonCreate.AddListenerStarted(SetPolygonToCreate);
+            OnPolygonEdit.AddListenerStarted(SetPolygonToEdit);
         }
 
         private void OnDisable()
         {
             polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.RemoveListener(UpdateLayer);
-
             lineInput.createdNewPolygonArea.RemoveListener(CreateLineLayer);
             lineInput.editedPolygonArea.RemoveListener(UpdateLayer);
-
             gridInput.whenAreaIsSelected.RemoveListener(CreateOrEditGridLayer);
+            
+            OnGridCreate.RemoveListenerStarted(SetGridInputModeToCreate);
+            OnGridEdit.RemoveListenerStarted(SetGridInputModeToEdit);
+            OnGridSelect.RemoveListenerStarted(SetGridInputModeToSelected);
+            OnLineCreate.RemoveListenerStarted(SetLineInputToCreate);
+            OnLineEdit.RemoveListenerStarted(SetLineInputToEdit);
+            OnPolygonCreate.RemoveListenerStarted(SetPolygonToCreate);
+            OnPolygonEdit.RemoveListenerStarted(SetPolygonToEdit);
         }
 
         private void Start()
         {
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            //we have to listen to inputservice after it is initialized
+            inputService = ServiceLocator.GetService<InputService>();
+            inputService.PolygonTapAction.performed += TapAction_performed;
+            inputService.PolygonClickAction.performed += ClickAction_performed;
+            inputService.PolygonClickAction.canceled += ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed += FinishAction_performed;
+        }
+
+        private void OnDestroy()
+        {
+            inputService.PolygonTapAction.performed -= TapAction_performed;
+            inputService.PolygonClickAction.performed -= ClickAction_performed;
+            inputService.PolygonClickAction.canceled -= ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed -= FinishAction_performed;
+        }
+
+        private void TapAction_performed(InputAction.CallbackContext obj)
+        {
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
+            if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
+            {
+                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Edit)
+                    return;
+
+                var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+                Vector3 currentPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+                input.SetSelectionCurrentPosition(currentPosition);
+
+                if (input.DoubleClickToCloseLoop)
+                {
+                    if ((Time.time - lastTapTime) < input.DoubleClickTimer && Vector3.Distance(currentPointerPosition, previousFrameScreenCoordinate) < input.DoubleClickDistance)
+                    {
+                        Debug.Log("Double click, closing loop.");
+                        input.CloseLoop(true);
+                        return;
+                    }
+                    else
+                    {
+                        lastTapTime = Time.time;
+                        previousFrameScreenCoordinate = currentPointerPosition;
+                    }
+                }
+
+                input.AddPoint();
+            }
+            else if (currentShapeType == ShapeType.Grid)
+            {
+                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Selected)
+                    return;
+
+                var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+                var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+                gridInput.DrawGridAtPosition(worldPosition, worldPosition);
+            }
+        }
+
+        public void UpdateGridSelectionFromPoints(List<Vector3> points)
+        {
+            gridInput.SetAreaFromPolygon(points);
+            gridInput.MakeSelection();
+        }
+
+        private void ClickAction_performed(InputAction.CallbackContext obj)
+        {
+            var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
+            input.SetSelectionStartPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
+        }
+
+        private void ClickAction_canceled(InputAction.CallbackContext obj)
+        {
+            var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
+            input.SetSelectionEndPosition(Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera));
+        }
+
+        private void EscapeAction_canceled(InputAction.CallbackContext obj)
+        {
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
+            input.ClearPolygon(true);
+        }
+
+        private void FinishAction_performed(InputAction.CallbackContext obj)
+        {
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
+            input.CloseLoop(true);
+        }
+        
+        protected void Update()
+        {
+            PolygonInput input = GetInputFromShapeType(currentShapeType);
+            if(input == null) return;
+            
+            var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
+            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            input.SetSelectionCurrentPosition(worldPosition);
+            
+            if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
+            {
+                input.UpdatePreviewLine();
+
+                if (input.Mode == PolygonInput.DrawMode.Edit) //dont auto draw in edit mode
+                {
+                    if (input.AutoDrawPolygon) // reset auto draw mode if mode changes to edit mode while auto drawing
+                        input.AutoDrawPolygon = false;
+
+                    return;
+                }
+
+                //if mode is not edit mode, we check if we are not auto drawing, but we are clicking and the auto draw modifier is pressed 
+                if (!input.AutoDrawPolygon && inputService.PolygonClickAction.IsPressed() && inputService.PolygonModifierAction.IsPressed())
+                    input.AutoDrawPolygon = true;
+                else if (input.AutoDrawPolygon && !inputService.PolygonClickAction.IsPressed()) // reset auto draw mode
+                    input.AutoDrawPolygon = false;
+
+                if (!input.RequireReleaseBeforeRedraw && input.AutoDrawPolygon)
+                    input.AutoAddPoint(previousFrameScreenCoordinate);
+                else if (input.RequireReleaseBeforeRedraw && !inputService.PolygonClickAction.IsPressed())
+                    input.RequireReleaseBeforeRedraw = false;
+
+                previousFrameWorldCoordinate = currentPointerPosition;
+            }
+            else if (currentShapeType == ShapeType.Grid)
+            {
+                gridInput.SetGridHighlightPosition(worldPosition);
+
+                if (!gridInput.DrawingArea && inputService.PolygonClickAction.IsPressed() && inputService.PolygonModifierAction.IsPressed())
+                {
+                    if (App.UIRoot.IsUIClicked() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
+
+                    gridInput.DrawingArea = true;
+                    OnBlockCameraDragging.InvokeStarted(true);
+                   
+                }
+                else if (gridInput.DrawingArea && !inputService.PolygonClickAction.IsPressed())
+                {
+                    gridInput.DrawingArea = false;
+                    OnBlockCameraDragging.InvokeStarted(false);
+                }
+            }
+        }
+
+        private PolygonInput GetInputFromShapeType(ShapeType type)
+        {
+            switch (currentShapeType)
+            {
+                case ShapeType.Polygon:
+                    return polygonInput;
+                case ShapeType.Line:
+                    return lineInput;
+                case ShapeType.Grid:
+                    return gridInput;
+                default:
+                    return null;
+            }
         }
 
         /// <summary>
@@ -88,6 +284,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void EnablePolygonInputByType(ShapeType type)
         {
+            currentShapeType = type;
             switch (type)
             {
                 case ShapeType.Undefined: break;
@@ -105,6 +302,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.ClearPolygon(true);
             polygonInput.ClearPolygon(true);
             gridInput.SetSelectionVisualEnabled(false);
+            currentShapeType =  ShapeType.Undefined;
         }
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
@@ -117,8 +315,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
-            polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
-           
+            polygonInput.OnHandleCreated.AddListener(RegisterBlockingCameraForHandle);
+            OnPolygonEdit.InvokeStarted();
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
@@ -137,7 +335,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
-            lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+            lineInput.OnHandleCreated.AddListener(RegisterBlockingCameraForHandle);
+            OnLineEdit.InvokeStarted();
+        }
+        
+        private void RegisterBlockingCameraForHandle(PolygonDragHandle handle)
+        {
+            handle.pointerDown.AddListener(()=> OnBlockCameraDragging.InvokeStarted(true));
+            handle.clicked.AddListener(() => OnBlockCameraDragging.InvokeStarted(false));
+            handle.endDrag.AddListener(() => OnBlockCameraDragging.InvokeStarted(false));
         }
 
         //called in the inspector
@@ -166,36 +372,54 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
+            OnGridEdit.InvokeStarted();
+        }
+
+        public void SetPolygonToCreate()
+        {
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
+            EnablePolygonInputByType(ShapeType.Polygon);
+            polygonInput.SetDrawMode(PolygonInput.DrawMode.Create);
+        }
+        
+        public void SetPolygonToEdit()
+        {
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
+            EnablePolygonInputByType(ShapeType.Polygon);
+            polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+        }
+
+        public void SetLineInputToCreate()
+        {
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
+            EnablePolygonInputByType(ShapeType.Line);
+            lineInput.SetDrawMode(PolygonInput.DrawMode.Create);
+        }
+
+        public void SetLineInputToEdit()
+        {
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
+            EnablePolygonInputByType(ShapeType.Line);
+            lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+        }
+
+        public void SetGridInputModeToCreate()
+        {
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
+            EnablePolygonInputByType(ShapeType.Grid);
+            gridInput.SetDrawMode(PolygonInput.DrawMode.Create);
+        }
+
+        public void SetGridInputModeToEdit()
+        {
+            EnablePolygonInputByType(ShapeType.Grid);
             gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
         }
 
-        public void SetPolygonInputModeToCreate(bool isCreateMode)
+        public void SetGridInputModeToSelected()
         {
-            polygonSelectionService.ActiveLayer?.DeselectLayer();
-
-            EnablePolygonInputByType(ShapeType.Polygon);
-            polygonInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
-        }
-
-        public void SetLineInputModeToCreate(bool isCreateMode)
-        {
-            polygonSelectionService.ActiveLayer?.DeselectLayer();
-
-            EnablePolygonInputByType(ShapeType.Line);
-            lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
-        }
-
-        public void SetGridInputModeToCreate(bool active)
-        {
-            polygonSelectionService.ActiveLayer?.DeselectLayer();
-
             EnablePolygonInputByType(ShapeType.Grid);
-            gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Selected);
-        }
-
-        public void SetGridInputModeToEdit(bool active)
-        {
-            gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Edit : PolygonInput.DrawMode.Selected);
+            gridInput.SetDrawMode(PolygonInput.DrawMode.Selected);
         }
     }
 }
