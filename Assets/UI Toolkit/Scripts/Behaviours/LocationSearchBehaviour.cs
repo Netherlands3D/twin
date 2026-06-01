@@ -69,9 +69,9 @@ namespace Netherlands3D.UI.Behaviours
                 panel.SuggestionSelected += OnSuggestionSelected;
                 panel.CoordinateXSubmitted += OnCoordinateXSubmitted;
                 panel.CoordinateYSubmitted += OnCoordinateYSubmitted;
+                
+                SyncPanelToMainCameraPosition();
             });
-        
-            SyncPanelToMainCameraPosition();
         }
 
         public void OnClose()
