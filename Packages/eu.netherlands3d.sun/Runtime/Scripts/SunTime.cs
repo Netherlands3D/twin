@@ -120,6 +120,9 @@ namespace Netherlands3D.Sun
 
         public void ToggleAnimation(bool animate)
         {
+            // Only do something if the state changed - otherwise you may get an infinite loop
+            if (this.animate == animate) return;
+            
             this.animate = animate;
             isAnimatingChanged.Invoke(animate);
         }

@@ -3,11 +3,11 @@
         <ui:Label text="Bodemvochtigheid" class="sensor-property-section__title"/>
         <ui:VisualElement class="sensor-property-section__row">
             <ui:Label text="Startdatum" class="sensor-property-section__item"/>
-            <nl3d:XYZField name="StartdatumField" labels-visible="false" class="sensor-property-section__item sensor-property-section__item-last"/>
+            <nl3d:DateField name="StartdatumField" class="sensor-property-section__item sensor-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="sensor-property-section__row">
             <ui:Label text="Einddatum" class="sensor-property-section__item"/>
-            <nl3d:XYZField name="EnddatumField" labels-visible="false" class="sensor-property-section__item sensor-property-section__item-last"/>
+            <nl3d:DateField name="EnddatumField" class="sensor-property-section__item sensor-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="sensor-property-section__row">
             <nl3d:Button button-style="IconOnly" icon="ResetTime" class="sensor-property-section__item" />

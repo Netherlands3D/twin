@@ -1,0 +1,50 @@
+﻿.sun-time-panel {
+    --sun-time-label-width: var(--spacing-20);
+    --sun-time-label-spacing: var(--spacing-3);
+    
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+}
+
+.sun-time-panel.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.sun-time-panel__sun-dial {
+    align-self: center;
+    margin-bottom: var(--inspector-section-spacing);
+}
+
+.sun-time-panel__field-label {
+    width: var(--sun-time-label-width);
+    margin-right: var(--sun-time-label-spacing);
+    flex-shrink: 0;
+    white-space: normal;
+    -unity-text-align: middle-left;
+}
+
+.sun-time-panel__field-label.sun-time-panel__field-label--grow {
+    width: auto;
+    flex-grow: 1;
+}
+
+.sun-time-panel__date-field {
+    flex: 1 1 auto;
+}
+
+.sun-time-panel__reset-button {
+    flex: 0 0 auto;
+}
+
+.sun-time-panel__speed-input {
+    flex: 0 0 auto;
+}
+
+.sun-time-panel__unit-label {
+    flex-shrink: 1;
+    -unity-text-align: middle-left;
+}
