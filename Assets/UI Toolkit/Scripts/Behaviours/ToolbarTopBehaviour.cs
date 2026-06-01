@@ -10,8 +10,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 {
     public class ToolbarTopBehaviour : MonoBehaviour
     {
-        [SerializeField] private UIDocument appDocument;
-
         private Tool domeTool;
         [SerializeField] private TriggerEvent snapshotEvent;
 

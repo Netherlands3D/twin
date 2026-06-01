@@ -17,10 +17,8 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
 {
-    [RequireComponent(typeof(UIDocument), typeof(ICredentialHandler))]
     public class InspectorPanelBehaviour : MonoBehaviour
     {
-        private UIDocument appDocument;
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
         [SerializeField] private LocationSearchBehaviour locationSearchBehaviour;
 
@@ -28,8 +26,6 @@ namespace Netherlands3D.UI.Behaviours
         
         private Tool activeToolWithPanel;
         private BaseInspectorContentPanel activePanel;
-        
-        // private ICredentialHandler credentialHandler;
         private ToolService tools;
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
@@ -42,8 +38,6 @@ namespace Netherlands3D.UI.Behaviours
 
         private void Awake()
         {
-            appDocument = GetComponent<UIDocument>();
-            // credentialHandler = GetComponent<ICredentialHandler>();
             tools = ServiceLocator.GetService<ToolService>();
             
             // RegisterPanel<AssetLibraryPanel>(assetLibrary); //todo: set assetLibrary in panel

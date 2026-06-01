@@ -12,7 +12,6 @@ namespace Netherlands3D.UI.Panels
         [SerializeField] private InputActionAsset inputActionAsset;
         [SerializeField] private FloatingPanelBehaviour[] panelBehaviours;
         
-        private VisualElement root;
         private InputAction rightClickAction;
         private InputAction leftClickAction;
         private InputAction longPressAction;
@@ -23,9 +22,8 @@ namespace Netherlands3D.UI.Panels
 
         void OnEnable()
         {
-            root = GetComponent<UIDocument>().rootVisualElement;
             floatingPanel = new FloatingPanel();
-            root.Add(floatingPanel);
+            App.UIRoot.Root.Add(floatingPanel);
             floatingPanel.OnClose.AddListener(ClearActivePanel);
             floatingPanel.SetEnabled(false);
             var map = inputActionAsset.FindActionMap("Camera", true);
