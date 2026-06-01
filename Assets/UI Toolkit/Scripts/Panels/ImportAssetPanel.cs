@@ -35,10 +35,7 @@ namespace Netherlands3D.UI.Panels
 
         private ErrorPanel errorPanel;
         private ErrorPanel ErrorPanel => errorPanel ??= this.Q<ErrorPanel>();
-
-        public Action OpenAssetLibrary { get; set; }
-        public Action UriImportFailed { get; set; }
-
+        
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.AddLayer;
 
         private ICredentialHandler credentialHandler = new CredentialPropertyHandler();
@@ -57,14 +54,12 @@ namespace Netherlands3D.UI.Panels
             GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
-            UriImportFailed += ErrorPanel.Show;
             
             CredentialPanel.SetEnabled(false);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
-                UriImportFailed -= ErrorPanel.Show;
                 credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             });
             
@@ -83,7 +78,7 @@ namespace Netherlands3D.UI.Panels
             AddLayerFromUrl(uri, auth);
         }
 
-        private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke();
+        private void OnOpenAssetLibrary(ClickEvent evt) => ServiceLocator.GetService<ToolService>().GetTool(ToolType.AssetLibrary).Open();
         private void OnUploadStarted(ClickEvent evt)
         { 
             ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes);
@@ -108,7 +103,7 @@ namespace Netherlands3D.UI.Panels
             {
                 // TODO: Add better error handling
                 Debug.LogException(e);
-                UriImportFailed?.Invoke();
+                ErrorPanel.Show();
             }
         }
 
@@ -123,7 +118,8 @@ namespace Netherlands3D.UI.Panels
 
                 ImportUriField.value = string.Empty;
                 importSucceeded.Invoke();
-                Hide(); //todo should this be a listener on importSucceeded?
+                // Hide(); //todo should this be a listener on importSucceeded?
+                ServiceLocator.GetService<ToolService>().GetTool(ToolType.AssetImport).Close();
             }
             catch (Exception e)
             {

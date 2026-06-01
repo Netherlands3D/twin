@@ -26,7 +26,7 @@ namespace Netherlands3D.UI.Behaviours
         
         private Tool activeToolWithPanel;
         private BaseInspectorContentPanel activePanel;
-        private ToolService tools;
+        private ToolService toolService;
 
         [SerializeField] private TriggerEvent OnDrawNewGrid;
         [SerializeField] private TriggerEvent OnGridConfirmed;
@@ -35,10 +35,13 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] private ScriptableObject SettingsWindow;
         [SerializeField] private string HelpUrl;
 
-
+        private HamburgerMenu hamburgerMenu;
+        private ToolbarMain toolbarMain;
+        
+        
         private void Awake()
         {
-            tools = ServiceLocator.GetService<ToolService>();
+            toolService = ServiceLocator.GetService<ToolService>();
             
             // RegisterPanel<AssetLibraryPanel>(assetLibrary); //todo: set assetLibrary in panel
             // RegisterPanel<ImportAssetPanel>();
@@ -51,6 +54,11 @@ namespace Netherlands3D.UI.Behaviours
             inspectorPanel = App.UIRoot.Root.Q<InspectorPanel>();
             inspectorPanel.Close();
             
+            hamburgerMenu = App.UIRoot.Root.Q<HamburgerMenu>();
+            toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
+            
+            toolService.AnyToolOpened.AddListener(OnAnyToolOpened);
+
             // ImportAssetPanel.SetCredentialHandler(credentialHandler); //todo: set credential handler in importAssetPanel
         }
 
@@ -63,7 +71,7 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnEnable()
         {
-            foreach (var toolWithPanel in tools.GetAllToolsWithPanel())
+            foreach (var toolWithPanel in toolService.GetAllToolsWithPanel())
             {
                 toolWithPanel.onOpen.AddListener(() => OnToolWithPanelOpen(toolWithPanel)); //todo: make this not a lambda function so we can unsubscribe
                 toolWithPanel.onClose.AddListener(Close);
@@ -90,6 +98,13 @@ namespace Netherlands3D.UI.Behaviours
             
            // toolRepository.SubscribeAll(OnToolClosed);
         }
+        
+        private void OnAnyToolOpened()
+        {
+            hamburgerMenu.Close();
+            // toolbarMain.EnableToolWithoutNotify(toolType);
+            // toolbarMain.ClearWithoutNotify();
+        }
 
         private void OnToolWithPanelOpen(Tool toolWithPanel)
         {
@@ -108,14 +123,16 @@ namespace Netherlands3D.UI.Behaviours
         private void OnDisable()
         {
             // tools.onPreNotifyAny.RemoveListener(CloseInspectorPanels);
-            tools.RemoveOpenListener(ToolType.Settings, ((IWindow)SettingsWindow).Open);
-            tools.RemoveOpenListener(ToolType.Help, OpenHelp);
+            toolService.RemoveOpenListener(ToolType.Settings, ((IWindow)SettingsWindow).Open);
+            toolService.RemoveOpenListener(ToolType.Help, OpenHelp);
             // tools.RemoveOpenListener(ToolType.AssetLibrary, ShowPanel<AssetLibraryPanel>);
             // tools.RemoveOpenListener(ToolType.AssetImport, ShowPanel<ImportAssetPanel>);
             
             // InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
             inspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
+            toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
+
             // ImportAssetPanel.OpenAssetLibrary -= tools.GetTool(ToolType.AssetLibrary).OpenInspector;
             // ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
             
@@ -133,6 +150,8 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Close()
         {
+            toolbarMain.EnableToolWithoutNotify(ToolType.None);
+            
             inspectorPanel.ClearContent();
             inspectorPanel.Close();
         }

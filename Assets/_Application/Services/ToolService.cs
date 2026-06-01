@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using GG.Extensions;
 using Netherlands3D.Twin.Tools;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Netherlands3D
 {
@@ -49,17 +47,24 @@ namespace Netherlands3D
         public Tool GetTool(ToolType type) => ToolMap[type];
         
         public UnityEvent AnyToolOpened;
+        public UnityEvent AnyToolClosed;
 
         private void OnEnable()
         {
             foreach (var tool in tools)
+            {
                 tool.tool.onOpen.AddListener(AnyToolOpened.Invoke);
+                tool.tool.onClose.AddListener(AnyToolClosed.Invoke); 
+            }
         }
 
         private void OnDisable()
         {
             foreach (var tool in tools)
+            {
                 tool.tool.onOpen.RemoveListener(AnyToolOpened.Invoke);
+                tool.tool.onClose.RemoveListener(AnyToolClosed.Invoke); 
+            }
         }
 
         public void AddOpenListener(ToolType type, UnityAction listener)
