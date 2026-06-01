@@ -57,15 +57,27 @@ namespace Netherlands3D
         //     onNotifyAny.Invoke(type);
         // }
 
-        public void OpenTool(ToolType type)
+        private void OnEnable()
         {
-            var tool = GetTool(type);
-            if (tool != null)
-            {
-                tool.OpenInspector();
-                AnyToolOpened.Invoke(tool);
-            }
+            foreach (var tool in tools)
+                tool.tool.onToggleInspector.AddListener(AnyToolOpened.Invoke);
         }
+
+        private void OnDisable()
+        {
+            foreach (var tool in tools)
+                tool.tool.onToggleInspector.RemoveListener(AnyToolOpened.Invoke);
+        }
+
+        // public void OpenTool(ToolType type)
+        // {
+        //     var tool = GetTool(type);
+        //     if (tool != null)
+        //     {
+        //         tool.OpenInspector();
+        //         AnyToolOpened.Invoke(tool);
+        //     }
+        // }
 
         public void AddOpenListener(ToolType type, UnityAction listener)
         {

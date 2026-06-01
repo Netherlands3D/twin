@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
@@ -14,7 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject
     {
         [SerializeField] private TextPopout popoutPrefab;
-        [SerializeField] private Tool layerTool;
+        private Tool layerTool;
 
         private TextPopout annotation;
         private enum EditMode
@@ -35,6 +36,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             CreateTextPopup();
            
             WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
+
+            layerTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer);
         }
 
         private void OnBlockerClicked()
