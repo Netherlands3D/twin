@@ -98,8 +98,9 @@ namespace Netherlands3D.UI.Panels
             }
             else
             {
-                credentialPanel.SetEnabled(true);
-                credentialPanel.ShowError(true);
+                credentialPanel.SetEnabled(true); //todo refactor this with the .hidden +  credentialPanel.CodeField.SetValueWithoutNotify(credentialHandler.PasswordOrKeyOrTokenOrCode); within a new enable method
+                if(!string.IsNullOrEmpty(credentialHandler.PasswordOrKeyOrTokenOrCode))
+                    credentialPanel.ShowError(true);
             }
         }
 
