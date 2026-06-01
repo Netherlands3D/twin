@@ -53,15 +53,14 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            // OnShow += () => EnableInClassList("active", true);
-            // OnHide += () => EnableInClassList("active", false);
+            
             GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
             UriImportFailed += ErrorPanel.Show;
             
             CredentialPanel.SetEnabled(false);
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
@@ -70,13 +69,6 @@ namespace Netherlands3D.UI.Panels
             });
             
             ImportUriField.RegisterCallback<NavigationSubmitEvent>(evt => OnImport(importUriField.value), TrickleDown.TrickleDown);
-        }
-
-        public void SetCredentialHandler(ICredentialHandler handler)
-        {
-            credentialHandler = handler;
-            CredentialPanel.Handler = handler;
-            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
