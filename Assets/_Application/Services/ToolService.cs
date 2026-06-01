@@ -15,6 +15,7 @@ namespace Netherlands3D
         Search,
         SunPosition,
         DownloadTile,
+        PolygonGrid,
         OpenProject,
         SaveProject,
         Settings,

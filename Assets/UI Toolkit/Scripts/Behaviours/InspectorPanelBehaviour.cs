@@ -81,7 +81,7 @@ namespace Netherlands3D.UI.Behaviours
             // InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             inspectorPanel.InspectorHeaderCloseButton.clicked += Close;
             
-            // OnDrawNewGrid.AddListenerStarted(OpenPolgyonGridPanel); //todo polygon grid should become a tool
+           
             // PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
             //TODO ongridconfirmed -> open layerpanel and close the gridpanel (if its not automatically happening)
         }
@@ -102,7 +102,6 @@ namespace Netherlands3D.UI.Behaviours
             inspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
             
-            // OnDrawNewGrid.RemoveListenerStarted(OpenPolgyonGridPanel);
             // PolygonGridPanel.OnConfirmSelection.RemoveListener(OnGridConfirmed.InvokeStarted);
         }
         

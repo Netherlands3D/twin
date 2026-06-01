@@ -33,9 +33,6 @@ namespace Netherlands3D.UI.Panels
             this.assetLibrary = assetLibrary;
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            // OnShow += () => EnableInClassList("active", true);
-            // OnHide += () => EnableInClassList("active", false);
             
             LoadCatalog(assetLibrary.Catalog);
 

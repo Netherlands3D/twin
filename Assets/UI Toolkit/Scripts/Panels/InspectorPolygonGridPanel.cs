@@ -13,9 +13,7 @@ using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
-    [InspectorPanel]
-
+    [UxmlElement, InspectorPanel]
     public partial class InspectorPolygonGridPanel : BaseInspectorContentPanel
     {
         public override string Title => "Tekengebied grid selecteren";
