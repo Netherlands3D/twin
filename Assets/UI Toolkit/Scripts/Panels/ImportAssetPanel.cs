@@ -59,8 +59,11 @@ namespace Netherlands3D.UI.Panels
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
             UriImportFailed += ErrorPanel.Show;
-            
+            ErrorPanel.Hide();
             CredentialPanel.SetEnabled(false);
+            
+            //we dont want to show the warning first but immediately start with the input of credentials instead
+            CredentialPanel.StartWithInput();
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
@@ -68,7 +71,7 @@ namespace Netherlands3D.UI.Panels
                 credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             });
             
-            ImportUriField.RegisterCallback<NavigationSubmitEvent>(evt => OnImport(importUriField.value), TrickleDown.TrickleDown);
+            ImportUriField.RegisterCallback<NavigationSubmitEvent>(OnSubmit, TrickleDown.TrickleDown);
         }
 
         public void SetCredentialHandler(ICredentialHandler handler)
@@ -78,16 +81,27 @@ namespace Netherlands3D.UI.Panels
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
 
+        private void OnSubmit(NavigationSubmitEvent evt)
+        {
+            OnImport(importUriField.value);
+        }
+
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
-            if (auth is FailedOrUnsupported)
+            var accepted = auth != null && auth is not FailedOrUnsupported;
+            //we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
+            if (accepted)
             {
-                credentialPanel.SetEnabled(true);
-                return;
+                CredentialPanel.SetAcceptedState();
+                credentialPanel.SetEnabled(false);
+                AddLayerFromUrl(uri, auth);
             }
-
-            credentialPanel.SetEnabled(false);
-            AddLayerFromUrl(uri, auth);
+            else
+            {
+                credentialPanel.SetEnabled(true); //todo refactor this with the .hidden +  credentialPanel.CodeField.SetValueWithoutNotify(credentialHandler.PasswordOrKeyOrTokenOrCode); within a new enable method
+                if(!string.IsNullOrEmpty(credentialHandler.PasswordOrKeyOrTokenOrCode))
+                    credentialPanel.ShowError(true);
+            }
         }
 
         private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke();
@@ -103,12 +117,18 @@ namespace Netherlands3D.UI.Panels
 
         private void OnImport(string value)
         {
+            //hide the credential error as we dont want to show this on inputting the uri without credentials when they are required
+            CredentialPanel.ShowError(false);
             try
             {
                 credentialHandler.ClearCredentials();
                 Uri uri = new Uri(value);
 
                 credentialHandler.Uri = uri;
+
+                //credentialPanel.UserNameField.value = credentialHandler.UserName;
+                //credentialPanel.CodeField.value = credentialHandler.PasswordOrKeyOrTokenOrCode;
+
                 credentialHandler.ApplyCredentials();
             }
             catch (Exception e)

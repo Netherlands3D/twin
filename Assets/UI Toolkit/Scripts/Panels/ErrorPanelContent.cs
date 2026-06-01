@@ -34,12 +34,6 @@ namespace Netherlands3D.UI.Panels
             // OnHide += () => SetEnabled(false);
             RetryButton.clicked += Hide;
         }
-
-        ~ErrorPanelContent()
-        {
-            RetryButton.clicked -= Hide;
-        }
-
         
         public void Show()
         {
