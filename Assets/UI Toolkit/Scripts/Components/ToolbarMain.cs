@@ -8,6 +8,7 @@ namespace Netherlands3D.UI.Components
     public partial class ToolbarMain : VisualElement
     {
         public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
+        private ToolService tools;
 
         public ToolbarMain()
         {
@@ -24,9 +25,13 @@ namespace Netherlands3D.UI.Components
 
         private void NotifyValueChanged(ChangeEvent<ToggleButtonGroupState> evt)
         {
+            tools = Services.ServiceLocator.GetService<ToolService>();
             var newValue = evt.newValue.GetActiveOptions(stackalloc int[Group.value.length]);
             ToolType type = newValue.Length > 0 ? (ToolType)newValue[0] : ToolType.None;
-            Services.ServiceLocator.GetService<ToolService>().GetTool(type)?.OpenInspector();
+            if (type == ToolType.None)
+                tools.CloseAllTools(); //todo Do we close all tools on toggling off a tool button?
+            else
+                tools.GetTool(type)?.OpenInspector();
         }
 
         public void ClearWithoutNotify()

@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Credentials;
 using Netherlands3D.Events;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Tools;
@@ -23,11 +24,7 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
         [SerializeField] private LocationSearchBehaviour locationSearchBehaviour;
 
-        private VisualElement root;
-        private VisualElement Root => root ??= appDocument?.rootVisualElement;
-
         private InspectorPanel inspectorPanel;
-        private InspectorPanel InspectorPanel => inspectorPanel ??= Root?.Q<InspectorPanel>();
         
         private Tool activeToolWithPanel;
         private BaseInspectorContentPanel activePanel;
@@ -56,7 +53,9 @@ namespace Netherlands3D.UI.Behaviours
             // RegisterPanel<LocationSearchPanel>();
             // locationSearchBehaviour?.Initialize(GetPanel<LocationSearchPanel>()); //todo: figure out what this does
 
-            InspectorPanel.Close();
+            
+            inspectorPanel = App.UIRoot.Root.Q<InspectorPanel>();
+            inspectorPanel.Close();
             
             // ImportAssetPanel.SetCredentialHandler(credentialHandler); //todo: set credential handler in importAssetPanel
         }
@@ -64,8 +63,8 @@ namespace Netherlands3D.UI.Behaviours
         private void Start()
         {
             PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            InspectorPanel.OnShow += polygonSelectionService.EnablePolygonSelection;
-            InspectorPanel.OnHide += polygonSelectionService.DisablePolygonSelection;
+            inspectorPanel.OnShow += polygonSelectionService.EnablePolygonSelection;
+            inspectorPanel.OnHide += polygonSelectionService.DisablePolygonSelection;
         }
 
         private void OnEnable()
@@ -83,7 +82,7 @@ namespace Netherlands3D.UI.Behaviours
             
             // InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
-            InspectorPanel.InspectorHeaderCloseButton.clicked += Close;
+            inspectorPanel.InspectorHeaderCloseButton.clicked += Close;
             // ImportAssetPanel.OpenAssetLibrary += tools.GetTool(ToolType.AssetLibrary).OpenInspector;
             // ImportAssetPanel.importSucceeded.AddListener(OnImportSucceeded);
             
@@ -107,8 +106,8 @@ namespace Netherlands3D.UI.Behaviours
             Open();
             
             activePanel = CreatePanel(toolWithPanel.PanelType, toolWithPanel.PanelArgs);
-            InspectorPanel.HeaderText = activePanel.Title;
-            InspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
+            inspectorPanel.HeaderText = activePanel.Title;
+            inspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
             activePanel.OnHide.AddListener(Close);
         }
 
@@ -122,7 +121,7 @@ namespace Netherlands3D.UI.Behaviours
             
             // InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
-            InspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
+            inspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             // ImportAssetPanel.OpenAssetLibrary -= tools.GetTool(ToolType.AssetLibrary).OpenInspector;
             // ImportAssetPanel.importSucceeded.RemoveListener(OnImportSucceeded);
             
@@ -135,7 +134,7 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Open()
         {
-            InspectorPanel.Open();
+            inspectorPanel.Open();
         }
 
         public void Close()
@@ -143,8 +142,8 @@ namespace Netherlands3D.UI.Behaviours
             // tools.ClearWithoutNotify.Invoke();
             // InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify(); //todo: this should be done through the tool that is closed and the associated button that listens to the tool.Onclose.
             // HidePanel();
-            InspectorPanel.Clear();
-            InspectorPanel.Close();
+            inspectorPanel.Content.Clear();
+            inspectorPanel.Close();
         }
 
         // TODO: Shouldn't this be in the InspectorPanel component?
@@ -156,7 +155,7 @@ namespace Netherlands3D.UI.Behaviours
             var panel = Activator.CreateInstance(panelType, args) as BaseInspectorContentPanel;
             // panels.Add(panel);
 
-            InspectorPanel.Content.Add(panel);
+            inspectorPanel.Content.Add(panel);
             // panel.Hide();
 
             return panel;

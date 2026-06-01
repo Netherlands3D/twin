@@ -17,17 +17,13 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private ToolbarToolbox toolbarToolbox;
 
-        private void Start()
-        {
-            domeTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Dome);
-        }
-
         private void OnEnable()
         {
             toolbarToolbox = App.UIRoot.Root.Q<ToolbarToolbox>();
             toolbarToolbox.OnDomeToggled += OnDomeToggled;
             toolbarToolbox.OnScreenshotClicked += OnScreenshotClicked;
 
+            domeTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Dome);
             domeTool.onOpen.AddListener(OnDomeToolOpen);
             domeTool.onClose.AddListener(OnDomeToolClose);
             toolbarToolbox.SetDomeValueWithoutNotify(domeTool.Open);
