@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Tools
         [SerializeField] private InspectorPanelType panelType;
 
         public Type PanelType => panelType.Type;
-        [SerializeField] private object[] panelArgs;
+        [SerializeField] private UnityEngine.Object[] panelArgs;
         public object[] PanelArgs => panelArgs;
         
         [Tooltip("GameObjects to spawn in the World when this tool is activated")]

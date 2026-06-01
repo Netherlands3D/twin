@@ -28,7 +28,7 @@ namespace Netherlands3D.UI.Panels
         private Breadcrumb Breadcrumb => breadcrumb ??= this.Q<Breadcrumb>();
         
         public AssetLibraryPanel(){}
-        public AssetLibraryPanel(AssetLibrary.AssetLibrary assetLibrary)
+        public AssetLibraryPanel(AssetLibrary.AssetLibrary assetLibrary) : this()
         {
             this.assetLibrary = assetLibrary;
             this.CloneComponentTree("Panels");

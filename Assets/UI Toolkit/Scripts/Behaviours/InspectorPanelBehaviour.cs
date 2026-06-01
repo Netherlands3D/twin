@@ -133,10 +133,7 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Close()
         {
-            // tools.ClearWithoutNotify.Invoke();
-            // InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify(); //todo: this should be done through the tool that is closed and the associated button that listens to the tool.Onclose.
-            // HidePanel();
-            inspectorPanel.Content.Clear();
+            inspectorPanel.ClearContent();
             inspectorPanel.Close();
         }
 
@@ -147,28 +144,10 @@ namespace Netherlands3D.UI.Behaviours
                 throw new ArgumentException("panelType must derive from BaseInspectorContentPanel");
                 
             var panel = Activator.CreateInstance(panelType, args) as BaseInspectorContentPanel;
-            // panels.Add(panel);
-
-            inspectorPanel.Content.Add(panel);
-            // panel.Hide();
-
+            inspectorPanel.AddContent(panel);
             return panel;
         }
 
         private void OpenHelp() => Application.OpenURL(HelpUrl);
-        
-        // private void CloseInspectorPanels(ToolType toolType)
-        // {
-        //     ((IWindow)SettingsWindow).Close();
-        //     HidePanel();
-        //     InspectorPanel.Toolbar.ToggleButtonsOffWithoutNotify();
-        //     InspectorPanel.Close();
-        // }
-
-        // private void OnImportSucceeded()
-        // {
-        //     InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(false);
-        //     Close();
-        // }
     }
 }
