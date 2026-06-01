@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Tools;
 using UnityEngine;
 using UnityEngine.Events;
@@ -35,7 +36,7 @@ namespace Netherlands3D
 
         private Dictionary<ToolType, Tool> toolMap;
         private Dictionary<ToolType, Tool> ToolMap => toolMap ??= BuildToolMap();
-
+        
         private Dictionary<ToolType, Tool> BuildToolMap()
         {
             toolMap = new Dictionary<ToolType, Tool>();
@@ -45,6 +46,7 @@ namespace Netherlands3D
         }
 
         public Tool GetTool(ToolType type) => ToolMap[type];
+        public ToolType GetToolType(Tool tool) => tools.FirstOrDefault(e => e.tool == tool).type;
         
         public UnityEvent AnyToolOpened;
         public UnityEvent AnyToolClosed;
@@ -65,16 +67,6 @@ namespace Netherlands3D
                 tool.tool.onOpen.RemoveListener(AnyToolOpened.Invoke);
                 tool.tool.onClose.RemoveListener(AnyToolClosed.Invoke); 
             }
-        }
-
-        public void AddOpenListener(ToolType type, UnityAction listener)
-        {
-            GetTool(type)?.onOpen.AddListener(listener);
-        }
-
-        public void RemoveOpenListener(ToolType type, UnityAction listener)
-        {
-            GetTool(type)?.onOpen.RemoveListener(listener);
         }
 
         public void CloseAllTools()
@@ -100,7 +92,6 @@ namespace Netherlands3D
                     toolsWithPanel.Add(tool.tool);
                 }
             }
-
             return toolsWithPanel;
         }
     }

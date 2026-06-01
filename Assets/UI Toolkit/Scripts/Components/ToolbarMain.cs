@@ -29,7 +29,7 @@ namespace Netherlands3D.UI.Components
             var newValue = evt.newValue.GetActiveOptions(stackalloc int[Group.value.length]);
             ToolType type = newValue.Length > 0 ? (ToolType)newValue[0] : ToolType.None;
             if (type == ToolType.None)
-                tools.CloseAllTools(); //todo Do we close all tools on toggling off a tool button?
+                tools.CloseAllToolsWithPanel(); //todo Do we close all tools on toggling off a tool button?
             else
                 tools.GetTool(type)?.Open();
         }
@@ -38,10 +38,15 @@ namespace Netherlands3D.UI.Components
         {
             Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, Group.value.length));
         }
-
-        public void EnableToolWithoutNotify(ToolType tool)
+        
+        public void UpdateState()
         {
-            var bits = 1ul << (int)tool;
+            ulong bits = 0ul;
+            foreach (var entry in tools.GetAllToolsWithPanel())
+            {
+                if (entry.IsOpen)
+                    bits |= 1ul << (int)tools.GetToolType(entry);
+            }
             Group.SetValueWithoutNotify(new ToggleButtonGroupState(bits, Group.value.length));
         }
     }

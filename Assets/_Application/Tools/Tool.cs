@@ -18,8 +18,7 @@ namespace Netherlands3D.Twin.Tools
         [FormerlySerializedAs("onActivate")] public UnityEvent onOpen = new();
 
         [FormerlySerializedAs("onDeactivate")] public UnityEvent onClose = new();
-
-        // [FormerlySerializedAs("onToggleInspector")] public UnityEvent<Tool> ToolToggled = new();
+        
         public UnityEvent<GameObject> onSpawnedPrefab = new();
 
         [Header("Content")] [Tooltip("Prefab to show in the UI Inspector when this tool is activated")] [SerializeField]
