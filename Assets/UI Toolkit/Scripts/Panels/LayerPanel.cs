@@ -114,9 +114,16 @@ namespace Netherlands3D.UI.Panels
             
             if (targetItem != null)
             {
-                var layer = targetItem.userData as LayerData;
-                Debug.Log(layer == null);
-                Debug.Log(layer.Name);
+                var newParent = targetItem.userData as LayerData;
+
+                var selectedLayers = treeView.selectedItems.ToList();
+                selectedLayers.Reverse();
+                foreach (LayerData selectedLayer in selectedLayers) //to list makes a copy and avoids a collectionmodified error
+                {
+                    Debug.Log(selectedLayer.Name);
+                    // selectedLayer.SetParent(newParent, newSiblingIndex);
+                    selectedLayer.SetParent(newParent, 0); //todo: calculate sibling index
+                }
             }
 
             dragGhost.RemoveFromHierarchy();

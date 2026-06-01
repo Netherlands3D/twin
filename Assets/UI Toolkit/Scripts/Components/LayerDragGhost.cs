@@ -1,3 +1,4 @@
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
@@ -12,6 +13,7 @@ namespace Netherlands3D.UI.Components
         private Icon layerVisibilityImage;
         private VisualElement colorImage;
         private Icon foldoutImage;
+        private VisualElement spacer;
         private Icon layerTypeImage;
         private Label layerNameText;
         
@@ -22,7 +24,11 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
+            layerVisibilityImage = this.Q<Icon>("IsActiveIcon");
             colorImage = this.Q<VisualElement>("ColorBar");
+            foldoutImage = this.Q<Icon>("FoldoutImage");
+            spacer = this.Q<VisualElement>("Spacer");
+            layerTypeImage = this.Q<Icon>("TypeIcon");
             layerNameText = this.Q<Label>("NameInputField");
             
             style.position = Position.Absolute;
@@ -31,7 +37,6 @@ namespace Netherlands3D.UI.Components
 
         public void Initialize(Vector2 dragStartPosition, LayerListViewItem ui)
         {
-            Debug.Log( dragStartPosition.ToString() );
             currentPosition = dragStartPosition;
             ApplyPosition();
             CopyAppearance(ui);
@@ -39,10 +44,11 @@ namespace Netherlands3D.UI.Components
 
         private void CopyAppearance(LayerListViewItem ui)
         {
-            // layerVisibilityImage.Image = ui.VisibilitySprite;
+            layerVisibilityImage.Image = (IconImage)ui.VisibilityState;
             UpdateColorBar(ui.layerData.Color);
-            // foldoutImage.enabled = ui.hasChildren;
-            // layerTypeImage.sprite = ui.LayerTypeSprite;
+            foldoutImage.EnableInClassList(UtilityClassConstants.HIDDEN, ui.layerData.ChildrenLayers.Count == 0);
+            
+            layerTypeImage.Image = ui.LayerTypeIcon;
             layerNameText.text = ui.layerData.Name;
 
             // var credentialsUI = GetComponent<LayerUICredentialsNeededListener>();
@@ -66,7 +72,7 @@ namespace Netherlands3D.UI.Components
         private void ApplyPosition()
         {
             // style.left = currentPosition.x;
-            style.top = currentPosition.y - resolvedStyle.height / 2; //todo ui-toolkit: not the correct height offset yet
+            style.top = currentPosition.y;// - resolvedStyle.height / 2; //todo ui-toolkit: not the correct height offset yet
         }
     }
 }

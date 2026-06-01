@@ -29,7 +29,6 @@ namespace Netherlands3D.UI.Components
         public LayerData layerData => userData as LayerData;
         public UnityEvent RequestTreeRefresh { get; } = new();
         public UnityEvent RequestTreeRebuild { get; } = new();
-
         
         private IVisualElementScheduledItem clickTimer;
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
@@ -38,6 +37,9 @@ namespace Netherlands3D.UI.Components
         public UnityEvent<Vector2, LayerListViewItem> DragStarted { get; } = new();
         public UnityEvent<Vector2, LayerListViewItem> Dragging { get; } = new();
         public UnityEvent<Vector2, LayerListViewItem> DragEnded { get; } = new();
+        
+        public VisibilityState VisibilityState => isActiveToggle.Image;
+        public IconImage LayerTypeIcon => layerTypeIcon.Image; 
         
         public LayerListViewItem()
         {
@@ -261,22 +263,7 @@ namespace Netherlands3D.UI.Components
                 allChildrenActive &= child.ActiveSelf;
             }
 
-            if (!layerData.ActiveSelf)
-            {
-                isActiveToggle.SetState(VisibilityState.Invisible);
-            }
-            else if (layerData.ActiveSelf && !layerData.ActiveInHierarchy)
-            {
-                isActiveToggle.SetState(VisibilityState.VisibleInInvisible);
-            }
-            else if (allChildrenActive)
-            {
-                isActiveToggle.SetState(VisibilityState.Visible);
-            }
-            else
-            {
-                isActiveToggle.SetState(VisibilityState.PartiallyVisible);
-            }
+            isActiveToggle.SetStateFromLayerState(layerData.ActiveSelf, layerData.ActiveInHierarchy, allChildrenActive);
         }
 
 

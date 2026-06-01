@@ -5,8 +5,9 @@
          editor-extension-mode="False">
     <ui:VisualElement class="layer-list-view-item">
         <nl3d:Icon name="IsActiveIcon" icon="Visibility" class="layer-list-view-item__cell layer-list-view-item__visibility-toggle" />
-        <nl3d:Icon name="FoldoutImage" icon="ChevronDown" class="layer-list-view-item__cell layer-list-view-item__visibility-toggle" />
         <ui:VisualElement name="ColorBar" class="layer-list-view-item__cell layer-list-view-item__color-bar"/>
+        <ui:VisualElement name="Spacer" />
+        <nl3d:Icon name="FoldoutImage" image="ChevronRight" class="layer-list-view-item__cell layer-list-view-item__visibility-toggle" />
         <nl3d:Icon name="TypeIcon" class="layer-list-view-item__cell layer-list-view-item__icon" />
         <ui:Label name="NameInputField" text="LayerName" class="layer-list-view-item__cell layer-list-view-item__name-label" />
 <!--        <nl3d:Toggle name="PropertyToggle" icon="AdjustmentsHorizontal" toggle-style="IconOnly" class="layer-list-view-item__cell layer-list-view-item__property-toggle"/>-->
