@@ -48,7 +48,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             tools.AnyToolOpened.AddListener(OnAnyToolOpened);
         }
 
-        private void OnAnyToolOpened(Tool tool)
+        private void OnAnyToolOpened()
         {
             hamburgerMenu.Close();
         }

@@ -93,7 +93,7 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnToolWithPanelOpen(Tool toolWithPanel)
         {
-            activeToolWithPanel?.CloseInspector();
+            activeToolWithPanel?.Close();
             activePanel?.OnHide.RemoveListener(Close);
             activeToolWithPanel = toolWithPanel;
             

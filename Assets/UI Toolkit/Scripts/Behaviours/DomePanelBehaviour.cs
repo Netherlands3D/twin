@@ -34,7 +34,7 @@ namespace Netherlands3D.UI.Panels
         
         public override bool ShouldBeActive()
         {
-            return domeTool.Open;
+            return domeTool.IsOpen;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             domeTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Dome);
             domeTool.onOpen.AddListener(OnDomeToolOpen);
             domeTool.onClose.AddListener(OnDomeToolClose);
-            toolbarToolbox.SetDomeValueWithoutNotify(domeTool.Open);
+            toolbarToolbox.SetDomeValueWithoutNotify(domeTool.IsOpen);
         }
 
         private void OnDisable()
@@ -42,8 +42,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnDomeToggled(bool isOn)
         {
-            if (isOn) domeTool.OpenInspector();
-            else domeTool.CloseInspector();
+            if (isOn) domeTool.Open();
+            else domeTool.Close();
         }
 
         private void OnScreenshotClicked()

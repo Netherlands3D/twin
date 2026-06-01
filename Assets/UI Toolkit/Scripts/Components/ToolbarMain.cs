@@ -31,7 +31,7 @@ namespace Netherlands3D.UI.Components
             if (type == ToolType.None)
                 tools.CloseAllTools(); //todo Do we close all tools on toggling off a tool button?
             else
-                tools.GetTool(type)?.OpenInspector();
+                tools.GetTool(type)?.Open();
         }
 
         public void ClearWithoutNotify()
