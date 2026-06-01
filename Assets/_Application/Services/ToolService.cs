@@ -19,6 +19,7 @@ namespace Netherlands3D
         SaveProject,
         Settings,
         Help,
+        Dome,
         None
     }
     
@@ -46,16 +47,7 @@ namespace Netherlands3D
 
         public Tool GetTool(ToolType type) => ToolMap[type];
         
-        // public UnityEvent<ToolType> onPreNotifyAny;
-        // public UnityEvent<ToolType> onNotifyAny;
         public UnityEvent<Tool> AnyToolOpened;
-        // public UnityEvent ClearWithoutNotify = new(); //todo: delete this?
-
-        // public void NotifyTool(ToolType type)
-        // {
-        //     onPreNotifyAny.Invoke(type);
-        //     onNotifyAny.Invoke(type);
-        // }
 
         private void OnEnable()
         {
@@ -68,16 +60,6 @@ namespace Netherlands3D
             foreach (var tool in tools)
                 tool.tool.onToggleInspector.RemoveListener(AnyToolOpened.Invoke);
         }
-
-        // public void OpenTool(ToolType type)
-        // {
-        //     var tool = GetTool(type);
-        //     if (tool != null)
-        //     {
-        //         tool.OpenInspector();
-        //         AnyToolOpened.Invoke(tool);
-        //     }
-        // }
 
         public void AddOpenListener(ToolType type, UnityAction listener)
         {

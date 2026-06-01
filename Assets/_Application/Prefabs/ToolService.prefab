@@ -66,13 +66,9 @@ MonoBehaviour:
     tool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
   - type: 9
     tool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
-  onPreNotifyAny:
-    m_PersistentCalls:
-      m_Calls: []
-  onNotifyAny:
-    m_PersistentCalls:
-      m_Calls: []
-  onOpenAny:
+  - type: 10
+    tool: {fileID: 11400000, guid: e184b14b2cc24f14e895ecc328e689e2, type: 2}
+  AnyToolOpened:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &5508215877957218700
