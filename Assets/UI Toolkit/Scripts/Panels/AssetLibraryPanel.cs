@@ -15,7 +15,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class AssetLibraryPanel : BaseInspectorContentPanel
     {
         public override string Title => "Toevoegen";

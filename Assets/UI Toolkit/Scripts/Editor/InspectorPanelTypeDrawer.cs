@@ -12,8 +12,8 @@ public class InspectorPanelTypeDrawer : PropertyDrawer
 {
     // Cached list + the frame it was built on (refresh once per domain reload)
     private static List<Type> _cachedPanelTypes;
-    private static string[]   _cachedDisplayNames;
-    private static string[]   _cachedAQNames; // AssemblyQualifiedName per entry (index 0 = "(None)")
+    private static string[] _cachedDisplayNames;
+    private static string[] _cachedAQNames; // AssemblyQualifiedName per entry (index 0 = "(None)")
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -42,7 +42,7 @@ public class InspectorPanelTypeDrawer : PropertyDrawer
 
         EditorGUI.EndProperty();
     }
-    
+
     private static void EnsureCache()
     {
         if (_cachedPanelTypes != null) return;
@@ -51,23 +51,12 @@ public class InspectorPanelTypeDrawer : PropertyDrawer
 
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            try
+            foreach (var type in assembly.GetTypes())
             {
-                foreach (var type in assembly.GetTypes())
-                {
-                    if (type.GetCustomAttribute<InspectorPanelAttribute>() != null)
-                        _cachedPanelTypes.Add(type);
-                }
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                // Some assemblies may fail to fully load; skip broken types
-                foreach (var type in e.Types)
-                {
-                    if (type == null) continue;
-                    if (type.GetCustomAttribute<InspectorPanelAttribute>() != null)
-                        _cachedPanelTypes.Add(type);
-                }
+                if (type.IsNested) continue; //The [UxmlElement] attribute causes Unity to code-generate a nested UxmlSerializedData class inside the panel classes, and that nested class inherits the attributes (InspectorPanelAttribute) of its parent, so it will be picked here.
+
+                if (type.GetCustomAttribute<InspectorPanelAttribute>() != null)
+                    _cachedPanelTypes.Add(type);
             }
         }
 
@@ -87,7 +76,6 @@ public class InspectorPanelTypeDrawer : PropertyDrawer
     [UnityEditor.Callbacks.DidReloadScripts]
     private static void OnScriptsReloaded() => _cachedPanelTypes = null;
 }
-
 
 
 #endif
