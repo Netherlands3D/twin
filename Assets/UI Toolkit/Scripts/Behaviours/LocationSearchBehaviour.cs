@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Netherlands3D.AddressSearch;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
 {
@@ -47,22 +50,18 @@ namespace Netherlands3D.UI.Behaviours
             addressSearchService.SuggestionAutoSelected -= OnSuggestionAutoSelected;
         }
 
-        /// <summary>
-        /// Wire the panel's UI events. Must be called once after the panel has been
-        /// registered with the inspector panel system.
-        /// </summary>
-        public void Initialize(LocationSearchPanel locationSearchPanel)
-        {
-            panel = locationSearchPanel;
-
-            panel.QueryChanged += OnQueryChanged;
-            panel.SubmitRequested += OnSubmitRequested;
-            panel.SuggestionSelected += OnSuggestionSelected;
-            panel.CoordinateXSubmitted += OnCoordinateXSubmitted;
-            panel.CoordinateYSubmitted += OnCoordinateYSubmitted;
-
-            SyncPanelToMainCameraPosition();
-        }
+        // private void Start()
+        // {
+        //     panel = App.UIRoot.Root.Q<LocationSearchPanel>();
+        //
+        //     panel.QueryChanged += OnQueryChanged;
+        //     panel.SubmitRequested += OnSubmitRequested;
+        //     panel.SuggestionSelected += OnSuggestionSelected;
+        //     panel.CoordinateXSubmitted += OnCoordinateXSubmitted;
+        //     panel.CoordinateYSubmitted += OnCoordinateYSubmitted;
+        //
+        //     SyncPanelToMainCameraPosition();
+        // }
 
         private void OnQueryChanged(string text)
         {

@@ -19,9 +19,6 @@ namespace Netherlands3D.UI.Behaviours
 {
     public class InspectorPanelBehaviour : MonoBehaviour
     {
-        [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
-        [SerializeField] private LocationSearchBehaviour locationSearchBehaviour;
-
         private InspectorPanel inspectorPanel;
         
         private Tool activeToolWithPanel;
@@ -42,12 +39,9 @@ namespace Netherlands3D.UI.Behaviours
         private void Awake()
         {
             toolService = ServiceLocator.GetService<ToolService>();
-          
-            // locationSearchBehaviour?.Initialize(GetPanel<LocationSearchPanel>()); //todo: figure out what this does
             
             inspectorPanel = App.UIRoot.Root.Q<InspectorPanel>();
             inspectorPanel.Close();
-            
             hamburgerMenu = App.UIRoot.Root.Q<HamburgerMenu>();
             toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
             

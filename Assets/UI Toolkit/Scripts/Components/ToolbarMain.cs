@@ -41,6 +41,8 @@ namespace Netherlands3D.UI.Components
         
         public void UpdateState()
         {
+            if(tools == null) return;
+            
             ulong bits = 0ul;
             foreach (var entry in tools.GetAllToolsWithPanel())
             {
