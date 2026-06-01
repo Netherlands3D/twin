@@ -28,16 +28,21 @@ namespace Netherlands3D.UI.Behaviours
 
         private LocationSearchPanel panel;
         private CameraService cameraService;
+        private ToolService toolService;
 
         private void OnEnable()
         {
             if (!addressSearchService) addressSearchService = GetComponent<AddressSearchService>();
             cameraService = ServiceLocator.GetService<CameraService>();
+            toolService = ServiceLocator.GetService<ToolService>();
 
             addressSearchService.onCoordinateFound.AddListener(OnCoordinateFound);
             addressSearchService.SuggestionsReady += OnSuggestionsReady;
             addressSearchService.SuggestionsCleared += OnSuggestionsCleared;
             addressSearchService.SuggestionAutoSelected += OnSuggestionAutoSelected;
+            
+            toolService.GetTool(ToolType.Search).onOpen.AddListener(OnOpen);
+            toolService.GetTool(ToolType.Search).onClose.AddListener(OnClose);
         }
 
         private void OnDisable()
@@ -48,20 +53,35 @@ namespace Netherlands3D.UI.Behaviours
             addressSearchService.SuggestionsReady -= OnSuggestionsReady;
             addressSearchService.SuggestionsCleared -= OnSuggestionsCleared;
             addressSearchService.SuggestionAutoSelected -= OnSuggestionAutoSelected;
+            
+            toolService.GetTool(ToolType.Search).onOpen.RemoveListener(OnOpen);
+            toolService.GetTool(ToolType.Search).onClose.RemoveListener(OnClose);
         }
 
-        // private void Start()
-        // {
-        //     panel = App.UIRoot.Root.Q<LocationSearchPanel>();
-        //
-        //     panel.QueryChanged += OnQueryChanged;
-        //     panel.SubmitRequested += OnSubmitRequested;
-        //     panel.SuggestionSelected += OnSuggestionSelected;
-        //     panel.CoordinateXSubmitted += OnCoordinateXSubmitted;
-        //     panel.CoordinateYSubmitted += OnCoordinateYSubmitted;
-        //
-        //     SyncPanelToMainCameraPosition();
-        // }
+        public void OnOpen()
+        {
+            //todo it would be cleaner to listen to a spawned panel event of the inspectorpanelbehaviour
+            App.UIRoot.Root.schedule.Execute(_ =>
+            {
+                panel = App.UIRoot.Root.Q<LocationSearchPanel>();
+                panel.QueryChanged += OnQueryChanged;
+                panel.SubmitRequested += OnSubmitRequested;
+                panel.SuggestionSelected += OnSuggestionSelected;
+                panel.CoordinateXSubmitted += OnCoordinateXSubmitted;
+                panel.CoordinateYSubmitted += OnCoordinateYSubmitted;
+            });
+        
+            SyncPanelToMainCameraPosition();
+        }
+
+        public void OnClose()
+        {
+            panel.QueryChanged -= OnQueryChanged;
+            panel.SubmitRequested -= OnSubmitRequested;
+            panel.SuggestionSelected -= OnSuggestionSelected;
+            panel.CoordinateXSubmitted -= OnCoordinateXSubmitted;
+            panel.CoordinateYSubmitted -= OnCoordinateYSubmitted;
+        }
 
         private void OnQueryChanged(string text)
         {

@@ -36,6 +36,7 @@ namespace Netherlands3D.UI.Behaviours
         private ToolbarMain toolbarMain;
         private Dictionary<Tool, UnityAction> toolListeners = new();
         
+        
         private void Awake()
         {
             toolService = ServiceLocator.GetService<ToolService>();
@@ -74,6 +75,7 @@ namespace Netherlands3D.UI.Behaviours
             
             toolService.GetTool(ToolType.Settings).onOpen.AddListener(((IWindow)SettingsWindow).Open);
             toolService.GetTool(ToolType.Help).onOpen.AddListener(OpenHelp);
+           
            
             // InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
