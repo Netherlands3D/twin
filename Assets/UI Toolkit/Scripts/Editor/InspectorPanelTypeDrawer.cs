@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,3 +87,7 @@ public class InspectorPanelTypeDrawer : PropertyDrawer
     [UnityEditor.Callbacks.DidReloadScripts]
     private static void OnScriptsReloaded() => _cachedPanelTypes = null;
 }
+
+
+
+#endif
