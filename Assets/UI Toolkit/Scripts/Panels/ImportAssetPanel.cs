@@ -40,7 +40,6 @@ namespace Netherlands3D.UI.Panels
 
         private ICredentialHandler credentialHandler = new CredentialPropertyHandler();
         private CredentialPanel credentialPanel;
-        private CredentialPanel CredentialPanel => credentialPanel ??= this.Q<CredentialPanel>();
 
         public UnityEvent importSucceeded = new();
         public UnityEvent importFailed = new();
@@ -56,12 +55,13 @@ namespace Netherlands3D.UI.Panels
             ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
          
             ErrorPanel.Hide();
-            CredentialPanel.SetEnabled(false);
+            credentialPanel = this.Q<CredentialPanel>();
+            credentialPanel.SetEnabled(false);
+            credentialPanel.OnConfirmCredentials.AddListener(ApplyCredentials);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-            credentialPanel.Handler = credentialHandler; //todo this should be refactored away when in the new enable method the code values will be synced automatically. the credentialpanel onconfirm button should also trigger the onimport /applycredentials 
             
             //we dont want to show the warning first but immediately start with the input of credentials instead
-            CredentialPanel.StartWithInput();
+            credentialPanel.StartWithInput();
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
@@ -75,6 +75,13 @@ namespace Netherlands3D.UI.Panels
         {
             OnImport(importUriField.value);
         }
+        
+        private void ApplyCredentials()
+        {
+            credentialHandler.UserName = credentialPanel.UserNameField.value;
+            credentialHandler.PasswordOrKeyOrTokenOrCode = credentialPanel.CodeField.value;
+            credentialHandler.ApplyCredentials();
+        }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
@@ -82,13 +89,13 @@ namespace Netherlands3D.UI.Panels
             //we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
             if (accepted)
             {
-                CredentialPanel.SetAcceptedState();
-                credentialPanel.SetEnabled(false);
+                credentialPanel.SetAcceptedState();
+                credentialPanel.Show(false);
                 AddLayerFromUrl(uri, auth);
             }
             else
             {
-                credentialPanel.SetEnabled(true); //todo refactor this with the .hidden +  credentialPanel.CodeField.SetValueWithoutNotify(credentialHandler.PasswordOrKeyOrTokenOrCode); within a new enable method
+                credentialPanel.Show(true, credentialHandler.PasswordOrKeyOrTokenOrCode);
                 if(!string.IsNullOrEmpty(credentialHandler.PasswordOrKeyOrTokenOrCode))
                     credentialPanel.ShowError(true);
             }
@@ -108,7 +115,7 @@ namespace Netherlands3D.UI.Panels
         private void OnImport(string value)
         {
             //hide the credential error as we dont want to show this on inputting the uri without credentials when they are required
-            CredentialPanel.ShowError(false);
+            credentialPanel.ShowError(false);
             try
             {
                 credentialHandler.ClearCredentials();
