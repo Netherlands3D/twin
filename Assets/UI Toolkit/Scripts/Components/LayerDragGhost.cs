@@ -32,7 +32,16 @@ namespace Netherlands3D.UI.Components
             layerNameText = this.Q<Label>("NameInputField");
             
             style.position = Position.Absolute;
-            pickingMode = PickingMode.Ignore;
+            SetPickingModeRecursive(this, PickingMode.Ignore);
+        }
+        
+        private void SetPickingModeRecursive(VisualElement element, PickingMode mode)
+        {
+            element.pickingMode = mode;
+            foreach (var child in element.Children())
+            {
+                SetPickingModeRecursive(child, mode);
+            }
         }
 
         public void Initialize(Vector2 dragStartPosition, LayerListViewItem ui)
@@ -46,8 +55,13 @@ namespace Netherlands3D.UI.Components
         {
             layerVisibilityImage.Image = (IconImage)ui.VisibilityState;
             UpdateColorBar(ui.layerData.Color);
-            foldoutImage.EnableInClassList(UtilityClassConstants.HIDDEN, ui.layerData.ChildrenLayers.Count == 0);
+            var hasChildren = ui.layerData.ChildrenLayers.Count > 0;
+            var indentWidth = ui.IndentWidth;
             
+            if(!hasChildren)
+                foldoutImage.Image = IconImage.None;
+    
+            spacer.style.width = indentWidth;
             layerTypeImage.Image = ui.LayerTypeIcon;
             layerNameText.text = ui.layerData.Name;
 
@@ -71,7 +85,6 @@ namespace Netherlands3D.UI.Components
 
         private void ApplyPosition()
         {
-            // style.left = currentPosition.x;
             style.top = currentPosition.y;// - resolvedStyle.height / 2; //todo ui-toolkit: not the correct height offset yet
         }
     }

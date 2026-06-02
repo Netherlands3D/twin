@@ -19,6 +19,10 @@ namespace Netherlands3D.UI.Panels
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
         
+        private Vector2 panelDragPosition;
+        private int siblingIndex;
+        private LayerListViewItem hoveredItem;
+        
         public LayerPanel()
         {
             this.CloneComponentTree("Panels");
@@ -90,24 +94,43 @@ namespace Netherlands3D.UI.Panels
         {
             if (dragGhost != null)
                 dragGhost.RemoveFromHierarchy();
+         
             
             var worldPosition = source.LocalToWorld(startPosition); // layer item to world
             var localPosition = this.WorldToLocal(worldPosition); // world to LayerPanel
+            
+            panelDragPosition = worldPosition;
             
             dragGhost = new LayerDragGhost();
             Add(dragGhost);
             dragGhost.Initialize(localPosition, source);
         }
-
+        
         private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)
         {
             dragGhost.UpdatePosition(delta);
+            panelDragPosition += delta;
+            
+            var hitElement = panel.Pick(panelDragPosition);
+            var targetItem = hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
+            if(targetItem == null)
+                return;
+            
+            if(hoveredItem != targetItem)
+            {
+                if(hoveredItem != null)
+                    hoveredItem.style.backgroundColor = StyleKeyword.Null;
+                hoveredItem = targetItem;
+                hoveredItem.style.backgroundColor = Color.red;
+            }
+            
+            var layer = hoveredItem.userData as LayerData;
+            siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
         }
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
         {
             var panelPosition = source.LocalToWorld(endPosition);
-            Debug.Log(panelPosition);
             
             var hitElement = panel.Pick(panelPosition);
             var targetItem = hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
@@ -120,9 +143,7 @@ namespace Netherlands3D.UI.Panels
                 selectedLayers.Reverse();
                 foreach (LayerData selectedLayer in selectedLayers) //to list makes a copy and avoids a collectionmodified error
                 {
-                    Debug.Log(selectedLayer.Name);
-                    // selectedLayer.SetParent(newParent, newSiblingIndex);
-                    selectedLayer.SetParent(newParent, 0); //todo: calculate sibling index
+                    selectedLayer.SetParent(newParent, siblingIndex); 
                 }
             }
 

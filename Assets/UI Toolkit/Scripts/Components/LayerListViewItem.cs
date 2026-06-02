@@ -39,7 +39,8 @@ namespace Netherlands3D.UI.Components
         public UnityEvent<Vector2, LayerListViewItem> DragEnded { get; } = new();
         
         public VisibilityState VisibilityState => isActiveToggle.Image;
-        public IconImage LayerTypeIcon => layerTypeIcon.Image; 
+        public IconImage LayerTypeIcon => layerTypeIcon.Image;
+        public float IndentWidth => GetTreeViewItemRoot().Q("unity-tree-view__item-indent").resolvedStyle.width;
         
         public LayerListViewItem()
         {
@@ -314,5 +315,6 @@ namespace Netherlands3D.UI.Components
         //todo: vertical gap between tree items
         //todo: root.Selectedlayers
         //todo: cleanup old scripts
+        //todo: credential needed state
     }
 }
