@@ -35,7 +35,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] protected float maxSelectionDistanceFromCamera = 10000;
         private float lastTapTime = 0;
         private Vector2 previousFrameScreenCoordinate = default;
-        private Vector2 previousFrameWorldCoordinate = default;
         
         private PolygonSelectionService polygonSelectionService;
         private InputService inputService;
@@ -220,8 +219,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     input.AutoAddPoint(previousFrameScreenCoordinate);
                 else if (input.RequireReleaseBeforeRedraw && !inputService.PolygonClickAction.IsPressed())
                     input.RequireReleaseBeforeRedraw = false;
-
-                previousFrameWorldCoordinate = currentPointerPosition;
             }
             else if (currentShapeType == ShapeType.Grid)
             {

@@ -24,9 +24,8 @@ namespace Netherlands3D.UI.Behaviours
         private Tool activeToolWithPanel;
         private BaseInspectorContentPanel activePanel;
         private ToolService toolService;
-
-        [SerializeField] private TriggerEvent OnDrawNewGrid;
-        [SerializeField] private TriggerEvent OnGridConfirmed;
+      
+       
         
         [Header("External Windows")]
         [SerializeField] private ScriptableObject SettingsWindow;
@@ -46,7 +45,7 @@ namespace Netherlands3D.UI.Behaviours
             hamburgerMenu = App.UIRoot.Root.Q<HamburgerMenu>();
             toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
             
-            toolService.AnyToolOpened.AddListener(OnAnyToolOpened);
+           
             foreach (var toolWithPanel in toolService.GetAllToolsWithPanel())
             {
                 var tool = toolWithPanel;
@@ -80,10 +79,7 @@ namespace Netherlands3D.UI.Behaviours
             // InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             inspectorPanel.InspectorHeaderCloseButton.clicked += Close;
-            
-           
-            // PolygonGridPanel.OnConfirmSelection.AddListener(OnGridConfirmed.InvokeStarted);
-            //TODO ongridconfirmed -> open layerpanel and close the gridpanel (if its not automatically happening)
+            toolService.AnyToolOpened.AddListener(OnAnyToolOpened);
         }
         
         private void OnDisable()
@@ -101,8 +97,6 @@ namespace Netherlands3D.UI.Behaviours
             // InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
             inspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
             toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
-            
-            // PolygonGridPanel.OnConfirmSelection.RemoveListener(OnGridConfirmed.InvokeStarted);
         }
         
         private void OnAnyToolOpened()

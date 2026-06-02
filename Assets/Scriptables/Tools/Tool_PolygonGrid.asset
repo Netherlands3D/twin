@@ -31,6 +31,7 @@ MonoBehaviour:
   panelType:
     _assemblyQualifiedName: Netherlands3D.UI.Panels.InspectorPolygonGridPanel, eu.netherlands3d.twin,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  panelArgs: []
+  panelArgs:
+  - {fileID: 11400000, guid: 1f0d8a518b80c13b6bd1c0a1e46b32a6, type: 2}
   functionalityPrefabs: []
   open: 0
