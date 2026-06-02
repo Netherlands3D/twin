@@ -10,7 +10,8 @@
     <ui:VisualElement name="App" picking-mode="Ignore" class="app">
         <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
             <ui:VisualElement picking-mode="Ignore" name="LeftSection">
-                <ui:VisualElement picking-mode="Ignore" class="app" style="flex-grow: 1; flex-direction: row;">
+                <nl3d:HamburgerMenu/>
+                <ui:VisualElement picking-mode="Ignore" class="app__inspector-zone" style="flex-grow: 1; flex-direction: row;">
                     <nl3d:ToolbarMain/>
                     <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
                     <nl3dP:LegendPanel />
