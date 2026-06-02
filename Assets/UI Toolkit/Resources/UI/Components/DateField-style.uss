@@ -1,0 +1,14 @@
+.date-field {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.date-field .number-field.date-field__item {
+    flex: 1 1 auto;
+    margin-right: var(--spacing-3);
+}
+
+.date-field .number-field.date-field__item.date-field__item--year {
+    margin-right: 0;
+}

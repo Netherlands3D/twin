@@ -22,11 +22,18 @@ namespace Netherlands3D.Credentials
         {
             keyVault = ServiceLocator.GetService<KeyVaultService>().KeyVault;
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
+            keyVault.UntestedQueryStringAuthFound.AddListener(OnAuthParsedFromUrl);
         }
 
         private void OnDestroy()
         {
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
+            keyVault.UntestedQueryStringAuthFound.RemoveListener(OnAuthParsedFromUrl);
+        }
+
+        private void OnAuthParsedFromUrl(string key, string value)
+        {
+            PasswordOrKeyOrTokenOrCode = value;
         }
 
         //called in the inspector on button press
