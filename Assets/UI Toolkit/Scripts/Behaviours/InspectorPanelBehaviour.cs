@@ -62,6 +62,7 @@ namespace Netherlands3D.UI.Behaviours
             
             toolService.AnyToolClosed.AddListener(toolbarMain.UpdateState);
             toolService.AnyToolOpened.AddListener(toolbarMain.UpdateState);
+            inspectorPanel.OnHide += toolbarMain.UpdateState;
         }
 
         private void OnEnable()
@@ -79,7 +80,9 @@ namespace Netherlands3D.UI.Behaviours
             // InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             inspectorPanel.InspectorHeaderCloseButton.clicked += Close;
-            toolService.AnyToolOpened.AddListener(OnAnyToolOpened);
+            toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
+            toolService.AnyToolClosed.RemoveListener(toolbarMain.UpdateState);
+            inspectorPanel.OnHide -= toolbarMain.UpdateState;
         }
         
         private void OnDisable()
@@ -125,6 +128,7 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Close()
         {
+            activeToolWithPanel?.Close();
             activeToolWithPanel = null;
             activePanel = null;
             inspectorPanel.ClearContent();
