@@ -9,7 +9,7 @@ using Button = Netherlands3D.UI.Components.Button;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class SunTimePanel : BaseInspectorContentPanel
     {
         public override string Title => "Zonpositie";
@@ -46,9 +46,6 @@ namespace Netherlands3D.UI.Panels
 
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            OnShow += OnShowAction;
-            OnHide += OnHideAction;
             
             SunDial.TimeChanged += OnSunDialTimeChanged;
             DateField.SubmitEvent += OnDateChanged;
@@ -58,34 +55,28 @@ namespace Netherlands3D.UI.Panels
 
             SimulationSpeedControls.SpeedChanged += OnSimulationSpeedChanged;
             SimulationSpeedControls.PlayToggled += OnPlayToggled;
+            
+            RegisterCallback<AttachToPanelEvent>(evt =>
+            {
+                sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
+                sunTime.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
+                sunTime.isAnimatingChanged.AddListener(OnIsAnimatingChanged);
+                OnNowButtonClicked(null);
+                OnTimeOfDayChanged(sunTime.Time);
+                OnIsAnimatingChanged(sunTime.IsAnimating);    
+            });
+            RegisterCallback<DetachFromPanelEvent>(evt =>
+            {
+                sunTime.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
+                sunTime.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
+                sunTime.isAnimatingChanged.RemoveListener(OnIsAnimatingChanged);
+            });
         }
 
         void OnNowButtonClicked(ClickEvent _)
         {
             sunTime?.ResetToNow();
             SimulationSpeedControls.Pause();
-        }
-
-        private void OnShowAction()
-        {
-            EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            
-            if (sunTime == null) return;
-            sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
-            sunTime.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
-            sunTime.isAnimatingChanged.AddListener(OnIsAnimatingChanged);
-            OnTimeOfDayChanged(sunTime.Time);
-            OnIsAnimatingChanged(sunTime.IsAnimating);
-        }
-
-        private void OnHideAction()
-        {
-            EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            
-            if (sunTime == null) return;
-            sunTime.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
-            sunTime.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
-            sunTime.isAnimatingChanged.RemoveListener(OnIsAnimatingChanged);
         }
 
         private void OnTimeOfDayChanged(DateTime dt)
