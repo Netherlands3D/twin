@@ -58,6 +58,7 @@ namespace Netherlands3D.UI.Panels
             ErrorPanel.Hide();
             CredentialPanel.SetEnabled(false);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            credentialPanel.Handler = credentialHandler;
             
             //we dont want to show the warning first but immediately start with the input of credentials instead
             CredentialPanel.StartWithInput();
