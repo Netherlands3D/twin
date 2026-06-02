@@ -58,7 +58,7 @@ namespace Netherlands3D.UI.Panels
             ErrorPanel.Hide();
             CredentialPanel.SetEnabled(false);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-            credentialPanel.Handler = credentialHandler;
+            credentialPanel.Handler = credentialHandler; //todo this should be refactored away when in the new enable method the code values will be synced automatically. the credentialpanel onconfirm button should also trigger the onimport /applycredentials 
             
             //we dont want to show the warning first but immediately start with the input of credentials instead
             CredentialPanel.StartWithInput();
