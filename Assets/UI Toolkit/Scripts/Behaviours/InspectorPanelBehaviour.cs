@@ -44,7 +44,6 @@ namespace Netherlands3D.UI.Behaviours
             inspectorPanel.Close();
             hamburgerMenu = App.UIRoot.Root.Q<HamburgerMenu>();
             toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
-            
            
             foreach (var toolWithPanel in toolService.GetAllToolsWithPanel())
             {
@@ -59,10 +58,8 @@ namespace Netherlands3D.UI.Behaviours
             PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             inspectorPanel.OnShow += polygonSelectionService.EnablePolygonSelection;
             inspectorPanel.OnHide += polygonSelectionService.DisablePolygonSelection;
-            
             toolService.AnyToolClosed.AddListener(toolbarMain.UpdateState);
             toolService.AnyToolOpened.AddListener(toolbarMain.UpdateState);
-            inspectorPanel.OnHide += toolbarMain.UpdateState;
         }
 
         private void OnEnable()
@@ -76,13 +73,11 @@ namespace Netherlands3D.UI.Behaviours
             toolService.GetTool(ToolType.Settings).onOpen.AddListener(((IWindow)SettingsWindow).Open);
             toolService.GetTool(ToolType.Help).onOpen.AddListener(OpenHelp);
            
-           
             // InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
-            inspectorPanel.InspectorHeaderCloseButton.clicked += Close;
-            toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
-            toolService.AnyToolClosed.RemoveListener(toolbarMain.UpdateState);
-            inspectorPanel.OnHide -= toolbarMain.UpdateState;
+            inspectorPanel.InspectorHeaderCloseButton.clicked += CloseActiveTool;
+            toolService.AnyToolOpened.AddListener(OnAnyToolOpened);
+            inspectorPanel.OnHide += toolbarMain.UpdateState;
         }
         
         private void OnDisable()
@@ -98,8 +93,9 @@ namespace Netherlands3D.UI.Behaviours
             
             // InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
             // InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
-            inspectorPanel.InspectorHeaderCloseButton.clicked -= Close;
+            inspectorPanel.InspectorHeaderCloseButton.clicked -= CloseActiveTool;
             toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
+            inspectorPanel.OnHide -= toolbarMain.UpdateState;
         }
         
         private void OnAnyToolOpened()
@@ -128,11 +124,15 @@ namespace Netherlands3D.UI.Behaviours
 
         public void Close()
         {
-            activeToolWithPanel?.Close();
             activeToolWithPanel = null;
             activePanel = null;
             inspectorPanel.ClearContent();
             inspectorPanel.Close();
+        }
+
+        private void CloseActiveTool()
+        {
+            activeToolWithPanel?.Close();
         }
       
         private BaseInspectorContentPanel CreatePanel(Type panelType, params object[] args)
