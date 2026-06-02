@@ -8,7 +8,6 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
 {
-    [RequireComponent(typeof(UIDocument))]
     public class FooterBehaviour : MonoBehaviour
     {
         [SerializeField] private StringEvent ShowAttributionEvent;
