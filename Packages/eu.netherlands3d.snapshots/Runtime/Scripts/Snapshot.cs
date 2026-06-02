@@ -61,13 +61,23 @@ namespace Netherlands3D.Snapshots
             //var cachedCanvasRenderModes = AttachCanvasesToSnapshotCamera(snapshotCamera);
 
             //Create temporary textures to render to
-            RenderTexture screenshotRenderTexture = new RenderTexture(imageWidth, imageHeight, 24);
+            RenderTexture screenshotRenderTexture =
+                new RenderTexture(
+                    imageWidth,
+                    imageHeight,
+                    24,
+                    RenderTextureFormat.ARGB32
+                );
 
-            // Render the camera
+            screenshotRenderTexture.Create();
+
+// WebGL test
+            snapshotCamera.allowMSAA = false;
+
+// Render the camera
             snapshotCamera.targetTexture = screenshotRenderTexture;
             snapshotCamera.Render();
             snapshotCamera.targetTexture = null;
-
             //RestoreSettingsOnCanvases(cachedCanvasRenderModes);
             GameObject.Destroy(snapshotCamera.gameObject);
 
