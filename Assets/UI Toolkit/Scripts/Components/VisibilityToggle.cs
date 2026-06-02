@@ -10,7 +10,7 @@ namespace Netherlands3D.UI.Components
     {
         Visible = IconImage.Visibility, 
         Invisible = IconImage.Invisible, 
-        PartiallyVisible, //todo: not implemented yet
+        PartiallyVisible = IconImage.VisibilityMixed,
         VisibleInInvisible //todo: not implemented yet
     }
     
@@ -55,6 +55,11 @@ namespace Netherlands3D.UI.Components
         public void Show(bool show)
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+        }
+
+        public void SetState(VisibilityState state)
+        {
+            Image = state;
         }
     }
 }
