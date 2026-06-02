@@ -35,15 +35,12 @@ namespace Netherlands3D.UI.Panels
         private SimulationSpeedControls simulationSpeedControls;
         private SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
 
-        /// <summary>Parameterless constructor required for UXML deserialization.</summary>
+       
+
         public SunTimePanel()
         {
-        }
-
-        public SunTimePanel(SunTime sunTime)
-        {
-            this.sunTime = sunTime;
-
+            sunTime = Services.ServiceLocator.GetService<SunTime>();
+            
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
             
@@ -61,7 +58,6 @@ namespace Netherlands3D.UI.Panels
                 sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
                 sunTime.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
                 sunTime.isAnimatingChanged.AddListener(OnIsAnimatingChanged);
-                OnNowButtonClicked(null);
                 OnTimeOfDayChanged(sunTime.Time);
                 OnIsAnimatingChanged(sunTime.IsAnimating);    
             });

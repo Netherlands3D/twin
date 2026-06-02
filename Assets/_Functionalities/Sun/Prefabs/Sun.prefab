@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 777692122200182175}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3175642, y: 0.4602861, z: -0.1806566, w: 0.80910623}
+  m_LocalRotation: {x: 0.41338155, y: 0.37653646, z: -0.19305426, w: 0.8062667}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 5606514037957622521}
   - component: {fileID: 2011149091027820903}
   - component: {fileID: 3565443448003096271}
+  - component: {fileID: 5533657842810257867}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -189,9 +190,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dateTimeKind: 2
   useCurrentTime: 1
-  hour: 9
-  minutes: 6
-  seconds: 46
+  hour: 10
+  minutes: 2
+  seconds: 34
   day: 2
   month: 6
   year: 2026
@@ -714,3 +715,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5533657842810257867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5593048648800678676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
+  service: {fileID: 1832797565794202596}
