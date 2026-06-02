@@ -15,6 +15,10 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class LayerPanel : BaseInspectorContentPanel
     {
+        private const string aboveTargetUSSClassName = "layer-list-view-item--reparent-above";
+        private const string reparentTargetUSSClassName = "layer-list-view-item--reparent-target";
+        private const string belowTargetUSSClassName = "layer-list-view-item--reparent-below";
+        
         private TreeView treeView;
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
@@ -22,6 +26,15 @@ namespace Netherlands3D.UI.Panels
         private Vector2 panelDragPosition;
         private int siblingIndex;
         private LayerListViewItem hoveredItem;
+        
+        private enum DropMode
+        {
+            Above,
+            Into,
+            Below
+        }
+        
+        private DropMode currentDropMode;
         
         public LayerPanel()
         {
@@ -119,10 +132,28 @@ namespace Netherlands3D.UI.Panels
             if(hoveredItem != targetItem)
             {
                 if(hoveredItem != null)
-                    hoveredItem.style.backgroundColor = StyleKeyword.Null;
+                {
+                    hoveredItem.EnableInClassList(aboveTargetUSSClassName, false);
+                    hoveredItem.EnableInClassList(reparentTargetUSSClassName, false);
+                    hoveredItem.EnableInClassList(belowTargetUSSClassName, false);
+                }
                 hoveredItem = targetItem;
-                hoveredItem.style.backgroundColor = Color.red;
             }
+            
+            var worldTop = hoveredItem.LocalToWorld(Vector2.zero);
+            float localY = panelDragPosition.y - worldTop.y;
+            float normalizedY = localY / hoveredItem.layout.height;
+
+            if (normalizedY < 0.25f)
+                currentDropMode = DropMode.Above;
+            else if (normalizedY > 0.75f)
+                currentDropMode = DropMode.Below;
+            else
+                currentDropMode = DropMode.Into;
+            
+            hoveredItem.EnableInClassList(aboveTargetUSSClassName, currentDropMode == DropMode.Above);
+            hoveredItem.EnableInClassList(reparentTargetUSSClassName, currentDropMode == DropMode.Into);
+            hoveredItem.EnableInClassList(belowTargetUSSClassName, currentDropMode == DropMode.Below);
             
             var layer = hoveredItem.userData as LayerData;
             siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
@@ -130,25 +161,44 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
         {
-            var panelPosition = source.LocalToWorld(endPosition);
-            
-            var hitElement = panel.Pick(panelPosition);
-            var targetItem = hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
-            
-            if (targetItem != null)
+            if (hoveredItem != null)
             {
-                var newParent = targetItem.userData as LayerData;
-
-                var selectedLayers = treeView.selectedItems.ToList();
+                var selectedLayers = treeView.selectedItems.ToList();  //to list makes a copy and avoids a collectionmodified error
                 selectedLayers.Reverse();
-                foreach (LayerData selectedLayer in selectedLayers) //to list makes a copy and avoids a collectionmodified error
+
+                switch (currentDropMode)
                 {
-                    selectedLayer.SetParent(newParent, siblingIndex); 
+                    case DropMode.Above:
+                        var newParentAbove = (hoveredItem.userData as LayerData).ParentLayer;
+                        ReparentToLayer(selectedLayers, newParentAbove, siblingIndex);
+                        break;
+                    case DropMode.Into:
+                        var newParent = hoveredItem.userData as LayerData;
+                        ReparentToLayer(selectedLayers, newParent, -1);
+                        break;
+                    case DropMode.Below:
+                        var newParentBelow = (hoveredItem.userData as LayerData).ParentLayer;
+                        ReparentToLayer(selectedLayers, newParentBelow, siblingIndex + 1);
+                        break;
+                        
                 }
             }
+            
+            hoveredItem.EnableInClassList(aboveTargetUSSClassName, false);
+            hoveredItem.EnableInClassList(reparentTargetUSSClassName, false);
+            hoveredItem.EnableInClassList(belowTargetUSSClassName, false);
+            hoveredItem = null;
 
             dragGhost.RemoveFromHierarchy();
             dragGhost = null;
+        }
+
+        private void ReparentToLayer(List<object> selectedLayers, LayerData newParent, int newSiblingIndex)
+        {
+            foreach (LayerData selectedLayer in selectedLayers)
+            {
+                selectedLayer.SetParent(newParent, newSiblingIndex); 
+            }
         }
     }
 }

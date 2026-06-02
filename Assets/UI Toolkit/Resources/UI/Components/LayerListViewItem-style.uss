@@ -42,3 +42,14 @@
     min-height: 0;
 }
 
+.layer-list-view-item--reparent-above{
+    background-color: red;
+}
+
+.layer-list-view-item--reparent-target{
+    background-color: green;
+}
+
+.layer-list-view-item--reparent-below{
+    background-color: blue;
+}
