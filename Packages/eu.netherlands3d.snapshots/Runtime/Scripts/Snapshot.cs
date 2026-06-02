@@ -58,7 +58,7 @@ namespace Netherlands3D.Snapshots
             LayerMask snapshotLayers
         ) {
             var snapshotCamera = CreateSnapshotCamera(sourceCamera, snapshotLayers);
-            var cachedCanvasRenderModes = AttachCanvasesToSnapshotCamera(snapshotCamera);
+            //var cachedCanvasRenderModes = AttachCanvasesToSnapshotCamera(snapshotCamera);
 
             //Create temporary textures to render to
             RenderTexture screenshotRenderTexture = new RenderTexture(imageWidth, imageHeight, 24);
@@ -68,7 +68,7 @@ namespace Netherlands3D.Snapshots
             snapshotCamera.Render();
             snapshotCamera.targetTexture = null;
 
-            RestoreSettingsOnCanvases(cachedCanvasRenderModes);
+            //RestoreSettingsOnCanvases(cachedCanvasRenderModes);
             GameObject.Destroy(snapshotCamera.gameObject);
 
             return screenshotRenderTexture;
