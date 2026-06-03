@@ -12,6 +12,8 @@ namespace Netherlands3D
     [RequireComponent(typeof(UIDocument))]
     public class AppRootBehaviour : MonoBehaviour
     {
+        public VisualElement Root => appRoot;
+
         private UIDocument appDocument;
         private VisualElement appRoot;
 

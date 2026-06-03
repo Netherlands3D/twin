@@ -1,8 +1,11 @@
-using System.Collections.Generic;
+using Mono.Cecil.Cil;
 using Netherlands3D.Twin;
+using PlasticPipe.Server;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -11,7 +14,10 @@ namespace Netherlands3D.UI.Panels
     {
         [SerializeField] private InputActionAsset inputActionAsset;
         [SerializeField] private FloatingPanelBehaviour[] panelBehaviours;
-        
+
+        [SerializeField] private Texture2D cornerSprite;
+        [SerializeField] private Texture2D sideSprite;
+
         private VisualElement root;
         private InputAction rightClickAction;
         private InputAction leftClickAction;
@@ -109,6 +115,206 @@ namespace Netherlands3D.UI.Panels
                 floatingPanel.SetPosition(screenPos);
                 break;
             }
+        }
+
+        private const float edgeWidth = 160;
+        private Color edgeColor = new Color(1, 0, 0, 1);
+
+        void Start()
+        {
+            var root = App.UIRoot.Root;
+
+            Color blue900;
+
+            if (root.customStyle.TryGetValue(new CustomStyleProperty<Color>("--color-blue-900"), out var value))
+            {
+                blue900 = value;
+            }
+
+            CreateEdge(root, Left());
+            CreateEdge(root, Right());
+            CreateEdge(root, Top());
+            CreateEdge(root, Bottom());
+
+            CreateEdge(root, TopLeft());
+            CreateEdge(root, TopRight());
+            CreateEdge(root, BottomLeft());
+            CreateEdge(root, BottomRight());
+        }
+
+        void CreateEdge(VisualElement root, VisualElement edge)
+        {
+            edge.pickingMode = PickingMode.Ignore;
+            edge.style.position = Position.Absolute;
+
+            root.Add(edge);
+        }
+
+        VisualElement Left()
+        {
+            var e = new VisualElement();
+
+            e.style.left = 0;
+            e.style.top = edgeWidth;
+            e.style.bottom = edgeWidth;
+            e.style.width = edgeWidth;
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg0));
+
+            return e;
+        }
+
+        VisualElement Right()
+        {
+            var e = new VisualElement();
+
+            e.style.right = 0;
+            e.style.top = edgeWidth;
+            e.style.bottom = edgeWidth;
+            e.style.width = edgeWidth;
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg180));
+
+            return e;
+        }
+
+        VisualElement Top()
+        {
+            var e = new VisualElement();
+
+            e.style.left = edgeWidth;
+            e.style.right = edgeWidth;
+            e.style.top = 0;
+            e.style.height = edgeWidth;
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg270));
+
+            return e;
+        }
+
+        VisualElement Bottom()
+        {
+            var e = new VisualElement();
+
+            e.style.left = edgeWidth;
+            e.style.right = edgeWidth;
+            e.style.bottom = 0;
+            e.style.height = edgeWidth;
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg90));         
+
+            return e;
+        }
+
+        VisualElement TopLeft()
+        {
+            var e = new VisualElement();
+
+            e.style.left = 0;
+            e.style.top = 0;
+            e.style.width = edgeWidth;
+            e.style.height = edgeWidth;
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg270));
+
+            return e;
+        }
+
+        VisualElement TopRight()
+        {
+            var e = new VisualElement();
+
+            e.style.right = 0;
+            e.style.top = 0;
+            e.style.width = edgeWidth;
+            e.style.height = edgeWidth; 
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg180));
+
+            return e;
+        }
+
+        VisualElement BottomLeft()
+        {
+            var e = new VisualElement();
+            e.style.left = 0;
+            e.style.bottom = 0;
+            e.style.width = edgeWidth;
+            e.style.height = edgeWidth; 
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg0));
+            return e;
+        }
+
+        VisualElement BottomRight()
+        {
+            var e = new VisualElement();
+            e.style.right = 0;
+            e.style.bottom = 0;
+            e.style.width = edgeWidth;
+            e.style.height = edgeWidth;
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg90));
+            return e;
+        }
+
+        public enum SpriteRotation
+        {
+            Deg0,
+            Deg90,
+            Deg180,
+            Deg270
+        }
+
+        public static Texture2D Rotate(Texture2D source, SpriteRotation rotation)
+        {
+            switch (rotation)
+            {
+                case SpriteRotation.Deg0:
+                    return source;
+
+                case SpriteRotation.Deg90:
+                    return Rotate90(source);
+
+                case SpriteRotation.Deg180:
+                    return Rotate90(Rotate90(source));
+
+                case SpriteRotation.Deg270:
+                    return Rotate90(Rotate90(Rotate90(source)));
+            }
+
+            return source;
+        }
+
+        private static Texture2D Rotate90(Texture2D source)
+        {
+            int w = source.width;
+            int h = source.height;
+
+            Texture2D result = new Texture2D(h, w, source.format, false);
+
+            Color32[] src = source.GetPixels32();
+            Color32[] dst = new Color32[src.Length];
+
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    int srcIndex = x + y * w;
+
+                    int newX = h - 1 - y;
+                    int newY = x;
+
+                    int dstIndex = newX + newY * h;
+
+                    dst[dstIndex] = src[srcIndex];
+                }
+            }
+
+            result.SetPixels32(dst);
+            result.Apply();
+
+            return result;
         }
     }
 }
