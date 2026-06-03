@@ -35,7 +35,7 @@ namespace Netherlands3D.UI.Components
             SetPickingModeRecursive(this, PickingMode.Ignore);
         }
         
-        private void SetPickingModeRecursive(VisualElement element, PickingMode mode)
+        private static void SetPickingModeRecursive(VisualElement element, PickingMode mode)
         {
             element.pickingMode = mode;
             foreach (var child in element.Children())
@@ -46,8 +46,8 @@ namespace Netherlands3D.UI.Components
 
         public void Initialize(Vector2 dragStartPosition, LayerListViewItem ui)
         {
-            currentPosition = dragStartPosition;
-            ApplyPosition();
+            // currentPosition = dragStartPosition;
+            UpdatePosition(dragStartPosition);
             CopyAppearance(ui);
         }
 
@@ -77,15 +77,10 @@ namespace Netherlands3D.UI.Components
             colorImage.style.backgroundColor = opaqueColor;
         }
         
-        public void UpdatePosition(Vector2 delta)
+        public void UpdatePosition(Vector2 worldPosition)
         {
-            currentPosition += delta;
-            ApplyPosition();
-        }
-
-        private void ApplyPosition()
-        {
-            style.top = currentPosition.y;// - resolvedStyle.height / 2; //todo ui-toolkit: not the correct height offset yet
+            // currentPosition = newPosition;
+            style.top = parent.WorldToLocal(worldPosition).y;// - resolvedStyle.height / 2; //todo ui-toolkit: not the correct height offset yet
         }
     }
 }

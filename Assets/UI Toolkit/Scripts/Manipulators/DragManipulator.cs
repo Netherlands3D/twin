@@ -46,8 +46,8 @@ public class DragManipulator : PointerManipulator
     {
         if (!CanStartManipulation(e)) return;
         
-        start = e.localPosition;
-        previousPosition = e.localPosition;
+        start = e.position;
+        previousPosition = e.position;
         pointerId = e.pointerId;
         isDragging = movementDeadzone <= 0;
         isTracking = true;
@@ -66,19 +66,19 @@ public class DragManipulator : PointerManipulator
 
         if (!isDragging)
         {
-            var totalMove = (Vector2)e.localPosition - (Vector2)start;
+            var totalMove = (Vector2)e.position - (Vector2)start;
             if (totalMove.magnitude < movementDeadzone) return;
 
             isDragging = true;
-            previousPosition = e.localPosition;
+            previousPosition = e.position;
             target.CapturePointer(pointerId);
             OnDragStarted(start);
             DragStarted.Invoke(start);
             return;
         }
         
-        Vector2 delta = (Vector2)e.localPosition - previousPosition;
-        previousPosition = e.localPosition;
+        Vector2 delta = (Vector2)e.position - previousPosition;
+        previousPosition = e.position;
 
         OnDrag(delta);
         Dragging.Invoke(delta);
@@ -96,8 +96,8 @@ public class DragManipulator : PointerManipulator
 
         if (!wasDragging) return;
         
-        OnDragEnded(e.localPosition);
-        DragEnded.Invoke(e.localPosition);
+        OnDragEnded(e.position);
+        DragEnded.Invoke(e.position);
     }
     
     private void OnPointerLeave(PointerLeaveEvent evt)

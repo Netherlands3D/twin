@@ -9,6 +9,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ScrollView = UnityEngine.UIElements.ScrollView;
 using TreeView = Netherlands3D.UI.Components.TreeView;
 
 namespace Netherlands3D.UI.Panels
@@ -22,6 +23,10 @@ namespace Netherlands3D.UI.Panels
         private const string toRootTargetUSSClassName = "layer-list-view-item--reparent-to-root";
 
         private TreeView treeView;
+        private ScrollView scrollView;
+        private const float scrollZoneSize = 50f;
+        private const float scrollSpeed = 300f; // px/s
+        
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
 
@@ -43,15 +48,17 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            
+
             treeView = this.Q<TreeView>();
             treeView.autoExpand = true;
-            
+
             treeView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             treeView.selectionType = SelectionType.Multiple;
-        
+
             treeView.makeItem = MakeItem;
             treeView.bindItem = BindItem;
+
+            scrollView = treeView.Q<ScrollView>();
             
             RegisterCallback<KeyDownEvent>(OnKeyDown);
         }
@@ -76,7 +83,7 @@ namespace Netherlands3D.UI.Panels
         {
             PopulateLayerPanel(rootLayer);
         }
-        
+
         public void PopulateLayerPanel(LayerData rootLayer)
         {
             this.rootLayer = rootLayer;
@@ -99,34 +106,40 @@ namespace Netherlands3D.UI.Panels
         private void BindItem(VisualElement item, int index)
         {
             if (item is not LayerListViewItem layerRowElement) return;
-    
+
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             layerRowElement.Initialize(layerData);
         }
 
         public override string Title => "Lagen";
-        
+
         private void OnDraggingLayerItemStarted(Vector2 startPosition, LayerListViewItem source)
         {
             if (dragGhost != null)
                 dragGhost.RemoveFromHierarchy();
-         
-            
-            var worldPosition = source.LocalToWorld(startPosition); // layer item to world
-            var localPosition = this.WorldToLocal(worldPosition); // world to LayerPanel
-            
-            panelDragPosition = worldPosition;
+
+            // var worldPosition = source.LocalToWorld(startPosition); // layer item to world
+            // var localPosition = this.WorldToLocal(worldPosition); // world to LayerPanel
+
+            panelDragPosition = startPosition;
+            // var localPosition = this.WorldToLocal(startPosition);
             
             dragGhost = new LayerDragGhost();
+            // panel.visualTree.Add(dragGhost);
             Add(dragGhost);
-            dragGhost.Initialize(localPosition, source);
+            dragGhost.Initialize(panelDragPosition, source);
         }
-        
+
         private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)
         {
-            dragGhost.UpdatePosition(delta);
-            panelDragPosition += delta;
+            // var worldPosition = source.LocalToWorld(startPosition); // layer item to world
+            // var localPosition = this.WorldToLocal(worldPosition); // world to LayerPanel
+            //
+            // panelDragPosition = worldPosition;
             
+            panelDragPosition += new Vector2(0, delta.y);
+            dragGhost.UpdatePosition(panelDragPosition);
+
             var hitElement = panel.Pick(panelDragPosition);
             var targetItem = hitElement as LayerListViewItem ?? hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
             // Debug.Log("hit: "  + hitElement?.name + "\ttarget: " + targetItem?.name);
@@ -135,16 +148,22 @@ namespace Netherlands3D.UI.Panels
                 var listViewItems = treeView.Query<LayerListViewItem>();
                 if (panelDragPosition.y < treeView.worldBound.yMin)
                 {
-                    // if(MoveScrollView(-scrollSpeed))
-                    //     return;
+                    if(MoveScrollView(-scrollSpeed))
+                    {
+                        dragGhost.UpdatePosition(panelDragPosition);
+                        return;
+                    }
                     
                     targetItem = listViewItems.First();
                     siblingIndex = 0;
                 }
                 else if (panelDragPosition.y > treeView.worldBound.yMax)
                 {
-                    // if(MoveScrollView(scrollSpeed))
-                    //     return;
+                    if (MoveScrollView(scrollSpeed))
+                    {
+                        dragGhost.UpdatePosition(panelDragPosition);
+                        return;
+                    }
                     
                     targetItem = listViewItems.Last();
                     siblingIndex = -1; // -1 means it will be added to the bottom of the list, which is what we want in this case
@@ -156,19 +175,42 @@ namespace Netherlands3D.UI.Panels
                 
                 return;
             }
-
+            
             SetHoveredItem(targetItem);
 
             var layer = hoveredItem.userData as LayerData;
             siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
         }
+
+        private bool MoveScrollView(float deltaY)
+        {
+            var currentScrollOffset = scrollView.scrollOffset;
             
+            var bounds = treeView.worldBound;
+            float distanceFromTop = panelDragPosition.y - bounds.yMin;
+            float distanceFromBottom = bounds.yMax - panelDragPosition.y;
+
+            float t = 0;
+            if (distanceFromTop < scrollZoneSize && distanceFromTop > 0)
+            {
+                t = 1f - (distanceFromTop / scrollZoneSize); // 0 at edge of zone, 1 at top
+            }
+            else if (distanceFromBottom < scrollZoneSize && distanceFromBottom > 0)
+            {
+                t = 1f - (distanceFromBottom / scrollZoneSize); // 0 at edge of zone, 1 at bottom
+            }
+
+            t = 1;
+            var scrollDelta = new Vector2(0, deltaY * t * Time.deltaTime);
+            scrollView.scrollOffset += scrollDelta;
+            var realChange = scrollView.scrollOffset - currentScrollOffset;
+            // panelDragPosition += realChange;
+            
+            return Mathf.Abs(realChange.y) > 0.01f;
+        }
 
         private void SetHoveredItem(LayerListViewItem targetItem)
         {
-            if (targetItem == null)
-                throw new NullReferenceException("targetItem cannot be null");
-
             if (hoveredItem != targetItem)
             {
                 if (hoveredItem != null)
