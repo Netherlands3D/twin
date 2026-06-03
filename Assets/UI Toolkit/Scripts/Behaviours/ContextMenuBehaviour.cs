@@ -116,113 +116,40 @@ namespace Netherlands3D.UI.Panels
 
         void Awake()
         {
-            var root = App.UIRoot.Root;
-            CreateEdge(root, Left());
-            CreateEdge(root, Right());
-            CreateEdge(root, Top());
-            CreateEdge(root, Bottom());
+            var anchor = App.UIRoot.Root.parent;
 
-            CreateEdge(root, TopLeft());
-            CreateEdge(root, TopRight());
-            CreateEdge(root, BottomLeft());
-            CreateEdge(root, BottomRight());
+            CreateEdge(anchor, sideSprite, SpriteRotation.Deg0,   left: 0,         top: edgeWidth,  bottom: edgeWidth, width: edgeWidth);
+            CreateEdge(anchor, sideSprite, SpriteRotation.Deg180, right: 0,        top: edgeWidth,  bottom: edgeWidth, width: edgeWidth);
+            CreateEdge(anchor, sideSprite, SpriteRotation.Deg270, left: edgeWidth, right: edgeWidth, top: 0,           height: edgeWidth);
+            CreateEdge(anchor, sideSprite, SpriteRotation.Deg90,  left: edgeWidth, right: edgeWidth, bottom: 0,        height: edgeWidth);
+
+            CreateEdge(anchor, cornerSprite, SpriteRotation.Deg270, left: 0,  top: 0,    width: edgeWidth, height: edgeWidth);
+            CreateEdge(anchor, cornerSprite, SpriteRotation.Deg180, right: 0, top: 0,    width: edgeWidth, height: edgeWidth);
+            CreateEdge(anchor, cornerSprite, SpriteRotation.Deg0,   left: 0,  bottom: 0, width: edgeWidth, height: edgeWidth);
+            CreateEdge(anchor, cornerSprite, SpriteRotation.Deg90,  right: 0, bottom: 0, width: edgeWidth, height: edgeWidth);
         }
 
-        void CreateEdge(VisualElement root, VisualElement edge)
-        {
-            edge.pickingMode = PickingMode.Ignore;
-            edge.style.position = Position.Absolute;
-            edge.AddToClassList("tint-blue-900");
-            root.parent.Insert(0, edge);
-        }
-
-        VisualElement Left()
+        void CreateEdge(
+            VisualElement anchor,
+            Texture2D sprite,
+            SpriteRotation rotation,
+            float? left = null, float? right = null, float? top = null, float? bottom = null,
+            float? width = null, float? height = null)
         {
             var e = new VisualElement();
-            e.style.left = 0;
-            e.style.top = edgeWidth;
-            e.style.bottom = edgeWidth;
-            e.style.width = edgeWidth;
-            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg0));
-            return e;
-        }
+            e.pickingMode = PickingMode.Ignore;
+            e.style.position = Position.Absolute;
+            e.AddToClassList("tint-blue-900");
+            e.style.backgroundImage = new StyleBackground(Rotate(sprite, rotation));
 
-        VisualElement Right()
-        {
-            var e = new VisualElement();
-            e.style.right = 0;
-            e.style.top = edgeWidth;
-            e.style.bottom = edgeWidth;
-            e.style.width = edgeWidth;
-            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg180));
-            return e;
-        }
+            if (left.HasValue)   e.style.left   = left.Value;
+            if (right.HasValue)  e.style.right  = right.Value;
+            if (top.HasValue)    e.style.top    = top.Value;
+            if (bottom.HasValue) e.style.bottom = bottom.Value;
+            if (width.HasValue)  e.style.width  = width.Value;
+            if (height.HasValue) e.style.height = height.Value;
 
-        VisualElement Top()
-        {
-            var e = new VisualElement();
-            e.style.left = edgeWidth;
-            e.style.right = edgeWidth;
-            e.style.top = 0;
-            e.style.height = edgeWidth;
-            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg270));
-            return e;
-        }
-
-        VisualElement Bottom()
-        {
-            var e = new VisualElement();
-
-            e.style.left = edgeWidth;
-            e.style.right = edgeWidth;
-            e.style.bottom = 0;
-            e.style.height = edgeWidth;
-            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg90));   
-            return e;
-        }
-
-        VisualElement TopLeft()
-        {
-            var e = new VisualElement();
-            e.style.left = 0;
-            e.style.top = 0;
-            e.style.width = edgeWidth;
-            e.style.height = edgeWidth;
-            e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg270));
-            return e;
-        }
-
-        VisualElement TopRight()
-        {
-            var e = new VisualElement();
-            e.style.right = 0;
-            e.style.top = 0;
-            e.style.width = edgeWidth;
-            e.style.height = edgeWidth; 
-            e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg180));
-            return e;
-        }
-
-        VisualElement BottomLeft()
-        {
-            var e = new VisualElement();
-            e.style.left = 0;
-            e.style.bottom = 0;
-            e.style.width = edgeWidth;
-            e.style.height = edgeWidth; 
-            e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg0));
-            return e;
-        }
-
-        VisualElement BottomRight()
-        {
-            var e = new VisualElement();
-            e.style.right = 0;
-            e.style.bottom = 0;
-            e.style.width = edgeWidth;
-            e.style.height = edgeWidth;
-            e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg90));
-            return e;
+            anchor.Insert(0, e);
         }
 
         public enum SpriteRotation
