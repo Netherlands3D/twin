@@ -187,8 +187,8 @@ MonoBehaviour:
   panelBehaviours:
   - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
   - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
-  cornerSprite: {fileID: 0}
-  sideSprite: {fileID: 0}
+  cornerSprite: {fileID: 2800000, guid: ba38e0d733f59434aa6fb8b7bc95b1e3, type: 3}
+  sideSprite: {fileID: 2800000, guid: 35e1feb47f2aa3c42b39efa9a6cf7f9e, type: 3}
 --- !u!114 &2679958399476094032
 MonoBehaviour:
   m_ObjectHideFlags: 0

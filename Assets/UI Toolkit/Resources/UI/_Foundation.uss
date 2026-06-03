@@ -29,3 +29,7 @@
     -unity-font-style: normal;
     color: var(--color-text);
 }
+
+.tint-blue-900 {
+    -unity-background-image-tint-color: var(--color-blue-900);
+}

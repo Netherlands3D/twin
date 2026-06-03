@@ -119,22 +119,10 @@ namespace Netherlands3D.UI.Panels
         }
 
         private const float edgeWidth = 160;
-        private Color edgeColor = new Color(1, 0, 0, 1);
 
-        void Start()
+        void Awake()
         {
-            var root = App.UIRoot.Root;           
-
-            root.RegisterCallback<GeometryChangedEvent>(_ =>
-            {
-                var blue900Prop = new StylesheetExtensions.ColorProperty("--color-blue-900");
-                if (root.customStyle.TryGet(blue900Prop, out var blue900))
-                {
-                    Debug.Log(blue900);
-                }
-            });
-
-
+            var root = App.UIRoot.Root;
             CreateEdge(root, Left());
             CreateEdge(root, Right());
             CreateEdge(root, Top());
@@ -150,49 +138,40 @@ namespace Netherlands3D.UI.Panels
         {
             edge.pickingMode = PickingMode.Ignore;
             edge.style.position = Position.Absolute;
-
-            root.Add(edge);
+            edge.AddToClassList("tint-blue-900");
+            root.parent.Insert(0, edge);
         }
 
         VisualElement Left()
         {
             var e = new VisualElement();
-
             e.style.left = 0;
             e.style.top = edgeWidth;
             e.style.bottom = edgeWidth;
             e.style.width = edgeWidth;
-            e.style.unityBackgroundImageTintColor = edgeColor;
             e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg0));
-
             return e;
         }
 
         VisualElement Right()
         {
             var e = new VisualElement();
-
             e.style.right = 0;
             e.style.top = edgeWidth;
             e.style.bottom = edgeWidth;
             e.style.width = edgeWidth;
-            e.style.unityBackgroundImageTintColor = edgeColor;
             e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg180));
-
             return e;
         }
 
         VisualElement Top()
         {
             var e = new VisualElement();
-
             e.style.left = edgeWidth;
             e.style.right = edgeWidth;
             e.style.top = 0;
             e.style.height = edgeWidth;
-            e.style.unityBackgroundImageTintColor = edgeColor;
             e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg270));
-
             return e;
         }
 
@@ -204,37 +183,29 @@ namespace Netherlands3D.UI.Panels
             e.style.right = edgeWidth;
             e.style.bottom = 0;
             e.style.height = edgeWidth;
-            e.style.unityBackgroundImageTintColor = edgeColor;
-            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg90));         
-
+            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg90));   
             return e;
         }
 
         VisualElement TopLeft()
         {
             var e = new VisualElement();
-
             e.style.left = 0;
             e.style.top = 0;
             e.style.width = edgeWidth;
             e.style.height = edgeWidth;
-            e.style.unityBackgroundImageTintColor = edgeColor;
             e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg270));
-
             return e;
         }
 
         VisualElement TopRight()
         {
             var e = new VisualElement();
-
             e.style.right = 0;
             e.style.top = 0;
             e.style.width = edgeWidth;
             e.style.height = edgeWidth; 
-            e.style.unityBackgroundImageTintColor = edgeColor;
             e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg180));
-
             return e;
         }
 
@@ -245,7 +216,6 @@ namespace Netherlands3D.UI.Panels
             e.style.bottom = 0;
             e.style.width = edgeWidth;
             e.style.height = edgeWidth; 
-            e.style.unityBackgroundImageTintColor = edgeColor;
             e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg0));
             return e;
         }
@@ -257,7 +227,6 @@ namespace Netherlands3D.UI.Panels
             e.style.bottom = 0;
             e.style.width = edgeWidth;
             e.style.height = edgeWidth;
-            e.style.unityBackgroundImageTintColor = edgeColor;
             e.style.backgroundImage = new StyleBackground(Rotate(cornerSprite, SpriteRotation.Deg90));
             return e;
         }
@@ -274,19 +243,13 @@ namespace Netherlands3D.UI.Panels
         {
             switch (rotation)
             {
-                case SpriteRotation.Deg0:
-                    return source;
-
                 case SpriteRotation.Deg90:
                     return Rotate90(source);
-
                 case SpriteRotation.Deg180:
                     return Rotate90(Rotate90(source));
-
                 case SpriteRotation.Deg270:
                     return Rotate90(Rotate90(Rotate90(source)));
             }
-
             return source;
         }
 
@@ -294,57 +257,23 @@ namespace Netherlands3D.UI.Panels
         {
             int w = source.width;
             int h = source.height;
-
             Texture2D result = new Texture2D(h, w, source.format, false);
-
             Color32[] src = source.GetPixels32();
             Color32[] dst = new Color32[src.Length];
-
             for (int y = 0; y < h; y++)
             {
                 for (int x = 0; x < w; x++)
                 {
                     int srcIndex = x + y * w;
-
                     int newX = h - 1 - y;
                     int newY = x;
-
                     int dstIndex = newX + newY * h;
-
                     dst[dstIndex] = src[srcIndex];
                 }
             }
-
             result.SetPixels32(dst);
             result.Apply();
-
             return result;
         }
-    }
-
-public static class StylesheetExtensions
-    {
-        public readonly struct ColorProperty
-        {
-            private readonly CustomStyleProperty<string> _property;
-
-            public ColorProperty(string name)
-            {
-                _property = new CustomStyleProperty<string>(name);
-            }
-
-            public bool TryGet(ICustomStyle style, out Color value)
-            {
-                value = default;
-
-                if (!style.TryGetValue(_property, out var str))
-                    return false;
-
-                return ColorUtility.TryParseHtmlString(str, out value);
-            }
-        }
-
-        public static bool TryGet(this ICustomStyle style, ColorProperty property, out Color value)
-            => property.TryGet(style, out value);
     }
 }

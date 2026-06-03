@@ -2582,16 +2582,6 @@ PrefabInstance:
       propertyPath: toolbar
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 6449633652433648055, guid: 5ba1df40519b07e4c8a5b0993382af49,
-        type: 3}
-      propertyPath: sideSprite
-      value: 
-      objectReference: {fileID: 2800000, guid: 35e1feb47f2aa3c42b39efa9a6cf7f9e, type: 3}
-    - target: {fileID: 6449633652433648055, guid: 5ba1df40519b07e4c8a5b0993382af49,
-        type: 3}
-      propertyPath: cornerSprite
-      value: 
-      objectReference: {fileID: 2800000, guid: ba38e0d733f59434aa6fb8b7bc95b1e3, type: 3}
     - target: {fileID: 8246707263937376439, guid: 5ba1df40519b07e4c8a5b0993382af49,
         type: 3}
       propertyPath: DeprecatedSearchPanel
