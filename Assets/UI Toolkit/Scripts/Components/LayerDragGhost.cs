@@ -32,16 +32,7 @@ namespace Netherlands3D.UI.Components
             layerNameText = this.Q<Label>("NameInputField");
             
             style.position = Position.Absolute;
-            SetPickingModeRecursive(this, PickingMode.Ignore);
-        }
-        
-        private static void SetPickingModeRecursive(VisualElement element, PickingMode mode)
-        {
-            element.pickingMode = mode;
-            foreach (var child in element.Children())
-            {
-                SetPickingModeRecursive(child, mode);
-            }
+            this.SetPickingModeRecursive(PickingMode.Ignore);
         }
 
         public void Initialize(Vector2 dragStartPosition, LayerListViewItem ui)
