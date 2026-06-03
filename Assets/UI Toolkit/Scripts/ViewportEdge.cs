@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,16 +10,29 @@ namespace Netherlands3D
     {
         [SerializeField] private Texture2D cornerSprite;
         [SerializeField] private Texture2D sideSprite;
-        private const float edgeWidth = 80;
+        private float baseEdgeWidth = 160;
+        private float edgeWidth;
+
+        private struct EdgeConfig
+        {
+            public VisualElement Element;
+            public bool HasWidth, HasHeight;
+            public bool MarginTopBottom, MarginLeftRight;
+        }
+
+        private List<EdgeConfig> panels = new List<EdgeConfig>();
+        private FreeCamera cam;
 
         void Start()
         {
+            edgeWidth = baseEdgeWidth;
+            cam = FindAnyObjectByType<FreeCamera>();
             var anchor = App.UIRoot.Root.parent;
 
-            CreateEdge(anchor, sideSprite, SpriteRotation.Deg0,   left: 0,         top: edgeWidth,  bottom: edgeWidth, width: edgeWidth);
-            CreateEdge(anchor, sideSprite, SpriteRotation.Deg180, right: 0,        top: edgeWidth,  bottom: edgeWidth, width: edgeWidth);
-            CreateEdge(anchor, sideSprite, SpriteRotation.Deg270, left: edgeWidth, right: edgeWidth, top: 0,           height: edgeWidth);
-            CreateEdge(anchor, sideSprite, SpriteRotation.Deg90,  left: edgeWidth, right: edgeWidth, bottom: 0,        height: edgeWidth);
+            CreateEdge(anchor, sideSprite,   SpriteRotation.Deg0,   left: 0,  top: edgeWidth, bottom: edgeWidth, width: edgeWidth);
+            CreateEdge(anchor, sideSprite,   SpriteRotation.Deg180, right: 0, top: edgeWidth, bottom: edgeWidth, width: edgeWidth);
+            CreateEdge(anchor, sideSprite,   SpriteRotation.Deg270, left: edgeWidth, top: 0, right: edgeWidth,   height: edgeWidth);
+            CreateEdge(anchor, sideSprite,   SpriteRotation.Deg90,  left: edgeWidth, bottom: 0, right: edgeWidth, height: edgeWidth);
 
             CreateEdge(anchor, cornerSprite, SpriteRotation.Deg270, left: 0,  top: 0,    width: edgeWidth, height: edgeWidth);
             CreateEdge(anchor, cornerSprite, SpriteRotation.Deg180, right: 0, top: 0,    width: edgeWidth, height: edgeWidth);
@@ -34,6 +49,7 @@ namespace Netherlands3D
         {
             var e = new VisualElement();
             e.pickingMode = PickingMode.Ignore;
+            e.style.position = Position.Absolute;
             e.AddToClassList("vignette-edge");
             e.style.backgroundImage = new StyleBackground(Rotate(sprite, rotation));
 
@@ -44,7 +60,32 @@ namespace Netherlands3D
             if (width.HasValue)  e.style.width  = width.Value;
             if (height.HasValue) e.style.height = height.Value;
 
+            panels.Add(new EdgeConfig
+            {
+                Element = e,
+                HasWidth = width.HasValue,
+                HasHeight = height.HasValue,
+                MarginTopBottom = top.HasValue && bottom.HasValue && !height.HasValue,
+                MarginLeftRight = left.HasValue && right.HasValue && !width.HasValue
+            });
+
             anchor.Insert(0, e);
+        }
+
+        private float tempEdgeWidth;
+        private void Update()
+        {
+            tempEdgeWidth = Mathf.Clamp(baseEdgeWidth - Mathf.Abs(cam.DynamicZoomSpeed), 0, baseEdgeWidth); 
+            edgeWidth = Mathf.Lerp(edgeWidth, tempEdgeWidth, Time.deltaTime * baseEdgeWidth / tempEdgeWidth);
+            
+            
+            foreach (var config in panels)
+            {
+                if (config.HasWidth)        config.Element.style.width  = edgeWidth;
+                if (config.HasHeight)       config.Element.style.height = edgeWidth;
+                if (config.MarginTopBottom) { config.Element.style.top = edgeWidth; config.Element.style.bottom = edgeWidth; }
+                if (config.MarginLeftRight) { config.Element.style.left = edgeWidth; config.Element.style.right = edgeWidth; }
+            }
         }
 
         public enum SpriteRotation
@@ -59,12 +100,9 @@ namespace Netherlands3D
         {
             switch (rotation)
             {
-                case SpriteRotation.Deg90:
-                    return Rotate90(source);
-                case SpriteRotation.Deg180:
-                    return Rotate90(Rotate90(source));
-                case SpriteRotation.Deg270:
-                    return Rotate90(Rotate90(Rotate90(source)));
+                case SpriteRotation.Deg90:  return Rotate90(source);
+                case SpriteRotation.Deg180: return Rotate90(Rotate90(source));
+                case SpriteRotation.Deg270: return Rotate90(Rotate90(Rotate90(source)));
             }
             return source;
         }

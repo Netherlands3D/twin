@@ -47,6 +47,8 @@ namespace Netherlands3D.Twin.Cameras
         private float dynamicMoveSpeed = 1.0f;
         private float dynamicDragSpeed = 1.0f;
         private float dynamicZoomSpeed = 1.0f;
+        
+        public float DynamicZoomSpeed => dynamicZoomSpeed;
 
         [SerializeField] private float minimumSpeed = 5.0f;
         [SerializeField] private float maximumSpeed = 1000.0f;
