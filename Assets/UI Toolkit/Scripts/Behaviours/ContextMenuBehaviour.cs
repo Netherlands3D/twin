@@ -126,10 +126,10 @@ namespace Netherlands3D.UI.Panels
 
             Color blue900;
 
-            if (root.customStyle.TryGetValue(new CustomStyleProperty<Color>("--color-blue-900"), out var value))
-            {
-                blue900 = value;
-            }
+            //if (root.styleSheets..TryGetValue(new CustomStyleProperty<Color>("--color-blue-900"), out var value))
+            //{
+            //    blue900 = value;
+            //}
 
             CreateEdge(root, Left());
             CreateEdge(root, Right());
