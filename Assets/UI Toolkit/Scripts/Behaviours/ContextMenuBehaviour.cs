@@ -1,5 +1,6 @@
 using Mono.Cecil.Cil;
 using Netherlands3D.Twin;
+using Netherlands3D.UI.ExtensionMethods;
 using PlasticPipe.Server;
 using System.Collections.Generic;
 using UnityEngine;
@@ -122,14 +123,17 @@ namespace Netherlands3D.UI.Panels
 
         void Start()
         {
-            var root = App.UIRoot.Root;
+            var root = App.UIRoot.Root;           
 
-            Color blue900;
+            root.RegisterCallback<GeometryChangedEvent>(_ =>
+            {
+                var blue900Prop = new StylesheetExtensions.ColorProperty("--color-blue-900");
+                if (root.customStyle.TryGet(blue900Prop, out var blue900))
+                {
+                    Debug.Log(blue900);
+                }
+            });
 
-            //if (root.styleSheets..TryGetValue(new CustomStyleProperty<Color>("--color-blue-900"), out var value))
-            //{
-            //    blue900 = value;
-            //}
 
             CreateEdge(root, Left());
             CreateEdge(root, Right());
@@ -316,5 +320,31 @@ namespace Netherlands3D.UI.Panels
 
             return result;
         }
+    }
+
+public static class StylesheetExtensions
+    {
+        public readonly struct ColorProperty
+        {
+            private readonly CustomStyleProperty<string> _property;
+
+            public ColorProperty(string name)
+            {
+                _property = new CustomStyleProperty<string>(name);
+            }
+
+            public bool TryGet(ICustomStyle style, out Color value)
+            {
+                value = default;
+
+                if (!style.TryGetValue(_property, out var str))
+                    return false;
+
+                return ColorUtility.TryParseHtmlString(str, out value);
+            }
+        }
+
+        public static bool TryGet(this ICustomStyle style, ColorProperty property, out Color value)
+            => property.TryGet(style, out value);
     }
 }

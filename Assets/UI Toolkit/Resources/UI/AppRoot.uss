@@ -24,3 +24,20 @@
 .app__properties-zone .app__properties-zone-column {
     margin-left: var(--spacing-2);
 }
+
+/* .viewport-edge{
+    
+}
+
+.viewport-edge__left{
+      e.style.left = 0;
+            e.style.top = edgeWidth;
+            e.style.bottom = edgeWidth;
+            e.style.width = edgeWidth;
+            e.style.unityBackgroundImageTintColor = edgeColor;
+            e.style.backgroundImage = new StyleBackground(Rotate(sideSprite, SpriteRotation.Deg0));
+}
+
+.viewport-edge__gradient-side {
+   
+} */

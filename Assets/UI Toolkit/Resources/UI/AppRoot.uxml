@@ -7,6 +7,18 @@
     editor-extension-mode="False"  
 >
     <ui:Style src="./AppRoot.uss"/>
+    <!-- <ui:VisualElement name="ViewportEdge" class="viewport-edge">
+         <ui:VisualElement name="Left" class="viewport-edge__left">
+             <ui:VisualElement class="viewport-edge__gradient-side">
+         </ui:VisualElement>
+         <ui:VisualElement name="Top" class="viewport-edge__top"/>
+         <ui:VisualElement name="Right" class="viewport-edge__right"/>
+         <ui:VisualElement name="Bottom" class="viewport-edge__bottom"/>
+         <ui:VisualElement name="TopLeft" class="viewport-edge__topleft"/>
+         <ui:VisualElement name="TopRight" class="viewport-edge__topright"/>
+         <ui:VisualElement name="BottemRight" class="viewport-edge__bottomright"/>
+         <ui:VisualElement name="BottomLeft" class="viewport-edge__bottomleft"/>
+    </ui:VisualElement> -->
     <ui:VisualElement name="App" picking-mode="Ignore" class="app">
         <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
             <ui:VisualElement picking-mode="Ignore" name="LeftSection">
