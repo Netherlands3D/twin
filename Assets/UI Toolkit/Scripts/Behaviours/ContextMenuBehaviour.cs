@@ -112,7 +112,7 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
-        private const float edgeWidth = 160;
+        private const float edgeWidth = 80;
 
         void Awake()
         {
@@ -138,8 +138,7 @@ namespace Netherlands3D.UI.Panels
         {
             var e = new VisualElement();
             e.pickingMode = PickingMode.Ignore;
-            e.style.position = Position.Absolute;
-            e.AddToClassList("tint-blue-900");
+            e.AddToClassList("vignette-edge");
             e.style.backgroundImage = new StyleBackground(Rotate(sprite, rotation));
 
             if (left.HasValue)   e.style.left   = left.Value;
