@@ -43,6 +43,7 @@ Transform:
   - {fileID: 1319537119612692894}
   - {fileID: 8724700332731692420}
   - {fileID: 223785074132285952}
+  - {fileID: 8849832324290079488}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -187,8 +188,6 @@ MonoBehaviour:
   panelBehaviours:
   - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
   - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
-  cornerSprite: {fileID: 2800000, guid: ba38e0d733f59434aa6fb8b7bc95b1e3, type: 3}
-  sideSprite: {fileID: 2800000, guid: 35e1feb47f2aa3c42b39efa9a6cf7f9e, type: 3}
 --- !u!114 &2679958399476094032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,6 +397,52 @@ MonoBehaviour:
   saveProjectTool: {fileID: 11400000, guid: a1d49cb8a018245d0a355d06eddb9133, type: 2}
   settingsTool: {fileID: 11400000, guid: a68e00a1439c8e846bf413051f5dcbde, type: 2}
   helpTool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
+--- !u!1 &3571720212759141192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8849832324290079488}
+  - component: {fileID: 3208263275035493685}
+  m_Layer: 0
+  m_Name: ViewportEdge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8849832324290079488
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3571720212759141192}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 84.68847, y: 506.6985, z: -52.43139}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3208263275035493685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3571720212759141192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 576de3306eaecafe990d4f53ab470369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.ViewportEdge
+  cornerSprite: {fileID: 2800000, guid: ba38e0d733f59434aa6fb8b7bc95b1e3, type: 3}
+  sideSprite: {fileID: 2800000, guid: 35e1feb47f2aa3c42b39efa9a6cf7f9e, type: 3}
 --- !u!1 &5306882516671821921
 GameObject:
   m_ObjectHideFlags: 0
