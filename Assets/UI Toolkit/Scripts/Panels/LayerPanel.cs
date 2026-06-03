@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
@@ -18,24 +19,26 @@ namespace Netherlands3D.UI.Panels
         private const string aboveTargetUSSClassName = "layer-list-view-item--reparent-above";
         private const string reparentTargetUSSClassName = "layer-list-view-item--reparent-target";
         private const string belowTargetUSSClassName = "layer-list-view-item--reparent-below";
-        
+        private const string toRootTargetUSSClassName = "layer-list-view-item--reparent-to-root";
+
         private TreeView treeView;
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
-        
+
         private Vector2 panelDragPosition;
         private int siblingIndex;
         private LayerListViewItem hoveredItem;
-        
+
         private enum DropMode
         {
             Above,
             Into,
-            Below
+            Below,
+            ToRoot
         }
-        
+
         private DropMode currentDropMode;
-        
+
         public LayerPanel()
         {
             this.CloneComponentTree("Panels");
@@ -125,21 +128,60 @@ namespace Netherlands3D.UI.Panels
             panelDragPosition += delta;
             
             var hitElement = panel.Pick(panelDragPosition);
-            var targetItem = hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
-            if(targetItem == null)
-                return;
-            
-            if(hoveredItem != targetItem)
+            var targetItem = hitElement as LayerListViewItem ?? hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
+            // Debug.Log("hit: "  + hitElement?.name + "\ttarget: " + targetItem?.name);
+            if (targetItem == null)
             {
-                if(hoveredItem != null)
+                var listViewItems = treeView.Query<LayerListViewItem>();
+                if (panelDragPosition.y < treeView.worldBound.yMin)
+                {
+                    // if(MoveScrollView(-scrollSpeed))
+                    //     return;
+                    
+                    targetItem = listViewItems.First();
+                    siblingIndex = 0;
+                }
+                else if (panelDragPosition.y > treeView.worldBound.yMax)
+                {
+                    // if(MoveScrollView(scrollSpeed))
+                    //     return;
+                    
+                    targetItem = listViewItems.Last();
+                    siblingIndex = -1; // -1 means it will be added to the bottom of the list, which is what we want in this case
+                }
+                
+                SetHoveredItem(targetItem);
+                currentDropMode = DropMode.ToRoot;
+                hoveredItem.EnableInClassList(toRootTargetUSSClassName, currentDropMode == DropMode.ToRoot);
+                
+                return;
+            }
+
+            SetHoveredItem(targetItem);
+
+            var layer = hoveredItem.userData as LayerData;
+            siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
+        }
+            
+
+        private void SetHoveredItem(LayerListViewItem targetItem)
+        {
+            if (targetItem == null)
+                throw new NullReferenceException("targetItem cannot be null");
+
+            if (hoveredItem != targetItem)
+            {
+                if (hoveredItem != null)
                 {
                     hoveredItem.EnableInClassList(aboveTargetUSSClassName, false);
                     hoveredItem.EnableInClassList(reparentTargetUSSClassName, false);
                     hoveredItem.EnableInClassList(belowTargetUSSClassName, false);
+                    hoveredItem.EnableInClassList(toRootTargetUSSClassName, false);
                 }
+
                 hoveredItem = targetItem;
             }
-            
+
             var worldTop = hoveredItem.LocalToWorld(Vector2.zero);
             float localY = panelDragPosition.y - worldTop.y;
             float normalizedY = localY / hoveredItem.layout.height;
@@ -150,20 +192,18 @@ namespace Netherlands3D.UI.Panels
                 currentDropMode = DropMode.Below;
             else
                 currentDropMode = DropMode.Into;
-            
+
             hoveredItem.EnableInClassList(aboveTargetUSSClassName, currentDropMode == DropMode.Above);
             hoveredItem.EnableInClassList(reparentTargetUSSClassName, currentDropMode == DropMode.Into);
             hoveredItem.EnableInClassList(belowTargetUSSClassName, currentDropMode == DropMode.Below);
-            
-            var layer = hoveredItem.userData as LayerData;
-            siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
+            hoveredItem.EnableInClassList(toRootTargetUSSClassName, currentDropMode == DropMode.ToRoot);
         }
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
         {
             if (hoveredItem != null)
             {
-                var selectedLayers = treeView.selectedItems.ToList();  //to list makes a copy and avoids a collectionmodified error
+                var selectedLayers = treeView.selectedItems.ToList(); //to list makes a copy and avoids a collectionmodified error
                 selectedLayers.Reverse();
 
                 switch (currentDropMode)
@@ -180,13 +220,16 @@ namespace Netherlands3D.UI.Panels
                         var newParentBelow = (hoveredItem.userData as LayerData).ParentLayer;
                         ReparentToLayer(selectedLayers, newParentBelow, siblingIndex + 1);
                         break;
-                        
+                    case DropMode.ToRoot:
+                        ReparentToLayer(selectedLayers, rootLayer, siblingIndex);
+                        break;
                 }
             }
-            
+
             hoveredItem.EnableInClassList(aboveTargetUSSClassName, false);
             hoveredItem.EnableInClassList(reparentTargetUSSClassName, false);
             hoveredItem.EnableInClassList(belowTargetUSSClassName, false);
+            hoveredItem.EnableInClassList(toRootTargetUSSClassName, false);
             hoveredItem = null;
 
             dragGhost.RemoveFromHierarchy();
@@ -197,7 +240,7 @@ namespace Netherlands3D.UI.Panels
         {
             foreach (LayerData selectedLayer in selectedLayers)
             {
-                selectedLayer.SetParent(newParent, newSiblingIndex); 
+                selectedLayer.SetParent(newParent, newSiblingIndex);
             }
         }
     }

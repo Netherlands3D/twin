@@ -53,3 +53,7 @@
 .layer-list-view-item--reparent-below{
     background-color: blue;
 }
+
+.layer-list-view-item--reparent-to-root{
+    background-color: yellow;
+}
