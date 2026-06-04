@@ -1,4 +1,9 @@
-.layer-list-view-item {
+.layer-list-view-item{
+    border-width: 1px;
+    border-color: transparent;
+}
+
+.layer-list-view-item__container {
     align-items: center;
     flex-direction: row;
     flex-grow: 1;
@@ -42,18 +47,18 @@
     min-height: 0;
 }
 
-.layer-list-view-item--reparent-above{
-    background-color: red;
+layer-list-view-item--reparent-above{
+    border-top-color: var(--color-blue-900);
 }
 
 .layer-list-view-item--reparent-target{
-    background-color: green;
+    background-color: var(--color-blue-200);
 }
 
 .layer-list-view-item--reparent-below{
-    background-color: blue;
+    border-bottom-color: var(--color-blue-900);
 }
 
 .layer-list-view-item--reparent-to-root{
-    background-color: yellow;
+    border-color: red;
 }

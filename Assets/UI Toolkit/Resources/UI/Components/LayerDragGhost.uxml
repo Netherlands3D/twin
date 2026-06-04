@@ -2,8 +2,9 @@
          xmlns:ui="UnityEngine.UIElements"
          xmlns:nl3d="Netherlands3D.UI.Components"
          noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
-         editor-extension-mode="False">
-    <ui:VisualElement class="layer-list-view-item">
+         editor-extension-mode="False"
+         class="layer-list-view-item">
+    <ui:VisualElement class="layer-list-view-item__container">
         <nl3d:Icon name="IsActiveIcon" icon="Visibility" class="layer-list-view-item__cell layer-list-view-item__visibility-toggle" />
         <ui:VisualElement name="ColorBar" class="layer-list-view-item__cell layer-list-view-item__color-bar"/>
         <ui:VisualElement name="Spacer" />
