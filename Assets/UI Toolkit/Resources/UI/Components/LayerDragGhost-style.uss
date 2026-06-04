@@ -1,1 +1,17 @@
 @import url("LayerListViewItem-style.uss");
+
+.icon.layer-list-view-item__visibility-toggle{ /* todo: figure out why these spacings are needed and not taken from the base style*/
+    margin-left: var(--spacing-1);
+}
+.layer-list-view-item__color-bar{
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
+}
+
+.layer-list-view-item__name-label{
+    margin-left: var(--spacing-1);
+}
+
+.layer-drag-ghost{
+    opacity: 0.5;
+}
