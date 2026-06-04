@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -7,49 +8,58 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarMain : VisualElement
     {
-        public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
         private ToolService tools;
+        private List<ToolButton> buttons;
 
         public ToolbarMain()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            RegisterCallback<AttachToPanelEvent>(NotifyAttachedToPanel);
+            buttons = this.Query<ToolButton>().ToList();
+            foreach(var entry in buttons)
+                entry.RegisterCallback<ClickEvent>(evt =>
+                {
+                    EnsureService();
+                    ToolType type = entry.ToolType;
+                    bool isActive = entry.Button.ClassListContains("active");
+                    foreach(var b in buttons)
+                        b.Button.RemoveFromClassList("active");
+        
+                    if (!isActive)
+                    {
+                        entry.Button.AddToClassList("active");
+                        tools.GetTool(type)?.Open();
+                    }
+                    else
+                    {
+                        tools.CloseAllToolsWithPanel();
+                    }
+                });
+            
         }
 
-        private void NotifyAttachedToPanel(AttachToPanelEvent _)
+        private void EnsureService()
         {
-            Group.RegisterValueChangedCallback(NotifyValueChanged);
-            ClearWithoutNotify();
-        }
-
-        private void NotifyValueChanged(ChangeEvent<ToggleButtonGroupState> evt)
-        {
-            tools = Services.ServiceLocator.GetService<ToolService>();
-            var newValue = evt.newValue.GetActiveOptions(stackalloc int[Group.value.length]);
-            ToolType type = newValue.Length > 0 ? (ToolType)newValue[0] : ToolType.None;
-            if (type == ToolType.None)
-                tools.CloseAllToolsWithPanel(); //todo Do we close all tools on toggling off a tool button?
-            else
-                tools.GetTool(type)?.Open();
-        }
-
-        public void ClearWithoutNotify()
-        {
-            Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, Group.value.length));
+            if (tools == null)
+            {
+                tools = Services.ServiceLocator.GetService<ToolService>();
+                tools.AnyToolClosed.AddListener(UpdateState);
+                tools.AnyToolOpened.AddListener(UpdateState);
+            }
         }
         
         public void UpdateState()
         {
             if(tools == null) return;
-            
-            ulong bits = 0ul;
-            foreach (var entry in tools.GetAllToolsWithPanel())
+    
+            foreach (var entry in buttons)
             {
-                if (entry.IsOpen)
-                    bits |= 1ul << (int)tools.GetToolType(entry);
+                var tool = tools.GetTool(entry.ToolType);
+                if (tool != null && tool.IsOpen)
+                    entry.Button.AddToClassList("active");
+                else
+                    entry.Button.RemoveFromClassList("active");
             }
-            Group.SetValueWithoutNotify(new ToggleButtonGroupState(bits, Group.value.length));
         }
     }
 }
