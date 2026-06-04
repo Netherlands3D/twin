@@ -46,7 +46,7 @@ namespace Netherlands3D.UI.Panels
 
            
             confirmButton.clicked += OnGridConfirmed.Invoke;
-            confirmButton.clicked += OnHide.Invoke; //TODO instead of hiding open the layertool here!
+            confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Close;
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {

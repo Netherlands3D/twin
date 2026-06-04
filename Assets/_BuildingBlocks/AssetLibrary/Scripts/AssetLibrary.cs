@@ -10,6 +10,7 @@ using Netherlands3D.Events;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
+using Netherlands3D.Twin.Tools;
 using UnityEngine;
 
 namespace Netherlands3D.AssetLibrary
@@ -105,6 +106,12 @@ namespace Netherlands3D.AssetLibrary
                 App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url)); //todo: Exceptions should still be handled
             else
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
+        }
+
+        public void OpenTool(ToolItem scriptableObject)
+        {
+            Tool tool = scriptableObject.Tool as Tool;
+            tool.Open();
         }
 
         public void Trigger(DataService dataService)

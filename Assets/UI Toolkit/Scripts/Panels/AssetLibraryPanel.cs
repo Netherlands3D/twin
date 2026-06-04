@@ -130,6 +130,7 @@ namespace Netherlands3D.UI.Panels
             {
                 case RecordItem recordItem: assetLibrary.Load(recordItem); return;
                 case DataService dataService: assetLibrary.Trigger(dataService); return;
+                case ToolItem toolItem: assetLibrary.OpenTool(toolItem); return;
                 default:
                     Debug.LogError(
                         $"Tried to open catalog item with type {catalogItem.GetType().Name}, but this is not a record item"

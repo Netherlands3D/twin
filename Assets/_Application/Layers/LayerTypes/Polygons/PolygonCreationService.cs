@@ -51,6 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private ShapeType currentShapeType = ShapeType.Undefined;
         private Plane worldPlane = new(Vector3.up, Vector3.zero);
+        private bool canCreatePolygon = true;
 
         private void Start()
         {
@@ -64,7 +65,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
             inputService.PolygonFinishAction.performed += FinishAction_performed;
             
-            OnGridCreate.AddListenerStarted(toolService.GetTool(ToolType.PolygonGrid).onOpen.Invoke);
+            toolService.GetTool(ToolType.PolygonGrid).onOpen.AddListener(OnGridCreate.InvokeStarted);
+            toolService.GetTool(ToolType.DownloadTile).onOpen.AddListener(OnGridCreate.InvokeStarted);
+            toolService.GetTool(ToolType.DownloadTile).onOpen.AddListener(SetPolygonCreationDisabled);
+            toolService.GetTool(ToolType.DownloadTile).onClose.AddListener(SetPolygonCreationEnabled);
             
             polygonInput.createdNewPolygonArea.AddListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.AddListener(UpdateLayer);
@@ -89,7 +93,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
             inputService.PolygonFinishAction.performed -= FinishAction_performed;
             
-            OnGridCreate.RemoveListenerStarted(toolService.GetTool(ToolType.PolygonGrid).onOpen.Invoke);
+            toolService.GetTool(ToolType.PolygonGrid).onOpen.RemoveListener(OnGridCreate.InvokeStarted);
+            toolService.GetTool(ToolType.DownloadTile).onOpen.RemoveListener(OnGridCreate.InvokeStarted);
+            toolService.GetTool(ToolType.DownloadTile).onOpen.RemoveListener(SetPolygonCreationDisabled);
+            toolService.GetTool(ToolType.DownloadTile).onClose.RemoveListener(SetPolygonCreationEnabled);
             
             polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.RemoveListener(UpdateLayer);
@@ -106,6 +113,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnPolygonEdit.RemoveListenerStarted(SetPolygonToEdit);
         }
 
+        private void SetPolygonCreationEnabled() => canCreatePolygon = true;
+        private void SetPolygonCreationDisabled() => canCreatePolygon = false;
+        
+        
         private void TapAction_performed(InputAction.CallbackContext obj)
         {
             PolygonInput input = GetInputFromShapeType(currentShapeType);
@@ -346,6 +357,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         //called in the inspector
         public void CreateOrEditGridLayer(Bounds bounds)
         {
+            if(!canCreatePolygon)
+                return;
+            
             Vector3 bottomLeft = new Vector3(bounds.min.x, 0, bounds.min.z);
             Vector3 topLeft = new Vector3(bounds.min.x, 0, bounds.max.z);
             Vector3 topRight = new Vector3(bounds.max.x, 0, bounds.max.z);

@@ -1,3 +1,4 @@
+using Netherlands3D.Events;
 using Netherlands3D.Functionalities.AreaDownload.UI;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -16,8 +17,6 @@ namespace Netherlands3D.UI.Panels
     public partial class InspectorDownloadGridPanel : BaseInspectorContentPanel
     {
         public override string Title => "Download 3D data";
-
-        public UnityEvent OnConfirmSelection = new();
         
         private VisualElement thumbnailContainer;
         private DownloadInspectorService downloadInspectorService;
@@ -27,8 +26,13 @@ namespace Netherlands3D.UI.Panels
         private NumberField no_x, no_y;
         
         private Button confirmButton;
-        
+
         public InspectorDownloadGridPanel()
+        {
+            
+        }
+        
+        public InspectorDownloadGridPanel(TriggerEvent OnGridConfirmed) : this()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -42,7 +46,8 @@ namespace Netherlands3D.UI.Panels
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
             
-            confirmButton.clicked += OnConfirmSelection.Invoke;
+            confirmButton.clicked += OnGridConfirmed.Invoke;
+            confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.DownloadTile).Close;
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {

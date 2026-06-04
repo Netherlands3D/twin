@@ -114,6 +114,7 @@ namespace Netherlands3D.Twin.Tools
 
             IsOpen = true;
             onOpen.Invoke();
+            Debug.Log($"OPENING TOOL: { code }");
         }
 
         public void Close()
@@ -123,7 +124,7 @@ namespace Netherlands3D.Twin.Tools
             IsOpen = false;
             onClose.Invoke();
 
-            DestroyPrefabInstances();
+            Debug.Log($"CLOSING TOOL: { code }");
         }
     }
 }
