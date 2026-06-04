@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,6 +7,8 @@ namespace Netherlands3D
 {
     public class ViewportEdge : MonoBehaviour
     {
+
+        private const string stylingClassName = "vignette-edge";
         [SerializeField] private Texture2D cornerSprite;
         [SerializeField] private Texture2D sideSprite;
         private const float edgeWidth = 80;
@@ -34,7 +37,7 @@ namespace Netherlands3D
         {
             var e = new VisualElement();
             e.pickingMode = PickingMode.Ignore;
-            e.AddToClassList("vignette-edge");
+            e.AddToClassList(stylingClassName);
             e.style.backgroundImage = new StyleBackground(Rotate(sprite, rotation));
 
             if (left.HasValue)   e.style.left   = left.Value;
@@ -74,8 +77,10 @@ namespace Netherlands3D
             int w = source.width;
             int h = source.height;
             Texture2D result = new Texture2D(h, w, source.format, false);
-            Color32[] src = source.GetPixels32();
-            Color32[] dst = new Color32[src.Length];
+    
+            var src = source.GetRawTextureData<Color32>();
+            var dst = result.GetRawTextureData<Color32>();
+    
             for (int y = 0; y < h; y++)
             {
                 for (int x = 0; x < w; x++)
@@ -87,7 +92,7 @@ namespace Netherlands3D
                     dst[dstIndex] = src[srcIndex];
                 }
             }
-            result.SetPixels32(dst);
+    
             result.Apply();
             return result;
         }
