@@ -5,6 +5,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.Events;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Sun;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Tools;
@@ -22,6 +23,8 @@ namespace Netherlands3D.UI.Behaviours
     {
         private UIDocument appDocument;
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
+        [SerializeField] private SunTime sunTime;
+    
         [SerializeField] private LocationSearchBehaviour locationSearchBehaviour;
 
         private VisualElement root;
@@ -146,6 +149,7 @@ namespace Netherlands3D.UI.Behaviours
             RegisterPanel<LayerPanel>();
             RegisterPanel<AssetLibraryPanel>(assetLibrary);
             RegisterPanel<ImportAssetPanel>();
+            RegisterPanel<SunTimePanel>(sunTime);
             RegisterPanel<InspectorPolygonGridPanel>();
             
             RegisterPanel<LocationSearchPanel>();
@@ -163,7 +167,7 @@ namespace Netherlands3D.UI.Behaviours
             RegisterTool(AssetImport, OpenAssetImportPanel);
             RegisterTool(Layer, OpenLayerPanel);
             RegisterTool(SearchTool, OpenSearchTool);
-            RegisterTool(SunPosition, CloseInspectorPanels);
+            RegisterTool(SunPosition, OpenSunTimePanel);
             RegisterTool(DownloadTile, CloseInspectorPanels);
             RegisterTool(OpenProject, CloseInspectorPanels);
             RegisterTool(SaveProject, CloseInspectorPanels);
@@ -293,6 +297,12 @@ namespace Netherlands3D.UI.Behaviours
         {
             CloseInspectorPanels();
             ShowPanel<ImportAssetPanel>();
+        }
+
+        private void OpenSunTimePanel()
+        {
+            CloseInspectorPanels();
+            ShowPanel<SunTimePanel>();
         }
 
         private void OpenSearchTool()

@@ -1,0 +1,30 @@
+﻿.simulation-speed-controls {
+    /* Presentational container for speed and playback controls */
+}
+
+.simulation-speed-controls__field-label {
+    width: var(--spacing-20);
+    flex-shrink: 0;
+    white-space: normal;
+    -unity-text-align: middle-left;
+    margin-right: var(--spacing-3);
+}
+
+.simulation-speed-controls__speed-input {
+    flex-grow: 1;
+}
+
+.simulation-speed-controls__unit-label {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-left: var(--spacing-2);
+}
+
+.button.simulation-speed-controls__control-button {
+    margin-right: var(--spacing-2);
+}
+
+.button.simulation-speed-controls__control-button--active {
+    border-color: var(--color-blue-700);
+}
+

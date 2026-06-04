@@ -1,0 +1,34 @@
+﻿<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    name="SunTimePanel"
+    class="sun-time-panel"
+>
+
+    <nl3d:ContentContainer text="Tijd en datum aanpassen" leading-icon="Sun">
+        <nl3d:SunDial name="SunDial" class="sun-time-panel__sun-dial" />
+
+        <ui:VisualElement class="inspector__section">
+            <ui:Label text="Tijd" class="sun-time-panel__field-label" />
+            <nl3d:TimeField name="TimeField" class="sun-time-panel__time-field time-field--centered" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="inspector__section">
+            <ui:Label text="Datum" class="sun-time-panel__field-label" />
+            <nl3d:DateField name="DateField" class="sun-time-panel__date-field" />
+        </ui:VisualElement>
+
+        <ui:VisualElement class="inspector__section">
+            <nl3d:Button name="NowButton" button-style="IconOnly" icon="ResetTime" class="sun-time-panel__reset-button" />
+            <ui:Label text="Herstel tijd en datum" class="sun-time-panel__field-label sun-time-panel__field-label--grow" />
+        </ui:VisualElement>
+
+        <ui:Label text="Animatie tijdverloop" class="inspector__section-header" />
+
+        <nl3d:SimulationSpeedControls name="SimulationSpeedControls" />
+    </nl3d:ContentContainer>
+
+</ui:UXML>

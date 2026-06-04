@@ -39,14 +39,14 @@ namespace Netherlands3D.UI.Panels
 
         public void Show()
         {
-            RemoveFromClassList(UtilityClassConstants.HIDDEN);
-            Content.RemoveFromClassList(UtilityClassConstants.HIDDEN); //do not call Content.Show() as this would give an infinite loop
+            Content.EnableInClassList(UtilityClassConstants.HIDDEN, false); //do not call Content.Show() as this would give an infinite loop
+            EnableInClassList(UtilityClassConstants.HIDDEN, false);
         }
 
         public void Hide()
         {
-            AddToClassList(UtilityClassConstants.HIDDEN);
-            Content.AddToClassList(UtilityClassConstants.HIDDEN); //do not call Content.Show() as this would give an infinite loop
+            Content.EnableInClassList(UtilityClassConstants.HIDDEN, true); //do not call Content.Show() as this would give an infinite loop
+            EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
     }
 }
