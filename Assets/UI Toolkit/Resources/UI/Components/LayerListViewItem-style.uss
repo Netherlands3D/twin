@@ -1,5 +1,9 @@
+:root{
+    --reorder-line-width: 2px;
+}
+
 .layer-list-view-item{
-    border-width: 1px;
+    border-width: var(--reorder-line-width);
     border-color: transparent;
 }
 
@@ -63,12 +67,14 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-top-color: var(--color-blue-900);
+    border-width: var(--reorder-line-width);
 }
 
 .layer-list-view-item--reparent-to-root-below{
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-color: var(--color-blue-900);
+    border-width: var(--reorder-line-width);
 }
 
 .layer-list-view-item__visibility-toggle.visibility-toggle{
