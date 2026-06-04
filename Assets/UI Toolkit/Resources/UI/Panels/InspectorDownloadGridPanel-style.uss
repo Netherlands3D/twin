@@ -53,3 +53,13 @@
     padding: 0;
     min-height: auto;
 }
+
+.inspector-download-grid__checkbox.checkbox-toggle{
+    margin-left: var(--spacing-0_5);
+}
+
+.inspector-download-grid__button-row{
+    flex-direction: row;
+    align-items: center;
+    align-self: stretch;
+}
