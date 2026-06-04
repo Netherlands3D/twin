@@ -26,7 +26,7 @@ namespace Netherlands3D.UI.Panels
         private ScrollView scrollView;
         private const float scrollZoneSize = 50f;
         private const float scrollSpeed = 300f; // px/s
-        
+
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
 
@@ -59,7 +59,7 @@ namespace Netherlands3D.UI.Panels
             treeView.bindItem = BindItem;
 
             scrollView = treeView.Q<ScrollView>();
-            
+
             RegisterCallback<KeyDownEvent>(OnKeyDown);
         }
 
@@ -123,7 +123,7 @@ namespace Netherlands3D.UI.Panels
 
             panelDragPosition = startPosition;
             // var localPosition = this.WorldToLocal(startPosition);
-            
+
             dragGhost = new LayerDragGhost();
             // panel.visualTree.Add(dragGhost);
             Add(dragGhost);
@@ -132,60 +132,94 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)
         {
-            // var worldPosition = source.LocalToWorld(startPosition); // layer item to world
-            // var localPosition = this.WorldToLocal(worldPosition); // world to LayerPanel
-            //
-            // panelDragPosition = worldPosition;
-            
             panelDragPosition += new Vector2(0, delta.y);
+            
+            var aboveTree = panelDragPosition.y < treeView.worldBound.yMin;
+            var belowTree = panelDragPosition.y > treeView.worldBound.yMax;
+            var atTopEdge = aboveTree && !MoveScrollView(-scrollSpeed);
+            var atBottomEdge = belowTree && !MoveScrollView(scrollSpeed);
+            
             dragGhost.UpdatePosition(panelDragPosition);
-
-            var hitElement = panel.Pick(panelDragPosition);
-            var targetItem = hitElement as LayerListViewItem ?? hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
-            // Debug.Log("hit: "  + hitElement?.name + "\ttarget: " + targetItem?.name);
-            if (targetItem == null)
+            
+            if (atTopEdge || atBottomEdge)
             {
-                var listViewItems = treeView.Query<LayerListViewItem>();
-                if (panelDragPosition.y < treeView.worldBound.yMin)
-                {
-                    if(MoveScrollView(-scrollSpeed))
-                    {
-                        dragGhost.UpdatePosition(panelDragPosition);
-                        return;
-                    }
-                    
-                    targetItem = listViewItems.First();
-                    siblingIndex = 0;
-                }
-                else if (panelDragPosition.y > treeView.worldBound.yMax)
-                {
-                    if (MoveScrollView(scrollSpeed))
-                    {
-                        dragGhost.UpdatePosition(panelDragPosition);
-                        return;
-                    }
-                    
-                    targetItem = listViewItems.Last();
-                    siblingIndex = -1; // -1 means it will be added to the bottom of the list, which is what we want in this case
-                }
-                
-                SetHoveredItem(targetItem);
+                SetHoveredItem(GetClosestItem(panelDragPosition.y));
+                siblingIndex = atTopEdge ? 0 : -1;
                 currentDropMode = DropMode.ToRoot;
-                hoveredItem.EnableInClassList(toRootTargetUSSClassName, currentDropMode == DropMode.ToRoot);
-                
+                hoveredItem.EnableInClassList(toRootTargetUSSClassName, true);
                 return;
             }
             
+            var hitElement = panel.Pick(panelDragPosition);
+            var targetItem = hitElement as LayerListViewItem
+                             ?? hitElement?.GetFirstAncestorOfType<LayerListViewItem>()
+                             ?? GetClosestItem(panelDragPosition.y);
+            
             SetHoveredItem(targetItem);
-
             var layer = hoveredItem.userData as LayerData;
             siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
+            
+            // panelDragPosition += new Vector2(0, delta.y);
+            // dragGhost.UpdatePosition(panelDragPosition);
+            //
+            // var hitElement = panel.Pick(panelDragPosition);
+            // var targetItem = hitElement as LayerListViewItem ?? hitElement?.GetFirstAncestorOfType<LayerListViewItem>();
+            // var aboveTree = panelDragPosition.y < treeView.worldBound.yMin;
+            // var belowTree = panelDragPosition.y > treeView.worldBound.yMax;
+            //
+            // if(targetItem == null && !aboveTree && !belowTree) //we are inbetween items
+            // {
+            //     targetItem = GetClosestItem(panelDragPosition.y); //get the closest item and continue normally
+            // }
+            // else //we did not find a target item: either we are above the first, below the last
+            // {
+            //     if (aboveTree) //above first visible
+            //     {
+            //         if (MoveScrollView(-scrollSpeed)) //if we scroll, we get the closest item and continue normally
+            //         {
+            //             dragGhost.UpdatePosition(panelDragPosition); //update ghost position because of scrolling
+            //             targetItem = GetClosestItem(panelDragPosition.y);
+            //         }
+            //         else //we are at the top: take the first item in the tree
+            //         {
+            //             targetItem = GetClosestItem(panelDragPosition.y);
+            //             
+            //             SetHoveredItem(targetItem);
+            //             siblingIndex = 0;
+            //             currentDropMode = DropMode.ToRoot;
+            //             hoveredItem.EnableInClassList(toRootTargetUSSClassName, true);
+            //             return;
+            //         }
+            //     }
+            //     else if (belowTree) //below last visible
+            //     {
+            //         if (MoveScrollView(scrollSpeed))
+            //         {
+            //             dragGhost.UpdatePosition(panelDragPosition);
+            //             targetItem = GetClosestItem(panelDragPosition.y);
+            //         }
+            //         else
+            //         {
+            //             targetItem = GetClosestItem(panelDragPosition.y);
+            //             SetHoveredItem(targetItem);
+            //             siblingIndex = -1; // -1 means it will be added to the bottom of the list, which is what we want in this case
+            //             currentDropMode = DropMode.ToRoot;
+            //             hoveredItem.EnableInClassList(toRootTargetUSSClassName, true);
+            //             return;
+            //         }
+            //     }
+            // }
+            //
+            // SetHoveredItem(targetItem);
+            //
+            // var layer = hoveredItem.userData as LayerData;
+            // siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
         }
 
         private bool MoveScrollView(float deltaY)
         {
             var currentScrollOffset = scrollView.scrollOffset;
-            
+
             var bounds = treeView.worldBound;
             float distanceFromTop = panelDragPosition.y - bounds.yMin;
             float distanceFromBottom = bounds.yMax - panelDragPosition.y;
@@ -204,9 +238,28 @@ namespace Netherlands3D.UI.Panels
             var scrollDelta = new Vector2(0, deltaY * t * Time.deltaTime);
             scrollView.scrollOffset += scrollDelta;
             var realChange = scrollView.scrollOffset - currentScrollOffset;
-            // panelDragPosition += realChange;
             
+            Debug.Log("scrolling");
+
             return Mathf.Abs(realChange.y) > 0.01f;
+        }
+
+        private LayerListViewItem GetClosestItem(float worldY)
+        {
+            var viewportBounds = scrollView.contentViewport.worldBound;
+            LayerListViewItem closest = null;
+            float closestDistance = float.MaxValue;
+            treeView.Query<LayerListViewItem>().ForEach(item =>
+            {
+                if (!viewportBounds.Overlaps(item.worldBound)) return; // skip pooled/offscreen items
+                float distance = Mathf.Abs(item.worldBound.center.y - worldY);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = item;
+                }
+            });
+            return closest;
         }
 
         private void SetHoveredItem(LayerListViewItem targetItem)
@@ -238,11 +291,12 @@ namespace Netherlands3D.UI.Panels
             hoveredItem.EnableInClassList(aboveTargetUSSClassName, currentDropMode == DropMode.Above);
             hoveredItem.EnableInClassList(reparentTargetUSSClassName, currentDropMode == DropMode.Into);
             hoveredItem.EnableInClassList(belowTargetUSSClassName, currentDropMode == DropMode.Below);
-            hoveredItem.EnableInClassList(toRootTargetUSSClassName, currentDropMode == DropMode.ToRoot);
+            // hoveredItem.EnableInClassList(toRootTargetUSSClassName, currentDropMode == DropMode.ToRoot);
         }
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
         {
+            return;
             if (hoveredItem != null)
             {
                 var selectedLayers = treeView.selectedItems.ToList(); //to list makes a copy and avoids a collectionmodified error
