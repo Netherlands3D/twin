@@ -1,4 +1,2 @@
 .unity-tree-view__item {
-    /*padding-top: var(--spacing-0_5);*/
-    /*padding-bottom: var(--spacing-0_5);*/
 }
