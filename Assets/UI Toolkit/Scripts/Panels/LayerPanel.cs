@@ -19,7 +19,8 @@ namespace Netherlands3D.UI.Panels
         private const string aboveTargetUSSClassName = "layer-list-view-item--reparent-above";
         private const string reparentTargetUSSClassName = "layer-list-view-item--reparent-target";
         private const string belowTargetUSSClassName = "layer-list-view-item--reparent-below";
-        private const string toRootTargetUSSClassName = "layer-list-view-item--reparent-to-root";
+        private const string toRootAboveTargetUSSClassName = "layer-list-view-item--reparent-to-root-above";
+        private const string toRootBelowTargetUSSClassName = "layer-list-view-item--reparent-to-root-below";
 
         private TreeView treeView;
         private ScrollView scrollView;
@@ -139,7 +140,10 @@ namespace Netherlands3D.UI.Panels
                 SetHoveredItem(GetClosestItem(panelDragPosition.y));
                 siblingIndex = atTopEdge ? 0 : -1;
                 currentDropMode = DropMode.ToRoot;
-                hoveredItem.EnableInClassList(toRootTargetUSSClassName, true);
+                if (atTopEdge)
+                    SetTargetItemUssClasses(hoveredItem, toRootAboveTargetUSSClassName);
+                else
+                    SetTargetItemUssClasses(hoveredItem, toRootBelowTargetUSSClassName);
                 return;
             }
             
@@ -188,10 +192,7 @@ namespace Netherlands3D.UI.Panels
             {
                 if (hoveredItem != null)
                 {
-                    hoveredItem.EnableInClassList(aboveTargetUSSClassName, false);
-                    hoveredItem.EnableInClassList(reparentTargetUSSClassName, false);
-                    hoveredItem.EnableInClassList(belowTargetUSSClassName, false);
-                    hoveredItem.EnableInClassList(toRootTargetUSSClassName, false);
+                    SetTargetItemUssClasses(hoveredItem, null);
                 }
 
                 hoveredItem = targetItem;
@@ -201,16 +202,24 @@ namespace Netherlands3D.UI.Panels
             float localY = panelDragPosition.y - worldTop.y;
             float normalizedY = localY / hoveredItem.layout.height;
 
+            string newClassName = null;
             if (normalizedY < 0.25f)
+            {
                 currentDropMode = DropMode.Above;
+                newClassName = aboveTargetUSSClassName;
+            }
             else if (normalizedY > 0.75f)
+            {
                 currentDropMode = DropMode.Below;
+                newClassName = reparentTargetUSSClassName;
+            }
             else
+            {
                 currentDropMode = DropMode.Into;
+                newClassName = belowTargetUSSClassName;
+            }
 
-            hoveredItem.EnableInClassList(aboveTargetUSSClassName, currentDropMode == DropMode.Above);
-            hoveredItem.EnableInClassList(reparentTargetUSSClassName, currentDropMode == DropMode.Into);
-            hoveredItem.EnableInClassList(belowTargetUSSClassName, currentDropMode == DropMode.Below);
+            SetTargetItemUssClasses(hoveredItem, newClassName);
         }
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
@@ -240,14 +249,23 @@ namespace Netherlands3D.UI.Panels
                 }
             }
 
-            hoveredItem.EnableInClassList(aboveTargetUSSClassName, false);
-            hoveredItem.EnableInClassList(reparentTargetUSSClassName, false);
-            hoveredItem.EnableInClassList(belowTargetUSSClassName, false);
-            hoveredItem.EnableInClassList(toRootTargetUSSClassName, false);
+            SetTargetItemUssClasses(hoveredItem, null);
             hoveredItem = null;
 
             dragGhost.RemoveFromHierarchy();
             dragGhost = null;
+        }
+
+        private void SetTargetItemUssClasses(LayerListViewItem targetItem, string newClassName)
+        {
+            targetItem.ItemRoot.EnableInClassList(aboveTargetUSSClassName, false);
+            targetItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
+            targetItem.ItemRoot.EnableInClassList(belowTargetUSSClassName, false);
+            targetItem.ItemRoot.EnableInClassList(toRootAboveTargetUSSClassName, false);
+            targetItem.ItemRoot.EnableInClassList(toRootBelowTargetUSSClassName, false);
+            
+            if(newClassName != null)
+                targetItem.ItemRoot.EnableInClassList(newClassName, true);
         }
 
         private void ReparentToLayer(List<object> selectedLayers, LayerData newParent, int newSiblingIndex)

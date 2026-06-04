@@ -38,9 +38,11 @@ namespace Netherlands3D.UI.Components
         public UnityEvent<Vector2, LayerListViewItem> Dragging { get; } = new();
         public UnityEvent<Vector2, LayerListViewItem> DragEnded { get; } = new();
         
+        private VisualElement itemRoot;
+        public VisualElement ItemRoot => itemRoot;
         public VisibilityState VisibilityState => isActiveToggle.Image;
         public IconImage LayerTypeIcon => layerTypeIcon.Image;
-        public float IndentWidth => GetTreeViewItemRoot().Q("unity-tree-view__item-indent").resolvedStyle.width;
+        public float IndentWidth => ItemRoot.Q("unity-tree-view__item-indent").resolvedStyle.width;
         
         public LayerListViewItem()
         {
@@ -125,7 +127,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLayout()
         {
-            VisualElement itemRoot = GetTreeViewItemRoot();
+            itemRoot = GetTreeViewItemRoot();
 
             if (itemRoot == null) return;
             itemRoot.AddComponentStylesheetByType(GetType());
@@ -311,8 +313,6 @@ namespace Netherlands3D.UI.Components
             return false;
         }
 
-        //todo: drag reordering
-        //todo: vertical gap between tree items
         //todo: root.Selectedlayers
         //todo: cleanup old scripts
         //todo: credential needed state
