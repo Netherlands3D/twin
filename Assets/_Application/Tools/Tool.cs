@@ -1,4 +1,4 @@
-using Netherlands3D.Twin.Tools.UI;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -15,47 +15,57 @@ namespace Netherlands3D.Twin.Tools
 
         public UnityEvent<bool> onAvailabilityChange = new();
 
-        [FormerlySerializedAs("onActivate")]
-        public UnityEvent onOpen = new();
+        [FormerlySerializedAs("onActivate")] public UnityEvent onOpen = new();
 
-        [FormerlySerializedAs("onDeactivate")]
-        public UnityEvent onClose = new();
-        public UnityEvent<Tool> onToggleInspector = new();
+        [FormerlySerializedAs("onDeactivate")] public UnityEvent onClose = new();
+        
         public UnityEvent<GameObject> onSpawnedPrefab = new();
 
-        [Header("Content")]
-        [Tooltip("Prefab to show in the UI Inspector when this tool is activated")]
-        [SerializeField] private GameObject inspectorPrefab;
+        [Header("Content")] [Tooltip("Prefab to show in the UI Inspector when this tool is activated")] [SerializeField]
+        private GameObject inspectorPrefab;
 
-        [Tooltip("GameObjects to spawn in the World when this tool is activated")]
-        [FormerlySerializedAs("featurePrefabs")]
-        [SerializeField] private GameObject[] functionalityPrefabs;
+        [SerializeField] private InspectorPanelType panelType;
 
-        public GameObject InspectorPrefab { get => inspectorPrefab; private set => inspectorPrefab = value; }
-        public GameObject[] FunctionalityPrefabs { get => functionalityPrefabs; private set => functionalityPrefabs = value; }
+        public Type PanelType => panelType.Type;
+        [SerializeField] private UnityEngine.Object[] panelArgs;
+        public object[] PanelArgs => panelArgs;
+
+        [Tooltip("GameObjects to spawn in the World when this tool is activated")] [FormerlySerializedAs("featurePrefabs")] [SerializeField]
+        private GameObject[] functionalityPrefabs;
+
+        public GameObject InspectorPrefab
+        {
+            get => inspectorPrefab;
+            private set => inspectorPrefab = value;
+        }
+
+        public GameObject[] FunctionalityPrefabs
+        {
+            get => functionalityPrefabs;
+            private set => functionalityPrefabs = value;
+        }
+
         private GameObject[] functionalityInstances;
 
+        // Runtime configuration to prevent SO changes in editor
+        private bool runtimeOpen = false;
+
+        // Configuration setting, this way you can preconfigure the state of the tool
         [SerializeField] private bool open = false;
+
         private bool available = false;
 
-        public bool Open { 
-            get{
-                return open;
-            }
-            set{
-                open = value;
-                if(open)
-                {
-                    onOpen.Invoke();
-                }
-                else
-                {
-                    onClose.Invoke();
-                }
-            }
+        public bool IsOpen
+        {
+            get => runtimeOpen;
+            private set => runtimeOpen = value;
         }
-        
-        public bool Available { get => available; set => available = value; }
+
+        public bool Available
+        {
+            get => available;
+            set => available = value;
+        }
 
         /// <summary>
         /// Set availability for the user on/off.
@@ -71,16 +81,17 @@ namespace Netherlands3D.Twin.Tools
         public GameObject[] SpawnPrefabInstances(Transform parent = null)
         {
             DestroyPrefabInstances();
-         
+
             functionalityInstances = new GameObject[functionalityPrefabs.Length];
             for (int i = 0; i < functionalityPrefabs.Length; i++)
             {
-                functionalityInstances[i] = Instantiate(functionalityPrefabs[i],parent,true);
+                functionalityInstances[i] = Instantiate(functionalityPrefabs[i], parent, true);
                 onSpawnedPrefab.Invoke(functionalityInstances[i]);
             }
+
             return functionalityInstances;
         }
-        
+
         /// <summary>
         /// Destroy all instances of the prefabs spawned in the world by activating this tool
         /// </summary>
@@ -93,33 +104,24 @@ namespace Netherlands3D.Twin.Tools
                     Destroy(instance);
                 }
             }
+
             functionalityInstances = null;
         }
 
-        /// <summary>
-        /// Let inspector(s) know that this tool is opened or closed
-        /// </summary>
-        public void ToggleInspector(){
-            Open = !Open;
-            onToggleInspector.Invoke(this);
+        public void Open()
+        {
+            if (IsOpen) return;
 
-            if(!Open) DestroyPrefabInstances();
+            IsOpen = true;
+            onOpen.Invoke();
         }
 
-        public void OpenInspector()
+        public void Close()
         {
-            if(Open) return;
+            if (!IsOpen) return;
 
-            Open = true;
-            onToggleInspector.Invoke(this);
-        }
-
-        public void CloseInspector()
-        {
-            if(!Open) return;
-
-            Open = false;
-            onToggleInspector.Invoke(this);
+            IsOpen = false;
+            onClose.Invoke();
 
             DestroyPrefabInstances();
         }

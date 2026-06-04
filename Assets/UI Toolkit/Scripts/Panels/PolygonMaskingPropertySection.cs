@@ -15,7 +15,7 @@ using Toggle = UnityEngine.UIElements.Toggle;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(PolygonSelectionLayerPropertyData))]
+    [PropertySection(typeof(PolygonSelectionLayerPropertyData), PropertySectionCategory.Styling)]
     public partial class PolygonMaskingPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private PolygonSelectionLayerPropertyData polygonPropertyData;
@@ -71,9 +71,9 @@ namespace Netherlands3D.UI.Panels
 
         private void AddMaskingPanel()
         {
-            var hierarchy = ProjectData.Current.RootLayer.GetFlatHierarchy();
-            var layers =hierarchy.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToList(); //keep only the maskable layers
-            maskingPanel = new MaskingPanel(layers, polygonPropertyData.MaskBitIndex);
+            // var hierarchy = ProjectData.Current.RootLayer.GetFlatHierarchy();
+            // var layers =hierarchy.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToList(); //keep only the maskable layers
+            maskingPanel = new MaskingPanel(ProjectData.Current.RootLayer, polygonPropertyData.MaskBitIndex);
             contentContainer.Add(maskingPanel);
         }
         

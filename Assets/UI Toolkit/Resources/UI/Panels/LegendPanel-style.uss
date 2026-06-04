@@ -1,0 +1,12 @@
+.legend-panel{
+    min-width: var(--inspector-min-width);
+    width: var(--inspector-width);
+    max-width: var(--inspector-max-width);
+    margin-left: var(--spacing-2);
+    align-self: flex-start;
+    max-height: 100%;
+}
+
+.legend-panel__content .unity-scroll-view__content-container{
+    align-items: flex-start;
+}

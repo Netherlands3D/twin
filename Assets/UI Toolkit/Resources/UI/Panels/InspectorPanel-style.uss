@@ -2,14 +2,17 @@
     --inspector-bg-color: var(--color-white);
     --inspector-border-radius: var(--spacing-2);
     --inspector-width: 400px;
+    --inspector-section-spacing: var(--spacing-3);
+    --inspector-section-header-margin-top: var(--spacing-2);
+    --inspector-section-header-spacing: var(--spacing-1);
    
     justify-content: space-between;
     flex-shrink: 0;
     flex-grow: 0;
     align-self: stretch;
-    min-width: 320px;
+    min-width: var(--inspector-min-width);
     width: var(--inspector-width);
-    max-width: 520px;
+    max-width: var(--inspector-max-width);
     margin: 0px;
     padding: var(--spacing-5);
     padding-top: var(--spacing-4);
@@ -47,28 +50,26 @@
 .inspector .inspector-header-button-close .icon {
     background-size: var(--spacing-6);
 }
+
 .inspector .inspector-content {
-    
     flex-grow: 1;
     flex-shrink: 1;
     margin-bottom: var(--spacing-5);
     padding: 0px;
 }
 
+.inspector__section {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: var(--inspector-section-spacing);
+}
+
+.inspector__section-header {
+    -unity-font-style: bold;
+    margin-top: var(--inspector-section-header-margin-top);
+    margin-bottom: var(--inspector-section-header-spacing);
+}
+
 .inspector.active {
     display: flex;
 }
-
-/* ============================================================================================= */
-/* TODO: remove these overrides as soon as we have implemented the whole inspector               */
-/* These override make sure that the inspector aligns nicely as an overlay to the UGUI inspector */
-/*.inspector {
-    margin-left: var(--spacing-28);
-    width: 488px;
-}
-
-.inspector .inspector-content {
-    padding-left: 0;
-}
-
-/* ============================================================================================= */

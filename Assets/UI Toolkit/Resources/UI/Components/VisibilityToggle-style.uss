@@ -15,8 +15,6 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    /*min-height: var(--spacing-11);*/
-    /*padding: var(--toggle-padding);*/
     margin: var(--toggle-margin);
     background-color: var(--toggle-bg-color);
     border-color: var(--toggle-border-color);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
@@ -14,29 +15,24 @@ using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
-    [RequireComponent(typeof(UIDocument))]
     public class PropertyPanelBehaviour : MonoBehaviour
     {
-        private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private SecondaryPropertiesPanel secondaryPropertiesPanel;
-        private VisualElement propertySectionContainer;
         private ColorPicker colorPicker;
 
         private void Start()
         {
-            root = GetComponent<UIDocument>().rootVisualElement;
-            propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
-            secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
+            propertiesPanel = App.UIRoot.Root.Q<PropertiesPanel>("PropertiesPanel");
+            secondaryPropertiesPanel = App.UIRoot.Root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
-            propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
             ClearActivePanel();
             
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.OnSelectLayer.AddListener(SpawnPanel);
-            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
+            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo ui-toolkit: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
         }
 
         private void OnDestroy()
@@ -48,12 +44,12 @@ namespace Netherlands3D.UI.Panels
 
         public void ClearActivePanel()
         {
-            propertySectionContainer.Clear();
+            propertiesPanel.ClearPropertySections();
             propertiesPanel.SetVisible(false);
             secondaryPropertiesPanel.SetVisible(false);
         }
 
-        public void SpawnPanel(LayerData layer)
+       public void SpawnPanel(LayerData layer)
         {
             ClearActivePanel();
             propertiesPanel.SetVisible(true);
@@ -61,8 +57,10 @@ namespace Netherlands3D.UI.Panels
             CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
             if (credentials != null && !layer.HasValidCredentials)
             {
-                bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
-                if (showingCredentials) return;
+                var credentialPanels = CollectPanelsForType(credentials.GetType());
+                SpawnCollectedPanels(credentialPanels, layer.LayerProperties);
+                propertiesPanel.UpdateButtonActiveStates();
+                if (credentialPanels.Count > 0) return;
             }
 
             CheckAndSpawnPropertyPanels(layer);
@@ -70,65 +68,56 @@ namespace Netherlands3D.UI.Panels
 
         private void CheckAndSpawnPropertyPanels(LayerData layer)
         {
-            var hasPanels = false;
+            var allPanels = new List<(RegisteredPropertySectionType panelType, PropertySectionCategory category)>();
+
             foreach (var property in layer.LayerProperties)
             {
                 if (property.IsEditable == false) continue;
 
-                hasPanels |= ShowPanelsForProperty(property, layer.LayerProperties);
-                hasPanels |= ShowPanelsForInterfaces(property, layer.LayerProperties);
+                Type propertyType = property.GetType();
+                allPanels.AddRange(CollectPanelsForType(propertyType));
+
+                foreach (var interfaceType in propertyType.GetInterfaces())
+                    allPanels.AddRange(CollectPanelsForType(interfaceType));
             }
 
-            if (!hasPanels)
-            {
+            allPanels.Sort((a, b) => a.panelType.Order.CompareTo(b.panelType.Order));
+            SpawnCollectedPanels(allPanels, layer.LayerProperties);
+
+            if (allPanels.Count == 0)
                 ClearActivePanel();
-            }
+
+            propertiesPanel.UpdateButtonActiveStates();
         }
 
-        private bool ShowPanelsForInterfaces(LayerPropertyData property, List<LayerPropertyData> properties)
+        private List<(RegisteredPropertySectionType panelType, PropertySectionCategory category)> CollectPanelsForType(Type type)
         {
-            var interfaces = property.GetType().GetInterfaces();
-            var hasPanel = false;
-            foreach (var interfaceType in interfaces)
+            var result = new List<(RegisteredPropertySectionType, PropertySectionCategory)>();
+            foreach (var categoryCollection in PropertySectionRegistry.TypeRegistry)
             {
-                if (PropertySectionRegistry.TypeRegistry.ContainsKey(interfaceType))
-                {
-                    var panelTypes = PropertySectionRegistry.TypeRegistry[interfaceType];
-                    foreach (var panelType in panelTypes)
-                    {
-                        CreatePanel(panelType, properties);
-                        hasPanel = true;
-                    }
-                }
-            }
+                if (!categoryCollection.Value.Collection.TryGetValue(type, out var panelTypes))
+                    continue;
 
-            return hasPanel;
-        }
-
-        private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
-        {
-            var type = property.GetType();
-            var hasPanels = PropertySectionRegistry.TypeRegistry.ContainsKey(type);
-            if (hasPanels)
-            {
-                var panelTypes = PropertySectionRegistry.TypeRegistry[type];
                 foreach (var panelType in panelTypes)
-                {
-                    CreatePanel(panelType, properties);
-                }
+                    result.Add((panelType, categoryCollection.Key));
             }
-
-            return hasPanels;
+            return result;
         }
 
-        private void CreatePanel(Type panelType, List<LayerPropertyData> properties)
+        private void SpawnCollectedPanels(List<(RegisteredPropertySectionType panelType, PropertySectionCategory category)> panels, List<LayerPropertyData> properties)
+        {
+            foreach (var (panelType, category) in panels)
+                CreatePanel(panelType.SectionType, category, properties);
+        }
+
+        private void CreatePanel(Type panelType, PropertySectionCategory category, List<LayerPropertyData> properties)
         {
             var propertySection = (VisualElement)Activator.CreateInstance(panelType);
-            propertySectionContainer.Add(propertySection);
+            propertiesPanel.AddPropertySection(propertySection, category);
 
             if (propertySection is IPropertyPanelWithColorPicker propertyPanelWithColorPicker)
                 propertyPanelWithColorPicker.ColorPicker = colorPicker;
-            
+
             ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
         }
     }

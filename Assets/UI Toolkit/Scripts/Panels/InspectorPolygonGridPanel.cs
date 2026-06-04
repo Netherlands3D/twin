@@ -1,3 +1,4 @@
+using Netherlands3D.Events;
 using Netherlands3D.Functionalities.AreaDownload.UI;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -13,12 +14,10 @@ using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class InspectorPolygonGridPanel : BaseInspectorContentPanel
     {
         public override string Title => "Tekengebied grid selecteren";
-
-        public UnityEvent OnConfirmSelection = new();
         
         private VisualElement thumbnailContainer;
         private DownloadInspectorService downloadInspectorService;
@@ -28,8 +27,10 @@ namespace Netherlands3D.UI.Panels
         private NumberField no_x, no_y;
         
         private Button confirmButton;
-        
-        public InspectorPolygonGridPanel()
+
+        public InspectorPolygonGridPanel() { }
+
+        public InspectorPolygonGridPanel(TriggerEvent OnGridConfirmed) : this()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -42,11 +43,10 @@ namespace Netherlands3D.UI.Panels
             zw_y = this.Q<NumberField>("ZW_Y");
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
-            
-            OnShow += () => Show(true);
-            OnHide += () => Show(false);
 
-            confirmButton.clicked += OnConfirmSelection.Invoke;
+           
+            confirmButton.clicked += OnGridConfirmed.Invoke;
+            confirmButton.clicked += OnHide.Invoke; //TODO instead of hiding open the layertool here!
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {

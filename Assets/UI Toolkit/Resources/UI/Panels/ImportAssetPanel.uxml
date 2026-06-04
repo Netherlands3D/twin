@@ -21,7 +21,7 @@
             </ui:VisualElement>
             <nl3d:Button LabelText="Toevoegen" button-style="Normal" class="import-asset-panel__open-url-button" name="ImportUriButton" />
         </nl3d:ContentContainer>
-        <nl3dP:ErrorPanel class="hidden" header-text="Eigen bestand toevoegen" message="Het bestand dat u probeert toe te voegen kon niet worden ingeladen. Controleer of het bestandstype wordt ondersteund en of u de juiste URL link heeft ingevoerd.">
+        <nl3dP:ErrorPanel header-text="Eigen bestand toevoegen" message="Het bestand dat u probeert toe te voegen kon niet worden ingeladen. Controleer of het bestandstype wordt ondersteund en of u de juiste URL link heeft ingevoerd.">
         </nl3dP:ErrorPanel>
         <nl3dP:CredentialPanel>
         </nl3dP:CredentialPanel>

@@ -21,6 +21,12 @@ namespace Netherlands3D.Credentials
         {
             keyVault = ServiceLocator.GetService<KeyVaultService>().KeyVault;
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
+            keyVault.UntestedQueryStringAuthFound.AddListener(OnAuthParsedFromUrl);
+        }
+        
+        private void OnAuthParsedFromUrl(string key, string value)
+        {
+            PasswordOrKeyOrTokenOrCode = value;
         }
 
         public void ApplyCredentials()
@@ -54,6 +60,7 @@ namespace Netherlands3D.Credentials
         public void Dispose()
         {
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
+            keyVault.UntestedQueryStringAuthFound.RemoveListener(OnAuthParsedFromUrl);
         }
     }
 }

@@ -35,10 +35,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] protected float maxSelectionDistanceFromCamera = 10000;
         private float lastTapTime = 0;
         private Vector2 previousFrameScreenCoordinate = default;
-        private Vector2 previousFrameWorldCoordinate = default;
         
         private PolygonSelectionService polygonSelectionService;
         private InputService inputService;
+        private ToolService toolService;
 
         [SerializeField] private BoolEvent OnBlockCameraDragging;
         [SerializeField] private TriggerEvent OnGridCreate;
@@ -52,8 +52,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private ShapeType currentShapeType = ShapeType.Undefined;
         private Plane worldPlane = new(Vector3.up, Vector3.zero);
 
-        private void OnEnable()
+        private void Start()
         {
+            toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            //we have to listen to inputservice after it is initialized
+            inputService = ServiceLocator.GetService<InputService>();
+            inputService.PolygonTapAction.performed += TapAction_performed;
+            inputService.PolygonClickAction.performed += ClickAction_performed;
+            inputService.PolygonClickAction.canceled += ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed += FinishAction_performed;
+            
+            OnGridCreate.AddListenerStarted(toolService.GetTool(ToolType.PolygonGrid).onOpen.Invoke);
+            
             polygonInput.createdNewPolygonArea.AddListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.AddListener(UpdateLayer);
             lineInput.createdNewPolygonArea.AddListener(CreateLineLayer);
@@ -69,8 +81,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnPolygonEdit.AddListenerStarted(SetPolygonToEdit);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
+            inputService.PolygonTapAction.performed -= TapAction_performed;
+            inputService.PolygonClickAction.performed -= ClickAction_performed;
+            inputService.PolygonClickAction.canceled -= ClickAction_canceled;
+            inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
+            inputService.PolygonFinishAction.performed -= FinishAction_performed;
+            
+            OnGridCreate.RemoveListenerStarted(toolService.GetTool(ToolType.PolygonGrid).onOpen.Invoke);
+            
             polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.RemoveListener(UpdateLayer);
             lineInput.createdNewPolygonArea.RemoveListener(CreateLineLayer);
@@ -84,27 +104,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnLineEdit.RemoveListenerStarted(SetLineInputToEdit);
             OnPolygonCreate.RemoveListenerStarted(SetPolygonToCreate);
             OnPolygonEdit.RemoveListenerStarted(SetPolygonToEdit);
-        }
-
-        private void Start()
-        {
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            //we have to listen to inputservice after it is initialized
-            inputService = ServiceLocator.GetService<InputService>();
-            inputService.PolygonTapAction.performed += TapAction_performed;
-            inputService.PolygonClickAction.performed += ClickAction_performed;
-            inputService.PolygonClickAction.canceled += ClickAction_canceled;
-            inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
-            inputService.PolygonFinishAction.performed += FinishAction_performed;
-        }
-
-        private void OnDestroy()
-        {
-            inputService.PolygonTapAction.performed -= TapAction_performed;
-            inputService.PolygonClickAction.performed -= ClickAction_performed;
-            inputService.PolygonClickAction.canceled -= ClickAction_canceled;
-            inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
-            inputService.PolygonFinishAction.performed -= FinishAction_performed;
         }
 
         private void TapAction_performed(InputAction.CallbackContext obj)
@@ -220,8 +219,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     input.AutoAddPoint(previousFrameScreenCoordinate);
                 else if (input.RequireReleaseBeforeRedraw && !inputService.PolygonClickAction.IsPressed())
                     input.RequireReleaseBeforeRedraw = false;
-
-                previousFrameWorldCoordinate = currentPointerPosition;
             }
             else if (currentShapeType == ShapeType.Grid)
             {

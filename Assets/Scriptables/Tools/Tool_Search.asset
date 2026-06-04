@@ -32,5 +32,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   inspectorPrefab: {fileID: 0}
+  panelType:
+    _assemblyQualifiedName: Netherlands3D.UI.Panels.LocationSearchPanel, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   functionalityPrefabs: []
   open: 0

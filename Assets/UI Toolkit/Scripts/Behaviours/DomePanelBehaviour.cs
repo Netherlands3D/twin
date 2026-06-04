@@ -18,15 +18,14 @@ namespace Netherlands3D.UI.Panels
         
         public override object GetData()
         {
-            var layers = ProjectData.Current.RootLayer.GetFlatHierarchy();
-            return layers.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToList(); //keep only the maskable layers
+            return ProjectData.Current.RootLayer;
         }
         
         public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, params object[] constructorArgs)
         {
             base.SpawnFloatingPanelContent(floatingPanel, constructorArgs);
-            var layers = constructorArgs[0] as List<LayerData>;
-            MaskingPanel content = new MaskingPanel(layers, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
+            var rootLayer = constructorArgs[0] as LayerData;
+            MaskingPanel content = new MaskingPanel(rootLayer, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
             content.SetHeader(headerText);
             content.SetDescription(description);
             return content;
@@ -34,7 +33,7 @@ namespace Netherlands3D.UI.Panels
         
         public override bool ShouldBeActive()
         {
-            return domeTool.Open;
+            return domeTool.IsOpen;
         }
     }
 }

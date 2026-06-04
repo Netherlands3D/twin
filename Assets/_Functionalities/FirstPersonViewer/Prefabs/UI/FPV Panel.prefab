@@ -3108,7 +3108,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.Tool, eu.netherlands3d.twin
-        m_MethodName: OpenInspector
+        m_MethodName: Open
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3147,7 +3147,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.Tool, eu.netherlands3d.twin
-        m_MethodName: CloseInspector
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

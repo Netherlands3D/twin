@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Netherlands3D.AddressSearch;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
 {
@@ -25,16 +28,21 @@ namespace Netherlands3D.UI.Behaviours
 
         private LocationSearchPanel panel;
         private CameraService cameraService;
+        private ToolService toolService;
 
         private void OnEnable()
         {
             if (!addressSearchService) addressSearchService = GetComponent<AddressSearchService>();
             cameraService = ServiceLocator.GetService<CameraService>();
+            toolService = ServiceLocator.GetService<ToolService>();
 
             addressSearchService.onCoordinateFound.AddListener(OnCoordinateFound);
             addressSearchService.SuggestionsReady += OnSuggestionsReady;
             addressSearchService.SuggestionsCleared += OnSuggestionsCleared;
             addressSearchService.SuggestionAutoSelected += OnSuggestionAutoSelected;
+            
+            toolService.GetTool(ToolType.Search).onOpen.AddListener(OnOpen);
+            toolService.GetTool(ToolType.Search).onClose.AddListener(OnClose);
         }
 
         private void OnDisable()
@@ -45,23 +53,34 @@ namespace Netherlands3D.UI.Behaviours
             addressSearchService.SuggestionsReady -= OnSuggestionsReady;
             addressSearchService.SuggestionsCleared -= OnSuggestionsCleared;
             addressSearchService.SuggestionAutoSelected -= OnSuggestionAutoSelected;
+            
+            toolService.GetTool(ToolType.Search).onOpen.RemoveListener(OnOpen);
+            toolService.GetTool(ToolType.Search).onClose.RemoveListener(OnClose);
         }
 
-        /// <summary>
-        /// Wire the panel's UI events. Must be called once after the panel has been
-        /// registered with the inspector panel system.
-        /// </summary>
-        public void Initialize(LocationSearchPanel locationSearchPanel)
+        public void OnOpen()
         {
-            panel = locationSearchPanel;
+            //todo it would be cleaner to listen to a spawned panel event of the inspectorpanelbehaviour
+            App.UIRoot.Root.schedule.Execute(_ =>
+            {
+                panel = App.UIRoot.Root.Q<LocationSearchPanel>();
+                panel.QueryChanged += OnQueryChanged;
+                panel.SubmitRequested += OnSubmitRequested;
+                panel.SuggestionSelected += OnSuggestionSelected;
+                panel.CoordinateXSubmitted += OnCoordinateXSubmitted;
+                panel.CoordinateYSubmitted += OnCoordinateYSubmitted;
+                
+                SyncPanelToMainCameraPosition();
+            });
+        }
 
-            panel.QueryChanged += OnQueryChanged;
-            panel.SubmitRequested += OnSubmitRequested;
-            panel.SuggestionSelected += OnSuggestionSelected;
-            panel.CoordinateXSubmitted += OnCoordinateXSubmitted;
-            panel.CoordinateYSubmitted += OnCoordinateYSubmitted;
-
-            SyncPanelToMainCameraPosition();
+        public void OnClose()
+        {
+            panel.QueryChanged -= OnQueryChanged;
+            panel.SubmitRequested -= OnSubmitRequested;
+            panel.SuggestionSelected -= OnSuggestionSelected;
+            panel.CoordinateXSubmitted -= OnCoordinateXSubmitted;
+            panel.CoordinateYSubmitted -= OnCoordinateYSubmitted;
         }
 
         private void OnQueryChanged(string text)
