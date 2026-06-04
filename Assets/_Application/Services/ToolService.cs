@@ -84,13 +84,18 @@ namespace Netherlands3D
             }
         }
 
+        private List<Tool> toolsWithPanel;
+
         public List<Tool> GetAllToolsWithPanel()
         {
-            List<Tool> toolsWithPanel = new List<Tool>();
-            foreach (var tool in tools){
-                if (tool.tool.PanelType != null)
-                {
-                    toolsWithPanel.Add(tool.tool);
+            if(toolsWithPanel == null)
+            {
+                toolsWithPanel = new List<Tool>();
+                foreach (var tool in tools){
+                    if (tool.tool.PanelType != null)
+                    {
+                        toolsWithPanel.Add(tool.tool);
+                    }
                 }
             }
             return toolsWithPanel;
