@@ -69,8 +69,9 @@ public class DragManipulator : PointerManipulator
             var totalMove = (Vector2)e.position - (Vector2)start;
             if (totalMove.magnitude < movementDeadzone) return;
 
-            isDragging = true;
+            start = e.position;
             previousPosition = e.position;
+            isDragging = true;
             target.CapturePointer(pointerId);
             OnDragStarted(start);
             DragStarted.Invoke(start);

@@ -18,6 +18,7 @@ namespace Netherlands3D.UI.Components
         private Label layerNameText;
         
         private Vector2 currentPosition;
+        private float yOffset;
         
         public LayerDragGhost()
         {
@@ -37,9 +38,9 @@ namespace Netherlands3D.UI.Components
 
         public void Initialize(Vector2 dragStartPosition, LayerListViewItem ui)
         {
-            // currentPosition = dragStartPosition;
             UpdatePosition(dragStartPosition);
             CopyAppearance(ui);
+            yOffset = ui.resolvedStyle.height/2;
         }
 
         private void CopyAppearance(LayerListViewItem ui)
@@ -70,8 +71,7 @@ namespace Netherlands3D.UI.Components
         
         public void UpdatePosition(Vector2 worldPosition)
         {
-            // currentPosition = newPosition;
-            style.top = parent.WorldToLocal(worldPosition).y;// - resolvedStyle.height / 2; //todo ui-toolkit: not the correct height offset yet
+            style.top = parent.WorldToLocal(worldPosition).y -  yOffset;
         }
     }
 }
