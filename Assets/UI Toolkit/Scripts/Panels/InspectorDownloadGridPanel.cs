@@ -12,7 +12,7 @@ using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class InspectorDownloadGridPanel : BaseInspectorContentPanel
     {
         public override string Title => "Download 3D data";
@@ -41,14 +41,7 @@ namespace Netherlands3D.UI.Panels
             zw_y = this.Q<NumberField>("ZW_Y");
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
-
-            PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             
-            OnShow += () => Show(true);
-            OnHide += () => Show(false);
-            OnShow += polygonSelectionService.EnablePolygonSelection;
-            OnHide += polygonSelectionService.DisablePolygonSelection;
-
             confirmButton.clicked += OnConfirmSelection.Invoke;
 
             RegisterCallback<AttachToPanelEvent>(evt =>
