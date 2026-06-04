@@ -211,12 +211,12 @@ namespace Netherlands3D.UI.Panels
             else if (normalizedY > 0.75f)
             {
                 currentDropMode = DropMode.Below;
-                newClassName = reparentTargetUSSClassName;
+                newClassName = belowTargetUSSClassName;
             }
             else
             {
                 currentDropMode = DropMode.Into;
-                newClassName = belowTargetUSSClassName;
+                newClassName = reparentTargetUSSClassName;
             }
 
             SetTargetItemUssClasses(hoveredItem, newClassName);
