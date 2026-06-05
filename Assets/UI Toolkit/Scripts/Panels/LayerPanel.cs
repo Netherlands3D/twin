@@ -204,16 +204,26 @@ namespace Netherlands3D.UI.Panels
             }
 
             SetHoveredButton(null);
-
             if (atTopEdge || atBottomEdge)
             {
-                SetHoveredItem(GetClosestItem(panelDragPosition.y));
-                siblingIndex = atTopEdge ? 0 : -1;
                 currentDropMode = DropMode.ToRoot;
+                if(atTopEdge)
+                {
+                    SetHoveredItem(treeView.Query<LayerListViewItem>().First()); //ensure we get the first item, using GetClosestItem gives jittering issues for some reason
+                    siblingIndex = 0;
+                }
+                else
+                {
+                    SetHoveredItem(GetClosestItem(panelDragPosition.y));
+                    siblingIndex = -1;
+                }
+    
                 if (atTopEdge)
                     SetTargetItemUssClasses(hoveredItem, toRootAboveTargetUSSClassName);
                 else
                     SetTargetItemUssClasses(hoveredItem, toRootBelowTargetUSSClassName);
+                Debug.Log("toroot "+hoveredItem.layerData.Name);
+
                 return;
             }
 
@@ -223,6 +233,7 @@ namespace Netherlands3D.UI.Panels
                              ?? GetClosestItem(panelDragPosition.y);
 
             SetHoveredItem(targetItem);
+            Debug.Log("not anove root: " + hoveredItem.layerData.Name);
             var layer = hoveredItem.userData as LayerData;
             siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
         }
