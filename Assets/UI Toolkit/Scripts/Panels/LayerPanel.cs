@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -60,6 +61,7 @@ namespace Netherlands3D.UI.Panels
             scrollView = treeView.Q<ScrollView>();
 
             RegisterCallback<KeyDownEvent>(OnKeyDown);
+            PopulateLayerPanel(ProjectData.Current.RootLayer);
         }
 
         private void OnKeyDown(KeyDownEvent evt)
