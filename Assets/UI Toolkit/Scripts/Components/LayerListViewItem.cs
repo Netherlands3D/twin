@@ -187,10 +187,11 @@ namespace Netherlands3D.UI.Components
 
             var previous = this.layerData;
             userData = layerData;
+            
+            SetAppearance(layerData);
 
             //visibility toggle
             previous?.ActiveSelfChanged.RemoveListener(OnActiveSelfChanged);
-            UpdateEnabledToggle(layerData.ActiveInHierarchy);
             layerData.ActiveSelfChanged.AddListener(OnActiveSelfChanged);
 
             previous?.ParentOrSiblingIndexChanged.RemoveListener(OnParentChanged);
@@ -201,25 +202,33 @@ namespace Netherlands3D.UI.Components
 
             //Color bar
             previous?.ColorChanged.RemoveListener(UpdateColorBar);
-            UpdateColorBar(layerData.Color);
             layerData.ColorChanged.AddListener(UpdateColorBar);
 
             //LayerTypeIcon
             previous?.OnPrefabIdChanged.RemoveListener(UpdateLayerTypeIcon);
-            UpdateLayerTypeIcon();
             layerData.OnPrefabIdChanged.AddListener(UpdateLayerTypeIcon);
 
             //Layer Name
             previous?.NameChanged.RemoveListener(UpdateNameLabels);
-            UpdateNameLabels(layerData, layerData.Name);
             layerData.NameChanged.AddListener(UpdateNameLabels);
 
             //properties
             previous?.PropertySet.RemoveListener(OnPropertiesChanged);
             previous?.PropertyRemoved.RemoveListener(OnPropertiesChanged);
-            LoadProperties(layerData.LayerProperties);
             layerData.PropertySet.AddListener(OnPropertiesChanged);
             layerData.PropertyRemoved.AddListener(OnPropertiesChanged);
+        }
+
+        private void SetAppearance(LayerData layerData)
+        {
+            if(!layerData.HasValidCredentials)
+                
+                
+            UpdateEnabledToggle(layerData.ActiveInHierarchy);
+            UpdateColorBar(layerData.Color);
+            UpdateLayerTypeIcon();
+            UpdateNameLabels(layerData, layerData.Name);
+            LoadProperties(layerData.LayerProperties);
         }
 
         private void OnPropertiesChanged(LayerPropertyData propertyData)
@@ -280,12 +289,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLayerTypeIcon()
         {
-            layerTypeIcon.Image = GetImage(layerData); //todo test if the icon updates when setting prefab (scatter)
-        }
-
-        private static IconImage GetImage(LayerData layerData)
-        {
-            return LayerTypeSpriteLibrary.GetIconImage(layerData);
+            layerTypeIcon.Image = LayerTypeSpriteLibrary.GetIconImage(layerData); //todo test if the icon updates when setting prefab (scatter)
         }
 
         private void UpdateNameLabels(LayerData layerData, string newName)
@@ -313,8 +317,8 @@ namespace Netherlands3D.UI.Components
             return false;
         }
 
+        //todo: credential needed state
         //todo: root.Selectedlayers
         //todo: cleanup old scripts
-        //todo: credential needed state
     }
 }
