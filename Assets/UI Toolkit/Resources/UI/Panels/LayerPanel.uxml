@@ -10,4 +10,8 @@
     <nl3d:TreeView>
 
     </nl3d:TreeView>
+    <ui:VisualElement class="layer-panel__bottom-button-container">
+        <nl3d:Button name="FolderButton" button-style="IconOnly" icon="Folder"/>
+        <nl3d:Button name="DeleteButton" button-style="IconOnly" icon="Trash"/>
+    </ui:VisualElement>
 </ui:UXML>

@@ -1,2 +1,13 @@
-.unity-tree-view__item {
+.layer-panel {
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+}
+.layer-panel__bottom-button-container{
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.layer-panel__bottom-button-container .button{
+    margin-left: var(--spacing-1);
 }
