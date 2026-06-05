@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 using ScrollView = UnityEngine.UIElements.ScrollView;
 using TreeView = Netherlands3D.UI.Components.TreeView;
 
@@ -33,6 +35,10 @@ namespace Netherlands3D.UI.Panels
         private Vector2 panelDragPosition;
         private int siblingIndex;
         private LayerListViewItem hoveredItem;
+
+        private LayerListViewItem referenceLayerItem;
+        private Button folderButton;
+        private Button deleteButton;
 
         private enum DropMode
         {
@@ -62,6 +68,40 @@ namespace Netherlands3D.UI.Panels
 
             RegisterCallback<KeyDownEvent>(OnKeyDown);
             PopulateLayerPanel(ProjectData.Current.RootLayer);
+
+            //bottom buttons
+            folderButton = this.Q<Button>("FolderButton");
+            folderButton.RegisterCallback<ClickEvent>(OnFolderButtonClicked);
+
+            deleteButton = this.Q<Button>("DeleteButton");
+            deleteButton.RegisterCallback<ClickEvent>(OnDeleteButtonClicked);
+        }
+
+        private void OnFolderButtonClicked(ClickEvent evt)
+        {
+            GroupSelectedLayers();
+        }
+
+        private void GroupSelectedLayers()
+        {
+            if (!treeView.selectedItems.Any()) //no selected layers to group
+                return;
+
+            var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList(); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+
+            var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
+            var referenceLayer = referenceLayerItem.layerData;
+            newGroup.LayerData.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
+            // SortSelectedLayers(layersToGroup); //todo: sort the selected items to maintain the order as visible in the tree view
+            foreach (LayerData selectedLayer in layersToGroup)
+            {
+                selectedLayer.SetParent(newGroup.LayerData);
+            }
+        }
+
+        private void OnDeleteButtonClicked(ClickEvent evt)
+        {
+            DeleteSelectedLayers();
         }
 
         private void OnKeyDown(KeyDownEvent evt)
@@ -101,7 +141,13 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.DragStarted.AddListener(OnDraggingLayerItemStarted);
             layerRowElement.Dragging.AddListener(OnDraggingLayerItem);
             layerRowElement.DragEnded.AddListener(OnDraggingLayerItemEnded);
+            layerRowElement.RegisterCallback<ClickEvent>(SetReferenceLayer);
             return layerRowElement;
+        }
+
+        private void SetReferenceLayer(ClickEvent evt)
+        {
+            referenceLayerItem = evt.currentTarget as LayerListViewItem;
         }
 
         private void BindItem(VisualElement item, int index)
@@ -124,6 +170,8 @@ namespace Netherlands3D.UI.Panels
             dragGhost = new LayerDragGhost();
             Add(dragGhost);
             dragGhost.Initialize(panelDragPosition, source);
+
+            referenceLayerItem = source;
         }
 
         private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)
