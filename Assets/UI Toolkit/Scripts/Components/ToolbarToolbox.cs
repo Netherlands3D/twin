@@ -20,6 +20,7 @@ namespace Netherlands3D.UI.Components
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            
         }
 
         private void OnAttachToPanel(AttachToPanelEvent _)

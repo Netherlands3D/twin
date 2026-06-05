@@ -5,6 +5,7 @@ using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using TextField = Netherlands3D.UI.Components.TextField;
@@ -14,7 +15,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class CredentialPanel : VisualElement
     {
-        public ICredentialHandler Handler { get; set; }
+        public UnityEvent OnConfirmCredentials = new();
         
         private Button warningButton;
         private Button WarningButton => warningButton ??= this.Q<Button>("WarningButton");
@@ -88,10 +89,7 @@ namespace Netherlands3D.UI.Panels
                 ErrorPanel.Show();
                 return;
             }
-
-            Handler.UserName = UserNameField.value;
-            Handler.PasswordOrKeyOrTokenOrCode = CodeField.value;
-            Handler.ApplyCredentials();
+            OnConfirmCredentials.Invoke();
         }
 
         private void InitializeDropdown()
@@ -142,9 +140,12 @@ namespace Netherlands3D.UI.Panels
         public bool IsInputEmpty() => string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value);
 
         
-        public void Show(bool show)
+        public void Show(bool show, string password = "")
         {
+            if(show)
+                CodeField.SetValueWithoutNotify(password);
             EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+            SetEnabled(show); //todo why is still needed?
         }
 
         public void ShowError(bool show)

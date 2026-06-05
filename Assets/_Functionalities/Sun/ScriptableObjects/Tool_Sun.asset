@@ -24,12 +24,13 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls: []
-  onToggleInspector:
-    m_PersistentCalls:
-      m_Calls: []
   onSpawnedPrefab:
     m_PersistentCalls:
       m_Calls: []
   inspectorPrefab: {fileID: 0}
+  panelType:
+    _assemblyQualifiedName: Netherlands3D.UI.Panels.SunTimePanel, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  panelArgs: []
   functionalityPrefabs: []
   open: 0

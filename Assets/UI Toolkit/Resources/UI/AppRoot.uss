@@ -4,6 +4,12 @@
     padding: 4px;
 }
 
+.app__inspector-zone
+{
+    
+}
+
+
 .app__top-zone {
     flex: 0 auto;
     position: absolute;

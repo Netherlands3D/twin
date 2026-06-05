@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
 
@@ -16,21 +17,14 @@ namespace Netherlands3D.UI.Panels
 {
     public class PropertyPanelBehaviour : MonoBehaviour
     {
-        [SerializeField] private UIDocument uiDocument;
-        private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private SecondaryPropertiesPanel secondaryPropertiesPanel;
         private ColorPicker colorPicker;
 
-        public LayerData activeLayer;
-        public UnityEvent<LayerData> PropertySectionOpened;
-        public UnityEvent<LayerData> PropertySectionClosed;
-
         private void Start()
         {
-            root = uiDocument.rootVisualElement;  //todo ui-toolkit: lets refactor this to use App.UIRoot when implemented fully
-            propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
-            secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
+            propertiesPanel = App.UIRoot.Root.Q<PropertiesPanel>("PropertiesPanel");
+            secondaryPropertiesPanel = App.UIRoot.Root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
@@ -53,8 +47,6 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel.ClearPropertySections();
             propertiesPanel.SetVisible(false);
             secondaryPropertiesPanel.SetVisible(false);
-            PropertySectionClosed.Invoke(activeLayer);
-            activeLayer = null;
         }
 
        public void SpawnPanel(LayerData layer)
@@ -88,13 +80,10 @@ namespace Netherlands3D.UI.Panels
                 foreach (var interfaceType in propertyType.GetInterfaces())
                     allPanels.AddRange(CollectPanelsForType(interfaceType));
             }
-            
+
             allPanels.Sort((a, b) => a.panelType.Order.CompareTo(b.panelType.Order));
             SpawnCollectedPanels(allPanels, layer.LayerProperties);
 
-            activeLayer = layer;
-            PropertySectionOpened.Invoke(activeLayer);
-            
             if (allPanels.Count == 0)
                 ClearActivePanel();
 

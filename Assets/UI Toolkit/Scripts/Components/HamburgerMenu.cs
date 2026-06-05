@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Services;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEditor;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -20,12 +23,6 @@ namespace Netherlands3D.UI.Components
         private Button SaveProjectButton => this.Q<Button>("Save");
         private Button SettingsButton => this.Q<Button>("Settings");
         private Button HelpButton => this.Q<Button>("Help");
-
-        public event Action OnOpenProjectSelected;
-        public event Action OnSaveProjectSelected;
-        public event Action OnSettingsSelected;
-        public event Action OnHelpSelected;
-        
         
         [UxmlAttribute("text")]
         public string ProjectTitle
@@ -52,11 +49,11 @@ namespace Netherlands3D.UI.Components
             SetValueWithoutNotify(false);
 
             RegisterCallback<ChangeEvent<bool>>(OnFoldoutValueChanged);
-
-            OpenProjectButton.RegisterCallback<ClickEvent>(_ => OnOpenProjectSelected?.Invoke());
-            SaveProjectButton.RegisterCallback<ClickEvent>(_ => OnSaveProjectSelected?.Invoke());
-            SettingsButton.RegisterCallback<ClickEvent>(_ => OnSettingsSelected?.Invoke());
-            HelpButton.RegisterCallback<ClickEvent>(_ => OnHelpSelected?.Invoke());
+            
+            OpenProjectButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.OpenProject).onOpen.Invoke());
+            SaveProjectButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.SaveProject).onOpen.Invoke());
+            SettingsButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.Settings).onOpen.Invoke());
+            HelpButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.Help).onOpen.Invoke());
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {

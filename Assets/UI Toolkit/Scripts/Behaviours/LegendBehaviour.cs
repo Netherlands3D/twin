@@ -7,6 +7,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Twin;
 using Netherlands3D.UI.Panels;
 using RSG;
 using UnityEngine.UIElements;
@@ -15,7 +16,6 @@ namespace Netherlands3D.Legend
 {
     public class LegendBehaviour : MonoBehaviour
     {
-        [SerializeField] private UIDocument uiDocument; //todo ui-toolkit: use App.UIRoot when this is merged (also for other behaviours that have this reference)
         [SerializeField] private bool log = false;
 
         private LegendPanel legendPanel;
@@ -29,7 +29,7 @@ namespace Netherlands3D.Legend
 
         private void Awake()
         {
-            legendPanel = uiDocument.rootVisualElement.Q<LegendPanel>();
+            legendPanel = App.UIRoot.Root.Q<LegendPanel>();
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
