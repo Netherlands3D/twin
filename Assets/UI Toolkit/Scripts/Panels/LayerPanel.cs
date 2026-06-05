@@ -13,7 +13,7 @@ using TreeView = Netherlands3D.UI.Components.TreeView;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class LayerPanel : BaseInspectorContentPanel
     {
         private const string aboveTargetUSSClassName = "layer-list-view-item--reparent-above";
