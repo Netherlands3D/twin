@@ -24,6 +24,7 @@ namespace Netherlands3D.UI.Panels
         private const string belowTargetUSSClassName = "layer-list-view-item--reparent-below";
         private const string toRootAboveTargetUSSClassName = "layer-list-view-item--reparent-to-root-above";
         private const string toRootBelowTargetUSSClassName = "layer-list-view-item--reparent-to-root-below";
+        private const string buttonHighlightUSSClassName = "button--drag-hover";
 
         private TreeView treeView;
         private ScrollView scrollView;
@@ -37,6 +38,8 @@ namespace Netherlands3D.UI.Panels
         private LayerListViewItem hoveredItem;
 
         private LayerListViewItem referenceLayerItem;
+        private Button hoveredButton;
+
         private Button folderButton;
         private Button deleteButton;
 
@@ -167,7 +170,7 @@ namespace Netherlands3D.UI.Panels
         {
             if (dragGhost != null)
                 dragGhost.RemoveFromHierarchy();
-            
+
             panelDragPosition = startPosition;
 
             dragGhost = new LayerDragGhost();
@@ -179,15 +182,29 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)
         {
-            panelDragPosition += new Vector2(0, delta.y);
-            
+            panelDragPosition += delta;
+
             var aboveTree = panelDragPosition.y < treeView.worldBound.yMin;
             var belowTree = panelDragPosition.y > treeView.worldBound.yMax;
             var atTopEdge = aboveTree && !MoveScrollView(-scrollSpeed);
             var atBottomEdge = belowTree && !MoveScrollView(scrollSpeed);
-            
+
             dragGhost.UpdatePosition(panelDragPosition);
-            
+            var hitElement = panel.Pick(panelDragPosition);
+
+            //check for hover buttons
+            if (belowTree && panelDragPosition.x > treeView.worldBound.xMin && panelDragPosition.x < treeView.worldBound.xMax) //don't account for buttons in the tree
+            {
+                var hitButton = hitElement as Button ?? hitElement?.GetFirstAncestorOfType<Button>();
+                if(hitButton != null)
+                {
+                    SetHoveredButton(hitButton);
+                    return;
+                }
+            }
+
+            SetHoveredButton(null);
+
             if (atTopEdge || atBottomEdge)
             {
                 SetHoveredItem(GetClosestItem(panelDragPosition.y));
@@ -199,15 +216,28 @@ namespace Netherlands3D.UI.Panels
                     SetTargetItemUssClasses(hoveredItem, toRootBelowTargetUSSClassName);
                 return;
             }
-            
-            var hitElement = panel.Pick(panelDragPosition);
+
+            // var hitElement = panel.Pick(panelDragPosition);
             var targetItem = hitElement as LayerListViewItem
                              ?? hitElement?.GetFirstAncestorOfType<LayerListViewItem>()
                              ?? GetClosestItem(panelDragPosition.y);
-            
+
             SetHoveredItem(targetItem);
             var layer = hoveredItem.userData as LayerData;
             siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
+        }
+
+        private void SetHoveredButton(Button hitButton)
+        {
+            if (hoveredButton == hitButton) return;
+
+            if (hoveredButton != null)
+                hoveredButton.EnableInClassList(buttonHighlightUSSClassName, false);
+
+            hoveredButton = hitButton;
+
+            if (hoveredButton != null)
+                hoveredButton.EnableInClassList(buttonHighlightUSSClassName, true);
         }
 
         private bool MoveScrollView(float deltaY)
@@ -217,7 +247,7 @@ namespace Netherlands3D.UI.Panels
             var scrollDelta = new Vector2(0, deltaY * Time.deltaTime);
             scrollView.scrollOffset += scrollDelta;
             var realChange = scrollView.scrollOffset - currentScrollOffset;
-            
+
             return Mathf.Abs(realChange.y) > 0.01f;
         }
 
@@ -277,7 +307,14 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
         {
-            if (hoveredItem != null)
+            if (hoveredButton != null)
+            {
+                if (hoveredButton == deleteButton)
+                    DeleteSelectedLayers();
+                else if (hoveredButton == folderButton)
+                    GroupSelectedLayers();
+            }
+            else if (hoveredItem != null)
             {
                 var selectedLayers = treeView.selectedItems.ToList(); //to list makes a copy and avoids a collectionmodified error
                 selectedLayers.Reverse();
@@ -302,7 +339,18 @@ namespace Netherlands3D.UI.Panels
                 }
             }
 
-            SetTargetItemUssClasses(hoveredItem, null);
+            CleanupDrag();
+        }
+
+        private void CleanupDrag()
+        {
+            if (hoveredItem != null)
+                SetTargetItemUssClasses(hoveredItem, null);
+
+            if (hoveredButton != null)
+                hoveredButton.EnableInClassList(buttonHighlightUSSClassName, false);
+
+            hoveredButton = null;
             hoveredItem = null;
 
             dragGhost.RemoveFromHierarchy();
@@ -316,8 +364,8 @@ namespace Netherlands3D.UI.Panels
             targetItem.ItemRoot.EnableInClassList(belowTargetUSSClassName, false);
             targetItem.ItemRoot.EnableInClassList(toRootAboveTargetUSSClassName, false);
             targetItem.ItemRoot.EnableInClassList(toRootBelowTargetUSSClassName, false);
-            
-            if(newClassName != null)
+
+            if (newClassName != null)
                 targetItem.ItemRoot.EnableInClassList(newClassName, true);
         }
 

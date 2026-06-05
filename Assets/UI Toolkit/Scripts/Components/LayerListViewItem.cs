@@ -336,7 +336,8 @@ namespace Netherlands3D.UI.Components
             return false;
         }
 
-        //todo: bottom buttons
+        //todo: reparent to top jitter
+        //todo: order grouped items
         //todo: root.Selectedlayers
         //todo: cleanup old scripts
     }

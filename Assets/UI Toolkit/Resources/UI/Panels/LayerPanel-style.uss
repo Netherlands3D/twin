@@ -11,3 +11,7 @@
 .layer-panel__bottom-button-container .button{
     margin-left: var(--spacing-1);
 }
+
+.button.button--drag-hover{
+    background-color: var(--color-blue-700-hover);
+}
