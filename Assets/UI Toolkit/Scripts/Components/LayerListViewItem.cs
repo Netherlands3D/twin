@@ -222,7 +222,9 @@ namespace Netherlands3D.UI.Components
         private void SetAppearance(LayerData layerData)
         {
             if(!layerData.HasValidCredentials)
-                
+            {
+                Debug.Log("Layer does not have valid credentials");
+            }
                 
             UpdateEnabledToggle(layerData.ActiveInHierarchy);
             UpdateColorBar(layerData.Color);
