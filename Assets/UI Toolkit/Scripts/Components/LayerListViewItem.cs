@@ -29,21 +29,21 @@ namespace Netherlands3D.UI.Components
         public LayerData layerData => userData as LayerData;
         public UnityEvent RequestTreeRefresh { get; } = new();
         public UnityEvent RequestTreeRebuild { get; } = new();
-        
+
         private IVisualElementScheduledItem clickTimer;
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
         private bool waitingForClick = false;
-        
+
         public UnityEvent<Vector2, LayerListViewItem> DragStarted { get; } = new();
         public UnityEvent<Vector2, LayerListViewItem> Dragging { get; } = new();
         public UnityEvent<Vector2, LayerListViewItem> DragEnded { get; } = new();
-        
+
         private VisualElement itemRoot;
         public VisualElement ItemRoot => itemRoot;
         public VisibilityState VisibilityState => isActiveToggle.Image;
         public IconImage LayerTypeIcon => layerTypeIcon.Image;
         public float IndentWidth => ItemRoot.Q("unity-tree-view__item-indent").resolvedStyle.width;
-        
+
         public LayerListViewItem()
         {
             this.CloneComponentTree("Components");
@@ -70,9 +70,8 @@ namespace Netherlands3D.UI.Components
             propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel); // we can only update the layout after attaching to the panel
-            
         }
-        
+
         private void OnClick(ClickEvent evt)
         {
             if (nameInputField.IsEditing)
@@ -81,7 +80,7 @@ namespace Netherlands3D.UI.Components
                 clickTimer.Pause();
                 return;
             }
-            
+
             if (waitingForClick)
             {
                 OnDoubleClick();
@@ -89,6 +88,7 @@ namespace Netherlands3D.UI.Components
                 clickTimer.Pause();
                 return;
             }
+
             waitingForClick = true;
             clickTimer = schedule.Execute(() => waitingForClick = false);
             clickTimer.ExecuteLater((long)(ClickInterval * 1000));
@@ -98,7 +98,7 @@ namespace Netherlands3D.UI.Components
         {
             layerData.DoubleClickLayer();
         }
-        
+
         private void OnDragStarted(Vector2 startPosition)
         {
             DragStarted.Invoke(startPosition, this);
@@ -187,8 +187,11 @@ namespace Netherlands3D.UI.Components
 
             var previous = this.layerData;
             userData = layerData;
-            
+
             SetAppearance(layerData);
+
+            //credentials
+            layerData.HasValidCredentialsChanged.AddListener(OnCredentialStatusChanged);
 
             //visibility toggle
             previous?.ActiveSelfChanged.RemoveListener(OnActiveSelfChanged);
@@ -219,17 +222,21 @@ namespace Netherlands3D.UI.Components
             layerData.PropertyRemoved.AddListener(OnPropertiesChanged);
         }
 
+        private void OnCredentialStatusChanged(bool valid)
+        {
+            SetAppearance(layerData);
+        }
+
         private void SetAppearance(LayerData layerData)
         {
-            if(!layerData.HasValidCredentials)
-            {
-                Debug.Log("Layer does not have valid credentials");
-            }
-                
-            UpdateEnabledToggle(layerData.ActiveInHierarchy);
-            UpdateColorBar(layerData.Color);
-            UpdateLayerTypeIcon();
+            var validCredentials = layerData.HasValidCredentials;
+            isActiveToggle.SetEnabled(validCredentials);
+            ItemRoot.EnableInClassList("credentials-needed", !validCredentials);
+
             UpdateNameLabels(layerData, layerData.Name);
+            UpdateEnabledToggle(layerData.ActiveInHierarchy);
+            UpdateColorBar(validCredentials ? layerData.Color : null); //clear the colorbar style to ensure the warning color is not overridden when the credentials are invalid
+            UpdateLayerTypeIcon();
             LoadProperties(layerData.LayerProperties);
         }
 
@@ -279,14 +286,24 @@ namespace Netherlands3D.UI.Components
 
             isActiveToggle.SetStateFromLayerState(layerData.ActiveSelf, layerData.ActiveInHierarchy, allChildrenActive);
         }
-
-
+        
         private void UpdateColorBar(Color newColor)
         {
             var opaqueColor = newColor;
             opaqueColor.a = 1;
 
             colorBar.style.backgroundColor = opaqueColor;
+        }
+        
+        private void UpdateColorBar(Color? newColor)
+        {
+            if (!newColor.HasValue)
+            {
+                colorBar.style.backgroundColor = StyleKeyword.Null;
+                return;
+            }
+
+            UpdateColorBar(newColor.Value);
         }
 
         private void UpdateLayerTypeIcon()
@@ -319,7 +336,6 @@ namespace Netherlands3D.UI.Components
             return false;
         }
 
-        //todo: credential needed state
         //todo: root.Selectedlayers
         //todo: cleanup old scripts
     }
