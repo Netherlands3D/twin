@@ -84,12 +84,15 @@ namespace Netherlands3D.UI.Panels
 
         private void GroupSelectedLayers()
         {
+            var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
             if (!treeView.selectedItems.Any()) //no selected layers to group
+            {
+                RebuildTree();
                 return;
+            }
 
             var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList(); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
 
-            var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
             var referenceLayer = referenceLayerItem.layerData;
             newGroup.LayerData.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
             // SortSelectedLayers(layersToGroup); //todo: sort the selected items to maintain the order as visible in the tree view
