@@ -67,6 +67,8 @@ namespace Netherlands3D.Functionalities
         public UnityEvent<string> modelExportStatusChanged = new();
         public UnityEvent OnSelectionCleared = new();
 
+        public ExportFormat ExportFormat => selectedExportFormat;
+
         [SerializeField] private LayerMask includedLayers;
         [SerializeField] private float minClipBoundsHeight = 1000.0f;
         private ExportFormat selectedExportFormat = ExportFormat.Collada;

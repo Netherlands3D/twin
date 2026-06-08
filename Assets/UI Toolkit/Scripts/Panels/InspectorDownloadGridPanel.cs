@@ -5,12 +5,14 @@ using Netherlands3D.Services;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
+using UnityEngine.UnityConsent;
 using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
@@ -68,7 +70,10 @@ namespace Netherlands3D.UI.Panels
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(GetFeatureThumbnail); 
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(UpdateFields);
 
-                AddDropDownListener(SetExportFormat);
+                dropDown.DropDownValueChanged.AddListener(SetExportFormat);
+                ExportFormat initialFormat = downloadInspectorService.ExportFormat;
+                int index = dropDownValues.First(kvp => kvp.Value.Item2 == initialFormat).Key;
+                SetDropdownValue(index);
 
                 copyZW.RegisterCallback<ClickEvent>(CopySouthWest);
                 copyNO.RegisterCallback<ClickEvent>(CopyNorthEast);
@@ -82,7 +87,7 @@ namespace Netherlands3D.UI.Panels
         private void SetExportFormat(int state)
         {
             if (!dropDownValues.TryGetValue(state, out var mapping))
-                return;
+                return;            
 
             ExportFormat format = mapping.Item2;
             downloadInspectorService.SetExportFormat(format);
@@ -143,16 +148,6 @@ namespace Netherlands3D.UI.Panels
         public void SetDropdownValue(int value)
         {
             dropDown.SetValue(value);
-        }
-
-        public void AddDropDownListener(UnityAction<int> listener)
-        {
-            dropDown.DropDownValueChanged.AddListener(listener);
-        }
-
-        public void RemoveDropDownListener(UnityAction<int> listener)
-        {
-            dropDown.DropDownValueChanged.RemoveListener(listener);
         }
 
         public void Show(bool show)
