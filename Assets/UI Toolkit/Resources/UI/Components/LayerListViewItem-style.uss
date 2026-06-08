@@ -81,16 +81,13 @@
     background-color: transparent;
 }
 
+.credentials-needed .layer-list-view-item__visibility-toggle .icon{
+    --icon-image: var(--icon-warning);
+    -unity-background-image-tint-color: var(--color-warning);
+}
+
 .credentials-needed .layer-list-view-item__color-bar{
     background-color: var(--color-warning);
-}
-
-.credentials-needed .visibility-toggle{
-    /*display: none;*/
-}
-
-.credentials-needed .layer-list-view-item__property-toggle{
-    /*display: none;*/
 }
 
 .credentials-needed .layer-list-view-item__icon.icon{
@@ -104,9 +101,4 @@
 
 .credentials-needed .layer-list-view-item__property-toggle:checked{
     background-color: var(--color-warning);
-}
-
-.credentials-needed .layer-list-view-item__visibility-toggle .icon{
-    --icon-image: var(--icon-warning);
-    -unity-background-image-tint-color: var(--color-warning);
 }
