@@ -24,8 +24,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private Dictionary<LayerData, LayerUI> layerUIDictionary = new();
 
         //Drag variables
-        [SerializeField] private DragGhost dragGhostPrefab;
-        public DragGhost DragGhost { get; private set; }
+        // [SerializeField] private DragGhost dragGhostPrefab;
+        // public DragGhost DragGhost { get; private set; }
         [SerializeField] private RectTransform dragLine;
         public RectTransform DragLine => dragLine;
         public Vector2 DragStartOffset { get; set; }
@@ -126,22 +126,22 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         public void StartDragLayer(LayerUI layerUI)
         {
-            CreateGhost(layerUI);
+            // CreateGhost(layerUI);
         }
 
         public void EndDragLayer()
         {
             // DraggingLayer = null;
-            Destroy(DragGhost.gameObject);
+            // Destroy(DragGhost.gameObject);
             dragLine.gameObject.SetActive(false);
         }
 
-        private void CreateGhost(LayerUI ui)
-        {
-            DragGhost = Instantiate(dragGhostPrefab, transform);
-            DragGhost.GetComponent<RectTransform>().SetLeft(layerUIContainer.offsetMin.x);
-            DragGhost.Initialize(DragStartOffset, ui);
-        }
+        // private void CreateGhost(LayerUI ui)
+        // {
+        //     DragGhost = Instantiate(dragGhostPrefab, transform);
+        //     DragGhost.GetComponent<RectTransform>().SetLeft(layerUIContainer.offsetMin.x);
+        //     DragGhost.Initialize(DragStartOffset, ui);
+        // }
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -169,7 +169,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         public bool IsDragOnButton()
         {
-            return DragGhost && MouseIsOverButton;
+            return false;
+            // return DragGhost && MouseIsOverButton;
         }
 
         public void DeleteSelectedLayers()
@@ -209,7 +210,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         //     ui.SetHighlight(layerState);
         //     ui.MarkLayerUIAsDirty();
         // }
-
+ 
         public List<LayerData> GetLayersSortedByUI()
         {
             var layersToGroup = new List<LayerData>(ProjectData.Current.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.

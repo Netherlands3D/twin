@@ -379,10 +379,10 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         
         private LayerUI CalculateLayerUnderMouse(out float relativeYValue)
         {
-            var ghostRectTransform = layerUIManager.DragGhost.GetComponent<RectTransform>();
-            var ghostSize = ghostRectTransform.rect.size * ghostRectTransform.lossyScale;
-            var mousePos = (Vector2)layerUIManager.DragGhost.transform.position - ghostSize / 2;
-
+            // var ghostRectTransform = layerUIManager.DragGhost.GetComponent<RectTransform>();
+            // var ghostSize = ghostRectTransform.rect.size * ghostRectTransform.lossyScale;
+            // var mousePos = (Vector2)layerUIManager.DragGhost.transform.position - ghostSize / 2;
+var mousePos = Mouse.current.position.ReadValue();
             for (var i = layerUIManager.LayerUIsVisibleInInspector.Count - 1; i >= 0; i--)
             {
                 var layer = layerUIManager.LayerUIsVisibleInInspector[i];
