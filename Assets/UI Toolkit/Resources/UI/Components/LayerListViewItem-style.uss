@@ -38,6 +38,7 @@
 .layer-list-view-item__name-label {
     flex-grow: 1;
     margin: 0 var(--spacing-3) 0 0;
+    min-height: var(--font-size-base);
 }
 
 .unity-tree-view__item .layer-list-view-item__property-toggle{
