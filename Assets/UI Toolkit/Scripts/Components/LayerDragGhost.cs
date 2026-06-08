@@ -1,7 +1,7 @@
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,10 +16,13 @@ namespace Netherlands3D.UI.Components
         private VisualElement spacer;
         private Icon layerTypeImage;
         private Label layerNameText;
-        
+
         private Vector2 currentPosition;
         private float yOffset;
-        
+
+        private VisualElement layerGhost;
+        private VisualElement reorderLine;
+
         public LayerDragGhost()
         {
             this.CloneComponentTree("Components");
@@ -31,7 +34,10 @@ namespace Netherlands3D.UI.Components
             spacer = this.Q<VisualElement>("Spacer");
             layerTypeImage = this.Q<Icon>("TypeIcon");
             layerNameText = this.Q<Label>("NameInputField");
-            
+
+            layerGhost = this.Q<VisualElement>("LayerGhost");
+            reorderLine = this.Q<VisualElement>("ReorderLine");
+
             style.position = Position.Absolute;
             this.SetPickingModeRecursive(PickingMode.Ignore);
         }
@@ -40,7 +46,7 @@ namespace Netherlands3D.UI.Components
         {
             UpdatePosition(dragStartPosition);
             CopyAppearance(ui);
-            yOffset = ui.resolvedStyle.height/2;
+            yOffset = ui.resolvedStyle.height / 2;
         }
 
         private void CopyAppearance(LayerListViewItem ui)
@@ -49,10 +55,10 @@ namespace Netherlands3D.UI.Components
             UpdateColorBar(ui.layerData.Color);
             var hasChildren = ui.layerData.ChildrenLayers.Count > 0;
             var indentWidth = ui.IndentWidth;
-            
-            if(!hasChildren)
+
+            if (!hasChildren)
                 foldoutImage.Image = IconImage.None;
-    
+
             spacer.style.width = indentWidth;
             layerTypeImage.Image = ui.LayerTypeIcon;
             layerNameText.text = ui.layerData.Name;
@@ -60,7 +66,7 @@ namespace Netherlands3D.UI.Components
             // var credentialsUI = GetComponent<LayerUICredentialsNeededListener>();
             // credentialsUI.layerUI = ui;
         }
-        
+
         private void UpdateColorBar(Color newColor)
         {
             var opaqueColor = newColor;
@@ -68,10 +74,60 @@ namespace Netherlands3D.UI.Components
 
             colorImage.style.backgroundColor = opaqueColor;
         }
-        
+
         public void UpdatePosition(Vector2 worldPosition)
         {
-            style.top = parent.WorldToLocal(worldPosition).y -  yOffset;
+            layerGhost.style.top = parent.WorldToLocal(worldPosition).y - yOffset;
+        }
+
+        public void UpdateLine(LayerListViewItem targetItem, LayerPanel.DropMode currentDropMode)
+        {
+            reorderLine.style.backgroundColor = StyleKeyword.Null;
+
+            var top = 0f;
+            switch (currentDropMode)
+            {
+                case LayerPanel.DropMode.Above:
+                {
+                    reorderLine.style.display = DisplayStyle.Flex;
+                    var parentPos = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMin, targetItem.worldBound.yMin));
+                    top = parentPos.y;
+                    reorderLine.style.left = targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound.xMin;
+                    reorderLine.style.left = parent.WorldToLocal(targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound).xMax;
+                    break;
+                }
+                case LayerPanel.DropMode.Below:
+                {
+                    reorderLine.style.display = DisplayStyle.Flex;
+                    var parentPos = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMax, targetItem.worldBound.yMax));
+                    top = parentPos.y;
+                    reorderLine.style.left = parent.WorldToLocal(targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound).xMax;
+                    break;
+                }
+                case LayerPanel.DropMode.Into:
+                {
+                    reorderLine.style.display = DisplayStyle.None;
+                    break;
+                }
+                case LayerPanel.DropMode.ToRoot:
+                {
+                    var targetLayer = targetItem.layerData;
+
+                    reorderLine.style.display = DisplayStyle.Flex;
+                    reorderLine.style.left = 0;
+
+                    bool aboveFirst = targetLayer.ParentLayer.ChildrenLayers.IndexOf(targetLayer) == 0;
+                    Vector2 parentPos;
+                    if (aboveFirst)
+                        parentPos = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMin, targetItem.worldBound.yMin));
+                    else
+                        parentPos = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMax, targetItem.worldBound.yMax));
+                    top = parentPos.y;
+                    reorderLine.style.backgroundColor = Color.rebeccaPurple;
+                    break;
+                }
+            }
+            reorderLine.style.top = top - reorderLine.style.height.value.value/2;
         }
     }
 }

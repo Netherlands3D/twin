@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -19,11 +20,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement, InspectorPanel]
     public partial class LayerPanel : BaseInspectorContentPanel
     {
-        private const string aboveTargetUSSClassName = "layer-list-view-item--reparent-above";
         private const string reparentTargetUSSClassName = "layer-list-view-item--reparent-target";
-        private const string belowTargetUSSClassName = "layer-list-view-item--reparent-below";
-        private const string toRootAboveTargetUSSClassName = "layer-list-view-item--reparent-to-root-above";
-        private const string toRootBelowTargetUSSClassName = "layer-list-view-item--reparent-to-root-below";
         private const string buttonHighlightUSSClassName = "button--drag-hover";
 
         private TreeView treeView;
@@ -43,7 +40,7 @@ namespace Netherlands3D.UI.Panels
         private Button folderButton;
         private Button deleteButton;
 
-        private enum DropMode
+        public enum DropMode
         {
             Above,
             Into,
@@ -141,8 +138,14 @@ namespace Netherlands3D.UI.Panels
                 current = current.ParentLayer;
             }
 
-            // Expand from root downward
             ancestors.Reverse();
+            return ancestors;
+        }
+
+        private void ExpandToItem(LayerData layerData)
+        {
+            // Walk up the hierarchy and collect all ancestors
+            var ancestors = GetAncestors(layerData);
 
             int parentId = -1;
 
@@ -272,7 +275,7 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.SelectLayerItem.AddListener(SelectItem);
             layerRowElement.DeselectLayerItem.AddListener(DeselectItem);
         }
-        
+
         private void DeselectItem(LayerListViewItem item)
         {
             var index = treeView.GetIndexFromElement(item);
@@ -310,8 +313,8 @@ namespace Netherlands3D.UI.Panels
         {
             panelDragPosition += delta;
 
-            var aboveTree = panelDragPosition.y < treeView.worldBound.yMin;
-            var belowTree = panelDragPosition.y > treeView.worldBound.yMax;
+            var aboveTree = panelDragPosition.y < scrollView.contentContainer.worldBound.yMin;
+            var belowTree = panelDragPosition.y > scrollView.contentContainer.worldBound.yMax;
             var atTopEdge = aboveTree && !MoveScrollView(-scrollSpeed);
             var atBottomEdge = belowTree && !MoveScrollView(scrollSpeed);
 
@@ -319,10 +322,10 @@ namespace Netherlands3D.UI.Panels
             var hitElement = panel.Pick(panelDragPosition);
 
             //check for hover buttons
-            if (belowTree && panelDragPosition.x > treeView.worldBound.xMin && panelDragPosition.x < treeView.worldBound.xMax) //don't account for buttons in the tree
+            if (belowTree && panelDragPosition.x > worldBound.xMin && panelDragPosition.x < worldBound.xMax) //don't account for buttons in the tree
             {
                 var hitButton = hitElement as Button ?? hitElement?.GetFirstAncestorOfType<Button>();
-                if(hitButton != null)
+                if (hitButton != null)
                 {
                     SetHoveredButton(hitButton);
                     return;
@@ -332,8 +335,8 @@ namespace Netherlands3D.UI.Panels
             SetHoveredButton(null);
             if (atTopEdge || atBottomEdge)
             {
-                currentDropMode = DropMode.ToRoot;
-                if(atTopEdge)
+
+                if (atTopEdge)
                 {
                     SetHoveredItem(treeView.Query<LayerListViewItem>().First()); //ensure we get the first item, using GetClosestItem gives jittering issues for some reason
                     siblingIndex = 0;
@@ -343,23 +346,17 @@ namespace Netherlands3D.UI.Panels
                     SetHoveredItem(GetClosestItem(panelDragPosition.y));
                     siblingIndex = -1;
                 }
-    
-                if (atTopEdge)
-                    SetTargetItemUssClasses(hoveredItem, toRootAboveTargetUSSClassName);
-                else
-                    SetTargetItemUssClasses(hoveredItem, toRootBelowTargetUSSClassName);
-                Debug.Log("toroot "+hoveredItem.layerData.Name);
-
+                
+                currentDropMode = DropMode.ToRoot; //override the drop mode set by SetHoveredItem
+                dragGhost.UpdateLine(hoveredItem, currentDropMode);
                 return;
             }
 
-            // var hitElement = panel.Pick(panelDragPosition);
             var targetItem = hitElement as LayerListViewItem
                              ?? hitElement?.GetFirstAncestorOfType<LayerListViewItem>()
                              ?? GetClosestItem(panelDragPosition.y);
 
             SetHoveredItem(targetItem);
-            Debug.Log("not anove root: " + hoveredItem.layerData.Name);
             var layer = hoveredItem.userData as LayerData;
             siblingIndex = layer.ParentLayer.ChildrenLayers.IndexOf(layer);
         }
@@ -424,26 +421,19 @@ namespace Netherlands3D.UI.Panels
 
             string newClassName = null;
             if (normalizedY < 0.25f)
-            {
                 currentDropMode = DropMode.Above;
-                newClassName = aboveTargetUSSClassName;
-            }
             else if (normalizedY > 0.75f)
-            {
                 currentDropMode = DropMode.Below;
-                newClassName = belowTargetUSSClassName;
-            }
             else
-            {
                 currentDropMode = DropMode.Into;
-                newClassName = reparentTargetUSSClassName;
-            }
 
+            dragGhost.UpdateLine(targetItem, currentDropMode);
             SetTargetItemUssClasses(hoveredItem, newClassName);
         }
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
         {
+            return;
             if (hoveredButton != null)
             {
                 if (hoveredButton == deleteButton)
@@ -481,9 +471,6 @@ namespace Netherlands3D.UI.Panels
 
         private void CleanupDrag()
         {
-            if (hoveredItem != null)
-                SetTargetItemUssClasses(hoveredItem, null);
-
             if (hoveredButton != null)
                 hoveredButton.EnableInClassList(buttonHighlightUSSClassName, false);
 
@@ -496,11 +483,7 @@ namespace Netherlands3D.UI.Panels
 
         private void SetTargetItemUssClasses(LayerListViewItem targetItem, string newClassName)
         {
-            targetItem.ItemRoot.EnableInClassList(aboveTargetUSSClassName, false);
             targetItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
-            targetItem.ItemRoot.EnableInClassList(belowTargetUSSClassName, false);
-            targetItem.ItemRoot.EnableInClassList(toRootAboveTargetUSSClassName, false);
-            targetItem.ItemRoot.EnableInClassList(toRootBelowTargetUSSClassName, false);
 
             if (newClassName != null)
                 targetItem.ItemRoot.EnableInClassList(newClassName, true);
