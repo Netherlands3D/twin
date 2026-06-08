@@ -162,6 +162,13 @@ namespace Netherlands3D.UI.Panels
 
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             layerRowElement.Initialize(layerData);
+            layerRowElement.SelectLayerItem.AddListener(SelectItem);
+        }
+
+        private void SelectItem(LayerListViewItem item)
+        {
+            var index = treeView.GetIndexFromElement(item);
+            treeView.SetSelection(new []{ index });
         }
 
         public override string Title => "Lagen";

@@ -220,6 +220,15 @@ namespace Netherlands3D.UI.Components
             previous?.PropertyRemoved.RemoveListener(OnPropertiesChanged);
             layerData.PropertySet.AddListener(OnPropertiesChanged);
             layerData.PropertyRemoved.AddListener(OnPropertiesChanged);
+            
+            layerData.LayerSelected.AddListener(SelectUI); //todo: add removelisteners for everything in this function
+        }
+
+        public UnityEvent<LayerListViewItem> SelectLayerItem = new();
+        
+        private void SelectUI(LayerData layerData)
+        {
+            SelectLayerItem.Invoke(this);
         }
 
         private void OnCredentialStatusChanged(bool valid)
@@ -336,7 +345,7 @@ namespace Netherlands3D.UI.Components
             return false;
         }
 
-        //todo: reparent to top jitter
+        //todo: fix reorder line below
         //todo: order grouped items
         //todo: root.Selectedlayers
         //todo: cleanup old scripts

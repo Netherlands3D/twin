@@ -65,5 +65,10 @@ namespace Netherlands3D.UI.Components
                 ref firstSelectedIndex,
                 ref lastDirection);
         }
+
+        public int GetIndexFromElement(LayerListViewItem item)
+        {
+            return indexDictionary[item];
+        }
     }
 }
