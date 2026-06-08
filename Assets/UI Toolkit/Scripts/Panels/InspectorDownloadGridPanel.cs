@@ -1,12 +1,13 @@
 using Netherlands3D.Events;
-using Netherlands3D.Functionalities.AreaDownload.UI;
+using Netherlands3D.Functionalities;
+using Netherlands3D.Functionalities.AreaDownload;
 using Netherlands3D.Services;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -19,8 +20,12 @@ namespace Netherlands3D.UI.Panels
     {
         public override string Title => "Download 3D data";
 
-        private List<string> options = new List<string>() { "Collada (.dae)", "DXF (.dxf)" };
-        
+        private readonly Dictionary<int, (string, ExportFormat)> dropDownValues = new()
+        {
+            { 0,  ("Collada (.dae)", ExportFormat.Collada) },
+            { 1,  ("DXF (.dxf)", ExportFormat.AutodeskDXF) }
+        };
+
         private VisualElement thumbnailContainer;
         private DownloadInspectorService downloadInspectorService;
         private Button copyZW;
@@ -30,7 +35,7 @@ namespace Netherlands3D.UI.Panels
 
         private DropDown dropDown => this.Q<DropDown>("DropDown");
 
-        private Button confirmButton;
+        private Button downloadButton;
 
         public InspectorDownloadGridPanel()
         {
@@ -43,7 +48,7 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
             
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
-            confirmButton = this.Q<Button>("DownloadButton");
+            downloadButton = this.Q<Button>("DownloadButton");
             copyZW = this.Q<Button>("ButtonCopyZw");
             copyNO = this.Q<Button>("ButtonCopyNo");
             zw_x = this.Q<NumberField>("ZW_X");
@@ -51,17 +56,20 @@ namespace Netherlands3D.UI.Panels
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
             
-            confirmButton.clicked += OnGridConfirmed.Invoke;
-            confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.DownloadTile).Close;
+            downloadButton.clicked += OnGridConfirmed.Invoke;
+            downloadButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.DownloadTile).Close;
+            downloadButton.clicked += DownloadSelection;
 
-            SetDropdownValues(options);
-
+            SetDropdownValues();
+       
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
                 downloadInspectorService = ServiceLocator.GetService<DownloadInspectorService>();
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(GetFeatureThumbnail); 
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(UpdateFields);
-                
+
+                AddDropDownListener(SetExportFormat);
+
                 copyZW.RegisterCallback<ClickEvent>(CopySouthWest);
                 copyNO.RegisterCallback<ClickEvent>(CopyNorthEast);
             });
@@ -70,6 +78,19 @@ namespace Netherlands3D.UI.Panels
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(GetFeatureThumbnail);
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(UpdateFields);
             });
+        }
+        private void SetExportFormat(int state)
+        {
+            if (!dropDownValues.TryGetValue(state, out var mapping))
+                return;
+
+            ExportFormat format = mapping.Item2;
+            downloadInspectorService.SetExportFormat(format);
+        }
+
+        private void DownloadSelection()
+        {
+            downloadInspectorService.Download();
         }
 
         private void CopySouthWest(ClickEvent evt)
@@ -107,8 +128,12 @@ namespace Netherlands3D.UI.Panels
 
         public int DropDownValue => dropDown.choices.IndexOf(dropDown.value);
 
-        public void SetDropdownValues(List<string> values)
+        public void SetDropdownValues()
         {
+            var values = dropDownValues.Values
+           .Select(v => v.Item1)
+           .ToList();
+
             if (values == null || values.Count == 0) return;
            
             dropDown.choices = values;

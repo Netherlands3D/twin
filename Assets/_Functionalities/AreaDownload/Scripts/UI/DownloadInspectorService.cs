@@ -20,17 +20,16 @@ using GG.Extensions;
 using Netherlands3D.Collada;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Dxf;
+using Netherlands3D.Functionalities.AreaDownload;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.UI;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
-namespace Netherlands3D.Functionalities.AreaDownload.UI
+namespace Netherlands3D.Functionalities
 {
     public class DownloadInspectorService : MonoBehaviour
     {
@@ -42,7 +41,6 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         [SerializeField] private CoordinateSystem DisplayCrs = CoordinateSystem.RD;
         
         [Header("References")]
-        //[SerializeField] private AreaSelection areaSelection;
         [SerializeField] private TextPopout popoutPrefab;
         
         private Coordinate NorthEast => ConvertBoundsToCoordinates(selectedArea).northEast;
@@ -73,19 +71,26 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         [SerializeField] private float minClipBoundsHeight = 1000.0f;
         private ExportFormat selectedExportFormat = ExportFormat.Collada;
 
+        private GameObject exporterObject;
+
         private void OnEnable()
         {
             OnSelectionBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
+            
 
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
             selectionService.OnDeselectActivePolygon.AddListener(WhenDeselected);
+
+            PolygonCreationService creationService = ServiceLocator.GetService<PolygonCreationService>();
+            creationService.GridInput.whenDrawingArea.AddListener(SetDuringSelectionAreaBounds);
+            creationService.GridInput.whenAreaIsSelected.AddListener(SetSelectionAreaBounds);
 
             Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
             northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
             northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);
             southWestTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleRight);
-            southWestTooltip.SetSnappingSide(TextPopout.SnappingSide.Right);
+            southWestTooltip.SetSnappingSide(TextPopout.SnappingSide.Right);          
         }
 
         private void OnDisable()
@@ -95,7 +100,11 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
             
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
             selectionService.OnDeselectActivePolygon.RemoveListener(WhenDeselected);
-            
+
+            PolygonCreationService creationService = ServiceLocator.GetService<PolygonCreationService>();
+            creationService.GridInput.whenDrawingArea.RemoveListener(SetDuringSelectionAreaBounds);
+            creationService.GridInput.whenAreaIsSelected.RemoveListener(SetSelectionAreaBounds);
+
             Destroy(northEastTooltip.gameObject);
             Destroy(southWestTooltip.gameObject);
         }
@@ -232,36 +241,34 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         public void Download()
         {
-            var exportGameObject = new GameObject("Exporter");
-            ModelFormatCreation exportScript;
+            if (exporterObject == null)
+                exporterObject = new GameObject("Exporter");
 
-            switch (selectedExportFormat)
+            ModelFormatCreation exportScript = selectedExportFormat switch
             {
-                case ExportFormat.Collada:
-                    //Slice and export using collada
-                    Debug.Log("Exporting Collada of area bounds: " + selectedArea);
-                    exportScript = exportGameObject.AddComponent<ColladaCreation>();
-                    exportScript.StartDownload(includedLayers, selectedArea, minClipBoundsHeight);
-                    break;
-                case ExportFormat.AutodeskDXF:
-                    Debug.Log("Exporting Autodesk DXF of area bounds: " + selectedArea);
-                    exportScript = exportGameObject.AddComponent<DXFCreation>();
-                    exportScript.StartDownload(includedLayers, selectedArea, minClipBoundsHeight);
-                    break;
-            }
+                ExportFormat.Collada => GetOrAdd<ColladaCreation>(),
+                ExportFormat.AutodeskDXF => GetOrAdd<DXFCreation>(),
+                _ => null
+            };
+
+            if (exportScript == null)
+                return;
+
+            Debug.Log($"Exporting {selectedExportFormat} of area bounds: {selectedArea}");
+
+            exportScript.StartDownload(includedLayers, selectedArea, minClipBoundsHeight);
+        }
+
+        private T GetOrAdd<T>() where T : ModelFormatCreation
+        {
+            var comp = exporterObject.GetComponent<T>();
+            return comp != null ? comp : exporterObject.AddComponent<T>();
         }
 
         public void SetExportFormat(ExportFormat format)
         {
             selectedExportFormat = format;
             OnExportFormatChanged.Invoke(selectedExportFormat);
-        }
-
-        //used by the dropdown in the inspector
-        public void SetExportFormat(int format)
-        {
-            //int to enum
-            selectedExportFormat = (ExportFormat)format;
         }
 
         public void ClearSelection()

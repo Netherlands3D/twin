@@ -1,16 +1,13 @@
 using Netherlands3D.Events;
-using Netherlands3D.Functionalities.AreaDownload.UI;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
+using Netherlands3D.Functionalities;
 
 namespace Netherlands3D.UI.Panels
 {
