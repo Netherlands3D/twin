@@ -163,8 +163,20 @@ namespace Netherlands3D.UI.Panels
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             layerRowElement.Initialize(layerData);
             layerRowElement.SelectLayerItem.AddListener(SelectItem);
+            layerRowElement.DeselectLayerItem.AddListener(DeselectItem);
         }
-
+        
+        private void DeselectItem(LayerListViewItem item)
+        {
+            var index = treeView.GetIndexFromElement(item);
+            if (treeView.selectedIndices.Contains(index))
+            {
+                var newSelection = treeView.selectedIndices.ToList();
+                newSelection.Remove(index);
+                treeView.SetSelection(newSelection);
+            }
+        }
+        
         private void SelectItem(LayerListViewItem item)
         {
             var index = treeView.GetIndexFromElement(item);

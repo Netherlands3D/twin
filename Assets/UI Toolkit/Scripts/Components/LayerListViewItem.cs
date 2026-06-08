@@ -43,6 +43,9 @@ namespace Netherlands3D.UI.Components
         public VisibilityState VisibilityState => isActiveToggle.Image;
         public IconImage LayerTypeIcon => layerTypeIcon.Image;
         public float IndentWidth => ItemRoot.Q("unity-tree-view__item-indent").resolvedStyle.width;
+        
+        public UnityEvent<LayerListViewItem> SelectLayerItem = new();
+        public UnityEvent<LayerListViewItem> DeselectLayerItem = new();
 
         public LayerListViewItem()
         {
@@ -186,6 +189,9 @@ namespace Netherlands3D.UI.Components
             if (layerData == null) return;
 
             var previous = this.layerData;
+            if(previous != null)
+                RemoveLayerDataListeners(previous);
+            
             userData = layerData;
 
             SetAppearance(layerData);
@@ -194,37 +200,53 @@ namespace Netherlands3D.UI.Components
             layerData.HasValidCredentialsChanged.AddListener(OnCredentialStatusChanged);
 
             //visibility toggle
-            previous?.ActiveSelfChanged.RemoveListener(OnActiveSelfChanged);
             layerData.ActiveSelfChanged.AddListener(OnActiveSelfChanged);
-
-            previous?.ParentOrSiblingIndexChanged.RemoveListener(OnParentChanged);
             layerData.ParentOrSiblingIndexChanged.AddListener(OnParentChanged);
-
-            previous?.LayerDestroyed.RemoveListener(OnLayerDestroyed);
             layerData.LayerDestroyed.AddListener(OnLayerDestroyed);
 
             //Color bar
-            previous?.ColorChanged.RemoveListener(UpdateColorBar);
             layerData.ColorChanged.AddListener(UpdateColorBar);
 
             //LayerTypeIcon
-            previous?.OnPrefabIdChanged.RemoveListener(UpdateLayerTypeIcon);
             layerData.OnPrefabIdChanged.AddListener(UpdateLayerTypeIcon);
 
             //Layer Name
-            previous?.NameChanged.RemoveListener(UpdateNameLabels);
             layerData.NameChanged.AddListener(UpdateNameLabels);
 
             //properties
-            previous?.PropertySet.RemoveListener(OnPropertiesChanged);
-            previous?.PropertyRemoved.RemoveListener(OnPropertiesChanged);
             layerData.PropertySet.AddListener(OnPropertiesChanged);
             layerData.PropertyRemoved.AddListener(OnPropertiesChanged);
             
             layerData.LayerSelected.AddListener(SelectUI); //todo: add removelisteners for everything in this function
+            layerData.LayerDeselected.AddListener(DeselectUI);
+            
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
-        public UnityEvent<LayerListViewItem> SelectLayerItem = new();
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            RemoveLayerDataListeners(layerData);
+        }
+
+        private void RemoveLayerDataListeners(LayerData layerData)
+        {
+            layerData.HasValidCredentialsChanged.RemoveListener(OnCredentialStatusChanged);
+            layerData.ActiveSelfChanged.RemoveListener(OnActiveSelfChanged);
+            layerData.ParentOrSiblingIndexChanged.RemoveListener(OnParentChanged);
+            layerData.LayerDestroyed.RemoveListener(OnLayerDestroyed);
+            layerData.ColorChanged.RemoveListener(UpdateColorBar);
+            layerData.OnPrefabIdChanged.RemoveListener(UpdateLayerTypeIcon);
+            layerData.NameChanged.RemoveListener(UpdateNameLabels);
+            layerData.PropertySet.RemoveListener(OnPropertiesChanged);
+            layerData.PropertyRemoved.RemoveListener(OnPropertiesChanged);
+            layerData.LayerSelected.RemoveListener(SelectUI); 
+            layerData.LayerDeselected.RemoveListener(DeselectUI);
+        }
+
+        private void DeselectUI(LayerData layerData)
+        {
+            DeselectLayerItem.Invoke(this);
+        }
         
         private void SelectUI(LayerData layerData)
         {
