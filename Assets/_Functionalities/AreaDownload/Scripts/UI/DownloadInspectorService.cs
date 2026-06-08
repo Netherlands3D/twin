@@ -16,13 +16,15 @@
  *  permissions and limitations under the License.
  */
 
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using GG.Extensions;
+using Netherlands3D.Collada;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Dxf;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.UI;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -40,7 +42,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         [SerializeField] private CoordinateSystem DisplayCrs = CoordinateSystem.RD;
         
         [Header("References")]
-        [SerializeField] private AreaSelection areaSelection;
+        //[SerializeField] private AreaSelection areaSelection;
         [SerializeField] private TextPopout popoutPrefab;
         
         private Coordinate NorthEast => ConvertBoundsToCoordinates(selectedArea).northEast;
@@ -58,11 +60,23 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         private List<Vector3> selectedAreaPoints = new();
         
         public UnityEvent<Bounds> OnSelectionBoundsChanged = new();
+        public UnityEvent<Bounds> OnSelectionAreaBoundsChanged = new();   
+        public UnityEvent<List<Vector3>> OnSelectionAreaChanged = new();
+        public UnityEvent<Bounds> WhenSelectionAreaBoundsChanged = new();
+
+        public UnityEvent<ExportFormat> OnExportFormatChanged = new();
+        public UnityEvent<float> modelExportProgressChanged = new();
+        public UnityEvent<string> modelExportStatusChanged = new();
+        public UnityEvent OnSelectionCleared = new();
+
+        [SerializeField] private LayerMask includedLayers;
+        [SerializeField] private float minClipBoundsHeight = 1000.0f;
+        private ExportFormat selectedExportFormat = ExportFormat.Collada;
 
         private void OnEnable()
         {
             OnSelectionBoundsChanged.AddListener(WhenSelectionBoundsChanged);
-            areaSelection.OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
+            OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
 
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
             selectionService.OnDeselectActivePolygon.AddListener(WhenDeselected);
@@ -76,7 +90,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         private void OnDisable()
         {
-            areaSelection.OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged.Invoke);
+            OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged.Invoke);
             OnSelectionBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
             
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
@@ -124,7 +138,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         private void ApplyBounds()
         {
-            areaSelection.SetSelectionAreaBounds(selectedArea);
+            SetSelectionAreaBounds(selectedArea);
             PolygonCreationService creationService = ServiceLocator.GetService<PolygonCreationService>();
             selectedAreaPoints.Clear();
             selectedAreaPoints.Add(new Vector3(selectedArea.min.x, selectedArea.center.y, selectedArea.max.z));
@@ -141,10 +155,35 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
             northEastTooltip.Show($"X: {EastExtent}\nY: {NorthExtent}", NorthEast, true);
         }
 
+        public void SetDuringSelectionAreaBounds(Bounds selectedAreaBounds)
+        {
+            WhenSelectionAreaBoundsChanged.Invoke(selectedAreaBounds);
+        }
+
         private void WhenDeselected()
         {
             southWestTooltip.Hide();
             northEastTooltip.Hide();
+        }
+        public void SetSelectionAreaBounds(Bounds selectedAreaBounds)
+        {
+            this.selectedArea = selectedAreaBounds;
+            OnSelectionAreaBoundsChanged.Invoke(this.selectedArea);
+        }
+
+        public void SetSelectionArea(List<Vector3> selectedArea)
+        {
+            var bounds = new Bounds();
+            foreach (var point in selectedArea)
+            {
+                bounds.Encapsulate(point);
+                bounds.Encapsulate(point + Vector3.up);
+            }
+
+            this.selectedArea = bounds;
+            OnSelectionAreaChanged.Invoke(selectedArea);
+
+            SetSelectionAreaBounds(bounds);
         }
 
         private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
@@ -189,6 +228,51 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 #else
             GUIUtility.systemCopyBuffer = text;
 #endif
+        }
+
+        public void Download()
+        {
+            var exportGameObject = new GameObject("Exporter");
+            ModelFormatCreation exportScript;
+
+            switch (selectedExportFormat)
+            {
+                case ExportFormat.Collada:
+                    //Slice and export using collada
+                    Debug.Log("Exporting Collada of area bounds: " + selectedArea);
+                    exportScript = exportGameObject.AddComponent<ColladaCreation>();
+                    exportScript.StartDownload(includedLayers, selectedArea, minClipBoundsHeight);
+                    break;
+                case ExportFormat.AutodeskDXF:
+                    Debug.Log("Exporting Autodesk DXF of area bounds: " + selectedArea);
+                    exportScript = exportGameObject.AddComponent<DXFCreation>();
+                    exportScript.StartDownload(includedLayers, selectedArea, minClipBoundsHeight);
+                    break;
+            }
+        }
+
+        public void SetExportFormat(ExportFormat format)
+        {
+            selectedExportFormat = format;
+            OnExportFormatChanged.Invoke(selectedExportFormat);
+        }
+
+        //used by the dropdown in the inspector
+        public void SetExportFormat(int format)
+        {
+            //int to enum
+            selectedExportFormat = (ExportFormat)format;
+        }
+
+        public void ClearSelection()
+        {
+            selectedArea = new Bounds()
+            {
+                center = Vector3.zero,
+                size = Vector3.zero
+            };
+            selectedAreaPoints.Clear();
+            OnSelectionCleared.Invoke();
         }
     }
 }
