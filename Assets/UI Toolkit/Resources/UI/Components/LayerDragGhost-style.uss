@@ -27,6 +27,7 @@
     opacity: 1;
     position: absolute;
     height: 2px;
+    margin-top: -1px; /*offset for the height so the line is vertically centered*/
     background-color: var(--color-blue-900);
     right: 0;
 }

@@ -82,16 +82,13 @@ namespace Netherlands3D.UI.Components
 
         public void UpdateLine(LayerListViewItem targetItem, LayerPanel.DropMode currentDropMode)
         {
-            reorderLine.style.backgroundColor = StyleKeyword.Null;
-
             var top = 0f;
             switch (currentDropMode)
             {
                 case LayerPanel.DropMode.Above:
                 {
                     reorderLine.style.display = DisplayStyle.Flex;
-                    var parentPos = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMin, targetItem.worldBound.yMin));
-                    top = parentPos.y;
+                    top = parent.WorldToLocal(new Vector2(0, targetItem.ItemRoot.worldBound.yMin)).y;
                     reorderLine.style.left = targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound.xMin;
                     reorderLine.style.left = parent.WorldToLocal(targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound).xMax;
                     break;
@@ -99,8 +96,7 @@ namespace Netherlands3D.UI.Components
                 case LayerPanel.DropMode.Below:
                 {
                     reorderLine.style.display = DisplayStyle.Flex;
-                    var parentPos = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMax, targetItem.worldBound.yMax));
-                    top = parentPos.y;
+                    top = parent.WorldToLocal(new Vector2(0, targetItem.ItemRoot.worldBound.yMax)).y;
                     reorderLine.style.left = parent.WorldToLocal(targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound).xMax;
                     break;
                 }
@@ -117,17 +113,15 @@ namespace Netherlands3D.UI.Components
                     reorderLine.style.left = 0;
 
                     bool aboveFirst = targetLayer.ParentLayer.ChildrenLayers.IndexOf(targetLayer) == 0;
-                    Vector2 parentPos;
                     if (aboveFirst)
-                        parentPos = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMin, targetItem.worldBound.yMin));
+                        top = 0;
                     else
-                        parentPos = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMax, targetItem.worldBound.yMax));
-                    top = parentPos.y;
-                    reorderLine.style.backgroundColor = Color.rebeccaPurple;
+                        top = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMax, targetItem.worldBound.yMax)).y;
+                    
                     break;
                 }
             }
-            reorderLine.style.top = top - reorderLine.style.height.value.value/2;
+            reorderLine.style.top = top - 1;
         }
     }
 }
