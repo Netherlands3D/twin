@@ -2,6 +2,7 @@ using System;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -59,13 +60,6 @@ namespace Netherlands3D.UI.Components
             });
         }
 
-        public void Initialize()
-        {
-            PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            OnShow += polygonSelectionService.EnablePolygonSelection;
-            OnHide += polygonSelectionService.DisablePolygonSelection;
-        }
-
         public void Open()
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, false);
@@ -79,5 +73,15 @@ namespace Netherlands3D.UI.Components
         }
 
         public bool IsOpen() => !ClassListContains(UtilityClassConstants.HIDDEN);
+
+        public void AddContent(BaseInspectorContentPanel content)
+        {
+            Content.Add(content);
+        }
+        
+        public void ClearContent()
+        {
+            Content.Clear();
+        }
     }
 }

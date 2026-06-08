@@ -15,6 +15,7 @@ using TextField = Netherlands3D.UI.Components.TextField;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
+    [InspectorPanel]
     public partial class ImportAssetPanel : BaseInspectorContentPanel
     {
         public override string Title => "Importeren";
@@ -34,15 +35,11 @@ namespace Netherlands3D.UI.Panels
 
         private ErrorPanel errorPanel;
         private ErrorPanel ErrorPanel => errorPanel ??= this.Q<ErrorPanel>();
-
-        public Action OpenAssetLibrary { get; set; }
-        public Action UriImportFailed { get; set; }
-
+        
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.AddLayer;
 
-        private ICredentialHandler credentialHandler;
+        private ICredentialHandler credentialHandler = new CredentialPropertyHandler();
         private CredentialPanel credentialPanel;
-        private CredentialPanel CredentialPanel => credentialPanel ??= this.Q<CredentialPanel>();
 
         public UnityEvent importSucceeded = new();
         public UnityEvent importFailed = new();
@@ -52,38 +49,38 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            OnShow += () => EnableInClassList("active", true);
-            OnHide += () => EnableInClassList("active", false);
+            
             GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
-            UriImportFailed += ErrorPanel.Show;
+         
             ErrorPanel.Hide();
-            CredentialPanel.SetEnabled(false);
+            credentialPanel = this.Q<CredentialPanel>();
+            credentialPanel.SetEnabled(false);
+            credentialPanel.OnConfirmCredentials.AddListener(ApplyCredentials);
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             
             //we dont want to show the warning first but immediately start with the input of credentials instead
-            CredentialPanel.StartWithInput();
+            credentialPanel.StartWithInput();
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
-                UriImportFailed -= ErrorPanel.Show;
                 credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             });
             
             ImportUriField.RegisterCallback<NavigationSubmitEvent>(OnSubmit, TrickleDown.TrickleDown);
         }
-
-        public void SetCredentialHandler(ICredentialHandler handler)
-        {
-            credentialHandler = handler;
-            CredentialPanel.Handler = handler;
-            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-        }
-
+        
         private void OnSubmit(NavigationSubmitEvent evt)
         {
             OnImport(importUriField.value);
+        }
+        
+        private void ApplyCredentials()
+        {
+            credentialHandler.UserName = credentialPanel.UserNameField.value;
+            credentialHandler.PasswordOrKeyOrTokenOrCode = credentialPanel.CodeField.value;
+            credentialHandler.ApplyCredentials();
         }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
@@ -92,19 +89,19 @@ namespace Netherlands3D.UI.Panels
             //we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
             if (accepted)
             {
-                CredentialPanel.SetAcceptedState();
-                credentialPanel.SetEnabled(false);
+                credentialPanel.SetAcceptedState();
+                credentialPanel.Show(false);
                 AddLayerFromUrl(uri, auth);
             }
             else
             {
-                credentialPanel.SetEnabled(true); //todo refactor this with the .hidden +  credentialPanel.CodeField.SetValueWithoutNotify(credentialHandler.PasswordOrKeyOrTokenOrCode); within a new enable method
+                credentialPanel.Show(true, credentialHandler.PasswordOrKeyOrTokenOrCode);
                 if(!string.IsNullOrEmpty(credentialHandler.PasswordOrKeyOrTokenOrCode))
                     credentialPanel.ShowError(true);
             }
         }
 
-        private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke();
+        private void OnOpenAssetLibrary(ClickEvent evt) => ServiceLocator.GetService<ToolService>().GetTool(ToolType.AssetLibrary).Open();
         private void OnUploadStarted(ClickEvent evt)
         { 
             ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes);
@@ -118,24 +115,20 @@ namespace Netherlands3D.UI.Panels
         private void OnImport(string value)
         {
             //hide the credential error as we dont want to show this on inputting the uri without credentials when they are required
-            CredentialPanel.ShowError(false);
+            credentialPanel.ShowError(false);
             try
             {
                 credentialHandler.ClearCredentials();
                 Uri uri = new Uri(value);
 
                 credentialHandler.Uri = uri;
-
-                //credentialPanel.UserNameField.value = credentialHandler.UserName;
-                //credentialPanel.CodeField.value = credentialHandler.PasswordOrKeyOrTokenOrCode;
-
                 credentialHandler.ApplyCredentials();
             }
             catch (Exception e)
             {
                 // TODO: Add better error handling
                 Debug.LogException(e);
-                UriImportFailed?.Invoke();
+                ErrorPanel.Show();
             }
         }
 
@@ -150,6 +143,8 @@ namespace Netherlands3D.UI.Panels
 
                 ImportUriField.value = string.Empty;
                 importSucceeded.Invoke();
+                // Hide(); //todo should this be a listener on importSucceeded?
+                ServiceLocator.GetService<ToolService>().GetTool(ToolType.AssetImport).Close();
             }
             catch (Exception e)
             {

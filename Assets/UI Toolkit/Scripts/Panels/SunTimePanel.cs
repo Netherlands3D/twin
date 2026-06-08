@@ -9,7 +9,7 @@ using Button = Netherlands3D.UI.Components.Button;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class SunTimePanel : BaseInspectorContentPanel
     {
         public override string Title => "Zonpositie";
@@ -35,20 +35,14 @@ namespace Netherlands3D.UI.Panels
         private SimulationSpeedControls simulationSpeedControls;
         private SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
 
-        /// <summary>Parameterless constructor required for UXML deserialization.</summary>
+       
+
         public SunTimePanel()
         {
-        }
-
-        public SunTimePanel(SunTime sunTime)
-        {
-            this.sunTime = sunTime;
-
+            sunTime = Services.ServiceLocator.GetService<SunTime>();
+            
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            OnShow += OnShowAction;
-            OnHide += OnHideAction;
             
             SunDial.TimeChanged += OnSunDialTimeChanged;
             DateField.SubmitEvent += OnDateChanged;
@@ -58,34 +52,27 @@ namespace Netherlands3D.UI.Panels
 
             SimulationSpeedControls.SpeedChanged += OnSimulationSpeedChanged;
             SimulationSpeedControls.PlayToggled += OnPlayToggled;
+            
+            RegisterCallback<AttachToPanelEvent>(evt =>
+            {
+                sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
+                sunTime.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
+                sunTime.isAnimatingChanged.AddListener(OnIsAnimatingChanged);
+                OnTimeOfDayChanged(sunTime.Time);
+                OnIsAnimatingChanged(sunTime.IsAnimating);    
+            });
+            RegisterCallback<DetachFromPanelEvent>(evt =>
+            {
+                sunTime.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
+                sunTime.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
+                sunTime.isAnimatingChanged.RemoveListener(OnIsAnimatingChanged);
+            });
         }
 
         void OnNowButtonClicked(ClickEvent _)
         {
             sunTime?.ResetToNow();
             SimulationSpeedControls.Pause();
-        }
-
-        private void OnShowAction()
-        {
-            EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            
-            if (sunTime == null) return;
-            sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
-            sunTime.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
-            sunTime.isAnimatingChanged.AddListener(OnIsAnimatingChanged);
-            OnTimeOfDayChanged(sunTime.Time);
-            OnIsAnimatingChanged(sunTime.IsAnimating);
-        }
-
-        private void OnHideAction()
-        {
-            EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            
-            if (sunTime == null) return;
-            sunTime.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
-            sunTime.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
-            sunTime.isAnimatingChanged.RemoveListener(OnIsAnimatingChanged);
         }
 
         private void OnTimeOfDayChanged(DateTime dt)

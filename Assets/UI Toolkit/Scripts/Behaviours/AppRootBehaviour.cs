@@ -12,9 +12,12 @@ namespace Netherlands3D
     [RequireComponent(typeof(UIDocument))]
     public class AppRootBehaviour : MonoBehaviour
     {
+        public VisualElement Root => appRoot;
+        
         private UIDocument appDocument;
         private VisualElement appRoot;
 
+        //the excuted order of this script should be executed very early to ensure the presence of the approot. 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();

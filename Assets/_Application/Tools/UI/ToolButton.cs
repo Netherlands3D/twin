@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Tools.UI
 {
-    public class ToolButton : MonoBehaviour
+    public class ToolButton : MonoBehaviour //todo ui toolkit: this file should be deleted
     {
         [SerializeField] private Tool tool;
         [SerializeField] private Toolbar toolbar;
@@ -34,7 +35,7 @@ namespace Netherlands3D.Twin.Tools.UI
         private void Start()
         {
             //Always start button Tool as disabled
-            Tool.Open = false;
+            // Tool.Close();
         }
 
         private void OnValidate()
@@ -46,17 +47,18 @@ namespace Netherlands3D.Twin.Tools.UI
 
         public void Toggle()
         {
-            Tool.ToggleInspector();
-
-            if (toolbar)
-            {
-                toolbar.DisableOutsideToolGroup(Tool);
-            }
+            // Tool.ToggleInspector();
+            //
+            // if (toolbar)
+            // {
+            //     toolbar.DisableOutsideToolGroup(Tool);
+            // }
         }
 
         public void ToggleWithoutNotify(bool active, bool destroySpawnedPrefabs = false)
         {
-            tool.Open = active;
+            throw new Exception("this class is old and should not be used anymore, if you see this error, remove this class from your gameObject and use UI toolkit");
+            // tool.IsOpen = active;
 
             if (destroySpawnedPrefabs)
             {
@@ -66,8 +68,8 @@ namespace Netherlands3D.Twin.Tools.UI
 
         public void UpdateVisuals()
         {
-            if (enabledObjects) enabledObjects.SetActive(Tool.Open);
-            if (disabledObjects) disabledObjects.SetActive(!Tool.Open);
+            if (enabledObjects) enabledObjects.SetActive(Tool.IsOpen);
+            if (disabledObjects) disabledObjects.SetActive(!Tool.IsOpen);
         }
     }
 }

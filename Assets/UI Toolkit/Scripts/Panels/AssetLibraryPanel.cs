@@ -15,7 +15,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class AssetLibraryPanel : BaseInspectorContentPanel
     {
         public override string Title => "Toevoegen";
@@ -28,15 +28,13 @@ namespace Netherlands3D.UI.Panels
         private Breadcrumb Breadcrumb => breadcrumb ??= this.Q<Breadcrumb>();
         
         public AssetLibraryPanel(){}
-        public AssetLibraryPanel(AssetLibrary.AssetLibrary assetLibrary)
+        public AssetLibraryPanel(AssetLibrary.AssetLibrary assetLibrary) : this()
         {
             this.assetLibrary = assetLibrary;
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            OnShow += () => EnableInClassList("active", true);
-            OnHide += () => EnableInClassList("active", false);
-            OnShow += () => LoadCatalog(assetLibrary.Catalog);
+            
+            LoadCatalog(assetLibrary.Catalog);
 
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;

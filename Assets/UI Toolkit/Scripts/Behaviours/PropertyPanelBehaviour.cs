@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
@@ -14,19 +15,16 @@ using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
-    [RequireComponent(typeof(UIDocument))]
     public class PropertyPanelBehaviour : MonoBehaviour
     {
-        private VisualElement root;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private SecondaryPropertiesPanel secondaryPropertiesPanel;
         private ColorPicker colorPicker;
 
         private void Start()
         {
-            root = GetComponent<UIDocument>().rootVisualElement; //todo ui-toolkit: lets refactor this to use App.UIRoot when implemented fully
-            propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
-            secondaryPropertiesPanel = root.Q<SecondaryPropertiesPanel>();
+            propertiesPanel = App.UIRoot.Root.Q<PropertiesPanel>("PropertiesPanel");
+            secondaryPropertiesPanel = App.UIRoot.Root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel;
 
