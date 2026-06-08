@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -66,9 +67,14 @@ namespace Netherlands3D.UI.Components
                 ref lastDirection);
         }
 
-        public int GetIndexFromElement(LayerListViewItem item)
+        public int GetIndexFromElement(VisualElement item)
         {
             return indexDictionary[item];
+        }
+
+        public VisualElement GetItemFromIndex(int index)
+        {
+            return indexDictionary.FirstOrDefault(p => p.Value == index).Key;
         }
     }
 }

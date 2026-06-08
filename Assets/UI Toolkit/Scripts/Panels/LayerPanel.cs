@@ -87,16 +87,14 @@ namespace Netherlands3D.UI.Panels
 
         private void GroupSelectedLayers()
         {
+            var layersToGroup = treeView.selectedItems.Cast<LayerData>().OrderBy(GetTreeViewIndexForLayerData).ToList(); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            
             var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
             var referenceLayer = referenceLayerItem?.layerData;
             var siblingIndex = referenceLayer == null ? -1 : referenceLayer.SiblingIndex;
 
-
-            var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList(); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
-            // SortLayersByVisualIndex(layersToGroup);
             newGroup.LayerData.SetParent(referenceLayer?.ParentLayer, siblingIndex); // only change hierarchy after caching the selection
 
-            // SortSelectedLayers(layersToGroup); //todo: sort the selected items to maintain the order as visible in the tree view
             if (layersToGroup.Count > 1) //only group if we have multiple layers selected
             {
                 foreach (LayerData selectedLayer in layersToGroup)
@@ -110,10 +108,30 @@ namespace Netherlands3D.UI.Panels
             ExpandToItem(newGroup.LayerData);
             RestoreSelection(layersToGroup);
         }
-
-        private void ExpandToItem(LayerData layerData)
+        
+        private int GetTreeViewIndexForLayerData(LayerData layerData)
         {
-            // Walk up the hierarchy and collect all ancestors
+            // Walk up to collect ancestors
+            var ancestors = GetAncestors(layerData);
+
+            // Walk down using existing functions to find the ID
+            int parentId = -1;
+            int id = -1;
+
+            foreach (var ancestor in ancestors)
+            {
+                id = parentId == -1
+                    ? GetRootIdForLayerData(ancestor)
+                    : GetTreeViewIdForParentIndex(parentId, ancestor);
+
+                parentId = id;
+            }
+
+            return treeView.viewController.GetIndexForId(id);
+        }
+
+        private static List<LayerData> GetAncestors(LayerData layerData)
+        {
             var ancestors = new List<LayerData>();
             var current = layerData;
 
@@ -170,25 +188,6 @@ namespace Netherlands3D.UI.Panels
 
             throw new NullReferenceException("LayerData is not a child of parent: " + treeView.GetItemDataForId<LayerData>(parentId).Name);
         }
-
-        // private void SortLayersByVisualIndex(List<LayerData> layers)
-        // {
-        //     foreach (var layerData in layers)
-        //     {
-        //         // Walk all indices to find which one has this LayerData as userData
-        //         for (int i = 0; i < treeView.itemsSource.Count; i++)
-        //         {
-        //             var id = treeView.GetIdForIndex(i);
-        //             var data = treeView.GetItemDataForId<LayerData>(id);
-        //
-        //             if (data == layerData)
-        //             {
-        //                 indicesToSelect.Add(i);
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // }
 
         private void RestoreSelection(List<LayerData> layersToReselect)
         {
@@ -284,11 +283,11 @@ namespace Netherlands3D.UI.Panels
                 treeView.SetSelection(newSelection);
             }
         }
-        
+
         private void SelectItem(LayerListViewItem item)
         {
             var index = treeView.GetIndexFromElement(item);
-            treeView.SetSelection(new []{ index });
+            treeView.SetSelection(new[] { index });
         }
 
         public override string Title => "Lagen";

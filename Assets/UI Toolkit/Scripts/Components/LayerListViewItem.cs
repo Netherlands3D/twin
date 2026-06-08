@@ -368,7 +368,6 @@ namespace Netherlands3D.UI.Components
         }
 
         //todo: fix reorder line below
-        //todo: order grouped items
         //todo: root.Selectedlayers
         //todo: cleanup old scripts
     }
