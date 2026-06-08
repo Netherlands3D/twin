@@ -54,18 +54,12 @@ namespace Netherlands3D.Functionalities
         private TextPopout northEastTooltip;
         private TextPopout southWestTooltip;
 
+        public Bounds SelectedArea => selectedArea;
+
         private Bounds selectedArea;
         private List<Vector3> selectedAreaPoints = new();
         
         public UnityEvent<Bounds> OnSelectionBoundsChanged = new();
-        public UnityEvent<Bounds> OnSelectionAreaBoundsChanged = new();   
-        public UnityEvent<List<Vector3>> OnSelectionAreaChanged = new();
-        public UnityEvent<Bounds> WhenSelectionAreaBoundsChanged = new();
-
-        public UnityEvent<ExportFormat> OnExportFormatChanged = new();
-        public UnityEvent<float> modelExportProgressChanged = new();
-        public UnityEvent<string> modelExportStatusChanged = new();
-        public UnityEvent OnSelectionCleared = new();
 
         public ExportFormat ExportFormat => selectedExportFormat;
 
@@ -78,7 +72,6 @@ namespace Netherlands3D.Functionalities
         private void OnEnable()
         {
             OnSelectionBoundsChanged.AddListener(WhenSelectionBoundsChanged);
-            OnSelectionAreaBoundsChanged.AddListener(OnSelectionBoundsChanged.Invoke);
             
 
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
@@ -97,7 +90,6 @@ namespace Netherlands3D.Functionalities
 
         private void OnDisable()
         {
-            OnSelectionAreaBoundsChanged.RemoveListener(OnSelectionBoundsChanged.Invoke);
             OnSelectionBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
             
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
@@ -168,33 +160,20 @@ namespace Netherlands3D.Functionalities
 
         public void SetDuringSelectionAreaBounds(Bounds selectedAreaBounds)
         {
-            WhenSelectionAreaBoundsChanged.Invoke(selectedAreaBounds);
+            OnSelectionBoundsChanged.Invoke(selectedAreaBounds);
         }
 
         private void WhenDeselected()
         {
             southWestTooltip.Hide();
             northEastTooltip.Hide();
+
+            ClearSelection();
         }
         public void SetSelectionAreaBounds(Bounds selectedAreaBounds)
         {
             this.selectedArea = selectedAreaBounds;
-            OnSelectionAreaBoundsChanged.Invoke(this.selectedArea);
-        }
-
-        public void SetSelectionArea(List<Vector3> selectedArea)
-        {
-            var bounds = new Bounds();
-            foreach (var point in selectedArea)
-            {
-                bounds.Encapsulate(point);
-                bounds.Encapsulate(point + Vector3.up);
-            }
-
-            this.selectedArea = bounds;
-            OnSelectionAreaChanged.Invoke(selectedArea);
-
-            SetSelectionAreaBounds(bounds);
+            OnSelectionBoundsChanged.Invoke(this.selectedArea);
         }
 
         private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
@@ -270,7 +249,6 @@ namespace Netherlands3D.Functionalities
         public void SetExportFormat(ExportFormat format)
         {
             selectedExportFormat = format;
-            OnExportFormatChanged.Invoke(selectedExportFormat);
         }
 
         public void ClearSelection()
@@ -281,7 +259,8 @@ namespace Netherlands3D.Functionalities
                 size = Vector3.zero
             };
             selectedAreaPoints.Clear();
-            OnSelectionCleared.Invoke();
         }
+
+        
     }
 }

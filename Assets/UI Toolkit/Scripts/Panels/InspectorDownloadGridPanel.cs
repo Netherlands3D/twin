@@ -34,6 +34,7 @@ namespace Netherlands3D.UI.Panels
         private Button copyNO;
         private NumberField zw_x, zw_y;
         private NumberField no_x, no_y;
+        private CheckboxToggle agreeToggle;
 
         private DropDown dropDown => this.Q<DropDown>("DropDown");
 
@@ -57,7 +58,8 @@ namespace Netherlands3D.UI.Panels
             zw_y = this.Q<NumberField>("ZW_Y");
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
-            
+            agreeToggle = this.Q<CheckboxToggle>("Voorwaarden");
+
             downloadButton.clicked += OnGridConfirmed.Invoke;
             downloadButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.DownloadTile).Close;
             downloadButton.clicked += DownloadSelection;
@@ -65,15 +67,19 @@ namespace Netherlands3D.UI.Panels
             SetDropdownValues();
        
             RegisterCallback<AttachToPanelEvent>(evt =>
-            {
+            {         
                 downloadInspectorService = ServiceLocator.GetService<DownloadInspectorService>();
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(GetFeatureThumbnail); 
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(UpdateFields);
+                downloadInspectorService.OnSelectionBoundsChanged.AddListener(UpdateDownloadButton);
 
-                dropDown.DropDownValueChanged.AddListener(SetExportFormat);
+                UpdateDownloadButton(downloadInspectorService.SelectedArea); 
+                agreeToggle.RegisterCallback<ChangeEvent<bool>>(evt => UpdateDownloadButton(downloadInspectorService.SelectedArea));
+
                 ExportFormat initialFormat = downloadInspectorService.ExportFormat;
                 int index = dropDownValues.First(kvp => kvp.Value.Item2 == initialFormat).Key;
                 SetDropdownValue(index);
+                dropDown.DropDownValueChanged.AddListener(SetExportFormat);                
 
                 copyZW.RegisterCallback<ClickEvent>(CopySouthWest);
                 copyNO.RegisterCallback<ClickEvent>(CopyNorthEast);
@@ -82,6 +88,7 @@ namespace Netherlands3D.UI.Panels
             {
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(GetFeatureThumbnail);
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(UpdateFields);
+                downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(UpdateDownloadButton);
             });
         }
         private void SetExportFormat(int state)
@@ -91,6 +98,17 @@ namespace Netherlands3D.UI.Panels
 
             ExportFormat format = mapping.Item2;
             downloadInspectorService.SetExportFormat(format);
+        }
+
+        private void UpdateDownloadButton(Bounds bounds)
+        {
+            bool downloadActive = true;
+            if (bounds.size == Vector3.zero)
+                downloadActive = false;
+            if(agreeToggle.value == false)
+                downloadActive = false;
+
+            downloadButton.SetEnabled(downloadActive);
         }
 
         private void DownloadSelection()
