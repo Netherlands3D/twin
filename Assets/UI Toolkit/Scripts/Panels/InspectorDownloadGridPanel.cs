@@ -1,11 +1,12 @@
 using Netherlands3D.Events;
 using Netherlands3D.Functionalities.AreaDownload.UI;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
-using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI_Toolkit.Scripts.Panels;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -17,6 +18,8 @@ namespace Netherlands3D.UI.Panels
     public partial class InspectorDownloadGridPanel : BaseInspectorContentPanel
     {
         public override string Title => "Download 3D data";
+
+        private List<string> options = new List<string>() { "Collada (.dae)", "DXF (.dxf)" };
         
         private VisualElement thumbnailContainer;
         private DownloadInspectorService downloadInspectorService;
@@ -24,7 +27,9 @@ namespace Netherlands3D.UI.Panels
         private Button copyNO;
         private NumberField zw_x, zw_y;
         private NumberField no_x, no_y;
-        
+
+        private DropDown dropDown => this.Q<DropDown>("DropDown");
+
         private Button confirmButton;
 
         public InspectorDownloadGridPanel()
@@ -48,6 +53,8 @@ namespace Netherlands3D.UI.Panels
             
             confirmButton.clicked += OnGridConfirmed.Invoke;
             confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.DownloadTile).Close;
+
+            SetDropdownValues(options);
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
@@ -96,6 +103,31 @@ namespace Netherlands3D.UI.Panels
             zw_y.SetValueWithoutNotify(int.Parse(downloadInspectorService.SouthExtent));
             no_x.SetValueWithoutNotify(int.Parse(downloadInspectorService.EastExtent));
             no_y.SetValueWithoutNotify(int.Parse(downloadInspectorService.NorthExtent));
+        }
+
+        public int DropDownValue => dropDown.choices.IndexOf(dropDown.value);
+
+        public void SetDropdownValues(List<string> values)
+        {
+            if (values == null || values.Count == 0) return;
+           
+            dropDown.choices = values;
+            SetDropdownValue(0);
+        }
+
+        public void SetDropdownValue(int value)
+        {
+            dropDown.SetValue(value);
+        }
+
+        public void AddDropDownListener(UnityAction<int> listener)
+        {
+            dropDown.DropDownValueChanged.AddListener(listener);
+        }
+
+        public void RemoveDropDownListener(UnityAction<int> listener)
+        {
+            dropDown.DropDownValueChanged.RemoveListener(listener);
         }
 
         public void Show(bool show)

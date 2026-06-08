@@ -33,9 +33,9 @@
     margin-left: var(--spacing-2);
 }
 
-.dropdown .unity-text-element {
+/* .dropdown .unity-text-element {
     display: none;
-}
+} */
 
 
 .unity-base-dropdown__item{
@@ -63,7 +63,10 @@
     border-bottom-right-radius: var(--spacing-4);
 }
 
-
+.unity-base-popup-field__text {
+    margin: 0;
+    display: none;
+}
 
 
 .unity-base-dropdown__item:hover {    
