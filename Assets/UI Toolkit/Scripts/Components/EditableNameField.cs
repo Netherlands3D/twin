@@ -46,9 +46,11 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             label = this.Q<Label>("Label");
+            label.focusable = true;
             inputField = this.Q<TextField>("InputField");
 
             label.RegisterCallback<ClickEvent>(OnNameLabelClicked);
+            label.RegisterCallback<BlurEvent>(OnLabelBlur);
 
             inputField.RegisterCallback<BlurEvent>(OnNameInputFieldBlur, TrickleDown.TrickleDown);
             inputField.RegisterCallback<NavigationSubmitEvent>(OnNavigationSubmitted, TrickleDown.TrickleDown);
@@ -57,7 +59,19 @@ namespace Netherlands3D.UI.Components
             inputField.style.display = DisplayStyle.None;
         }
 
-        public void StartEditing()
+        private void OnLabelBlur(BlurEvent evt)
+        {
+            ResetClickState();
+        }
+
+        private void ResetClickState()
+        {
+            firstClickDone = false;
+            intervalExpired = false;
+            clickTimer?.Pause();
+        }
+
+        private void StartEditing()
         {
             label.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             // inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false); //todo: find out why this doesn't work but the inline style does
@@ -72,10 +86,7 @@ namespace Netherlands3D.UI.Components
             // inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true); //todo: find out why this doesn't work but the inline style does
             inputField.style.display = DisplayStyle.None;
             
-            firstClickDone = false;
-            intervalExpired = false;
-            clickTimer?.Pause();
-            
+            ResetClickState();
             value = inputField.text;
         }
         
