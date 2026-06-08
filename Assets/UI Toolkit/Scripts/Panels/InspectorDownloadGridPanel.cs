@@ -43,7 +43,7 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
             
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
-            confirmButton = this.Q<Button>("ConfirmButton");
+            confirmButton = this.Q<Button>("DownloadButton");
             copyZW = this.Q<Button>("ButtonCopyZw");
             copyNO = this.Q<Button>("ButtonCopyNo");
             zw_x = this.Q<NumberField>("ZW_X");
