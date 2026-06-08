@@ -209,16 +209,16 @@ namespace Netherlands3D.Twin.Layers
 
         public void SelectLayer(bool deselectOthers = false)
         {
-            if (deselectOthers)
-                Root.DeselectAllLayers();
+            // if (deselectOthers)
+            //     Root.DeselectAllLayers();
 
-            Root.AddLayerToSelection(this);
+            // Root.AddLayerToSelection(this);
             LayerSelected.Invoke(this);
         }
 
         public void DeselectLayer()
         {
-            Root.RemoveLayerFromSelection(this);
+            // Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
         }
 
