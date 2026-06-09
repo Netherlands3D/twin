@@ -34,15 +34,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         //         RemovedSelectedLayer.Invoke(layer);
         // }
 
-        public void DeselectAllLayers()
-        {
-            // Make a copy of the SelectedLayers list because the Deselect function removes
-            // the selected layer from this list; and the enumeration fails without a copy
-            foreach (var selectedLayer in SelectedLayers.ToList())
-            {
-                selectedLayer.DeselectLayer();
-            }
-        }
+        // public void DeselectAllLayers()
+        // {
+        //     // Make a copy of the SelectedLayers list because the Deselect function removes
+        //     // the selected layer from this list; and the enumeration fails without a copy
+        //     foreach (var selectedLayer in SelectedLayers.ToList())
+        //     {
+        //         selectedLayer.DeselectLayer();
+        //     }
+        // }
 
         public override void Dispose()
         {

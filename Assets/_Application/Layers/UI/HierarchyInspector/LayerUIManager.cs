@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
-    public class LayerUIManager : MonoBehaviour, IPointerDownHandler
+    public class LayerUIManager : MonoBehaviour//, IPointerDownHandler
     {
         public List<LayerUI> LayerUIsVisibleInInspector { get; private set; } = new List<LayerUI>();
 
@@ -87,7 +87,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void OnDisable()
         {
-            ProjectData.Current.RootLayer.DeselectAllLayers();
+            // ProjectData.Current.RootLayer.DeselectAllLayers();
             App.Layers.LayerAdded.RemoveListener(CreateNewUI);
             App.Layers.LayerRemoved.RemoveListener(OnLayerDeleted);
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
@@ -143,11 +143,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         //     DragGhost.Initialize(DragStartOffset, ui);
         // }
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (MultiSelectionUtility.NoModifierKeyPressed())
-                ProjectData.Current.RootLayer.DeselectAllLayers();
-        }
+        // public void OnPointerDown(PointerEventData eventData)
+        // {
+        //     if (MultiSelectionUtility.NoModifierKeyPressed())
+        //         ProjectData.Current.RootLayer.DeselectAllLayers();
+        // }
 
         // private void Update()
         // {
