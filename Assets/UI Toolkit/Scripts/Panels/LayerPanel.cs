@@ -274,6 +274,11 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.Initialize(layerData);
             layerRowElement.SelectLayerItem.AddListener(SelectItem);
             layerRowElement.DeselectLayerItem.AddListener(DeselectItem);
+
+            if (layerData.IsSelected)
+            {
+                SelectItem(layerRowElement);
+            }
         }
 
         private void DeselectItem(LayerListViewItem item)
