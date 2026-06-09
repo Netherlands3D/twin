@@ -38,6 +38,7 @@ namespace Netherlands3D.UI.Panels
             // Virtualization and selection
             listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             listView.selectionType = SelectionType.Multiple;
+            listView.AddToClassList("asset-library-panel__list-view");
 
             listView.makeItem = MakeListViewItem;
             listView.bindItem = BindListViewItem;
