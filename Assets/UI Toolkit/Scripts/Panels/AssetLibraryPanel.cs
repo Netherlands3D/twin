@@ -82,7 +82,10 @@ namespace Netherlands3D.UI.Panels
         private VisualElement MakeListViewItem()
         {
             var button = new Button { name = "LayerButton" };
+            button.pickingMode = PickingMode.Ignore;
             var listViewItem = new ListViewItem(button);
+            return listViewItem;
+
             button.RegisterCallback<ClickEvent>(async _ =>
             {
                 if (button.userData is not ICatalogItem item)
