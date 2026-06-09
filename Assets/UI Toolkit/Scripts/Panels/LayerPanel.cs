@@ -438,7 +438,6 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
         {
-            return;
             if (hoveredButton != null)
             {
                 if (hoveredButton == deleteButton)
