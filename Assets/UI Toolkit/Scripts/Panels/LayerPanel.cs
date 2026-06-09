@@ -92,15 +92,16 @@ namespace Netherlands3D.UI.Panels
             if (!treeView.worldBound.Contains(panelPos))
             {
                 treeView.ClearSelection();
+                referenceLayerItem = null;
             }
         }
 
         private void OnSelectionChanged(IEnumerable<object> selectedObjects)
         {
             var layerDatas = selectedObjects.Cast<LayerData>().ToList();
-            
+
             ProjectData.Current.RootLayer.DeselectAllLayers();
-            
+
             foreach (LayerData data in layerDatas)
             {
                 if (!data.IsSelected)
@@ -110,10 +111,10 @@ namespace Netherlands3D.UI.Panels
 
         private void OnFolderButtonClicked(ClickEvent evt)
         {
-            GroupSelectedLayers();
+            CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected
         }
 
-        private void GroupSelectedLayers()
+        private void CreateFolderAndGroupLayers(bool group)
         {
             var layersToGroup = treeView.selectedItems.Cast<LayerData>().OrderBy(GetTreeViewIndexForLayerData).ToList(); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
 
@@ -123,7 +124,7 @@ namespace Netherlands3D.UI.Panels
 
             newGroup.LayerData.SetParent(referenceLayer?.ParentLayer, siblingIndex); // only change hierarchy after caching the selection
 
-            if (layersToGroup.Count > 1) //only group if we have multiple layers selected
+            if (group)
             {
                 foreach (LayerData selectedLayer in layersToGroup)
                 {
@@ -134,7 +135,10 @@ namespace Netherlands3D.UI.Panels
             RebuildTree();
 
             ExpandToItem(newGroup.LayerData);
-            RestoreSelection(layersToGroup);
+            if (group)
+                RestoreSelection(layersToGroup);
+            else
+                RestoreSelection(new List<LayerData>(){newGroup.LayerData});
         }
 
         private int GetTreeViewIndexForLayerData(LayerData layerData)
@@ -475,7 +479,7 @@ namespace Netherlands3D.UI.Panels
                 if (hoveredButton == deleteButton)
                     DeleteSelectedLayers();
                 else if (hoveredButton == folderButton)
-                    GroupSelectedLayers();
+                    CreateFolderAndGroupLayers(true); //always group when dragging on the button
             }
             else if (hoveredItem != null)
             {
