@@ -38,11 +38,11 @@
 .layer-list-view-item__name-label {
     flex-grow: 1;
     margin: 0 var(--spacing-3) 0 0;
-    min-height: var(--font-size-base);
+    margin-right: 0;
 }
 
 .unity-tree-view__item .layer-list-view-item__property-toggle{
-    padding: var(--spacing-1);
+    padding: 0 var(--spacing-1) 0 var(--spacing-1);
     background-color: transparent;
     border-width: 0;
     border-top-left-radius: 0;
@@ -52,16 +52,8 @@
     min-height: 0;
 }
 
-.layer-list-view-item--reparent-above .layer-list-view-item{
-    border-top-color: var(--color-blue-900);
-}
-
 .layer-list-view-item--reparent-target{
     background-color: var(--color-blue-200);
-}
-
-.layer-list-view-item--reparent-below .layer-list-view-item{
-    border-bottom-color: var(--color-blue-900);
 }
 
 .layer-list-view-item__visibility-toggle.visibility-toggle{
@@ -89,3 +81,4 @@
 .credentials-needed .layer-list-view-item__property-toggle:checked{
     background-color: var(--color-warning);
 }
+

@@ -1,12 +1,9 @@
 @import url("ScrollView-style.uss");
 
-.treeview{
-    
-}
-
 .unity-tree-view__item{
     border-width: var(--spacing-0_5);
     border-radius: var(--spacing-2);
+    margin-bottom: var(--spacing-0_5);
 }
 
 .unity-tree-view__item:hover {
