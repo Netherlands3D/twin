@@ -15,3 +15,14 @@
     transition-duration: 0.3s;
     opacity: 0;
 }
+
+.asset-library-panel__footer{
+    margin-top: auto;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.asset-library-panel_import{
+
+}
