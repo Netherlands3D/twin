@@ -11,6 +11,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 using Button = UnityEngine.UIElements.Button;
 using ScrollView = UnityEngine.UIElements.ScrollView;
 using TreeView = Netherlands3D.UI.Components.TreeView;
@@ -60,9 +61,13 @@ namespace Netherlands3D.UI.Panels
 
             treeView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             treeView.selectionType = SelectionType.Multiple;
+            treeView.focusable = true;
 
             treeView.makeItem = MakeItem;
             treeView.bindItem = BindItem;
+
+            treeView.selectionChanged += OnSelectionChanged;
+            treeView.RegisterCallback<BlurEvent>(OnBlur);
 
             scrollView = treeView.Q<ScrollView>();
 
@@ -77,6 +82,32 @@ namespace Netherlands3D.UI.Panels
             deleteButton.RegisterCallback<ClickEvent>(OnDeleteButtonClicked);
         }
 
+        private void OnBlur(BlurEvent evt)
+        {
+            var pos = Pointer.current.position.ReadValue();
+            var panelPos = RuntimePanelUtils.ScreenToPanel(
+                treeView.panel,
+                new Vector2(pos.x, Screen.height - pos.y)
+            );
+            if (!treeView.worldBound.Contains(panelPos))
+            {
+                treeView.ClearSelection();
+            }
+        }
+
+        private void OnSelectionChanged(IEnumerable<object> selectedObjects)
+        {
+            var layerDatas = selectedObjects.Cast<LayerData>().ToList();
+            
+            ProjectData.Current.RootLayer.DeselectAllLayers();
+            
+            foreach (LayerData data in layerDatas)
+            {
+                if (!data.IsSelected)
+                    data.SelectLayer();
+            }
+        }
+
         private void OnFolderButtonClicked(ClickEvent evt)
         {
             GroupSelectedLayers();
@@ -85,7 +116,7 @@ namespace Netherlands3D.UI.Panels
         private void GroupSelectedLayers()
         {
             var layersToGroup = treeView.selectedItems.Cast<LayerData>().OrderBy(GetTreeViewIndexForLayerData).ToList(); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
-            
+
             var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
             var referenceLayer = referenceLayerItem?.layerData;
             var siblingIndex = referenceLayer == null ? -1 : referenceLayer.SiblingIndex;
@@ -105,7 +136,7 @@ namespace Netherlands3D.UI.Panels
             ExpandToItem(newGroup.LayerData);
             RestoreSelection(layersToGroup);
         }
-        
+
         private int GetTreeViewIndexForLayerData(LayerData layerData)
         {
             // Walk up to collect ancestors
@@ -272,30 +303,32 @@ namespace Netherlands3D.UI.Panels
 
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             layerRowElement.Initialize(layerData);
-            layerRowElement.SelectLayerItem.AddListener(SelectItem);
-            layerRowElement.DeselectLayerItem.AddListener(DeselectItem);
+            layerRowElement.SelectLayerItem.AddListener(SelectItemWithoutNotify);
+            layerRowElement.DeselectLayerItem.AddListener(DeselectWithoutNotify);
 
             if (layerData.IsSelected)
             {
-                SelectItem(layerRowElement);
+                SelectItemWithoutNotify(layerRowElement);
             }
         }
 
-        private void DeselectItem(LayerTreeViewItem item)
+        private void DeselectWithoutNotify(LayerTreeViewItem item)
         {
             var index = treeView.GetIndexFromElement(item);
             if (treeView.selectedIndices.Contains(index))
             {
                 var newSelection = treeView.selectedIndices.ToList();
                 newSelection.Remove(index);
-                treeView.SetSelection(newSelection);
+                treeView.SetSelectionWithoutNotify(newSelection);
             }
         }
 
-        private void SelectItem(LayerTreeViewItem item)
+        private void SelectItemWithoutNotify(LayerTreeViewItem item)
         {
             var index = treeView.GetIndexFromElement(item);
-            treeView.SetSelection(new[] { index });
+            var newIndices = treeView.selectedIndices.ToList();
+            newIndices.Add(index);
+            treeView.SetSelectionWithoutNotify(newIndices);
         }
 
         public override string Title => "Lagen";
@@ -340,7 +373,6 @@ namespace Netherlands3D.UI.Panels
             SetHoveredButton(null);
             if (atTopEdge || atBottomEdge)
             {
-
                 if (atTopEdge)
                 {
                     SetHoveredItem(treeView.Query<LayerTreeViewItem>().First()); //ensure we get the first item, using GetClosestItem gives jittering issues for some reason
@@ -351,7 +383,7 @@ namespace Netherlands3D.UI.Panels
                     SetHoveredItem(GetClosestItem(panelDragPosition.y));
                     siblingIndex = -1;
                 }
-                
+
                 currentDropMode = DropMode.ToRoot; //override the drop mode set by SetHoveredItem
                 dragGhost.UpdateLine(hoveredItem, currentDropMode);
                 return;
