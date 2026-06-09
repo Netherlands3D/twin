@@ -78,7 +78,6 @@ namespace Netherlands3D.Twin.Layers
             foreach (var child in ChildrenLayers)
             {
                 child.UpdateActiveInHierarchy();
-                // child.ActiveSelf = child.ActiveSelf; //set the values again to recursively call the events.
             }
 
             LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);

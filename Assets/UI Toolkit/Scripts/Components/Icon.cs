@@ -25,7 +25,6 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateClassList()
         {
-            //todo: IconImage.None should not have an image
             this.ReplacePrefixedValueInClassList("image-", image.ToString().ToKebabCase());
             this.ReplacePrefixedValueInClassList("tint-", color.ToString().ToKebabCase());
         }
