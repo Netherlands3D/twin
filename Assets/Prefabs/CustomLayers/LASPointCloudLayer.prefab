@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1376849245051100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1376849245051100001}
+  - component: {fileID: 1376849245051100002}
+  - component: {fileID: 1376849245051100003}
+  m_Layer: 12
+  m_Name: LASPointCloudLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1376849245051100001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376849245051100000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1376849245051100002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376849245051100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d1e1e4b7d145c6ad47961150df7015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabIdentifier: f54b3f1829b04b88b2f33f2b01e0d6a7
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  maxLoadedPoints: 2000000
+  chunkSizeMeters: 75
+  maxPointsPerChunkMesh: 45000
+  pointsPerFrameWhileLoading: 25000
+  lodDistanceMultiplier: 3
+  centerWhenHeaderLoaded: 1
+  pointSizePixels: 4
+  pointSizeReferenceDistance: 200
+  minPointSizePixels: 1
+  maxPointSizePixels: 8
+  materialTemplate: {fileID: 0}
+--- !u!114 &1376849245051100003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376849245051100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4d878bc3b3f47745960e6be7203cfc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PositionLocked: 0
+  RotationLocked: 0
+  ScaleLocked: 0
+  positionAxes: 7
+  rotationAxes: 7
+  scaleAxes: 7
