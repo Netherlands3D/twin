@@ -65,6 +65,7 @@ namespace Netherlands3D.UI.Panels
 
             treeView.makeItem = MakeItem;
             treeView.bindItem = BindItem;
+            treeView.unbindItem = UnbindItem;
 
             treeView.selectionChanged += OnSelectionChanged;
             treeView.RegisterCallback<BlurEvent>(OnBlur);
@@ -316,6 +317,13 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
+        private void UnbindItem(VisualElement item, int index)
+        {
+            if (item is not LayerTreeViewItem layerRowElement) return;
+
+            layerRowElement.RemoveLayerDataListeners(layerRowElement.layerData);
+        }
+        
         private void DeselectWithoutNotify(LayerTreeViewItem item)
         {
             var index = treeView.GetIndexFromElement(item);

@@ -219,16 +219,9 @@ namespace Netherlands3D.UI.Components
             
             layerData.LayerSelected.AddListener(SelectUI); //todo: add removelisteners for everything in this function
             layerData.LayerDeselected.AddListener(DeselectUI);
-            
-            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
-        private void OnDetachFromPanel(DetachFromPanelEvent evt)
-        {
-            RemoveLayerDataListeners(layerData);
-        }
-
-        private void RemoveLayerDataListeners(LayerData layerData)
+        public void RemoveLayerDataListeners(LayerData layerData)
         {
             layerData.HasValidCredentialsChanged.RemoveListener(OnCredentialStatusChanged);
             layerData.ActiveSelfChanged.RemoveListener(OnActiveSelfChanged);
