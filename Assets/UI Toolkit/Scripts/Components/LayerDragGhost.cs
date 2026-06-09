@@ -51,11 +51,11 @@ namespace Netherlands3D.UI.Components
 
         private void CopyAppearance(LayerTreeViewItem ui)
         {
-            var validCredentials = ui.layerData.HasValidCredentials;
+            var validCredentials = ui.LayerData.HasValidCredentials;
             
             layerVisibilityImage.Image = validCredentials ? (IconImage)ui.VisibilityState : IconImage.Warning;
-            UpdateColorBar(validCredentials ? ui.layerData.Color : null);
-            var hasChildren = ui.layerData.ChildrenLayers.Count > 0;
+            UpdateColorBar(validCredentials ? ui.LayerData.Color : null);
+            var hasChildren = ui.LayerData.ChildrenLayers.Count > 0;
             var indentWidth = ui.IndentWidth;
 
             if (!hasChildren)
@@ -63,7 +63,7 @@ namespace Netherlands3D.UI.Components
 
             spacer.style.width = indentWidth;
             layerTypeImage.Image = ui.LayerTypeIcon;
-            layerNameText.text = ui.layerData.Name;
+            layerNameText.text = ui.LayerData.Name;
 
             EnableInClassList("credentials-needed", !validCredentials);
         }
@@ -111,7 +111,7 @@ namespace Netherlands3D.UI.Components
                 }
                 case LayerPanel.DropMode.ToRoot:
                 {
-                    var targetLayer = targetItem.layerData;
+                    var targetLayer = targetItem.LayerData;
 
                     reorderLine.style.display = DisplayStyle.Flex;
                     reorderLine.style.left = 0;

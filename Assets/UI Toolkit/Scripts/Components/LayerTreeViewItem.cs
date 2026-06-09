@@ -26,7 +26,7 @@ namespace Netherlands3D.UI.Components
 
         private PropertyPanelBehaviour propertyPanelBehaviour;
 
-        public LayerData layerData => userData as LayerData;
+        public LayerData LayerData => userData as LayerData;
         public UnityEvent RequestTreeRefresh { get; } = new();
         public UnityEvent RequestTreeRebuild { get; } = new();
 
@@ -99,7 +99,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnDoubleClick()
         {
-            layerData.DoubleClickLayer();
+            LayerData.DoubleClickLayer();
         }
 
         private void OnDragStarted(Vector2 startPosition)
@@ -119,7 +119,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnNameChanged(ChangeEvent<string> evt)
         {
-            layerData.Name = evt.newValue;
+            LayerData.Name = evt.newValue;
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
@@ -161,19 +161,19 @@ namespace Netherlands3D.UI.Components
 
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
         {
-            layerData.ActiveSelf = evt.newValue;
+            LayerData.ActiveSelf = evt.newValue;
         }
 
         private void UncheckPropertyToggle(LayerData layerData)
         {
-            if (layerData == this.layerData)
+            if (layerData == this.LayerData)
                 propertyToggle.SetValueWithoutNotify(false);
         }
 
         private void OnPropertyToggleValueChanged(ChangeEvent<bool> evt)
         {
             if (evt.newValue)
-                propertyPanelBehaviour.SpawnPanel(layerData);
+                propertyPanelBehaviour.SpawnPanel(LayerData);
             else
                 propertyPanelBehaviour.ClearActivePanel();
         }
@@ -188,7 +188,7 @@ namespace Netherlands3D.UI.Components
         {
             if (layerData == null) return;
 
-            var previous = this.layerData;
+            var previous = this.LayerData;
             if(previous != null)
                 RemoveLayerDataListeners(previous);
             
@@ -248,7 +248,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnCredentialStatusChanged(bool valid)
         {
-            SetAppearance(layerData);
+            SetAppearance(LayerData);
         }
 
         private void SetAppearance(LayerData layerData)
@@ -266,7 +266,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnPropertiesChanged(LayerPropertyData propertyData)
         {
-            LoadProperties(layerData.LayerProperties);
+            LoadProperties(LayerData.LayerProperties);
         }
 
         private void OnActiveSelfChanged(bool activeSelf)
@@ -294,7 +294,7 @@ namespace Netherlands3D.UI.Components
 
         private void SetEnabledToggleInteractiveState()
         {
-            var parent = layerData.ParentLayer;
+            var parent = LayerData.ParentLayer;
             var interactable = parent is RootLayer || (parent != null && parent.ActiveInHierarchy);
             isActiveToggle.SetEnabled(interactable);
         }
@@ -303,12 +303,12 @@ namespace Netherlands3D.UI.Components
         {
             var allChildrenActive = true;
 
-            foreach (var child in layerData.ChildrenLayers)
+            foreach (var child in LayerData.ChildrenLayers)
             {
                 allChildrenActive &= child.ActiveSelf;
             }
 
-            isActiveToggle.SetStateFromLayerState(layerData.ActiveSelf, layerData.ActiveInHierarchy, allChildrenActive);
+            isActiveToggle.SetStateFromLayerState(LayerData.ActiveSelf, LayerData.ActiveInHierarchy, allChildrenActive);
         }
         
         private void UpdateColorBar(Color newColor)
@@ -332,7 +332,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLayerTypeIcon()
         {
-            layerTypeIcon.Image = LayerTypeSpriteLibrary.GetIconImage(layerData); //todo test if the icon updates when setting prefab (scatter)
+            layerTypeIcon.Image = LayerTypeSpriteLibrary.GetIconImage(LayerData); //todo test if the icon updates when setting prefab (scatter)
         }
 
         private void UpdateNameLabels(LayerData layerData, string newName)

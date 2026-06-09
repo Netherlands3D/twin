@@ -120,7 +120,7 @@ namespace Netherlands3D.UI.Panels
             var layersToGroup = treeView.selectedItems.Cast<LayerData>().OrderBy(GetTreeViewIndexForLayerData).ToList(); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
 
             var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
-            var referenceLayer = referenceLayerItem?.layerData;
+            var referenceLayer = referenceLayerItem?.LayerData;
             var siblingIndex = referenceLayer == null ? -1 : referenceLayer.SiblingIndex;
 
             newGroup.LayerData.SetParent(referenceLayer?.ParentLayer, siblingIndex); // only change hierarchy after caching the selection
@@ -321,7 +321,7 @@ namespace Netherlands3D.UI.Panels
         {
             if (item is not LayerTreeViewItem layerRowElement) return;
 
-            layerRowElement.RemoveLayerDataListeners(layerRowElement.layerData);
+            layerRowElement.RemoveLayerDataListeners(layerRowElement.LayerData);
         }
         
         private void DeselectWithoutNotify(LayerTreeViewItem item)
