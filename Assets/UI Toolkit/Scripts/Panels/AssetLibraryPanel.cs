@@ -19,7 +19,6 @@ namespace Netherlands3D.UI.Panels
     public partial class AssetLibraryPanel : BaseInspectorContentPanel
     {
         public override string Title => "Toevoegen";
-        public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.Library;
         
         private AssetLibrary.AssetLibrary assetLibrary;
         private ListView listView;
