@@ -26,17 +26,17 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         //todo move this non ui logic into a service
         private void GroupSelectedLayers()
         {
-            if (ProjectData.Current.RootLayer.SelectedLayers.Count == 0) 
-                return;
-            
-            var newGroup = CreateFolderLayer();
-            var referenceLayer = ProjectData.Current.RootLayer.SelectedLayers.Last();
-            newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
-            var layersToGroup = layerUIManager.GetLayersSortedByUI();
-            foreach (var selectedLayer in layersToGroup)
-            {
-                selectedLayer.SetParent(newGroup);
-            }
+            // if (ProjectData.Current.RootLayer.SelectedLayers.Count == 0) 
+            //     return;
+            //
+            // var newGroup = CreateFolderLayer();
+            // var referenceLayer = ProjectData.Current.RootLayer.SelectedLayers.Last();
+            // newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
+            // var layersToGroup = layerUIManager.GetLayersSortedByUI();
+            // foreach (var selectedLayer in layersToGroup)
+            // {
+            //     selectedLayer.SetParent(newGroup);
+            // }
         }
     }
 }

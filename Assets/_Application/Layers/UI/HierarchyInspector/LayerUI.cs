@@ -287,13 +287,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
             if (!layerUIManager.IsDragOnButton()) //don't reparent when dragging on a button, since the button action should be called instead and handle any possible reparents
             {
-                layerUIManager.SortSelectedLayersByVisibility();
-                Layer.Root.SelectedLayers.Reverse();
-
-                foreach (var selectedLayer in Layer.Root.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
-                {
-                    selectedLayer.SetParent(newParent?.Layer, newSiblingIndex);
-                }
+                // layerUIManager.SortSelectedLayersByVisibility();
+                // Layer.Root.SelectedLayers.Reverse();
+                //
+                // foreach (var selectedLayer in Layer.Root.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
+                // {
+                //     selectedLayer.SetParent(newParent?.Layer, newSiblingIndex);
+                // }
             }
 
             // RemoveHoverHighlight(referenceLayerUnderMouse);

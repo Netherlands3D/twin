@@ -19,20 +19,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
            
         }
 
-        public void AddLayerToSelection(LayerData layer)
-        {
-            if (!SelectedLayers.Contains(layer))
-            {
-                SelectedLayers.Add(layer);
-                AddedSelectedLayer.Invoke(layer);
-            }
-        }
-
-        public void RemoveLayerFromSelection(LayerData layer)
-        {
-            if (SelectedLayers.Remove(layer))
-                RemovedSelectedLayer.Invoke(layer);
-        }
+        // public void AddLayerToSelection(LayerData layer)
+        // {
+        //     if (!SelectedLayers.Contains(layer))
+        //     {
+        //         SelectedLayers.Add(layer);
+        //         AddedSelectedLayer.Invoke(layer);
+        //     }
+        // }
+        //
+        // public void RemoveLayerFromSelection(LayerData layer)
+        // {
+        //     if (SelectedLayers.Remove(layer))
+        //         RemovedSelectedLayer.Invoke(layer);
+        // }
 
         public void DeselectAllLayers()
         {

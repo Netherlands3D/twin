@@ -6,12 +6,12 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
     {
         public override void ButtonAction()
         {
-            layerUIManager.DeleteSelectedLayers();
+            // layerUIManager.DeleteSelectedLayers();
         }
 
         public override void OnDrop(PointerEventData eventData)
         {
-            layerUIManager.DeleteSelectedLayers();
+            // layerUIManager.DeleteSelectedLayers();
         }
     }
 }
