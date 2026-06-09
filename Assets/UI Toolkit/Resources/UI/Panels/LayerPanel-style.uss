@@ -8,10 +8,6 @@
     height: 100%;
 }
 
-/*.unity-tree-view__item{*/
-/*    margin-bottom: var(--spacing-0_5);*/
-/*}*/
-
 .layer-panel__bottom-button-container{
     flex-direction: row;
     justify-content: flex-end;
