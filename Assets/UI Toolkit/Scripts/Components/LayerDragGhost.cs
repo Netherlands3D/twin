@@ -11,7 +11,7 @@ namespace Netherlands3D.UI.Components
     public partial class LayerDragGhost : VisualElement
     {
         private Icon layerVisibilityImage;
-        private VisualElement colorImage;
+        private VisualElement colorBar;
         private Icon foldoutImage;
         private VisualElement spacer;
         private Icon layerTypeImage;
@@ -29,7 +29,7 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             layerVisibilityImage = this.Q<Icon>("IsActiveIcon");
-            colorImage = this.Q<VisualElement>("ColorBar");
+            colorBar = this.Q<VisualElement>("ColorBar");
             foldoutImage = this.Q<Icon>("FoldoutImage");
             spacer = this.Q<VisualElement>("Spacer");
             layerTypeImage = this.Q<Icon>("TypeIcon");
@@ -51,8 +51,10 @@ namespace Netherlands3D.UI.Components
 
         private void CopyAppearance(LayerTreeViewItem ui)
         {
-            layerVisibilityImage.Image = (IconImage)ui.VisibilityState;
-            UpdateColorBar(ui.layerData.Color);
+            var validCredentials = ui.layerData.HasValidCredentials;
+            
+            layerVisibilityImage.Image = validCredentials ? (IconImage)ui.VisibilityState : IconImage.Warning;
+            UpdateColorBar(validCredentials ? ui.layerData.Color : null);
             var hasChildren = ui.layerData.ChildrenLayers.Count > 0;
             var indentWidth = ui.IndentWidth;
 
@@ -63,16 +65,18 @@ namespace Netherlands3D.UI.Components
             layerTypeImage.Image = ui.LayerTypeIcon;
             layerNameText.text = ui.layerData.Name;
 
-            // var credentialsUI = GetComponent<LayerUICredentialsNeededListener>();
-            // credentialsUI.layerUI = ui;
+            EnableInClassList("credentials-needed", !validCredentials);
         }
 
-        private void UpdateColorBar(Color newColor)
+        private void UpdateColorBar(Color? newColor)
         {
-            var opaqueColor = newColor;
-            opaqueColor.a = 1;
+            if (!newColor.HasValue)
+            {
+                colorBar.style.backgroundColor = StyleKeyword.Null;
+                return;
+            }
 
-            colorImage.style.backgroundColor = opaqueColor;
+            UpdateColorBar(newColor.Value);
         }
 
         public void UpdatePosition(Vector2 worldPosition)

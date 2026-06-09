@@ -217,7 +217,7 @@ namespace Netherlands3D.UI.Components
             layerData.PropertySet.AddListener(OnPropertiesChanged);
             layerData.PropertyRemoved.AddListener(OnPropertiesChanged);
             
-            layerData.LayerSelected.AddListener(SelectUI); //todo: add removelisteners for everything in this function
+            layerData.LayerSelected.AddListener(SelectUI);
             layerData.LayerDeselected.AddListener(DeselectUI);
         }
 

@@ -31,3 +31,8 @@
     background-color: var(--color-blue-900);
     right: 0;
 }
+
+.credentials-needed .layer-tree-view-item__visibility-toggle{
+    --icon-image: var(--icon-warning);
+    -unity-background-image-tint-color: var(--color-warning);
+}
