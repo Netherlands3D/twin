@@ -48,7 +48,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public LayerData ParentLayer => parent;
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
-        [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
+        [JsonIgnore] public bool IsSelected { get; private set; } = false;
         
         [JsonIgnore]
         public string Name
@@ -213,12 +213,14 @@ namespace Netherlands3D.Twin.Layers
             //     Root.DeselectAllLayers();
 
             // Root.AddLayerToSelection(this);
+            IsSelected = true;
             LayerSelected.Invoke(this);
         }
 
         public void DeselectLayer()
         {
             // Root.RemoveLayerFromSelection(this);
+            IsSelected = false;
             LayerDeselected.Invoke(this);
         }
 
