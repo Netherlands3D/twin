@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class FirstPersonViewManipulator : DragManipulator
 {
     private Vector2 totalDrag;
-    private Vector2 layoutPositionAtDragStart; // capture layout once, not per-frame
+    private Vector2 layoutPositionAtDragStart;
 
     private readonly LayerMask layers = LayerMask.GetMask(
         "Default",
