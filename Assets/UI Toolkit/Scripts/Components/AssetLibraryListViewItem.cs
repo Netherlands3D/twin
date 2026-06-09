@@ -9,7 +9,13 @@ namespace Netherlands3D.UI.Components
     {
         private Icon icon;
         private Label label;
-        
+
+        public string LabelText
+        {
+            get => label.text;
+            set => label.text = value;
+        }
+
         public IconImage Image
         {
             get => icon.Image;

@@ -80,23 +80,18 @@ namespace Netherlands3D.UI.Panels
         }
 
         private VisualElement MakeListViewItem()
-        {
-            var button = new Button { name = "LayerButton" };
-            button.pickingMode = PickingMode.Ignore;
-            var listViewItem = new ListViewItem(button);
-            return listViewItem;
-
-            button.RegisterCallback<ClickEvent>(async _ =>
+        { 
+            var listViewItem = new AssetLibraryListViewItem();
+            listViewItem.RegisterCallback<ClickEvent>(async _ =>
             {
-                if (button.userData is not ICatalogItem item)
+                if (listViewItem.userData is not ICatalogItem item)
                     return;
 
                 switch (item)
                 {
                     case ICatalog catalog:
-                        {
-                            
-                           await  OpenFolder(catalog.Title, await catalog.BrowseAsync());
+                        {                            
+                            await OpenFolder(catalog.Title, await catalog.BrowseAsync());
                             break;
                         }
 
@@ -107,7 +102,6 @@ namespace Netherlands3D.UI.Panels
                         }
                 }
             });
-
             return listViewItem;
         }
 
@@ -134,19 +128,18 @@ namespace Netherlands3D.UI.Panels
 
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not ListViewItem listViewItem) return;
-            if (listViewItem.Q<Button>() is not Button button) return;
+            if (item is not AssetLibraryListViewItem listViewItem) return;
             
             ICatalogItem catalogItem = listView.itemsSource[index] as ICatalogItem;
-            button.LabelText = catalogItem.Title;
+            listViewItem.LabelText = catalogItem.Title;
             var icon = catalogItem switch
             {
                 ICatalogItemCollection => IconImage.Folder,
                 ICatalog => IconImage.Library,
                 _ => IconImage.Map
             };
-            button.Image = icon;
-            button.userData = catalogItem;
+            listViewItem.Image = icon;
+            listViewItem.userData = catalogItem;
         }
     }
 }
