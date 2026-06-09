@@ -2,7 +2,6 @@
     align-items: center;
     flex-direction: row;
     flex-grow: 1;
-    margin-bottom: var(--spacing-1);
 }
 
 .mask-layer-tree-view-item:hover {
