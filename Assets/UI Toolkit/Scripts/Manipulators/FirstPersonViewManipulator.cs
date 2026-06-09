@@ -3,38 +3,43 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class FirstPersonViewManipulator : DragManipulator
 {
-    private Vector2 totalDrag; // track cumulative movement ourselves
+    private Vector2 totalDrag;
+    private Vector2 layoutPositionAtDragStart; // capture layout once, not per-frame
+
     private readonly LayerMask layers = LayerMask.GetMask(
         "Default",
         "Terrain",
         "Buildings"
     );
-    
+
+    public FirstPersonViewManipulator(float deadzone) : base(deadzone)
+    {
+    }
+
     protected override void OnDragStarted(Vector2 startPosition)
     {
         base.OnDragStarted(startPosition);
         totalDrag = Vector2.zero;
+        layoutPositionAtDragStart = new Vector2(target.layout.x, target.layout.y);
     }
 
     protected override void OnDrag(Vector2 delta)
     {
         base.OnDrag(delta);
         totalDrag += delta;
-        target.style.top = target.layout.y + totalDrag.y;
-        target.style.left = target.layout.x + totalDrag.x;
+        target.style.top = layoutPositionAtDragStart.y + totalDrag.y;
+        target.style.left = layoutPositionAtDragStart.x + totalDrag.x;
     }
 
     protected override void OnDragEnded(Vector2 endPosition)
     {
         base.OnDragEnded(endPosition);
-        
-        if (!GuardPointerIsMovedOutsideOfDeadZone() && 
-            !Interface.PointerIsOverUI())
+
+        if (!Interface.PointerIsOverUI())
         {
             EnterFPVMode();
         }
@@ -68,10 +73,5 @@ public class FirstPersonViewManipulator : DragManipulator
 
         fpv.SetPositionAndRotation(point, Quaternion.LookRotation(forward, Vector3.up));
         fpv.EnterViewer(null, null);
-    }
-
-    protected bool GuardPointerIsMovedOutsideOfDeadZone()
-    {
-        return Mathf.Abs(target.style.top.value.value) < movementDeadzone || Mathf.Abs(target.style.left.value.value) < movementDeadzone;
     }
 }

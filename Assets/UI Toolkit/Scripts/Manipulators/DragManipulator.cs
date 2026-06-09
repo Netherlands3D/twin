@@ -18,7 +18,7 @@ public class DragManipulator : PointerManipulator
     
     private Vector2 previousPosition;
     
-    public DragManipulator(float deadzone = 32f)
+    public DragManipulator(float deadzone)
     {
         this.movementDeadzone = deadzone;
         pointerId = -1;
