@@ -14,7 +14,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class LayerListViewItem : VisualElement, IVisualizationWithPropertyData
+    public partial class LayerTreeViewItem : VisualElement, IVisualizationWithPropertyData
     {
         private bool layoutReordered = false; //needs to happen the first time, but not after rebinding the element
 
@@ -34,9 +34,9 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
         private bool waitingForClick = false;
 
-        public UnityEvent<Vector2, LayerListViewItem> DragStarted { get; } = new();
-        public UnityEvent<Vector2, LayerListViewItem> Dragging { get; } = new();
-        public UnityEvent<Vector2, LayerListViewItem> DragEnded { get; } = new();
+        public UnityEvent<Vector2, LayerTreeViewItem> DragStarted { get; } = new();
+        public UnityEvent<Vector2, LayerTreeViewItem> Dragging { get; } = new();
+        public UnityEvent<Vector2, LayerTreeViewItem> DragEnded { get; } = new();
 
         private VisualElement itemRoot;
         public VisualElement ItemRoot => itemRoot;
@@ -44,10 +44,10 @@ namespace Netherlands3D.UI.Components
         public IconImage LayerTypeIcon => layerTypeIcon.Image;
         public float IndentWidth => ItemRoot.Q("unity-tree-view__item-indent").resolvedStyle.width;
         
-        public UnityEvent<LayerListViewItem> SelectLayerItem = new();
-        public UnityEvent<LayerListViewItem> DeselectLayerItem = new();
+        public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
+        public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
 
-        public LayerListViewItem()
+        public LayerTreeViewItem()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");

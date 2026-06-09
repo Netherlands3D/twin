@@ -42,14 +42,14 @@ namespace Netherlands3D.UI.Components
             this.SetPickingModeRecursive(PickingMode.Ignore);
         }
 
-        public void Initialize(Vector2 dragStartPosition, LayerListViewItem ui)
+        public void Initialize(Vector2 dragStartPosition, LayerTreeViewItem ui)
         {
             UpdatePosition(dragStartPosition);
             CopyAppearance(ui);
             yOffset = ui.resolvedStyle.height / 2;
         }
 
-        private void CopyAppearance(LayerListViewItem ui)
+        private void CopyAppearance(LayerTreeViewItem ui)
         {
             layerVisibilityImage.Image = (IconImage)ui.VisibilityState;
             UpdateColorBar(ui.layerData.Color);
@@ -80,7 +80,7 @@ namespace Netherlands3D.UI.Components
             layerGhost.style.top = parent.WorldToLocal(worldPosition).y - yOffset;
         }
 
-        public void UpdateLine(LayerListViewItem targetItem, LayerPanel.DropMode currentDropMode)
+        public void UpdateLine(LayerTreeViewItem targetItem, LayerPanel.DropMode currentDropMode)
         {
             var top = 0f;
             switch (currentDropMode)

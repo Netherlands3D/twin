@@ -32,9 +32,9 @@ namespace Netherlands3D.UI.Panels
 
         private Vector2 panelDragPosition;
         private int siblingIndex;
-        private LayerListViewItem hoveredItem;
+        private LayerTreeViewItem hoveredItem;
 
-        private LayerListViewItem referenceLayerItem;
+        private LayerTreeViewItem referenceLayerItem;
         private Button hoveredButton;
 
         private Button folderButton;
@@ -251,7 +251,7 @@ namespace Netherlands3D.UI.Panels
 
         private VisualElement MakeItem()
         {
-            var layerRowElement = new LayerListViewItem();
+            var layerRowElement = new LayerTreeViewItem();
             layerRowElement.RequestTreeRefresh.AddListener(treeView.RefreshItems);
             layerRowElement.RequestTreeRebuild.AddListener(RebuildTree);
             layerRowElement.DragStarted.AddListener(OnDraggingLayerItemStarted);
@@ -263,12 +263,12 @@ namespace Netherlands3D.UI.Panels
 
         private void SetReferenceLayer(ClickEvent evt)
         {
-            referenceLayerItem = evt.currentTarget as LayerListViewItem;
+            referenceLayerItem = evt.currentTarget as LayerTreeViewItem;
         }
 
         private void BindItem(VisualElement item, int index)
         {
-            if (item is not LayerListViewItem layerRowElement) return;
+            if (item is not LayerTreeViewItem layerRowElement) return;
 
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             layerRowElement.Initialize(layerData);
@@ -281,7 +281,7 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
-        private void DeselectItem(LayerListViewItem item)
+        private void DeselectItem(LayerTreeViewItem item)
         {
             var index = treeView.GetIndexFromElement(item);
             if (treeView.selectedIndices.Contains(index))
@@ -292,7 +292,7 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
-        private void SelectItem(LayerListViewItem item)
+        private void SelectItem(LayerTreeViewItem item)
         {
             var index = treeView.GetIndexFromElement(item);
             treeView.SetSelection(new[] { index });
@@ -300,7 +300,7 @@ namespace Netherlands3D.UI.Panels
 
         public override string Title => "Lagen";
 
-        private void OnDraggingLayerItemStarted(Vector2 startPosition, LayerListViewItem source)
+        private void OnDraggingLayerItemStarted(Vector2 startPosition, LayerTreeViewItem source)
         {
             if (dragGhost != null)
                 dragGhost.RemoveFromHierarchy();
@@ -314,7 +314,7 @@ namespace Netherlands3D.UI.Panels
             referenceLayerItem = source;
         }
 
-        private void OnDraggingLayerItem(Vector2 delta, LayerListViewItem source)
+        private void OnDraggingLayerItem(Vector2 delta, LayerTreeViewItem source)
         {
             panelDragPosition += delta;
 
@@ -343,7 +343,7 @@ namespace Netherlands3D.UI.Panels
 
                 if (atTopEdge)
                 {
-                    SetHoveredItem(treeView.Query<LayerListViewItem>().First()); //ensure we get the first item, using GetClosestItem gives jittering issues for some reason
+                    SetHoveredItem(treeView.Query<LayerTreeViewItem>().First()); //ensure we get the first item, using GetClosestItem gives jittering issues for some reason
                     siblingIndex = 0;
                 }
                 else
@@ -357,8 +357,8 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
-            var targetItem = hitElement as LayerListViewItem
-                             ?? hitElement?.GetFirstAncestorOfType<LayerListViewItem>()
+            var targetItem = hitElement as LayerTreeViewItem
+                             ?? hitElement?.GetFirstAncestorOfType<LayerTreeViewItem>()
                              ?? GetClosestItem(panelDragPosition.y);
 
             SetHoveredItem(targetItem);
@@ -390,12 +390,12 @@ namespace Netherlands3D.UI.Panels
             return Mathf.Abs(realChange.y) > 0.01f;
         }
 
-        private LayerListViewItem GetClosestItem(float worldY)
+        private LayerTreeViewItem GetClosestItem(float worldY)
         {
             var viewportBounds = scrollView.contentViewport.worldBound;
-            LayerListViewItem closest = null;
+            LayerTreeViewItem closest = null;
             float closestDistance = float.MaxValue;
-            treeView.Query<LayerListViewItem>().ForEach(item =>
+            treeView.Query<LayerTreeViewItem>().ForEach(item =>
             {
                 if (!viewportBounds.Overlaps(item.worldBound)) return; // skip pooled/offscreen items
                 float distance = Mathf.Abs(item.worldBound.center.y - worldY);
@@ -408,7 +408,7 @@ namespace Netherlands3D.UI.Panels
             return closest;
         }
 
-        private void SetHoveredItem(LayerListViewItem targetItem)
+        private void SetHoveredItem(LayerTreeViewItem targetItem)
         {
             if (hoveredItem != targetItem)
             {
@@ -436,7 +436,7 @@ namespace Netherlands3D.UI.Panels
             SetTargetItemUssClasses(hoveredItem, newClassName);
         }
 
-        private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerListViewItem source)
+        private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerTreeViewItem source)
         {
             if (hoveredButton != null)
             {
@@ -485,7 +485,7 @@ namespace Netherlands3D.UI.Panels
             dragGhost = null;
         }
 
-        private void SetTargetItemUssClasses(LayerListViewItem targetItem, string newClassName)
+        private void SetTargetItemUssClasses(LayerTreeViewItem targetItem, string newClassName)
         {
             targetItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
 
