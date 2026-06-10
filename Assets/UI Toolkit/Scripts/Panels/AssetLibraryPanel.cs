@@ -1,5 +1,7 @@
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts;
@@ -148,6 +150,8 @@ namespace Netherlands3D.UI.Panels
                 ICatalog => IconImage.Library,
                 _ => IconImage.Map
             };
+
+            //layerTypeIcon.Image = LayerTypeSpriteLibrary.GetIconImage();
             assetItem.Image = icon;
             listViewItem.userData = catalogItem;
         }
