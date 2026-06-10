@@ -52,6 +52,7 @@ namespace Netherlands3D.UI.Panels
         public async void LoadCatalog(ICatalog catalog)
         {
             breadcrumb.ClearCrumbs();
+            listView.ClearSelection();
 
             // TODO: Until we officially support pagination - set the page limit to the max of 1000
             var pagination = new Pagination(0, 1000);
@@ -63,11 +64,13 @@ namespace Netherlands3D.UI.Panels
         private async Task OpenFolder(string title, ICatalogItemCollection catalogItemCollection)
         {
             breadcrumb.AddCrumb(title, catalogItemCollection);
+            listView.ClearSelection();
             await LoadItemsIntoListView(catalogItemCollection);
         }
 
         private async void OnBreadcrumbClicked(int _, Breadcrumb.Crumb crumb)
         {
+            listView.ClearSelection();
             await LoadItemsIntoListView(crumb.Target as ICatalogItemCollection);
         }
 
@@ -127,6 +130,8 @@ namespace Netherlands3D.UI.Panels
                         break;
                 }
             }
+
+            listView.ClearSelection();
         }
 
         private void BindListViewItem(VisualElement item, int index)
