@@ -2,11 +2,6 @@
     --reorder-line-width: 2px;
 }
 
-.layer-tree-view-item{
-    border-width: var(--reorder-line-width);
-    border-color: transparent;
-}
-
 .layer-tree-view-item__container {
     align-items: center;
     flex-direction: row;
@@ -47,9 +42,10 @@
     border-width: 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    border-top-right-radius: var(--spacing-2);
-    border-bottom-right-radius: var(--spacing-2);
+    border-top-right-radius: var(--spacing-1);
+    border-bottom-right-radius: var(--spacing-1);
     min-height: 0;
+    height: 100%;
 }
 
 .layer-tree-view-item--reparent-target{
