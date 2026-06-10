@@ -8,7 +8,7 @@ namespace Netherlands3D.Functionalities.AssetBundles
         [MenuItem("Netherlands3D/Build AssetBundles")]
         static void BuildAllAssetBundles()
         {
-            BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.WebGL);
+            BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
         }
     }
 }

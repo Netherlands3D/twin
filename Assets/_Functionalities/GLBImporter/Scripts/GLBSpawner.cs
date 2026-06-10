@@ -76,8 +76,8 @@ namespace Netherlands3D.Functionalities.GLBImporter
             }
 
             var consoleLogger = new ConsoleLogger();
-            var materialGenerator = new NL3DMaterialGenerator();
-            GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
+//            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, null, consoleLogger);
 
             FileStream fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.None);
             byte[] data = new byte[fileStream.Length];

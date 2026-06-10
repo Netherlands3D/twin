@@ -20,8 +20,8 @@ namespace Netherlands3D.Tiles3D
         {
             var binaryData = data;
             
-            var materialGenerator = new NL3DMaterialGenerator();
-            GltfImport gltf = new GltfImport(null, null, materialGenerator);
+//            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, null);
             tile.content.gltf = gltf;
 
             var success = true;

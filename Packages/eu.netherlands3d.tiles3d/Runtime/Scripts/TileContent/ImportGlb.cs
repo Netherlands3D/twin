@@ -16,8 +16,8 @@ namespace Netherlands3D.Tiles3D
         {
             var consoleLogger = new GLTFast.Logging.ConsoleLogger();
             
-            var materialGenerator = new NL3DMaterialGenerator();
-            GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
+//            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, null, consoleLogger);
             tile.content.gltf = gltf;
 
             var success = true;
