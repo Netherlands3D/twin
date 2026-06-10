@@ -24,7 +24,7 @@ namespace Netherlands3D.UI.Components
         private EditableNameField nameInputField;
         private Toggle propertyToggle;
 
-        private PropertyPanelBehaviour propertyPanelBehaviour;
+        // private PropertyPanelBehaviour propertyPanelBehaviour;
 
         public LayerData LayerData => userData as LayerData;
         public UnityEvent RequestTreeRefresh { get; } = new();
@@ -52,8 +52,8 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
-            propertyPanelBehaviour.PropertySectionClosed.AddListener(UncheckPropertyToggle);
+            // propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
+            // propertyPanelBehaviour.PropertySectionClosed.AddListener(UncheckPropertyToggle);
 
             isActiveToggle = this.Q<VisibilityToggle>("IsActiveToggle");
             layerTypeIcon = this.Q<Icon>("TypeIcon");
@@ -172,10 +172,11 @@ namespace Netherlands3D.UI.Components
 
         private void OnPropertyToggleValueChanged(ChangeEvent<bool> evt)
         {
-            if (evt.newValue)
-                propertyPanelBehaviour.SpawnPanel(LayerData);
-            else
-                propertyPanelBehaviour.ClearActivePanel();
+            Debug.Log("toggle property changed: " + evt.newValue);
+            // if (evt.newValue)
+            //     propertyPanelBehaviour.SpawnPanel(LayerData);
+            // else
+            //     propertyPanelBehaviour.ClearActivePanel();
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
