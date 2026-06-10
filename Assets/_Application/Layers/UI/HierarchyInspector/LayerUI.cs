@@ -193,7 +193,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
         }
 
-        private void OnNameChanged(string newName)
+        private void OnNameChanged(LayerData data, string newName)
         {
             gameObject.name = newName;
         }

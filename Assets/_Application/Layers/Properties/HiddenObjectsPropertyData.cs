@@ -21,12 +21,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate)
         {
             string id = layerFeature.Attributes[VisibilityAttributeIdentifier];
-            SetVisibilityForSubObjectByAttributeTag(id, visible, coordinate);
+            SetVisibilityForSubObjectById(id, visible, coordinate);
         }   
         
-        public void SetVisibilityForSubObjectByAttributeTag(string objectId, bool visible, Coordinate coordinate)
+        public void SetVisibilityForSubObjectById(string objectId, bool visible, Coordinate coordinate)
         {
-            var stylingRuleName = VisibilityStyleRuleName(objectId);
+            var stylingRuleName = objectId;
+            var stylingRuleKey = VisibilityStyleRuleKey(objectId);
 
             // Add or set the colorization of this feature by its material index
             var stylingRule = new StylingRule(
@@ -39,64 +40,51 @@ namespace Netherlands3D.Twin.Layers.Properties
             stylingRule.Symbolizer.SetVisibility(visible);
             stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
             
-            SetStylingRule(stylingRuleName, stylingRule);
+            SetStylingRule(stylingRuleKey, stylingRule);
         }
 
         public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
         {
             string id = layerFeature.GetAttribute(VisibilityAttributeIdentifier);
-            return GetVisibilityForSubObjectByAttributeTag(id);
+            return GetVisibilityForSubObjectById(id);
         }
 
-        public bool? GetVisibilityForSubObjectByAttributeTag(string id)
+        public bool? GetVisibilityForSubObjectById(string id)
         {
-            var stylingRuleName = VisibilityStyleRuleName(id);
-
-            if (!StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            var stylingRuleKey = VisibilityStyleRuleKey(id);
+            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
             {
                 return true;
             }
-
             return stylingRule.Symbolizer.GetVisibility();
-        }
-
-        public void RemoveVisibilityForSubObjectByAttributeTag(string id)
-        {
-            var stylingRuleName = VisibilityStyleRuleName(id);
-            bool dataRemoved = StylingRules.Remove(stylingRuleName);
         }
 
         public Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature)
         {
             string id = layerFeature.GetAttribute(VisibilityAttributeIdentifier);
-            return GetVisibilityCoordinateForSubObjectByTag(id);
+            return GetVisibilityCoordinateForSubObjectById(id);
         }
 
-        public Coordinate? GetVisibilityCoordinateForSubObjectByTag(string objectId)
+        public Coordinate? GetVisibilityCoordinateForSubObjectById(string id)
         {
-            var stylingRuleName = VisibilityStyleRuleName(objectId);
-            if (!StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            var stylingRuleKey = VisibilityStyleRuleKey(id);
+            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
             {
                 return null;
             }
             return stylingRule.Symbolizer.GetCustomProperty<Coordinate>(VisibilityAttributePositionIdentifier);
         }
         
-        private string VisibilityStyleRuleName(string visibilityIdentifier)
+        public void RemoveVisibilityForSubObjectById(string id)
+        {
+            var stylingRuleKey = VisibilityStyleRuleKey(id);
+            bool dataRemoved = StylingRules.Remove(stylingRuleKey);
+        }
+        
+        private string VisibilityStyleRuleKey(string visibilityIdentifier)
         {
             return $"feature.{visibilityIdentifier}.{VisibilityIdentifier}";
         }
-
-        public string ObjectIdFromVisibilityStyleRuleName(string styleRuleName)
-        {
-            int startIndex = styleRuleName.IndexOf('.') + 1;
-            int endIndex = styleRuleName.LastIndexOf('.');
-            if (startIndex > 0 && endIndex > startIndex)
-            {
-                return styleRuleName.Substring(startIndex, endIndex - startIndex);
-            }
-            return null;
-        }       
         
         [JsonConstructor]
         public HiddenObjectsPropertyData()

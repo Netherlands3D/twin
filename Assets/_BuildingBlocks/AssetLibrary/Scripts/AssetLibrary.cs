@@ -5,9 +5,11 @@ using Netherlands3D.AssetLibrary.Entries;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Catalogs.Catalogs;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine;
 
 namespace Netherlands3D.AssetLibrary
@@ -26,14 +28,16 @@ namespace Netherlands3D.AssetLibrary
     [CreateAssetMenu(menuName = "Netherlands3D/ApplicationCatalog")]
     public class AssetLibrary : ScriptableObject
     {
+        public const string PREFAB_IDENTIFIER = "prefab-library";
+
         [SerializeField] private List<AssetLibraryEntry> items = new();
         [SerializeField] private List<string> extraCatalogs = new();
-        
+
         // Cached list of scriptable object events that have been registered
         private readonly Dictionary<int, ScriptableObject> scriptableObjectEvents = new();
         private readonly Dictionary<string, LayerGameObject> prefabs = new();
 
-        [field:NonSerialized] public InMemoryCatalog Catalog { get; private set; }
+        [field: NonSerialized] public InMemoryCatalog Catalog { get; private set; }
 
         public async Task Initialize()
         {
@@ -42,13 +46,13 @@ namespace Netherlands3D.AssetLibrary
                 "Application",
                 "Built from ApplicationCatalog asset"
             );
-            
+
             // Register all top-level entries, the entries themselves will ensure their children are registered
             foreach (var entry in items)
             {
                 RegisterEntry(entry);
             }
-            
+
             // Register extra catalogs as OGC API catalogs
             // TODO: when we introduce extra types of remote Catalogs - make a service that detects the type of catalog
             // and use the correct object construction
@@ -64,6 +68,7 @@ namespace Netherlands3D.AssetLibrary
             {
                 prefabs[prefab.PrefabIdentifier] = prefab;
             }
+
             foreach (var @event in entry.CollectEvents())
             {
                 scriptableObjectEvents[@event.GetInstanceID()] = @event;
@@ -96,8 +101,10 @@ namespace Netherlands3D.AssetLibrary
 
         public void Load(RecordItem recordItem)
         {
-            var layerBuilder = CreateLayerBuilder(recordItem);
-            App.Layers.Add(layerBuilder);
+            if (recordItem.Url.IsRemoteAsset())
+                App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url)); //todo: Exceptions should still be handled
+            else
+                App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }
 
         public void Trigger(DataService dataService)
@@ -115,7 +122,7 @@ namespace Netherlands3D.AssetLibrary
                 Debug.LogError("Event identifier was not an integer, found: " + eventIdAsString);
                 return;
             }
-            
+
             if (!scriptableObjectEvents.TryGetValue(eventId, out var soEvent))
             {
                 Debug.LogError($"Event with identifier '{eventId}' could not be found");
@@ -129,22 +136,6 @@ namespace Netherlands3D.AssetLibrary
             }
 
             invoker.InvokeStarted();
-        }
-
-        private ILayerBuilder CreateLayerBuilder(ICatalogItem item)
-        {
-            if (item is not RecordItem recordItem)
-            {
-                Debug.LogError("Attempting to load a catalog item that is not a record, got " + item.GetType());
-                return null;
-            }
-            
-            // This uses the Import from URL flow, and thus automatically detects which type of service is imported
-            // using the ImportAdapters. This is why there is no further specification here - the information below
-            // is all we need to get the ball rolling.
-            return LayerBuilder.Create()
-                .FromUrl(recordItem.Url)
-                .NamedAs(recordItem.Title);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin.Configuration
                 return;
 
             //If we are not setting the origin from the coordinate input fields; use the origin of the camera position
-            var cameraCoordinate = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RDNAP);
+            var cameraCoordinate = new Coordinate(App.Cameras.ActiveCamera.transform.position).Convert(CoordinateSystem.RDNAP);
             ProjectData.Current.CameraPosition = new double[]
             {
                 cameraCoordinate.value1, cameraCoordinate.value2, cameraCoordinate.value3

@@ -51,18 +51,6 @@ MonoBehaviour:
   prefabIdentifier: f7b3d6632f1e47b4f902509046b93e7a
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
@@ -83,7 +71,7 @@ MonoBehaviour:
   PositionLocked: 0
   RotationLocked: 1
   ScaleLocked: 1
-  positionAxes: 2
+  positionAxes: 1
   rotationAxes: 7
   scaleAxes: 7
 --- !u!114 &5954464799649402090

@@ -48,6 +48,7 @@ namespace Netherlands3D.Twin.UI
 
             canvas.scaleFactor *= factor;
             previousScaleFactor = canvas.scaleFactor;
+            Debug.Log("Detected zooming of the canvas, readjusting scale factor");
         }
 #endif
 
@@ -56,7 +57,6 @@ namespace Netherlands3D.Twin.UI
 #if UNITY_WEBGL && !UNITY_EDITOR
             if (Mathf.Approximately(canvas.scaleFactor, previousScaleFactor) == false)
             {
-                Debug.Log("Detected zooming of the canvas, readjusting scale factor");
                 ScaleCanvasForWindows();
             }
 #endif

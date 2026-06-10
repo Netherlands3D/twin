@@ -43,7 +43,6 @@ namespace Netherlands3D.FirstPersonViewer
         public bool isGrounded;
 
         [Header("Settings")]
-        [SerializeField] private float stepHeight = 1.5f;
         [SerializeField] private float returnFocusDistance = 150;
 
         private MovementVisualController viewObject;
@@ -159,7 +158,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, groundCallback, snappingCullingMask);
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * (FirstPersonCamera.CameraHeightOffset + 0.05f), Vector3.down, groundCallback, snappingCullingMask);
         }
 
         private void UpdateGroundPosition(Vector3 point, bool hit)

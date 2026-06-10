@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private Vector3 previousScale;
         public WorldTransform WorldTransform { get; private set; }
 
-        [SerializeField] private string scaleUnitCharacter = "%";
+        [SerializeField] protected string scaleUnitCharacter = "%";
         
         protected override void OnVisualizationInitialize()
         {
@@ -83,7 +83,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             UpdatePosition(transformProperty.Position);
             UpdateRotation(transformProperty.EulerRotation);
             UpdateScale(transformProperty.LocalScale);
-
+            
             ToggleScatterPropertyData scatterProperty = LayerData.GetProperty<ToggleScatterPropertyData>();
             if(scatterProperty != null) scatterProperty.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
 

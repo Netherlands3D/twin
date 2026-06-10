@@ -1034,6 +1034,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d5147c86ba835f444a056ac3d3d8c938,
         type: 2}
+    - target: {fileID: 3105538417608319205, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 3105538417608319205, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 24
+      objectReference: {fileID: 0}
     - target: {fileID: 3276692152114206076, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
         type: 3}
       propertyPath: m_Sprite
@@ -1050,6 +1060,12 @@ PrefabInstance:
       propertyPath: layerUIManager
       value: 
       objectReference: {fileID: 284876463517830170}
+    - target: {fileID: 4220570756203021814, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 730d7bdcdd4a2446dbe4df81938266f4,
+        type: 3}
     - target: {fileID: 4276114273750226166, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
         type: 3}
       propertyPath: m_Spacing
@@ -1231,6 +1247,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6680253027198020331, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680253027198020331, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680253027198020331, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 48
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680253027198020331, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 48
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680253027198020331, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680253027198020331, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680253027198020331, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6680253027198020331, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6894644764106823124, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
         type: 3}
       propertyPath: m_IsActive
@@ -1353,6 +1409,11 @@ PrefabInstance:
       propertyPath: m_PixelsPerUnitMultiplier
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 8528284374620227127, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: layerUIManager
+      value: 
+      objectReference: {fileID: 284876463517830170}
     - target: {fileID: 8836423589182230401, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
         type: 3}
       propertyPath: m_AnchorMax.y

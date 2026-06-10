@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject

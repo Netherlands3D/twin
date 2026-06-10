@@ -32,7 +32,7 @@ namespace RuntimeHandle
                     .Initialize(_parentTransformHandle, Vector3.forward, zColor));
 
             _planes = new List<PositionPlane>();
-            
+
             if (_parentTransformHandle.axes == HandleAxes.XY || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _planes.Add(new GameObject().AddComponent<PositionPlane>()
                     .Initialize(_parentTransformHandle, Vector3.right, Vector3.up, -Vector3.forward, new Color(xColor.r,xColor.g,xColor.b,0.2f)));

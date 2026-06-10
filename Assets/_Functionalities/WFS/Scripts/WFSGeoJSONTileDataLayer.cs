@@ -5,6 +5,7 @@ using System;
 using Netherlands3D.Coordinates;
 using KindMen.Uxios;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 
@@ -17,6 +18,8 @@ namespace Netherlands3D.Functionalities.Wfs
     /// </summary>
     public class WFSGeoJSONTileDataLayer : Layer
     {
+        private const uint DefaultPageSize = 1000;
+        
         private const CoordinateSystem DefaultEpsgCoordinateSystem = CoordinateSystem.RD;
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
         private Config requestConfig { get; set; } = Config.Default();
@@ -178,7 +181,8 @@ namespace Netherlands3D.Functionalities.Wfs
 
         private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, Action<TileChange> callback = null)
         {
-            var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
+            Uri wfsUri = new Uri(wfsUrl); 
+            var queryParameters = QueryString.Decode(wfsUri.Query);
             string spatialReference = queryParameters.Single("srsname");
 
             CoordinateSystem system = DefaultEpsgCoordinateSystem;
@@ -198,28 +202,42 @@ namespace Netherlands3D.Functionalities.Wfs
                 url += "," + spatialReference;
             }
 
-            string jsonString = null;
-            var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);
-            geoJsonRequest.Then(response => jsonString = response.Data as string);
-            geoJsonRequest.Catch(exception => Debug.LogWarning($"Request to {url} failed with message {exception.Message}")
-            );
+            string version = OgcWebServicesUtility.GetVersionFromUrl(wfsUri);
+            bool version2 = version.StartsWith("2");
+            string paramCount = version2 ? "count" : "maxFeatures";
+            string paramStart = version2 ? "startIndex" : "startPosition";
+            int startIndex = 0;
+            requestConfig.AddParam(paramCount, DefaultPageSize.ToString());
 
-            yield return Uxios.WaitForRequest(geoJsonRequest);
-
-            if (string.IsNullOrEmpty(jsonString) == false)
+            while (true)
             {
-                //the 250 comes from a standard empty featurecollection json response approximate text length
-                int minLength = Math.Min(250, jsonString.Length);
-                string emptyCheckString = jsonString.Substring(0, minLength).Replace(" ", "");
-                bool emptyCollection = emptyCheckString.Contains("\"totalFeatures\":0");
-                if (!emptyCollection)
-                {
-                    var parser = new GeoJSONParser(0.01f);
-                    parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
-                    yield return parser.ParseJSONString(jsonString);
-                }
-            }
+                requestConfig.Params.Set(paramStart, startIndex.ToString());
 
+                string jsonString = null;
+                var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);
+                geoJsonRequest.Then(r => jsonString = r.Data as string);
+                geoJsonRequest.Catch(e => Debug.LogWarning($"Request to {url} failed: {e.Message}"));
+
+                yield return Uxios.WaitForRequest(geoJsonRequest);
+
+                if (string.IsNullOrEmpty(jsonString))
+                    break;
+
+                int parsedThisPage = 0;
+                var parser = new GeoJSONParser(0.01f);
+                parser.OnFeatureParsed.AddListener(_ => parsedThisPage++);
+                parser.OnParseError.AddListener(_ => parsedThisPage++);
+                parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
+
+                yield return parser.ParseJSONString(jsonString);
+
+                if (parsedThisPage == 0) // stop if no features
+                    break;
+                else
+                    Debug.Log((startIndex + parsedThisPage) + " parsed features for " + url); 
+
+                startIndex += parsedThisPage;
+            }
             callback?.Invoke(tileChange);
         }
 

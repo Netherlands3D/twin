@@ -82,7 +82,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         {
             handler.UserName = userNameInputField.text;
             handler.PasswordOrKeyOrTokenOrCode = inputFieldToUseForPasswordOrKey.text;
-
             handler.ApplyCredentials();
         }
 
@@ -92,7 +91,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         /// </summary>
         public void SetAuthorizationInputType(int dropdownValue)
         {
-            if (dropdownValue == 0)
+            if (dropdownValue == 1)
             {
                 inputFieldToUseForPasswordOrKey = passwordInputField;
             }

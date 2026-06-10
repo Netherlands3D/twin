@@ -29,8 +29,8 @@ namespace Netherlands3D.Twin
         {            
             if(url != uri.ToString())
                 return;
-                
-            dataTypeChain.DetermineAdapter(uri, auth);
+
+            App.Layers.AddFromUrl(uri, auth); //todo: Exceptions should still be handled
             handler.OnAuthorizationHandled.RemoveListener(DetermineAdapter);
         }
     }

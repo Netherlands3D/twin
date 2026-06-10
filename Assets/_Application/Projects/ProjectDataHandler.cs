@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.AssetBundles;
-using Netherlands3D.Twin.DataTypeAdapters;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -44,7 +43,7 @@ namespace Netherlands3D.Twin.Projects
         public UnityEvent OnLoadStarted;
 
         [Tooltip("called when the load action completed successfully")]
-        public UnityEvent OnLoadCompleted;
+        public UnityEvent<ProjectData> OnLoadCompleted;
 
         [Tooltip("called when the load action failed")]
         public UnityEvent OnLoadFailed;
@@ -196,19 +195,20 @@ namespace Netherlands3D.Twin.Projects
 #endif
         }
 
-        public void LoadFromFile(string filePath)
+        public ProjectData LoadFromFile(string filePath)
         {
             OnLoadStarted.Invoke();
 
             if (filePath.ToLower().EndsWith(".nl3d"))
             {
                 Debug.Log("loading nl3d file: " + filePath);
-                projectDataStore.LoadFromFile(filePath);
-                OnLoadCompleted.Invoke();
-                return;
+                var project = projectDataStore.LoadFromFile(filePath);
+                OnLoadCompleted.Invoke(project);
+                return project;
             }
 
             OnLoadFailed.Invoke();
+            return null;
         }
 
         public void Redo()

@@ -60,7 +60,9 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
             var canvasTransform = transform.GetComponentInParent<Canvas>().transform;
             northEastTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleLeft);
+            northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);
             southWestTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleRight);
+            southWestTooltip.SetSnappingSide(TextPopout.SnappingSide.Right);
         }
 
         private void OnDisable()

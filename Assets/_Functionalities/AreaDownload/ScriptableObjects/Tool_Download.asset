@@ -28,6 +28,22 @@ MonoBehaviour:
   onToggleInspector:
     m_PersistentCalls:
       m_Calls: []
+  onSpawnedPrefab:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7443215433914948042, guid: edf49d0620627654f98c961dc4935c4d,
+          type: 3}
+        m_TargetAssemblyTypeName: Netherlands3D.SelectionTools.AreaSelection, eu.netherlands3d.selection-tools.Runtime
+        m_MethodName: SetEditModeForSpawnedInstance
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   inspectorPrefab: {fileID: 3537603041487147064, guid: 6b9505a13a1cf954b99d6247e15687df,
     type: 3}
   functionalityPrefabs:
