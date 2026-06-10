@@ -1,0 +1,19 @@
+.snackbar-panel {
+    width: 380px;
+    height: auto;
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-md);
+    max-height: 600px;
+    padding: var(--spacing-4);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+}
+
+.snackbar-text
+{
+    font-size: var(--font-size-14);
+    color: var(--color-gray-800);
+    margin-bottom: var(--spacing-2);
+}
