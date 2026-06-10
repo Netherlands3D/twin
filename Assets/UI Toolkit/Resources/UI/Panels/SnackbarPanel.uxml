@@ -3,5 +3,5 @@
 	xmlns:nl3d="Netherlands3D.UI.Components" 
 	editor-extension-mode="False" 
 	class="snackbar-panel">
-	<ui:Label name="Text" text="Empty statement" />
+	<ui:Label name="Text" text="Empty statement" class="snackbar-text"/>
 </ui:UXML>

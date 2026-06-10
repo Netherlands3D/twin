@@ -1,4 +1,5 @@
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI.Panels;
 using System.Collections;
 using UnityEngine;
@@ -13,7 +14,8 @@ namespace Netherlands3D.Services
         [SerializeField] private Color errorColor = Color.red;
 
         private SnackbarPanel snackbarPanel;
-
+        private string activeMessage;
+        private int activeCounter;
         private Coroutine activeCoroutine;
         private float timer;
 
@@ -21,6 +23,28 @@ namespace Netherlands3D.Services
         {
             snackbarPanel = App.UIRoot.Root.Q<SnackbarPanel>();
             snackbarPanel.Show(false);
+
+           
+        }
+
+        private void OnEnable()
+        {
+            App.Layers.LayerAdded.AddListener(OnLayerAdded);
+        }
+
+        private void OnDisable()
+        {
+            App.Layers.LayerAdded.RemoveListener(OnLayerAdded);
+        }
+
+        private void OnLayerAdded(LayerData layerData)
+        {
+            if (activeCounter > 0)
+                activeMessage += $",{layerData.Name}";
+            else
+                activeMessage += layerData.Name;
+            activeCounter++;
+            DisplayMessage(activeMessage + (activeCounter == 1 ? "is" : "zijn") + " succesvol toegevoegd");
         }
 
         public void DisplayMessage(string newText)
@@ -53,6 +77,8 @@ namespace Netherlands3D.Services
                 timer -= Time.deltaTime;
                 yield return null;
             }
+            activeMessage = string.Empty;
+            activeCounter = 0;
             snackbarPanel.Show(false);
         }
     }
