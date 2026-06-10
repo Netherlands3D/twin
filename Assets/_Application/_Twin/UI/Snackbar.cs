@@ -8,8 +8,6 @@ namespace Netherlands3D.Twin.UI
     public class Snackbar : MonoBehaviour
     {
         [SerializeField] private float waitTime = 5f;
-        [SerializeField] private Slider slider;
-        [SerializeField] private TextMeshProUGUI text;
         [SerializeField] private Color infoColor = Color.black;
         [SerializeField] private Color errorColor = Color.red;
 
@@ -17,12 +15,12 @@ namespace Netherlands3D.Twin.UI
 
         private void Start()
         {
-            DisableSnackbar();
+            //DisableSnackbar();
         }
 
         private void OnEnable()
         {
-            activeCoroutine = StartCoroutine(StartTimer());
+            //activeCoroutine = StartCoroutine(StartTimer());
         }
 
         private void OnDisable()
@@ -33,47 +31,31 @@ namespace Netherlands3D.Twin.UI
 
         public void DisplayMessage(string newText)
         {
-            DisableSnackbar();
-            text.text = newText;
-            text.color = infoColor;
-            gameObject.SetActive(true);
-            StartCoroutine(RebuildLayout());
-        }
-
-        private IEnumerator RebuildLayout()
-        {
-            // Wait a frame
-            yield return null;
-            
-            LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+            //DisableSnackbar();
+            //text.text = newText;
+            //text.color = infoColor;
+            //gameObject.SetActive(true);
+            //StartCoroutine(RebuildLayout());
         }
 
         public void DisplayError(string newText)
         {
             DisplayMessage(newText);
-            text.color = errorColor;
+            //text.color = errorColor;
         }
 
-        private IEnumerator StartTimer()
-        {
-            slider.maxValue = waitTime;
-            slider.value = slider.maxValue;
+        //private IEnumerator StartTimer()
+        //{
+        //    slider.maxValue = waitTime;
+        //    slider.value = slider.maxValue;
 
-            while (slider.value > 0)
-            {
-                slider.value -= Time.deltaTime;
-                yield return null;
-            }
+        //    while (slider.value > 0)
+        //    {
+        //        slider.value -= Time.deltaTime;
+        //        yield return null;
+        //    }
 
-            DisableSnackbar();
-        }
-
-        //also called by button
-        public void DisableSnackbar()
-        {
-            slider.value = 0;
-            gameObject.SetActive(false);
-            activeCoroutine = null;
-        }
+        //    DisableSnackbar();
+        //}
     }
 }
