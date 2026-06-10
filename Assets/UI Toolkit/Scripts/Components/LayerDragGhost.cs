@@ -76,7 +76,10 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            UpdateColorBar(newColor.Value);
+            var opaqueColor = newColor.Value;
+            opaqueColor.a = 1;
+
+            colorBar.style.backgroundColor = opaqueColor;
         }
 
         public void UpdatePosition(Vector2 worldPosition)
