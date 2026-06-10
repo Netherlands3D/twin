@@ -1,22 +1,6 @@
 .asset-library-listview-item {   
 
-    transition-property: background-color;
-    transition-duration: 0.1s;
-    transition-timing-function: ease-in;
-
-    background-color: transparent;
-}
-
-.asset-library-listview-item__container{    
-    
-    margin-bottom: var(--spacing-2);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-     border-color:  var(--color-blue-200);
-    border-width: 2px;
-    border-radius:var(--spacing-2);
+   flex-direction: row;
 }
 
 .asset-library-listview-item__container > * {
@@ -35,10 +19,3 @@
 } 
  */
 
-.asset-library-listview-item__container:hover{
-    background-color: var(--color-blue-700-hover);
-}
-
-.asset-library-listview-item:checked .asset-library-listview-item__container{
-    background-color:  var(--color-selection);
-}

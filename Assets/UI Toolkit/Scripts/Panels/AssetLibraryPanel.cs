@@ -38,7 +38,6 @@ namespace Netherlands3D.UI.Panels
             // Virtualization and selection
             listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             listView.selectionType = SelectionType.Multiple;
-            listView.AddToClassList("asset-library-panel__list-view");
 
             listView.makeItem = MakeListViewItem;
             listView.bindItem = BindListViewItem;
@@ -82,7 +81,8 @@ namespace Netherlands3D.UI.Panels
 
         private VisualElement MakeListViewItem()
         { 
-            var listViewItem = new AssetLibraryListViewItem();
+            var assetLibraryListViewItem = new AssetLibraryListViewItem();
+            var listViewItem = new ListViewItem(assetLibraryListViewItem);
             listViewItem.RegisterCallback<ClickEvent>(async _ =>
             {
                 if (listViewItem.userData is not ICatalogItem item)
@@ -129,17 +129,19 @@ namespace Netherlands3D.UI.Panels
 
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not AssetLibraryListViewItem listViewItem) return;
-            
+            if (item is not ListViewItem listViewItem) return;
+
+            AssetLibraryListViewItem assetItem = listViewItem.Q<AssetLibraryListViewItem>();
+
             ICatalogItem catalogItem = listView.itemsSource[index] as ICatalogItem;
-            listViewItem.LabelText = catalogItem.Title;
+            assetItem.LabelText = catalogItem.Title;
             var icon = catalogItem switch
             {
                 ICatalogItemCollection => IconImage.Folder,
                 ICatalog => IconImage.Library,
                 _ => IconImage.Map
             };
-            listViewItem.Image = icon;
+            assetItem.Image = icon;
             listViewItem.userData = catalogItem;
         }
     }

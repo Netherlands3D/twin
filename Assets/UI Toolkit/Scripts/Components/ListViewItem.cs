@@ -6,15 +6,19 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ListViewItem : VisualElement
     {
+        private VisualElement contentContainer;
+
         public ListViewItem()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
+
+            contentContainer = this.Q<VisualElement>("ContentContainer");
         }
 
         public ListViewItem(VisualElement content) : this()
         {
-            Add(content);
+            contentContainer.Add(content);
         }
     }
 }

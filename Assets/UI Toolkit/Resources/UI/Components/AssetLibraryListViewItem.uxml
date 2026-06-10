@@ -5,8 +5,6 @@
     editor-extension-mode="False" 
     class="asset-library-listview-item"
 >   
-    <ui:VisualElement class="asset-library-listview-item__container">"
-        <nl3d:Icon/>
-        <ui:Label class="asset-library-listview-item__label"/>
-     </ui:VisualElement>
+    <nl3d:Icon/>
+    <ui:Label class="asset-library-listview-item__label"/>
 </ui:UXML>
