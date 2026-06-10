@@ -6,6 +6,7 @@
     align-items: center;
     flex-direction: row;
     flex-grow: 1;
+    height: var(--spacing-8);
 }
 
 .layer-tree-view-item:hover {
