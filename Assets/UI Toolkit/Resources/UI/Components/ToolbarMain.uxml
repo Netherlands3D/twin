@@ -7,17 +7,12 @@
     class="toolbar-main"
 >
     <ui:VisualElement name="Divider" class="divider" />
-    <ui:ToggleButtonGroup 
-        name="ButtonGroup" 
-        class="toolbar-main__group" 
-        allow-empty-selection="true" 
-        is-multiple-selection="false"
-    >
-        <nl3d:Button name="Layer" button-type="transparent" button-style="IconOnly" icon="Sheets" />
-        <nl3d:Button name="Library" button-type="transparent" button-style="IconOnly" icon="Library" />
-        <nl3d:Button name="Add" button-type="transparent" button-style="IconOnly" icon="Plus" />
-        <nl3d:Button name="Search" button-type="transparent" button-style="IconOnly" icon="Search" />
-        <nl3d:Button name="SunPosition" button-type="transparent" button-style="IconOnly" icon="Sun" />
-        <nl3d:Button name="DownloadTile" button-type="transparent" button-style="IconOnly" icon="DownloadTile" />
-    </ui:ToggleButtonGroup>
+    <ui:VisualElement class="toolbar-main__group">
+        <nl3d:ToolButton name="Layer" icon="Sheets" tooltype="Layer" />
+        <nl3d:ToolButton name="Library" icon="Library" tooltype="AssetLibrary"/>
+        <nl3d:ToolButton name="Add" icon="Plus" tooltype="AssetImport"/>
+        <nl3d:ToolButton name="Search" icon="Search" tooltype="Search"/>
+        <nl3d:ToolButton name="SunPosition" icon="Sun" tooltype="SunPosition"/>
+        <nl3d:ToolButton name="DownloadTile" icon="DownloadTile" tooltype="DownloadTile"/>
+    </ui:VisualElement>
 </ui:UXML>

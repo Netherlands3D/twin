@@ -15,14 +15,14 @@ namespace Netherlands3D.Twin.Tools
 
         public UnityEvent<bool> onAvailabilityChange = new();
 
-        [FormerlySerializedAs("onActivate")] public UnityEvent onOpen = new();
+        [FormerlySerializedAs("onActivate")] public UnityEvent onOpen = new();//TODO UI TOOLKIT: clean up the formerlyserializedas
 
-        [FormerlySerializedAs("onDeactivate")] public UnityEvent onClose = new();
+        [FormerlySerializedAs("onDeactivate")] public UnityEvent onClose = new(); //TODO UI TOOLKIT: clean up the formerlyserializedas
         
         public UnityEvent<GameObject> onSpawnedPrefab = new();
 
         [Header("Content")] [Tooltip("Prefab to show in the UI Inspector when this tool is activated")] [SerializeField]
-        private GameObject inspectorPrefab;
+        private GameObject inspectorPrefab; //TODO UI TOOLKIT: clean up
 
         [SerializeField] private InspectorPanelType panelType;
 
@@ -31,7 +31,7 @@ namespace Netherlands3D.Twin.Tools
         public object[] PanelArgs => panelArgs;
 
         [Tooltip("GameObjects to spawn in the World when this tool is activated")] [FormerlySerializedAs("featurePrefabs")] [SerializeField]
-        private GameObject[] functionalityPrefabs;
+        private GameObject[] functionalityPrefabs;//TODO UI TOOLKIT: clean up
 
         public GameObject InspectorPrefab
         {
@@ -123,8 +123,6 @@ namespace Netherlands3D.Twin.Tools
 
             IsOpen = false;
             onClose.Invoke();
-
-            Debug.Log($"CLOSING TOOL: { code }");
         }
     }
 }

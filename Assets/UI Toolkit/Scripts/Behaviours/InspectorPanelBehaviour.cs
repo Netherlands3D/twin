@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Netherlands3D.Credentials;
-using Netherlands3D.Events;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -10,7 +7,6 @@ using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
-using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -24,15 +20,12 @@ namespace Netherlands3D.UI.Behaviours
         private Tool activeToolWithPanel;
         private BaseInspectorContentPanel activePanel;
         private ToolService toolService;
-      
-       
         
         [Header("External Windows")]
         [SerializeField] private ScriptableObject SettingsWindow;
         [SerializeField] private string HelpUrl;
 
         private HamburgerMenu hamburgerMenu;
-        private ToolbarMain toolbarMain;
         private Dictionary<Tool, UnityAction> toolListeners = new();
         
         
@@ -43,7 +36,6 @@ namespace Netherlands3D.UI.Behaviours
             inspectorPanel = App.UIRoot.Root.Q<InspectorPanel>();
             inspectorPanel.Close();
             hamburgerMenu = App.UIRoot.Root.Q<HamburgerMenu>();
-            toolbarMain = App.UIRoot.Root.Q<ToolbarMain>();
            
             foreach (var toolWithPanel in toolService.GetAllToolsWithPanel())
             {
@@ -58,8 +50,6 @@ namespace Netherlands3D.UI.Behaviours
             PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             inspectorPanel.OnShow += polygonSelectionService.EnablePolygonSelection;
             inspectorPanel.OnHide += polygonSelectionService.DisablePolygonSelection;
-            toolService.AnyToolClosed.AddListener(toolbarMain.UpdateState);
-            toolService.AnyToolOpened.AddListener(toolbarMain.UpdateState);
         }
 
         private void OnEnable()
@@ -69,15 +59,10 @@ namespace Netherlands3D.UI.Behaviours
                 toolWithPanel.onOpen.AddListener(toolListeners[toolWithPanel]);
                 toolWithPanel.onClose.AddListener(Close);
             }
-            
             toolService.GetTool(ToolType.Settings).onOpen.AddListener(((IWindow)SettingsWindow).Open);
             toolService.GetTool(ToolType.Help).onOpen.AddListener(OpenHelp);
-           
-            // InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
-            // InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
             inspectorPanel.InspectorHeaderCloseButton.clicked += CloseActiveTool;
             toolService.AnyToolOpened.AddListener(OnAnyToolOpened);
-            inspectorPanel.OnHide += toolbarMain.UpdateState;
         }
         
         private void OnDisable()
@@ -87,15 +72,10 @@ namespace Netherlands3D.UI.Behaviours
                 toolWithPanel.onOpen.RemoveListener(toolListeners[toolWithPanel]);
                 toolWithPanel.onClose.RemoveListener(Close);
             }
-            
             toolService.GetTool(ToolType.Settings).onOpen.RemoveListener(((IWindow)SettingsWindow).Open);
             toolService.GetTool(ToolType.Help).onOpen.RemoveListener(OpenHelp);
-            
-            // InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
-            // InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
             inspectorPanel.InspectorHeaderCloseButton.clicked -= CloseActiveTool;
             toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
-            inspectorPanel.OnHide -= toolbarMain.UpdateState;
         }
         
         private void OnAnyToolOpened()

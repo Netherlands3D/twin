@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.AddressSearch;
-using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
@@ -49,14 +48,6 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            // OnShow += () => EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            // OnHide += () =>
-            // {
-            //     EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            //     SetQueryText(string.Empty);
-            //     ClearSuggestions();
-            // };
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
