@@ -24,7 +24,7 @@ namespace Netherlands3D.UI.Components
         private EditableNameField nameInputField;
         private Toggle propertyToggle;
 
-        // private PropertyPanelBehaviour propertyPanelBehaviour;
+        private PropertyPanelBehaviour propertyPanelBehaviour;
 
         public LayerData LayerData => userData as LayerData;
         public UnityEvent RequestTreeRefresh { get; } = new();
@@ -52,9 +52,6 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            // propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
-            // propertyPanelBehaviour.PropertySectionClosed.AddListener(UncheckPropertyToggle);
-
             isActiveToggle = this.Q<VisibilityToggle>("IsActiveToggle");
             layerTypeIcon = this.Q<Icon>("TypeIcon");
             colorBar = this.Q<VisualElement>("ColorBar");
@@ -73,6 +70,7 @@ namespace Netherlands3D.UI.Components
             propertyToggle.RegisterValueChangedCallback(OnPropertyToggleValueChanged);
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel); // we can only update the layout after attaching to the panel
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
         private void OnClick(ClickEvent evt)
@@ -124,6 +122,13 @@ namespace Netherlands3D.UI.Components
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
+            if (propertyPanelBehaviour == null)
+            {
+                propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
+                propertyPanelBehaviour.PropertySectionOpened.AddListener(CheckPropertyToggle);
+                propertyPanelBehaviour.PropertySectionClosed.AddListener(UncheckPropertyToggle);
+            }
+
             if (!layoutReordered)
                 UpdateLayout();
         }
@@ -147,6 +152,12 @@ namespace Netherlands3D.UI.Components
 
             layoutReordered = true;
         }
+        
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            propertyPanelBehaviour.PropertySectionClosed.RemoveListener(UncheckPropertyToggle);
+            propertyPanelBehaviour.PropertySectionOpened.RemoveListener(CheckPropertyToggle);
+        }
 
         private VisualElement GetTreeViewItemRoot()
         {
@@ -166,17 +177,22 @@ namespace Netherlands3D.UI.Components
 
         private void UncheckPropertyToggle(LayerData layerData)
         {
-            if (layerData == this.LayerData)
+            if (layerData == LayerData)
                 propertyToggle.SetValueWithoutNotify(false);
+        }
+
+        private void CheckPropertyToggle(LayerData layerData)
+        {
+            if (layerData == LayerData)
+                propertyToggle.SetValueWithoutNotify(true);
         }
 
         private void OnPropertyToggleValueChanged(ChangeEvent<bool> evt)
         {
-            Debug.Log("toggle property changed: " + evt.newValue);
-            // if (evt.newValue)
-            //     propertyPanelBehaviour.SpawnPanel(LayerData);
-            // else
-            //     propertyPanelBehaviour.ClearActivePanel();
+            if (evt.newValue)
+                propertyPanelBehaviour.SpawnPanel(LayerData);
+            else
+                propertyPanelBehaviour.ClearActivePanel();
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
