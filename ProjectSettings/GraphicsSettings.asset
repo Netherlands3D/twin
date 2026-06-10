@@ -41,6 +41,26 @@ GraphicsSettings:
   - {fileID: -6465566751694194690, guid: 3b5ad576a7d85d745bb1094377662046, type: 3}
   - {fileID: -6465566751694194690, guid: c43d943999b82fb4a9b29c6e62a2c801, type: 3}
   - {fileID: -6465566751694194690, guid: 5532de98ab7d64f0c8f097877aa3f77d, type: 3}
+  - {fileID: -6465566751694194690, guid: b9d29dfa1474148e792ac720cbd45122, type: 3}
+  - {fileID: -6465566751694194690, guid: f06cd296b834444abb6dbc0acccf9414, type: 3}
+  - {fileID: -6465566751694194690, guid: c9ba521fe23b44d6db1017a2d9d47a17, type: 3}
+  - {fileID: -6465566751694194690, guid: c18c97ae1ce021b4980c5d19a54f0d3c, type: 3}
+  - {fileID: -6465566751694194690, guid: 90c26dfde11bf4ff69ef936c6e6b1ed1, type: 3}
+  - {fileID: -6465566751694194690, guid: ba6d401c74b2c4f96af7edf0fe32241e, type: 3}
+  - {fileID: -6465566751694194690, guid: 7954f2f1aefcf4383b97888420a84c00, type: 3}
+  - {fileID: -6465566751694194690, guid: 0370904c39b8a4cd4a5db6bcf181055d, type: 3}
+  - {fileID: -6465566751694194690, guid: 429ab83ee9ef05b4f8a76e58ea5d5ad4, type: 3}
+  - {fileID: -6465566751694194690, guid: 9a07dad0f3c4e43ff8312e3b5fa42300, type: 3}
+  - {fileID: -6465566751694194690, guid: fc3d9e208a7d541c1b4e38291aec4252, type: 3}
+  - {fileID: -6465566751694194690, guid: 570c30d8611584eb4b05ed386a2c66f1, type: 3}
+  - {fileID: -6465566751694194690, guid: 41356b46cd8884ec5b404223e1338fa0, type: 3}
+  - {fileID: -6465566751694194690, guid: 4233af6163f6143de9458c05a40a9e2a, type: 3}
+  - {fileID: -6465566751694194690, guid: c87047c884d9843f5b0f4cce282aa760, type: 3}
+  - {fileID: -6465566751694194690, guid: 28efc76bda49d4bae9db32ea2079d3c0, type: 3}
+  - {fileID: -6465566751694194690, guid: 42aa4553160a34cf08f29a15eea9eb3b, type: 3}
+  - {fileID: -6465566751694194690, guid: 81efe6bcd8aa64c21b80376f539ee767, type: 3}
+  - {fileID: -6465566751694194690, guid: f94bbd13412a4419bbfac24d9a53b058, type: 3}
+  - {fileID: -6465566751694194690, guid: 42aa4553160a34cf08f29a15eea9eb3b, type: 3}
   m_PreloadedShaders: []
   m_PreloadShadersBatchTimeLimit: -1
   m_SpritesDefaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000,
