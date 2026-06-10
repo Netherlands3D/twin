@@ -1,12 +1,17 @@
+using Codice.Client.BaseCommands.BranchExplorer.ExplorerData;
+using KindMen.Uxios;
+using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using KindMen.Uxios;
-using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
+using static Codice.Client.Commands.WkTree.WorkspaceTreeNode;
 
 namespace Netherlands3D.DataTypeAdapters
 {
@@ -23,11 +28,11 @@ namespace Netherlands3D.DataTypeAdapters
 
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
-
         public UnityEvent<string> OnDownloadFailed = new();
         public UnityEvent<string> OnLocalCacheFailed = new();
 
         private CancellationTokenSource cancellationTokenSource;
+        private SnackbarService snackbarService;
 
         private void Awake()
         {
@@ -49,10 +54,39 @@ namespace Netherlands3D.DataTypeAdapters
             dataTypeAdapterInterfaces = list.ToArray();
         }
 
+        private void OnEnable()
+        {
+            snackbarService = ServiceLocator.GetService<SnackbarService>();
+
+            CouldNotFindAdapter.AddListener(CouldNotFindAdapterMessage);
+            OnDownloadFailed.AddListener(DownloadFailedMessage);
+            OnLocalCacheFailed.AddListener(LocalCacheFailedMessage);
+        }
         private void OnDisable()
         {
             AbortChain();
+
+            CouldNotFindAdapter.RemoveListener(CouldNotFindAdapterMessage);
+            OnDownloadFailed.RemoveListener(DownloadFailedMessage);
+            OnLocalCacheFailed.RemoveListener(LocalCacheFailedMessage);
         }
+
+        private void CouldNotFindAdapterMessage(string message)
+        {
+            snackbarService.DisplayError($"Dit type brondata wordt niet ondersteund voor: {message}, probeer een andere.");            
+        }
+
+        private void DownloadFailedMessage(string message)
+        {
+            snackbarService.DisplayError($"Er is iets mis gegaan bij het downloaden van deze bron: {message}, probeer het opnieuw of controleer de CORS instellingen.");
+        }
+
+        private void LocalCacheFailedMessage(string message)
+        {
+            snackbarService.DisplayError($"Er is een leeg bestand ontvangen tijdens het downloaden van deze bron: {message}, probeer het opnieuw of controleer de CORS instellingen.");
+        }
+
+      
 
         //the void signature is needed for event listeners
         public void DetermineAdapter(Uri sourceUri, StoredAuthorization auth)

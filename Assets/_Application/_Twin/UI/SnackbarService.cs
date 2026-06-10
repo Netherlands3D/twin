@@ -1,9 +1,10 @@
+using Netherlands3D.Twin;
 using Netherlands3D.UI.Panels;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin.UI
+namespace Netherlands3D.Services
 {
     public class SnackbarService : MonoBehaviour
     {
