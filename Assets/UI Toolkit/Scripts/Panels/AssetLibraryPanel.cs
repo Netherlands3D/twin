@@ -116,8 +116,10 @@ namespace Netherlands3D.UI.Panels
             {
                 switch (item)
                 {
-                    case RecordItem recordItem: assetLibrary.Load(recordItem); return;
-                    case DataService dataService: assetLibrary.Trigger(dataService); return;
+                    case RecordItem recordItem: assetLibrary.Load(recordItem); 
+                        break;
+                    case DataService dataService: assetLibrary.Trigger(dataService);
+                        break;
                     default:
                         Debug.LogError(
                             $"Tried to open catalog item with type {item.GetType().Name}, but this is not a record item"

@@ -3,11 +3,11 @@
    flex-direction: row;
 }
 
-.asset-library-listview-item__container > * {
+.asset-library-listview-item > * {
     align-items: stretch;
 }
 
-.asset-library-listview-item__container .icon {
+.asset-library-listview-item .icon {
     margin: var(--spacing-2);
 }
 
