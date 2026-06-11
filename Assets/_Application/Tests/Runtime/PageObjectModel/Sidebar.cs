@@ -15,6 +15,7 @@ namespace Netherlands3D.Twin.Tests.PageObjectModel
         // Computed properties because inspectors are only there when they are open
         public struct InspectorsCollection
         {
+            //todo UI-toolkit: fix the layer panel tests with the new UI
             // public LayersPanel Layers => LayersPanel.For(E2E.FindComponentOfType<LayerUIManager>());
         }
 
