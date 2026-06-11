@@ -38,7 +38,6 @@ namespace Netherlands3D.UI.Components
             layerGhost = this.Q<VisualElement>("LayerGhost");
             reorderLine = this.Q<VisualElement>("ReorderLine");
 
-            style.position = Position.Absolute;
             this.SetPickingModeRecursive(PickingMode.Ignore);
         }
 
