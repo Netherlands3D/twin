@@ -99,7 +99,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnSelectionChanged(IEnumerable<object> selectedObjects)
         {
-            var layerDatas = selectedObjects.Cast<LayerData>().ToList();
+            var layerDatas = selectedObjects.Cast<LayerData>();
 
             ProjectData.Current.RootLayer.DeselectAllLayers();
 
@@ -117,7 +117,7 @@ namespace Netherlands3D.UI.Panels
 
         private void CreateFolderAndGroupLayers(bool group)
         {
-            var layersToGroup = treeView.selectedItems.Cast<LayerData>().OrderBy(GetTreeViewIndexForLayerData).ToList(); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            var layersToGroup = treeView.selectedItems.Cast<LayerData>().OrderBy(GetTreeViewIndexForLayerData); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
 
             var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
             var referenceLayer = referenceLayerItem?.LayerData;
@@ -228,7 +228,7 @@ namespace Netherlands3D.UI.Panels
             throw new NullReferenceException("LayerData is not a child of parent: " + treeView.GetItemDataForId<LayerData>(parentId).Name);
         }
 
-        private void RestoreSelection(List<LayerData> layersToReselect)
+        private void RestoreSelection(IEnumerable<LayerData> layersToReselect)
         {
             var indicesToSelect = new List<int>();
 
@@ -538,10 +538,12 @@ namespace Netherlands3D.UI.Panels
 
         private void ReparentToLayer(List<object> selectedLayers, LayerData newParent, int newSiblingIndex)
         {
-            foreach (LayerData selectedLayer in selectedLayers)
+            var selection = selectedLayers.Cast<LayerData>();
+            foreach (LayerData selectedLayer in selection)
             {
                 selectedLayer.SetParent(newParent, newSiblingIndex);
             }
+            RestoreSelection(selection);
         }
     }
 }
