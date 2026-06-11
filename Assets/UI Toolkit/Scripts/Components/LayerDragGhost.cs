@@ -112,18 +112,19 @@ namespace Netherlands3D.UI.Components
                     reorderLine.style.display = DisplayStyle.None;
                     break;
                 }
-                case LayerPanel.DropMode.ToRoot:
+                case LayerPanel.DropMode.ToRootAbove:
                 {
-                    var targetLayer = targetItem.LayerData;
-
                     reorderLine.style.display = DisplayStyle.Flex;
                     reorderLine.style.left = 0;
-
-                    bool aboveFirst = targetLayer.ParentLayer.ChildrenLayers.IndexOf(targetLayer) == 0;
-                    if (aboveFirst)
-                        top = 0;
-                    else
-                        top = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMax, targetItem.worldBound.yMax)).y;
+                    top = 0;
+                    
+                    break;
+                }
+                case LayerPanel.DropMode.ToRootBelow:
+                {
+                    reorderLine.style.display = DisplayStyle.Flex;
+                    reorderLine.style.left = 0;
+                    top = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMax, targetItem.worldBound.yMax)).y;
                     
                     break;
                 }

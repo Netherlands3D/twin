@@ -46,7 +46,8 @@ namespace Netherlands3D.UI.Panels
             Above,
             Into,
             Below,
-            ToRoot
+            ToRootAbove,
+            ToRootBelow
         }
 
         private DropMode currentDropMode;
@@ -388,15 +389,16 @@ namespace Netherlands3D.UI.Panels
                 if (atTopEdge)
                 {
                     SetHoveredItem(treeView.Query<LayerTreeViewItem>().First()); //ensure we get the first item, using GetClosestItem gives jittering issues for some reason
+                    currentDropMode = DropMode.ToRootAbove; //override the drop mode set by SetHoveredItem
                     siblingIndex = 0;
                 }
                 else
                 {
                     SetHoveredItem(GetClosestItem(panelDragPosition.y));
+                    currentDropMode = DropMode.ToRootBelow; //override the drop mode set by SetHoveredItem
                     siblingIndex = -1;
                 }
 
-                currentDropMode = DropMode.ToRoot; //override the drop mode set by SetHoveredItem
                 dragGhost.UpdateLine(hoveredItem, currentDropMode);
                 return;
             }
@@ -506,7 +508,10 @@ namespace Netherlands3D.UI.Panels
                         var newParentBelow = (hoveredItem.userData as LayerData).ParentLayer;
                         ReparentToLayer(selectedLayers, newParentBelow, siblingIndex + 1);
                         break;
-                    case DropMode.ToRoot:
+                    case DropMode.ToRootAbove:
+                        ReparentToLayer(selectedLayers, rootLayer, siblingIndex);
+                        break;
+                    case DropMode.ToRootBelow:
                         ReparentToLayer(selectedLayers, rootLayer, siblingIndex);
                         break;
                 }
