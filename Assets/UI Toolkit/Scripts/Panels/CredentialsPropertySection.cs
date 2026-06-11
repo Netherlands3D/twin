@@ -15,29 +15,33 @@ namespace Netherlands3D.UI.Panels
     public partial class CredentialsPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private CredentialPanel credentialPanel;
-        private CredentialPanel CredentialPanel => credentialPanel ??= this.Q<CredentialPanel>();  
-        
+        private ICredentialHandler credentialHandler;
         
         public CredentialsPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");   
             
-            CredentialPanel.Show(true);
-            
-            credentialPanel.Handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
-            credentialPanel.Handler?.OnAuthorizationUnchanged.RemoveListener(OnCredentialsHandled);
-            credentialPanel.Handler = new CredentialPropertyHandler();
-            credentialPanel.Handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
-            credentialPanel.Handler.OnAuthorizationUnchanged.AddListener(OnCredentialsHandled);
+            credentialPanel = this.Q<CredentialPanel>();
+            credentialHandler = new CredentialPropertyHandler();
+            credentialHandler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
+            credentialHandler.OnAuthorizationUnchanged.AddListener(OnCredentialsHandled);
+            credentialPanel.OnConfirmCredentials.AddListener(ApplyCredentials);
+            credentialPanel.Show(true);
             
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {
-                CredentialPropertyHandler propertyHandler = credentialPanel.Handler as CredentialPropertyHandler;
+                CredentialPropertyHandler propertyHandler = credentialHandler as CredentialPropertyHandler;
                 propertyHandler.Dispose();
             });
         }
-      
+
+        private void ApplyCredentials()
+        {
+            credentialHandler.UserName = credentialPanel.UserNameField.value;
+            credentialHandler.PasswordOrKeyOrTokenOrCode = credentialPanel.CodeField.value;
+            credentialHandler.ApplyCredentials();
+        }
 
         private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
@@ -45,15 +49,15 @@ namespace Netherlands3D.UI.Panels
             
             //we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
             if (accepted)
-                CredentialPanel.SetAcceptedState();
+                credentialPanel.SetAcceptedState();
             else
-                CredentialPanel.ResetState();
+                credentialPanel.ResetState();
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            credentialPanel.Handler.Uri = properties.Get<LayerURLPropertyData>().Url;
-            credentialPanel.Handler.ApplyCredentials();
+            credentialHandler.Uri = properties.Get<LayerURLPropertyData>().Url;
+            credentialHandler.ApplyCredentials();
         }
     }
 }

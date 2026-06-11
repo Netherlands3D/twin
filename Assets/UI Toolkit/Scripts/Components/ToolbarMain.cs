@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -7,67 +8,58 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarMain : VisualElement
     {
-        public enum Tool
-        {
-            Layer = 0,
-            Library = 1,
-            Add = 2,
-            Search = 3,
-            SunPosition = 4,
-            DownloadTile = 5
-        }
-
-        public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
-
-        public event Action OnLayerToolSelected;
-        public event Action OnLibraryToolSelected;
-        public event Action OnAddToolSelected;
-        public event Action OnSearchToolSelected;
-        public event Action OnSunPositionToolSelected;
-        public event Action OnDownloadToolSelected;
-        public event Action OnToolDeselected;
+        private ToolService tools;
+        private List<ToolButton> buttons;
 
         public ToolbarMain()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-
-            RegisterCallback<AttachToPanelEvent>(NotifyAttachedToPanel);
-        }
-
-        private void NotifyAttachedToPanel(AttachToPanelEvent _)
-        {
-            Group.RegisterValueChangedCallback(NotifyValueChanged);
-
-            ClearWithoutNotify();
-        }
-
-        private void NotifyValueChanged(ChangeEvent<ToggleButtonGroupState> evt)
-        {
-            var newValue = evt.newValue.GetActiveOptions(stackalloc int[Group.value.length]);
-            Tool? newButton = newValue.Length > 0 ? (Tool)newValue[0] : null;
+            buttons = this.Query<ToolButton>().ToList();
+            foreach(var entry in buttons)
+                entry.RegisterCallback<ClickEvent>(evt =>
+                {
+                    EnsureService();
+                    ToolType type = entry.ToolType;
+                    bool isActive = entry.Button.ClassListContains("active");
+                    foreach(var b in buttons)
+                        b.Button.RemoveFromClassList("active");
+        
+                    if (!isActive)
+                    {
+                        entry.Button.AddToClassList("active");
+                        tools.GetTool(type)?.Open();
+                    }
+                    else
+                    {
+                        tools.CloseAllToolsWithPanel();
+                    }
+                });
             
-            switch (newButton)
+        }
+
+        private void EnsureService()
+        {
+            if (tools == null)
             {
-                case Tool.Layer: OnLayerToolSelected?.Invoke(); break;
-                case Tool.Library: OnLibraryToolSelected?.Invoke(); break;
-                case Tool.Add: OnAddToolSelected?.Invoke(); break;
-                case Tool.Search: OnSearchToolSelected?.Invoke(); break;
-                case Tool.SunPosition: OnSunPositionToolSelected?.Invoke(); break;
-                case Tool.DownloadTile: OnDownloadToolSelected?.Invoke(); break;
-                case null: OnToolDeselected?.Invoke(); break;
+                tools = Services.ServiceLocator.GetService<ToolService>();
+                tools.AnyToolClosed.AddListener(UpdateState);
+                tools.AnyToolOpened.AddListener(UpdateState);
             }
         }
-
-        public void ClearWithoutNotify()
+        
+        public void UpdateState()
         {
-            Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, Group.value.length));
-        }
-
-        public void EnableToolWithoutNotify(Tool tool)
-        {
-            var bits = 1ul << (int)tool;
-            Group.SetValueWithoutNotify(new ToggleButtonGroupState(bits, Group.value.length));
+            if(tools == null) return;
+    
+            foreach (var entry in buttons)
+            {
+                var tool = tools.GetTool(entry.ToolType);
+                if (tool != null && tool.IsOpen)
+                    entry.Button.AddToClassList("active");
+                else
+                    entry.Button.RemoveFromClassList("active");
+            }
         }
     }
 }

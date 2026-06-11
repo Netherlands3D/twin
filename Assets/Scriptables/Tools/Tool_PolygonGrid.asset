@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cae0576fe1b446859f958251c879c025, type: 3}
-  m_Name: Tool_Search
+  m_Name: Tool_PolygonGrid
   m_EditorClassIdentifier: 
-  code: search
-  title: Zoeken
-  functionGroups:
-  - {fileID: 0}
+  code: polygon-grid
+  title: Polygon Grid
+  functionGroups: []
   onAvailabilityChange:
     m_PersistentCalls:
       m_Calls: []
@@ -25,15 +24,14 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls: []
-  onToggleInspector:
-    m_PersistentCalls:
-      m_Calls: []
   onSpawnedPrefab:
     m_PersistentCalls:
       m_Calls: []
   inspectorPrefab: {fileID: 0}
   panelType:
-    _assemblyQualifiedName: Netherlands3D.UI.Panels.LocationSearchPanel, eu.netherlands3d.twin,
+    _assemblyQualifiedName: Netherlands3D.UI.Panels.InspectorPolygonGridPanel, eu.netherlands3d.twin,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  panelArgs:
+  - {fileID: 11400000, guid: 1f0d8a518b80c13b6bd1c0a1e46b32a6, type: 2}
   functionalityPrefabs: []
   open: 0
