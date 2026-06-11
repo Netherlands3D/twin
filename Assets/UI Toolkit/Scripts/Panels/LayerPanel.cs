@@ -399,6 +399,7 @@ namespace Netherlands3D.UI.Panels
                     siblingIndex = -1;
                 }
 
+                hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
                 dragGhost.UpdateLine(hoveredItem, currentDropMode);
                 return;
             }
