@@ -1,8 +1,6 @@
-using Codice.Client.BaseCommands.BranchExplorer.ExplorerData;
 using KindMen.Uxios;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
-using static Codice.Client.Commands.WkTree.WorkspaceTreeNode;
 
 namespace Netherlands3D.DataTypeAdapters
 {

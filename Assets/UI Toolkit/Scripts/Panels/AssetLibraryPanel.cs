@@ -1,7 +1,5 @@
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts;
