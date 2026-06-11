@@ -213,24 +213,13 @@ namespace Netherlands3D.UI.Components
 
             SetAppearance(layerData);
 
-            //credentials
             layerData.HasValidCredentialsChanged.AddListener(OnCredentialStatusChanged);
-
-            //visibility toggle
             layerData.ActiveSelfChanged.AddListener(OnActiveSelfChanged);
             layerData.ParentOrSiblingIndexChanged.AddListener(OnParentChanged);
             layerData.LayerDestroyed.AddListener(OnLayerDestroyed);
-
-            //Color bar
             layerData.ColorChanged.AddListener(UpdateColorBar);
-
-            //LayerTypeIcon
             layerData.OnPrefabIdChanged.AddListener(UpdateLayerTypeIcon);
-
-            //Layer Name
             layerData.NameChanged.AddListener(UpdateNameLabels);
-
-            //properties
             layerData.PropertySet.AddListener(OnPropertiesChanged);
             layerData.PropertyRemoved.AddListener(OnPropertiesChanged);
             
