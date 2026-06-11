@@ -11,7 +11,6 @@
         <nl3d:Icon name="FoldoutImage" image="ChevronRight" class="layer-tree-view-item__cell layer-tree-view-item__foldout-toggle" />
         <nl3d:Icon name="TypeIcon" class="layer-tree-view-item__cell layer-tree-view-item__icon" />
         <ui:Label name="NameInputField" text="LayerName" class="layer-tree-view-item__cell layer-tree-view-item__name-label" />
-        <!--        <nl3d:Toggle name="PropertyToggle" icon="AdjustmentsHorizontal" toggle-style="IconOnly" class="layer-list-view-item__cell layer-list-view-item__property-toggle"/>-->
     </ui:VisualElement>
     <ui:VisualElement name="ReorderLine" class="layer-drag-ghost__reorder-line"/> 
 </ui:UXML>
