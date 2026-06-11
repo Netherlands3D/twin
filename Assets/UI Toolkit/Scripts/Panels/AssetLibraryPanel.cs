@@ -130,7 +130,7 @@ namespace Netherlands3D.UI.Panels
             {
                 case RecordItem recordItem: assetLibrary.Load(recordItem); return;
                 case DataService dataService: assetLibrary.Trigger(dataService); return;
-                case ToolItem toolItem: assetLibrary.OpenTool(toolItem); return;
+                case ToolItem toolItem: assetLibrary.OpenTool(toolItem); return; //TODO UI Toolkit This should be refactored away in https://gemeente-amsterdam.atlassian.net/browse/S3DA-2121 as tools like this will not be opened anymore fromm the assetlibrary panels 
                 default:
                     Debug.LogError(
                         $"Tried to open catalog item with type {catalogItem.GetType().Name}, but this is not a record item"
