@@ -492,7 +492,6 @@ namespace Netherlands3D.UI.Panels
             {
                 var selectedLayers = treeView.selectedItems.ToList(); //to list makes a copy and avoids a collectionmodified error
                 selectedLayers.Reverse();
-                SetTargetItemUssClasses(hoveredItem, null);
                 switch (currentDropMode)
                 {
                     case DropMode.Above:
@@ -518,6 +517,9 @@ namespace Netherlands3D.UI.Panels
 
         private void CleanupDrag()
         {
+            if(hoveredItem != null)
+                SetTargetItemUssClasses(hoveredItem, null);
+            
             if (hoveredButton != null)
                 hoveredButton.EnableInClassList(buttonHighlightUSSClassName, false);
 
