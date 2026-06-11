@@ -6,10 +6,12 @@
     height: 100%;
 }
 
-.icon.layer-tree-view-item__visibility-toggle{ /* todo: figure out why these spacings are needed and not taken from the base style*/
+.icon.layer-tree-view-item__visibility-toggle{
     margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
 }
-.layer-tree-view-item__color-bar{
+
+.icon.layer-tree-view-item__foldout-toggle{
     margin-left: var(--spacing-1);
     margin-right: var(--spacing-1);
 }
@@ -20,6 +22,7 @@
 
 .layer-tree-view-item__container{
     position: absolute;
+    border-width: var(--spacing-0_5);
     opacity: 0.5;
 }
 
