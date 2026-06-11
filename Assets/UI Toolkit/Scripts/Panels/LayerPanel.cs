@@ -21,7 +21,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement, InspectorPanel]
     public partial class LayerPanel : BaseInspectorContentPanel
     {
-        private const string reparentTargetUSSClassName = "layer-list-view-item--reparent-target";
+        private const string reparentTargetUSSClassName = "layer-tree-view-item--reparent-target";
         private const string buttonHighlightUSSClassName = "button--drag-hover";
 
         private TreeView treeView;
@@ -468,7 +468,6 @@ namespace Netherlands3D.UI.Panels
             float localY = panelDragPosition.y - worldTop.y;
             float normalizedY = localY / hoveredItem.layout.height;
 
-            string newClassName = null;
             if (normalizedY < 0.25f)
                 currentDropMode = DropMode.Above;
             else if (normalizedY > 0.75f)
@@ -477,7 +476,7 @@ namespace Netherlands3D.UI.Panels
                 currentDropMode = DropMode.Into;
 
             dragGhost.UpdateLine(targetItem, currentDropMode);
-            SetTargetItemUssClasses(hoveredItem, newClassName);
+            SetTargetItemUssClasses(hoveredItem, reparentTargetUSSClassName);
         }
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerTreeViewItem source)
@@ -493,7 +492,7 @@ namespace Netherlands3D.UI.Panels
             {
                 var selectedLayers = treeView.selectedItems.ToList(); //to list makes a copy and avoids a collectionmodified error
                 selectedLayers.Reverse();
-
+                SetTargetItemUssClasses(hoveredItem, null);
                 switch (currentDropMode)
                 {
                     case DropMode.Above:

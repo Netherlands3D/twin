@@ -49,6 +49,10 @@
     height: 100%;
 }
 
+.unity-tree-view__item:hover.layer-tree-view-item--reparent-target{
+    background-color: var(--color-blue-200);
+}
+
 .layer-tree-view-item--reparent-target{
     background-color: var(--color-blue-200);
 }
