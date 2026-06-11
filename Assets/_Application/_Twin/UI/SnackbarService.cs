@@ -22,9 +22,7 @@ namespace Netherlands3D.Services
         private void Start()
         {
             snackbarPanel = App.UIRoot.Root.Q<SnackbarPanel>();
-            snackbarPanel.Show(false);
-
-           
+            snackbarPanel.Show(false);           
         }
 
         private void OnEnable()
@@ -40,11 +38,11 @@ namespace Netherlands3D.Services
         private void OnLayerAdded(LayerData layerData)
         {
             if (activeCounter > 0)
-                activeMessage += $",{layerData.Name}";
+                activeMessage += $" ,{layerData.Name}";
             else
                 activeMessage += layerData.Name;
             activeCounter++;
-            DisplayMessage(activeMessage + (activeCounter == 1 ? "is" : "zijn") + " succesvol toegevoegd");
+            DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd");
         }
 
         public void DisplayMessage(string newText)

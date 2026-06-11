@@ -10,12 +10,3 @@
 .asset-library-listview-item .icon {
     margin: var(--spacing-2);
 }
-
-
-/* .asset-library-listview-item__label {
-    -unity-font-definition: var(--nl3d-default-font-semi-bold);
-    margin: 0 var(--spacing-2) 0 0;
-    padding: 0;
-} 
- */
-

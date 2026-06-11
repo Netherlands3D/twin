@@ -1,8 +1,5 @@
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
-using Netherlands3D.Credentials.StoredAuthorization;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.UI.Components;
