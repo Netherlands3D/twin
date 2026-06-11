@@ -32,7 +32,7 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            
+            SetStateFromLayerState(value, true,  true); //we cannot calculate the true state from the toggle without the rest of the hierarchy, this should be done from the tree if needed
             this.RegisterValueChangedCallback(OnValueChanged);
         }
 
