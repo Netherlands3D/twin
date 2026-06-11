@@ -29,3 +29,8 @@
     -unity-font-style: normal;
     color: var(--color-text);
 }
+
+.vignette-edge {
+    -unity-background-image-tint-color: var(--color-blue-900-alpha);
+    position: absolute;
+}
