@@ -13,18 +13,6 @@
     flex-shrink: 0;
 }
 
-.inspector-download-grid__body{
-    /* flex-shrink: 0;
-    align-items: flex-start; */
-    
-}
-
-.inspector-download-grid__body > .button{
-    /* margin-top: var(--spacing-2);
-    margin-bottom: var(--spacing-4); */
-
-}
-
 .inspector-download-grid__body-tip-text{
     white-space: pre-wrap;
 }

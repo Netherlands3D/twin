@@ -114,7 +114,6 @@ namespace Netherlands3D.Twin.Tools
 
             IsOpen = true;
             onOpen.Invoke();
-            Debug.Log($"OPENING TOOL: { code }");
         }
 
         public void Close()

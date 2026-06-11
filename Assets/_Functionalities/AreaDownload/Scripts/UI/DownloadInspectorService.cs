@@ -222,9 +222,6 @@ namespace Netherlands3D.Functionalities
 
         public void Download()
         {
-            if (exporterObject == null)
-                exporterObject = new GameObject("Exporter");
-
             ModelFormatCreation exportScript = selectedExportFormat switch
             {
                 ExportFormat.Collada => GetOrAdd<ColladaCreation>(),
@@ -242,7 +239,11 @@ namespace Netherlands3D.Functionalities
 
         private T GetOrAdd<T>() where T : ModelFormatCreation
         {
-            var comp = exporterObject.GetComponent<T>();
+            //the exporter will destroy the exporterObject on finish exporting
+            if (exporterObject == null)
+                exporterObject = new GameObject("Exporter");
+
+                var comp = exporterObject.GetComponent<T>();
             return comp != null ? comp : exporterObject.AddComponent<T>();
         }
 

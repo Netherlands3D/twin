@@ -22,10 +22,10 @@ namespace Netherlands3D.UI.Panels
     {
         public override string Title => "Download 3D data";
 
-        private readonly Dictionary<int, (string, ExportFormat)> dropDownValues = new()
+        private readonly List<(string, ExportFormat)> dropDownValues = new()
         {
-            { 0,  ("Collada (.dae)", ExportFormat.Collada) },
-            { 1,  ("DXF (.dxf)", ExportFormat.AutodeskDXF) }
+            ("Collada (.dae)", ExportFormat.Collada),
+            ("DXF (.dxf)", ExportFormat.AutodeskDXF) 
         };
 
         private VisualElement thumbnailContainer;
@@ -39,13 +39,8 @@ namespace Netherlands3D.UI.Panels
         private DropDown dropDown => this.Q<DropDown>("DropDown");
 
         private Button downloadButton;
-
-        public InspectorDownloadGridPanel()
-        {
-            
-        }
         
-        public InspectorDownloadGridPanel(TriggerEvent OnGridConfirmed) : this()
+        public InspectorDownloadGridPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -60,9 +55,10 @@ namespace Netherlands3D.UI.Panels
             no_y = this.Q<NumberField>("NO_Y");
             agreeToggle = this.Q<CheckboxToggle>("Voorwaarden");
 
-            downloadButton.clicked += OnGridConfirmed.Invoke;
-            downloadButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.DownloadTile).Close;
             downloadButton.clicked += DownloadSelection;
+            //todo should we close the panel on download success??
+            //downloadButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.DownloadTile).Close; //<- this will clear also the selected area
+
 
             SetDropdownValues();
        
@@ -77,7 +73,7 @@ namespace Netherlands3D.UI.Panels
                 agreeToggle.RegisterCallback<ChangeEvent<bool>>(evt => UpdateDownloadButton(downloadInspectorService.SelectedArea));
 
                 ExportFormat initialFormat = downloadInspectorService.ExportFormat;
-                int index = dropDownValues.First(kvp => kvp.Value.Item2 == initialFormat).Key;
+                int index = dropDownValues.FindIndex(x => x.Item2 == initialFormat);
                 SetDropdownValue(index);
                 dropDown.DropDownValueChanged.AddListener(SetExportFormat);                
 
@@ -92,11 +88,8 @@ namespace Netherlands3D.UI.Panels
             });
         }
         private void SetExportFormat(int state)
-        {
-            if (!dropDownValues.TryGetValue(state, out var mapping))
-                return;            
-
-            ExportFormat format = mapping.Item2;
+        {           
+            ExportFormat format = dropDownValues[state].Item2;
             downloadInspectorService.SetExportFormat(format);
         }
 
@@ -153,13 +146,10 @@ namespace Netherlands3D.UI.Panels
 
         public void SetDropdownValues()
         {
-            var values = dropDownValues.Values
-           .Select(v => v.Item1)
-           .ToList();
+            if (dropDownValues.Count == 0)
+                return;
 
-            if (values == null || values.Count == 0) return;
-           
-            dropDown.choices = values;
+            dropDown.choices = dropDownValues.Select(v => v.Item1).ToList();
             SetDropdownValue(0);
         }
 

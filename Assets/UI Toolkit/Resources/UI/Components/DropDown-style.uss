@@ -33,10 +33,6 @@
     margin-left: var(--spacing-2);
 }
 
-/* .dropdown .unity-text-element {
-    display: none;
-} */
-
 .dropdown .unity-label{
     -unity-text-align: middle-center;
 }

@@ -5,17 +5,16 @@ namespace Netherlands3D.Catalogs
 {
     public record ToolItem : BaseCatalogItem
     {
-        public ScriptableObject Tool { get; private set; }
+        public ScriptableObject ScriptableToolObject { get; private set; }
         
         public ToolItem(
             string id,
             string title,
             string description,
-            ScriptableObject tool,
-            bool withoutNotify = false
+            ScriptableObject tool
         ) : base(id, title, description)
         {
-            Tool = tool;
+            ScriptableToolObject = tool;
         }
     }
 }

@@ -108,9 +108,9 @@ namespace Netherlands3D.AssetLibrary
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }
 
-        public void OpenTool(ToolItem scriptableObject)
+        public void OpenTool(ToolItem item)
         {
-            Tool tool = scriptableObject.Tool as Tool;
+            Tool tool = item.ScriptableToolObject as Tool;
             tool.Open();
         }
 

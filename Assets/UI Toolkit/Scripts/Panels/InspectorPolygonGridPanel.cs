@@ -43,6 +43,7 @@ namespace Netherlands3D.UI.Panels
 
            
             confirmButton.clicked += OnGridConfirmed.Invoke;
+            //TODO instead of closing the polygon tool open the layertool here so this will automatically close and load the correct panel!
             confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Close;
 
             RegisterCallback<AttachToPanelEvent>(evt =>
