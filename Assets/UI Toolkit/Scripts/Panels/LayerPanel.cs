@@ -460,7 +460,7 @@ namespace Netherlands3D.UI.Panels
             {
                 if (hoveredItem != null)
                 {
-                    SetTargetItemUssClasses(hoveredItem, null);
+                    hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
                 }
 
                 hoveredItem = targetItem;
@@ -478,7 +478,7 @@ namespace Netherlands3D.UI.Panels
                 currentDropMode = DropMode.Into;
 
             dragGhost.UpdateLine(targetItem, currentDropMode);
-            SetTargetItemUssClasses(hoveredItem, reparentTargetUSSClassName);
+            hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, true);
         }
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerTreeViewItem source)
@@ -523,7 +523,7 @@ namespace Netherlands3D.UI.Panels
         private void CleanupDrag()
         {
             if(hoveredItem != null)
-                SetTargetItemUssClasses(hoveredItem, null);
+                hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
             
             if (hoveredButton != null)
                 hoveredButton.EnableInClassList(buttonHighlightUSSClassName, false);
@@ -533,14 +533,6 @@ namespace Netherlands3D.UI.Panels
 
             dragGhost.RemoveFromHierarchy();
             dragGhost = null;
-        }
-
-        private void SetTargetItemUssClasses(LayerTreeViewItem targetItem, string newClassName)
-        {
-            targetItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
-
-            if (newClassName != null)
-                targetItem.ItemRoot.EnableInClassList(newClassName, true);
         }
 
         private void ReparentToLayer(List<object> selectedLayers, LayerData newParent, int newSiblingIndex)
