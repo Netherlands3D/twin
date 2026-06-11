@@ -1,5 +1,51 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &757971778858455883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1955165290551131509}
+  - component: {fileID: 5399928559634836721}
+  m_Layer: 5
+  m_Name: Vignette
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1955165290551131509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757971778858455883}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5399928559634836721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757971778858455883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 576de3306eaecafe990d4f53ab470369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.ViewportEdge
+  cornerSprite: {fileID: 2800000, guid: ba38e0d733f59434aa6fb8b7bc95b1e3, type: 3}
+  sideSprite: {fileID: 2800000, guid: 35e1feb47f2aa3c42b39efa9a6cf7f9e, type: 3}
 --- !u!1 &891704482898673965
 GameObject:
   m_ObjectHideFlags: 0
@@ -42,6 +88,7 @@ Transform:
   - {fileID: 1319537119612692894}
   - {fileID: 8724700332731692420}
   - {fileID: 223785074132285952}
+  - {fileID: 1955165290551131509}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -106,10 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d112c7a02e4e7241b7f10e89b433a13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
-  locationSearchBehaviour: {fileID: 898252592541998064}
-  OnDrawNewGrid: {fileID: 11400000, guid: 2725eb416725304468190dd92c09fdc3, type: 2}
-  OnGridConfirmed: {fileID: 11400000, guid: 1f0d8a518b80c13b6bd1c0a1e46b32a6, type: 2}
   SettingsWindow: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
   HelpUrl: https://netherlands3d.eu/
 --- !u!114 &873264101414426239
