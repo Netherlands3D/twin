@@ -137,6 +137,7 @@ namespace Netherlands3D.UI.Panels
             RebuildTree();
 
             ExpandToItem(newGroup.LayerData);
+
             if (group)
                 RestoreSelection(layersToGroup);
             else
@@ -375,6 +376,7 @@ namespace Netherlands3D.UI.Panels
             //check for hover buttons
             if (belowTree && panelDragPosition.x > worldBound.xMin && panelDragPosition.x < worldBound.xMax) //don't account for buttons in the tree
             {
+                //we are dragging over a button, don't do any reorder logic
                 var hitButton = hitElement as Button ?? hitElement?.GetFirstAncestorOfType<Button>();
                 if (hitButton != null)
                 {
@@ -383,30 +385,34 @@ namespace Netherlands3D.UI.Panels
                 }
             }
 
+            //we are not/no longer over a button, reset the hoverButton
             SetHoveredButton(null);
+            
+            //we are dragging outside of the tree, we need to reorder to the root layer
             if (atTopEdge || atBottomEdge)
             {
-                if (atTopEdge)
+                if (atTopEdge) // above the first layer item, reorder to the root with the top item as the reference layer
                 {
                     SetHoveredItem(treeView.Query<LayerTreeViewItem>().First()); //ensure we get the first item, using GetClosestItem gives jittering issues for some reason
                     currentDropMode = DropMode.ToRootAbove; //override the drop mode set by SetHoveredItem
                     siblingIndex = 0;
                 }
-                else
+                else // below the last layer item, reorder to the root with the bottom item as the reference layer
                 {
                     SetHoveredItem(GetClosestItem(panelDragPosition.y));
                     currentDropMode = DropMode.ToRootBelow; //override the drop mode set by SetHoveredItem
-                    siblingIndex = -1;
+                    siblingIndex = -1; // setting the sibling index to -1 makes it just add the layer to the end of the RootLayer's children
                 }
 
+                //reset the hover state and ghost line for the ToRoot cases
                 hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
                 dragGhost.UpdateLine(hoveredItem, currentDropMode);
                 return;
             }
 
-            var targetItem = hitElement as LayerTreeViewItem
-                             ?? hitElement?.GetFirstAncestorOfType<LayerTreeViewItem>()
-                             ?? GetClosestItem(panelDragPosition.y);
+            //regular reorder within the tree structure
+            var targetItem = hitElement as LayerTreeViewItem //we already have a LayerTreeViewItem
+                             ?? GetClosestItem(panelDragPosition.y); //get the closest LayerTreeViewItem, for example when we are in a margin in between 2 items, or horizontally outside of the item
 
             SetHoveredItem(targetItem);
             var layer = hoveredItem.userData as LayerData;
