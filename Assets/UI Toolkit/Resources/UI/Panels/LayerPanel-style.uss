@@ -1,7 +1,3 @@
-:root {
-    --reorder-line-width: 2px;
-}
-
 .layer-panel {
     flex-direction: column;
     flex-grow: 1;
@@ -19,13 +15,4 @@
 
 .button.button--drag-hover{
     background-color: var(--color-blue-700-hover);
-}
-
-.layer-panel__reorder-line-below{
-    height: var(--reorder-line-width);
-    color: transparent;
-}
-
-.layer-panel__reorder-line-below.active{
-    background-color: var(--color-blue-900);
 }
