@@ -83,6 +83,9 @@ namespace Netherlands3D.UI.Panels
 
             deleteButton = this.Q<Button>("DeleteButton");
             deleteButton.RegisterCallback<ClickEvent>(OnDeleteButtonClicked);
+            
+            dragGhost = this.Q<LayerDragGhost>();
+            dragGhost.SetVisible(false);
         }
 
         private void OnBlur(BlurEvent evt)
@@ -332,13 +335,9 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDraggingLayerItemStarted(Vector2 startPosition, LayerTreeViewItem source)
         {
-            if (dragGhost != null)
-                dragGhost.RemoveFromHierarchy();
-
             panelDragPosition = startPosition;
 
-            dragGhost = new LayerDragGhost();
-            Add(dragGhost);
+            dragGhost.SetVisible(true);
             dragGhost.Initialize(panelDragPosition, source);
 
             referenceLayerItem = source;
@@ -529,8 +528,7 @@ namespace Netherlands3D.UI.Panels
             hoveredButton = null;
             hoveredItem = null;
 
-            dragGhost.RemoveFromHierarchy();
-            dragGhost = null;
+            dragGhost.SetVisible(false);
         }
 
         private void ReparentToLayer(List<object> selectedLayers, LayerData newParent, int newSiblingIndex)

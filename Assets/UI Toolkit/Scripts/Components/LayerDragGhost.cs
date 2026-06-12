@@ -51,7 +51,7 @@ namespace Netherlands3D.UI.Components
         private void CopyAppearance(LayerTreeViewItem ui)
         {
             var validCredentials = ui.LayerData.HasValidCredentials;
-            
+
             layerVisibilityImage.Image = validCredentials ? (IconImage)ui.VisibilityState : IconImage.Warning;
             UpdateColorBar(validCredentials ? ui.LayerData.Color : null);
             var hasChildren = ui.LayerData.ChildrenLayers.Count > 0;
@@ -116,7 +116,7 @@ namespace Netherlands3D.UI.Components
                     reorderLine.style.display = DisplayStyle.Flex;
                     reorderLine.style.left = 0;
                     top = 0;
-                    
+
                     break;
                 }
                 case LayerPanel.DropMode.ToRootBelow:
@@ -124,11 +124,17 @@ namespace Netherlands3D.UI.Components
                     reorderLine.style.display = DisplayStyle.Flex;
                     reorderLine.style.left = 0;
                     top = parent.WorldToLocal(new Vector2(targetItem.worldBound.xMax, targetItem.worldBound.yMax)).y;
-                    
+
                     break;
                 }
             }
+
             reorderLine.style.top = top - 1;
+        }
+
+        public void SetVisible(bool visible)
+        {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
     }
 }
