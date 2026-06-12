@@ -1,72 +1,68 @@
 using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI.Panels;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Services
 {
     public class SnackbarService : MonoBehaviour
     {
-        [SerializeField] private float waitTime = 5f;
+        private const float defaultWaitTime = 5f;
         [SerializeField] private Color infoColor = Color.black;
         [SerializeField] private Color errorColor = Color.red;
 
-        private SnackbarPanel snackbarPanel;
-        private string activeMessage;
-        private int activeCounter;
+        private SnackbarPanel snackbarPanel;       
         private Coroutine activeCoroutine;
         private float timer;
+
+        public UnityEvent OnShowMessage = new();
+        public UnityEvent OnHideMessage = new();
 
         private void Start()
         {
             snackbarPanel = App.UIRoot.Root.Q<SnackbarPanel>();
             snackbarPanel.Show(false);           
         }
-        public void OnLayerAdded(LayerData layerData)
+
+        public void DisplayMessage(string newText, float time = defaultWaitTime)
         {
-            if (activeCounter > 0)
-                activeMessage += $" ,{layerData.Name}";
-            else
-                activeMessage += layerData.Name;
-            activeCounter++;
-            DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd");
+            DisplayText(newText, infoColor, time);
         }
 
-        public void DisplayMessage(string newText)
+        public void DisplayError(string newText, float time = defaultWaitTime)
         {
-            DisplayText(newText, infoColor);
+            DisplayText(newText, errorColor, time);
         }
 
-        public void DisplayError(string newText)
+        public void DisplayMessage(string newText, Color color, float time = defaultWaitTime)
         {
-            DisplayText(newText, errorColor);
-        }
+            DisplayText(newText, color, time);
+        }       
 
-        private void DisplayText(string newText, Color color)
+        private void DisplayText(string newText, Color color, float time = defaultWaitTime)
         {
             if (activeCoroutine != null)
                 StopCoroutine(activeCoroutine);
             snackbarPanel.SetText(newText);
             snackbarPanel.SetTextColor(color);
-            activeCoroutine = StartCoroutine(StartTimer());
+            activeCoroutine = StartCoroutine(StartTimer(time));
         }
 
-        private IEnumerator StartTimer()
+        private IEnumerator StartTimer(float duration)
         {
-            //slider.maxValue = waitTime;
-            //slider.value = slider.maxValue;
+            //TODO UI Toolkit, implement a slider here in the panel so the timer is visible to the user.
             snackbarPanel.Show(true);
-            timer = waitTime;
+            OnShowMessage.Invoke();
+            timer = duration;
             while (timer > 0)
             {
                 timer -= Time.deltaTime;
                 yield return null;
-            }
-            activeMessage = string.Empty;
-            activeCounter = 0;
+            }         
             snackbarPanel.Show(false);
+            OnHideMessage.Invoke();
         }
     }
 }

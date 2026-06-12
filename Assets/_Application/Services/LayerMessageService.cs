@@ -10,6 +10,8 @@ namespace Netherlands3D
     {
         private Layers layers;
         private SnackbarService snackbarService;
+        private string activeMessage;
+        private int activeCounter;
 
         private void Awake()
         {
@@ -19,6 +21,7 @@ namespace Netherlands3D
 
         private void OnEnable()
         {
+            snackbarService.OnHideMessage.AddListener(OnHideSnackbar);
             layers.LayerAdded.AddListener(OnLayerAdded);
             layers.DataTypeChain.CouldNotFindAdapter.AddListener(CouldNotFindAdapterMessage);
             layers.DataTypeChain.OnDownloadFailed.AddListener(DownloadFailedMessage);
@@ -27,15 +30,27 @@ namespace Netherlands3D
 
         private void OnDisable()
         {
+            snackbarService.OnHideMessage.RemoveListener(OnHideSnackbar);
             layers.LayerAdded.RemoveListener(OnLayerAdded);
             layers.DataTypeChain.CouldNotFindAdapter.RemoveListener(CouldNotFindAdapterMessage);
             layers.DataTypeChain.OnDownloadFailed.RemoveListener(DownloadFailedMessage);
             layers.DataTypeChain.OnLocalCacheFailed.RemoveListener(LocalCacheFailedMessage);
         }
 
+        private void OnHideSnackbar()
+        {              
+            activeMessage = string.Empty;
+            activeCounter = 0;
+        }
+
         private void OnLayerAdded(LayerData layerData)
         {
-            snackbarService.OnLayerAdded(layerData);
+            if (activeCounter > 0)
+                activeMessage += $" ,{layerData.Name}";
+            else
+                activeMessage += layerData.Name;
+            activeCounter++;
+            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd");
         }
 
         private void CouldNotFindAdapterMessage(string message)

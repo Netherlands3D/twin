@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Services
 {
-    public class Layers : MonoBehaviour, ILayersServiceFacade
+    public class Layers : MonoBehaviour
     {
         [SerializeField] private PrefabLibrary prefabLibrary;
         [SerializeField] private DataTypeChain fromUrlImporter;
