@@ -144,7 +144,7 @@ namespace Netherlands3D.UI.Panels
         private int GetTreeViewIndexForLayerData(LayerData layerData)
         {
             // Walk up to collect ancestors
-            var ancestors = GetAncestors(layerData);
+            var ancestors = layerData.GetAncestors();
 
             // Walk down using existing functions to find the ID
             int parentId = -1;
@@ -162,25 +162,10 @@ namespace Netherlands3D.UI.Panels
             return treeView.viewController.GetIndexForId(id);
         }
 
-        private static List<LayerData> GetAncestors(LayerData layerData)
-        {
-            var ancestors = new List<LayerData>();
-            var current = layerData;
-
-            while (current is not RootLayer)
-            {
-                ancestors.Add(current);
-                current = current.ParentLayer;
-            }
-
-            ancestors.Reverse();
-            return ancestors;
-        }
-
         private void ExpandToItem(LayerData layerData)
         {
             // Walk up the hierarchy and collect all ancestors
-            var ancestors = GetAncestors(layerData);
+            var ancestors = layerData.GetAncestors();
 
             int parentId = -1;
 

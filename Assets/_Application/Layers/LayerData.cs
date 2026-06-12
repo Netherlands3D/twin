@@ -384,6 +384,21 @@ namespace Netherlands3D.Twin.Layers
             return layerDataTree;
         }
         
+        public List<LayerData> GetAncestors()
+        {
+            var ancestors = new List<LayerData>();
+            var current = this;
+
+            while (current is not RootLayer)
+            {
+                ancestors.Add(current);
+                current = current.ParentLayer;
+            }
+
+            ancestors.Reverse();
+            return ancestors;
+        }
+        
         public bool Equals(LayerData other) => other is not null && other.Id == Id;
         public override bool Equals(object obj) => Equals(obj as LayerData);
         public override int GetHashCode() => Id.GetHashCode();
