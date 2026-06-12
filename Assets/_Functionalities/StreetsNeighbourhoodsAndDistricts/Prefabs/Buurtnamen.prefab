@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8034896417068674446}
   - component: {fileID: 6476753256470473480}
   - component: {fileID: 7755908596815118996}
+  - component: {fileID: 1995259766809239788}
   m_Layer: 0
   m_Name: Buurtnamen
   m_TagString: Untagged
@@ -66,6 +67,7 @@ MonoBehaviour:
   textPrefab: {fileID: 8383371600766724334, guid: 8f30e63ba8737ec468056e0a256c6189,
     type: 3}
   geoJsonUrl: https://service.pdok.nl/cbs/wijkenbuurten/2022/wfs/v1_0?request=GetFeature&service=wfs&outputFormat=json&version=2.0.0&typeName=wijkenbuurten:buurten&propertyName=buurtnaam,geom&bbox=
+  geoJsonUrlGeometry: https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?request=GetCapabilities&service=WFS
   maxSpawnsPerFrame: 100
   textsAndSizes:
   - textPropertyName: buurtnaam
@@ -96,3 +98,44 @@ MonoBehaviour:
   prefabIdentifier: c3ba1b0d37f2843cf973cb1d03a3bd3c
   thumbnail: {fileID: 0}
   spawnLocation: 0
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1995259766809239788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4137703543855384620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionalities:
+  - {fileID: 11400000, guid: cd4d713ac36eed3478e85868b1e0e0f9, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7755908596815118996}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
+        m_MethodName: DestroyLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
