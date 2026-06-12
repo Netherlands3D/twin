@@ -42,7 +42,10 @@ namespace Netherlands3D.UI.Components
         public VisualElement ItemRoot => itemRoot;
         public VisibilityState VisibilityState => isActiveToggle.Image;
         public IconImage LayerTypeIcon => layerTypeIcon.Image;
-        public float IndentWidth => ItemRoot.Q("unity-tree-view__item-indent").resolvedStyle.width;
+
+        private VisualElement indent;
+        public float IndentWidth => indent.resolvedStyle.width;
+        
         
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
@@ -136,7 +139,8 @@ namespace Netherlands3D.UI.Components
         private void UpdateLayout()
         {
             itemRoot = GetTreeViewItemRoot();
-
+            indent = ItemRoot.Q("unity-tree-view__item-indent");
+                
             if (itemRoot == null) return;
             itemRoot.AddComponentStylesheetByType(GetType());
 
