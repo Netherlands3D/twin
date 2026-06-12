@@ -30,7 +30,7 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel = App.UIRoot.Root.Q<PropertiesPanel>("PropertiesPanel");
             secondaryPropertiesPanel = App.UIRoot.Root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
-            propertiesPanel.Q<Button>().clicked += ClearActivePanel;
+            propertiesPanel.CloseButton.clicked += ClearActivePanel;
 
             ClearActivePanel();
             

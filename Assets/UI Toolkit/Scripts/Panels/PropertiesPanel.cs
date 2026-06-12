@@ -12,6 +12,7 @@ namespace Netherlands3D.UI.Panels
     public partial class PropertiesPanel : VisualElement
     {
         private Header header;
+        public Button CloseButton { get; private set; }
         private PropertyPanelToolbar propertyPanelToolbar;
         private VisualElement informationContent;
         private VisualElement settingsContent;
@@ -35,6 +36,7 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
             
             header = this.Q<Header>(className: "properties-header-title");
+            CloseButton = this.Q<Button>("CloseButton");
             propertyPanelToolbar = this.Q<PropertyPanelToolbar>();
             informationContent = this.Q<VisualElement>("InformationContent");
             settingsContent = this.Q<VisualElement>("SettingsContent");
