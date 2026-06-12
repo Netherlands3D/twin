@@ -44,8 +44,9 @@ namespace Netherlands3D.UI.Components
         public IconImage LayerTypeIcon => layerTypeIcon.Image;
 
         private VisualElement indent;
+        private VisualElement foldout;
         public float IndentWidth => indent.resolvedStyle.width;
-        
+        public Rect FoldoutWorldBound => foldout.worldBound;
         
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
@@ -140,6 +141,7 @@ namespace Netherlands3D.UI.Components
         {
             itemRoot = GetTreeViewItemRoot();
             indent = ItemRoot.Q("unity-tree-view__item-indent");
+            foldout = ItemRoot.Q(className: "unity-tree-view__item-toggle");
                 
             if (itemRoot == null) return;
             itemRoot.AddComponentStylesheetByType(GetType());

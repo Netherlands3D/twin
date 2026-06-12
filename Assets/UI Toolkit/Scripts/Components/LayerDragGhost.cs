@@ -95,15 +95,15 @@ namespace Netherlands3D.UI.Components
                 {
                     reorderLine.style.display = DisplayStyle.Flex;
                     top = parent.WorldToLocal(new Vector2(0, targetItem.ItemRoot.worldBound.yMin)).y;
-                    reorderLine.style.left = targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound.xMin;
-                    reorderLine.style.left = parent.WorldToLocal(targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound).xMax;
+                    reorderLine.style.left = targetItem.FoldoutWorldBound.xMin;
+                    reorderLine.style.left = parent.WorldToLocal(targetItem.FoldoutWorldBound).xMax;
                     break;
                 }
                 case LayerPanel.DropMode.Below:
                 {
                     reorderLine.style.display = DisplayStyle.Flex;
                     top = parent.WorldToLocal(new Vector2(0, targetItem.ItemRoot.worldBound.yMax)).y;
-                    reorderLine.style.left = parent.WorldToLocal(targetItem.ItemRoot.Q(className: "unity-tree-view__item-toggle").worldBound).xMax;
+                    reorderLine.style.left = parent.WorldToLocal(targetItem.FoldoutWorldBound).xMax;
                     break;
                 }
                 case LayerPanel.DropMode.Into:
