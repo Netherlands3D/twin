@@ -461,14 +461,22 @@ namespace Netherlands3D.UI.Panels
             float normalizedY = localY / hoveredItem.layout.height;
 
             if (normalizedY < dropMargin)
+            {
                 currentDropMode = DropMode.Above;
-            else if (normalizedY > (1-dropMargin))
+                hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
+            }
+            else if (normalizedY > (1 - dropMargin))
+            {
                 currentDropMode = DropMode.Below;
+                hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, false);
+            }
             else
+            {
                 currentDropMode = DropMode.Into;
+                hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, true);
+            }
 
             dragGhost.UpdateLine(targetItem, currentDropMode);
-            hoveredItem.ItemRoot.EnableInClassList(reparentTargetUSSClassName, true);
         }
 
         private void OnDraggingLayerItemEnded(Vector2 endPosition, LayerTreeViewItem source)
