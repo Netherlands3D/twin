@@ -145,10 +145,9 @@ namespace Netherlands3D.UI.Components
             itemRoot.AddComponentStylesheetByType(GetType());
 
             // Find the index of the unity tree view toggle
-            var treeToggle = itemRoot.Q("unity-tree-view__item-indent");
-            if (treeToggle != null)
+            if (indent != null)
             {
-                int toggleIndex = itemRoot.hierarchy.IndexOf(treeToggle);
+                int toggleIndex = itemRoot.hierarchy.IndexOf(indent);
 
                 itemRoot.hierarchy.Insert(toggleIndex, colorBar);
                 itemRoot.hierarchy.Insert(toggleIndex, isActiveToggle);
