@@ -27,8 +27,8 @@ namespace Netherlands3D.UI.Components
         private PropertyPanelBehaviour propertyPanelBehaviour;
 
         public LayerData LayerData => userData as LayerData;
-        public UnityEvent RequestTreeRefresh { get; } = new();
-        public UnityEvent RequestTreeRebuild { get; } = new();
+        internal UnityEvent RequestTreeRefresh { get; } = new();
+        internal UnityEvent RequestTreeRebuild { get; } = new();
 
         private IVisualElementScheduledItem clickTimer;
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
