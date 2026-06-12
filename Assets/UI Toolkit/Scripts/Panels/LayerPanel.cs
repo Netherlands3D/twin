@@ -30,6 +30,7 @@ namespace Netherlands3D.UI.Panels
 
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
+        private float dropMargin = 0.25f; //top 25% and bottom 25% are for reordering, 25%-75% is for reparenting
 
         private Vector2 panelDragPosition;
         private int siblingIndex;
@@ -459,9 +460,9 @@ namespace Netherlands3D.UI.Panels
             float localY = panelDragPosition.y - worldTop.y;
             float normalizedY = localY / hoveredItem.layout.height;
 
-            if (normalizedY < 0.25f)
+            if (normalizedY < dropMargin)
                 currentDropMode = DropMode.Above;
-            else if (normalizedY > 0.75f)
+            else if (normalizedY > (1-dropMargin))
                 currentDropMode = DropMode.Below;
             else
                 currentDropMode = DropMode.Into;
