@@ -56,9 +56,6 @@ namespace Netherlands3D.UI.Panels
             agreeToggle = this.Q<CheckboxToggle>("Voorwaarden");
 
             downloadButton.clicked += DownloadSelection;
-            //todo should we close the panel on download success??
-            //downloadButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.DownloadTile).Close; //<- this will clear also the selected area
-
 
             SetDropdownValues();
        
