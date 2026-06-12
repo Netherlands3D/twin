@@ -1,10 +1,7 @@
-using Netherlands3D.Services;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Services;
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.Services
 {
     public class LayerMessageService : MonoBehaviour
     {

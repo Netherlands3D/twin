@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Services
+namespace Netherlands3D.Twin.Services
 {
     public class SnackbarService : MonoBehaviour
     {

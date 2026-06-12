@@ -135,7 +135,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void OnParseErrorMessage(string message)
         {
-            ServiceLocator.GetService<SnackbarService>().DisplayError(message);
+            App.Snackbar.DisplayError(message); //todo check if this coupling is correct or should be done otherwise
         }
 
         protected override void RegisterEventListeners()
