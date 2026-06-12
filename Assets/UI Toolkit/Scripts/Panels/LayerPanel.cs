@@ -138,10 +138,7 @@ namespace Netherlands3D.UI.Panels
 
             ExpandToItem(newGroup.LayerData);
 
-            if (group)
-                RestoreSelection(layersToGroup);
-            else
-                RestoreSelection(new List<LayerData>(){newGroup.LayerData});
+            RestoreSelection(group ? layersToGroup : new List<LayerData>(){newGroup.LayerData});
         }
 
         private int GetTreeViewIndexForLayerData(LayerData layerData)
