@@ -52,8 +52,7 @@ MonoBehaviour:
   onSpawnedPrefab:
     m_PersistentCalls:
       m_Calls: []
-  inspectorPrefab: {fileID: 4151227325010422218, guid: c9c980a6d72fe49d6b1b7e465edd594f,
-    type: 3}
+  inspectorPrefab: {fileID: 0}
   panelType:
     _assemblyQualifiedName: Netherlands3D.UI.Panels.LayerPanel, eu.netherlands3d.twin,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
