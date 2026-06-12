@@ -28,7 +28,6 @@ namespace Netherlands3D.DataTypeAdapters
         public UnityEvent<string> OnLocalCacheFailed = new();
 
         private CancellationTokenSource cancellationTokenSource;
-        private SnackbarService snackbarService;
 
         private void Awake()
         {
@@ -50,39 +49,10 @@ namespace Netherlands3D.DataTypeAdapters
             dataTypeAdapterInterfaces = list.ToArray();
         }
 
-        private void OnEnable()
-        {
-            snackbarService = ServiceLocator.GetService<SnackbarService>();
-
-            CouldNotFindAdapter.AddListener(CouldNotFindAdapterMessage);
-            OnDownloadFailed.AddListener(DownloadFailedMessage);
-            OnLocalCacheFailed.AddListener(LocalCacheFailedMessage);
-        }
         private void OnDisable()
         {
             AbortChain();
-
-            CouldNotFindAdapter.RemoveListener(CouldNotFindAdapterMessage);
-            OnDownloadFailed.RemoveListener(DownloadFailedMessage);
-            OnLocalCacheFailed.RemoveListener(LocalCacheFailedMessage);
         }
-
-        private void CouldNotFindAdapterMessage(string message)
-        {
-            snackbarService.DisplayError($"Dit type brondata wordt niet ondersteund voor: {message}, probeer een andere.");            
-        }
-
-        private void DownloadFailedMessage(string message)
-        {
-            snackbarService.DisplayError($"Er is iets mis gegaan bij het downloaden van deze bron: {message}, probeer het opnieuw of controleer de CORS instellingen.");
-        }
-
-        private void LocalCacheFailedMessage(string message)
-        {
-            snackbarService.DisplayError($"Er is een leeg bestand ontvangen tijdens het downloaden van deze bron: {message}, probeer het opnieuw of controleer de CORS instellingen.");
-        }
-
-      
 
         //the void signature is needed for event listeners
         public void DetermineAdapter(Uri sourceUri, StoredAuthorization auth)

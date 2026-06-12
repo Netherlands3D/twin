@@ -24,18 +24,7 @@ namespace Netherlands3D.Services
             snackbarPanel = App.UIRoot.Root.Q<SnackbarPanel>();
             snackbarPanel.Show(false);           
         }
-
-        private void OnEnable()
-        {
-            App.Layers.LayerAdded.AddListener(OnLayerAdded);
-        }
-
-        private void OnDisable()
-        {
-            App.Layers.LayerAdded.RemoveListener(OnLayerAdded);
-        }
-
-        private void OnLayerAdded(LayerData layerData)
+        public void OnLayerAdded(LayerData layerData)
         {
             if (activeCounter > 0)
                 activeMessage += $" ,{layerData.Name}";

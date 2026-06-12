@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin.Services
         [SerializeField] private DataTypeChain fromUrlImporter;
         private VisualizationSpawner spawner;
 
+        public DataTypeChain DataTypeChain => fromUrlImporter;
+
         public UnityEvent<LayerData> LayerAdded { get; } = new();
         public UnityEvent<LayerData> LayerRemoved { get; } = new();
 
