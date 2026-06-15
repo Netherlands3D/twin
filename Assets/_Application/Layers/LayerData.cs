@@ -67,6 +67,9 @@ namespace Netherlands3D.Twin.Layers
             get => activeSelf;
             set
             {
+                if(value == activeSelf)
+                    return;
+                
                 activeSelf = value;
                 ActiveSelfChanged.Invoke(value);
                 UpdateActiveInHierarchy();
