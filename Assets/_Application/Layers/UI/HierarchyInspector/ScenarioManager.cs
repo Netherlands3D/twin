@@ -84,6 +84,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 folder.RemoveProperty(folder.GetProperty<FolderPropertyData>());
                 AddScenario(folder);
                 SetScenarioContainerEnabled(true);
+                if (selectedScenario != null)
+                    DeselectScenario(selectedScenario.Layer);
                 SelectScenario(folder);
             }
         }
@@ -113,7 +115,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             scenario.SetLayer(layer);
             scenarios.Add(scenario);
             scenario.VisibilityChanged.AddListener(v => OnScenarioVisiblityChanged(v, scenario));
-            
         }
 
         private void OnScenarioVisiblityChanged(bool visible, Scenario scenario)
