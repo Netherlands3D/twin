@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             int count = children.Count();
             for (int i = 0; i < count; i++)
             {
-                children[i].RootIndex = i;
+                children[i].RootId = i-1; //substract 1 so the rootLayer has index -1 instead of 0
             }
         }
 
