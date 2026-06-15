@@ -41,6 +41,10 @@ namespace Netherlands3D.UI.Panels
 
         private Button folderButton;
         private Button deleteButton;
+        
+        private bool doRefresh;
+        private bool doRebuild;
+        private bool doReselect;
 
         public enum DropMode
         {
@@ -83,9 +87,30 @@ namespace Netherlands3D.UI.Panels
 
             deleteButton = this.Q<Button>("DeleteButton");
             deleteButton.RegisterCallback<ClickEvent>(OnDeleteButtonClicked);
-            
+
             dragGhost = this.Q<LayerDragGhost>();
             dragGhost.SetVisible(false);
+            
+            schedule.Execute(() =>
+            {
+                if (doRebuild)
+                {
+                    RebuildTree();
+                    doRebuild = false;
+                }
+
+                if (doRefresh)
+                {
+                    treeView.RefreshItems();
+                    doRefresh = false;
+                }
+
+                if (doReselect)
+                {
+                    RestoreSelection();
+                    doReselect = false;
+                }
+            }).Every(0); // 0ms = runs every frame
         }
 
         private void OnBlur(BlurEvent evt)
@@ -95,7 +120,10 @@ namespace Netherlands3D.UI.Panels
                 treeView.panel,
                 new Vector2(pos.x, Screen.height - pos.y)
             );
-            if (!treeView.worldBound.Contains(panelPos))
+
+            var inPanel = treeView.worldBound.Contains(panelPos) && scrollView.contentContainer.worldBound.Contains(panelPos);
+            var overButton = deleteButton.worldBound.Contains(panelPos) || folderButton.worldBound.Contains(panelPos);
+            if (!inPanel && !overButton)
             {
                 treeView.ClearSelection();
                 referenceLayerItem = null;
@@ -104,7 +132,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnSelectionChanged(IEnumerable<object> selectedObjects)
         {
-            var layerDatas = selectedObjects.Cast<LayerData>().ToList();
+            var layerDatas = selectedObjects.Cast<LayerData>().ToList(); //Make a copy to ensure we have a collection that is not modified due to deselecting
 
             ProjectData.Current.RootLayer.DeselectAllLayers();
 
@@ -122,7 +150,8 @@ namespace Netherlands3D.UI.Panels
 
         private void CreateFolderAndGroupLayers(bool group)
         {
-            var layersToGroup = treeView.selectedItems.Cast<LayerData>().OrderBy(GetTreeViewIndexForLayerData); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList(); //make a copy with ToList because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            layersToGroup.OrderBy(l => l.RootId);
 
             var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
             var referenceLayer = referenceLayerItem?.LayerData;
@@ -142,28 +171,7 @@ namespace Netherlands3D.UI.Panels
 
             ExpandToItem(newGroup.LayerData);
 
-            RestoreSelection(group ? layersToGroup : new List<LayerData>(){newGroup.LayerData});
-        }
-
-        private int GetTreeViewIndexForLayerData(LayerData layerData)
-        {
-            // Walk up to collect ancestors
-            var ancestors = layerData.GetAncestors();
-
-            // Walk down using existing functions to find the ID
-            int parentId = -1;
-            int id = -1;
-
-            foreach (var ancestor in ancestors)
-            {
-                id = parentId == -1
-                    ? GetRootIdForLayerData(ancestor)
-                    : GetTreeViewIdForParentIndex(parentId, ancestor);
-
-                parentId = id;
-            }
-
-            return treeView.viewController.GetIndexForId(id);
+            RequestSelection(group ? layersToGroup : new List<LayerData>() { newGroup.LayerData });
         }
 
         private void ExpandToItem(LayerData layerData)
@@ -171,69 +179,26 @@ namespace Netherlands3D.UI.Panels
             // Walk up the hierarchy and collect all ancestors
             var ancestors = layerData.GetAncestors();
 
-            int parentId = -1;
-
             foreach (var ancestor in ancestors)
             {
-                int id = parentId == -1
-                    ? GetRootIdForLayerData(ancestor)
-                    : GetTreeViewIdForParentIndex(parentId, ancestor);
-
-                treeView.ExpandItem(id);
-                parentId = id;
+                treeView.ExpandItem(ancestor.RootId);
             }
         }
 
-        private int GetRootIdForLayerData(LayerData layerData)
+        private List<LayerData> selectionToRestore = new List<LayerData>();
+        private void RequestSelection(List<LayerData> selection)
         {
-            var parent = layerData.ParentLayer;
-
-            if (parent is not RootLayer)
-            {
-                throw new NullReferenceException("LayerData is not a child of RootLayer");
-            }
-
-            var rootIds = treeView.GetRootIds();
-            foreach (var id in rootIds)
-            {
-                if (treeView.GetItemDataForId<LayerData>(id) == layerData)
-                    return id;
-            }
-
-            throw new NullReferenceException("LayerData is not a present in the tree view");
+            doReselect = true;
+            selectionToRestore = selection;
         }
-
-        private int GetTreeViewIdForParentIndex(int parentId, LayerData layerData)
-        {
-            var childIds = treeView.viewController.GetChildrenIds(parentId);
-
-            foreach (var id in childIds)
-            {
-                if (treeView.GetItemDataForId<LayerData>(id) == layerData)
-                    return id;
-            }
-
-            throw new NullReferenceException("LayerData is not a child of parent: " + treeView.GetItemDataForId<LayerData>(parentId).Name);
-        }
-
-        private void RestoreSelection(IEnumerable<LayerData> layersToReselect)
+        
+        private void RestoreSelection()
         {
             var indicesToSelect = new List<int>();
 
-            foreach (var layerData in layersToReselect)
+            foreach (var layer in selectionToRestore)
             {
-                // Walk all indices to find which one has this LayerData as userData
-                for (int i = 0; i < treeView.itemsSource.Count; i++)
-                {
-                    var id = treeView.GetIdForIndex(i);
-                    var data = treeView.GetItemDataForId<LayerData>(id);
-
-                    if (data == layerData)
-                    {
-                        indicesToSelect.Add(i);
-                        break;
-                    }
-                }
+                indicesToSelect.Add(layer.RootId);
             }
 
             treeView.SetSelection(indicesToSelect);
@@ -260,7 +225,17 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
-        private void RebuildTree()
+        private void OnRequestRefresh()
+        {
+            doRefresh = true;
+        }
+
+        private void OnRequestRebuild()
+        {
+            doRebuild = true;
+        }
+        
+        public void RebuildTree()
         {
             PopulateLayerPanel(rootLayer);
         }
@@ -276,8 +251,8 @@ namespace Netherlands3D.UI.Panels
         private VisualElement MakeItem()
         {
             var layerRowElement = new LayerTreeViewItem();
-            layerRowElement.RequestTreeRefresh.AddListener(treeView.RefreshItems);
-            layerRowElement.RequestTreeRebuild.AddListener(RebuildTree);
+            layerRowElement.RequestTreeRefresh.AddListener(OnRequestRefresh);
+            layerRowElement.RequestTreeRebuild.AddListener(OnRequestRebuild);
             layerRowElement.DragStarted.AddListener(OnDraggingLayerItemStarted);
             layerRowElement.Dragging.AddListener(OnDraggingLayerItem);
             layerRowElement.DragEnded.AddListener(OnDraggingLayerItemEnded);
@@ -533,12 +508,13 @@ namespace Netherlands3D.UI.Panels
 
         private void ReparentToLayer(List<object> selectedLayers, LayerData newParent, int newSiblingIndex)
         {
-            var selection = selectedLayers.Cast<LayerData>();
+            var selection = selectedLayers.Cast<LayerData>().ToList(); //Make a copy to ensure we have a collection that is not modified due to the reparenting
             foreach (LayerData selectedLayer in selection)
             {
                 selectedLayer.SetParent(newParent, newSiblingIndex);
             }
-            RestoreSelection(selection);
+
+            RequestSelection(selection);
         }
     }
 }

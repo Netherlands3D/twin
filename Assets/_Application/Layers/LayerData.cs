@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Layers
 
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-        [JsonIgnore] protected int rootIndex = -1;
+        [JsonIgnore] protected int rootId = -1;
         [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();        
 
         [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
@@ -100,14 +100,14 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
 
         [JsonIgnore]
-        public int RootIndex
+        public int RootId
         {
-            get => rootIndex;
+            get => rootId;
             set
             {
-                if(value != rootIndex)
+                if(value != rootId)
                     LayerOrderChanged.Invoke(value); 
-                rootIndex = value;
+                rootId = value;
             }
         }
 
@@ -205,8 +205,8 @@ namespace Netherlands3D.Twin.Layers
             if (initialParent == null)
             {
                 parent = Root;
-                ParentOrSiblingIndexChanged.AddListener(Root.UpdateLayerTreeOrder);
             }
+            ParentOrSiblingIndexChanged.AddListener(Root.UpdateLayerTreeOrder);
         }
 
         public void SelectLayer(bool deselectOthers = false)
