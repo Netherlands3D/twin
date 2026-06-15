@@ -465,7 +465,7 @@ namespace Netherlands3D.UI.Panels
 
         private void ReparentToLayer(List<object> selectedLayers, LayerData newParent, int newSiblingIndex)
         {
-            var selection = selectedLayers.Cast<LayerData>();
+            var selection = selectedLayers.Cast<LayerData>().ToList(); //Make a copy to ensure we have a collection that is not modified due to the reparenting
             foreach (LayerData selectedLayer in selection)
             {
                 selectedLayer.SetParent(newParent, newSiblingIndex);
