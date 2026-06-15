@@ -1,3 +1,4 @@
+using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
@@ -9,11 +10,14 @@ namespace Netherlands3D.Twin.Services
         private SnackbarService snackbarService;
         private string activeMessage;
         private int activeCounter;
+        private DataTypeChain[] chains;
+        
 
         private void Awake()
         {
             layers = App.Layers;
             snackbarService = App.Snackbar;
+            chains = FindObjectsByType<DataTypeChain>(FindObjectsSortMode.None);
         }
 
         private void OnEnable()
@@ -21,9 +25,13 @@ namespace Netherlands3D.Twin.Services
             snackbarService.OnHideMessage.AddListener(OnHideSnackbar);
             layers.LayerAdded.AddListener(OnLayerAdded);
             layers.VisualizationCreated.AddListener(OnVisualizationCreated); // when the visualisation is created, we want to listen to potential error messages (eg. parse errors) to display
-            layers.DataTypeChain.CouldNotFindAdapter.AddListener(CouldNotFindAdapterMessage);
-            layers.DataTypeChain.OnDownloadFailed.AddListener(DownloadFailedMessage);
-            layers.DataTypeChain.OnLocalCacheFailed.AddListener(LocalCacheFailedMessage);
+
+            foreach (var chain in chains)
+            {
+                chain.CouldNotFindAdapter.AddListener(CouldNotFindAdapterMessage);
+                chain.OnDownloadFailed.AddListener(DownloadFailedMessage);
+                chain.OnLocalCacheFailed.AddListener(LocalCacheFailedMessage);
+            }
         }
 
         private void OnDisable()
@@ -31,9 +39,12 @@ namespace Netherlands3D.Twin.Services
             snackbarService.OnHideMessage.RemoveListener(OnHideSnackbar);
             layers.LayerAdded.RemoveListener(OnLayerAdded);
             layers.VisualizationCreated.RemoveListener(OnVisualizationCreated);
-            layers.DataTypeChain.CouldNotFindAdapter.RemoveListener(CouldNotFindAdapterMessage);
-            layers.DataTypeChain.OnDownloadFailed.RemoveListener(DownloadFailedMessage);
-            layers.DataTypeChain.OnLocalCacheFailed.RemoveListener(LocalCacheFailedMessage);
+            foreach (var chain in chains)
+            {
+                chain.CouldNotFindAdapter.RemoveListener(CouldNotFindAdapterMessage);
+                chain.OnDownloadFailed.RemoveListener(DownloadFailedMessage);
+                chain.OnLocalCacheFailed.RemoveListener(LocalCacheFailedMessage);
+            }
         }
 
         private void OnVisualizationCreated(LayerGameObject visualization)
