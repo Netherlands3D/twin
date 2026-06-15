@@ -150,9 +150,7 @@ namespace Netherlands3D.UI.Panels
         {
             // Walk up the hierarchy and collect all ancestors
             var ancestors = layerData.GetAncestors();
-
-            int parentId = -1;
-
+            
             foreach (var ancestor in ancestors)
             {
                 treeView.ExpandItem(ancestor.RootId);
