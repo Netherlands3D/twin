@@ -82,9 +82,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             credentialHandler = GetComponent<ICredentialHandler>();
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
-            parser.OnParseError.AddListener(OnParseErrorMessage);
+            parser.OnParseError.AddListener(VisualisationError.Invoke);
         }
-
+        
         protected override void OnVisualizationReady()
         {
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
@@ -133,11 +133,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        private void OnParseErrorMessage(string message)
-        {
-            App.Snackbar.DisplayError(message); //todo check if this coupling is correct or should be done otherwise
-        }
-
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
@@ -148,7 +143,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             base.UnregisterEventListeners();
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
-            parser.OnParseError.RemoveListener(OnParseErrorMessage);
+            parser.OnParseError.RemoveListener(VisualisationError.Invoke);
             credentialHandler?.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 

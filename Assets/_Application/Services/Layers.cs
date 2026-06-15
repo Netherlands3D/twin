@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.Services
 
         public UnityEvent<LayerData> LayerAdded { get; } = new();
         public UnityEvent<LayerData> LayerRemoved { get; } = new();
+        public UnityEvent<LayerGameObject> VisualizationCreated = new();
 
         private void Awake()
         {
@@ -118,8 +119,8 @@ namespace Netherlands3D.Twin.Services
             Visualize(layer, spawner, callback);
             return layer;
         }
-
-        private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
+        
+        private async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
         {
             try
             {
@@ -131,10 +132,13 @@ namespace Netherlands3D.Twin.Services
                 }
 
                 var visualization = await visualizationTask;
+                VisualizationCreated.Invoke(visualization);
 
                 if (layer.LayerData == null || layer.LayerData.IsDisposed)
                 {
-                    Debug.Log("Layer " + layer.LayerData.Name + " was disposed before the visualisation was spawned, destroying the visualisation");
+                    var errorMessage = "Layer " + layer.LayerData.Name + " was disposed before the visualisation was spawned, destroying the visualisation";
+                    Debug.Log(errorMessage);
+                    visualization.SendErrorMessage(errorMessage);
                     Destroy(visualization.gameObject);
                     return;
                 }
