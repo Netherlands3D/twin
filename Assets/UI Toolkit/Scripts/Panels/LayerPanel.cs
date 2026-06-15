@@ -122,7 +122,8 @@ namespace Netherlands3D.UI.Panels
 
         private void CreateFolderAndGroupLayers(bool group)
         {
-            var layersToGroup = treeView.selectedItems.Cast<LayerData>().OrderBy(GetTreeViewIndexForLayerData); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList();//make a copy with ToList because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            layersToGroup.OrderBy(l => l.RootId); 
 
             var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
             var referenceLayer = referenceLayerItem?.LayerData;
@@ -141,29 +142,8 @@ namespace Netherlands3D.UI.Panels
             RebuildTree();
 
             ExpandToItem(newGroup.LayerData);
-
-            RestoreSelection(group ? layersToGroup : new List<LayerData>(){newGroup.LayerData});
-        }
-
-        private int GetTreeViewIndexForLayerData(LayerData layerData)
-        {
-            // Walk up to collect ancestors
-            var ancestors = layerData.GetAncestors();
-
-            // Walk down using existing functions to find the ID
-            int parentId = -1;
-            int id = -1;
-
-            foreach (var ancestor in ancestors)
-            {
-                id = parentId == -1
-                    ? GetRootIdForLayerData(ancestor)
-                    : GetTreeViewIdForParentIndex(parentId, ancestor);
-
-                parentId = id;
-            }
-
-            return treeView.viewController.GetIndexForId(id);
+            
+            RestoreSelection(group ? layersToGroup : new List<LayerData>() { newGroup.LayerData });
         }
 
         private void ExpandToItem(LayerData layerData)
@@ -175,67 +155,19 @@ namespace Netherlands3D.UI.Panels
 
             foreach (var ancestor in ancestors)
             {
-                int id = parentId == -1
-                    ? GetRootIdForLayerData(ancestor)
-                    : GetTreeViewIdForParentIndex(parentId, ancestor);
-
-                treeView.ExpandItem(id);
-                parentId = id;
+                treeView.ExpandItem(ancestor.RootId);
             }
-        }
-
-        private int GetRootIdForLayerData(LayerData layerData)
-        {
-            var parent = layerData.ParentLayer;
-
-            if (parent is not RootLayer)
-            {
-                throw new NullReferenceException("LayerData is not a child of RootLayer");
-            }
-
-            var rootIds = treeView.GetRootIds();
-            foreach (var id in rootIds)
-            {
-                if (treeView.GetItemDataForId<LayerData>(id) == layerData)
-                    return id;
-            }
-
-            throw new NullReferenceException("LayerData is not a present in the tree view");
-        }
-
-        private int GetTreeViewIdForParentIndex(int parentId, LayerData layerData)
-        {
-            var childIds = treeView.viewController.GetChildrenIds(parentId);
-
-            foreach (var id in childIds)
-            {
-                if (treeView.GetItemDataForId<LayerData>(id) == layerData)
-                    return id;
-            }
-
-            throw new NullReferenceException("LayerData is not a child of parent: " + treeView.GetItemDataForId<LayerData>(parentId).Name);
         }
 
         private void RestoreSelection(IEnumerable<LayerData> layersToReselect)
         {
             var indicesToSelect = new List<int>();
-
-            foreach (var layerData in layersToReselect)
+            
+            foreach (var layer in layersToReselect)
             {
-                // Walk all indices to find which one has this LayerData as userData
-                for (int i = 0; i < treeView.itemsSource.Count; i++)
-                {
-                    var id = treeView.GetIdForIndex(i);
-                    var data = treeView.GetItemDataForId<LayerData>(id);
-
-                    if (data == layerData)
-                    {
-                        indicesToSelect.Add(i);
-                        break;
-                    }
-                }
+                indicesToSelect.Add(layer.RootId);
             }
-
+            
             treeView.SetSelection(indicesToSelect);
         }
 
