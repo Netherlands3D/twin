@@ -104,7 +104,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnSelectionChanged(IEnumerable<object> selectedObjects)
         {
-            var layerDatas = selectedObjects.Cast<LayerData>().ToList();
+            var layerDatas = selectedObjects.Cast<LayerData>().ToList(); //Make a copy to ensure we have a collection that is not modified due to deselecting
 
             ProjectData.Current.RootLayer.DeselectAllLayers();
 
