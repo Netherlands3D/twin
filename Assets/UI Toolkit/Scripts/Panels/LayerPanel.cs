@@ -120,8 +120,10 @@ namespace Netherlands3D.UI.Panels
                 treeView.panel,
                 new Vector2(pos.x, Screen.height - pos.y)
             );
-            
-            if (!scrollView.contentContainer.worldBound.Contains(panelPos) && !deleteButton.worldBound.Contains(panelPos) && !folderButton.worldBound.Contains(panelPos))
+
+            var inPanel = treeView.worldBound.Contains(panelPos) && scrollView.contentContainer.worldBound.Contains(panelPos);
+            var overButton = deleteButton.worldBound.Contains(panelPos) || folderButton.worldBound.Contains(panelPos);
+            if (!inPanel && !overButton)
             {
                 treeView.ClearSelection();
                 referenceLayerItem = null;
