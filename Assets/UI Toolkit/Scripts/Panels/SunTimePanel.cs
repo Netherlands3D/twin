@@ -1,5 +1,4 @@
-﻿using Codice.Client.BaseCommands;
-using Netherlands3D.Sun;
+﻿using Netherlands3D.Sun;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
@@ -7,7 +6,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
-using ScrollView = Netherlands3D.UI.Components.ScrollView;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -38,9 +36,10 @@ namespace Netherlands3D.UI.Panels
         private SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
 
         private ScreenshotContainer images;
-        //private ScrollView screenshotScrollView;
-        private VisualElement screenshotScrollView;
-
+        private VisualElement imagesContainer;
+        private VisualElement imagesRow1, imagesRow2, imagesRow3;
+        private const int maxRowCount = 5;
+        private Label timeLabel;
 
         public SunTimePanel()
         {
@@ -86,36 +85,42 @@ namespace Netherlands3D.UI.Panels
             else
                 images = screenshots;
 
-            screenshotScrollView = this.Q<VisualElement>("ImagesGrid");
-            screenshotScrollView.RegisterCallbackOnce<GeometryChangedEvent>(OnGridGeometryChanged);
+            imagesContainer = this.Q<VisualElement>("ImagesGrid");
+            imagesContainer.RegisterCallbackOnce<GeometryChangedEvent>(OnGridGeometryChanged);
         }
 
         private void OnGridGeometryChanged(GeometryChangedEvent evt)
         {
-            float containerWidth = screenshotScrollView.resolvedStyle.width;
+            float containerWidth = imagesContainer.resolvedStyle.width;
             if (containerWidth == 0) return;
 
-            screenshotScrollView.UnregisterCallback<GeometryChangedEvent>(OnGridGeometryChanged);
+            
+            imagesRow1 = imagesContainer.Q<VisualElement>("ImagesRow1");
+            AddImagesToRow(0, 4, containerWidth, imagesRow1);
+            imagesRow2 = imagesContainer.Q<VisualElement>("ImagesRow2");
+            AddImagesToRow(4, 5, containerWidth, imagesRow2);
+            imagesRow3 = imagesContainer.Q<VisualElement>("ImagesRow3");
+            AddImagesToRow(9, 3, containerWidth, imagesRow3);
 
-            PopulateGrid(containerWidth);
         }
 
-        private void PopulateGrid(float containerWidth)
+        private void AddImagesToRow(int startIndex, int count, float containerWidth, VisualElement row)
         {
-            screenshotScrollView.Clear();
+            row.Clear();
+            const float margin = 3f; //todo solve this margin to be a constant from uss?
+            float cellWidth = (containerWidth - margin * 2 * (maxRowCount + 1)) / maxRowCount;
 
-            const int columns = 4;
-            const float margin = 3f; // matches USS margin: 3px
-            float cellWidth = (containerWidth - margin * 2 * (columns + 1)) / columns;
-
-            foreach (var tex in images.screenshots)
+            for(int i = startIndex; i < startIndex + count; i++)
             {
+                var tex = images.screenshots[i];
+                if (tex == null) continue;
+               
                 var cell = new VisualElement();
                 cell.AddToClassList("sun-shadow-panel__image-cell");
                 cell.style.backgroundImage = new StyleBackground(tex);
                 cell.style.width = cellWidth;
                 cell.style.height = cellWidth * ((float)tex.texture.height / tex.texture.width);
-                screenshotScrollView.Add(cell);
+                row.Add(cell);
             }
         }
 

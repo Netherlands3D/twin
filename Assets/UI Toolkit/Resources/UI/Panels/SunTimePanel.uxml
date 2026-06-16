@@ -10,30 +10,35 @@
 
     <nl3d:ContentContainer text="Tijd en datum aanpassen" leading-icon="Sun">
         <nl3d:SunDial name="SunDial" class="sun-time-panel__sun-dial" />
-
         <ui:VisualElement class="inspector__section">
             <ui:Label text="Tijd" class="sun-time-panel__field-label" />
             <nl3d:TimeField name="TimeField" class="sun-time-panel__time-field time-field--centered" />
         </ui:VisualElement>
-
         <ui:VisualElement class="inspector__section">
             <ui:Label text="Datum" class="sun-time-panel__field-label" />
             <nl3d:DateField name="DateField" class="sun-time-panel__date-field" />
         </ui:VisualElement>
-
         <ui:VisualElement class="inspector__section">
             <nl3d:Button name="NowButton" button-style="IconOnly" icon="ResetTime" class="sun-time-panel__reset-button" />
             <ui:Label text="Herstel tijd en datum" class="sun-time-panel__field-label sun-time-panel__field-label--grow" />
         </ui:VisualElement>
-
         <ui:Label text="Animatie tijdverloop" class="inspector__section-header" />
-
         <nl3d:SimulationSpeedControls name="SimulationSpeedControls" />
     </nl3d:ContentContainer>
-     <nl3d:ContentContainer text="Schaduw studie" leading-icon="Clock">
+    <nl3d:ContentContainer text="Schaduw studie" leading-icon="Clock">
         <ui:VisualElement name="ImagesGrid" class="sun-shadow-panel__images">
-           <!--  <ui:VisualElement name="ImagesGridContainer" /> -->
-         </ui:VisualElement>
-      </nl3d:ContentContainer>
-
+            <ui:VisualElement name="ImagesRow1" class="sun-shadow-panel__image-row"/>
+            <ui:VisualElement name="ImagesRow2" class="sun-shadow-panel__image-row"/>
+            <ui:VisualElement name="ImagesRow3" class="sun-shadow-panel__image-row"/>
+        </ui:VisualElement>
+        <ui:Label text="Schaduwstudie maken" class="sun-shadow-panel__title" />
+            <ui:Label text="Exporteer voor de volgende data en tijden een schermafbeelding vanuit het huidige camerastandpunt en perspectief:" class="sun-shadow-panel__text" />
+            <ui:VisualElement class="sun-shadow-panel__bullet-row">
+                <ui:Label text="•" class="sun-shadow-panel__bullet" />
+                <ui:Label text="" class="sun-shadow-panel__text" />
+            </ui:VisualElement>
+            <ui:Label text="Exporteer voor de volgende data en tijden een schermafbeelding vanuit het huidige camerastandpunt en perspectief:" class="sun-shadow-panel__text" />
+            <nl3d:Hyperlink text="Toelichting standaard data" url="https://iplo.nl/thema/licht/bezonning/"/>
+            <ui:Label text="De afbeeldingen worden als .png bestand opgeslagen in een .zip map in uw standaard downloads map." class="sun-shadow-panel__text-explain" />
+    </nl3d:ContentContainer>
 </ui:UXML>

@@ -1,6 +1,7 @@
 ﻿.sun-time-panel {
     --sun-time-label-width: var(--spacing-20);
     --sun-time-label-spacing: var(--spacing-3);
+    --sun-shadow-cell-margin: 3px;
     
     display: flex;
     flex-direction: column;
@@ -50,15 +51,25 @@
 }
 
 .sun-shadow-panel__images { /* .unity-scroll-view__content-container.unity-scroll-view__content-container--vertical { */
+    flex-direction: column;   
+    margin-bottom: var(--spacing-3);   
+}
+
+.sun-shadow-panel__image-row{
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
-        padding: 0;
-    margin: 0;
-    justify-content: space-evenly;
+    margin-bottom: var(--sun-shadow-cell-margin);
 }
 
-.sun-shadow-panel__image-cell {
-    
-    margin: 3px;
+.sun-shadow-panel__image-cell {    
+    margin: var(--sun-shadow-cell-margin);
+}
+
+.sun-shadow-panel__title{
+    -unity-font-definition: var(--nl3d-default-font-semi-bold);
+}
+
+.sun-shadow-panel__text{
+    white-space: normal;
 }
