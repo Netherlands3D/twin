@@ -57,7 +57,7 @@
 
 .sun-shadow-panel__image-row{
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: no-wrap;
     align-items: flex-start;
     margin-bottom: var(--sun-shadow-cell-margin);
 }
