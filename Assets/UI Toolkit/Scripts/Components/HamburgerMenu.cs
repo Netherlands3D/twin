@@ -21,7 +21,7 @@ namespace Netherlands3D.UI.Components
 
         private Button OpenProjectButton => this.Q<Button>("Open");
         private Button SaveProjectButton => this.Q<Button>("Save");
-        private Button SettingsButton => this.Q<Button>("Settings");
+        private ToolButton SettingsButton => this.Q<ToolButton>("Settings");
         private Button HelpButton => this.Q<Button>("Help");
         
         [UxmlAttribute("text")]
