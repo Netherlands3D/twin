@@ -7,7 +7,8 @@
     name="SettingsPanel" 
     class="settings-panel"
 >
-    <nl3d:ContentContainer leading-icon="AdjustmentsHorizontal" text="Weergave instellingen">
+    <nl3d:ScrollView>
+    <nl3d:ContentContainer name="SettingsSection" leading-icon="AdjustmentsHorizontal" text="Weergave instellingen" class="settings-panel__section">
         <nl3d:RadioButtonGroup name="QualitySettings" choices="Laag (high performance), Middel, Hoog" label="Kwaliteit"/>
         <ui:VisualElement name="spacer" class="settings-panel__spacer"/>
         <ui:VisualElement>
@@ -15,4 +16,9 @@
             <nl3d:ListView name="Functionalities"/>
         </ui:VisualElement>
     </nl3d:ContentContainer>
+    <nl3d:ContentContainer name="FPVSection" leading-icon="FPV" text="First Person View instellingen" class="settings-panel__section">
+        <nl3d:CheckboxToggle name="MouseLockToggle" LabelText="Mouse Locking (backspace om muis te ontgrendelen)"/>
+        <nl3d:Slider name="MouseSensitivitySlider" label="Muisgevoeligheid" low-value="1" high-value="5"/>
+    </nl3d:ContentContainer>
+    </nl3d:ScrollView>
 </ui:UXML>
