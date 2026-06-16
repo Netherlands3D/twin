@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Configuration;
-using Netherlands3D.Twin.Configuration.UI;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Quality;
 using Netherlands3D.UI_Toolkit;
@@ -13,7 +12,7 @@ using ListView = UnityEngine.UIElements.ListView;
 using QualitySettings = UnityEngine.QualitySettings;
 using RadioButtonGroup = UnityEngine.UIElements.RadioButtonGroup;
 using Slider = Netherlands3D.UI.Components.Slider;
-using Toggle = Netherlands3D.UI.Components.Toggle;
+using Toggle = UnityEngine.UIElements.Toggle;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -53,6 +52,7 @@ namespace Netherlands3D.UI.Panels
             functionalitiesListView.bindItem = BindFunctionalityItem;
             functionalitiesListView.itemsSource = configuration.Functionalities;
             
+            //when we get many more different sections (per functionality) we should consider making dedicated 
             fpvSection = this.Q<ContentContainer>("FPVSection");
             mouseLockToggle = fpvSection.Q<Toggle>("MouseLockToggle");
             mouseSensitivitySlider = fpvSection.Q<Slider>("MouseSensitivitySlider");
@@ -92,14 +92,24 @@ namespace Netherlands3D.UI.Panels
         {
             fpvFunctionality?.OnEnable.AddListener(SetFPVSectionActive);
             fpvFunctionality?.OnDisable.AddListener(SetFPVSectionInactive);
+            
+            var isLocked = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.GetMouseLockModus();
+            mouseLockToggle.SetValueWithoutNotify(isLocked);
+            mouseLockToggle.RegisterValueChangedCallback(OnMouseLockModeChanged);
+
+            var sensitivity = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().FirstPersonCamera.GetSensitivity();
+            mouseSensitivitySlider.SetValueWithoutNotify(sensitivity * 100);
+            mouseSensitivitySlider.RegisterValueChangedCallback(OnSensitivityChanged);
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             fpvFunctionality?.OnEnable.AddListener(SetFPVSectionActive);
             fpvFunctionality?.OnDisable.AddListener(SetFPVSectionInactive);
-        }
 
+            mouseLockToggle.UnregisterValueChangedCallback(OnMouseLockModeChanged);
+            mouseSensitivitySlider.UnregisterValueChangedCallback(OnSensitivityChanged);
+        }
 
         private void SetFPVSectionActive()
         {
@@ -114,6 +124,16 @@ namespace Netherlands3D.UI.Panels
         private void SetFPVSectionActive(bool show)
         {
             fpvSection.EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+        }
+        
+        private void OnSensitivityChanged(ChangeEvent<float> evt)
+        {
+            ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().FirstPersonCamera.SetSensitivity(evt.newValue / 100);
+        }
+
+        private void OnMouseLockModeChanged(ChangeEvent<bool> evt)
+        {
+            ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.SetMouseLockModus(evt.newValue);
         }
     }
 }

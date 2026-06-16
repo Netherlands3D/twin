@@ -18,7 +18,7 @@
     </nl3d:ContentContainer>
     <nl3d:ContentContainer name="FPVSection" leading-icon="FPV" text="First Person View instellingen" class="settings-panel__section">
         <nl3d:CheckboxToggle name="MouseLockToggle" LabelText="Mouse Locking (backspace om muis te ontgrendelen)"/>
-        <nl3d:Slider name="MouseSensitivitySlider" label="Muisgevoeligheid" low-value="1" high-value="5"/>
+        <nl3d:Slider name="MouseSensitivitySlider" label="Muisgevoeligheid" low-value="1" high-value="100"/>
     </nl3d:ContentContainer>
     </nl3d:ScrollView>
 </ui:UXML>
