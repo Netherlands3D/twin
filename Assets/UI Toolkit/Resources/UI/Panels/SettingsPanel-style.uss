@@ -1,2 +1,7 @@
 .settings-panel {
 }
+
+.settings-panel__spacer{
+    height: var(--spacing-0_5);
+    background-color: var(--color-blue-200);
+}
