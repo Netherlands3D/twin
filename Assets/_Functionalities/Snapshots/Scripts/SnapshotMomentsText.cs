@@ -8,6 +8,7 @@ using static Netherlands3D.Snapshots.PeriodicSnapshots;
 
 namespace Netherlands3D.Functionalities.Snapshots
 {
+    //todo UI Toolkit: this script can be removed
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class SnapshotsMomentsText : MonoBehaviour
     {

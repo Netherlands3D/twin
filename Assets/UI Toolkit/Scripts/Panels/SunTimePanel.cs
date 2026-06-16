@@ -1,10 +1,14 @@
-﻿using Netherlands3D.Sun;
+﻿using Netherlands3D.Snapshots;
+using Netherlands3D.Sun;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Netherlands3D.Snapshots.PeriodicSnapshots;
 using Button = Netherlands3D.UI.Components.Button;
 
 namespace Netherlands3D.UI.Panels
@@ -38,8 +42,10 @@ namespace Netherlands3D.UI.Panels
         private ScreenshotContainer images;
         private VisualElement imagesContainer;
         private VisualElement imagesRow1, imagesRow2, imagesRow3;
+        private Label textRow1, textRow2, textRow3;
         private const int maxRowCount = 5;
-        private Label timeLabel;
+        
+        private PeriodicSnapshots periodicSnapshotsService;
 
         public SunTimePanel()
         {
@@ -48,7 +54,7 @@ namespace Netherlands3D.UI.Panels
         public SunTimePanel(ScriptableObject imageContainer) : this()
         {
             sunTime = Services.ServiceLocator.GetService<SunTime>();
-          
+            periodicSnapshotsService = Services.ServiceLocator.GetService<PeriodicSnapshots>();
 
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -102,6 +108,36 @@ namespace Netherlands3D.UI.Panels
             imagesRow3 = imagesContainer.Q<VisualElement>("ImagesRow3");
             AddImagesToRow(9, 3, containerWidth, imagesRow3);
 
+            textRow1 = this.Q<Label>("TextRow1");
+            textRow1.text = GetMomentsText(0, 4);
+            textRow2 = this.Q<Label>("TextRow2");
+            textRow2.text = GetMomentsText(4, 5);
+            textRow3 = this.Q<Label>("TextRow3");
+            textRow3.text = GetMomentsText(9, 3);
+
+        }
+
+        private const string dayMonthSeperator = "-";
+        private const string aboutString = " om ";
+        private const string timeSuffix = ":00";
+
+        public string GetMomentsText(int startIndex, int count)
+        {
+            StringBuilder builder = new StringBuilder();
+            List<Moment> moments = periodicSnapshotsService.Moments;
+           // moments.Sort((a, b) => a.ToDateTime().CompareTo(b.ToDateTime()));
+           for(int i = startIndex; i < startIndex + count; i++)
+           {
+                Moment moment = moments[i];               
+                //example     21-03 om 12:00
+                builder.Append(moment.day.ToString("D2"));
+                builder.Append(dayMonthSeperator);
+                builder.Append(moment.month.ToString("D2"));
+                builder.Append(aboutString);
+                builder.Append(moment.hour.ToString());
+                builder.AppendLine(timeSuffix);
+            }
+            return builder.ToString();
         }
 
         private void AddImagesToRow(int startIndex, int count, float containerWidth, VisualElement row)

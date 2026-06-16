@@ -73,3 +73,9 @@
 .sun-shadow-panel__text{
     white-space: normal;
 }
+
+.sun-shadow-panel__bullet-row{
+    flex-direction: row;
+    align-items: flex-start;
+    flex-shrink: 0;
+}

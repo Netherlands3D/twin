@@ -32,13 +32,21 @@
             <ui:VisualElement name="ImagesRow3" class="sun-shadow-panel__image-row"/>
         </ui:VisualElement>
         <ui:Label text="Schaduwstudie maken" class="sun-shadow-panel__title" />
-            <ui:Label text="Exporteer voor de volgende data en tijden een schermafbeelding vanuit het huidige camerastandpunt en perspectief:" class="sun-shadow-panel__text" />
-            <ui:VisualElement class="sun-shadow-panel__bullet-row">
-                <ui:Label text="•" class="sun-shadow-panel__bullet" />
-                <ui:Label text="" class="sun-shadow-panel__text" />
-            </ui:VisualElement>
-            <ui:Label text="Exporteer voor de volgende data en tijden een schermafbeelding vanuit het huidige camerastandpunt en perspectief:" class="sun-shadow-panel__text" />
-            <nl3d:Hyperlink text="Toelichting standaard data" url="https://iplo.nl/thema/licht/bezonning/"/>
-            <ui:Label text="De afbeeldingen worden als .png bestand opgeslagen in een .zip map in uw standaard downloads map." class="sun-shadow-panel__text-explain" />
+        <ui:Label text="Exporteer voor de volgende data en tijden een schermafbeelding vanuit het huidige camerastandpunt en perspectief:" class="sun-shadow-panel__text" />
+        <ui:VisualElement class="sun-shadow-panel__bullet-row">
+            <ui:Label text="•" class="sun-shadow-panel__bullet" />
+            <ui:Label name="TextRow1" class="sun-shadow-panel__text" />
+        </ui:VisualElement>
+        <ui:VisualElement class="sun-shadow-panel__bullet-row">
+            <ui:Label text="•" class="sun-shadow-panel__bullet" />
+            <ui:Label name="TextRow2" class="sun-shadow-panel__text" />
+        </ui:VisualElement>
+        <ui:VisualElement class="sun-shadow-panel__bullet-row">
+            <ui:Label text="•" class="sun-shadow-panel__bullet" />
+            <ui:Label name="TextRow3" class="sun-shadow-panel__text" />
+        </ui:VisualElement>
+        <ui:Label text="Exporteer voor de volgende data en tijden een schermafbeelding vanuit het huidige camerastandpunt en perspectief:" class="sun-shadow-panel__text" />
+        <nl3d:Hyperlink text="Toelichting standaard data" url="https://iplo.nl/thema/licht/bezonning/"/>
+        <ui:Label text="De afbeeldingen worden als .png bestand opgeslagen in een .zip map in uw standaard downloads map." class="sun-shadow-panel__text-explain" />
     </nl3d:ContentContainer>
 </ui:UXML>
