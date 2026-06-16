@@ -1,18 +1,18 @@
 ﻿using System;
 using Netherlands3D.Sun;
-using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
+using UnityEngine;
 
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement, InspectorPanel]
     public partial class SunTimePanel : BaseInspectorContentPanel
     {
-        public override string Title => "Zonpositie";
+        public override string Title => "Zonnestand";
 
         // SunTime stores speed as seconds/second internally.
         // The UI shows speed in hours/second so we apply this factor.
@@ -35,12 +35,22 @@ namespace Netherlands3D.UI.Panels
         private SimulationSpeedControls simulationSpeedControls;
         private SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
 
-       
+        private ScreenshotContainer images;
+
 
         public SunTimePanel()
         {
+        }
+
+        public SunTimePanel(ScriptableObject imageContainer) : this()
+        {
             sunTime = Services.ServiceLocator.GetService<SunTime>();
             
+            if(imageContainer is not ScreenshotContainer screenshots)
+                Debug.LogError("missing images for schaduwstudie, please provide a screenshotcontainer scriptableobject");
+            else
+                images = screenshots;
+
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
             

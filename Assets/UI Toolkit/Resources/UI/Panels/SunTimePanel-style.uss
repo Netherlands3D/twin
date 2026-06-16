@@ -48,3 +48,22 @@
     flex-shrink: 1;
     -unity-text-align: middle-left;
 }
+
+.sun-shadow-panel__images {
+    max-height: 320px;
+}
+
+.sun-shadow-panel__images .unity-scroll-view__content-container{
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.sun-shadow-panel__image-cell {
+    width: 100px;
+    height: 70px;
+    margin: 3px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px;
+}

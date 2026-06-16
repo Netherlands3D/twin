@@ -30,5 +30,10 @@
 
         <nl3d:SimulationSpeedControls name="SimulationSpeedControls" />
     </nl3d:ContentContainer>
+     <nl3d:ContentContainer text="Schaduw studie" leading-icon="Clock">
+        <nl3d:ScrollView name="ImagesGrid" class="sun-shadow-panel__images">
+            <ui:VisualElement name="ImagesGridContainer" />
+        </nl3d:ScrollView>
+      </nl3d:ContentContainer>
 
 </ui:UXML>
