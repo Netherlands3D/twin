@@ -8,13 +8,11 @@
     class="settings-panel"
 >
     <nl3d:ContentContainer leading-icon="AdjustmentsHorizontal" text="Weergave instellingen">
-        <ui:VisualElement>
-            <nl3d:RadioButtonGroup name="QualitySettings" choices="Laag (high performance), Middel, Hoog" label="Kwaliteit"/>
-        </ui:VisualElement>
+        <nl3d:RadioButtonGroup name="QualitySettings" choices="Laag (high performance), Middel, Hoog" label="Kwaliteit"/>
         <ui:VisualElement name="spacer" class="settings-panel__spacer"/>
         <ui:VisualElement>
-            <ui:Label text="Optionele functionaliteiten" />
-            <nl3d:ListView/>
+            <ui:Label text="Optionele functionaliteiten" class="text-header"/>
+            <nl3d:ListView name="Functionalities"/>
         </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
