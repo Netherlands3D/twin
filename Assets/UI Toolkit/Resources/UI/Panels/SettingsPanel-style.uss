@@ -6,5 +6,5 @@
     background-color: var(--color-blue-200);
 }
 .settings-panel__section{
-    margin-bottom: var(--spacing-2);
+    margin-bottom: var(--spacing-1);
 }
