@@ -79,3 +79,7 @@
     align-items: flex-start;
     flex-shrink: 0;
 }
+
+.sun-shadow-panel__button{
+    align-self: flex-start;
+}

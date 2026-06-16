@@ -51,6 +51,7 @@ namespace Netherlands3D.UI.Panels
         {
         }
 
+        //todo it would be nicer to have the scriptableobject support moments and images combined so we dont have to get them from periodicsnapshots
         public SunTimePanel(ScriptableObject imageContainer) : this()
         {
             sunTime = Services.ServiceLocator.GetService<SunTime>();
