@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Codice.Client.BaseCommands;
 using Netherlands3D.Sun;
-using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit.Scripts.Panels;
+using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
-using UnityEngine;
+using ScrollView = Netherlands3D.UI.Components.ScrollView;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -36,6 +38,8 @@ namespace Netherlands3D.UI.Panels
         private SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
 
         private ScreenshotContainer images;
+        //private ScrollView screenshotScrollView;
+        private VisualElement screenshotScrollView;
 
 
         public SunTimePanel()
@@ -45,11 +49,7 @@ namespace Netherlands3D.UI.Panels
         public SunTimePanel(ScriptableObject imageContainer) : this()
         {
             sunTime = Services.ServiceLocator.GetService<SunTime>();
-            
-            if(imageContainer is not ScreenshotContainer screenshots)
-                Debug.LogError("missing images for schaduwstudie, please provide a screenshotcontainer scriptableobject");
-            else
-                images = screenshots;
+          
 
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -77,6 +77,46 @@ namespace Netherlands3D.UI.Panels
                 sunTime.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
                 sunTime.isAnimatingChanged.RemoveListener(OnIsAnimatingChanged);
             });
+
+
+
+
+            if (imageContainer is not ScreenshotContainer screenshots)
+                Debug.LogError("missing images for schaduwstudie, please provide a screenshotcontainer scriptableobject");
+            else
+                images = screenshots;
+
+            screenshotScrollView = this.Q<VisualElement>("ImagesGrid");
+            screenshotScrollView.RegisterCallbackOnce<GeometryChangedEvent>(OnGridGeometryChanged);
+        }
+
+        private void OnGridGeometryChanged(GeometryChangedEvent evt)
+        {
+            float containerWidth = screenshotScrollView.resolvedStyle.width;
+            if (containerWidth == 0) return;
+
+            screenshotScrollView.UnregisterCallback<GeometryChangedEvent>(OnGridGeometryChanged);
+
+            PopulateGrid(containerWidth);
+        }
+
+        private void PopulateGrid(float containerWidth)
+        {
+            screenshotScrollView.Clear();
+
+            const int columns = 4;
+            const float margin = 3f; // matches USS margin: 3px
+            float cellWidth = (containerWidth - margin * 2 * (columns + 1)) / columns;
+
+            foreach (var tex in images.screenshots)
+            {
+                var cell = new VisualElement();
+                cell.AddToClassList("sun-shadow-panel__image-cell");
+                cell.style.backgroundImage = new StyleBackground(tex);
+                cell.style.width = cellWidth;
+                cell.style.height = cellWidth * ((float)tex.texture.height / tex.texture.width);
+                screenshotScrollView.Add(cell);
+            }
         }
 
         void OnNowButtonClicked(ClickEvent _)
