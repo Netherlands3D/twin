@@ -164,6 +164,7 @@ namespace Netherlands3D.UI.Components
         {
             var btn = new Button { name = $"Crumb{index}" };
             btn.AddToClassList("crumb-link");
+            btn.ShowIcon = Button.ButtonStyle.Normal;
             btn.LabelText = text ?? string.Empty;
             btn.clicked += () => GoTo(index);
             
