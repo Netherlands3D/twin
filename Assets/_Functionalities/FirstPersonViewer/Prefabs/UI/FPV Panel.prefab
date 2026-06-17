@@ -2897,7 +2897,6 @@ GameObject:
   - component: {fileID: 1113854796155858908}
   - component: {fileID: 3786414258801945320}
   - component: {fileID: 9158230434932633248}
-  - component: {fileID: 3136937631438768198}
   m_Layer: 5
   m_Name: ToolbarButton_Pointer
   m_TagString: Untagged
@@ -3059,50 +3058,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.Tool, eu.netherlands3d.twin
         m_MethodName: Close
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &3136937631438768198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4875962263667687263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  functionalities:
-  - {fileID: 11400000, guid: afc2ee87715890948a93c9f9558e4464, type: 2}
-  OnEnableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4875962263667687263}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  OnDisableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4875962263667687263}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
