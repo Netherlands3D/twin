@@ -2,15 +2,15 @@ Shader "Netherlands3D/PointCloudVertexColor"
 {
     Properties
     {
-        _PointSize ("Point Size", Float) = 3
-        _PointSizeReferenceDistance ("Point Size Reference Distance", Float) = 250
-        _MinPointSize ("Min Point Size", Float) = 2
-        _MaxPointSize ("Max Point Size", Float) = 14
+        _PointSize ("Point Size", Float) = 4
+        _PointSizeReferenceDistance ("Point Size Reference Distance", Float) = 200
+        _MinPointSize ("Min Point Size", Float) = 1
+        _MaxPointSize ("Max Point Size", Float) = 8
     }
 
     SubShader
     {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
+        Tags { "RenderType"="Opaque" "Queue"="Geometry" "RenderPipeline"="UniversalPipeline" }
         Pass
         {
             Cull Off

@@ -6,6 +6,7 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.LASImporter.Parsing;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -17,6 +18,7 @@ using UnityEngine.Rendering;
 
 namespace Netherlands3D.Functionalities.LASImporter
 {
+    [RequireComponent(typeof(WorldTransform))]
     public class LASPointCloudLayer : LayerGameObject, IVisualizationWithPropertyData
     {
         [SerializeField] private int maxLoadedPoints = 2000000;
@@ -46,6 +48,8 @@ namespace Netherlands3D.Functionalities.LASImporter
         private Vector3 previousPosition;
         private Quaternion previousRotation;
         private Vector3 previousScale;
+        private WorldTransform worldTransform;
+        private Coordinate? georeferencedAnchor;
 
         private static readonly int PointSizeShaderProperty = Shader.PropertyToID("_PointSize");
         private static readonly int PointSizeReferenceDistanceShaderProperty = Shader.PropertyToID("_PointSizeReferenceDistance");
@@ -54,6 +58,12 @@ namespace Netherlands3D.Functionalities.LASImporter
 
         public override BoundingBox Bounds => loadedBounds;
         public IReadOnlyDictionary<byte, int> ClassificationCounts => classificationCounts;
+
+        protected override void OnVisualizationInitialize()
+        {
+            if (!TryGetComponent(out worldTransform))
+                worldTransform = gameObject.AddComponent<WorldTransform>();
+        }
 
         protected override void OnVisualizationReady()
         {
@@ -177,6 +187,7 @@ namespace Netherlands3D.Functionalities.LASImporter
                     ? CoordinateSystems.To3D(header.CoordinateSystem)
                     : CoordinateSystem.Undefined;
 
+                var anchor = georeferencedAnchor;
                 var centerX = (header.MinX + header.MaxX) * 0.5;
                 var centerY = (header.MinY + header.MaxY) * 0.5;
                 var centerZ = (header.MinZ + header.MaxZ) * 0.5;
@@ -192,7 +203,10 @@ namespace Netherlands3D.Functionalities.LASImporter
 
                     var color = point.HasColor ? point.Color : LASClassificationColors.ForClassification(point.Classification);
                     var unityPosition = header.HasCoordinateSystem
-                        ? new Coordinate(pointCoordinateSystem, point.X, point.Y, point.Z).ToUnity()
+                        ? CoordinateDeltaToLocalUnity(
+                            new Coordinate(pointCoordinateSystem, point.X, point.Y, point.Z),
+                            anchor.Value
+                        )
                         : new Vector3((float)(point.X - centerX), (float)(point.Z - centerZ), (float)(point.Y - centerY));
 
                     AddPointToChunk(new RenderPoint(unityPosition, color, point.Classification));
@@ -222,8 +236,15 @@ namespace Netherlands3D.Functionalities.LASImporter
             if (lasHeader.HasCoordinateSystem)
             {
                 var boundsCoordinateSystem = CoordinateSystems.To3D(lasHeader.CoordinateSystem);
-                transform.position = Vector3.zero;
-                transform.rotation = Quaternion.identity;
+                georeferencedAnchor = new Coordinate(
+                    boundsCoordinateSystem,
+                    (lasHeader.MinX + lasHeader.MaxX) * 0.5,
+                    (lasHeader.MinY + lasHeader.MaxY) * 0.5,
+                    (lasHeader.MinZ + lasHeader.MaxZ) * 0.5
+                );
+
+                worldTransform.MoveToCoordinate(georeferencedAnchor.Value);
+                worldTransform.SetRotation(Quaternion.identity);
                 transform.localScale = Vector3.one;
                 CacheCurrentTransform();
                 loadedBounds = new BoundingBox(
@@ -233,6 +254,7 @@ namespace Netherlands3D.Functionalities.LASImporter
                 return;
             }
 
+            georeferencedAnchor = null;
             var centerX = (lasHeader.MinX + lasHeader.MaxX) * 0.5;
             var centerY = (lasHeader.MinY + lasHeader.MaxY) * 0.5;
             var centerZ = (lasHeader.MinZ + lasHeader.MaxZ) * 0.5;
@@ -262,6 +284,26 @@ namespace Netherlands3D.Functionalities.LASImporter
             worldBounds.Encapsulate(transform.TransformPoint(new Vector3(localMin.x, localMax.y, localMax.z)));
             worldBounds.Encapsulate(transform.TransformPoint(localMax));
             return worldBounds;
+        }
+
+        private static Vector3 CoordinateDeltaToLocalUnity(Coordinate coordinate, Coordinate anchor)
+        {
+            var connectedCoordinate = coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            var connectedAnchor = anchor.Convert(CoordinateSystems.connectedCoordinateSystem);
+            var difference = connectedCoordinate - connectedAnchor;
+            var relativePosition = new Vector3(
+                (float)difference.value1,
+                (float)difference.value2,
+                (float)difference.value3
+            );
+
+            if (CoordinateSystems.getCoordinateSystemType(CoordinateSystems.connectedCoordinateSystem) ==
+                CoordinateSystemType.Geocentric)
+            {
+                return new Vector3(-relativePosition.x, relativePosition.z, -relativePosition.y);
+            }
+
+            return new Vector3(relativePosition.x, relativePosition.z, relativePosition.y);
         }
 
         private void SetTransformEditingAvailability()
@@ -454,7 +496,8 @@ namespace Netherlands3D.Functionalities.LASImporter
 
         private int CalculateLodStride(Camera camera, Bounds worldBounds, PointCloudChunk chunk)
         {
-            var baseStride = Mathf.Max(1, Mathf.CeilToInt(chunk.Points.Count / (float)Math.Max(1, maxPointsPerChunkMesh)));
+            var maxRenderablePoints = chunk.GetMaxRenderablePointCount(maxPointsPerChunkMesh);
+            var baseStride = Mathf.Max(1, Mathf.CeilToInt(chunk.Points.Count / (float)Math.Max(1, maxRenderablePoints)));
             var radius = Mathf.Max(1f, worldBounds.extents.magnitude);
             var distance = camera.orthographic
                 ? camera.orthographicSize
@@ -586,12 +629,15 @@ namespace Netherlands3D.Functionalities.LASImporter
                     indexFormat = SystemInfo.supports32bitsIndexBuffer ? IndexFormat.UInt32 : IndexFormat.UInt16
 #endif
                 };
+                mesh.MarkDynamic();
 
                 var meshFilter = GameObject.AddComponent<MeshFilter>();
                 meshFilter.sharedMesh = mesh;
 
                 var meshRenderer = GameObject.AddComponent<MeshRenderer>();
                 meshRenderer.sharedMaterial = material;
+                meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
+                meshRenderer.receiveShadows = false;
             }
 
             public void AddPoint(RenderPoint point)
@@ -605,12 +651,17 @@ namespace Netherlands3D.Functionalities.LASImporter
                 IsDirty = true;
             }
 
+            public int GetMaxRenderablePointCount(int requestedMaxPoints)
+            {
+                return mesh != null && mesh.indexFormat == IndexFormat.UInt32
+                    ? requestedMaxPoints
+                    : Mathf.Min(requestedMaxPoints, MaxPointsFor16BitIndexBuffer);
+            }
+
             public void RebuildMesh(int stride, int maxPoints)
             {
                 CurrentStride = Mathf.Max(1, stride);
-                var pointLimit = mesh.indexFormat == IndexFormat.UInt32
-                    ? maxPoints
-                    : Mathf.Min(maxPoints, MaxPointsFor16BitIndexBuffer);
+                var pointLimit = GetMaxRenderablePointCount(maxPoints);
 
                 vertices.Clear();
                 colors.Clear();
