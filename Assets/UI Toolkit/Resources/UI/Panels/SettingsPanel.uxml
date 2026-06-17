@@ -7,7 +7,7 @@
     name="SettingsPanel" 
     class="settings-panel"
 >
-    <nl3d:ScrollView>
+    <nl3d:ScrollView> <!-- todo put the scroll view in all inspectorpanels? -->
     <nl3d:ContentContainer name="SettingsSection" leading-icon="AdjustmentsHorizontal" text="Weergave instellingen" class="settings-panel__section">
         <nl3d:RadioButtonGroup name="QualitySettings" choices="Laag (high performance), Middel, Hoog" label="Kwaliteit"/>
         <ui:VisualElement name="spacer" class="settings-panel__spacer"/>
