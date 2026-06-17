@@ -14,6 +14,7 @@ Shader "Netherlands3D/PointCloudVertexColor"
         Pass
         {
             Cull Off
+            Offset -2, -2
 
             HLSLPROGRAM
             #pragma vertex vert

@@ -58,7 +58,7 @@ MonoBehaviour:
   pointSizeReferenceDistance: 200
   minPointSizePixels: 1
   maxPointSizePixels: 8
-  materialTemplate: {fileID: 0}
+  materialTemplate: {fileID: 2100000, guid: cdbba6fd9f5848a49b1d1eaa4ac93e79, type: 2}
 --- !u!114 &1376849245051100003
 MonoBehaviour:
   m_ObjectHideFlags: 0

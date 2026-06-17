@@ -580,7 +580,11 @@ namespace Netherlands3D.Functionalities.LASImporter
                 mesh = new Mesh
                 {
                     name = GameObject.name,
+#if UNITY_WEBGL
+                    indexFormat = IndexFormat.UInt16
+#else
                     indexFormat = SystemInfo.supports32bitsIndexBuffer ? IndexFormat.UInt32 : IndexFormat.UInt16
+#endif
                 };
 
                 var meshFilter = GameObject.AddComponent<MeshFilter>();
