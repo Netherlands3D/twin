@@ -1,5 +1,9 @@
 @import url("TextField-style.uss");
 
+.editable-name-field {
+    flex-direction: row;
+}
+
 .editable-name-field__label{
     margin-top: 0;
     margin-bottom: 0;
