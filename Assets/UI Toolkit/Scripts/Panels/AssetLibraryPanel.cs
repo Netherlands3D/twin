@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement, InspectorPanel]
     public partial class AssetLibraryPanel : BaseInspectorContentPanel
     {
-        public override string Title => "Toevoegen";
+        public override string Title => "Bibliotheek";
         
         private AssetLibrary.AssetLibrary assetLibrary;
         private ListView listView;
