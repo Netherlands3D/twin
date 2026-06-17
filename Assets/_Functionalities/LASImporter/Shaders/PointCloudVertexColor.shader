@@ -13,6 +13,8 @@ Shader "Netherlands3D/PointCloudVertexColor"
         Tags { "RenderType"="Opaque" "Queue"="Geometry" }
         Pass
         {
+            Cull Off
+
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -48,14 +50,10 @@ Shader "Netherlands3D/PointCloudVertexColor"
                 float distanceSize = _PointSize * (_PointSizeReferenceDistance / cameraDistance);
                 float pointSize = clamp(distanceSize, _MinPointSize, _MaxPointSize);
                 float4 centerHCS = TransformWorldToHClip(positionWS);
-                float worldUnitsPerPixel = (2.0 * abs(centerHCS.w) / UNITY_MATRIX_P._m11) / _ScreenParams.y;
-                float halfSizeWorld = worldUnitsPerPixel * pointSize * 0.5;
+                float2 clipUnitsPerPixel = 2.0 / _ScreenParams.xy;
+                centerHCS.xy += input.corner * pointSize * 0.5 * clipUnitsPerPixel * centerHCS.w;
 
-                float3 cameraRightWS = UNITY_MATRIX_I_V[0].xyz;
-                float3 cameraUpWS = UNITY_MATRIX_I_V[1].xyz;
-                float3 offsetWS = (cameraRightWS * input.corner.x + cameraUpWS * input.corner.y) * halfSizeWorld;
-
-                output.positionHCS = TransformWorldToHClip(positionWS + offsetWS);
+                output.positionHCS = centerHCS;
                 output.corner = input.corner;
                 return output;
             }

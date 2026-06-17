@@ -550,6 +550,8 @@ namespace Netherlands3D.Functionalities.LASImporter
 
         private sealed class PointCloudChunk
         {
+            private const int MaxPointsFor16BitIndexBuffer = 16000;
+
             public Vector2Int Key { get; }
             public List<RenderPoint> Points { get; } = new();
             public GameObject GameObject { get; private set; }
@@ -578,7 +580,7 @@ namespace Netherlands3D.Functionalities.LASImporter
                 mesh = new Mesh
                 {
                     name = GameObject.name,
-                    indexFormat = IndexFormat.UInt32
+                    indexFormat = SystemInfo.supports32bitsIndexBuffer ? IndexFormat.UInt32 : IndexFormat.UInt16
                 };
 
                 var meshFilter = GameObject.AddComponent<MeshFilter>();
@@ -602,12 +604,16 @@ namespace Netherlands3D.Functionalities.LASImporter
             public void RebuildMesh(int stride, int maxPoints)
             {
                 CurrentStride = Mathf.Max(1, stride);
+                var pointLimit = mesh.indexFormat == IndexFormat.UInt32
+                    ? maxPoints
+                    : Mathf.Min(maxPoints, MaxPointsFor16BitIndexBuffer);
+
                 vertices.Clear();
                 colors.Clear();
                 corners.Clear();
                 indices.Clear();
 
-                for (int i = 0; i < Points.Count && vertices.Count / 4 < maxPoints; i += CurrentStride)
+                for (int i = 0; i < Points.Count && vertices.Count / 4 < pointLimit; i += CurrentStride)
                 {
                     var point = Points[i];
                     AddBillboardPoint(point);
