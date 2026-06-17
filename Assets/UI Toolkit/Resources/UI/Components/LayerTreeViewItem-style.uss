@@ -27,10 +27,11 @@
     margin-right: var(--spacing-1);
 }
 
-.layer-tree-view-item__name-label {
+.layer-tree-view-item__name-label{
+    flex-basis: 0; /* ensures the toggle is not pushed out of view*/
     flex-grow: 1;
-    margin: 0 var(--spacing-3) 0 0;
-    margin-right: 0;
+    flex-shrink: 1;
+    overflow: hidden;
 }
 
 .unity-tree-view__item .layer-tree-view-item__property-toggle{
