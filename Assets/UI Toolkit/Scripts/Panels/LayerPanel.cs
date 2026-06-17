@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -91,6 +89,10 @@ namespace Netherlands3D.UI.Panels
             dragGhost = this.Q<LayerDragGhost>();
             dragGhost.SetVisible(false);
             
+            App.Layers.LayerAdded.AddListener(OnLayerHierarchyChanged);
+            App.Layers.LayerRemoved.AddListener(OnLayerHierarchyChanged);
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            
             schedule.Execute(() =>
             {
                 if (doRebuild)
@@ -111,6 +113,17 @@ namespace Netherlands3D.UI.Panels
                     doReselect = false;
                 }
             }).Every(0); // 0ms = runs every frame
+        }
+
+        private void OnLayerHierarchyChanged(LayerData changedLayer)
+        {
+            OnRequestRebuild();
+        }
+        
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            App.Layers.LayerAdded.RemoveListener(OnLayerHierarchyChanged);
+            App.Layers.LayerRemoved.RemoveListener(OnLayerHierarchyChanged);
         }
 
         private void OnBlur(BlurEvent evt)
