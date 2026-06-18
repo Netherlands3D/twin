@@ -32,6 +32,7 @@ MonoBehaviour:
   panelType:
     _assemblyQualifiedName: Netherlands3D.UI.Panels.SettingsPanel, eu.netherlands3d.twin,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  panelArgs: []
+  panelArgs:
+  - {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
   functionalityPrefabs: []
   open: 0
