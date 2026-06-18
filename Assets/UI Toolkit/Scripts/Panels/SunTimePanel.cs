@@ -26,17 +26,15 @@ namespace Netherlands3D.UI.Panels
         private SunDial sunDial;
         private SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
 
-        private NumberField timeField;
-        private NumberField TimeField => timeField ??= this.Q<NumberField>("TimeField");
+        private TimeField timeField;
+        private TimeField TimeField => timeField ??= this.Q<TimeField>("TimeField");
 
         private Button nowButton;
         private Button NowButton => nowButton ??= this.Q<Button>("NowButton");
 
         private SimulationSpeedControls simulationSpeedControls;
         private SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
-
-       
-
+        
         public SunTimePanel()
         {
             sunTime = Services.ServiceLocator.GetService<SunTime>();
@@ -46,7 +44,8 @@ namespace Netherlands3D.UI.Panels
             
             SunDial.TimeChanged += OnSunDialTimeChanged;
             DateField.SubmitEvent += OnDateChanged;
-            TimeField.InputField.RegisterValueChangedCallback(OnTimeChanged);
+            TimeField.InputField.RegisterCallback<BlurEvent>(_ =>OnTimeChanged());
+            TimeField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>OnTimeChanged());
 
             NowButton.RegisterCallback<ClickEvent>(OnNowButtonClicked);
 
@@ -108,7 +107,7 @@ namespace Netherlands3D.UI.Panels
             sunTime?.ToggleAnimation(isPlaying);
         }
 
-        private void OnTimeChanged(ChangeEvent<string> _)
+        private void OnTimeChanged()
         {
             UnityEngine.Debug.Log($"Time: {sunTime.Time}");
             var time = timeField.GetValueAsTime();
