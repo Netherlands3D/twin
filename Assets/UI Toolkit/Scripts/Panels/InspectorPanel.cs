@@ -1,6 +1,4 @@
 using System;
-using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.ExtensionMethods;
@@ -27,37 +25,14 @@ namespace Netherlands3D.UI.Components
         {
             get => Header?.text;
             set { if (Header != null) Header.text = value; }
-        }
-
-        private ToolbarInspector toolbar;
-        public ToolbarInspector Toolbar => toolbar ??= this.Q<ToolbarInspector>();
-        private ToolbarInspector.ToolbarStyle _toolbarStyleCache = ToolbarInspector.ToolbarStyle.Normal;
-
-        /// <summary>
-        /// Forwards the toolbar style to the child ToolbarInspector component.
-        /// </summary>
-        [UxmlAttribute("toolbar-style")]
-        public ToolbarInspector.ToolbarStyle ToolbarStyle
-        {
-            get => Toolbar != null ? Toolbar.Style : _toolbarStyleCache;
-            set
-            {
-                _toolbarStyleCache = value;
-                if (Toolbar != null) Toolbar.Style = value;
-            }
-        }
+        }               
 
         public VisualElement Content => this.Q("Content");
 
         public InspectorPanel()
         {
             this.CloneComponentTree("Panels");
-            this.AddComponentStylesheet("Panels");
-
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                Toolbar.Style = _toolbarStyleCache;
-            });
+            this.AddComponentStylesheet("Panels");           
         }
 
         public void Open()

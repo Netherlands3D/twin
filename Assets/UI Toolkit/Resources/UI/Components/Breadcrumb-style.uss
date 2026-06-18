@@ -1,7 +1,7 @@
-.breadcrumb {
+.breadcrumb {   
     flex-direction: row;
     flex-shrink: 0;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: nowrap;
 }
 
@@ -10,6 +10,7 @@
     width: var(--spacing-6);
     height: var(--spacing-6);
     margin-right: var(--spacing-1);
+    align-self: center;
 }
 
 .breadcrumb .backbutton {
@@ -21,7 +22,7 @@
     flex-wrap: wrap;
     align-items: center;
     flex-grow: 1;
-    flex-shrink: 0;
+    flex-shrink: 1;
 }
 
 .breadcrumb .crumb-link.button {

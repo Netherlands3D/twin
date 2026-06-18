@@ -5,5 +5,5 @@
   editor-extension-mode="False"
   class="listview-item"
 >
-  
+   <ui:VisualElement name="ContentContainer" class="listview-item__container"/>
 </ui:UXML>
