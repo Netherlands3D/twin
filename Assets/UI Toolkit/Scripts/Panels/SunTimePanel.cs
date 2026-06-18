@@ -4,6 +4,7 @@ using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 
@@ -26,8 +27,8 @@ namespace Netherlands3D.UI.Panels
         private SunDial sunDial;
         private SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
 
-        private TimeField timeField;
-        private TimeField TimeField => timeField ??= this.Q<TimeField>("TimeField");
+        private NumberField timeField;
+        private NumberField TimeField => timeField ??= this.Q<NumberField>("TimeField");
 
         private Button nowButton;
         private Button NowButton => nowButton ??= this.Q<Button>("NowButton");
@@ -109,9 +110,8 @@ namespace Netherlands3D.UI.Panels
 
         private void OnTimeChanged()
         {
-            UnityEngine.Debug.Log($"Time: {sunTime.Time}");
-            var time = timeField.GetValueAsTime();
-            sunTime?.SetTime(time.Hour, time.Minute, 0);
+            var dt = timeField.GetValueAsTime();
+            sunTime?.SetTime(dt.Hour, dt.Minute, 0);
         }
 
         private void OnDateChanged(int day, int month, int year)

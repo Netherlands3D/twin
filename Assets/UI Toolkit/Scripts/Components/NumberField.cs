@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
@@ -12,6 +13,15 @@ namespace Netherlands3D.UI.Components
         Small
     }
 
+    /// <summary>
+    /// Determines how the underlying double value of a NumberField is displayed and parsed.
+    /// </summary>
+    public enum NumberFieldFormat
+    {
+        Double,
+        Time
+    }
+
     [UxmlElement]
     public partial class NumberField : VisualElement
     {
@@ -19,6 +29,7 @@ namespace Netherlands3D.UI.Components
         private const string DefaultPlaceholder = "-";
         private const string unparseableDecimalSeparator = ",";
         private const string parseableDecimalSeparator = ".";
+        private const char timeSeparator = ':';
 
         private VisualElement labelContainer;
         private Label labelText;
@@ -26,7 +37,9 @@ namespace Netherlands3D.UI.Components
 
         private string label = "X";
         private string placeholderText = DefaultPlaceholder;
+        private bool placeholderExplicitlySet;
         private NumberFieldStyle numberFieldStyle = NumberFieldStyle.Default;
+        private NumberFieldFormat valueFormat = NumberFieldFormat.Double;
         private float scrollStep = 1f;
         private string unitCharacter = string.Empty;
         private string formatString;
@@ -54,8 +67,8 @@ namespace Netherlands3D.UI.Components
             get => placeholderText;
             set
             {
-
-                placeholderText = value;
+                placeholderExplicitlySet = !string.IsNullOrWhiteSpace(value);
+                placeholderText = string.IsNullOrWhiteSpace(value) ? DefaultPlaceholder : value;
                 ApplyPlaceholder();
             }
         }
@@ -69,6 +82,24 @@ namespace Netherlands3D.UI.Components
                 numberFieldStyle = value;
                 UpdateStyleClass();
                 ApplyLabelTypography();
+            }
+        }
+        
+        [UxmlAttribute("value-format")]
+        public NumberFieldFormat ValueFormat
+        {
+            get => valueFormat;
+            set
+            {
+                valueFormat = value;
+
+                // If the user hasn't set an explicit placeholder, switch to a sensible
+                // default for the chosen format (e.g. "00:00" instead of "-").
+                if (!placeholderExplicitlySet)
+                {
+                    placeholderText = DefaultPlaceholder;
+                    ApplyPlaceholder();
+                }
             }
         }
 
@@ -177,6 +208,7 @@ namespace Netherlands3D.UI.Components
             var newValue = currentValue + direction * scrollStep;
 
             // We cannot set the InputField.text directly, we need to set it and manually invoke the change events
+            var oldValue = InputField.text;
             InputField.SetValueWithoutNotify(FormatValue(newValue));
 
             using var changeEvent = NavigationSubmitEvent.GetPooled();
@@ -191,31 +223,99 @@ namespace Netherlands3D.UI.Components
             InputField.SetValueWithoutNotify(FormatValue(newValue));
         }
         
-        protected virtual string FormatValue(double value)
+        public void SetValueWithoutNotify(DateTime dateTime)
         {
-            return $"{value.ToString(formatString, CultureInfo.InvariantCulture)}{UnitCharacter}";
+            var totalMinutes = dateTime.Hour * 60 + dateTime.Minute;
+            SetValueWithoutNotify((double)totalMinutes);
+        }
+        
+        private string FormatValue(double value)
+        {
+            string formatted = string.Empty;
+            switch (valueFormat)
+            {
+                case NumberFieldFormat.Time:
+                    formatted = FormatAsTime(value);
+                    break;
+                case NumberFieldFormat.Double:
+                    formatted = value.ToString(formatString, CultureInfo.InvariantCulture);
+                    break;
+                default:
+                    formatted = value.ToString(formatString, CultureInfo.InvariantCulture);
+                    break;
+            }
+
+            return $"{formatted}{UnitCharacter}";
+        }
+
+        private static string FormatAsTime(double totalMinutes)
+        {
+            var isNegative = totalMinutes < 0;
+            var absMinutes = Math.Abs(totalMinutes);
+
+            var hours = (int)(absMinutes / 60);
+            var minutes = (int)Math.Round(absMinutes % 60, MidpointRounding.AwayFromZero);
+
+            // Rounding can push minutes to exactly 60 (e.g. 89.6 minutes -> 1h, 60m)
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours += 1;
+            }
+
+            var sign = isNegative ? "-" : string.Empty;
+            return $"{sign}{hours:00}{timeSeparator}{minutes:00}";
         }
 
         public double GetValueAsDouble()
         {
-            return ParseValue(InputField.text);
-        }
-        
-        protected virtual double ParseValue(string text)
-        {
+            if (valueFormat == NumberFieldFormat.Time)
+                return ParseTimeAsTotalMinutes(InputField.text);
+
             //remove the unit character and set the correct decimal separator
             var numberFormat = new NumberFormatInfo
             {
                 NumberDecimalSeparator = parseableDecimalSeparator
             };
+            
+            var text = InputField.text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            if(UnitCharacter.Length > 0)
+            text = text.Replace(UnitCharacter, string.Empty);
 
-            var cleaned = text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            if (UnitCharacter.Length > 0)
-                cleaned = cleaned.Replace(UnitCharacter, string.Empty);
-
-            double.TryParse(cleaned, NumberStyles.Float, numberFormat, out var value);
+            double.TryParse(text, NumberStyles.Float, numberFormat, out var value);
 
             return value;
+        }
+        
+        public DateTime GetValueAsTime()
+        {
+            return DateTime.Today.AddMinutes(GetValueAsDouble());
+        }
+
+        private double ParseTimeAsTotalMinutes(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return 0d;
+
+            var trimmed = text.Trim();
+            if (UnitCharacter.Length > 0)
+                trimmed = trimmed.Replace(UnitCharacter, string.Empty).Trim();
+
+            var isNegative = trimmed.StartsWith("-");
+            if (isNegative)
+                trimmed = trimmed.Substring(1);
+
+            var parts = trimmed.Split(timeSeparator);
+
+            if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var hours))
+                return 0d;
+
+            var minutes = 0;
+            if (parts.Length > 1)
+                int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out minutes);
+
+            var totalMinutes = (double)(hours * 60 + minutes);
+            return isNegative ? -totalMinutes : totalMinutes;
         }
 
         public int GetValueAsInt()
