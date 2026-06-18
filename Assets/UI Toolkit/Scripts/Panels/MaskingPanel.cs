@@ -1,14 +1,10 @@
-using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 using TreeView = Netherlands3D.UI.Components.TreeView;
-
 
 namespace Netherlands3D.UI.Panels
 {

@@ -1,0 +1,41 @@
+@import url("LayerTreeViewItem-style.uss");
+
+.layer-drag-ghost{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.icon.layer-tree-view-item__visibility-toggle{
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
+}
+
+.icon.layer-tree-view-item__foldout-toggle{
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
+}
+
+.layer-tree-view-item__name-label{
+    margin-left: var(--spacing-1);
+}
+
+.layer-tree-view-item__container{
+    position: absolute;
+    border-width: var(--spacing-0_5);
+    opacity: 0.5;
+}
+
+.layer-drag-ghost__reorder-line{
+    opacity: 1;
+    position: absolute;
+    height: 2px;
+    margin-top: -1px; /*offset for the height so the line is vertically centered*/
+    background-color: var(--color-blue-900);
+    right: 0;
+}
+
+.credentials-needed .layer-tree-view-item__visibility-toggle{
+    --icon-image: var(--icon-warning);
+    -unity-background-image-tint-color: var(--color-warning);
+}

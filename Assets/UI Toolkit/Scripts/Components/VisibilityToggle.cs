@@ -11,7 +11,7 @@ namespace Netherlands3D.UI.Components
         Visible = IconImage.Visibility, 
         Invisible = IconImage.Invisible, 
         PartiallyVisible = IconImage.VisibilityMixed,
-        VisibleInInvisible //todo: not implemented yet
+        VisibleInInvisible = IconImage.VisibleInInvisible
     }
     
     [UxmlElement]
@@ -32,24 +32,13 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            
-            
+            SetStateFromLayerState(value, true,  true); //we cannot calculate the true state from the toggle without the rest of the hierarchy, this should be done from the tree if needed
             this.RegisterValueChangedCallback(OnValueChanged);
-            SetImage(value);
         }
 
         private void OnValueChanged(ChangeEvent<bool> evt)
         {
-            SetImage(evt.newValue);
-        }
-
-        private void SetImage(bool newValue)
-        {
-            Image = newValue ? VisibilityState.Visible : VisibilityState.Invisible;
-            if (newValue)
-                Icon.Color = ThemeColor.Blue900;
-            else
-                Icon.Color = ThemeColor.Blue200;
+            SetStateFromLayerState(evt.newValue, true,  true); //we cannot calculate the true state from the toggle without the rest of the hierarchy, this should be done from the tree if needed
         }
 
         public void Show(bool show)
@@ -60,6 +49,26 @@ namespace Netherlands3D.UI.Components
         public void SetState(VisibilityState state)
         {
             Image = state;
+        }
+        
+        public void SetStateFromLayerState(bool activeSelf, bool activeInHierarchy, bool allChildrenActive)
+        {
+            if (!activeSelf)
+            {
+                SetState(VisibilityState.Invisible);
+            }
+            else if (activeSelf && !activeInHierarchy)
+            {
+                SetState(VisibilityState.VisibleInInvisible);
+            }
+            else if (allChildrenActive)
+            {
+                SetState(VisibilityState.Visible);
+            }
+            else
+            {
+                SetState(VisibilityState.PartiallyVisible);
+            }
         }
     }
 }

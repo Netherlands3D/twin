@@ -98,5 +98,14 @@ namespace Netherlands3D.UI.ExtensionMethods
             // Trim trailing dash if present
             return sb.ToString().Trim('-');
         }
+        
+        public static void SetPickingModeRecursive(this VisualElement element, PickingMode mode)
+        {
+            element.pickingMode = mode;
+            foreach (var child in element.Children())
+            {
+                SetPickingModeRecursive(child, mode);
+            }
+        }
     }
 }
