@@ -33,19 +33,17 @@ namespace Netherlands3D.UI.Panels
         
         public SettingsPanel()
         {
-        }
-
-        public SettingsPanel(Configuration configuration) : this()
-        {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
             settingsSection = this.Q<ContentContainer>("SettingsSection");
             
             qualityRadioButtonGroup = settingsSection.Q<RadioButtonGroup>("QualitySettings");
             qualityRadioButtonGroup.value = QualitySettings.GetQualityLevel();
             qualityRadioButtonGroup.RegisterValueChangedCallback(OnQualitySettingsChanged);
+        }
 
+        public SettingsPanel(Configuration configuration) : this()
+        {
             functionalitiesListView = settingsSection.Q<ListView>("Functionalities");
             functionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             functionalitiesListView.makeItem = MakeFunctionalityItem;
