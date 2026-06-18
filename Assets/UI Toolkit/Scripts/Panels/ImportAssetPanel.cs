@@ -14,8 +14,7 @@ using TextField = Netherlands3D.UI.Components.TextField;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
-    [InspectorPanel]
+    [UxmlElement, InspectorPanel]
     public partial class ImportAssetPanel : BaseInspectorContentPanel
     {
         public override string Title => "Importeren";

@@ -426,7 +426,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                                 else
                                     continue;
                             }
-                            mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootIndex);
+                            mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootId);
                         }
                     }
                 }
@@ -436,7 +436,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     if (subObjectParent != null)
                     {
                         if (subObjectParent.LayerData.ActiveInHierarchy)
-                            mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootIndex);
+                            mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootId);
                     }
                 }
                 orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();

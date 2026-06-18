@@ -5,22 +5,25 @@ using UnityEngine.UIElements;
 public class DragManipulator : PointerManipulator
 {
     private Vector3 start;
-    private bool active;
+    private bool isTracking;
+    private bool isDragging;
     private int pointerId;
-    private Vector2 startSize;
 
-    protected float movementDeadzone = 32f;
+    protected float movementDeadzone;
     protected MouseButton dragMouseButton = MouseButton.LeftMouse;
     
     public UnityEvent<Vector2> DragStarted = new(); //parameter is startPosition
     public UnityEvent<Vector2> Dragging = new(); //parameter is delta
     public UnityEvent<Vector2> DragEnded = new(); //parameter is endPosition
     
-    public DragManipulator()
+    private Vector2 previousPosition;
+    
+    public DragManipulator(float deadzone)
     {
+        this.movementDeadzone = deadzone;
         pointerId = -1;
         activators.Add(new ManipulatorActivationFilter { button = dragMouseButton });
-        active = false;
+        isTracking = false;
     }
 
     protected override void RegisterCallbacksOnTarget()
@@ -28,6 +31,7 @@ public class DragManipulator : PointerManipulator
         target.RegisterCallback<PointerDownEvent>(OnPointerDown);
         target.RegisterCallback<PointerMoveEvent>(OnPointerMove);
         target.RegisterCallback<PointerUpEvent>(OnPointerUp);
+        target.RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
     }
 
     protected override void UnregisterCallbacksFromTarget()
@@ -35,56 +39,72 @@ public class DragManipulator : PointerManipulator
         target.UnregisterCallback<PointerDownEvent>(OnPointerDown);
         target.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
         target.UnregisterCallback<PointerUpEvent>(OnPointerUp);
+        target.UnregisterCallback<PointerLeaveEvent>(OnPointerLeave);
     }
 
     private void OnPointerDown(PointerDownEvent e)
     {
-        if (active)
-        {
-            e.StopImmediatePropagation();
-            return;
-        }
-
         if (!CanStartManipulation(e)) return;
         
-        StartDragging(e);
-        e.StopPropagation();
+        start = e.position;
+        previousPosition = e.position;
+        pointerId = e.pointerId;
+        isDragging = movementDeadzone <= 0;
+        isTracking = true;
+        
+        if (isDragging)
+        {
+            target.CapturePointer(pointerId);
+            OnDragStarted(start);
+            DragStarted.Invoke(start);
+        }
     }
 
     private void OnPointerMove(PointerMoveEvent e)
     {
-        if (GuardPointerIsDragging()) return;
+        if (!isTracking) return;
 
-        Vector2 diff = e.localPosition - start;
+        if (!isDragging)
+        {
+            var totalMove = (Vector2)e.position - (Vector2)start;
+            if (totalMove.magnitude < movementDeadzone) return;
 
-        OnDrag(diff);
-        Dragging.Invoke(diff);
+            start = e.position;
+            previousPosition = e.position;
+            isDragging = true;
+            target.CapturePointer(pointerId);
+            OnDragStarted(start);
+            DragStarted.Invoke(start);
+            return;
+        }
+        
+        Vector2 delta = (Vector2)e.position - previousPosition;
+        previousPosition = e.position;
 
-        e.StopPropagation();
-    }
-    private void OnPointerUp(PointerUpEvent e)
-    {
-        if (GuardPointerIsDragging() || !CanStopManipulation(e)) return;
-        
-        OnDragEnded(e.localPosition);
-        
-        active = false;
-        target.ReleaseMouse();
-        
-        e.StopPropagation();
-        DragEnded.Invoke(e.localPosition);
+        OnDrag(delta);
+        Dragging.Invoke(delta);
     }
     
-    private void StartDragging(PointerDownEvent e)
+    private void OnPointerUp(PointerUpEvent e)
     {
-        start = e.localPosition;
-        pointerId = e.pointerId;
-
-        active = true;
-        target.CapturePointer(pointerId);
+        if (!isTracking || !CanStopManipulation(e)) return;
         
-        OnDragStarted(start);
-        DragStarted.Invoke(start);
+        bool wasDragging = isDragging;
+    
+        isTracking = false;
+        isDragging = false;
+        target.ReleasePointer(pointerId);
+
+        if (!wasDragging) return;
+        
+        OnDragEnded(e.position);
+        DragEnded.Invoke(e.position);
+    }
+    
+    private void OnPointerLeave(PointerLeaveEvent evt)
+    {
+        if(isTracking || isDragging)
+            target.CapturePointer(pointerId); //capture the pointer when dragging off the element, 
     }
 
     protected virtual void OnDragStarted(Vector2 startPosition)
@@ -98,6 +118,4 @@ public class DragManipulator : PointerManipulator
     protected virtual void OnDragEnded(Vector2 endPosition)
     {
     }
-
-    protected bool GuardPointerIsDragging() => !active || !target.HasPointerCapture(pointerId);
 }
