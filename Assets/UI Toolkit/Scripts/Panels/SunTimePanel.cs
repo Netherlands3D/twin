@@ -26,8 +26,8 @@ namespace Netherlands3D.UI.Panels
         private SunDial sunDial;
         private SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
 
-        private TimeField timeField;
-        private TimeField TimeField => timeField ??= this.Q<TimeField>("TimeField");
+        private NumberField timeField;
+        private NumberField TimeField => timeField ??= this.Q<NumberField>("TimeField");
 
         private Button nowButton;
         private Button NowButton => nowButton ??= this.Q<Button>("NowButton");
@@ -46,7 +46,7 @@ namespace Netherlands3D.UI.Panels
             
             SunDial.TimeChanged += OnSunDialTimeChanged;
             DateField.SubmitEvent += OnDateChanged;
-            TimeField.TimeChanged += OnTimeChanged;
+            TimeField.InputField.RegisterValueChangedCallback(OnTimeChanged);
 
             NowButton.RegisterCallback<ClickEvent>(OnNowButtonClicked);
 
@@ -79,7 +79,7 @@ namespace Netherlands3D.UI.Panels
         {
             SunDial.SetTimeWithoutNotify(dt.Hour, dt.Minute);
             DateField.SetValueWithoutNotify(dt.Day, dt.Month, dt.Year);
-            TimeField.SetValueWithoutNotify(dt.ToString("HH:mm"));
+            TimeField.SetValueWithoutNotify(dt);
         }
 
         private void OnSunDialTimeChanged(int hour, int minute)
@@ -108,9 +108,11 @@ namespace Netherlands3D.UI.Panels
             sunTime?.ToggleAnimation(isPlaying);
         }
 
-        private void OnTimeChanged(int hour, int minute)
+        private void OnTimeChanged(ChangeEvent<string> _)
         {
-            sunTime?.SetTime(hour, minute, 0);
+            UnityEngine.Debug.Log($"Time: {sunTime.Time}");
+            var time = timeField.GetValueAsTime();
+            sunTime?.SetTime(time.Hour, time.Minute, 0);
         }
 
         private void OnDateChanged(int day, int month, int year)
