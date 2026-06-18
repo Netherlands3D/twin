@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Layers
 
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
-        [JsonIgnore] protected int rootIndex = -1;
+        [JsonIgnore] protected int rootId = -1;
         [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();        
 
         [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
@@ -67,14 +67,23 @@ namespace Netherlands3D.Twin.Layers
             get => activeSelf;
             set
             {
+                if(value == activeSelf)
+                    return;
+                
                 activeSelf = value;
-                foreach (var child in ChildrenLayers)
-                {
-                    child.ActiveSelf = child.ActiveSelf; //set the values again to recursively call the events.
-                }
-
-                LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
+                ActiveSelfChanged.Invoke(value);
+                UpdateActiveInHierarchy();
             }
+        }
+
+        private void UpdateActiveInHierarchy()
+        {
+            foreach (var child in ChildrenLayers)
+            {
+                child.UpdateActiveInHierarchy();
+            }
+
+            LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
         }
 
         [JsonIgnore]
@@ -91,14 +100,14 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public int SiblingIndex => parent.ChildrenLayers.IndexOf(this);
 
         [JsonIgnore]
-        public int RootIndex
+        public int RootId
         {
-            get => rootIndex;
+            get => rootId;
             set
             {
-                if(value != rootIndex)
+                if(value != rootId)
                     LayerOrderChanged.Invoke(value); 
-                rootIndex = value;
+                rootId = value;
             }
         }
 
@@ -156,6 +165,7 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public readonly UnityEvent<LayerData, string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
+        [JsonIgnore] public readonly UnityEvent<bool> ActiveSelfChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
         [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();
@@ -195,15 +205,15 @@ namespace Netherlands3D.Twin.Layers
             if (initialParent == null)
             {
                 parent = Root;
-                ParentOrSiblingIndexChanged.AddListener(Root.UpdateLayerTreeOrder);
             }
+            ParentOrSiblingIndexChanged.AddListener(Root.UpdateLayerTreeOrder);
         }
 
         public void SelectLayer(bool deselectOthers = false)
         {
             if (deselectOthers)
                 Root.DeselectAllLayers();
-
+            
             Root.AddLayerToSelection(this);
             LayerSelected.Invoke(this);
         }
@@ -375,6 +385,21 @@ namespace Netherlands3D.Twin.Layers
             layerDataTree.Add(this);
             layerDataTree.AddRange(children.SelectMany(l => l.GetLayerDataTree()).ToList());
             return layerDataTree;
+        }
+        
+        public List<LayerData> GetAncestors()
+        {
+            var ancestors = new List<LayerData>();
+            var current = this;
+
+            while (current is not RootLayer)
+            {
+                ancestors.Add(current);
+                current = current.ParentLayer;
+            }
+
+            ancestors.Reverse();
+            return ancestors;
         }
         
         public bool Equals(LayerData other) => other is not null && other.Id == Id;

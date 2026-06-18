@@ -43,7 +43,7 @@ namespace Netherlands3D.Functionalities.Wms
             base.OnVisualizationReady();
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
-            SetRenderOrder(LayerData.RootIndex);
+            SetRenderOrder(LayerData.RootId);
             SetLegendActive(ShowLegendOnSelect && LayerData.IsSelected);
         }
 

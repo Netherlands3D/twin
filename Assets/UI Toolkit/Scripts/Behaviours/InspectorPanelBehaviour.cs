@@ -91,7 +91,6 @@ namespace Netherlands3D.UI.Behaviours
             
             activePanel = CreatePanel(toolWithPanel.PanelType, toolWithPanel.PanelArgs);
             inspectorPanel.HeaderText = activePanel.Title;
-            inspectorPanel.ToolbarStyle = activePanel.ToolbarStyle;
             activePanel.OnHide.AddListener(Close);
         }
 

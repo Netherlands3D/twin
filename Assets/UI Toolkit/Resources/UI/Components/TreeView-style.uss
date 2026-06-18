@@ -1,9 +1,5 @@
 @import url("ScrollView-style.uss");
 
-.treeview{
-    
-}
-
 .unity-tree-view__item{
     border-width: var(--spacing-0_5);
     border-radius: var(--spacing-2);

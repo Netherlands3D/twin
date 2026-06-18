@@ -50,6 +50,7 @@ namespace Netherlands3D.UI.Components
             {
                 var isOn = GetIsMaskingBitSet(maskingLayerPropertyData);
                 MaskActiveToggle.value = isOn;
+                MaskActiveToggle.SetState(isOn ? VisibilityState.Visible : VisibilityState.Invisible);
             }
             else
             {

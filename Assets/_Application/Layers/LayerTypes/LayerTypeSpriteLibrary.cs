@@ -23,16 +23,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         public Sprite PrimarySprite;
         public Sprite SecondarySprite;
     }
-    
+
     [CreateAssetMenu(fileName = "LayerTypeSpriteLibrary", menuName = "ScriptableObjects/LayerTypeSpriteLibrary", order = 1)]
     public class LayerTypeSpriteLibrary : ScriptableObject
     {
+        //todo UI Toolkit in the future we hope to refactor this class away, and have a presets for sprites which we can use also for prefabassetentries
+        //the refactor will be dependent on the icon refactor story https://gemeente-amsterdam.atlassian.net/browse/S3DA-2101
+
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
+
+
+        //todo UI Toolkit this can be removed when layerpanel story is merged
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
-            if(layer.HasProperty<FolderPropertyData>() || layer.HasProperty<ScenarioPropertyData>())
+            if (layer.HasProperty<FolderPropertyData>() || layer.HasProperty<ScenarioPropertyData>())
                 return layerTypeSprites[2];
-            
+
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
             if (template != null)
             {
@@ -43,6 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             return layerTypeSprites[0];
         }
 
+        //todo UI Toolkit can also be removed after layerpanel story is merged
         private LayerSpriteCollection GetProxyLayerSprite(LayerGameObject template, LayerData data)
         {
             switch (template)
@@ -52,7 +59,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[8];
                 case CartesianTileLayerGameObject _:
                 case Tile3DLayerGameObject _:
-                case GroundPlaneLayerGameObject: 
+                case GroundPlaneLayerGameObject:
                     return layerTypeSprites[1];
                 case WorldAnnotationLayerGameObject _:
                     return layerTypeSprites[10];
@@ -69,11 +76,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 case GeoJSONPolygonLayer _:
                     return layerTypeSprites[6];
                 case GeoJSONLineLayer _:
-                    return layerTypeSprites[7];                
+                    return layerTypeSprites[7];
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
                 case PolygonSelectionLayerGameObject _:
                     {
+
+                        if (data == null)
+                            return layerTypeSprites[6];
+
                         PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
                         if (propertyData.ShapeType == ShapeType.Line)
                             return layerTypeSprites[7];
@@ -86,10 +97,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[0];
             }
         }
-        
+
+
         public static IconImage GetIconImage(LayerData layer)
         {
-            if(layer.HasProperty<FolderPropertyData>() || layer.HasProperty<ScenarioPropertyData>())
+            if (layer.HasProperty<FolderPropertyData>() || layer.HasProperty<ScenarioPropertyData>())
                 return IconImage.Folder;
 
             var template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
@@ -100,7 +112,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return IconImage.Map;
                 case CartesianTileLayerGameObject _:
                 case Tile3DLayerGameObject _:
-                case GroundPlaneLayerGameObject: 
+                case GroundPlaneLayerGameObject:
                     return IconImage.Tile;
                 case WorldAnnotationLayerGameObject _:
                     return IconImage.Annotation;
@@ -117,7 +129,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 case GeoJSONPolygonLayer _:
                     return IconImage.Polygon;
                 case GeoJSONLineLayer _:
-                    return IconImage.Line;                
+                    return IconImage.Line;
                 case GeoJSONPointLayer _:
                     return IconImage.Dot;
                 case PolygonSelectionLayerGameObject _:
@@ -129,6 +141,46 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                             return IconImage.OrthogonalView;
                         return IconImage.Polygon;
                     }
+                default:
+                    Debug.LogError($"layer type of {template.GetType()} is not specified");
+                    return IconImage.Help;
+            }
+        }
+
+        //todo UI Toolkit this is begging to be refactored and merged with the method above
+
+        public static IconImage GetIconImage(string prefabId)
+        {
+            var template = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            switch (template)
+            {
+                case WMSLayerGameObject _:
+                case GeoJsonLayerGameObject _:
+                    return IconImage.Map;
+                case CartesianTileLayerGameObject _:
+                case Tile3DLayerGameObject _:
+                case GroundPlaneLayerGameObject:
+                    return IconImage.Tile;
+                case WorldAnnotationLayerGameObject _:
+                    return IconImage.Annotation;
+                case CameraPositionLayerGameObject _:
+                    return IconImage.VideoCamera;
+                case FirstPersonCameraLayerGameObject _:
+                    return IconImage.FPV;
+                case HierarchicalObjectLayerGameObject _:
+                    return IconImage.Object;
+                case ObjectScatterLayerGameObject _:
+                    return IconImage.ScatterObject;
+                case CartesianTileSubObjectColorLayerGameObject _:
+                    return IconImage.CSV;
+                case GeoJSONPolygonLayer _:
+                    return IconImage.Polygon;
+                case GeoJSONLineLayer _:
+                    return IconImage.Line;
+                case GeoJSONPointLayer _:
+                    return IconImage.Dot;
+                case PolygonSelectionLayerGameObject _:
+                     return IconImage.Polygon;
                 default:
                     Debug.LogError($"layer type of {template.GetType()} is not specified");
                     return IconImage.Help;

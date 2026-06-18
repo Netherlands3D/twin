@@ -54,7 +54,6 @@
 .inspector .inspector-content {
     flex-grow: 1;
     flex-shrink: 1;
-    margin-bottom: var(--spacing-5);
     padding: 0px;
 }
 
