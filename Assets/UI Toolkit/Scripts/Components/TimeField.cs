@@ -1,154 +1,84 @@
 ﻿using System;
-using System.Text;
-using Netherlands3D.UI.ExtensionMethods;
+using System.Globalization;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
-    // [UxmlElement]
-    // public partial class TimeField : VisualElement
-    // {
-    //     public event Action<int, int> TimeChanged;
-    //
-    //     private const string InvalidClassName = "time-field--invalid";
-    //     private string lastValidValue = string.Empty;
-    //
-    //     private TextField inputField;
-    //     private TextField InputField => inputField ??= this.Q<TextField>("InputField");
-    //
-    //     [UxmlAttribute("value")]
-    //     public string Value
-    //     {
-    //         get => InputField.value;
-    //         set => SetValueWithoutNotify(value);
-    //     }
-    //
-    //     public TimeField()
-    //     {
-    //         this.CloneComponentTree("Components");
-    //         this.AddComponentStylesheet("Components");
-    //
-    //         InputField.RegisterValueChangedCallback(evt => OnInputChanged(evt.newValue));
-    //         InputField.RegisterCallback<BlurEvent>(_ => CommitCurrentValue());
-    //         InputField.RegisterCallback<KeyDownEvent>(OnInputKeyDown);
-    //     }
-    //
-    //     public void SetValueWithoutNotify(string value)
-    //     {
-    //         if (TryParseTime(value, out _, out _, out var normalizedValue))
-    //         {
-    //             lastValidValue = normalizedValue;
-    //             InputField.SetValueWithoutNotify(normalizedValue);
-    //             EnableInClassList(InvalidClassName, false);
-    //             return;
-    //         }
-    //
-    //         lastValidValue = string.Empty;
-    //         InputField.SetValueWithoutNotify(string.Empty);
-    //         EnableInClassList(InvalidClassName, false);
-    //     }
-    //
-    //     private void OnInputChanged(string rawInput)
-    //     {
-    //         var sanitizedInput = SanitizeInput(rawInput);
-    //         if (!string.Equals(rawInput, sanitizedInput, StringComparison.Ordinal))
-    //             InputField.SetValueWithoutNotify(sanitizedInput);
-    //
-    //         if (!TryParseTime(sanitizedInput, out var hour, out var minute, out var normalizedValue))
-    //         {
-    //             EnableInClassList(InvalidClassName, sanitizedInput.Length > 0);
-    //             return;
-    //         }
-    //
-    //         lastValidValue = normalizedValue;
-    //         EnableInClassList(InvalidClassName, false);
-    //         TimeChanged?.Invoke(hour, minute);
-    //     }
-    //
-    //     private void OnInputKeyDown(KeyDownEvent evt)
-    //     {
-    //         if (evt.keyCode != UnityEngine.KeyCode.Return && evt.keyCode != UnityEngine.KeyCode.KeypadEnter)
-    //             return;
-    //
-    //         CommitCurrentValue();
-    //         evt.StopPropagation();
-    //     }
-    //
-    //     private void CommitCurrentValue()
-    //     {
-    //         if (TryParseTime(InputField.value, out _, out _, out var normalizedValue))
-    //         {
-    //             InputField.SetValueWithoutNotify(normalizedValue);
-    //             lastValidValue = normalizedValue;
-    //             EnableInClassList(InvalidClassName, false);
-    //             return;
-    //         }
-    //
-    //         InputField.SetValueWithoutNotify(lastValidValue);
-    //         EnableInClassList(InvalidClassName, false);
-    //     }
-    //
-    //     private static string SanitizeInput(string input)
-    //     {
-    //         if (string.IsNullOrEmpty(input)) return string.Empty;
-    //
-    //         var builder = new StringBuilder(5);
-    //         var seenSeparator = false;
-    //         var hourDigits = 0;
-    //         var minuteDigits = 0;
-    //
-    //         foreach (var currentChar in input)
-    //         {
-    //             if (char.IsDigit(currentChar))
-    //             {
-    //                 if (!seenSeparator)
-    //                 {
-    //                     if (hourDigits >= 2) continue;
-    //                     hourDigits++;
-    //                 }
-    //                 else
-    //                 {
-    //                     if (minuteDigits >= 2) continue;
-    //                     minuteDigits++;
-    //                 }
-    //
-    //                 builder.Append(currentChar);
-    //                 continue;
-    //             }
-    //
-    //             if (!IsSeparator(currentChar) || seenSeparator || hourDigits == 0) continue;
-    //
-    //             seenSeparator = true;
-    //             builder.Append(':');
-    //         }
-    //
-    //         return builder.ToString();
-    //     }
-    //
-    //     private static bool TryParseTime(string input, out int hour, out int minute, out string normalizedValue)
-    //     {
-    //         hour = 0;
-    //         minute = 0;
-    //         normalizedValue = string.Empty;
-    //
-    //         var sanitizedInput = SanitizeInput(input);
-    //         var parts = sanitizedInput.Split(':');
-    //         if (parts.Length != 2) return false;
-    //
-    //         if (!int.TryParse(parts[0], out hour)) return false;
-    //         if (!int.TryParse(parts[1], out minute)) return false;
-    //
-    //         if (hour is < 0 or > 23) return false;
-    //         if (minute is < 0 or > 59) return false;
-    //
-    //         normalizedValue = $"{hour:00}:{minute:00}";
-    //         return true;
-    //     }
-    //
-    //     private static bool IsSeparator(char currentChar)
-    //     {
-    //         return currentChar == ':' || currentChar == '.' || currentChar == ';' || currentChar == ',';
-    //     }
-    // }
-}
+    /// <summary>
+    /// A NumberField that displays and parses its value as "hh:mm" instead of a plain
+    /// decimal number. The underlying double value represents total minutes, so it
+    /// naturally supports negative durations and hour counts beyond 24
+    /// (e.g. "36:15" for a 36h15m duration).
+    /// </summary>
+    [UxmlElement]
+    public partial class TimeField : NumberField
+    {
+        private const char timeSeparator = ':';
+        
+        protected override string FormatValue(double totalMinutes)
+        {
+            var isNegative = totalMinutes < 0;
+            var absMinutes = Math.Abs(totalMinutes);
 
+            var hours = (int)(absMinutes / 60);
+            var minutes = (int)Math.Round(absMinutes % 60, MidpointRounding.AwayFromZero);
+
+            // Rounding can push minutes to exactly 60 (e.g. 89.6 minutes -> 1h, 60m)
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours += 1;
+            }
+
+            var sign = isNegative ? "-" : string.Empty;
+            return $"{sign}{hours:00}{timeSeparator}{minutes:00}{UnitCharacter}";
+        }
+
+        protected override double ParseValue(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return 0d;
+
+            var trimmed = text.Trim();
+            if (UnitCharacter.Length > 0)
+                trimmed = trimmed.Replace(UnitCharacter, string.Empty).Trim();
+
+            var isNegative = trimmed.StartsWith("-");
+            if (isNegative)
+                trimmed = trimmed.Substring(1);
+
+            var parts = trimmed.Split(timeSeparator);
+
+            if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var hours))
+                return 0d;
+
+            var minutes = 0;
+            if (parts.Length > 1)
+                int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out minutes);
+
+            var totalMinutes = (double)(hours * 60 + minutes);
+            return isNegative ? -totalMinutes : totalMinutes;
+        }
+
+        /// <summary>
+        /// Sets the field's value from the time-of-day portion of a DateTime (hours and
+        /// minutes; seconds are ignored).
+        /// </summary>
+        public void SetValueWithoutNotify(DateTime dateTime)
+        {
+            var totalMinutes = dateTime.Hour * 60 + dateTime.Minute;
+            SetValueWithoutNotify((double)totalMinutes);
+        }
+
+        /// <summary>
+        /// Returns the field's value as a DateTime, using today's date as the base with
+        /// the parsed total minutes applied as a time-of-day offset. If the value
+        /// represents a duration beyond 24h (or a negative duration), the date portion
+        /// rolls forward/backward accordingly.
+        /// </summary>
+        public DateTime GetValueAsTime()
+        {
+            return DateTime.Today.AddMinutes(GetValueAsDouble());
+        }
+    }
+}
