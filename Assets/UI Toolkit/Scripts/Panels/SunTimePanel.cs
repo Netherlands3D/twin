@@ -110,7 +110,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnTimeChanged()
         {
-            var dt = timeField.GetValueAsTime();
+            var dt = timeField.GetValueAsTime(sunTime.Time);
             sunTime?.SetTime(dt.Hour, dt.Minute, 0);
         }
 

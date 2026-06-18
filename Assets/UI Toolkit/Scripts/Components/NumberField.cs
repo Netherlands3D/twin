@@ -287,15 +287,22 @@ namespace Netherlands3D.UI.Components
             return value;
         }
         
-        public DateTime GetValueAsTime()
+        public DateTime GetValueAsTime(DateTime fallbackTime)
         {
-            return DateTime.Today.AddMinutes(GetValueAsDouble());
+            var minutes = GetValueAsDouble();
+            if (minutes < 0)
+            {
+                SetValueWithoutNotify(fallbackTime);
+                return  fallbackTime;
+            }
+            
+            return DateTime.Today.AddMinutes(minutes);
         }
 
         private double ParseTimeAsTotalMinutes(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
-                return 0d;
+                return -1d;
 
             var trimmed = text.Trim();
             if (UnitCharacter.Length > 0)
@@ -308,7 +315,7 @@ namespace Netherlands3D.UI.Components
             var parts = trimmed.Split(timeSeparator);
 
             if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var hours))
-                return 0d;
+                return -1d;
 
             var minutes = 0;
             if (parts.Length > 1)
