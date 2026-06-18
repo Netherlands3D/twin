@@ -23,7 +23,6 @@ MonoBehaviour:
   Functionalities:
   - {fileID: 11400000, guid: cd3367005c1f1cd4b8de1fd613e311fa, type: 2}
   - {fileID: 11400000, guid: 3da8bf8309a3baa4da8b4dba6d2283d9, type: 2}
-  - {fileID: 11400000, guid: dbd04a92726eed247b22c8dc9eb160d8, type: 2}
   - {fileID: 11400000, guid: 77c433a944001411a9376d15fb427d17, type: 2}
   - {fileID: 11400000, guid: 73566e5fce73b5440b33ed107ed5be94, type: 2}
   corsProxyUrl: 
