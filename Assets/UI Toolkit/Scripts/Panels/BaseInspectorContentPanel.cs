@@ -12,7 +12,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Panels
         public UnityEvent OnHide = new();
 
         public abstract string Title { get; }
-        public virtual ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.Normal;
         public void Show() => OnShow?.Invoke();
         public void Hide() => OnHide?.Invoke();
     }

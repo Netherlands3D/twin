@@ -1,7 +1,22 @@
 .listview-item {
+    transition-property: background-color;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in;
+
+    background-color: transparent;
+}
+
+.listview-item__container{    
+    
+    margin-bottom: var(--spacing-2);
+    margin-right: var(--spacing-2);
     display: flex;
-    flex-direction: column;
-    padding-bottom: var(--spacing-2);
+    flex-direction: row;
+    align-items: center;
+
+    border-color:  var(--color-blue-200);
+    border-width: 2px;
+    border-radius:var(--spacing-2);
 }
 
 .listview-item > * {
@@ -22,4 +37,12 @@
 
 .listview-item.unity-collection-view__item:hover {
     background-color: transparent;
+}
+
+.listview-item__container:hover{
+    background-color: var(--color-blue-700-hover);
+}
+
+ .listview-item:checked .listview-item__container{
+    background-color:  var(--color-selection);
 }
