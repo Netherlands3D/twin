@@ -11,7 +11,6 @@
 
 .unity-base-field__label {
     margin-bottom: var(--spacing-3);
-    white-space: normal;
 }
 
 .slider.slider-header-no-header > .unity-base-field__label,

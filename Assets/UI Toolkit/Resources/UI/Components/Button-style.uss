@@ -49,7 +49,6 @@
 }
 
 .button > #Label { 
-    white-space: normal; 
     padding: 0px;
     margin: 0px;
 }

@@ -23,7 +23,6 @@
     width: var(--sun-time-label-width);
     margin-right: var(--sun-time-label-spacing);
     flex-shrink: 0;
-    white-space: normal;
     -unity-text-align: middle-left;
 }
 

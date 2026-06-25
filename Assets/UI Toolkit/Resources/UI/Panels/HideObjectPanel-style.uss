@@ -47,7 +47,6 @@
     -unity-text-align: middle-left;
     margin: 0;
     padding: 0;
-    white-space: normal;
 }
 
 .hide-object-panel__body {
