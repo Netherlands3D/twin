@@ -1,0 +1,13 @@
+.transform-property-section__row {
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: var(--spacing-2);
+}
+
+.transform-property-section__row .transform-property-section__item{
+    margin-right: var(--spacing-2);
+}
+
+.transform-property-section__item.transform-property-section__item-last{
+    margin-right: 0;
+}
