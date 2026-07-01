@@ -64,6 +64,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
                 OnDemolishEndChanged.Invoke(value);
             }
         }
+
+        public TimelineLayerPropertyData()
+        {
+        }
         
         [JsonConstructor]
         public TimelineLayerPropertyData(DateTime? buildStart, DateTime? buildEnd, DateTime? demolishStart, DateTime? demolishEnd)
