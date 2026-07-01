@@ -37,6 +37,8 @@ namespace Netherlands3D.Functionalities.LASImporter
         private readonly Dictionary<Vector2Int, PointCloudChunk> chunkMap = new();
         private readonly Dictionary<byte, int> classificationCounts = new();
         private LASPointCloudPropertyData propertyData;
+        private LASPointCloudRenderPropertyData renderPropertyData;
+        private LASClassificationColorPropertyData classificationColorPropertyData;
         private TransformLayerPropertyData transformPropertyData;
         private LASHeader header;
         private Material pointMaterial;
@@ -68,6 +70,7 @@ namespace Netherlands3D.Functionalities.LASImporter
         protected override void OnVisualizationReady()
         {
             pointMaterial = CreatePointMaterial();
+            ApplyRenderPropertySettings();
             ApplyTransformProperty();
             CacheCurrentTransform();
             loadingCoroutine = StartCoroutine(LoadPointCloudProgressively());
@@ -120,10 +123,23 @@ namespace Netherlands3D.Functionalities.LASImporter
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<LASPointCloudPropertyData>(properties);
+            InitProperty<LASPointCloudRenderPropertyData>(properties, null,
+                LASPointColorMode.FileColors,
+                pointSizePixels,
+                pointSizeReferenceDistance,
+                minPointSizePixels,
+                maxPointSizePixels,
+                maxLoadedPoints,
+                maxPointsPerChunkMesh,
+                lodDistanceMultiplier
+            );
+            InitProperty<LASClassificationColorPropertyData>(properties);
             InitProperty<TransformLayerPropertyData>(properties, null, new Coordinate(transform.position),
                 transform.eulerAngles, transform.localScale, "%");
 
             propertyData = properties.OfType<LASPointCloudPropertyData>().FirstOrDefault();
+            renderPropertyData = properties.OfType<LASPointCloudRenderPropertyData>().FirstOrDefault();
+            classificationColorPropertyData = properties.OfType<LASClassificationColorPropertyData>().FirstOrDefault();
             transformPropertyData = properties.OfType<TransformLayerPropertyData>().FirstOrDefault();
             if (transformPropertyData != null)
                 transformPropertyData.IsEditable = false;
@@ -134,12 +150,20 @@ namespace Netherlands3D.Functionalities.LASImporter
             base.RegisterEventListeners();
 
             transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
-            if (transformPropertyData == null)
-                return;
+            if (transformPropertyData != null)
+            {
+                transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+                transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+                transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
+            }
 
-            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
-            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
-            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
+            renderPropertyData = LayerData.GetProperty<LASPointCloudRenderPropertyData>();
+            if (renderPropertyData != null)
+                renderPropertyData.RenderSettingsChanged.AddListener(ApplyRenderSettingsChanged);
+
+            classificationColorPropertyData = LayerData.GetProperty<LASClassificationColorPropertyData>();
+            if (classificationColorPropertyData != null)
+                classificationColorPropertyData.OnStylingChanged.AddListener(ApplyClassificationStylingChanged);
         }
 
         protected override void UnregisterEventListeners()
@@ -150,6 +174,12 @@ namespace Netherlands3D.Functionalities.LASImporter
                 transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
                 transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
             }
+
+            if (renderPropertyData != null)
+                renderPropertyData.RenderSettingsChanged.RemoveListener(ApplyRenderSettingsChanged);
+
+            if (classificationColorPropertyData != null)
+                classificationColorPropertyData.OnStylingChanged.RemoveListener(ApplyClassificationStylingChanged);
 
             base.UnregisterEventListeners();
         }
@@ -191,8 +221,9 @@ namespace Netherlands3D.Functionalities.LASImporter
                 var centerX = (header.MinX + header.MaxX) * 0.5;
                 var centerY = (header.MinY + header.MaxY) * 0.5;
                 var centerZ = (header.MinZ + header.MaxZ) * 0.5;
-                int stride = header.PointCount > (ulong)Math.Max(1, maxLoadedPoints)
-                    ? Mathf.CeilToInt(header.PointCount / (float)Math.Max(1, maxLoadedPoints))
+                var maxPointsToLoad = Math.Max(1, GetMaxLoadedPoints());
+                int stride = header.PointCount > (ulong)maxPointsToLoad
+                    ? Mathf.CeilToInt(header.PointCount / (float)maxPointsToLoad)
                     : 1;
 
                 int pointsThisFrame = 0;
@@ -201,7 +232,7 @@ namespace Netherlands3D.Functionalities.LASImporter
                     if (!reader.TryReadPoint(pointIndex, out var point))
                         continue;
 
-                    var color = point.HasColor ? point.Color : LASClassificationColors.ForClassification(point.Classification);
+                    var fileColor = point.HasColor ? point.Color : LASClassificationColors.ForClassification(point.Classification);
                     var unityPosition = header.HasCoordinateSystem
                         ? CoordinateDeltaToLocalUnity(
                             new Coordinate(pointCoordinateSystem, point.X, point.Y, point.Z),
@@ -209,7 +240,7 @@ namespace Netherlands3D.Functionalities.LASImporter
                         )
                         : new Vector3((float)(point.X - centerX), (float)(point.Z - centerZ), (float)(point.Y - centerY));
 
-                    AddPointToChunk(new RenderPoint(unityPosition, color, point.Classification));
+                    AddPointToChunk(new RenderPoint(unityPosition, fileColor, point.HasColor, point.Classification));
                     AddClassification(point.Classification);
 
                     pointsThisFrame++;
@@ -222,6 +253,7 @@ namespace Netherlands3D.Functionalities.LASImporter
                 }
 
                 UpdateChunkVisibilityAndLod(force: true);
+                SyncClassificationPropertyData();
             }
             finally
             {
@@ -471,6 +503,21 @@ namespace Netherlands3D.Functionalities.LASImporter
             classificationCounts[classification] = count + 1;
         }
 
+        private void SyncClassificationPropertyData()
+        {
+            if (classificationColorPropertyData == null)
+                return;
+
+            foreach (var (classification, count) in classificationCounts)
+            {
+                classificationColorPropertyData.EnsureClassification(
+                    classification,
+                    count,
+                    LASClassificationColors.ForClassification(classification)
+                );
+            }
+        }
+
         private void UpdateChunkVisibilityAndLod(bool force = false)
         {
             var camera = Camera.main;
@@ -490,21 +537,91 @@ namespace Netherlands3D.Functionalities.LASImporter
 
                 int stride = CalculateLodStride(camera, worldBounds, chunk);
                 if (force || chunk.IsDirty || stride != chunk.CurrentStride)
-                    chunk.RebuildMesh(stride, maxPointsPerChunkMesh);
+                    chunk.RebuildMesh(stride, GetMaxPointsPerChunkMesh(), GetRenderColor);
             }
         }
 
         private int CalculateLodStride(Camera camera, Bounds worldBounds, PointCloudChunk chunk)
         {
-            var maxRenderablePoints = chunk.GetMaxRenderablePointCount(maxPointsPerChunkMesh);
+            var maxRenderablePoints = chunk.GetMaxRenderablePointCount(GetMaxPointsPerChunkMesh());
             var baseStride = Mathf.Max(1, Mathf.CeilToInt(chunk.Points.Count / (float)Math.Max(1, maxRenderablePoints)));
             var radius = Mathf.Max(1f, worldBounds.extents.magnitude);
             var distance = camera.orthographic
                 ? camera.orthographicSize
                 : Vector3.Distance(camera.transform.position, worldBounds.ClosestPoint(camera.transform.position));
 
-            var detail = Mathf.Max(1f, distance / (radius * Mathf.Max(0.01f, lodDistanceMultiplier)));
+            var detail = Mathf.Max(1f, distance / (radius * Mathf.Max(0.01f, GetLodDistanceMultiplier())));
             return Mathf.Max(baseStride, Mathf.NextPowerOfTwo(Mathf.CeilToInt(detail)));
+        }
+
+        private Color32 GetRenderColor(RenderPoint point)
+        {
+            if (renderPropertyData == null)
+                return point.FileColor;
+
+            return renderPropertyData.ColorMode switch
+            {
+                LASPointColorMode.Classification => GetClassificationColor(point.Classification),
+                LASPointColorMode.SingleColor => LayerData.Color,
+                _ => point.HasFileColor ? point.FileColor : GetClassificationColor(point.Classification)
+            };
+        }
+
+        private Color32 GetClassificationColor(byte classification)
+        {
+            var color = classificationColorPropertyData?.GetColorByClassification(classification)
+                        ?? LASClassificationColors.ForClassification(classification);
+            return color;
+        }
+
+        private int GetMaxLoadedPoints()
+        {
+            return renderPropertyData?.MaxLoadedPoints ?? maxLoadedPoints;
+        }
+
+        private int GetMaxPointsPerChunkMesh()
+        {
+            return renderPropertyData?.MaxPointsPerChunkMesh ?? maxPointsPerChunkMesh;
+        }
+
+        private float GetLodDistanceMultiplier()
+        {
+            return renderPropertyData?.LodDistanceMultiplier ?? lodDistanceMultiplier;
+        }
+
+        private void ApplyRenderPropertySettings()
+        {
+            if (renderPropertyData == null)
+                return;
+
+            pointSizePixels = renderPropertyData.PointSizePixels;
+            pointSizeReferenceDistance = renderPropertyData.PointSizeReferenceDistance;
+            minPointSizePixels = renderPropertyData.MinPointSizePixels;
+            maxPointSizePixels = renderPropertyData.MaxPointSizePixels;
+            maxLoadedPoints = renderPropertyData.MaxLoadedPoints;
+            maxPointsPerChunkMesh = renderPropertyData.MaxPointsPerChunkMesh;
+            lodDistanceMultiplier = renderPropertyData.LodDistanceMultiplier;
+            if (pointMaterial)
+                ApplyPointSizeSettings(pointMaterial);
+        }
+
+        private void ApplyRenderSettingsChanged()
+        {
+            ApplyRenderPropertySettings();
+            MarkChunksDirty();
+            UpdateChunkVisibilityAndLod(force: true);
+        }
+
+        private void ApplyClassificationStylingChanged()
+        {
+            MarkChunksDirty();
+            UpdateChunkVisibilityAndLod(force: true);
+        }
+
+        private void MarkChunksDirty()
+        {
+            foreach (var chunk in chunks)
+                chunk.MarkDirty();
         }
 
         private Material CreatePointMaterial()
@@ -512,6 +629,7 @@ namespace Netherlands3D.Functionalities.LASImporter
             if (materialTemplate)
             {
                 var material = new Material(materialTemplate);
+                ValidatePointCloudShader(material);
                 ApplyPointSizeSettings(material);
                 return material;
             }
@@ -520,11 +638,21 @@ namespace Netherlands3D.Functionalities.LASImporter
             if (shader)
             {
                 var material = new Material(shader);
+                ValidatePointCloudShader(material);
                 ApplyPointSizeSettings(material);
                 return material;
             }
 
+            Debug.LogError("LAS point cloud shader 'Netherlands3D/PointCloudVertexColor' could not be found. Falling back to URP Unlit; point colors and circular billboards may not render correctly.", this);
             return new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+        }
+
+        private void ValidatePointCloudShader(Material material)
+        {
+            if (!material.shader || material.shader.isSupported)
+                return;
+
+            Debug.LogError($"LAS point cloud shader '{material.shader.name}' is not supported on this platform. The point cloud may not render.", this);
         }
 
         private void ApplyPointSizeSettings(Material material)
@@ -580,13 +708,15 @@ namespace Netherlands3D.Functionalities.LASImporter
         private readonly struct RenderPoint
         {
             public readonly Vector3 Position;
-            public readonly Color32 Color;
+            public readonly Color32 FileColor;
+            public readonly bool HasFileColor;
             public readonly byte Classification;
 
-            public RenderPoint(Vector3 position, Color32 color, byte classification)
+            public RenderPoint(Vector3 position, Color32 fileColor, bool hasFileColor, byte classification)
             {
                 Position = position;
-                Color = color;
+                FileColor = fileColor;
+                HasFileColor = hasFileColor;
                 Classification = classification;
             }
         }
@@ -658,7 +788,7 @@ namespace Netherlands3D.Functionalities.LASImporter
                     : Mathf.Min(requestedMaxPoints, MaxPointsFor16BitIndexBuffer);
             }
 
-            public void RebuildMesh(int stride, int maxPoints)
+            public void RebuildMesh(int stride, int maxPoints, Func<RenderPoint, Color32> colorProvider)
             {
                 CurrentStride = Mathf.Max(1, stride);
                 var pointLimit = GetMaxRenderablePointCount(maxPoints);
@@ -671,7 +801,7 @@ namespace Netherlands3D.Functionalities.LASImporter
                 for (int i = 0; i < Points.Count && vertices.Count / 4 < pointLimit; i += CurrentStride)
                 {
                     var point = Points[i];
-                    AddBillboardPoint(point);
+                    AddBillboardPoint(point, colorProvider(point));
                 }
 
                 mesh.Clear();
@@ -685,13 +815,18 @@ namespace Netherlands3D.Functionalities.LASImporter
                 IsDirty = false;
             }
 
-            private void AddBillboardPoint(RenderPoint point)
+            public void MarkDirty()
+            {
+                IsDirty = true;
+            }
+
+            private void AddBillboardPoint(RenderPoint point, Color32 color)
             {
                 var startIndex = vertices.Count;
-                AddBillboardVertex(point, -1f, -1f);
-                AddBillboardVertex(point, -1f, 1f);
-                AddBillboardVertex(point, 1f, 1f);
-                AddBillboardVertex(point, 1f, -1f);
+                AddBillboardVertex(point, color, -1f, -1f);
+                AddBillboardVertex(point, color, -1f, 1f);
+                AddBillboardVertex(point, color, 1f, 1f);
+                AddBillboardVertex(point, color, 1f, -1f);
 
                 indices.Add(startIndex);
                 indices.Add(startIndex + 1);
@@ -701,10 +836,10 @@ namespace Netherlands3D.Functionalities.LASImporter
                 indices.Add(startIndex + 3);
             }
 
-            private void AddBillboardVertex(RenderPoint point, float cornerX, float cornerY)
+            private void AddBillboardVertex(RenderPoint point, Color32 color, float cornerX, float cornerY)
             {
                 vertices.Add(point.Position);
-                colors.Add(point.Color);
+                colors.Add(color);
                 corners.Add(new Vector2(cornerX, cornerY));
             }
 

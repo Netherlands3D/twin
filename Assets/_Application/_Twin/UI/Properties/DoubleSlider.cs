@@ -74,6 +74,17 @@ namespace Netherlands3D.Twin.UI.Properties
         public UnityEvent<float> onMinValueChanged;
         public UnityEvent<float> onMaxValueChanged;
 
+        public void ConfigureRange(float minPossibleValue, float maxPossibleValue, bool wholeNumbers = false, float minRange = 0f)
+        {
+            this.minPossibleValue = minPossibleValue;
+            this.maxPossibleValue = maxPossibleValue;
+            this.wholeNumbers = wholeNumbers;
+            this.minRange = minRange;
+
+            ApplySharedProperties();
+            UpdateVisuals();
+        }
+
         private void Awake()
         {
             ApplySharedProperties();

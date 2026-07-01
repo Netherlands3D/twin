@@ -11,12 +11,21 @@ Shader "Netherlands3D/PointCloudVertexColor"
     SubShader
     {
         Tags { "RenderType"="Opaque" "Queue"="Geometry" "RenderPipeline"="UniversalPipeline" }
+        LOD 100
+
         Pass
         {
+            Name "ForwardUnlit"
+            Tags { "LightMode"="UniversalForward" }
+
             Cull Off
+            ZWrite On
+            ZTest LEqual
+            Blend Off
             Offset -2, -2
 
             HLSLPROGRAM
+            #pragma target 3.0
             #pragma vertex vert
             #pragma fragment frag
 
@@ -30,14 +39,14 @@ Shader "Netherlands3D/PointCloudVertexColor"
             struct Attributes
             {
                 float4 positionOS : POSITION;
-                half4 color : COLOR;
+                float4 color : COLOR;
                 float2 corner : TEXCOORD0;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-                half4 color : COLOR;
+                float4 color : COLOR;
                 float2 corner : TEXCOORD0;
             };
 
@@ -59,7 +68,7 @@ Shader "Netherlands3D/PointCloudVertexColor"
                 return output;
             }
 
-            half4 frag(Varyings input) : SV_Target
+            float4 frag(Varyings input) : SV_Target
             {
                 clip(1.0 - dot(input.corner, input.corner));
                 return input.color;
