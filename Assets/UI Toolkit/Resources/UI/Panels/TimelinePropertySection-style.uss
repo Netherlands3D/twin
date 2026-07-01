@@ -11,3 +11,8 @@
 .transform-property-section__item.transform-property-section__item-last{
     margin-right: 0;
 }
+
+.transform-property-section__row .number-field .textfield .unity-base-text-field__input {
+    padding-left: 0;
+    padding-right: 0;
+}

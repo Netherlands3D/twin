@@ -1,19 +1,19 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="TransformPropertySection">
-    <nl3d:ContentContainer leading-icon="ScaleV1" text="Transformatie">
+    <nl3d:ContentContainer leading-icon="ResetTime" text="Tijdlijn">
         <ui:VisualElement class="transform-property-section__row">
-            <nl3d:Icon image="ResetTime" class="transform-property-section__item"/>
+            <nl3d:CheckboxToggle name="BuildStartCheckBox" LabelText="Bouw start" class="transform-property-section__item"/>
             <nl3d:DateField name="BuildStart" number-field-style="Small" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="transform-property-section__row">
-            <nl3d:Icon image="ResetTime" class="transform-property-section__item"/>
+            <nl3d:CheckboxToggle name="BuildEndCheckBox" LabelText="Bouw eind" class="transform-property-section__item"/>
             <nl3d:DateField name="BuildEnd" number-field-style="Small" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="transform-property-section__row">
-            <nl3d:Icon image="ResetTime" class="transform-property-section__item"/>
+            <nl3d:CheckboxToggle name="DemolishStartCheckBox" LabelText="Sloop start" class="transform-property-section__item"/>
             <nl3d:DateField name="DemolishStart" number-field-style="Small" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
         <ui:VisualElement class="transform-property-section__row">
-            <nl3d:Icon image="ResetTime" class="transform-property-section__item"/>
+            <nl3d:CheckboxToggle name="DemolishEndCheckBox" LabelText="Sloop eind" class="transform-property-section__item"/>
             <nl3d:DateField name="DemolishEnd" number-field-style="Small" class="transform-property-section__item transform-property-section__item-last"/>
         </ui:VisualElement>
     </nl3d:ContentContainer>
