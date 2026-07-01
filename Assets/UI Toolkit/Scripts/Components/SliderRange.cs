@@ -44,7 +44,12 @@ namespace Netherlands3D.UI.Components
 
             var input = this.Q<VisualElement>(className: "unity-min-max-slider__input");
             if (input == null)
+            {
+                Debug.LogError(
+                    $"{nameof(SliderRange)} could not find Unity's internal min-max slider input."
+                );
                 return;
+            }
 
             // Create a row container for Minfield - MinMaxSlider - MaxField
             rangeRow = new VisualElement { name = "RangeRow" };
@@ -158,7 +163,7 @@ namespace Netherlands3D.UI.Components
             get => scrollStep;
             set
             {
-                scrollStep = value;
+                scrollStep = Mathf.Max(0f, value);
                 ApplyScrollStep();
             }
         }

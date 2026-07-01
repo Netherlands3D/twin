@@ -46,7 +46,12 @@ namespace Netherlands3D.UI.Components
 
             var input = this.Q<VisualElement>(className: "unity-base-slider__input");
             if (input == null)
+            {
+                Debug.LogError(
+                    $"{nameof(Slider)} could not find Unity's internal slider input."
+                );
                 return;
+            }
 
             sliderRow = new VisualElement { name = "SliderRow" };
             sliderRow.AddToClassList("slider__row");
@@ -145,7 +150,7 @@ namespace Netherlands3D.UI.Components
             get => scrollStep;
             set
             {
-                scrollStep = value;
+                scrollStep = Mathf.Max(0f, value);
                 ApplyScrollStep();
             }
         }
