@@ -55,7 +55,7 @@ namespace Netherlands3D
                     stylingPropertyData.SetDefaultSymbolizerColor(new Color(0,1,0,1));
                     break;
                 case BuildState.Normal:
-                    stylingPropertyData.SetDefaultSymbolizerColor(null);
+                    stylingPropertyData.SetDefaultSymbolizerColor(Color.white);
                     break;
                 case BuildState.Demolishing:
                     stylingPropertyData.SetDefaultSymbolizerColor(new Color(1,0,0,1));
