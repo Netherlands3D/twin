@@ -1,0 +1,16 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="memory-stats"
+>
+    <ui:VisualElement class="memory-stats__content">
+        <ui:Label name="SystemTextLabel" class="text-base" text="System memory: " />
+        <ui:Label name="SystemValueLabel" class="text-header" text="000 MB" />
+        <ui:Label name="Dot" class="text-base" text=" · " />
+        <ui:Label name="ManagedTextLabel" class="text-base" text="Managed memory: " />
+        <ui:Label name="ManagedValueLabel" class="text-header" text="000.00 MB" />
+    </ui:VisualElement>
+</ui:UXML>

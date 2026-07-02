@@ -1,12 +1,5 @@
-<ui:UXML 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:ui="UnityEngine.UIElements" 
-    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
-    xmlns:nl3d="Netherlands3D.UI.Components"
-    xmlns:nl3dP="Netherlands3D.UI.Panels"
-    editor-extension-mode="False"  
->
-    <ui:Style src="./AppRoot.uss"/>
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" xmlns:nl3dP="Netherlands3D.UI.Panels" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/AppRoot.uss?fileID=7433441132597879392&amp;guid=d3f7bd6ca2ed49288802723cf5912845&amp;type=3#AppRoot"/>
     <ui:VisualElement name="App" picking-mode="Ignore" class="app">
         <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
             <ui:VisualElement picking-mode="Ignore" name="LeftSection">
@@ -14,25 +7,28 @@
                 <ui:VisualElement picking-mode="Ignore" class="app__inspector-zone" style="flex-grow: 1; flex-direction: row;">
                     <nl3d:ToolbarMain/>
                     <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
-                    <nl3dP:LegendPanel />
+                    <nl3dP:LegendPanel/>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="MidSection" class="app__top-zone" picking-mode="Ignore">
-                <nl3d:ToolbarToolbox picking-mode="Ignore" />
+            <ui:VisualElement name="MidSection" picking-mode="Ignore" class="app__top-zone">
+                <nl3d:ToolbarToolbox picking-mode="Ignore"/>
             </ui:VisualElement>
             <ui:VisualElement name="PropertiesZone" class="app__properties-zone">
                 <nl3dP:SecondaryPropertiesPanel name="SecondaryPropertiesPanel" class="app__properties-zone-column"/>
                 <nl3dP:PropertiesPanel name="PropertiesPanel" class="app__properties-zone-column"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="BottomSection" picking-mode="Ignore" style="align-items: flex-end; flex-direction: row;">
-            <nl3d:Footer/>
-            <ui:VisualElement name="BottomTools" picking-mode="Ignore" style="flex-shrink: 0; flex-basis: auto;">
+        <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="app_bottom-zone">
+            <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="app__bottom-info">
+                <nl3d:DebugInfo/>
+                <nl3d:Footer/>
+            </ui:VisualElement>
+            <ui:VisualElement name="BottomTools" picking-mode="Ignore" class="app__bottom-tools">
                 <nl3d:ToolbarNavigation/>
                 <ui:VisualElement name="CameraSlider"/>
             </ui:VisualElement>
             <nl3d:MapViewport/>
         </ui:VisualElement>
-        <nl3dP:SnackbarPanel></nl3dP:SnackbarPanel>
+        <nl3dP:SnackbarPanel/>
     </ui:VisualElement>
 </ui:UXML>

@@ -30,3 +30,21 @@
 .app__properties-zone .app__properties-zone-column {
     margin-left: var(--spacing-2);
 }
+
+.app_bottom-zone {
+    flex-direction: row;
+    flex-shrink: 0;
+    align-items: flex-end;
+}
+
+.app__bottom-info {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
+.app__bottom-tools {
+    flex-shrink: 0;
+}

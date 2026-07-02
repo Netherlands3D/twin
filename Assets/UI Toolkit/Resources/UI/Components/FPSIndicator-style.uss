@@ -1,0 +1,28 @@
+.fps-indicator {
+}
+
+.fps-indicator Label {
+    margin: 0px;
+    padding: 0px;
+    color: var(--color-white);
+    white-space: pre-wrap;
+}
+
+.fps-indicator__content {
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-items: center;
+}
+
+.fps-indicator__color {
+    height: var(--spacing-4);
+    width: var(--spacing-4);
+    min-height: var(--spacing-4);
+    min-width: var(--spacing-4);
+    margin-right: var(--spacing-3);
+    border-width: var(--spacing-0_5);
+    border-radius: 100%;
+    border-color: var(--color-white);
+    background-color: var(--color-blue-200);
+}
