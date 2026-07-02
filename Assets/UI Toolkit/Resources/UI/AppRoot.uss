@@ -30,3 +30,8 @@
 .app__properties-zone .app__properties-zone-column {
     margin-left: var(--spacing-2);
 }
+
+.app__bottom-section{
+    align-items: flex-end; 
+    flex-direction: row;
+}
