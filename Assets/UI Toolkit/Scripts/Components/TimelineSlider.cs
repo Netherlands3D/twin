@@ -32,21 +32,38 @@ namespace Netherlands3D.UI.Components
             if (string.IsNullOrEmpty(label))
                 label = "Label";
 
-            showInputField = true;
+            showInputField = false;
             fill = true;
             
             RegisterCallback<AttachToPanelEvent>(_ => ApplyTextFieldClassToInput());
+            schedule.Execute(SetInitialDate);
+
             this.RegisterValueChangedCallback(OnSliderChanged);
+            
         }
 
         private void OnSliderChanged(ChangeEvent<float> evt)
         {
             var year = (int)evt.newValue;
             var month = (int)Mathf.Lerp(1, 12, evt.newValue-year);
-            ServiceLocator.GetService<SunTime>().SetDate(1, month,  year);
-            label = "1 - " + month +  " - " + year; 
+            SetDate(month, year);
         }
 
+        private void SetDate(int month, int year)
+        {
+            ServiceLocator.GetService<SunTime>().SetDate(1, month,  year);
+            label = "1 - " + month +  " - " + year;
+        }
+
+        
+        void SetInitialDate()
+        {
+            var time = ServiceLocator.GetService<SunTime>()?.Time;
+            if(time.HasValue)
+                SetDate(time.Value.Month, time.Value.Year);
+        }
+
+        
         private void ApplyTextFieldClassToInput()
         {
             var inputText = this.Q<TextElement>(className: "unity-text-element--inner-input-field-component");

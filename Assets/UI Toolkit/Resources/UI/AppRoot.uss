@@ -35,3 +35,12 @@
     align-items: flex-end; 
     flex-direction: row;
 }
+
+.app__timeline-section{
+    flex-direction: row;
+    align-items: center;
+}
+
+.app__timeline-slider{
+    flex-grow: 1;
+}

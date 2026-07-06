@@ -2,6 +2,8 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.UI_Toolkit;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -16,12 +18,36 @@ namespace Netherlands3D
         
         private UIDocument appDocument;
         private VisualElement appRoot;
+        
+        
+        private NumberField minYear;
+        private NumberField maxYear;
+        private TimelineSlider timelineSlider;
 
         //the excuted order of this script should be executed very early to ensure the presence of the approot. 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
             appRoot = appDocument?.rootVisualElement.Q("App");
+            
+            minYear = appRoot.Q<NumberField>("MinYear");
+            maxYear = appRoot.Q<NumberField>("MaxYear");
+            timelineSlider = appRoot.Q<TimelineSlider>();
+            minYear.SetValueWithoutNotify(timelineSlider.lowValue);
+            maxYear.SetValueWithoutNotify(timelineSlider.highValue);
+            
+            minYear.InputField.RegisterValueChangedCallback(OnMinYearChanged);
+            maxYear.InputField.RegisterValueChangedCallback(OnMaxYearChanged);
+        }
+
+        private void OnMinYearChanged(ChangeEvent<string> evt)
+        {
+            timelineSlider.lowValue = minYear.GetValueAsInt();
+        }
+        
+        private void OnMaxYearChanged(ChangeEvent<string> evt)
+        {
+            timelineSlider.highValue = maxYear.GetValueAsInt();
         }
 
         public void Show()

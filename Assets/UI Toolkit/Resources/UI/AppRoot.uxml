@@ -25,7 +25,11 @@
                 <nl3dP:PropertiesPanel name="PropertiesPanel" class="app__properties-zone-column"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <nl3d:TimelineSlider name="Timeline" low-value="1900" high-value="2100"/>
+        <ui:VisualElement class="app__timeline-section">
+            <nl3d:NumberField name="MinYear"/>
+            <nl3d:TimelineSlider class="app__timeline-slider" name="Timeline" low-value="1900" high-value="2100"/>
+            <nl3d:NumberField name="MaxYear"/>
+        </ui:VisualElement>
         <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="app__bottom-section">
             <nl3d:Footer/>
             <ui:VisualElement name="BottomTools" picking-mode="Ignore" style="flex-shrink: 0; flex-basis: auto;">
