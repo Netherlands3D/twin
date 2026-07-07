@@ -3,6 +3,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -20,60 +21,90 @@ namespace Netherlands3D.UI.Panels
         public override string Title => "Importeren";
 
         public const string supportedFileTypes = "obj,csv,json,geojson,glb";
-        
+
+        private Breadcrumb breadcrumb;
         private Button uploadButton;
-        private Button UploadButton => uploadButton ??= this.Q<Button>("FileUploadButton");
-
         private Button goToAssetLibraryButton;
-        private Button GoToAssetLibraryButton => goToAssetLibraryButton ??= this.Q<Button>("GoToAssetLibraryButton");
-
+        private Button selectionAreaButton;
         private TextField importUriField;
-        private TextField ImportUriField => importUriField ??= this.Q<TextField>("ImportUriField");
         private Button importUriButton;
-        private Button ImportUriButton => importUriButton ??= this.Q<Button>("ImportUriButton");
-
         private ErrorPanel errorPanel;
-        private ErrorPanel ErrorPanel => errorPanel ??= this.Q<ErrorPanel>();       
-      
 
         private ICredentialHandler credentialHandler = new CredentialPropertyHandler();
         private CredentialPanel credentialPanel;
 
         public UnityEvent importSucceeded = new();
         public UnityEvent importFailed = new();
-
-
+        
+        private VisualElement mainSection => this.Q<VisualElement>("ImportAssetMainSection");
+        private VisualElement selectionAreaSection => this.Q<VisualElement>("SelectionAreaSection");
+        
         public ImportAssetPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
+
+            uploadButton = this.Q<Button>("FileUploadButton");
+            goToAssetLibraryButton = this.Q<Button>("GoToAssetLibraryButton");
+            selectionAreaButton = this.Q<Button>("SelectionAreaButton");
+            importUriField = this.Q<TextField>("ImportUriField");
+            importUriButton = this.Q<Button>("ImportUriButton");
+            errorPanel = this.Q<ErrorPanel>();
+            breadcrumb = this.Q<Breadcrumb>();
+            breadcrumb.AddCrumb("Toevoegen", mainSection);
+            breadcrumb.CrumbClicked += OnCrumbClicked;
             
-            GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
-            UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
-            ImportUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
-         
-            ErrorPanel.Hide();
+            goToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
+            selectionAreaButton.RegisterCallback<ClickEvent>(GoToSelectionAreaButtonClicked);
+            uploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
+            importUriButton.RegisterCallback<ClickEvent>(OnInportUriButtonClicked);
+
+            errorPanel.Hide();
             credentialPanel = this.Q<CredentialPanel>();
             credentialPanel.SetEnabled(false);
             credentialPanel.OnConfirmCredentials.AddListener(ApplyCredentials);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-            
+
             //we dont want to show the warning first but immediately start with the input of credentials instead
             credentialPanel.StartWithInput();
-            
-            RegisterCallback<DetachFromPanelEvent>(_ =>
-            {
-                credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            });
-            
-            ImportUriField.RegisterCallback<NavigationSubmitEvent>(OnSubmit, TrickleDown.TrickleDown);
+
+            RegisterCallback<DetachFromPanelEvent>(_ => { credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials); });
+
+            importUriField.RegisterCallback<NavigationSubmitEvent>(OnSubmit, TrickleDown.TrickleDown);
+
+            SetSelectionAreaSectionActive(false);
         }
-        
+
+        private void OnCrumbClicked(int index, Breadcrumb.Crumb crumb)
+        {
+            switch (index)
+            {
+                case 1:
+                    SetSelectionAreaSectionActive(true);
+                    break; 
+                default:
+                    SetSelectionAreaSectionActive(false);
+                    break;
+            }
+        }
+
+        private void GoToSelectionAreaButtonClicked(ClickEvent evt)
+        {
+            SetSelectionAreaSectionActive(true);
+            breadcrumb.AddCrumb("Selectiegebied", selectionAreaSection);
+        }
+
+        private void SetSelectionAreaSectionActive(bool active)
+        {
+            mainSection.EnableInClassList(UtilityClassConstants.HIDDEN, active);
+            selectionAreaSection.EnableInClassList(UtilityClassConstants.HIDDEN, !active);
+        }
+
         private void OnSubmit(NavigationSubmitEvent evt)
         {
             OnImport(importUriField.value);
         }
-        
+
         private void ApplyCredentials()
         {
             credentialHandler.UserName = credentialPanel.UserNameField.value;
@@ -94,14 +125,15 @@ namespace Netherlands3D.UI.Panels
             else
             {
                 credentialPanel.Show(true, credentialHandler.PasswordOrKeyOrTokenOrCode);
-                if(!string.IsNullOrEmpty(credentialHandler.PasswordOrKeyOrTokenOrCode))
+                if (!string.IsNullOrEmpty(credentialHandler.PasswordOrKeyOrTokenOrCode))
                     credentialPanel.ShowError(true);
             }
         }
 
         private void OnOpenAssetLibrary(ClickEvent evt) => ServiceLocator.GetService<ToolService>().GetTool(ToolType.AssetLibrary).Open();
+
         private void OnUploadStarted(ClickEvent evt)
-        { 
+        {
             ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes);
         }
 
@@ -126,7 +158,7 @@ namespace Netherlands3D.UI.Panels
             {
                 // TODO: Add better error handling
                 Debug.LogException(e);
-                ErrorPanel.Show();
+                errorPanel.Show();
             }
         }
 
@@ -139,7 +171,7 @@ namespace Netherlands3D.UI.Panels
                 if (layers.Length == 0)
                     Debug.LogWarning("The import of the dataset succeeded, but the dataset is empty and contains no layers");
 
-                ImportUriField.value = string.Empty;
+                importUriField.value = string.Empty;
                 importSucceeded.Invoke();
                 // Hide(); //todo should this be a listener on importSucceeded?
                 ServiceLocator.GetService<ToolService>().GetTool(ToolType.AssetImport).Close();
