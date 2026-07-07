@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Events;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit;
@@ -35,9 +36,9 @@ namespace Netherlands3D.UI.Panels
 
         public UnityEvent importSucceeded = new();
         public UnityEvent importFailed = new();
-        
-        private VisualElement mainSection => this.Q<VisualElement>("ImportAssetMainSection");
-        private VisualElement selectionAreaSection => this.Q<VisualElement>("SelectionAreaSection");
+
+        private VisualElement mainSection;
+        private SelectionAreaPanel selectionAreaSection;
         
         public ImportAssetPanel()
         {
@@ -53,6 +54,8 @@ namespace Netherlands3D.UI.Panels
             breadcrumb = this.Q<Breadcrumb>();
             breadcrumb.AddCrumb("Toevoegen", mainSection);
             breadcrumb.CrumbClicked += OnCrumbClicked;
+            mainSection = this.Q<VisualElement>("ImportAssetMainSection");
+            selectionAreaSection = this.Q<SelectionAreaPanel>();
             
             goToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             selectionAreaButton.RegisterCallback<ClickEvent>(GoToSelectionAreaButtonClicked);
@@ -73,6 +76,11 @@ namespace Netherlands3D.UI.Panels
             importUriField.RegisterCallback<NavigationSubmitEvent>(OnSubmit, TrickleDown.TrickleDown);
 
             SetSelectionAreaSectionActive(false);
+        }
+
+        public ImportAssetPanel(TriggerEvent polygonEvent, TriggerEvent lineEvent, TriggerEvent gridEvent) : this()
+        {
+            selectionAreaSection.SetEvents(polygonEvent, lineEvent, gridEvent);
         }
 
         private void OnCrumbClicked(int index, Breadcrumb.Crumb crumb)

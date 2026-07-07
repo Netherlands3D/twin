@@ -25,10 +25,6 @@
             <nl3dP:CredentialPanel>
             </nl3dP:CredentialPanel>
         </ui:VisualElement>
-        <ui:VisualElement name="SelectionAreaSection">
-            <nl3d:Button LabelText="Polygoon" icon="Polygon"/>
-            <nl3d:Button LabelText="Lijn" icon="Line"/>
-            <nl3d:Button LabelText="Grid" icon="OrthogonalView"/>
-        </ui:VisualElement>
+        <nl3dP:SelectionAreaPanel/>
     </nl3d:ScrollView>
 </ui:UXML>
