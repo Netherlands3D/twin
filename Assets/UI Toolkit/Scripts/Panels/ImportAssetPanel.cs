@@ -52,7 +52,6 @@ namespace Netherlands3D.UI.Panels
             importUriButton = this.Q<Button>("ImportUriButton");
             errorPanel = this.Q<ErrorPanel>();
             breadcrumb = this.Q<Breadcrumb>();
-            breadcrumb.AddCrumb("Toevoegen", mainSection);
             breadcrumb.CrumbClicked += OnCrumbClicked;
             mainSection = this.Q<VisualElement>("ImportAssetMainSection");
             selectionAreaSection = this.Q<SelectionAreaPanel>();
@@ -99,13 +98,20 @@ namespace Netherlands3D.UI.Panels
         private void GoToSelectionAreaButtonClicked(ClickEvent evt)
         {
             SetSelectionAreaSectionActive(true);
-            breadcrumb.AddCrumb("Selectiegebied", selectionAreaSection);
         }
 
         private void SetSelectionAreaSectionActive(bool active)
         {
             mainSection.EnableInClassList(UtilityClassConstants.HIDDEN, active);
             selectionAreaSection.EnableInClassList(UtilityClassConstants.HIDDEN, !active);
+            
+            if(active)
+                breadcrumb.AddCrumb("Selectiegebied", selectionAreaSection);
+            else
+            {
+                breadcrumb.ClearCrumbs();
+                breadcrumb.AddCrumb("Toevoegen", mainSection);
+            }
         }
 
         private void OnSubmit(NavigationSubmitEvent evt)
