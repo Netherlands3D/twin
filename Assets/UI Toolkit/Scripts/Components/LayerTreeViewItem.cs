@@ -50,6 +50,7 @@ namespace Netherlands3D.UI.Components
         
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
+        public UnityEvent<int, bool> VisibilityToggleChanged = new UnityEvent<int, bool>();
 
         public LayerTreeViewItem()
         {
@@ -177,7 +178,10 @@ namespace Netherlands3D.UI.Components
 
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
         {
-            LayerData.ActiveSelf = evt.newValue;
+            if(LayerData.IsSelected)
+                VisibilityToggleChanged.Invoke(LayerData.RootId, evt.newValue); //invoke an event to allow toggling of multi-selected items
+            else
+                LayerData.ActiveSelf = evt.newValue;
         }
 
         private void UncheckPropertyToggle(LayerData layerData)
