@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -59,8 +60,7 @@ namespace Netherlands3D.UI.Panels
         
         private void OnEditGridButtonPressed(ClickEvent evt)
         {
-            Debug.Log("edit grid button pressed");
-            throw new NotImplementedException();
+            ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Open();
         }
     }
 }
