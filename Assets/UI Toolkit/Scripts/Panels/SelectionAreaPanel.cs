@@ -11,6 +11,8 @@ namespace Netherlands3D.UI.Panels
         private Button polygonButton;
         private Button lineButton;
         private Button gridButton;
+        private TriggerEvent polygonEvent;
+        private TriggerEvent lineEvent;
         
         public SelectionAreaPanel()
         {
@@ -22,11 +24,34 @@ namespace Netherlands3D.UI.Panels
             gridButton = this.Q<Button>("GridButton");
         }
 
+        
         public void SetEvents(TriggerEvent polygonEvent, TriggerEvent lineEvent, TriggerEvent gridEvent)
         {
-            polygonButton.clicked += polygonEvent.InvokeStarted;
-            lineButton.clicked += lineEvent.InvokeStarted;
+            this.polygonEvent = polygonEvent;
+            this.lineEvent = lineEvent;
+            polygonButton.clicked += OnPolygonButtonClicked;
+            lineButton.clicked += OnLineButtonClicked;
             gridButton.clicked += gridEvent.InvokeStarted;
+        }
+
+        private void OnPolygonButtonClicked()
+        {
+            if(lineButton.hasActivePseudoState)
+                polygonEvent.InvokeStarted(); //cancel the line tool by invoking the polygon tool, a second InvokeStarted will activate the tool
+            
+            polygonButton.SetActivePseudoState(true);
+            lineButton.SetActivePseudoState(false);
+            polygonEvent.InvokeStarted();
+        }
+        
+        private void OnLineButtonClicked()
+        {
+            if(polygonButton.hasActivePseudoState)
+                lineEvent.InvokeStarted(); //cancel the polygon tool by invoking the line event, a second InvokeStarted will activate the tool
+            
+            polygonButton.SetActivePseudoState(false);
+            lineButton.SetActivePseudoState(true);
+            lineEvent.InvokeStarted();
         }
     }
 }
