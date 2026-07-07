@@ -182,6 +182,8 @@ namespace Netherlands3D.UI.Components
                 VisibilityToggleChanged.Invoke(LayerData.RootId, evt.newValue); //invoke an event to allow toggling of multi-selected items
             else
                 LayerData.ActiveSelf = evt.newValue;
+            
+            evt.StopPropagation(); //avoid the layer from deselecting
         }
 
         private void UncheckPropertyToggle(LayerData layerData)
