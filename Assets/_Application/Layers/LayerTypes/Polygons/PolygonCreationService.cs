@@ -64,7 +64,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
             inputService.PolygonFinishAction.performed += FinishAction_performed;
             
-            OnGridCreate.AddListenerStarted(toolService.GetTool(ToolType.PolygonGrid).onOpen.Invoke);
+            OnGridCreate.AddListenerStarted(toolService.GetTool(ToolType.PolygonGrid).Open);
             
             polygonInput.createdNewPolygonArea.AddListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.AddListener(UpdateLayer);
