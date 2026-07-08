@@ -50,18 +50,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DisplayCrs: 28992
-  areaSelection: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
-  northExtentTextField: {fileID: 0}
-  southExtentTextField: {fileID: 0}
-  eastExtentTextField: {fileID: 0}
-  westExtentTextField: {fileID: 0}
-  copyNorthEastExtentButton: {fileID: 0}
-  copySouthWestExtentButton: {fileID: 0}
   popoutPrefab: {fileID: 1268885788563908924, guid: 0c75754029f6c6940848c9f8bfe7edb9,
     type: 3}
   OnSelectionBoundsChanged:
     m_PersistentCalls:
       m_Calls: []
+  OnSelectionAreaBoundsChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSelectionAreaChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  WhenSelectionAreaBoundsChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExportFormatChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  modelExportProgressChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  modelExportStatusChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSelectionCleared:
+    m_PersistentCalls:
+      m_Calls: []
+  includedLayers:
+    serializedVersion: 2
+    m_Bits: 192
+  minClipBoundsHeight: 1000
 --- !u!114 &4432376315142314611
 MonoBehaviour:
   m_ObjectHideFlags: 0
