@@ -288,9 +288,6 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.DragEnded.AddListener(OnDraggingLayerItemEnded);
             layerRowElement.RegisterCallback<ClickEvent>(SetReferenceLayer);
             
-            // layerRowElement.SelectLayerItem.AddListener(SelectItemWithoutNotify);
-            // layerRowElement.DeselectLayerItem.AddListener(DeselectWithoutNotify);
-            // layerRowElement.VisibilityToggleChanged.AddListener(ToggleSelection);
             return layerRowElement;
         }
 
