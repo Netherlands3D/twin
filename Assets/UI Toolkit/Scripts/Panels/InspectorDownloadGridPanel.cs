@@ -1,69 +1,109 @@
 using Netherlands3D.Events;
+using Netherlands3D.Functionalities;
+using Netherlands3D.Functionalities.AreaDownload;
 using Netherlands3D.Services;
-using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI_Toolkit.Scripts.Panels;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
+using UnityEngine.UnityConsent;
 using Button = UnityEngine.UIElements.Button;
-using Netherlands3D.Functionalities;
 
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement, InspectorPanel]
-    public partial class InspectorPolygonGridPanel : BaseInspectorContentPanel
+    public partial class InspectorDownloadGridPanel : BaseInspectorContentPanel
     {
-        public override string Title => "Tekengebied grid selecteren";
-        
+        public override string Title => "Download 3D data";
+
+        private readonly List<(string, ExportFormat)> dropDownValues = new()
+        {
+            ("Collada (.dae)", ExportFormat.Collada),
+            ("DXF (.dxf)", ExportFormat.AutodeskDXF) 
+        };
+
         private VisualElement thumbnailContainer;
         private DownloadInspectorService downloadInspectorService;
         private Button copyZW;
         private Button copyNO;
         private NumberField zw_x, zw_y;
         private NumberField no_x, no_y;
+        private CheckboxToggle agreeToggle;
+
+        private DropDown dropDown => this.Q<DropDown>("DropDown");
+
+        private Button downloadButton;
         
-        private Button confirmButton;
-
-        public InspectorPolygonGridPanel() { }
-
-        public InspectorPolygonGridPanel(TriggerEvent OnGridConfirmed) : this()
+        public InspectorDownloadGridPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
             
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
-            confirmButton = this.Q<Button>("ConfirmButton");
+            downloadButton = this.Q<Button>("DownloadButton");
             copyZW = this.Q<Button>("ButtonCopyZw");
             copyNO = this.Q<Button>("ButtonCopyNo");
             zw_x = this.Q<NumberField>("ZW_X");
             zw_y = this.Q<NumberField>("ZW_Y");
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
+            agreeToggle = this.Q<CheckboxToggle>("Voorwaarden");
 
-           
-            confirmButton.clicked += OnGridConfirmed.Invoke;
-            //TODO instead of closing the polygon tool open the layertool here so this will automatically close and load the correct panel!
-            confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Close;
+            downloadButton.clicked += DownloadSelection;
 
+            SetDropdownValues();
+       
             RegisterCallback<AttachToPanelEvent>(evt =>
-            {
+            {         
                 downloadInspectorService = ServiceLocator.GetService<DownloadInspectorService>();
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(GetFeatureThumbnail); 
                 downloadInspectorService.OnSelectionBoundsChanged.AddListener(UpdateFields);
-                
+                downloadInspectorService.OnSelectionBoundsChanged.AddListener(UpdateDownloadButton);
+
+                UpdateDownloadButton(downloadInspectorService.SelectedArea); 
+                agreeToggle.RegisterCallback<ChangeEvent<bool>>(evt => UpdateDownloadButton(downloadInspectorService.SelectedArea));
+
+                ExportFormat initialFormat = downloadInspectorService.ExportFormat;
+                int index = dropDownValues.FindIndex(x => x.Item2 == initialFormat);
+                SetDropdownValue(index);
+                dropDown.DropDownValueChanged.AddListener(SetExportFormat);                
+
                 copyZW.RegisterCallback<ClickEvent>(CopySouthWest);
                 copyNO.RegisterCallback<ClickEvent>(CopyNorthEast);
-                zw_x.InputField.RegisterCallback<NavigationSubmitEvent>(evt => downloadInspectorService.SetWestValue(zw_x.GetValueAsInt()), TrickleDown.TrickleDown);
-                zw_y.InputField.RegisterCallback<NavigationSubmitEvent>(evt => downloadInspectorService.SetSouthValue(zw_y.GetValueAsInt()), TrickleDown.TrickleDown);
-                no_x.InputField.RegisterCallback<NavigationSubmitEvent>(evt => downloadInspectorService.SetEastValue(no_x.GetValueAsInt()), TrickleDown.TrickleDown);
-                no_y.InputField.RegisterCallback<NavigationSubmitEvent>(evt => downloadInspectorService.SetNorthValue(no_y.GetValueAsInt()), TrickleDown.TrickleDown); 
             });
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(GetFeatureThumbnail);
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(UpdateFields);
+                downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(UpdateDownloadButton);
             });
+        }
+        private void SetExportFormat(int state)
+        {           
+            ExportFormat format = dropDownValues[state].Item2;
+            downloadInspectorService.SetExportFormat(format);
+        }
+
+        private void UpdateDownloadButton(Bounds bounds)
+        {
+            bool downloadActive = true;
+            if (bounds.size == Vector3.zero)
+                downloadActive = false;
+            if(agreeToggle.value == false)
+                downloadActive = false;
+
+            downloadButton.SetEnabled(downloadActive);
+        }
+
+        private void DownloadSelection()
+        {
+            downloadInspectorService.Download();
         }
 
         private void CopySouthWest(ClickEvent evt)
@@ -97,6 +137,22 @@ namespace Netherlands3D.UI.Panels
             zw_y.SetValueWithoutNotify(int.Parse(downloadInspectorService.SouthExtent));
             no_x.SetValueWithoutNotify(int.Parse(downloadInspectorService.EastExtent));
             no_y.SetValueWithoutNotify(int.Parse(downloadInspectorService.NorthExtent));
+        }
+
+        public int DropDownValue => dropDown.choices.IndexOf(dropDown.value);
+
+        public void SetDropdownValues()
+        {
+            if (dropDownValues.Count == 0)
+                return;
+
+            dropDown.choices = dropDownValues.Select(v => v.Item1).ToList();
+            SetDropdownValue(0);
+        }
+
+        public void SetDropdownValue(int value)
+        {
+            dropDown.SetValue(value);
         }
 
         public void Show(bool show)
