@@ -22,7 +22,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } } //TODO this should be refactored away when https://gemeente-amsterdam.atlassian.net/browse/S3DA-1935 will be done
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
         public Feature Feature { get { return feature; } }
-        public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
+        public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootId; } }
         //todo: Mapping.BoundingBox should be the bbox of all meshes in the feature, this is currently not working correctly.
         public BoundingBox BoundingBox => boundingBox;
         public LayerData LayerData => geoJsonLayerParent.LayerData;

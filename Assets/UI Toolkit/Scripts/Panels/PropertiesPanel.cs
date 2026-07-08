@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Panels
     public partial class PropertiesPanel : VisualElement
     {
         private Header header;
-        private Button propertiesHeaderCloseButton;
+        public Button CloseButton { get; private set; }
         private PropertyPanelToolbar propertyPanelToolbar;
         private VisualElement informationContent;
         private VisualElement settingsContent;
@@ -35,8 +35,8 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
             
-            propertiesHeaderCloseButton = this.Q<CloseButton>();
             header = this.Q<Header>(className: "properties-header-title");
+            CloseButton = this.Q<Button>("CloseButton");
             propertyPanelToolbar = this.Q<PropertyPanelToolbar>();
             informationContent = this.Q<VisualElement>("InformationContent");
             settingsContent = this.Q<VisualElement>("SettingsContent");
@@ -45,15 +45,8 @@ namespace Netherlands3D.UI.Panels
             propertyPanelToolbar.Information.RegisterCallback<ClickEvent>(OnInformationButtonClicked);
             propertyPanelToolbar.Settings.RegisterCallback<ClickEvent>(OnSettingsButtonClicked);
             propertyPanelToolbar.Styles.RegisterCallback<ClickEvent>(OnStylesButtonClicked);
-            propertiesHeaderCloseButton.RegisterCallback<ClickEvent>(OnCloseButtonClick);
 
             SetCategoryPanelsActive(PropertySectionCategory.Information);
-        }
-
-        private void OnCloseButtonClick(ClickEvent evt)
-        {
-            var properties = ServiceLocator.GetService<Netherlands3D.Twin.Layers.Properties.Properties>(); //todo: the properties class will be deleted once the Layer inspector panel is implemented
-            properties.Hide();
         }
         
         private void OnInformationButtonClicked(ClickEvent evt)

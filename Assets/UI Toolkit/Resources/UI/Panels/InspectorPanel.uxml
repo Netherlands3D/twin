@@ -11,5 +11,4 @@
         <nl3d:Button name="InspectorHeaderCloseButton" button-style="IconOnly" icon="close" class="inspector-header-button-close"/>
     </ui:VisualElement>
     <ui:VisualElement class="inspector-content" name="Content" />
-    <nl3d:ToolbarInspector />
 </ui:UXML>

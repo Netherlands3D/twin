@@ -72,6 +72,7 @@
     --color-blue-700: rgb(0, 70, 153);
     --color-blue-700-hover: rgba(0, 70, 153, 0.4);
     --color-blue-900: rgb(47, 53, 80);
+    --color-blue-900-alpha: rgba(47, 53, 80, 0.7);
     
     /* Specific colors */
     --color-text: var(--color-blue-900);
@@ -182,9 +183,10 @@
     --icon-videocamera: url("project://database/Assets/Sprites/UI/Icons/Type=VideoCamera,%20Color=white,%20Size=medium.png");
     --icon-width: url("project://database/Assets/Sprites/UI/Icons/Type=Width,%20Color=white,%20Size=medium.png");
     --icon-warning: url("project://database/Assets/Sprites/UI/Icons/Type=Warning,%20Color=white,%20Size=medium.png");
-    --icon-visibility: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visable.png");
+    --icon-visibility: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visible.png");
     --icon-invisible: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=invisible.png");
     --icon-visibilitymixed: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Mixed.png");
+    --icon-visibleininvisible: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visible%20in%20Invisible.png");
     --icon-colorfeatures: url("project://database/Assets/Sprites/UI/Icons/Type=ColorFeatures,%20Color=white,%20Size=large.png");
 
     /* Font */

@@ -7,9 +7,9 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
 
@@ -21,12 +21,16 @@ namespace Netherlands3D.UI.Panels
         private SecondaryPropertiesPanel secondaryPropertiesPanel;
         private ColorPicker colorPicker;
 
+        public LayerData activeLayer;
+        public UnityEvent<LayerData> PropertySectionOpened;
+        public UnityEvent<LayerData> PropertySectionClosed;
+        
         private void Start()
         {
             propertiesPanel = App.UIRoot.Root.Q<PropertiesPanel>("PropertiesPanel");
             secondaryPropertiesPanel = App.UIRoot.Root.Q<SecondaryPropertiesPanel>();
             colorPicker = secondaryPropertiesPanel.Q<ColorPicker>("PropertiesColorPicker");
-            propertiesPanel.Q<Button>().clicked += ClearActivePanel;
+            propertiesPanel.CloseButton.clicked += ClearActivePanel;
 
             ClearActivePanel();
             
@@ -47,6 +51,8 @@ namespace Netherlands3D.UI.Panels
             propertiesPanel.ClearPropertySections();
             propertiesPanel.SetVisible(false);
             secondaryPropertiesPanel.SetVisible(false);
+            PropertySectionClosed.Invoke(activeLayer);
+            activeLayer = null;
         }
 
        public void SpawnPanel(LayerData layer)
@@ -83,7 +89,10 @@ namespace Netherlands3D.UI.Panels
 
             allPanels.Sort((a, b) => a.panelType.Order.CompareTo(b.panelType.Order));
             SpawnCollectedPanels(allPanels, layer.LayerProperties);
-
+            
+            activeLayer = layer;
+            PropertySectionOpened.Invoke(activeLayer);
+            
             if (allPanels.Count == 0)
                 ClearActivePanel();
 

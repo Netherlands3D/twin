@@ -1,10 +1,11 @@
+using KindMen.Uxios;
+using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using KindMen.Uxios;
-using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,7 +24,6 @@ namespace Netherlands3D.DataTypeAdapters
 
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
-
         public UnityEvent<string> OnDownloadFailed = new();
         public UnityEvent<string> OnLocalCacheFailed = new();
 
