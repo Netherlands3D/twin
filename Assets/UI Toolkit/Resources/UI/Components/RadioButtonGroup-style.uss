@@ -10,7 +10,6 @@
     margin-right: 0px;
     margin-bottom: var(--spacing-3);
     padding: 0px;
-    white-space: normal;
 }
 
 .radio-group .unity-radio-button__text {
@@ -19,7 +18,6 @@
     margin: 0px;
     padding: 0px;
     min-width: 0;
-    white-space: normal;
 }
 
 .radio-group .unity-radio-button {
