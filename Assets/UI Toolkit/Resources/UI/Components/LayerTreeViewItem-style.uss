@@ -34,6 +34,11 @@
     overflow: hidden;
 }
 
+.layer-tree-view-item__name-label .editable-name-field__label,
+.layer-tree-view-item__name-label .editable-name-field__input TextElement {
+    white-space: pre;
+}
+
 .unity-tree-view__item .layer-tree-view-item__property-toggle{
     padding: 0 var(--spacing-1) 0 var(--spacing-1);
     background-color: transparent;

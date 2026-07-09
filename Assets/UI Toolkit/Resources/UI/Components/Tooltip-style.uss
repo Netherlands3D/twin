@@ -19,5 +19,4 @@
 }
 
 .tooltip__label {
-    white-space: normal;
 }

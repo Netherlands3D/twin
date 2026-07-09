@@ -26,7 +26,6 @@
 }
 
 .inspector-polygon-grid__body-tip-text{
-    white-space: pre-wrap;
 }
 
 .inspector-polygon-grid__number-fields-row{
