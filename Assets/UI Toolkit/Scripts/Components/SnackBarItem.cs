@@ -17,9 +17,13 @@ namespace Netherlands3D.UI.Components
         private Icon icon;
         private Label titleLabel;
         private Label detailsLabel;
+        
+        public event System.Action<SnackBarItem> Closed;
+        private CloseButton closeButton;
 
         private Icon Icon => icon ??= this.Q<Icon>();
         private Label TitleLabel => titleLabel ??= this.Q<Label>("Titel");
+        private CloseButton CloseButton => closeButton ??= this.Q<CloseButton>();
         private Label DetailsLabel => detailsLabel ??= this.Q<Label>("Text");
 
         private SnackbarMessageType messageType = SnackbarMessageType.Info;
@@ -46,6 +50,9 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
+
+            CloseButton.clicked += OnCloseClicked;
+            RegisterCallback<DetachFromPanelEvent>(OnDetachedFromPanel);
         }
 
         public void SetMessage(string title, string details, SnackbarMessageType type, IconImage icon)
@@ -56,6 +63,17 @@ namespace Netherlands3D.UI.Components
 
             MessageType = type;
             Image = icon;
+        }
+
+        private void OnCloseClicked()
+        {
+            Closed?.Invoke(this);
+        }
+
+        private void OnDetachedFromPanel(DetachFromPanelEvent evt)
+        {
+            CloseButton.clicked -= OnCloseClicked;
+            UnregisterCallback<DetachFromPanelEvent>(OnDetachedFromPanel);
         }
     }
 }

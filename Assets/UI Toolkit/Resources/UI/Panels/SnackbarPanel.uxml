@@ -7,6 +7,5 @@
     class="snackbar-panel"
 >
     <nl3d:ScrollView class="snackbar-panel__content">
-        <nl3d:SnackBarItem/>
     </nl3d:ScrollView>
 </ui:UXML>

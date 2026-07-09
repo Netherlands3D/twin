@@ -13,19 +13,35 @@ namespace Netherlands3D.UI.Panels
         public UnityEvent OnClose = new();
         public UnityEvent OnOpen = new();
 
-        private SnackBarItem snackBarItem;
+        private readonly Components.ScrollView scrollView;
 
         public SnackbarPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            snackBarItem = this.Q<SnackBarItem>();
+            scrollView = this.Q<Components.ScrollView>();
         }
 
-        public void SetMessage(string title, string details, SnackBarItem.SnackbarMessageType type, IconImage icon)
+        public SnackBarItem SetMessage(string title, string details, SnackBarItem.SnackbarMessageType type, IconImage icon)
         {
-            snackBarItem.SetMessage(title, details, type, icon);
+            var item = new SnackBarItem();
+            item.SetMessage(title, details, type, icon);
+            item.Closed += RemoveItem;
+
+            scrollView.Add(item);
+            Show(true);
+
+            return item;
+        }
+
+        public void RemoveItem(SnackBarItem item)
+        {
+            item.Closed -= RemoveItem;
+            item.RemoveFromHierarchy();
+
+            if (scrollView.childCount == 0)
+                Show(false);
         }
 
         public void Show(bool show)

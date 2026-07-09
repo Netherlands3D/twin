@@ -14,6 +14,10 @@
     translate: -50% 0;
 }
 
+.snackbar-panel__content {
+    flex-direction: column;
+}
+
 .snackbar-text
 {
     -unity-text-align: middle-center;

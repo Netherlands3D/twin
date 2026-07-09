@@ -1,5 +1,6 @@
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Services
@@ -65,7 +66,7 @@ namespace Netherlands3D.Twin.Services
             else
                 activeMessage += layerData.Name;
             activeCounter++;
-            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd");
+            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd", IconImage.Sheets);
         }
 
         private void CouldNotFindAdapterMessage(string message)
