@@ -9,6 +9,7 @@
                 </Netherlands3D.UI.Components.ChangePointerStyleElement>
                 <Netherlands3D.UI.Components.Hyperlink text="website" url="https://netherlands3d.eu" tooltip="website"/>
                 <Netherlands3D.UI.Components.Tooltip/>
+                <Netherlands3D.UI.Components.SnackBarItem/>
                 <Netherlands3D.UI.Components.Breadcrumb/>
                 <Netherlands3D.UI.Components.IconButton/>
                 <Netherlands3D.UI.Components.BackButton/>
@@ -33,6 +34,7 @@
     </Netherlands3D.UI.Components.InspectorPanel>
     <Netherlands3D.UI.Components.MemoryStats/>
     <Netherlands3D.UI.Components.FPSIndicator style="align-items: stretch;"/>
-    <Netherlands3D.UI.Components.DebugInfo/>
+    <Netherlands3D.UI.Components.DebugInfo style="display: flex;"/>
     <Netherlands3D.UI.Components.Footer/>
+    <Netherlands3D.UI.Panels.SnackbarPanel/>
 </ui:UXML>

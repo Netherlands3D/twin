@@ -24,5 +24,16 @@
     border-width: var(--spacing-0_5);
     border-radius: 100%;
     border-color: var(--color-white);
-    background-color: var(--color-blue-200);
+}
+
+.fps-indicator__color--good {
+    background-color: var(--color-green);
+}
+
+.fps-indicator__color--reduced {
+    background-color: var(--color-orange);
+}
+
+.fps-indicator__color--low {
+    background-color: var(--color-red);
 }

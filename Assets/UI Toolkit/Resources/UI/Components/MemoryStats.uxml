@@ -7,7 +7,7 @@
     class="memory-stats"
 >
     <ui:VisualElement class="memory-stats__content">
-        <ui:Label name="SystemTextLabel" class="text-base" text="System memory: " />
+        <ui:Label name="SystemTextLabel" class="text-base" text="Unity heap size: " />
         <ui:Label name="SystemValueLabel" class="text-header" text="000 MB" />
         <ui:Label name="Dot" class="text-base" text=" · " />
         <ui:Label name="ManagedTextLabel" class="text-base" text="Managed memory: " />

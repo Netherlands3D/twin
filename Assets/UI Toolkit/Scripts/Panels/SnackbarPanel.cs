@@ -1,6 +1,7 @@
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
-using UnityEngine;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -11,29 +12,25 @@ namespace Netherlands3D.UI.Panels
     {
         public UnityEvent OnClose = new();
         public UnityEvent OnOpen = new();
-        
-        private Label text;
+
+        private SnackBarItem snackBarItem;
 
         public SnackbarPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            text = this.Q<Label>();
+
+            snackBarItem = this.Q<SnackBarItem>();
+        }
+
+        public void SetMessage(string title, string details, SnackBarItem.SnackbarMessageType type, IconImage icon)
+        {
+            snackBarItem.SetMessage(title, details, type, icon);
         }
 
         public void Show(bool show)
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, !show);
-        }
-
-        public void SetText(string newText)
-        {
-            text.text = newText;
-        }
-
-        public void SetTextColor(Color color)
-        {
-            text.style.color = color;
         }
     }
 }

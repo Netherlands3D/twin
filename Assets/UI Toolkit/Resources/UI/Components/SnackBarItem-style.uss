@@ -1,0 +1,44 @@
+.snackbar-item {
+    min-height: var(--spacing-6);
+}
+
+.snackbar-item__icon {
+}
+
+.snackbar-item__content {
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+}
+
+.snackbar-item__title {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    min-height: var(--spacing-6);
+    margin: 0 var(--spacing-4) 0 var(--spacing-4);
+}
+
+.snackbar-item__details {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    margin: 0 0 0 var(--spacing-10);
+}
+
+/* TODO: set to display flex when help button use is implemented for snackbar items */
+.snackbar-item__help {
+    display: none;
+}
+
+.snackbar-item--warning .snackbar-item__title,
+.snackbar-item--warning .snackbar-item__details {
+    color: var(--color-warning);
+}
+
+.snackbar-item.snackbar-item--warning .snackbar-item__icon.icon,
+.snackbar-item.snackbar-item--warning .snackbar-item__help .icon,
+.snackbar-item.snackbar-item--warning .close-button .icon {
+    --icon-tint-color: var(--color-warning);
+}
