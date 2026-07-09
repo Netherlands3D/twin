@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
             inputService.PolygonFinishAction.performed -= FinishAction_performed;
             
-            OnGridCreate.RemoveListenerStarted(toolService.GetTool(ToolType.PolygonGrid).onOpen.Invoke);
+            OnGridCreate.RemoveListenerStarted(toolService.GetTool(ToolType.PolygonGrid).Open);
             
             polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.RemoveListener(UpdateLayer);
@@ -242,7 +242,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private PolygonInput GetInputFromShapeType(ShapeType type)
         {
-            switch (currentShapeType)
+            switch (type)
             {
                 case ShapeType.Polygon:
                     return polygonInput;
