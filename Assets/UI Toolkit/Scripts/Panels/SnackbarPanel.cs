@@ -29,7 +29,7 @@ namespace Netherlands3D.UI.Panels
             item.SetMessage(title, details, type, icon);
             item.Closed += RemoveItem;
 
-            scrollView.Add(item);
+            scrollView.Insert(0, item);
             Show(true);
 
             return item;
