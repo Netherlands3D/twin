@@ -166,8 +166,6 @@ namespace Netherlands3D.UI.Panels
             {
                 var layerData = treeView.GetItemDataForIndex<LayerData>(index);
                 layerData.ActiveSelf = active;
-                // MaskingLayerPropertyData propertyData = layerData.GetProperty<MaskingLayerPropertyData>();
-                // propertyData?.SetMaskBit(maskBitIndex, active);
             }
 
             doRefresh = true;

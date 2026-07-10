@@ -178,6 +178,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
         {
+            //if the layer that is being toggled is selected, we want to toggle all the selected layers (through the LayerPanel that has access to all selected layers), if this layer is not selected, we only want to toggle this layer's visiblity
             if(LayerData.IsSelected)
                 VisibilityToggleChanged.Invoke(LayerData.RootId, evt.newValue); //invoke an event to allow toggling of multi-selected items
             else
