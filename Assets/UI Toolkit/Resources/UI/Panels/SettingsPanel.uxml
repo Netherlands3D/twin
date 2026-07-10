@@ -1,24 +1,21 @@
 <ui:UXML 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:ui="UnityEngine.UIElements" 
-    xmlns:nl3d="Netherlands3D.UI.Components" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
     editor-extension-mode="False" 
     name="SettingsPanel" 
     class="settings-panel"
 >
-    <nl3d:ScrollView> <!-- todo put the scroll view in all inspectorpanels? -->
-    <nl3d:ContentContainer name="SettingsSection" leading-icon="AdjustmentsHorizontal" text="Weergave instellingen" class="settings-panel__section">
-        <nl3d:RadioButtonGroup name="QualitySettings" choices="Laag (high performance), Middel, Hoog" label="Kwaliteit"/>
-        <ui:VisualElement name="spacer" class="settings-panel__spacer"/>
-        <ui:VisualElement>
-            <ui:Label text="Optionele functionaliteiten" class="text-header"/>
-            <nl3d:ListView name="Functionalities"/>
-        </ui:VisualElement>
-    </nl3d:ContentContainer>
-    <nl3d:ContentContainer name="FPVSection" leading-icon="FPV" text="First Person View instellingen" class="settings-panel__section">
-        <nl3d:CheckboxToggle name="MouseLockToggle" LabelText="Mouse Locking (backspace om muis te ontgrendelen)"/>
-        <nl3d:Slider name="MouseSensitivitySlider" label="Muisgevoeligheid" low-value="1" high-value="100"/>
-    </nl3d:ContentContainer>
+    <nl3d:ScrollView>
+        <nl3d:ContentContainer name="SettingsSection" leading-icon="AdjustmentsHorizontal" text="Weergave instellingen" class="settings-panel__section">
+            <nl3d:RadioButtonGroup name="QualitySettings" choices="Laag (high performance), Middel, Hoog" label="Kwaliteit"/>
+            <ui:VisualElement name="spacer" class="settings-panel__spacer"/>
+            <ui:VisualElement>
+                <ui:Label text="Optionele functionaliteiten" class="text-header"/>
+                <nl3d:ListView name="Functionalities"/>
+            </ui:VisualElement>
+        </nl3d:ContentContainer>
     </nl3d:ScrollView>
 </ui:UXML>
