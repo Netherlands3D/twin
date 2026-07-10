@@ -10,7 +10,6 @@
     -unity-text-align: middle-left;
     margin: 0;
     padding: 0;
-    white-space: normal;
 }
 
 .masking-panel__body {
