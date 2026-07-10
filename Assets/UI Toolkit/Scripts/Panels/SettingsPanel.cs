@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 using ListView = UnityEngine.UIElements.ListView;
 using QualitySettings = UnityEngine.QualitySettings;
 using RadioButtonGroup = UnityEngine.UIElements.RadioButtonGroup;
+using ScrollView = Netherlands3D.UI.Components.ScrollView;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -44,7 +45,7 @@ namespace Netherlands3D.UI.Panels
             if (fpvFunctionality != null)
             {
                 var fpvSection = new FPVSettingsPanel(fpvFunctionality);
-                this.Add(fpvSection);
+                this.Q<ScrollView>().Add(fpvSection);
             }
         }
         
