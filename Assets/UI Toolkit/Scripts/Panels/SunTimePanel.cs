@@ -45,6 +45,7 @@ namespace Netherlands3D.UI.Panels
         private Label textRow1, textRow2, textRow3;
         private const int maxRowCount = 5;
         
+        private Button downloadButton;
         private PeriodicSnapshots periodicSnapshotsService;
 
         public SunTimePanel()
@@ -85,7 +86,8 @@ namespace Netherlands3D.UI.Panels
             });
 
 
-
+            downloadButton = this.Q<Button>("DownloadButton");
+            downloadButton.clicked += periodicSnapshotsService.DownloadSnapshots;
 
             if (imageContainer is not ScreenshotContainer screenshots)
                 Debug.LogError("missing images for schaduwstudie, please provide a screenshotcontainer scriptableobject");

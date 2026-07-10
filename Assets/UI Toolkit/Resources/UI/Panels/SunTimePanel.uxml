@@ -26,7 +26,6 @@
         <nl3d:SimulationSpeedControls name="SimulationSpeedControls" />
     </nl3d:ContentContainer>
     <nl3d:ContentContainer text="Schaduw studie" leading-icon="Clock">
-       
             <ui:VisualElement name="ImagesGrid" class="sun-shadow-panel__images">
                 <ui:VisualElement name="ImagesRow1" class="sun-shadow-panel__image-row"/>
                 <ui:VisualElement name="ImagesRow2" class="sun-shadow-panel__image-row"/>
@@ -49,7 +48,6 @@
             <ui:Label text="Exporteer voor de volgende data en tijden een schermafbeelding vanuit het huidige camerastandpunt en perspectief:" class="sun-shadow-panel__text" />
             <nl3d:Hyperlink text="Toelichting standaard data" url="https://iplo.nl/thema/licht/bezonning/"/>
             <ui:Label text="De afbeeldingen worden als .png bestand opgeslagen in een .zip map in uw standaard downloads map." class="sun-shadow-panel__text" />
-       
          <nl3d:Button LabelText="Download" button-style="Normal" name="DownloadButton" class="sun-shadow-panel__button"/>
     </nl3d:ContentContainer>   
     </nl3d:ScrollView>
