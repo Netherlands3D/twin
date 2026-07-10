@@ -47,3 +47,7 @@
     flex-shrink: 1;
     -unity-text-align: middle-left;
 }
+
+.sun-time-panel__time-field{
+    flex-grow: 1;
+}
