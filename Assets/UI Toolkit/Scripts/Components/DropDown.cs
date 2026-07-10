@@ -1,9 +1,9 @@
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
 using Netherlands3D.UI_Toolkit.Scripts;
-using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
+using Netherlands3D.UI_Toolkit;
 
 namespace Netherlands3D.UI.Components
 {
@@ -13,18 +13,36 @@ namespace Netherlands3D.UI.Components
         public UnityEvent<int> DropDownValueChanged = new();
         
         private Icon icon;
-        private Icon Icon => icon ??= this.Q<Icon>();
-        
+        private Label label;
+
         private VisualElement rootSettings;
         private VisualElement popup;
         
         private List<IconImage> valueIcons;
-        
+
+        public enum DropDownStyle
+        {
+            Icons,
+            Text
+        }
+
+        [UxmlAttribute("dropdown-style")]
+        public DropDownStyle Style
+        {
+            get => dropDownStyle;
+            set => dropDownStyle = value;
+        }
+
+        private DropDownStyle dropDownStyle = DropDownStyle.Icons;
+
         public DropDown()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            
+
+            label = this.Q<Label>();
+            icon = this.Q<Icon>();
+
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
                 //find the panel settings root not the ui root
@@ -34,7 +52,11 @@ namespace Netherlands3D.UI.Components
 
                 rootSettings = root;
                 
-                Icon.pickingMode = PickingMode.Ignore;
+                icon.pickingMode = PickingMode.Ignore;
+                label.pickingMode = PickingMode.Ignore;
+
+                label.EnableInClassList(UtilityClassConstants.HIDDEN, dropDownStyle != DropDownStyle.Text);
+                icon.EnableInClassList(UtilityClassConstants.HIDDEN, dropDownStyle != DropDownStyle.Icons);
             });
             
             RegisterCallback<PointerDownEvent>(evt =>
@@ -76,16 +98,33 @@ namespace Netherlands3D.UI.Components
                 item.AddToClassList("dropdown-popup-item__last-item");
                 
             item.Clear();
-            Icon icon = new Icon();
-            icon.pickingMode = PickingMode.Ignore;
-            icon.Image = valueIcons[index];
-            item.Add(icon);
+            switch(dropDownStyle)
+            {
+                case DropDownStyle.Icons:
+                    Icon icon = new Icon();
+                    icon.pickingMode = PickingMode.Ignore;
+                    icon.Image = valueIcons[index];
+                    item.Add(icon);
+                    break;
+                case DropDownStyle.Text:
+                    Label text = new Label(choices[index]);
+                    text.pickingMode = PickingMode.Ignore;
+                    item.Add(text);
+                    break;
+            }           
         }
 
         public void SetValue(int index)
         {
             value = choices[index];
-            Icon.Image = valueIcons[index]; 
+            if (dropDownStyle == DropDownStyle.Icons)
+            {
+                icon.Image = valueIcons[index];
+            }
+            else if (dropDownStyle == DropDownStyle.Text)
+            {
+                label.text = choices[index];
+            }
         }
 
         private void SetPopupPosition(GeometryChangedEvent evt)

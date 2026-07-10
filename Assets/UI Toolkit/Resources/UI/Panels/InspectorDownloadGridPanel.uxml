@@ -1,0 +1,37 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    name="InspectorDownloadGridPanel"
+    class="inspector-download-grid-panel"
+    >
+    <ui:VisualElement class="inspector-download-grid__container">
+        <ui:VisualElement class="inspector-download-grid-thumbnail__container" name="ThumbnailContainer" />
+    </ui:VisualElement>
+    <ui:VisualElement class="inspector-download-grid__body">
+        <ui:Label text="&lt;b&gt;Tip: &lt;/b&gt; met de combinatie shift-klik+sleep kunt u meerdere tegels selecteren." class="inspector-download-grid__body-tip-text"/>
+        <ui:VisualElement class="inspector-download-grid__number-fields-row">
+            <ui:Label text="Hoekpunt ZW" class="inspector-download-grid__number-fields-text inspector-download-grid__item"/>
+            <nl3d:Button name="ButtonCopyZw" class="inspector-download-grid__button-copy inspector-download-grid__item" icon="CopyPaste" button-style="IconOnly"/>
+            <nl3d:NumberField name="ZW_X" number-field-style="Small" class="inspector-download-grid__item"/>
+            <nl3d:NumberField name="ZW_Y" number-field-style="Small" class="inspector-download-grid__item inspector-download-grid__item-last"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="inspector-download-grid__number-fields-row">
+            <ui:Label text="Hoekpunt NO" class="inspector-download-grid__number-fields-text inspector-download-grid__item"/>
+            <nl3d:Button name="ButtonCopyNo" class="inspector-download-grid__button-copy inspector-download-grid__item" icon="CopyPaste" button-style="IconOnly"/>
+            <nl3d:NumberField name="NO_X" number-field-style="Small" class="inspector-download-grid__item"/>
+            <nl3d:NumberField name="NO_Y" number-field-style="Small" class="inspector-download-grid__item inspector-download-grid__item-last"/>
+        </ui:VisualElement>
+        <nl3d:Hyperlink text="Productbeschrijving 3D basisvoorziening" url="https://3d.kadaster.nl/productbeschrijving/"/>
+        <nl3d:Hyperlink text="Gebruiksvoorwaarden 3DBag" url="https://docs.3dbag.nl/en/copyright/"/>
+        <nl3d:CheckboxToggle name="Voorwaarden" LabelText="Ik ga akkoord met de voorwaarden" class="inspector-download-grid__checkbox"/>
+        <ui:VisualElement class="inspector-download-grid__button-row">
+            <nl3d:DropDown name="DropDown" dropdown-style="Text" class="dropdown"/>
+            <nl3d:Button name="DownloadButton" LabelText="Download" button-style="WithIcon" icon="downloadtile" class="inspector-download-grid__button"/>
+        </ui:VisualElement>        
+        <nl3d:TextCallOut text="&lt;b&gt;&lt;color=#E35656&gt;Let op!&lt;/color&gt;&lt;/b&gt; Bij een selectie van meer dan 16 tegels is het mogelijk dat uw browser niet genoeg geheugen heeft en vastloopt. De download bevat alleen de geometrie van lagen die zichtbaar zijn in het geselecteerde gebied, exclusief textures. Lagen waar u credentials voor nodig hebt worden i.v.m. dataveiligheid niet meegenomen in de download." class="inspector-download-grid__text-call-out"/>
+    </ui:VisualElement>
+</ui:UXML>

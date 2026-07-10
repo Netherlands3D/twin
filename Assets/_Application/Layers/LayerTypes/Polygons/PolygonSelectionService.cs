@@ -40,11 +40,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
             
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
-            
-            //todo leaving this commented code because the inspectorpanelbehaviour will now be responsible for enabling/disabling the polygon selection/visibility
-            //double check if this is correct when ui toolkit is fully implemented specifically the layerpanel
-            // layerTool?.onOpen.AddListener(EnablePolygonSelection);
-            // layerTool?.onClose.AddListener(DisablePolygonSelection);
         }
 
         private void OnDisable()
