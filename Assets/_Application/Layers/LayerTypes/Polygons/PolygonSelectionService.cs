@@ -13,10 +13,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionService : MonoBehaviour
     {
-        public LayerData ActiveLayer => activeLayer;
+        public LayerData SelectedLayer => selectedLayer;
         public bool PolygonSelectionEnabled => polygonSelectionEnabled;
         
-        private LayerData activeLayer;
+        private LayerData selectedLayer;
         private List<LayerData> layers = new(); 
         private PointerToWorldPosition pointerToWorldPosition;
         private PolygonCreationService polygonCreationService;
@@ -38,13 +38,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
-            
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
-            
-            //todo leaving this commented code because the inspectorpanelbehaviour will now be responsible for enabling/disabling the polygon selection/visibility
-            //double check if this is correct when ui toolkit is fully implemented specifically the layerpanel
-            // layerTool?.onOpen.AddListener(EnablePolygonSelection);
-            // layerTool?.onClose.AddListener(DisablePolygonSelection);
         }
 
         private void OnDisable()
@@ -63,10 +57,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonSelectionEnabled = false;
             OnPolygonSelectionEnabled.Invoke(false);
 
-            //clear any selected polygon when selectio is disabled
+            //clear any selected polygon when selection is disabled
             polygonCreationService.ClearInputs();
 
-            activeLayer = null;
+            selectedLayer = null;
             ReselectLayerPolygon(null);
             OnDeselectActivePolygon.Invoke();
         }
@@ -166,7 +160,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private void ProcessPolygonDeselection(LayerData layer)
         {
-            if(layer != activeLayer) //only deselect if the deselected layer is the active layer
+            if(layer != selectedLayer) //only deselect if the deselected layer is the active layer
                 return;
             
             //Do not allow selecting a new polygon if we are still creating one
@@ -178,7 +172,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             polygonCreationService.ClearInputs();
 
-            activeLayer = null;
+            selectedLayer = null;
             ReselectLayerPolygon(null);
             OnDeselectActivePolygon.Invoke();
         }
@@ -190,7 +184,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //we don't reselect immediately in case of a grid, but we already register the active layer
             if (data?.ShapeType == ShapeType.Grid)
             {
-                activeLayer = layer;
+                selectedLayer = layer;
                 polygonCreationService.UpdateInputByType(layer);
                 polygonCreationService.GridInput.SetSelectionVisualEnabled(true);
                 OnSelectActivePolygon.Invoke();
@@ -203,7 +197,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             
             polygonCreationService.ClearInputs();
-            activeLayer = layer;
+            selectedLayer = layer;
             ReselectLayerPolygon(layer);
             OnSelectActivePolygon.Invoke();
         }
