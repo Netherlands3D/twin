@@ -25,9 +25,7 @@ namespace Netherlands3D.UI.Panels
         
         private Button confirmButton;
 
-        public InspectorPolygonGridPanel() { }
-
-        public InspectorPolygonGridPanel(TriggerEvent OnGridConfirmed) : this()
+        public InspectorPolygonGridPanel() 
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -42,7 +40,7 @@ namespace Netherlands3D.UI.Panels
             no_y = this.Q<NumberField>("NO_Y");
 
            
-            confirmButton.clicked += OnGridConfirmed.Invoke;
+            //confirmButton.clicked += OnGridConfirmed.Invoke;
             //confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Close; //TODO instead of hiding open the layertool here!
 
             RegisterCallback<AttachToPanelEvent>(evt =>

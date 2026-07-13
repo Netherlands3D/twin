@@ -77,11 +77,6 @@ namespace Netherlands3D.UI.Panels
             SetSelectionAreaSectionActive(false);
         }
 
-        public ImportAssetPanel(TriggerEvent polygonEvent, TriggerEvent lineEvent, TriggerEvent gridEvent) : this()
-        {
-            selectionAreaSection.SetEvents(polygonEvent, lineEvent, gridEvent);
-        }
-
         private void OnCrumbClicked(int index, Breadcrumb.Crumb crumb)
         {
             switch (index)

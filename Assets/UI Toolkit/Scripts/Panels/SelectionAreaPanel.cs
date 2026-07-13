@@ -1,4 +1,5 @@
 using Netherlands3D.Events;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
@@ -11,8 +12,9 @@ namespace Netherlands3D.UI.Panels
         private Button polygonButton;
         private Button lineButton;
         private Button gridButton;
-        private TriggerEvent polygonEvent;
-        private TriggerEvent lineEvent;
+        
+        private PolygonCreationService polygonCreationService;
+        private ToolService toolService;
         
         public SelectionAreaPanel()
         {
@@ -22,36 +24,33 @@ namespace Netherlands3D.UI.Panels
             polygonButton = this.Q<Button>("PolygonButton");
             lineButton = this.Q<Button>("LineButton");
             gridButton = this.Q<Button>("GridButton");
-        }
+            
+            polygonCreationService = Services.ServiceLocator.GetService<PolygonCreationService>();
+            toolService = Services.ServiceLocator.GetService<ToolService>();
 
-        
-        public void SetEvents(TriggerEvent polygonEvent, TriggerEvent lineEvent, TriggerEvent gridEvent)
-        {
-            this.polygonEvent = polygonEvent;
-            this.lineEvent = lineEvent;
-            polygonButton.clicked += OnPolygonButtonClicked;
             lineButton.clicked += OnLineButtonClicked;
-            gridButton.clicked += gridEvent.InvokeStarted;
+            polygonButton.clicked += OnPolygonButtonClicked;
+            gridButton.clicked += OnGridButtonClicked;
         }
 
         private void OnPolygonButtonClicked()
         {
-            if(lineButton.hasActivePseudoState)
-                polygonEvent.InvokeStarted(); //cancel the line tool by invoking the polygon tool, a second InvokeStarted will activate the tool
-            
             polygonButton.SetActivePseudoState(true);
             lineButton.SetActivePseudoState(false);
-            polygonEvent.InvokeStarted();
+            polygonCreationService.SetPolygonToCreate();
         }
         
         private void OnLineButtonClicked()
         {
-            if(polygonButton.hasActivePseudoState)
-                lineEvent.InvokeStarted(); //cancel the polygon tool by invoking the line event, a second InvokeStarted will activate the tool
-            
             polygonButton.SetActivePseudoState(false);
             lineButton.SetActivePseudoState(true);
-            lineEvent.InvokeStarted();
+            polygonCreationService.SetLineInputToCreate();
+        }
+
+        private void OnGridButtonClicked()
+        {
+            toolService.GetTool(ToolType.PolygonGrid).Open();
+            polygonCreationService.SetGridInputModeToCreate();
         }
     }
 }
