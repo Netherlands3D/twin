@@ -61,6 +61,7 @@ namespace Netherlands3D.UI.Panels
         private void OnEditGridButtonPressed(ClickEvent evt)
         {
             ServiceLocator.GetService<PolygonCreationService>().SetGridInputModeToEdit();
+            ServiceLocator.GetService<PolygonSelectionService>().SetSelectedLayerForPolygonSelectionProperty(polygonPropertyData);
         }
     }
 }

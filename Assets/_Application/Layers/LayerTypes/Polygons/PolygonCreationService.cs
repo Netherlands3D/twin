@@ -38,6 +38,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private PolygonSelectionService polygonSelectionService;
         private InputService inputService;
+        
 
         [SerializeField] private BoolEvent OnBlockCameraDragging;
 
@@ -60,6 +61,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.createdNewPolygonArea.AddListener(CreateLineLayer);
             lineInput.editedPolygonArea.AddListener(UpdateLayer);
             gridInput.whenAreaIsSelected.AddListener(CreateOrEditGridLayer);
+            
+            
         }
 
         private void OnDestroy()
