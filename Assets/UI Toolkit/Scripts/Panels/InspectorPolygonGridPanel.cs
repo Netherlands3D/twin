@@ -1,14 +1,11 @@
 using Netherlands3D.Events;
 using Netherlands3D.Functionalities.AreaDownload.UI;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
 
@@ -46,7 +43,7 @@ namespace Netherlands3D.UI.Panels
 
            
             confirmButton.clicked += OnGridConfirmed.Invoke;
-            confirmButton.clicked += OnHide.Invoke; //TODO instead of hiding open the layertool here!
+            //confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Close; //TODO instead of hiding open the layertool here!
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {

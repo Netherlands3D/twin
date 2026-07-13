@@ -85,15 +85,16 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnToolWithPanelOpen(Tool toolWithPanel)
         {
-            activeToolWithPanel?.Close();
-            activePanel?.OnHide.RemoveListener(Close);
+            if (activeToolWithPanel != null)
+            {
+                activeToolWithPanel.Close();    
+            }
             activeToolWithPanel = toolWithPanel;
             
             Open();
             
             activePanel = CreatePanel(toolWithPanel.PanelType, toolWithPanel.PanelArgs);
             inspectorPanel.HeaderText = activePanel.Title;
-            activePanel.OnHide.AddListener(Close);
         }
 
         public void Open()

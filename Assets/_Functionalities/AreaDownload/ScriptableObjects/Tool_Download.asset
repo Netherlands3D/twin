@@ -25,9 +25,6 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls: []
-  onToggleInspector:
-    m_PersistentCalls:
-      m_Calls: []
   onSpawnedPrefab:
     m_PersistentCalls:
       m_Calls:
@@ -46,6 +43,9 @@ MonoBehaviour:
         m_CallState: 2
   inspectorPrefab: {fileID: 3537603041487147064, guid: 6b9505a13a1cf954b99d6247e15687df,
     type: 3}
+  panelType:
+    _assemblyQualifiedName: 
+  panelArgs: []
   functionalityPrefabs:
   - {fileID: 845528695721911891, guid: edf49d0620627654f98c961dc4935c4d, type: 3}
-  open: 1
+  open: 0

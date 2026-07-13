@@ -66,6 +66,11 @@ namespace Netherlands3D.Twin.Tools
             get => available;
             set => available = value;
         }
+        
+        private void OnEnable()
+        {
+            runtimeOpen = open; // reset from the pre-configured (serialized) state each time
+        }
 
         /// <summary>
         /// Set availability for the user on/off.
