@@ -13,6 +13,5 @@
 
 .snackbar-text
 {
-    white-space: normal;
     -unity-text-align: middle-center;
 }

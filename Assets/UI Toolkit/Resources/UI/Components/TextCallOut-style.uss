@@ -11,5 +11,4 @@
 }
 
 .textcallout > #Label {
-    white-space: normal;
 }

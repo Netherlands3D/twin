@@ -23,11 +23,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
     public class PolygonCreationService : MonoBehaviour
     {
-        public AreaSelection GridInput => gridInput;
+        public GridInput GridInput => gridInput;
         public PolygonInput PolygonInput => polygonInput;
         public PolygonInput LineInput => lineInput;
         
-        [SerializeField] private AreaSelection gridInput;
+        [SerializeField] private GridInput gridInput;
         [SerializeField] private PolygonInput polygonInput;
         [SerializeField] private PolygonInput lineInput;
 
@@ -44,11 +44,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private ShapeType currentShapeType = ShapeType.Undefined;
         private Plane worldPlane = new(Vector3.up, Vector3.zero);
+        private bool canCreatePolygon = true;
 
         private void Start()
         {
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            
             //we have to listen to inputservice after it is initialized
             inputService = ServiceLocator.GetService<InputService>();
             inputService.PolygonTapAction.performed += TapAction_performed;
@@ -56,6 +58,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             inputService.PolygonClickAction.canceled += ClickAction_canceled;
             inputService.PolygonEscapeAction.canceled += EscapeAction_canceled;
             inputService.PolygonFinishAction.performed += FinishAction_performed;
+            
+           
+            toolService.GetTool(ToolType.DownloadTile).onOpen.AddListener(SetPolygonCreationDisabled);
+            toolService.GetTool(ToolType.DownloadTile).onClose.AddListener(SetPolygonCreationEnabled);
             
             polygonInput.createdNewPolygonArea.AddListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.AddListener(UpdateLayer);
@@ -73,6 +79,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
             inputService.PolygonFinishAction.performed -= FinishAction_performed;
             
+            toolService.GetTool(ToolType.DownloadTile).onOpen.RemoveListener(SetPolygonCreationDisabled);
+            toolService.GetTool(ToolType.DownloadTile).onClose.RemoveListener(SetPolygonCreationEnabled);
+            
             polygonInput.createdNewPolygonArea.RemoveListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.RemoveListener(UpdateLayer);
             lineInput.createdNewPolygonArea.RemoveListener(CreateLineLayer);
@@ -81,6 +90,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             gridInput.whenAreaIsSelected.RemoveListener(EditGridLayer);
         }
 
+        private void SetPolygonCreationEnabled() => canCreatePolygon = true;
+        private void SetPolygonCreationDisabled() => canCreatePolygon = false;
+        
+        
         private void TapAction_performed(InputAction.CallbackContext obj)
         {
             PolygonInput input = GetInputFromShapeType(currentShapeType);
@@ -235,7 +248,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         /// </summary>
         public void UpdateInputByType(LayerData layer)
         {
-            if(layer == null) return;
+            if (layer == null)
+            {
+                EnablePolygonInputByType(ShapeType.Undefined);
+                return;
+            }
             
             PolygonSelectionLayerPropertyData data = layer.GetProperty<PolygonSelectionLayerPropertyData>();
             EnablePolygonInputByType(data.ShapeType);
@@ -275,6 +292,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
+            if (!canCreatePolygon) return;
+            
             var preset = new PolygonLayerPreset.Args(
                 "Polygon",
                 ShapeType.Polygon,

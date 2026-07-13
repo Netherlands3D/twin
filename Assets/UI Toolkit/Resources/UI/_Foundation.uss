@@ -10,6 +10,10 @@
     display: none;
 }
 
+.text-wrapping {
+    white-space: normal;
+}
+
 .text-base, 
 .unity-label, 
 .text-header {
@@ -17,10 +21,12 @@
     font-size: var(--font-size-base);
     -unity-font-style: normal;
     color: var(--color-text);
+    white-space: normal;
 }
 
 .text-header {
     -unity-font-definition: var(--nl3d-header-font);
+    white-space: normal;
 }
 
 .inspector-header-title {
@@ -28,6 +34,7 @@
     font-size: var(--font-size-lg);
     -unity-font-style: normal;
     color: var(--color-text);
+    white-space: normal;
 }
 
 .vignette-edge {
