@@ -38,7 +38,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private PolygonSelectionService polygonSelectionService;
         private InputService inputService;
-        private ToolService toolService;
 
         [SerializeField] private BoolEvent OnBlockCameraDragging;
 
@@ -47,7 +46,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void Start()
         {
-            toolService = ServiceLocator.GetService<ToolService>();
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             //we have to listen to inputservice after it is initialized
             inputService = ServiceLocator.GetService<InputService>();
