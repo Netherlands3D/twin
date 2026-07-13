@@ -60,6 +60,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             inputService.PolygonFinishAction.performed += FinishAction_performed;
             
            
+            toolService.GetTool(ToolType.DownloadTile).onOpen.AddListener(SetGridInputModeToCreate);
             toolService.GetTool(ToolType.DownloadTile).onOpen.AddListener(SetPolygonCreationDisabled);
             toolService.GetTool(ToolType.DownloadTile).onClose.AddListener(SetPolygonCreationEnabled);
             
@@ -79,6 +80,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             inputService.PolygonEscapeAction.canceled -= EscapeAction_canceled;
             inputService.PolygonFinishAction.performed -= FinishAction_performed;
             
+            toolService.GetTool(ToolType.DownloadTile).onOpen.RemoveListener(SetGridInputModeToCreate);
             toolService.GetTool(ToolType.DownloadTile).onOpen.RemoveListener(SetPolygonCreationDisabled);
             toolService.GetTool(ToolType.DownloadTile).onClose.RemoveListener(SetPolygonCreationEnabled);
             
@@ -292,7 +294,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
-            if (!canCreatePolygon) return;
             
             var preset = new PolygonLayerPreset.Args(
                 "Polygon",
@@ -336,6 +337,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         //called in the inspector
         public void CreateGridLayer(Bounds bounds)
         {
+            if (!canCreatePolygon) return;
+            
             if(gridInput.Mode != PolygonInput.DrawMode.Create && polygonSelectionService.SelectedLayer != null)
                 return;
             
