@@ -1,6 +1,8 @@
 using Netherlands3D.Events;
 using Netherlands3D.Functionalities.AreaDownload.UI;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -25,6 +27,9 @@ namespace Netherlands3D.UI.Panels
         
         private Button confirmButton;
 
+        private bool newPolygonSaved = false;
+        
+
         public InspectorPolygonGridPanel() 
         {
             this.CloneComponentTree("Panels");
@@ -38,10 +43,9 @@ namespace Netherlands3D.UI.Panels
             zw_y = this.Q<NumberField>("ZW_Y");
             no_x = this.Q<NumberField>("NO_X");
             no_y = this.Q<NumberField>("NO_Y");
-
-           
-            //confirmButton.clicked += OnGridConfirmed.Invoke;
-            //confirmButton.clicked += ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Close; //TODO instead of hiding open the layertool here!
+            
+            newPolygonSaved = false;
+            confirmButton.clicked += OnConfirm; 
 
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
@@ -60,7 +64,17 @@ namespace Netherlands3D.UI.Panels
             {
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(GetFeatureThumbnail);
                 downloadInspectorService.OnSelectionBoundsChanged.RemoveListener(UpdateFields);
+                
+                if(newPolygonSaved) return;
+
+                ServiceLocator.GetService<PolygonCreationService>().CancelLastCreatedGridLayer();
             });
+        }
+
+        private void OnConfirm()
+        {
+            newPolygonSaved = true;
+            ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer).Open();
         }
 
         private void CopySouthWest(ClickEvent evt)

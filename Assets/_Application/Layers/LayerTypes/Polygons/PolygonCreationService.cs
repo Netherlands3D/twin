@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private PolygonSelectionService polygonSelectionService;
         private InputService inputService;
-        
+        private ToolService toolService;
 
         [SerializeField] private BoolEvent OnBlockCameraDragging;
 
@@ -48,6 +48,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void Start()
         {
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            toolService = ServiceLocator.GetService<ToolService>();
             //we have to listen to inputservice after it is initialized
             inputService = ServiceLocator.GetService<InputService>();
             inputService.PolygonTapAction.performed += TapAction_performed;
@@ -60,9 +61,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonInput.editedPolygonArea.AddListener(UpdateLayer);
             lineInput.createdNewPolygonArea.AddListener(CreateLineLayer);
             lineInput.editedPolygonArea.AddListener(UpdateLayer);
-            gridInput.whenAreaIsSelected.AddListener(CreateOrEditGridLayer);
-            
-            
+            gridInput.whenAreaIsSelected.AddListener(CreateGridLayer);
+            gridInput.whenAreaIsSelected.AddListener(EditGridLayer);
         }
 
         private void OnDestroy()
@@ -77,7 +77,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonInput.editedPolygonArea.RemoveListener(UpdateLayer);
             lineInput.createdNewPolygonArea.RemoveListener(CreateLineLayer);
             lineInput.editedPolygonArea.RemoveListener(UpdateLayer);
-            gridInput.whenAreaIsSelected.RemoveListener(CreateOrEditGridLayer);
+            gridInput.whenAreaIsSelected.RemoveListener(CreateGridLayer);
+            gridInput.whenAreaIsSelected.RemoveListener(EditGridLayer);
         }
 
         private void TapAction_performed(InputAction.CallbackContext obj)
@@ -318,22 +319,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         }
 
         //called in the inspector
-        public void CreateOrEditGridLayer(Bounds bounds)
+        public void CreateGridLayer(Bounds bounds)
         {
+            if(gridInput.Mode != PolygonInput.DrawMode.Create && polygonSelectionService.ActiveLayer != null)
+                return;
+            
             Vector3 bottomLeft = new Vector3(bounds.min.x, 0, bounds.min.z);
             Vector3 topLeft = new Vector3(bounds.min.x, 0, bounds.max.z);
             Vector3 topRight = new Vector3(bounds.max.x, 0, bounds.max.z);
             Vector3 bottomRight = new Vector3(bounds.max.x, 0, bounds.min.z);
-
-            PolygonSelectionLayerPropertyData data = polygonSelectionService.ActiveLayer?.GetProperty<PolygonSelectionLayerPropertyData>();
-
-            //is the current selected layer already a grid and the current input mode is not selected, then we can adjust the polygon
-            if (data?.ShapeType == ShapeType.Grid && gridInput.Mode != PolygonInput.DrawMode.Selected)
-            {
-                var newPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(bottomRight), new Coordinate(topRight), new Coordinate(topLeft)  };
-                data.OriginalPolygon = newPolygon;
-                return;
-            }
 
             var preset = new PolygonLayerPreset.Args(
                 "Grid",
@@ -344,6 +338,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
             SetGridInputModeToEdit();
+        }
+
+        public void EditGridLayer(Bounds bounds)
+        {
+            if(gridInput.Mode != PolygonInput.DrawMode.Edit && polygonSelectionService.ActiveLayer == null)
+                return;
+            
+            Vector3 bottomLeft = new Vector3(bounds.min.x, 0, bounds.min.z);
+            Vector3 topLeft = new Vector3(bounds.min.x, 0, bounds.max.z);
+            Vector3 topRight = new Vector3(bounds.max.x, 0, bounds.max.z);
+            Vector3 bottomRight = new Vector3(bounds.max.x, 0, bounds.min.z);
+
+            PolygonSelectionLayerPropertyData data = polygonSelectionService.ActiveLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            var newPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(bottomRight), new Coordinate(topRight), new Coordinate(topLeft)  };
+            data.OriginalPolygon = newPolygon;
+        }
+
+        public void CancelLastCreatedGridLayer()
+        {
+            if(polygonSelectionService.ActiveLayer == null) return;
+            
+            App.Layers.Remove(polygonSelectionService.ActiveLayer);
         }
 
         public void SetPolygonToCreate()

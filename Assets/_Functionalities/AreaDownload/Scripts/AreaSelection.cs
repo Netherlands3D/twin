@@ -40,7 +40,7 @@ namespace Netherlands3D.Functionalities.AreaDownload
         [Tooltip("Once a selection is confirmed, this is called")]
         public UnityEvent<Bounds> OnSelectionAreaBoundsChanged = new();
 
-        [Tooltip("While a selection is being made, this is called")]
+        //TODO THIS IS OBSOLETE?
         public UnityEvent<Bounds> WhenSelectionAreaBoundsChanged = new();
 
         public UnityEvent<ExportFormat> OnExportFormatChanged = new();
@@ -52,6 +52,7 @@ namespace Netherlands3D.Functionalities.AreaDownload
 
         [SerializeField] private LayerMask includedLayers;
 
+        //TODO THIS IS OBSOLETE?
         public void SetDuringSelectionAreaBounds(Bounds selectedAreaBounds)
         {
             WhenSelectionAreaBoundsChanged.Invoke(selectedAreaBounds);
