@@ -235,6 +235,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         /// </summary>
         public void UpdateInputByType(LayerData layer)
         {
+            if(layer == null) return;
+            
             PolygonSelectionLayerPropertyData data = layer.GetProperty<PolygonSelectionLayerPropertyData>();
             EnablePolygonInputByType(data.ShapeType);
             var polygonAsUnityPoints = data.OriginalPolygon.ToUnityPositions().ToList();
@@ -257,15 +259,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void EnablePolygonInputByType(ShapeType type)
         {
             currentShapeType = type;
-            switch (type)
-            {
-                case ShapeType.Undefined: break;
-                case ShapeType.Polygon: polygonInput.gameObject.SetActive(true); break;
-                case ShapeType.Line: lineInput.gameObject.SetActive(true); break;
-                case ShapeType.Grid: gridInput.gameObject.SetActive(true); break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            polygonInput.gameObject.SetActive(currentShapeType == ShapeType.Polygon);
+            lineInput.gameObject.SetActive(currentShapeType == ShapeType.Line);
+            gridInput.gameObject.SetActive(currentShapeType == ShapeType.Grid);
         }
         
         public void ClearInputs()

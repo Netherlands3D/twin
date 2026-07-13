@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     public class PolygonSelectionService : MonoBehaviour
     {
         public LayerData SelectedLayer => selectedLayer;
+    
         public bool PolygonSelectionEnabled => polygonSelectionEnabled;
         
         private LayerData selectedLayer;
@@ -60,9 +61,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //clear any selected polygon when selection is disabled
             polygonCreationService.ClearInputs();
 
-            selectedLayer = null;
-            ReselectLayerPolygon(null);
+            SetSelectedLayer(null);
             OnDeselectActivePolygon.Invoke();
+        }
+        
+        private void SetSelectedLayer(LayerData layer)
+        {
+            if (selectedLayer == layer) return;
+            
+            selectedLayer = layer;
+            polygonCreationService.UpdateInputByType(layer);
         }
 
         public void RegisterPolygon(LayerData layer)
@@ -171,9 +179,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 return;
 
             polygonCreationService.ClearInputs();
-
-            selectedLayer = null;
-            ReselectLayerPolygon(null);
+            SetSelectedLayer(null);
             OnDeselectActivePolygon.Invoke();
         }
         
@@ -184,8 +190,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //we don't reselect immediately in case of a grid, but we already register the active layer
             if (data?.ShapeType == ShapeType.Grid)
             {
-                selectedLayer = layer;
-                polygonCreationService.UpdateInputByType(layer);
+                SetSelectedLayer(layer);
                 polygonCreationService.GridInput.SetSelectionVisualEnabled(true);
                 OnSelectActivePolygon.Invoke();
                 return;
@@ -197,24 +202,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             
             polygonCreationService.ClearInputs();
-            selectedLayer = layer;
-            ReselectLayerPolygon(layer);
+            SetSelectedLayer(layer);
             OnSelectActivePolygon.Invoke();
-        }
-        
-        private void ReselectLayerPolygon(LayerData layer)
-        {
-            if (layer == null)
-            {
-                // reselecting nothing, disabling all polygon selections
-                polygonCreationService.PolygonInput.gameObject.SetActive(false);
-                polygonCreationService.LineInput.gameObject.SetActive(false);
-                polygonCreationService.GridInput.gameObject.SetActive(false);
-                return;
-            }
-
-            //Align the input sytem by reselecting using layer polygon
-            polygonCreationService.UpdateInputByType(layer);
         }
 
         //TODO we should really consider storing this in a spatial mapping sense
