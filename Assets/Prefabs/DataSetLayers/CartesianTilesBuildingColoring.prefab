@@ -44,10 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 015a5f659ffff4baea3beea5b739422b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 
-  onShow:
+  prefabIdentifier: c57dd4a997e79ce43895144d0702166c
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  VisualisationError:
     m_PersistentCalls:
       m_Calls: []
-  onHide:
+  progressEvent:
     m_PersistentCalls:
       m_Calls: []
