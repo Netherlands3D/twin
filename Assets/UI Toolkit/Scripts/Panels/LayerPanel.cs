@@ -156,6 +156,36 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
+        private void ToggleSelection(int clickedRootIndex, bool active)
+        {
+            var selectedTreeIndices = treeView.selectedIndices.ToList(); 
+            
+            //convert the treeIndex to the rootIndex. The tree index ignores collapsed items, and only counts visible treeViewItems,
+            //the rootIndex is the stable index of the item in the tree (including collapsed items)
+            var toggledSelectedLayer = false;
+            for (var i = 0; i < selectedTreeIndices.Count; i++)
+            {
+                var treeIndex = selectedTreeIndices[i];
+                var rootIndex = treeView.GetIdForIndex(treeIndex);
+                if(rootIndex == clickedRootIndex)
+                {
+                    toggledSelectedLayer = true;
+                    break;
+                }
+            }
+            
+            if (!toggledSelectedLayer) //we toggled a different layer than the selected layers, don't toggle the selected layers
+                return;
+
+            foreach (var index in selectedTreeIndices) //make a copy of the indices, because they might change
+            {
+                var layerData = treeView.GetItemDataForIndex<LayerData>(index);
+                layerData.ActiveSelf = active;
+            }
+
+            doRefresh = true;
+        }
+        
         private void OnFolderButtonClicked(ClickEvent evt)
         {
             CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected
@@ -270,6 +300,7 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.Dragging.AddListener(OnDraggingLayerItem);
             layerRowElement.DragEnded.AddListener(OnDraggingLayerItemEnded);
             layerRowElement.RegisterCallback<ClickEvent>(SetReferenceLayer);
+            
             return layerRowElement;
         }
 
@@ -286,6 +317,7 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.Initialize(layerData);
             layerRowElement.SelectLayerItem.AddListener(SelectItemWithoutNotify);
             layerRowElement.DeselectLayerItem.AddListener(DeselectWithoutNotify);
+            layerRowElement.VisibilityToggleChanged.AddListener(ToggleSelection);
 
             if (layerData.IsSelected)
             {
@@ -298,6 +330,9 @@ namespace Netherlands3D.UI.Panels
             if (item is not LayerTreeViewItem layerRowElement) return;
 
             layerRowElement.RemoveLayerDataListeners(layerRowElement.LayerData);
+            layerRowElement.SelectLayerItem.RemoveListener(SelectItemWithoutNotify);
+            layerRowElement.DeselectLayerItem.RemoveListener(DeselectWithoutNotify);
+            layerRowElement.VisibilityToggleChanged.RemoveListener(ToggleSelection);
         }
         
         private void DeselectWithoutNotify(LayerTreeViewItem item)
