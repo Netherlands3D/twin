@@ -21,7 +21,7 @@ namespace Netherlands3D.UI.Components
 
         private Button OpenProjectButton => this.Q<Button>("Open");
         private Button SaveProjectButton => this.Q<Button>("Save");
-        private Button SettingsButton => this.Q<Button>("Settings");
+        private ToolButton SettingsButton => this.Q<ToolButton>("Settings");
         private Button HelpButton => this.Q<Button>("Help");
         
         [UxmlAttribute("text")]
@@ -50,10 +50,10 @@ namespace Netherlands3D.UI.Components
 
             RegisterCallback<ChangeEvent<bool>>(OnFoldoutValueChanged);
             
-            OpenProjectButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.OpenProject).onOpen.Invoke());
-            SaveProjectButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.SaveProject).onOpen.Invoke());
-            SettingsButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.Settings).onOpen.Invoke());
-            HelpButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.Help).onOpen.Invoke());
+            OpenProjectButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.OpenProject).Open());
+            SaveProjectButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.SaveProject).Open());
+            SettingsButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.Settings).Open());
+            HelpButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.Help).Open());
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
