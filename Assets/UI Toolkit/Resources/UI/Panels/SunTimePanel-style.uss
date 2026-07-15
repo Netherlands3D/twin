@@ -49,7 +49,7 @@
     -unity-text-align: middle-left;
 }
 
-.sun-shadow-panel__images { /* .unity-scroll-view__content-container.unity-scroll-view__content-container--vertical { */
+.sun-shadow-panel__images { 
     flex-direction: column;   
     margin-bottom: var(--spacing-3);   
 }

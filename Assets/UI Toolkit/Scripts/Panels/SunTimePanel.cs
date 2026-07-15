@@ -92,12 +92,16 @@ namespace Netherlands3D.UI.Panels
             downloadButton.clicked += periodicSnapshotsService.DownloadSnapshots;
 
             if (imageContainer is not ScreenshotContainer screenshots)
+            {
                 Debug.LogError("missing images for schaduwstudie, please provide a screenshotcontainer scriptableobject");
+                return;
+            }
             else
                 images = screenshots;
 
             imagesContainer = this.Q<VisualElement>("ImagesGrid");
-            imagesContainer.RegisterCallbackOnce<GeometryChangedEvent>(OnGridGeometryChanged);
+            //once because we want to unregister immediately after firing or evertying will be instantiated multple times
+            imagesContainer.RegisterCallbackOnce<GeometryChangedEvent>(OnGridGeometryChanged); 
         }
 
         private void OnGridGeometryChanged(GeometryChangedEvent evt)
