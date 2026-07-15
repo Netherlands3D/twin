@@ -1,0 +1,21 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="SettingsPanel" 
+    class="settings-panel"
+>
+    <nl3d:ScrollView>
+        <nl3d:ContentContainer name="SettingsSection" leading-icon="AdjustmentsHorizontal" text="Weergave instellingen" class="settings-panel__section">
+            <nl3d:RadioButtonGroup name="QualitySettings" choices="Laag (high performance), Middel, Hoog" label="Kwaliteit"/>
+            <ui:VisualElement name="spacer" class="settings-panel__spacer"/>
+            <ui:VisualElement>
+                <ui:Label text="Optionele functionaliteiten" class="text-header"/>
+                <nl3d:ListView name="Functionalities"/>
+            </ui:VisualElement>
+        </nl3d:ContentContainer>
+    </nl3d:ScrollView>
+</ui:UXML>
