@@ -114,6 +114,7 @@ Material:
     - _GlossinessSource: 0
     - _GlossyReflections: 0
     - _IncludeInGlobalMask: 0
+    - _LightIntensity: 1
     - _MaskInvert: 0
     - _MaskingChannelBitmask: 12582911
     - _Metallic: 0.2
@@ -124,6 +125,7 @@ Material:
     - _SPHERICAL_MASKING: 0
     - _SPIKE_CLAMPING: 0
     - _SUBOBJECT_FILTERING: 1
+    - _ShadowIntensity: 0.5
     - _Shininess: 0
     - _Smoothness: 0.2
     - _SmoothnessSource: 0
@@ -147,6 +149,7 @@ Material:
     - _OffsetMainTexture: {r: 0, g: 0, b: 0, a: 0}
     - _OffsetSecondaryTexture: {r: 0, g: 0, b: 0, a: 0}
     - _SecondaryHighlightColor: {r: 1, g: 1, b: 0, a: 1}
+    - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _Size: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _TilingMainTexture: {r: 0.1, g: 0.1, b: 0, a: 0}
