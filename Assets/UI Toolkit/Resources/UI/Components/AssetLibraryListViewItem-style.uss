@@ -1,0 +1,12 @@
+.asset-library-listview-item {   
+
+   flex-direction: row;
+}
+
+.asset-library-listview-item > * {
+    align-items: stretch;
+}
+
+.asset-library-listview-item .icon {
+    margin: var(--spacing-2);
+}

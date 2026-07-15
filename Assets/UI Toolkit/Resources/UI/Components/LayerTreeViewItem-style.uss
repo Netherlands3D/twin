@@ -1,0 +1,87 @@
+.layer-tree-view-item__container {
+    align-items: center;
+    flex-direction: row;
+    flex-grow: 1;
+    height: var(--spacing-8);
+}
+
+.layer-tree-view-item:hover {
+    background-color: transparent;
+}
+
+.layer-tree-view-item__cell {
+    margin: 0;
+}
+
+.layer-tree-view-item__visibility-toggle{
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
+}
+
+.layer-tree-view-item__color-bar{
+    width: var(--spacing-1);
+    height: 100%;
+}
+
+.unity-tree-view__item .layer-tree-view-item__icon{
+    margin-right: var(--spacing-1);
+}
+
+.layer-tree-view-item__name-label{
+    flex-basis: 0; /* ensures the toggle is not pushed out of view*/
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+}
+
+.layer-tree-view-item__name-label .editable-name-field__label,
+.layer-tree-view-item__name-label .editable-name-field__input TextElement {
+    white-space: pre;
+}
+
+.unity-tree-view__item .layer-tree-view-item__property-toggle{
+    padding: 0 var(--spacing-1) 0 var(--spacing-1);
+    background-color: transparent;
+    border-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: var(--spacing-1);
+    border-bottom-right-radius: var(--spacing-1);
+    min-height: 0;
+    height: 100%;
+}
+
+.unity-tree-view__item:hover.layer-tree-view-item--reparent-target{
+    background-color: var(--color-blue-200);
+}
+
+.layer-tree-view-item--reparent-target{
+    background-color: var(--color-blue-200);
+}
+
+.layer-tree-view-item__visibility-toggle.visibility-toggle{
+    background-color: transparent;
+}
+
+.credentials-needed .layer-tree-view-item__visibility-toggle .icon{
+    --icon-image: var(--icon-warning);
+    -unity-background-image-tint-color: var(--color-warning);
+}
+
+.credentials-needed .layer-tree-view-item__color-bar{
+    background-color: var(--color-warning);
+}
+
+.credentials-needed .layer-tree-view-item__icon.icon{
+     --icon-image: var(--icon-help);
+}
+
+.credentials-needed .layer-tree-view-item__property-toggle .icon{
+    --icon-image: var(--icon-settings);
+    -unity-background-image-tint-color: var(--color-warning);
+}
+
+.credentials-needed .layer-tree-view-item__property-toggle:checked{
+    background-color: var(--color-warning);
+}
+

@@ -82,9 +82,9 @@ namespace Netherlands3D.UI.Components
         private int caretIndex;
         private int selectionStart;
         private int selectionEnd;
-        
+
         public string CachedSelection { get; private set; } = "";
-        
+
         public int CaretIndex
         {
             get { return caretIndex; }
@@ -96,8 +96,8 @@ namespace Netherlands3D.UI.Components
             get { return selectionStart; }
             set { selectionStart = value; }
         }
-        
-        public int SelectionEnd 
+
+        public int SelectionEnd
         {
             get { return selectionEnd; }
             set { selectionEnd = value; }
@@ -108,19 +108,13 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                ApplyStyleVariant();
-                UpdateClassList();
-                var textInput = this.Q("unity-text-input"); // internal TextInput element
-                if (textInput != null)
-                {
-                    textInput.RegisterCallback<KeyUpEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
-                    textInput.RegisterCallback<PointerDownEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
-                    textInput.RegisterCallback<PointerUpEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
-                    textInput.RegisterCallback<PointerCaptureOutEvent>(e => UpdateInput());
-                }
-            });
+            ApplyStyleVariant();
+            UpdateClassList();
+            var textInput = this.Q("unity-text-input"); // internal TextInput element
+            textInput.RegisterCallback<KeyUpEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
+            textInput.RegisterCallback<PointerDownEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
+            textInput.RegisterCallback<PointerUpEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
+            textInput.RegisterCallback<PointerCaptureOutEvent>(e => UpdateInput());
         }
 
         private void UpdateInput()
@@ -128,16 +122,16 @@ namespace Netherlands3D.UI.Components
             CaretIndex = this.cursorIndex;
             SelectionStart = this.selectIndex;
             SelectionEnd = this.cursorIndex;
-            
+
             int start = Mathf.Min(SelectionStart, SelectionEnd);
-            int end   = Mathf.Max(SelectionStart, SelectionEnd);
+            int end = Mathf.Max(SelectionStart, SelectionEnd);
 
             if (!string.IsNullOrEmpty(value) && start < end && end <= value.Length)
                 CachedSelection = value.Substring(start, end - start);
             else
                 CachedSelection = "";
         }
-        
+
         /// <summary>
         /// Ensures reasonable defaults per style. Keeps label text even when label is visually hidden,
         /// so it can serve as an accessible name or for debugging/QA.
@@ -149,7 +143,7 @@ namespace Netherlands3D.UI.Components
                 if (string.IsNullOrEmpty(LabelText)) LabelText = "Label";
             }
         }
-        
+
         private void UpdateClassList()
         {
             this.RemoveFromClassListStartingWith("text-");

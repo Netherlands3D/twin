@@ -14,8 +14,7 @@ using TextField = Netherlands3D.UI.Components.TextField;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
-    [InspectorPanel]
+    [UxmlElement, InspectorPanel]
     public partial class ImportAssetPanel : BaseInspectorContentPanel
     {
         public override string Title => "Importeren";
@@ -34,9 +33,8 @@ namespace Netherlands3D.UI.Panels
         private Button ImportUriButton => importUriButton ??= this.Q<Button>("ImportUriButton");
 
         private ErrorPanel errorPanel;
-        private ErrorPanel ErrorPanel => errorPanel ??= this.Q<ErrorPanel>();
-        
-        public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.AddLayer;
+        private ErrorPanel ErrorPanel => errorPanel ??= this.Q<ErrorPanel>();       
+      
 
         private ICredentialHandler credentialHandler = new CredentialPropertyHandler();
         private CredentialPanel credentialPanel;

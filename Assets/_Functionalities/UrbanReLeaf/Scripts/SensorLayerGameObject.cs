@@ -20,7 +20,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
 
         protected override void OnVisualizationReady()
         {
-            SetRenderOrder(LayerData.RootIndex);
+            SetRenderOrder(LayerData.RootId);
         }
 
         //a higher order means rendering over lower indices

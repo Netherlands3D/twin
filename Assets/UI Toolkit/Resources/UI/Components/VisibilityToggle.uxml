@@ -6,5 +6,5 @@
     editor-extension-mode="False" 
     class="visibility-toggle unity-toggle"
 >
-    <nl3d:Icon name="Icon"/>
+    <nl3d:Icon name="Icon" color="White"/>
 </ui:UXML>

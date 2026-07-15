@@ -8,12 +8,8 @@
     name="ImportAssetPanel"
     class="import-asset-panel">
     <nl3d:ScrollView>
-        <nl3d:ListViewItem>
-            <nl3d:Button class="import-asset-panel__button-asset-library" name="GoToAssetLibraryButton" icon="Library" LabelText="Vanuit bibliotheek" />
-        </nl3d:ListViewItem>
-        <nl3d:ListViewItem>
-            <nl3d:Button class="import-asset-panel__button-upload" name="FileUploadButton" icon="Plus" LabelText="Uploaden vanaf deze computer" />
-        </nl3d:ListViewItem>
+        <nl3d:Button class="import-asset-panel__button-asset-library" name="GoToAssetLibraryButton" icon="Library" LabelText="Vanuit bibliotheek" />
+        <nl3d:Button class="import-asset-panel__button-upload" name="FileUploadButton" icon="Plus" LabelText="Uploaden vanaf deze computer" />       
         <nl3d:ContentContainer class="import-asset-panel__open-url" container-type="NoFoldout" show-divider="true" leading-icon="LibraryAdd" text="Toevoegen vanaf link">
             <ui:VisualElement name="Row">
                 <nl3d:Icon class="import-asset-panel__open-url-icon" />

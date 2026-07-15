@@ -51,6 +51,30 @@ namespace Netherlands3D
         
         public UnityEvent AnyToolOpened;
         public UnityEvent AnyToolClosed;
+        
+#if UNITY_EDITOR
+        private Dictionary<Tool, bool> initialStates = new Dictionary<Tool, bool>();
+
+        public void OnValidate()
+        {
+            foreach (var entry in tools)
+            {
+                initialStates.Add(entry.tool, entry.tool.IsOpen);
+            }
+        }
+
+        private void OnApplicationQuit()
+        {
+            foreach (var entry in tools)
+            {
+                var initialOpen = initialStates[entry.tool];
+                if (initialOpen)
+                    entry.tool.Open();
+                else
+                    entry.tool.Close();
+            }
+        }
+#endif
 
         private void OnEnable()
         {

@@ -24,7 +24,6 @@
     width: var(--sun-time-label-width);
     margin-right: var(--sun-time-label-spacing);
     flex-shrink: 0;
-    white-space: normal;
     -unity-text-align: middle-left;
 }
 
@@ -83,3 +82,8 @@
 .sun-shadow-panel__button{
     align-self: flex-start;
 }
+
+.sun-time-panel__time-field{
+    flex-grow: 1;
+}
+

@@ -21,7 +21,7 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            FPV.Q<Icon>().AddManipulator(new FirstPersonViewManipulator());
+            FPV.Q<Icon>().AddManipulator(new FirstPersonViewManipulator(0));
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
             North.RegisterCallback<ClickEvent>(OnNorthClick);

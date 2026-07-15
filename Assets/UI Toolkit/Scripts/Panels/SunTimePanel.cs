@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine;
 using UnityEngine.UIElements;
 using static Netherlands3D.Snapshots.PeriodicSnapshots;
 using Button = Netherlands3D.UI.Components.Button;
@@ -30,8 +31,8 @@ namespace Netherlands3D.UI.Panels
         private SunDial sunDial;
         private SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
 
-        private TimeField timeField;
-        private TimeField TimeField => timeField ??= this.Q<TimeField>("TimeField");
+        private NumberField timeField;
+        private NumberField TimeField => timeField ??= this.Q<NumberField>("TimeField");
 
         private Button nowButton;
         private Button NowButton => nowButton ??= this.Q<Button>("NowButton");
@@ -63,7 +64,8 @@ namespace Netherlands3D.UI.Panels
             
             SunDial.TimeChanged += OnSunDialTimeChanged;
             DateField.SubmitEvent += OnDateChanged;
-            TimeField.TimeChanged += OnTimeChanged;
+            TimeField.InputField.RegisterCallback<BlurEvent>(_ =>OnTimeChanged());
+            TimeField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>OnTimeChanged());
 
             NowButton.RegisterCallback<ClickEvent>(OnNowButtonClicked);
 
@@ -173,7 +175,7 @@ namespace Netherlands3D.UI.Panels
         {
             SunDial.SetTimeWithoutNotify(dt.Hour, dt.Minute);
             DateField.SetValueWithoutNotify(dt.Day, dt.Month, dt.Year);
-            TimeField.SetValueWithoutNotify(dt.ToString("HH:mm"));
+            TimeField.SetValueWithoutNotify(dt);
         }
 
         private void OnSunDialTimeChanged(int hour, int minute)
@@ -202,9 +204,10 @@ namespace Netherlands3D.UI.Panels
             sunTime?.ToggleAnimation(isPlaying);
         }
 
-        private void OnTimeChanged(int hour, int minute)
+        private void OnTimeChanged()
         {
-            sunTime?.SetTime(hour, minute, 0);
+            var dt = timeField.GetValueAsTime(sunTime.Time);
+            sunTime?.SetTime(dt.Hour, dt.Minute, 0);
         }
 
         private void OnDateChanged(int day, int month, int year)

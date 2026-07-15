@@ -5,7 +5,6 @@
 .simulation-speed-controls__field-label {
     width: var(--spacing-20);
     flex-shrink: 0;
-    white-space: normal;
     -unity-text-align: middle-left;
     margin-right: var(--spacing-3);
 }

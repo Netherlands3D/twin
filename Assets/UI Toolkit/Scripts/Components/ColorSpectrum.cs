@@ -18,6 +18,7 @@ namespace Netherlands3D.UI.Components
         private Vector2 center => new Vector2(colorSpectrumRadius, colorSpectrumRadius);
 
         private Vector2 selectorPosition = new Vector2(colorSpectrumRadius, colorSpectrumRadius);
+        private Vector2 pointerPosition = new Vector2(colorSpectrumRadius, colorSpectrumRadius);
 
         [UxmlAttribute("selector-position")]
         public Vector2 SelectorPosition
@@ -82,7 +83,7 @@ namespace Netherlands3D.UI.Components
             AddToClassList("color-spectrum");
             RegisterCallback<AttachToPanelEvent>(_ => ApplySelectorPosition());
 
-            var dragManipulator = new DragManipulator();
+            var dragManipulator = new DragManipulator(0);
             dragManipulator.DragStarted.AddListener(OnDragStarted);
             dragManipulator.Dragging.AddListener(OnDragging);
             this.AddManipulator(dragManipulator);
@@ -90,13 +91,15 @@ namespace Netherlands3D.UI.Components
 
         private void OnDragStarted(Vector2 startPosition)
         {
-            dragStartPosition = startPosition;
+            pointerPosition = startPosition;
             SelectorPosition = startPosition;
         }
 
+
         private void OnDragging(Vector2 delta)
         {
-            SelectorPosition = dragStartPosition + delta;
+            pointerPosition += delta; //raw pointer position
+            SelectorPosition = pointerPosition; //clamping happens internally
         }
 
         private void ApplySelectorPosition()

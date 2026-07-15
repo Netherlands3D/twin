@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9fc8c6e437240cb93994a805f69d248, type: 3}
+  m_Script: {fileID: 11500000, guid: d8b036f600b6eaa84a55b38b361b2701, type: 3}
   m_Name: Tekengebied - Grid
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.AssetLibrary.Entries.ToolAssetEntry
   id: planning-area-grid
   title: Grid
   description: 
-  scriptableObjectEvent: {fileID: 11400000, guid: 2725eb416725304468190dd92c09fdc3,
-    type: 2}
+  tool: {fileID: 11400000, guid: bb3c1255bfb17a31c98dc52d1a116c36, type: 2}
+  withoutNotify: 0

@@ -20,7 +20,7 @@ namespace Netherlands3D.UI.Components
 
         private VisualElement DialFace => dialFace ??= this.Q<VisualElement>("DialFace");
         private VisualElement OrbitContainer => orbitContainer ??= this.Q<VisualElement>("OrbitContainer");
-        private DragManipulator DragManipulator => dragManipulator ??= new DragManipulator();
+        private DragManipulator DragManipulator => dragManipulator ??= new DragManipulator(0);
 
         public SunDial()
         {

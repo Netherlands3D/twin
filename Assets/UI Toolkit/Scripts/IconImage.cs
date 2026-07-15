@@ -105,6 +105,7 @@
         Visibility = 200,
         Invisible = 201,
         VisibilityMixed = 202,
-        ColorFeatures = 203
+        VisibleInInvisible = 203,
+        ColorFeatures = 204
     }
 }

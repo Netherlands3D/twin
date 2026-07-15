@@ -3,7 +3,6 @@
 }
 
 .polygon-property-section__message-text{
-    white-space: pre-wrap;
 }
 
 .polygon-property-section__button{
