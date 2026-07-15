@@ -158,8 +158,10 @@ namespace Netherlands3D.UI.Panels
 
         private void ToggleSelection(int clickedRootIndex, bool active)
         {
-            var selectedTreeIndices = treeView.selectedIndices.ToList(); //convert the treeIndex to the rootIndex. The tree index ignores collapsed items, and only counts visible treeViewItems, the rootIndex is the stable index of the item in the tree (including collapsed items)
-
+            var selectedTreeIndices = treeView.selectedIndices.ToList(); 
+            
+            //convert the treeIndex to the rootIndex. The tree index ignores collapsed items, and only counts visible treeViewItems,
+            //the rootIndex is the stable index of the item in the tree (including collapsed items)
             var toggledSelectedLayer = false;
             for (var i = 0; i < selectedTreeIndices.Count; i++)
             {
