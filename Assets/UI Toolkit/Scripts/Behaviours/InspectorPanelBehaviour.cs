@@ -61,7 +61,6 @@ namespace Netherlands3D.UI.Behaviours
                 toolWithPanel.onOpen.AddListener(toolListeners[toolWithPanel]);
                 toolWithPanel.onClose.AddListener(Close);
             }
-            toolService.GetTool(ToolType.Settings).onOpen.AddListener(((IWindow)SettingsWindow).Open);
             toolService.GetTool(ToolType.Help).onOpen.AddListener(OpenHelp);
             inspectorPanel.InspectorHeaderCloseButton.clicked += CloseActiveTool;
             toolService.AnyToolOpened.AddListener(OnAnyToolOpened);
@@ -74,7 +73,6 @@ namespace Netherlands3D.UI.Behaviours
                 toolWithPanel.onOpen.RemoveListener(toolListeners[toolWithPanel]);
                 toolWithPanel.onClose.RemoveListener(Close);
             }
-            toolService.GetTool(ToolType.Settings).onOpen.RemoveListener(((IWindow)SettingsWindow).Open);
             toolService.GetTool(ToolType.Help).onOpen.RemoveListener(OpenHelp);
             inspectorPanel.InspectorHeaderCloseButton.clicked -= CloseActiveTool;
             toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
