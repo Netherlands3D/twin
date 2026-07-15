@@ -68,21 +68,7 @@ MonoBehaviour:
       - rid: 3493114797230653446
       - rid: 3493114797230653447
     m_RuntimeSettings:
-      m_List:
-      - rid: 3276363333139693570
-      - rid: 3276363333139693571
-      - rid: 3276363333139693572
-      - rid: 3276363333139693573
-      - rid: 3276363333139693574
-      - rid: 3276363333139693576
-      - rid: 3276363333139693577
-      - rid: 3276363333139693581
-      - rid: 3276363333139693585
-      - rid: 3276363333139693588
-      - rid: 2306829690112835584
-      - rid: 3493114797230653443
-      - rid: 3493114797230653445
-      - rid: 3493114797230653447
+      m_List: []
   m_AssetVersion: 10
   m_ObsoleteDefaultVolumeProfile: {fileID: 0}
   m_RenderingLayerNames:
@@ -351,6 +337,8 @@ MonoBehaviour:
         m_GeometryShadowShader: {fileID: 4800000, guid: 19349a0f9a7ed4c48a27445bcf92e5e1,
           type: 3}
         m_GeometryUnshadowShader: {fileID: 4800000, guid: 77774d9009bb81447b048c907d4c6273,
+          type: 3}
+        m_FallOffLookup: {fileID: 2800000, guid: 5688ab254e4c0634f8d6c8e0792331ca,
           type: 3}
         m_CopyDepthPS: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
         m_DefaultLitMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3,
