@@ -67,6 +67,12 @@ namespace Netherlands3D.Twin.Tools
             set => available = value;
         }
 
+        //we have to force a sync with open, to be sure runtime open starts with the right value
+        private void OnEnable()
+        {
+            runtimeOpen = open;
+        }
+
         /// <summary>
         /// Set availability for the user on/off.
         /// Toolbar will show/hide the buttons for this tool.
