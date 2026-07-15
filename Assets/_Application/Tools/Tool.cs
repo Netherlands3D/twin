@@ -46,10 +46,7 @@ namespace Netherlands3D.Twin.Tools
         }
 
         private GameObject[] functionalityInstances;
-
-        // Runtime configuration to prevent SO changes in editor
-        private bool runtimeOpen = false;
-
+        
         // Configuration setting, this way you can preconfigure the state of the tool
         [SerializeField] private bool open = false;
 
@@ -57,20 +54,14 @@ namespace Netherlands3D.Twin.Tools
 
         public bool IsOpen
         {
-            get => runtimeOpen;
-            private set => runtimeOpen = value;
+            get => open;
+            private set => open = value;
         }
 
         public bool Available
         {
             get => available;
             set => available = value;
-        }
-
-        //we have to force a sync with open, to be sure runtime open starts with the right value
-        private void OnEnable()
-        {
-            runtimeOpen = open;
         }
 
         /// <summary>
