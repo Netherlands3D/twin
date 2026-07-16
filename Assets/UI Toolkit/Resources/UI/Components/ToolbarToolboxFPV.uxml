@@ -1,0 +1,13 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="toolbar-toolbox-fpv"
+>
+    <ui:VisualElement class="toolbar-toolbox-fpv__group" picking-mode="Ignore">
+        <nl3d:Button name="SnapToMaaiveld" toggle-type="transparent" toggle-style="IconOnly" icon="Map" />
+        <nl3d:Button name="Exit" button-type="transparent" button-style="IconOnly" icon="Close" />
+    </ui:VisualElement>
+</ui:UXML>
