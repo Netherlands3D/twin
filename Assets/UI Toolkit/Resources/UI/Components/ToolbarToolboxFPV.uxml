@@ -7,7 +7,7 @@
     class="toolbar-toolbox-fpv"
 >
     <ui:VisualElement class="toolbar-toolbox-fpv__group" picking-mode="Ignore">
-        <nl3d:Button name="SnapToMaaiveld" toggle-type="transparent" toggle-style="IconOnly" icon="Map" />
+        <nl3d:Button name="SnapToMaaiveld" button-type="transparent" button-style="IconOnly" icon="ChevronDown" />
         <nl3d:Button name="Exit" button-type="transparent" button-style="IconOnly" icon="Close" />
     </ui:VisualElement>
 </ui:UXML>
