@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.AssetBundles;
+using Netherlands3D.Services;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -121,6 +122,10 @@ namespace Netherlands3D.Twin.Projects
             redoAction.performed += OnRedoAction;
 
             credentialHandler.OnAuthorizationHandled.AddListener(fileImporter.DetermineAdapter);
+            
+            ToolService tools = ServiceLocator.GetService<ToolService>();
+            tools.GetTool(ToolType.OpenProject).onOpen.AddListener(OpenProject);
+            tools.GetTool(ToolType.SaveProject).onOpen.AddListener(SaveProject);
         }
 
         private void OnDisable()
@@ -138,6 +143,10 @@ namespace Netherlands3D.Twin.Projects
             redoAction.Disable();
 
             credentialHandler.OnAuthorizationHandled.RemoveListener(fileImporter.DetermineAdapter);
+            
+            ToolService tools = ServiceLocator.GetService<ToolService>();
+            tools.GetTool(ToolType.OpenProject).onOpen.RemoveListener(OpenProject);
+            tools.GetTool(ToolType.SaveProject).onOpen.RemoveListener(SaveProject);
         }
 
         private void OnProjectDataChanged(ProjectData project)
@@ -173,6 +182,11 @@ namespace Netherlands3D.Twin.Projects
         private void OnRedoAction(InputAction.CallbackContext obj)
         {
             Redo();
+        }
+
+        private void OpenProject()
+        {
+            fileOpener.OpenFile("nl3d");
         }
 
         public void SaveProject()
