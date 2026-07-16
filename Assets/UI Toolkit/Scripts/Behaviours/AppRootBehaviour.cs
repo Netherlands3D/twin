@@ -2,6 +2,7 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.UI_Toolkit;
 using System.Collections.Generic;
+using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -16,22 +17,42 @@ namespace Netherlands3D
         
         private UIDocument appDocument;
         private VisualElement appRoot;
+        private VisualElement leftSection;
+        private VisualElement propertiesZone;
+        private VisualElement toolbarNavigation;
+        private VisualElement toolbarToolbox;
+        private VisualElement toolbarToolboxFPV;
 
         //the excuted order of this script should be executed very early to ensure the presence of the approot. 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
             appRoot = appDocument?.rootVisualElement.Q("App");
+            leftSection = appRoot.Q("LeftSection");
+            propertiesZone = appRoot.Q("PropertiesZone");
+            toolbarNavigation = appRoot.Q<ToolbarNavigation>();
+            toolbarToolbox = appRoot.Q<ToolbarToolbox>();
+            toolbarToolboxFPV = appRoot.Q<ToolbarToolboxFPV>();
         }
 
-        public void Show()
+        public void ShowDefaultUI() //todo: rename/move this function?
         {
-            appRoot.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            // appRoot.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            leftSection.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            propertiesZone.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            toolbarNavigation.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            toolbarToolbox.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            toolbarToolboxFPV.AddToClassList(UtilityClassConstants.HIDDEN);
         }
 
-        public void Hide()
+        public void HideDefaultUI()
         {
-            appRoot.AddToClassList(UtilityClassConstants.HIDDEN);
+            // appRoot.AddToClassList(UtilityClassConstants.HIDDEN);
+            leftSection.AddToClassList(UtilityClassConstants.HIDDEN);
+            propertiesZone.AddToClassList(UtilityClassConstants.HIDDEN);
+            toolbarNavigation.AddToClassList(UtilityClassConstants.HIDDEN);
+            toolbarToolbox.AddToClassList(UtilityClassConstants.HIDDEN);
+            toolbarToolboxFPV.RemoveFromClassList(UtilityClassConstants.HIDDEN);
         }
 
         /// <summary>

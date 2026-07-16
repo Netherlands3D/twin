@@ -487,12 +487,12 @@ PrefabInstance:
     - target: {fileID: 3034395081720571745, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
       propertyPath: OnViewerExited.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Show
+      value: ShowDefaultUI
       objectReference: {fileID: 0}
     - target: {fileID: 3034395081720571745, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
       propertyPath: OnViewerEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Hide
+      value: HideDefaultUI
       objectReference: {fileID: 0}
     - target: {fileID: 3034395081720571745, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
