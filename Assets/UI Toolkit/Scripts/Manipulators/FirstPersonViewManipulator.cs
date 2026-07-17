@@ -39,7 +39,7 @@ public class FirstPersonViewManipulator : DragManipulator
     {
         base.OnDragEnded(endPosition);
 
-        if (!Interface.PointerIsOverUI())
+        if (!FirstPersonViewerInput.PointerIsOverUIToolkit())
         {
             EnterFPVMode();
         }
