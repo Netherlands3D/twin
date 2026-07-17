@@ -46,7 +46,7 @@ namespace Netherlands3D.FirstPersonViewer
         public bool LockInput => inputLocks.Count > 0;
         public bool BlockCameraInput { private set; get; }
         private bool lockMouseModus;
-        private bool isLocked;
+        private bool cursorLocked;
         private bool isActive;
 
         //Events
@@ -79,6 +79,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void OnFPVEnter()
         {
             //Only lock mouse when the locking modus is selected.
+            RemoveInputLockConstrain(this); // always start clean
             ToggleCursor(lockMouseModus);
         }
 
@@ -91,9 +92,8 @@ namespace Netherlands3D.FirstPersonViewer
         {
             if (!isActive) return;
             
-            HandleCursorLocking();
-
             isEditingInputfield = IsInputfieldSelected();
+            HandleCursorLocking();
 
             HandleExiting();
         }
@@ -106,27 +106,19 @@ namespace Netherlands3D.FirstPersonViewer
             // click to move mode
             if (!lockMouseModus)
             {
-                if (LeftClick.WasPressedThisFrame() && !PointerIsOverUIToolkit())
-                {
-                    ToggleCursor(true);
-                }
-                else if (!LeftClick.IsPressed() && isLocked)  //unlock even when mouse is released off-screen
-                {
-                    ToggleCursor(false);
-                }
-
+                BlockCameraInput = !LeftClick.IsPressed();
                 return;
             }
             
             // lock cursor mode
-            if (ExitInput.WasReleasedThisFrame() && isLocked)
+            if (ExitInput.WasReleasedThisFrame() && cursorLocked)
             {
                 ToggleCursor(false);
                 return;
             }
             
             // Relock only when unlocked, mouse pressed, and not clicking UI.
-            if (!isLocked && LeftClick.WasPressedThisFrame() && !PointerIsOverUIToolkit())
+            if (!cursorLocked && LeftClick.WasPressedThisFrame() && !PointerIsOverUIToolkit())
             {
                 ToggleCursor(true);
             }
@@ -135,34 +127,26 @@ namespace Netherlands3D.FirstPersonViewer
         private void ToggleCursor(bool lockCursor)
         {
             // Lock the mouse cursor to the screen using the old method to keep it centered (used by the Object Selector).
-            isLocked = lockCursor;
+            cursorLocked = lockCursor;
 
-            if (lockMouseModus)
+            Cursor.lockState = lockCursor
+                ? CursorLockMode.Locked
+                : CursorLockMode.None;
+
+            Cursor.visible = !lockCursor;
+
+            if (lockCursor)
             {
-                if (isLocked)
-                {
-                    RemoveInputLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                    onShowSnackbarExit.Invoke(fpvExitText);
-                }
-                else
-                {
-                    AddInputLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                }
+                RemoveInputLockConstrain(this);
+                onShowSnackbarExit.Invoke(fpvExitText);
             }
-            else
+            else if (lockMouseModus) // only self-lock in lock-cursor modus
             {
-                if (isLocked)
-                    WebGLCursor.Lock();
-                else
-                    WebGLCursor.Unlock();
+                AddInputLockConstrain(this);
             }
 
             BlockCameraInput = !lockCursor;
-            OnLockStateChanged.Invoke(isLocked);
+            OnLockStateChanged.Invoke(cursorLocked);
         }
 
         //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 
@@ -233,9 +217,9 @@ namespace Netherlands3D.FirstPersonViewer
                 return false;
 
             Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Vector2 panelPosition = RuntimePanelUtils.ScreenToPanel(root.panel, mousePosition);
 
-            VisualElement picked =
-                root.panel.Pick(mousePosition);
+            VisualElement picked = root.panel.Pick(panelPosition);
 
             return picked != null;
         }
