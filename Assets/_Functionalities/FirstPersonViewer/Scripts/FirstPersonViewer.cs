@@ -1,10 +1,8 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
-using System;
 using System.Collections.Generic;
 using Netherlands3D.Twin;
 using UnityEngine;

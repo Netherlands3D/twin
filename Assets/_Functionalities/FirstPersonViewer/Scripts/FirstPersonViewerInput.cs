@@ -192,18 +192,19 @@ namespace Netherlands3D.FirstPersonViewer
 
         public bool IsInputfieldSelected()
         {
-            GameObject selected = EventSystem.current.currentSelectedGameObject;
-
-            if (selected == null)
-            {
-                selectedUI = null;
-                return false;
-            }
-
-            if (selected == selectedUI) return isEditingInputfield;
-
-            selectedUI = selected;
-            return selected.GetComponent<TMP_InputField>() != null;
+            return false; //todo: rewrite this function for UI Toolkit. We have no inputfields in the MVP, so this is currently always false
+            // GameObject selected = EventSystem.current.currentSelectedGameObject;
+            //
+            // if (selected == null)
+            // {
+            //     selectedUI = null;
+            //     return false;
+            // }
+            //
+            // if (selected == selectedUI) return isEditingInputfield;
+            //
+            // selectedUI = selected;
+            // return selected.GetComponent<TMP_InputField>() != null;
         }
 
         public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;
