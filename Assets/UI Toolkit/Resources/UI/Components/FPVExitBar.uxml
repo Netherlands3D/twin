@@ -6,5 +6,5 @@
     editor-extension-mode="False"  
     class="fpv-exit-bar"
 >
-        <nl3d:Slider header-type="NoHeader" high-value="1"/>
+        <nl3d:Slider label="First person modus verlaten" high-value="1" class="fpv-exit-bar__slider" />
 </ui:UXML>

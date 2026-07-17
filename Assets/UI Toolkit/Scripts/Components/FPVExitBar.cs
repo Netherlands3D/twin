@@ -16,13 +16,19 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             slider = this.Q<Slider>();
-
             UpdateTimer(-1);
-            
-            schedule.Execute(()=>
-                ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>()?.Input.ExitDuration.AddListener(UpdateTimer)
-            );
+
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+
+        private void OnAttachToPanel(AttachToPanelEvent evt)
+        {
+            schedule.Execute(() => //wait a frame for the service to be available
+            {
+                slider.Q<NumberField>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
+                ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>()?.Input.ExitDuration.AddListener(UpdateTimer);
+            });
         }
 
         private void UpdateTimer(float percentage)

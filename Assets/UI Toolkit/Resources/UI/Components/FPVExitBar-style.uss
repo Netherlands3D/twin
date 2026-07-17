@@ -1,3 +1,11 @@
 .fpv-exit-bar{
     width: 15%;
 }
+
+.fpv-exit-bar__slider.slider .unity-base-slider__dragger{
+    display: none;
+}
+
+.fpv-exit-bar__slider.slider .unity-base-field__label{
+    font-size: var(--spacing-8);
+}
