@@ -30,7 +30,6 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Raycasting")]
         [SerializeField] private LayerMask snappingCullingMask;
         private OpticalRaycaster raycaster;
-        private Action<Vector3, bool> groundCallback;
 
         //Falling
         [Header("Ground")]
@@ -72,8 +71,6 @@ namespace Netherlands3D.FirstPersonViewer
             FirstPersonCamera.onSetupComplete.AddListener(OnAnimationCompleted);
 
             SetupFSM();
-
-            groundCallback = UpdateGroundPosition;
         }
 
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
@@ -158,7 +155,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * (FirstPersonCamera.CameraHeightOffset + 0.05f), Vector3.down, groundCallback, snappingCullingMask);
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * (FirstPersonCamera.CameraHeightOffset + 0.05f), Vector3.down, UpdateGroundPosition, snappingCullingMask);
         }
 
         private void UpdateGroundPosition(Vector3 point, bool hit)
@@ -168,8 +165,10 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void CheckGroundCollision()
         {
-            if (Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance) isGrounded = true;
-            else isGrounded = false;
+            if (Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance)
+                isGrounded = true;
+            else
+                isGrounded = false;
         }
 
         public void SnapToGround()

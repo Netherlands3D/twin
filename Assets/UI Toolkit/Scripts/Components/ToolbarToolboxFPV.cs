@@ -43,7 +43,7 @@ namespace Netherlands3D.UI.Components
         {
             Debug.Log("snap");
             FirstPersonViewer.FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
-            fpv.SnapToGround();
+            fpv.ResetToGround();
         }
     }
 }
