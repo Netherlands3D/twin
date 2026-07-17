@@ -30,3 +30,16 @@
 .app__properties-zone .app__properties-zone-column {
     margin-left: var(--spacing-2);
 }
+
+.first-person-viewer-active .app--functionality-first-person-viewer--hidden{
+    display: none;
+}
+
+/*start hidden, these elements only become visible once the first person becomes active and the second selector override this*/
+.app--functionality-first-person-viewer--visible {
+    display: none; 
+}
+
+.first-person-viewer-active .app--functionality-first-person-viewer--visible {
+    display: flex;
+}
