@@ -6,8 +6,5 @@
     editor-extension-mode="False"  
     class="fpv-exit-bar"
 >
-        <nl3d:Slider header-type="NoHeader"/>
-<!--        <ui:VisualElement name="ProgressBar" class="fpv-exit-bar__progress-bar"/>-->
-<!--    <ui:VisualElement class="toolbar-toolbox-fpv__group" picking-mode="Ignore">-->
-<!--    </ui:VisualElement>-->
+        <nl3d:Slider header-type="NoHeader" high-value="1"/>
 </ui:UXML>

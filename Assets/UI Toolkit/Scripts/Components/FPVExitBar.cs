@@ -9,7 +9,6 @@ namespace Netherlands3D.UI.Components
     public partial class FPVExitBar : VisualElement
     {
         private Slider slider;
-        // private VisualElement progressBar;
 
         public FPVExitBar()
         {
@@ -17,17 +16,13 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             slider = this.Q<Slider>();
-            // progressBar = this.Q<VisualElement>("ProgressBar");
 
-            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
-        }
-
-        private void OnAttachToPanel(AttachToPanelEvent evt)
-        {
+            UpdateTimer(-1);
+            
             schedule.Execute(()=>
-                ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.ExitDuration.AddListener(UpdateTimer)
+                ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>()?.Input.ExitDuration.AddListener(UpdateTimer)
             );
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
         private void UpdateTimer(float percentage)
@@ -40,13 +35,12 @@ namespace Netherlands3D.UI.Components
             {
                 slider.EnableInClassList(UtilityClassConstants.HIDDEN, false);
                 slider.value = percentage;
-                // progressBar.style.width = Length.Percent(percentage * 100f);
             }
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent _)
         {
-            ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.ExitDuration.RemoveListener(UpdateTimer);
+            ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>()?.Input.ExitDuration.RemoveListener(UpdateTimer);
         }
     }
 }
