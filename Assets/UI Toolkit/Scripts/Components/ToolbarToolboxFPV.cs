@@ -1,5 +1,7 @@
 using System;
+using Netherlands3D.Services;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -15,31 +17,33 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            snapButton = this.Q<Button>("SnapButton");
-            exitButton = this.Q<Button>("ExitButton");
-            
-            // RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            // RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            snapButton = this.Q<Button>("Snap");
+            exitButton = this.Q<Button>("Exit");
+
+            exitButton.clicked += ExitFPVMode;
+            snapButton.clicked += SnapToGround;
+
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+        
+        private void OnDetachFromPanel(DetachFromPanelEvent _)
+        {
+            exitButton.clicked -= ExitFPVMode;
+            snapButton.clicked -= SnapToGround;
         }
 
-        // private void OnAttachToPanel(AttachToPanelEvent _)
-        // {
-        //     Dome.RegisterValueChangedCallback(OnDomeValueChanged);
-        //     Screenshot.RegisterCallback<ClickEvent>(OnScreenshotClick);
-        // }
-        //
-        // private void OnDetachFromPanel(DetachFromPanelEvent _)
-        // {
-        //     Dome.UnregisterValueChangedCallback(OnDomeValueChanged);
-        //     Screenshot.UnregisterCallback<ClickEvent>(OnScreenshotClick);
-        // }
-        //
-        // private void OnDomeValueChanged(ChangeEvent<bool> evt) => OnDomeToggled?.Invoke(evt.newValue);
-        // private void OnScreenshotClick(ClickEvent _) => OnScreenshotClicked?.Invoke();
-        //
-        // public void SetDomeValueWithoutNotify(bool isOn)
-        // {
-        //     Dome.SetValueWithoutNotify(isOn);
-        // }
+        private void ExitFPVMode()
+        {
+            Debug.Log("ExitFPVMode");
+            FirstPersonViewer.FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
+            fpv.ExitViewer(true);
+        }
+        
+        private void SnapToGround()
+        {
+            Debug.Log("snap");
+            FirstPersonViewer.FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
+            fpv.SnapToGround();
+        }
     }
 }

@@ -19,7 +19,7 @@
             </ui:VisualElement>
             <ui:VisualElement name="MidSection" class="app__top-zone" picking-mode="Ignore">
                 <nl3d:ToolbarToolbox picking-mode="Ignore" />
-                <nl3d:ToolbarToolboxFPV picking-mode="Ignore" class="hidden"/>
+                <nl3d:ToolbarToolboxFPV class="hidden"/>
             </ui:VisualElement>
             <ui:VisualElement name="PropertiesZone" class="app__properties-zone">
                 <nl3dP:SecondaryPropertiesPanel name="SecondaryPropertiesPanel" class="app__properties-zone-column"/>

@@ -5,7 +5,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Netherlands3D.SelectionTools;
 using System;
+using Netherlands3D.Twin;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -41,7 +44,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         //Mouse Locking
         public bool LockInput => inputLocks.Count > 0;
-        public bool LockCamera { private set; get; }
+        public bool BlockCameraInput { private set; get; }
         private bool lockMouseModus;
         private bool isLocked;
         private bool isActive;
@@ -76,14 +79,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void OnFPVEnter()
         {
             //Only lock mouse when the locking modus is selected.
-            if (lockMouseModus)
-            {
-                isLocked = true;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-                onShowSnackbarExit.Invoke(fpvExitText);
-            }
-            else ToggleCursor(true);
+            ToggleCursor(lockMouseModus);
         }
 
         private void OnDisable()
@@ -107,53 +103,65 @@ namespace Netherlands3D.FirstPersonViewer
             //When editing an inputfield just block this function.
             if (isEditingInputfield) return;
 
+            // click to move mode
             if (!lockMouseModus)
             {
-                //Use the normal locking mode (Mouse Click)
-                bool isCurrentlyLocked = isLocked;
-                if (LeftClick.triggered && !isCurrentlyLocked)
+                if (LeftClick.WasPressedThisFrame() && !PointerIsOverUIToolkit())
                 {
-                    if (!Interface.PointerIsOverUI()) ToggleCursor(false);
+                    ToggleCursor(true);
                 }
-                else if (LeftClick.WasReleasedThisFrame() && isCurrentlyLocked) ToggleCursor(true);
+                else if (!LeftClick.IsPressed() && isLocked)  //unlock even when mouse is released off-screen
+                {
+                    ToggleCursor(false);
+                }
 
                 return;
             }
-
-            //When key is released release/lock mouse
-            if (ExitInput.WasReleasedThisFrame())
+            
+            // lock cursor mode
+            if (ExitInput.WasReleasedThisFrame() && isLocked)
             {
-                ToggleCursor(isLocked);
-            }
-            else if (LeftClick.triggered && !Interface.PointerIsOverUI())
-            {
-                //When no UI object is detected lock the mouse to screen again, Lock Cursor.
                 ToggleCursor(false);
+                return;
             }
-
+            
+            // Relock only when unlocked, mouse pressed, and not clicking UI.
+            if (!isLocked && LeftClick.WasPressedThisFrame() && !PointerIsOverUIToolkit())
+            {
+                ToggleCursor(true);
+            }
         }
 
-        private void ToggleCursor(bool unlock)
+        private void ToggleCursor(bool lockCursor)
         {
             // Lock the mouse cursor to the screen using the old method to keep it centered (used by the Object Selector).
+            isLocked = lockCursor;
+
             if (lockMouseModus)
             {
-                if (unlock) AddInputLockConstrain(this);
-                else RemoveInputLockConstrain(this);
-
-                Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
-                Cursor.visible = unlock;
-                if (!unlock) onShowSnackbarExit.Invoke(fpvExitText);
+                if (isLocked)
+                {
+                    RemoveInputLockConstrain(this);
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    onShowSnackbarExit.Invoke(fpvExitText);
+                }
+                else
+                {
+                    AddInputLockConstrain(this);
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
             }
             else
             {
-                if (unlock) WebGLCursor.Unlock();
-                else WebGLCursor.Lock();
+                if (isLocked)
+                    WebGLCursor.Lock();
+                else
+                    WebGLCursor.Unlock();
             }
 
-            isLocked = !unlock;
-            LockCamera = unlock;
-
+            BlockCameraInput = !lockCursor;
             OnLockStateChanged.Invoke(isLocked);
         }
 
@@ -190,7 +198,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             isActive = false;
             //TODO Move this to a application wide cursor manager.
-            ToggleCursor(true);
+            ToggleCursor(false);
         }
 
         public void AddInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Add(monoBehaviour);
@@ -217,5 +225,19 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;
         public bool GetMouseLockModus() => lockMouseModus;
+        
+        public static bool PointerIsOverUIToolkit()
+        {
+            VisualElement root = App.UIRoot?.Root;
+            if (root == null)
+                return false;
+
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+
+            VisualElement picked =
+                root.panel.Pick(mousePosition);
+
+            return picked != null;
+        }
     }
 }
