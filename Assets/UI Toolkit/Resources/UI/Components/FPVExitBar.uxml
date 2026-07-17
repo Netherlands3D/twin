@@ -1,0 +1,13 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="fpv-exit-bar"
+>
+        <nl3d:Slider header-type="NoHeader"/>
+<!--        <ui:VisualElement name="ProgressBar" class="fpv-exit-bar__progress-bar"/>-->
+<!--    <ui:VisualElement class="toolbar-toolbox-fpv__group" picking-mode="Ignore">-->
+<!--    </ui:VisualElement>-->
+</ui:UXML>

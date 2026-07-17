@@ -17,6 +17,7 @@
                     <nl3dP:LegendPanel />
                 </ui:VisualElement>
             </ui:VisualElement>
+            <nl3d:FPVExitBar name="FVPProgressBar" class="app--functionality-first-person-viewer--visible"/>
             <ui:VisualElement name="MidSection" class="app__top-zone" picking-mode="Ignore">
                 <nl3d:ToolbarToolbox picking-mode="Ignore" class="app--functionality-first-person-viewer--hidden" />
                 <nl3d:ToolbarToolboxFPV class="app--functionality-first-person-viewer--visible"/>

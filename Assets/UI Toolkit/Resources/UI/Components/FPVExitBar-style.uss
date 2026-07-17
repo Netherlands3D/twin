@@ -1,0 +1,8 @@
+.fpv-exit-bar{
+    width: 20%;
+}
+
+.fpv-exit-bar__progress-bar{
+    background-color: red;
+    width: 0;
+}
