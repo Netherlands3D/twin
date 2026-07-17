@@ -1,7 +1,5 @@
-using System;
 using Netherlands3D.Services;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -34,14 +32,12 @@ namespace Netherlands3D.UI.Components
 
         private void ExitFPVMode()
         {
-            Debug.Log("ExitFPVMode");
             FirstPersonViewer.FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
             fpv.ExitViewer(true);
         }
         
         private void SnapToGround()
         {
-            Debug.Log("snap");
             FirstPersonViewer.FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
             fpv.ResetToGround();
         }
