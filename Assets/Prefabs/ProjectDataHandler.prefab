@@ -52,7 +52,6 @@ MonoBehaviour:
   projectDataStore: {fileID: 11400000, guid: d44646dfa83fba241ac198123f4db956, type: 2}
   applicationActionMap: {fileID: -944628639613478452, guid: ada4cb215956c0845b3d6b4c9796c6f9,
     type: 3}
-  fileOpener: {fileID: 0}
   OnSaveStarted:
     m_PersistentCalls:
       m_Calls:
@@ -101,24 +100,23 @@ MonoBehaviour:
   OnLoadCompleted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161295898398469103}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Projects.ProjectDataVersionUpgrader,
-          eu.netherlands3d.twin
-        m_MethodName: UpdateProjectVersion
-        m_Mode: 2
+      - m_Target: {fileID: 11400000, guid: 04532d925262d428a882e0fae89db4d1, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: Netherlands3D.Twin.Projects.ProjectData,
-            eu.netherlands3d.twin
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 04532d925262d428a882e0fae89db4d1, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 1
+      - m_Target: {fileID: 161295898398469103}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Projects.ProjectDataVersionUpgrader,
+          eu.netherlands3d.twin
+        m_MethodName: UpdateProjectVersion
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
