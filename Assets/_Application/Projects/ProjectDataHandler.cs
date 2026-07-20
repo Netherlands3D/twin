@@ -319,5 +319,10 @@ namespace Netherlands3D.Twin.Projects
             var fileName = Path.GetFileName(lastSavePath);
             DownloadFromIndexedDB($"{fileName}", gameObject.name, "DownloadedProject");
         }
+        
+        public void DownloadedProject()
+        {
+            Debug.Log("Downloading project file succeeded");
+        }
     }
 }
