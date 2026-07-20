@@ -136,7 +136,7 @@
 .icon.image-visibility { background-image: var(--icon-visibility); }
 .icon.image-invisible { background-image: var(--icon-invisible); }
 .icon.image-color-features { background-image: var(--icon-colorfeatures); }
-.icon.image-urban-releaf { background-image: var(--icon-urbanreleaf); }
+/*.icon.image-urban-releaf { background-image: var(--icon-urbanreleaf); }*/
 .icon.image-visibility-mixed { background-image: var(--icon-visibilitymixed); }
 .icon.image-visible-in-invisible { background-image: var(--icon-visibleininvisible); }
 .icon.image-none { background-image: none; }
