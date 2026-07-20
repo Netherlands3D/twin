@@ -33,8 +33,8 @@ namespace Netherlands3D.Services
         public InputAction PolygonModifierAction => polygonModifierAction ??= polygonSelectionActionMap.FindAction("Modifier");
         public InputAction PolygonClickAction => polygonClickAction ??= polygonSelectionActionMap.FindAction("Click");
         
-        public InputAction OpenProjectAction => openProjectAction ??= inputPolygonActionAsset.FindAction("Projects/Open");
-        public InputAction SaveProjectAction => saveProjectAction ??= inputPolygonActionAsset.FindAction("Projects/Save");
+        public InputAction OpenProjectAction => openProjectAction ??= applicationActionMap.FindAction("Projects/Open");
+        public InputAction SaveProjectAction => saveProjectAction ??= applicationActionMap.FindAction("Projects/Save");
 
         void Awake()
         {
@@ -48,14 +48,14 @@ namespace Netherlands3D.Services
 
         private void OnEnable()
         {
-            openProjectAction.Enable();
-            saveProjectAction.Enable();
+            OpenProjectAction.Enable();
+            SaveProjectAction.Enable();
         }
 
         private void OnDisable()
         {
-            openProjectAction.Disable();
-            saveProjectAction.Disable();
+            OpenProjectAction.Disable();
+            SaveProjectAction.Disable();
         }
     }
 }
