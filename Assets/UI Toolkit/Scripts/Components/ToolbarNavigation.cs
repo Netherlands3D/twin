@@ -33,7 +33,7 @@ namespace Netherlands3D.UI.Components
         {
             UpdatePerspectiveIcon();
             schedule.Execute(()=>
-            ServiceLocator.GetService<Compass>().ChangeDirection.AddListener(UpdateCompass));
+            ServiceLocator.GetService<Compass>()?.ChangeDirection.AddListener(UpdateCompass));
         }
 
         private void OnNorthClick(ClickEvent _)
