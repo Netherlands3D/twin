@@ -51,10 +51,10 @@ namespace Netherlands3D.UI.Panels
             Accepted
         }
 
-        private readonly Dictionary<int, (ContentState state, IconImage icon)> dropDownValues = new()
+        private readonly Dictionary<int, (ContentState state, string icon)> dropDownValues = new()
         {
-            { 0, (ContentState.Key, IconImage.KeyTokenCode) },
-            { 1, (ContentState.UsernameAndPassword, IconImage.UsernamePassword) }
+            { 0, (ContentState.Key, IconImage.KEY_TOKEN_CODE) },
+            { 1, (ContentState.UsernameAndPassword, IconImage.USERNAME_PASSWORD) }
         };
 
         public CredentialPanel()
@@ -110,7 +110,7 @@ namespace Netherlands3D.UI.Panels
         {
             //update the dropdownvalue if the content is set to a valid value
             int index = -1;
-            foreach (KeyValuePair<int, (ContentState state, IconImage icon)> kv in dropDownValues)
+            foreach (KeyValuePair<int, (ContentState state, string icon)> kv in dropDownValues)
                 if (kv.Value.state == state)
                     index = kv.Key;
 

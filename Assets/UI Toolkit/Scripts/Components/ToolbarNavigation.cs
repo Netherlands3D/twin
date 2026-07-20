@@ -51,7 +51,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdatePerspectiveIcon()
         {
-            Perspective.Image = Perspective.value ? IconImage.OrthogonalView : IconImage.PerspectiveView;
+            Perspective.Image = Perspective.value ? IconImage.ORTHOGONAL_VIEW : IconImage.PERSPECTIVE_VIEW;
         }
     }
 }

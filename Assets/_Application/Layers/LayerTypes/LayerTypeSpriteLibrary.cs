@@ -99,91 +99,91 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         }
 
 
-        public static IconImage GetIconImage(LayerData layer)
+        public static string GetIconImage(LayerData layer)
         {
             if (layer.HasProperty<FolderPropertyData>() || layer.HasProperty<ScenarioPropertyData>())
-                return IconImage.Folder;
+                return IconImage.FOLDER;
 
             var template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
             switch (template)
             {
                 case WMSLayerGameObject _:
                 case GeoJsonLayerGameObject _:
-                    return IconImage.Map;
+                    return IconImage.MAP;
                 case CartesianTileLayerGameObject _:
                 case Tile3DLayerGameObject _:
                 case GroundPlaneLayerGameObject:
-                    return IconImage.Tile;
+                    return IconImage.TILE;
                 case WorldAnnotationLayerGameObject _:
-                    return IconImage.Annotation;
+                    return IconImage.ANNOTATION;
                 case CameraPositionLayerGameObject _:
-                    return IconImage.VideoCamera;
+                    return IconImage.VIDEO_CAMERA;
                 case FirstPersonCameraLayerGameObject _:
                     return IconImage.FPV;
                 case HierarchicalObjectLayerGameObject _:
-                    return IconImage.Object;
+                    return IconImage.OBJECT;
                 case ObjectScatterLayerGameObject _:
-                    return IconImage.ScatterObject;
+                    return IconImage.SCATTER_OBJECT;
                 case CartesianTileSubObjectColorLayerGameObject _:
                     return IconImage.CSV;
                 case GeoJSONPolygonLayer _:
-                    return IconImage.Polygon;
+                    return IconImage.POLYGON;
                 case GeoJSONLineLayer _:
-                    return IconImage.Line;
+                    return IconImage.LINE;
                 case GeoJSONPointLayer _:
-                    return IconImage.Dot;
+                    return IconImage.DOT;
                 case PolygonSelectionLayerGameObject _:
                     {
                         PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
                         if (propertyData.ShapeType == ShapeType.Line)
-                            return IconImage.Line;
+                            return IconImage.LINE;
                         else if (propertyData.ShapeType == ShapeType.Grid)
-                            return IconImage.OrthogonalView;
-                        return IconImage.Polygon;
+                            return IconImage.ORTHOGONAL_VIEW;
+                        return IconImage.POLYGON;
                     }
                 default:
                     Debug.LogError($"layer type of {template.GetType()} is not specified");
-                    return IconImage.Help;
+                    return IconImage.HELP;
             }
         }
 
         //todo UI Toolkit this is begging to be refactored and merged with the method above
 
-        public static IconImage GetIconImage(string prefabId)
+        public static string GetIconImage(string prefabId)
         {
             var template = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             switch (template)
             {
                 case WMSLayerGameObject _:
                 case GeoJsonLayerGameObject _:
-                    return IconImage.Map;
+                    return IconImage.MAP;
                 case CartesianTileLayerGameObject _:
                 case Tile3DLayerGameObject _:
                 case GroundPlaneLayerGameObject:
-                    return IconImage.Tile;
+                    return IconImage.TILE;
                 case WorldAnnotationLayerGameObject _:
-                    return IconImage.Annotation;
+                    return IconImage.ANNOTATION;
                 case CameraPositionLayerGameObject _:
-                    return IconImage.VideoCamera;
+                    return IconImage.VIDEO_CAMERA;
                 case FirstPersonCameraLayerGameObject _:
                     return IconImage.FPV;
                 case HierarchicalObjectLayerGameObject _:
-                    return IconImage.Object;
+                    return IconImage.OBJECT;
                 case ObjectScatterLayerGameObject _:
-                    return IconImage.ScatterObject;
+                    return IconImage.SCATTER_OBJECT;
                 case CartesianTileSubObjectColorLayerGameObject _:
                     return IconImage.CSV;
                 case GeoJSONPolygonLayer _:
-                    return IconImage.Polygon;
+                    return IconImage.POLYGON;
                 case GeoJSONLineLayer _:
-                    return IconImage.Line;
+                    return IconImage.LINE;
                 case GeoJSONPointLayer _:
-                    return IconImage.Dot;
+                    return IconImage.DOT;
                 case PolygonSelectionLayerGameObject _:
-                     return IconImage.Polygon;
+                     return IconImage.POLYGON;
                 default:
                     Debug.LogError($"layer type of {template.GetType()} is not specified");
-                    return IconImage.Help;
+                    return IconImage.HELP;
             }
         }
     }
