@@ -16,7 +16,7 @@
                 <nl3dP:LegendPanel />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="MidSection" class="default-hud__top-zone" picking-mode="Ignore">
+        <ui:VisualElement name="TopSection" class="default-hud__top-section" picking-mode="Ignore">
             <nl3d:ToolbarToolbox picking-mode="Ignore" />
         </ui:VisualElement>
         <ui:VisualElement name="PropertiesZone" class="default-hud__properties-zone">

@@ -6,7 +6,7 @@
     position: absolute;
 }
 
-.fpv-hud__mid-section {
+.fpv-hud__top-section {
     flex-grow: 1;
     left: 0;
     right: 0;

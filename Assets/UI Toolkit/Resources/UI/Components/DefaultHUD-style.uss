@@ -2,7 +2,7 @@
     flex-grow: 1;
 }
 
-.default-hud__top-zone {
+.default-hud__top-section {
     flex: 0 auto;
     position: absolute;
     left: 0;

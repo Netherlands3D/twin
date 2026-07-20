@@ -7,12 +7,10 @@
     editor-extension-mode="False"
     class="fpv-hud"
     picking-mode="Ignore">
-    <!--    <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">-->
     <nl3d:FPVExitBar name="FVPProgressBar" class="fpv-hud__exit-bar"/>
-    <ui:VisualElement name="MidSection" class="fpv-hud__mid-section" picking-mode="Ignore">
+    <ui:VisualElement name="TopSection" class="fpv-hud__top-section" picking-mode="Ignore">
         <nl3d:ToolbarToolboxFPV />
     </ui:VisualElement>
-    <!--    </ui:VisualElement>-->
     <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="fpv-hud__bottom-section">
         <nl3d:Footer />
         <ui:VisualElement name="BottomTools" picking-mode="Ignore" style="flex-shrink: 0; flex-basis: auto;" />

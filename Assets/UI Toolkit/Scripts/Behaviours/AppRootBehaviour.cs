@@ -35,14 +35,12 @@ namespace Netherlands3D
         {
             appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
             appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            // appRoot.RemoveFromClassList("first-person-viewer-active");
         }
 
         public void EnableFPVUI()
         {
             appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
             appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            // appRoot.AddToClassList("first-person-viewer-active");
         }
 
         /// <summary>

@@ -3,37 +3,3 @@
     margin: 8px;
     padding: 4px;
 }
-
-/*.app__top-zone {*/
-/*    flex: 0 auto;*/
-/*    position: absolute;*/
-/*    left: 0;*/
-/*    right: 0;*/
-/*    top: 0;*/
-/*    align-items: center;*/
-/*}*/
-
-/*.app__properties-zone {*/
-/*    position: absolute;*/
-/*    right: 0;*/
-/*    top: 0;*/
-/*    flex-direction: row;*/
-/*    max-height: 100%;*/
-/*}*/
-
-/*.app__properties-zone .app__properties-zone-column {*/
-/*    margin-left: var(--spacing-2);*/
-/*}*/
-
-/*.first-person-viewer-active .app--functionality-first-person-viewer--hidden{*/
-/*    display: none;*/
-/*}*/
-
-/*!*start hidden, these elements only become visible once the first person becomes active and the second selector override this*!*/
-/*.app--functionality-first-person-viewer--visible {*/
-/*    display: none; */
-/*}*/
-
-/*.first-person-viewer-active .app--functionality-first-person-viewer--visible {*/
-/*    display: flex;*/
-/*}*/
