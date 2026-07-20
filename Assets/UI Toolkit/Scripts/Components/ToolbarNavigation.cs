@@ -1,4 +1,6 @@
 using System;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -12,9 +14,8 @@ namespace Netherlands3D.UI.Components
         private Toggle Perspective => this.Q<Toggle>("Perspective");
         private VisualElement FPV => this.Q<VisualElement>("FPV");
 
-        public event Action OrientToNorth;
         public event Action<bool> ToggleOrthographicView;
-
+        
         
         public ToolbarNavigation()
         {
@@ -31,11 +32,13 @@ namespace Netherlands3D.UI.Components
         private void OnAttachToPanelEvent(AttachToPanelEvent _)
         {
             UpdatePerspectiveIcon();
+            schedule.Execute(()=>
+            ServiceLocator.GetService<Compass>().ChangeDirection.AddListener(UpdateCompass));
         }
 
         private void OnNorthClick(ClickEvent _)
         {
-            OrientToNorth?.Invoke();
+            ServiceLocator.GetService<Compass>().SwitchToNorth();
         }
 
         public void UpdateCompass(float yawInDegrees)
