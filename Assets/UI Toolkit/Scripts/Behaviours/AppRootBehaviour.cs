@@ -1,6 +1,9 @@
+using System;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Functionalities;
 using System.Collections.Generic;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -12,7 +15,7 @@ namespace Netherlands3D
     public class AppRootBehaviour : MonoBehaviour
     {
         public VisualElement Root => appRoot;
-        
+
         private UIDocument appDocument;
         private VisualElement appRoot;
 
@@ -20,17 +23,26 @@ namespace Netherlands3D
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
-            appRoot = appDocument?.rootVisualElement.Q("App");
+            appRoot = appDocument?.rootVisualElement;
+        }
+
+        private void Start()
+        {
+            DisableFPVUI();
         }
 
         public void DisableFPVUI()
         {
-            appRoot.RemoveFromClassList("first-person-viewer-active");
+            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            // appRoot.RemoveFromClassList("first-person-viewer-active");
         }
 
         public void EnableFPVUI()
         {
-            appRoot.AddToClassList("first-person-viewer-active");
+            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            // appRoot.AddToClassList("first-person-viewer-active");
         }
 
         /// <summary>

@@ -1,0 +1,24 @@
+.default-hud{
+    flex-grow: 1;
+}
+
+.default-hud__top-zone {
+    flex: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    align-items: center;
+}
+
+.default-hud__properties-zone {
+    position: absolute;
+    right: 0;
+    top: 0;
+    flex-direction: row;
+    max-height: 100%;
+}
+
+.default-hud__properties-zone .default-hud__properties-zone-column {
+    margin-left: var(--spacing-2);
+}

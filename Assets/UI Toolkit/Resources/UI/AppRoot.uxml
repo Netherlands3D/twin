@@ -1,40 +1,14 @@
-<ui:UXML 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:ui="UnityEngine.UIElements" 
-    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     xmlns:nl3d="Netherlands3D.UI.Components"
     xmlns:nl3dP="Netherlands3D.UI.Panels"
-    editor-extension-mode="False"  
->
-    <ui:Style src="./AppRoot.uss"/>
-    <ui:VisualElement name="App" picking-mode="Ignore" class="app">
-        <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
-            <ui:VisualElement picking-mode="Ignore" name="LeftSection" class="app--functionality-first-person-viewer--hidden">
-                <nl3d:HamburgerMenu/>
-                <ui:VisualElement picking-mode="Ignore" class="app__inspector-zone" style="flex-grow: 1; flex-direction: row;">
-                    <nl3d:ToolbarMain/>
-                    <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
-                    <nl3dP:LegendPanel />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <nl3d:FPVExitBar name="FVPProgressBar" class="app--functionality-first-person-viewer--visible"/>
-            <ui:VisualElement name="MidSection" class="app__top-zone" picking-mode="Ignore">
-                <nl3d:ToolbarToolbox picking-mode="Ignore" class="app--functionality-first-person-viewer--hidden" />
-                <nl3d:ToolbarToolboxFPV class="app--functionality-first-person-viewer--visible"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="PropertiesZone" class="app__properties-zone app--functionality-first-person-viewer--hidden">
-                <nl3dP:SecondaryPropertiesPanel name="SecondaryPropertiesPanel" class="app__properties-zone-column"/>
-                <nl3dP:PropertiesPanel name="PropertiesPanel" class="app__properties-zone-column"/>
-            </ui:VisualElement>
-        </ui:VisualElement>
-        <ui:VisualElement name="BottomSection" picking-mode="Ignore" style="align-items: flex-end; flex-direction: row;">
-            <nl3d:Footer/>
-            <ui:VisualElement name="BottomTools" picking-mode="Ignore" style="flex-shrink: 0; flex-basis: auto;">
-                <nl3d:ToolbarNavigation class="app--functionality-first-person-viewer--hidden"/>
-                <ui:VisualElement name="CameraSlider"/>
-            </ui:VisualElement>
-<!--            <nl3d:MapViewport/>-->
-        </ui:VisualElement>
-        <nl3dP:SnackbarPanel></nl3dP:SnackbarPanel>
-    </ui:VisualElement>
+    editor-extension-mode="False"
+    name="App"
+    class="app">
+    <ui:Style src="./AppRoot.uss" />
+    <nl3dP:DefaultHUD picking-mode="Ignore" />
+    <nl3dP:FPVHUD class="hidden" picking-mode="Ignore" />
+    <nl3dP:SnackbarPanel />
 </ui:UXML>
