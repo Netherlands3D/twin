@@ -111,6 +111,10 @@ namespace Netherlands3D.Twin.Projects
             ToolService tools = ServiceLocator.GetService<ToolService>();
             tools.GetTool(ToolType.OpenProject).onOpen.AddListener(OpenProject);
             tools.GetTool(ToolType.SaveProject).onOpen.AddListener(SaveProject);
+            
+            InputService input =  ServiceLocator.GetService<InputService>();
+            input.OpenProjectAction.performed += OpenProject;
+            input.SaveProjectAction.performed += SaveProject;
         }
 
         private void OnDisable()
@@ -120,7 +124,14 @@ namespace Netherlands3D.Twin.Projects
             ToolService tools = ServiceLocator.GetService<ToolService>();
             tools.GetTool(ToolType.OpenProject).onOpen.RemoveListener(OpenProject);
             tools.GetTool(ToolType.SaveProject).onOpen.RemoveListener(SaveProject);
+            
+            InputService input =  ServiceLocator.GetService<InputService>();
+            input.OpenProjectAction.performed -= OpenProject;
+            input.SaveProjectAction.performed -= SaveProject;
         }
+
+        private void OpenProject(InputAction.CallbackContext ctx) => OpenProject();
+        private void SaveProject(InputAction.CallbackContext ctx) => SaveProject();
 
         private void OpenProject()
         {
@@ -132,9 +143,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void SaveProject()
         {
-            Debug.Log("SAVING PROJECT DATA");
             SaveAsFile();
-            Debug.Log("SAVING PROJECT DATA Finished");
             ToolService tools = ServiceLocator.GetService<ToolService>();
             tools.GetTool(ToolType.SaveProject).Close();
         }

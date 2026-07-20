@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +8,13 @@ namespace Netherlands3D.Services
     {
         [Header("InputPolygon")]
         [SerializeField] private InputActionAsset inputPolygonActionAsset;
+        [SerializeField] private InputActionAsset applicationActionMap;
+        
+        private InputAction openProjectAction;
+        private InputAction saveProjectAction;
+        private InputAction undoAction;
+        private InputAction redoAction;
+        
         private InputActionMap polygonSelectionActionMap;
         
         private InputAction polygonPointerAction;
@@ -24,6 +32,9 @@ namespace Netherlands3D.Services
         public InputAction PolygonTapSecondaryAction => polygonTapSecondaryAction ??= polygonSelectionActionMap.FindAction("TapSecondary");
         public InputAction PolygonModifierAction => polygonModifierAction ??= polygonSelectionActionMap.FindAction("Modifier");
         public InputAction PolygonClickAction => polygonClickAction ??= polygonSelectionActionMap.FindAction("Click");
+        
+        public InputAction OpenProjectAction => openProjectAction ??= inputPolygonActionAsset.FindAction("Projects/Open");
+        public InputAction SaveProjectAction => saveProjectAction ??= inputPolygonActionAsset.FindAction("Projects/Save");
 
         void Awake()
         {
@@ -33,6 +44,18 @@ namespace Netherlands3D.Services
                 Debug.LogWarning("polygonSelectionActionMap was not enabled, but assigned as the input action map. Enabling the input action map", this);
                 polygonSelectionActionMap.Enable();
             }
+        }
+
+        private void OnEnable()
+        {
+            openProjectAction.Enable();
+            saveProjectAction.Enable();
+        }
+
+        private void OnDisable()
+        {
+            openProjectAction.Disable();
+            saveProjectAction.Disable();
         }
     }
 }
