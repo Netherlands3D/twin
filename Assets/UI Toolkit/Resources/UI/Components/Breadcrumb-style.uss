@@ -41,7 +41,7 @@
 .breadcrumb .separator.icon {
     width: var(--spacing-6);
     height: var(--spacing-6);
-    --icon-image: var(--icon-smallchevronright);
+    background-image: var(--icon-smallchevronright);
     margin-left: var(--spacing-1);
     margin-right: var(--spacing-1);
 }

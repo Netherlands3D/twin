@@ -23,7 +23,7 @@ namespace Netherlands3D.UI.Panels
         }
         
         [UxmlAttribute("icon")]
-        public IconImage Icon
+        public string Icon
         {
             get => contentContainer.LeadingIconImage;
             set => contentContainer.LeadingIconImage = value;

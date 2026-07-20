@@ -146,16 +146,16 @@ namespace Netherlands3D.UI.Panels
             assetItem.LabelText = catalogItem.Title;
             var icon = catalogItem switch
             {
-                ICatalogItemCollection => IconImage.Folder,
-                ICatalog => IconImage.Library,
-                _ => IconImage.Map
+                ICatalogItemCollection => IconImage.FOLDER,
+                ICatalog => IconImage.LIBRARY,
+                _ => IconImage.MAP
             };
 
             RecordItem recordItem = catalogItem as RecordItem;
             if(recordItem != null)
             {
                 if (recordItem.Url.IsRemoteAsset())
-                    icon = IconImage.Link;
+                    icon = IconImage.LINK;
                 else
                 {
                     string prefabId = recordItem.Url.AbsolutePath.Trim('/');

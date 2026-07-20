@@ -38,3 +38,4 @@
 .toolbar-navigation .toolbar-navigation__button.toolbar-navigation__compass.toolbar-navigation__compass--north .icon {
     --icon-tint-color: var(--color-white);
 }
+.icon.image-fpv{ background-image: url("project://database/Assets/Sprites/UI/Icons/Type=FPV,%20Color=white,%20Size=medium.png"); }
