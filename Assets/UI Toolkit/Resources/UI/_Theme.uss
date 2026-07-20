@@ -117,7 +117,6 @@
     --icon-folder: url("project://database/Assets/Sprites/UI/Icons/Type=Folder,%20Color=white,%20Size=medium.png");
     --icon-forward: url("project://database/Assets/Sprites/UI/Icons/Type=Forward,%20Color=white,%20Size=medium.png");
     --icon-forwardblocked: url("project://database/Assets/Sprites/UI/Icons/Type=ForwardBlocked,%20Color=white,%20Size=medium.png");
-    --icon-fpv: url("project://database/Assets/Sprites/UI/Icons/Type=FPV,%20Color=white,%20Size=medium.png");
     --icon-height: url("project://database/Assets/Sprites/UI/Icons/Type=Height,%20Color=white,%20Size=medium.png");
     --icon-help: url("project://database/Assets/Sprites/UI/Icons/Type=Help,%20Color=white,%20Size=medium.png");
     --icon-picture: url("project://database/Assets/Sprites/UI/Icons/Type=Image,%20Color=white,%20Size=medium.png");

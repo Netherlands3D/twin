@@ -23,3 +23,5 @@
     flex: 0 auto;
     margin-right: var(--toolbar-toolbox-spacing);
 }
+
+.icon.image-snap-to-maaiveld { background-image: url("project://database/Assets/Sprites/UI/Icons/Type=FPV,%20Color=white,%20Size=medium.png");  }

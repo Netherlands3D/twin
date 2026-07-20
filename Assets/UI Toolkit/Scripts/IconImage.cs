@@ -23,7 +23,7 @@
         public const string COLOR_WHEEL = "ColorWheel";
         public const string COPY_PASTE = "CopyPaste";
         public const string CREDENTIALS = "Credentials";
-        public const string CSV = "CSV";
+        public const string CSV = "Csv";
         public const string DOT = "Dot";
         public const string DOWN = "Down";
         public const string DOWNLOAD_TILE = "DownloadTile";
@@ -33,7 +33,7 @@
         public const string FOLDER = "Folder";
         public const string FORWARD = "Forward";
         public const string FORWARD_BLOCKED = "ForwardBlocked";
-        public const string FPV = "FPV";
+        public const string FPV = "Fpv";
         public const string HEIGHT = "Height";
         public const string HELP = "Help";
         public const string KEY = "Key";
@@ -94,7 +94,6 @@
         public const string UP = "Up";
         public const string UPDATE_CREDENTIALS = "UpdateCredentials";
         public const string UPLOAD_FOLDER = "UploadFolder";
-        public const string URBAN_RELEAF = "UrbanReleaf";
         public const string USERNAME = "Username";
         public const string USERNAME_PASSWORD = "UsernamePassword";
         public const string VIDEO_CAMERA = "VideoCamera";
