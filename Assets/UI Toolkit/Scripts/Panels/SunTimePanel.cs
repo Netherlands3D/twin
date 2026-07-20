@@ -134,9 +134,9 @@ namespace Netherlands3D.UI.Panels
         {
             StringBuilder builder = new StringBuilder();
             List<Moment> moments = periodicSnapshotsService.Moments;
-           // moments.Sort((a, b) => a.ToDateTime().CompareTo(b.ToDateTime()));
-           for(int i = startIndex; i < startIndex + count; i++)
-           {
+            moments.Sort((a, b) => a.ToDateTime().CompareTo(b.ToDateTime()));
+            for(int i = startIndex; i < startIndex + count; i++)
+            {
                 Moment moment = moments[i];               
                 //example     21-03 om 12:00
                 builder.Append(moment.day.ToString("D2"));
