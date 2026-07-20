@@ -36,6 +36,6 @@
 }
 
 .credentials-needed .layer-tree-view-item__visibility-toggle{
-    --icon-image: var(--icon-warning);
+    background-image: var(--icon-warning);
     -unity-background-image-tint-color: var(--color-warning);
 }
