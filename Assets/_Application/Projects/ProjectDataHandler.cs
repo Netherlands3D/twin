@@ -27,12 +27,11 @@ namespace Netherlands3D.Twin.Projects
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
         [SerializeField] private ProjectDataStore projectDataStore;
         [SerializeField] private InputActionAsset applicationActionMap;
-        [SerializeField] private FileOpen fileOpener;
 
         public UnityEvent OnSaveStarted;
         public UnityEvent OnSaveCompleted;
         public UnityEvent OnLoadStarted;
-        public UnityEvent OnLoadCompleted;
+        public UnityEvent<ProjectData> OnLoadCompleted;
         public UnityEvent OnLoadFailed;
 
         private static ProjectDataHandler instance;
@@ -103,8 +102,11 @@ namespace Netherlands3D.Twin.Projects
         private void OpenProject()
         {
             OnLoadStarted.Invoke();
-            fileOpener.OpenFile("nl3d");
-            OnLoadCompleted.Invoke();
+            FileOpen fileOpenerService = ServiceLocator.GetService<FileOpen>();
+            fileOpenerService.OpenFile("nl3d");
+            OnLoadCompleted.Invoke(null);
+            ToolService tools = ServiceLocator.GetService<ToolService>();
+            tools.GetTool(ToolType.OpenProject).Close();
         }
 
         public void SaveProject()
@@ -112,6 +114,8 @@ namespace Netherlands3D.Twin.Projects
             OnSaveStarted.Invoke();
             projectDataStore.SaveAsFile(this);
             OnSaveCompleted.Invoke();
+            ToolService tools = ServiceLocator.GetService<ToolService>();
+            tools.GetTool(ToolType.SaveProject).Close();
         }
 
         private void LoadDefaultProject()
@@ -137,7 +141,7 @@ namespace Netherlands3D.Twin.Projects
             {
                 Debug.Log("loading nl3d file: " + filePath);
                 var project = projectDataStore.LoadFromFile(filePath);
-                OnLoadCompleted.Invoke();
+                OnLoadCompleted.Invoke(project);
                 return project;
             }
 
