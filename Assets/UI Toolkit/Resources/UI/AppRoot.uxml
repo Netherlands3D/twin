@@ -33,7 +33,7 @@
                 <nl3d:ToolbarNavigation class="app--functionality-first-person-viewer--hidden"/>
                 <ui:VisualElement name="CameraSlider"/>
             </ui:VisualElement>
-            <nl3d:MapViewport/>
+<!--            <nl3d:MapViewport/>-->
         </ui:VisualElement>
         <nl3dP:SnackbarPanel></nl3dP:SnackbarPanel>
     </ui:VisualElement>

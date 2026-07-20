@@ -8035,11 +8035,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Minimap
       objectReference: {fileID: 0}
-    - target: {fileID: 2568988435537759548, guid: 316af653f2625134ab367f8e339c26b9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2568988435537759546, guid: 316af653f2625134ab367f8e339c26b9, type: 3}
     - {fileID: 2568988435537759545, guid: 316af653f2625134ab367f8e339c26b9, type: 3}
