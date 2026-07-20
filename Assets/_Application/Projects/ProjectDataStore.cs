@@ -113,7 +113,7 @@ namespace Netherlands3D.Twin.Projects
 
             zipOutputStream.Finish();
             zipOutputStream.Close();
-
+            Debug.Log("SAVING PROJECT DATA path " + lastSavePath);
             SaveFile(lastSavePath);
         }
 

@@ -101,19 +101,17 @@ namespace Netherlands3D.Twin.Projects
 
         private void OpenProject()
         {
-            OnLoadStarted.Invoke();
             FileOpen fileOpenerService = ServiceLocator.GetService<FileOpen>();
             fileOpenerService.OpenFile("nl3d");
-            OnLoadCompleted.Invoke(null);
             ToolService tools = ServiceLocator.GetService<ToolService>();
             tools.GetTool(ToolType.OpenProject).Close();
         }
 
         public void SaveProject()
         {
-            OnSaveStarted.Invoke();
+            Debug.Log("SAVING PROJECT DATA");
             projectDataStore.SaveAsFile(this);
-            OnSaveCompleted.Invoke();
+            Debug.Log("SAVING PROJECT DATA Finished");
             ToolService tools = ServiceLocator.GetService<ToolService>();
             tools.GetTool(ToolType.SaveProject).Close();
         }
@@ -147,6 +145,11 @@ namespace Netherlands3D.Twin.Projects
 
             OnLoadFailed.Invoke();
             return null;
+        }
+        
+        public void ProjectSavedToIndexedDB()
+        {
+            projectDataStore.ProjectSavedToIndexedDB();
         }
     }
 }
