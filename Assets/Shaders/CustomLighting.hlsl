@@ -1,122 +1,179 @@
+// MIT License
+
+// Copyright (c) 2021 NedMakesGames
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files(the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions :
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+//https://www.youtube.com/watch?v=GQyCPaThQnA
+
 #ifndef CUSTOM_LIGHTING_INCLUDED
 #define CUSTOM_LIGHTING_INCLUDED
 
-void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, out float DistanceAtten, out float ShadowAtten)
-{
-#if SHADERGRAPH_PREVIEW
-    Direction = float3(0.5, 0.5, 0);
-    Color = 1;
-    DistanceAtten = 1;
-    ShadowAtten = 1;
-#else
-#if SHADOWS_SCREEN
-    float4 clipPos = TransformWorldToHClip(WorldPos);
-    float4 shadowCoord = ComputeScreenPos(clipPos);
-#else
-    float4 shadowCoord = TransformWorldToShadowCoord(WorldPos);
+// This is a neat trick to work around a bug in the shader graph when
+// enabling shadow keywords. Created by @cyanilux
+// https://github.com/Cyanilux/URP_ShaderGraphCustomLighting
+// Licensed under the MIT License, Copyright (c) 2020 Cyanilux
+#ifndef SHADERGRAPH_PREVIEW
+    #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
+    #if (SHADERPASS != SHADERPASS_FORWARD)
+        #undef REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR
+    #endif
 #endif
-    Light mainLight = GetMainLight(shadowCoord);
-    Direction = mainLight.direction;
-    Color = mainLight.color;
-    DistanceAtten = mainLight.distanceAttenuation;
-    ShadowSamplingData shadowSamplingData = GetMainLightShadowSamplingData();
-    float shadowStrength = GetMainLightShadowStrength();
-    ShadowAtten = SampleShadowmap(shadowCoord, TEXTURE2D_ARGS(_MainLightShadowmapTexture, sampler_MainLightShadowmapTexture), shadowSamplingData, shadowStrength, false); 
-#endif
-}
 
-void MainLight_half(float3 WorldPos, out half3 Direction, out half3 Color, out half DistanceAtten, out half ShadowAtten)
-{
-#if SHADERGRAPH_PREVIEW
-    Direction = half3(0.5, 0.5, 0);
-    Color = 1;
-    DistanceAtten = 1;
-    ShadowAtten = 1;
-#else
-#if SHADOWS_SCREEN
-    half4 clipPos = TransformWorldToHClip(WorldPos);
-    half4 shadowCoord = ComputeScreenPos(clipPos);
-#else
-    half4 shadowCoord = TransformWorldToShadowCoord(WorldPos);
-#endif
-    Light mainLight = GetMainLight(shadowCoord);
-    Direction = mainLight.direction;
-    Color = mainLight.color;
-    DistanceAtten = mainLight.distanceAttenuation;
-    ShadowSamplingData shadowSamplingData = GetMainLightShadowSamplingData();
-    float shadowStrength = GetMainLightShadowStrength();
-    ShadowAtten = SampleShadowmap(shadowCoord, TEXTURE2D_ARGS(_MainLightShadowmapTexture, sampler_MainLightShadowmapTexture), shadowSamplingData, shadowStrength, false); 
-#endif
-}
+struct CustomLightingData {
+    // Position and orientation
+    float3 positionWS;
+    float3 normalWS;
+    float3 viewDirectionWS;
+    float4 shadowCoord;
 
-void DirectSpecular_float(float3 Specular, float Smoothness, float3 Direction, float3 Color, float3 WorldNormal, float3 WorldView, out float3 Out)
-{
-#if SHADERGRAPH_PREVIEW
-    Out = 0;
-#else
-    Smoothness = exp2(10 * Smoothness + 1);
-    WorldNormal = normalize(WorldNormal);
-    WorldView = SafeNormalize(WorldView);
-    Out = LightingSpecular(Color, Direction, WorldNormal, WorldView, float4(Specular, 0), Smoothness);
-#endif
-}
+    // Surface attributes
+    float3 albedo;
+    float smoothness;
+    float ambientOcclusion;
 
-void DirectSpecular_half(half3 Specular, half Smoothness, half3 Direction, half3 Color, half3 WorldNormal, half3 WorldView, out half3 Out)
-{
-#if SHADERGRAPH_PREVIEW
-    Out = 0;
-#else
-    Smoothness = exp2(10 * Smoothness + 1);
-    WorldNormal = normalize(WorldNormal);
-    WorldView = SafeNormalize(WorldView);
-    Out = LightingSpecular(Color, Direction, WorldNormal, WorldView,half4(Specular, 0), Smoothness);
-#endif
-}
+    // Baked lighting
+    float3 bakedGI;
+    float4 shadowMask;
+    float fogFactor;
+};
 
-void AdditionalLights_float(float3 SpecColor, float Smoothness, float3 WorldPosition, float3 WorldNormal, float3 WorldView, out float3 Diffuse, out float3 Specular)
-{
-    float3 diffuseColor = 0;
-    float3 specularColor = 0;
+// Translate a [0, 1] smoothness value to an exponent 
+float GetSmoothnessPower(float rawSmoothness) {
+    return exp2(10 * rawSmoothness + 1);
+}
 
 #ifndef SHADERGRAPH_PREVIEW
-    Smoothness = exp2(10 * Smoothness + 1);
-    WorldNormal = normalize(WorldNormal);
-    WorldView = SafeNormalize(WorldView);
-    int pixelLightCount = GetAdditionalLightsCount();
-    for (int i = 0; i < pixelLightCount; ++i)
-    {
-        Light light = GetAdditionalLight(i, WorldPosition);
-        half3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
-        diffuseColor += LightingLambert(attenuatedLightColor, light.direction, WorldNormal);
-        specularColor += LightingSpecular(attenuatedLightColor, light.direction, WorldNormal, WorldView, float4(SpecColor, 0), Smoothness);
-    }
-#endif
+float3 CustomGlobalIllumination(CustomLightingData d) {
+    float3 indirectDiffuse = d.albedo * d.bakedGI * d.ambientOcclusion;
 
-    Diffuse = diffuseColor;
-    Specular = specularColor;
+    float3 reflectVector = reflect(-d.viewDirectionWS, d.normalWS);
+    // This is a rim light term, making reflections stronger along
+    // the edges of view
+    float fresnel = Pow4(1 - saturate(dot(d.viewDirectionWS, d.normalWS)));
+    // This function samples the baked reflections cubemap
+    // It is located in URP/ShaderLibrary/Lighting.hlsl
+    float3 indirectSpecular = GlossyEnvironmentReflection(reflectVector,
+        RoughnessToPerceptualRoughness(1 - d.smoothness),
+        d.ambientOcclusion) * fresnel;
+
+    return indirectDiffuse + indirectSpecular;
 }
 
-void AdditionalLights_half(half3 SpecColor, half Smoothness, half3 WorldPosition, half3 WorldNormal, half3 WorldView, out half3 Diffuse, out half3 Specular)
-{
-    half3 diffuseColor = 0;
-    half3 specularColor = 0;
+float3 CustomLightHandling(CustomLightingData d, Light light) {
 
-#ifndef SHADERGRAPH_PREVIEW
-    Smoothness = exp2(10 * Smoothness + 1);
-    WorldNormal = normalize(WorldNormal);
-    WorldView = SafeNormalize(WorldView);
-    int pixelLightCount = GetAdditionalLightsCount();
-    for (int i = 0; i < pixelLightCount; ++i)
-    {
-        Light light = GetAdditionalLight(i, WorldPosition);
-        half3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
-        diffuseColor += LightingLambert(attenuatedLightColor, light.direction, WorldNormal);
-        specularColor += LightingSpecular(attenuatedLightColor, light.direction, WorldNormal, WorldView, half4(SpecColor, 0), Smoothness);
-    }
+    float3 radiance = light.color * (light.distanceAttenuation * light.shadowAttenuation);
+
+    float diffuse = saturate(dot(d.normalWS, light.direction));
+    float specularDot = saturate(dot(d.normalWS, normalize(light.direction + d.viewDirectionWS)));
+    float specular = pow(specularDot, GetSmoothnessPower(d.smoothness)) * diffuse;
+
+    float3 color = d.albedo * radiance * (diffuse + specular);
+
+    return color;
+}
 #endif
 
-    Diffuse = diffuseColor;
-    Specular = specularColor;
+float3 CalculateCustomLighting(CustomLightingData d) {
+#ifdef SHADERGRAPH_PREVIEW
+    // In preview, estimate diffuse + specular
+    float3 lightDir = float3(0.5, 0.5, 0);
+    float intensity = saturate(dot(d.normalWS, lightDir)) +
+        pow(saturate(dot(d.normalWS, normalize(d.viewDirectionWS + lightDir))), GetSmoothnessPower(d.smoothness));
+    return d.albedo * intensity;
+#else
+    // Get the main light. Located in URP/ShaderLibrary/Lighting.hlsl
+    Light mainLight = GetMainLight(d.shadowCoord, d.positionWS, d.shadowMask);
+    // In mixed subtractive baked lights, the main light must be subtracted
+    // from the bakedGI value. This function in URP/ShaderLibrary/Lighting.hlsl takes care of that.
+    MixRealtimeAndBakedGI(mainLight, d.normalWS, d.bakedGI);
+    float3 color = CustomGlobalIllumination(d);
+    // Shade the main light
+    color += CustomLightHandling(d, mainLight);
+
+    #ifdef _ADDITIONAL_LIGHTS
+        // Shade additional cone and point lights. Functions in URP/ShaderLibrary/Lighting.hlsl
+        uint numAdditionalLights = GetAdditionalLightsCount();
+        for (uint lightI = 0; lightI < numAdditionalLights; lightI++) {
+            Light light = GetAdditionalLight(lightI, d.positionWS, d.shadowMask);
+            color += CustomLightHandling(d, light);
+        }
+    #endif
+
+    color = MixFog(color, d.fogFactor);
+
+    return color;
+#endif
+}
+
+void CalculateCustomLighting_float(float3 Position, float3 Normal, float3 ViewDirection,
+    float3 Albedo, float Smoothness, float AmbientOcclusion,
+    float2 LightmapUV,
+    out float3 Color) {
+
+    CustomLightingData d;
+    d.positionWS = Position;
+    d.normalWS = Normal;
+    d.viewDirectionWS = ViewDirection;
+    d.albedo = Albedo;
+    d.smoothness = Smoothness;
+    d.ambientOcclusion = AmbientOcclusion;
+
+#ifdef SHADERGRAPH_PREVIEW
+    // In preview, there's no shadows or bakedGI
+    d.shadowCoord = 0;
+    d.bakedGI = 0;
+    d.shadowMask = 0;
+    d.fogFactor = 0;
+#else
+    // Calculate the main light shadow coord
+    // There are two types depending on if cascades are enabled
+    float4 positionCS = TransformWorldToHClip(Position);
+    #if SHADOWS_SCREEN
+        d.shadowCoord = ComputeScreenPos(positionCS);
+    #else
+        d.shadowCoord = TransformWorldToShadowCoord(Position);
+    #endif
+
+    // The following URP functions and macros are all located in
+    // URP/ShaderLibrary/Lighting.hlsl
+    // Technically, OUTPUT_LIGHTMAP_UV, OUTPUT_SH and ComputeFogFactor
+    // should be called in the vertex function of the shader. However, as of
+    // 2021.1, we do not have access to custom interpolators in the shader graph.
+
+    // The lightmap UV is usually in TEXCOORD1
+    // If lightmaps are disabled, OUTPUT_LIGHTMAP_UV does nothing
+    float2 lightmapUV;
+    OUTPUT_LIGHTMAP_UV(LightmapUV, unity_LightmapST, lightmapUV);
+    // Samples spherical harmonics, which encode light probe data
+    float3 vertexSH;
+    OUTPUT_SH(Normal, vertexSH);
+    // This function calculates the final baked lighting from light maps or probes
+    d.bakedGI = SAMPLE_GI(lightmapUV, vertexSH, Normal);
+    // This function calculates the shadow mask if baked shadows are enabled
+    d.shadowMask = SAMPLE_SHADOWMASK(lightmapUV);
+    // This returns 0 if fog is turned off
+    // It is not the same as the fog node in the shader graph
+    d.fogFactor = ComputeFogFactor(positionCS.z);
+#endif
+
+    Color = CalculateCustomLighting(d);
 }
 
 #endif
