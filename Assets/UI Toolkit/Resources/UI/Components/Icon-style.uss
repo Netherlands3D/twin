@@ -58,7 +58,7 @@
 .icon.image-color-wheel { background-image: var(--icon-colorwheel); }
 .icon.image-copy-paste { background-image: var(--icon-copypaste); }
 .icon.image-credentials { background-image: var(--icon-credentials); }
-.icon.image-c-s-v { background-image: var(--icon-csv); }
+.icon.image-csv { background-image: var(--icon-csv); }
 .icon.image-dot { background-image: var(--icon-dot); }
 .icon.image-down { background-image: var(--icon-down); }
 .icon.image-download-tile { background-image: var(--icon-downloadtile); }
@@ -68,7 +68,6 @@
 .icon.image-folder { background-image: var(--icon-folder); }
 .icon.image-forward { background-image: var(--icon-forward); }
 .icon.image-forward-blocked { background-image: var(--icon-forwardblocked); }
-.icon.image-f-p-v { background-image: var(--icon-fpv); }
 .icon.image-height { background-image: var(--icon-height); }
 .icon.image-help { background-image: var(--icon-help); }
 .icon.image-picture { background-image: var(--icon-picture); }
@@ -136,7 +135,7 @@
 .icon.image-visibility { background-image: var(--icon-visibility); }
 .icon.image-invisible { background-image: var(--icon-invisible); }
 .icon.image-color-features { background-image: var(--icon-colorfeatures); }
-/*.icon.image-urban-releaf { background-image: var(--icon-urbanreleaf); }*/
 .icon.image-visibility-mixed { background-image: var(--icon-visibilitymixed); }
 .icon.image-visible-in-invisible { background-image: var(--icon-visibleininvisible); }
 .icon.image-none { background-image: none; }
+
