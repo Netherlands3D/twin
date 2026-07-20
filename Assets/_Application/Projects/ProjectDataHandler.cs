@@ -28,6 +28,13 @@ namespace Netherlands3D.Twin.Projects
         [DllImport("__Internal")]
         [UsedImplicitly]
         private static extern void PreventDefaultShortcuts();
+        
+        [DllImport("__Internal")]
+        private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
+
+        [DllImport("__Internal")]
+        [UsedImplicitly]
+        private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
 
         [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [UsedImplicitly] private CredentialHandler credentialHandler; // don't remove, this is used in LoadDefaultProject()
@@ -192,13 +199,6 @@ namespace Netherlands3D.Twin.Projects
             OnLoadFailed.Invoke();
             return null;
         }
-        
-        [DllImport("__Internal")]
-        private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
-
-        [DllImport("__Internal")]
-        [UsedImplicitly]
-        private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
 
         private readonly JsonSerializerSettings serializerSettings = new()
         {
