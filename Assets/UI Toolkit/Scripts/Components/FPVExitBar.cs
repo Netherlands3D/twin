@@ -16,7 +16,7 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             slider = this.Q<Slider>();
-            UpdateTimer(-1);
+            slider.EnableInClassList(UtilityClassConstants.HIDDEN, true);
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
@@ -33,7 +33,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateTimer(float percentage)
         {
-            if (percentage == -1)
+            if (percentage < 0)
             {
                 slider.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             }
