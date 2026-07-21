@@ -72,7 +72,7 @@ namespace Netherlands3D.UI.Panels
             treeView.unbindItem = UnbindItem;
 
             treeView.selectionChanged += OnSelectionChanged;
-            treeView.RegisterCallback<BlurEvent>(OnBlur);
+            RegisterCallback<ClickEvent>(OnClick);
 
             scrollView = treeView.Q<ScrollView>();
 
@@ -126,17 +126,19 @@ namespace Netherlands3D.UI.Panels
             App.Layers.LayerRemoved.RemoveListener(OnLayerHierarchyChanged);
         }
 
-        private void OnBlur(BlurEvent evt)
+        private void OnClick(ClickEvent evt)
         {
             var pos = Pointer.current.position.ReadValue();
             var panelPos = RuntimePanelUtils.ScreenToPanel(
-                treeView.panel,
+                panel,
                 new Vector2(pos.x, Screen.height - pos.y)
             );
 
-            var inPanel = treeView.worldBound.Contains(panelPos) && scrollView.contentContainer.worldBound.Contains(panelPos);
+            var inInspectorPanel = worldBound.Contains(panelPos);
+            var inTreeViewLayerContainer = scrollView.contentContainer.worldBound.Contains(panelPos);
             var overButton = deleteButton.worldBound.Contains(panelPos) || folderButton.worldBound.Contains(panelPos);
-            if (!inPanel && !overButton)
+            Debug.Log(inInspectorPanel + "\t" + inTreeViewLayerContainer);
+            if (inInspectorPanel && !inTreeViewLayerContainer && !overButton)
             {
                 treeView.ClearSelection();
                 referenceLayerItem = null;
