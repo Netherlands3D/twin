@@ -16,6 +16,7 @@ namespace Netherlands3D.UI.Panels
         private Toggle position;
         private Toggle rotation;
         private Toggle scale;
+        private Button snap;
         
         private GameObject target;
         private TransformHandleInterfaceToggle  transformInterfaceToggle;
@@ -28,6 +29,8 @@ namespace Netherlands3D.UI.Panels
             position = this.Q<Toggle>("Position");
             rotation = this.Q<Toggle>("Rotation");
             scale = this.Q<Toggle>("Scale");
+            snap = this.Q<Button>("Snap");
+            snap.clicked += OnSnapPosition;
             position.RegisterValueChangedCallback(OnTogglePosition);
             rotation.RegisterValueChangedCallback(OnToggleRotation);
             scale.RegisterValueChangedCallback(OnToggleScale);
@@ -61,6 +64,11 @@ namespace Netherlands3D.UI.Panels
         private void OnToggleScale(ChangeEvent<bool> evt)
         {
             transformInterfaceToggle.CurrentMode = TransformHandleInterfaceToggle.TransformMode.Scale;
+        }
+
+        private void OnSnapPosition()
+        {
+            transformInterfaceToggle.SnapObject();
         }
 
         private void OnUpdate()

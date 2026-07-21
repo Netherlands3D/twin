@@ -12,5 +12,6 @@
         <nl3d:Toggle name="Position" icon="Move" LabelText="Verplaatsen"/>
         <nl3d:Toggle name="Rotation" icon="RotateV2" LabelText="Roteren"/>
         <nl3d:Toggle name="Scale" icon="ScaleV2" LabelText="Verschalen"/>
+        <nl3d:Button name="Snap" button-style="WithIcon" icon="SnapToGround" LabelText="Plaats op hoogste raakpunt"/>
     </ui:VisualElement>
 </ui:UXML>
