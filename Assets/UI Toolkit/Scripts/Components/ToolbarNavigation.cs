@@ -14,7 +14,7 @@ namespace Netherlands3D.UI.Components
         private Toggle Perspective => this.Q<Toggle>("Perspective");
         private VisualElement FPV => this.Q<VisualElement>("FPV");
 
-        public event Action<bool> ToggleOrthographicView;
+        // public event Action<bool> ToggleOrthographicView;
         
         
         public ToolbarNavigation()
@@ -33,7 +33,9 @@ namespace Netherlands3D.UI.Components
         {
             UpdatePerspectiveIcon();
             schedule.Execute(()=>
-            ServiceLocator.GetService<Compass>()?.ChangeDirection.AddListener(UpdateCompass));
+            {
+                ServiceLocator.GetService<Compass>()?.ChangeDirection.AddListener(UpdateCompass);
+            });
         }
 
         private void OnNorthClick(ClickEvent _)
@@ -47,9 +49,9 @@ namespace Netherlands3D.UI.Components
             North.EnableInClassList("toolbar-navigation__compass--north", yawInDegrees is > 359.0f or < 1.0f);
         }
 
-        private void OnToggleOrthographicView(ChangeEvent<bool> value)
+        private void OnToggleOrthographicView(ChangeEvent<bool> evt)
         {
-            ToggleOrthographicView?.Invoke(value.newValue);
+            ServiceLocator.GetService<CameraService>().ActiveCamera.GetComponent<FreeCamera>()?.EnableOrtographic(evt.newValue);
         }
 
         private void UpdatePerspectiveIcon()
