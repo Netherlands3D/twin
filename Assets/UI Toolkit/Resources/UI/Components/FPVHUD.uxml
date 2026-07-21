@@ -13,7 +13,6 @@
     </ui:VisualElement>
     <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="fpv-hud__bottom-section">
         <nl3d:Footer />
-        <ui:VisualElement name="BottomTools" picking-mode="Ignore" style="flex-shrink: 0; flex-basis: auto;" />
         <!--            <nl3d:MapViewport/>-->
     </ui:VisualElement>
 </ui:UXML>

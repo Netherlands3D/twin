@@ -13,9 +13,6 @@ namespace Netherlands3D.UI.Components
         private Button North => this.Q<Button>("North");
         private Toggle Perspective => this.Q<Toggle>("Perspective");
         private VisualElement FPV => this.Q<VisualElement>("FPV");
-
-        // public event Action<bool> ToggleOrthographicView;
-        
         
         public ToolbarNavigation()
         {
