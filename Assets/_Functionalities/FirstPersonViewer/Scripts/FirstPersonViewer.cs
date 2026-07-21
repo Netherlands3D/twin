@@ -167,10 +167,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void CheckGroundCollision()
         {
-            if (Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance)
-                isGrounded = true;
-            else
-                isGrounded = false;
+            isGrounded = Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance;
         }
 
         public void SnapToGround()
