@@ -265,9 +265,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
-            if (!isActive && LayerData.IsSelected)
+            if (LayerData.IsSelected)
             {
-                LayerData.DeselectLayer();
+                if (isActive)
+                    OnSelect(LayerData);
+                else
+                    OnDeselect(LayerData);
             }
 
             gameObject.SetActive(isActive);
