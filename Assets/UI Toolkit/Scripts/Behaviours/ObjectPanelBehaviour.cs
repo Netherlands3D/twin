@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -10,10 +13,31 @@ namespace Netherlands3D.UI.Panels
     [CreateAssetMenu(fileName = "ObjectPanelBehaviour", menuName = "ScriptableObjects/FloatingPanelBehaviours/ObjectPanelBehaviour", order = 1)]
     public class ObjectPanelBehaviour : FloatingPanelBehaviour
     {
+        private static readonly List<RaycastResult> results = new(8);
+        private HierarchicalObjectLayerGameObject target;
+        
         public override bool ShouldBeActive()
         {
-            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            return transformInterfaceToggle.Target != null;
+            // var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            // return transformInterfaceToggle.Target != null;
+            results.Clear();
+            target = null;
+            var pointerPos = Pointer.current.position.ReadValue();
+            var pointerData = new PointerEventData(EventSystem.current);
+            pointerData.position = pointerPos;
+            EventSystem.current.RaycastAll(pointerData, results);
+            ObjectSelectorService selectionService = ServiceLocator.GetService<ObjectSelectorService>();
+            if(!selectionService.IsAnyToolActive()) return false;
+            foreach (var raycast in results)
+            {
+                if (raycast.gameObject.TryGetComponent(out HierarchicalObjectLayerGameObject t))
+                {
+                    target = t;
+                    t.LayerData.SelectLayer(true);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public override object GetData()
