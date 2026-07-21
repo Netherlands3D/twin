@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Netherlands3D.UI.Panels
     public class ObjectPanelBehaviour : FloatingPanelBehaviour
     {
         private static readonly List<RaycastResult> results = new(8);
-        private HierarchicalObjectLayerGameObject target;
+        private LayerData target;
         
         public override bool ShouldBeActive()
         {
@@ -34,8 +35,8 @@ namespace Netherlands3D.UI.Panels
                 }
                 if (t != null)
                 {
-                    target = t;
-                    t.LayerData.SelectLayer(true);
+                    target = t.LayerData;
+                    target.SelectLayer(true);
                     return true;
                 }
             }
@@ -50,7 +51,7 @@ namespace Netherlands3D.UI.Panels
         public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, params object[] constructorArgs)
         {
             base.SpawnFloatingPanelContent(floatingPanel);
-            content = new ObjectPanel(constructorArgs[0] as HierarchicalObjectLayerGameObject);
+            content = new ObjectPanel(constructorArgs[0] as LayerData);
             ObjectPanel panel = content as ObjectPanel;
             panel.OnClose.AddListener(CloseFloatingPanel);
             return content;

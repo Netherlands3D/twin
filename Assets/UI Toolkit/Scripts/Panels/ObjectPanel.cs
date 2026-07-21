@@ -1,4 +1,5 @@
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.UI.ExtensionMethods;
@@ -19,7 +20,7 @@ namespace Netherlands3D.UI.Panels
         private Toggle scale;
         private Button snap;
         
-        private HierarchicalObjectLayerGameObject target;
+        private LayerData target;
         private TransformHandleInterfaceToggle  transformInterfaceToggle;
 
         public ObjectPanel()
@@ -37,7 +38,7 @@ namespace Netherlands3D.UI.Panels
             scale.RegisterValueChangedCallback(OnToggleScale);
         }
         
-        public ObjectPanel(HierarchicalObjectLayerGameObject target) :  this()
+        public ObjectPanel(LayerData target) :  this()
         {
             this.target = target;
             transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
@@ -47,7 +48,7 @@ namespace Netherlands3D.UI.Panels
             OnUpdate();
             
             PropertyPanelBehaviour propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
-            propertyPanelBehaviour.SpawnPanel(target.LayerData);
+            propertyPanelBehaviour.SpawnPanel(target);
         }
         
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
