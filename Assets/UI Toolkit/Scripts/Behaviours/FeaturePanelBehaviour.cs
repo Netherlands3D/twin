@@ -2,21 +2,20 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
-using Netherlands3D.SubObjects;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
 {
-    [CreateAssetMenu(fileName = "HideObjectPanelBehaviour", menuName = "ScriptableObjects/FloatingPanelBehaviours/HideObjectPanelBehaviour", order = 1)]
-    public class HideObjectPanelBehaviour : FloatingPanelBehaviour
+    [CreateAssetMenu(fileName = "FeaturePanelBehaviour", menuName = "ScriptableObjects/FloatingPanelBehaviours/FeaturePanelBehaviour", order = 1)]
+    public class FeaturePanelBehaviour : FloatingPanelBehaviour
     {
+        //todo improve flow for specific imapping type?
         public override bool ShouldBeActive()
         {
             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
             Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
-            
-            return selectedMappings.Values.Any(m => m is MeshMapping);
+            return selectedMappings.Values.Any(m => m is FeatureMapping);
         }
 
         public override object GetData()
@@ -29,8 +28,8 @@ namespace Netherlands3D.UI.Panels
         public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, params object[] constructorArgs)
         {
             base.SpawnFloatingPanelContent(floatingPanel);
-            content = new HideObjectPanel(constructorArgs[0] as Dictionary<string, IMapping>);
-            HideObjectPanel panel = content as HideObjectPanel;
+            content = new FeaturePanel(constructorArgs[0] as Dictionary<string, IMapping>);
+            FeaturePanel panel = content as FeaturePanel;
             panel.OnClose.AddListener(CloseFloatingPanel);
             return content;
         }
@@ -39,13 +38,12 @@ namespace Netherlands3D.UI.Panels
         {
             floatingPanel.OnClose.Invoke();
             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            objectSelectorService.SubObjectSelector.HideSelectedMappings();
             objectSelectorService.Deselect();
         }
 
         public override void Dispose()
         {
-            HideObjectPanel panel = content as HideObjectPanel;
+            FeaturePanel panel = content as FeaturePanel;
             panel.OnClose.RemoveListener(CloseFloatingPanel);
             base.Dispose();
         }
