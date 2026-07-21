@@ -32,7 +32,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Exit")]
         [SerializeField] private float exitDuration = 1;
-        [SerializeField] private float exitViewDelay = .15f;
+
         private float exitTimer;
         public UnityEvent<string> onShowSnackbarExit;
         [SerializeField] private string fpvExitText;
@@ -90,7 +90,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void Update()
         {
             if (!isActive) return;
-            
+
             isEditingInputfield = IsInputfieldSelected();
             HandleCursorLocking();
 
@@ -108,16 +108,16 @@ namespace Netherlands3D.FirstPersonViewer
                 BlockCameraInput = !LeftClick.IsPressed();
                 return;
             }
-            
+
             // lock cursor mode
             if (ExitInput.WasReleasedThisFrame() && cursorLocked)
             {
                 ToggleCursor(false);
                 return;
             }
-            
+
             // Relock only when unlocked, mouse pressed, and not clicking UI.
-            if (!cursorLocked && LeftClick.WasPressedThisFrame() && !PointerIsOverUIToolkit())
+            if (!cursorLocked && LeftClick.WasPressedThisFrame() && !App.UIRoot.IsOverUI(Mouse.current.position.ReadValue()))
             {
                 ToggleCursor(true);
             }
@@ -153,18 +153,13 @@ namespace Netherlands3D.FirstPersonViewer
         {
             if (ExitInput.IsPressed() && !isEditingInputfield)
             {
-                exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
+                exitTimer -= Time.deltaTime;
 
-                //Delay x seconds before showing the progress. So the UI component isn't flickering
-                if (exitTimer < exitDuration - exitViewDelay)
+                float percentageTime = exitTimer / exitDuration;
+                ExitDuration.Invoke(percentageTime);
+                
+                if (exitTimer < 0)
                 {
-                    float percentageTime = Mathf.Clamp01(1f - ((exitTimer + exitViewDelay) / exitDuration));
-                    ExitDuration.Invoke(percentageTime);
-                }
-
-                if (exitTimer == 0)
-                {
-                    ExitDuration?.Invoke(-1);
                     OnInputExit.Invoke(exitModifier.IsPressed());
                 }
             }
@@ -209,19 +204,5 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;
         public bool GetMouseLockModus() => lockMouseModus;
-        
-        public static bool PointerIsOverUIToolkit()
-        {
-            VisualElement root = App.UIRoot?.Root;
-            if (root == null)
-                return false;
-
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Vector2 panelPosition = RuntimePanelUtils.ScreenToPanel(root.panel, mousePosition);
-
-            VisualElement picked = root.panel.Pick(panelPosition);
-
-            return picked != null;
-        }
     }
 }

@@ -73,14 +73,13 @@ namespace Netherlands3D.Functionalities
         {
             OnSelectionBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             
-
             PolygonSelectionService selectionService = ServiceLocator.GetService<PolygonSelectionService>();
             selectionService.OnDeselectActivePolygon.AddListener(WhenDeselected);
 
             PolygonCreationService creationService = ServiceLocator.GetService<PolygonCreationService>();
             creationService.GridInput.whenDrawingArea.AddListener(SetDuringSelectionAreaBounds);
             creationService.GridInput.whenAreaIsSelected.AddListener(SetSelectionAreaBounds);
-
+            
             Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
             northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
             northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);

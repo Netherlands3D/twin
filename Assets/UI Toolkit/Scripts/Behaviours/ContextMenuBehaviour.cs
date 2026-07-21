@@ -62,13 +62,12 @@ namespace Netherlands3D.UI.Panels
         private void OnRightClick(InputAction.CallbackContext ctx)
         {
             Vector2 panelPos = App.UIRoot.GetPanelClickPosition();
-            App.UIRoot.ClickedUI(panelPos);
             
             if(IsActivePanelClicked(panelPos))
                 return;
             
             ClearActivePanel();
-            if(App.UIRoot.ClickedUI(panelPos))
+            if(App.UIRoot.IsOverUI(panelPos))
                 return;
             
             CheckAndSpawnPanel(panelPos);
