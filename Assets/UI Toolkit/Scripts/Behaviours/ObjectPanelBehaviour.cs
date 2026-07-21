@@ -18,8 +18,6 @@ namespace Netherlands3D.UI.Panels
         
         public override bool ShouldBeActive()
         {
-            // var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            // return transformInterfaceToggle.Target != null;
             results.Clear();
             target = null;
             var pointerPos = Pointer.current.position.ReadValue();
@@ -30,7 +28,11 @@ namespace Netherlands3D.UI.Panels
             if(!selectionService.IsAnyToolActive()) return false;
             foreach (var raycast in results)
             {
-                if (raycast.gameObject.TryGetComponent(out HierarchicalObjectLayerGameObject t))
+                if (!raycast.gameObject.TryGetComponent(out HierarchicalObjectLayerGameObject t))
+                {
+                    t = raycast.gameObject.GetComponentInParent<HierarchicalObjectLayerGameObject>();
+                }
+                if (t != null)
                 {
                     target = t;
                     t.LayerData.SelectLayer(true);
@@ -42,14 +44,13 @@ namespace Netherlands3D.UI.Panels
 
         public override object GetData()
         {
-            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            return transformInterfaceToggle.Target;
+            return target;
         }
 
         public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, params object[] constructorArgs)
         {
             base.SpawnFloatingPanelContent(floatingPanel);
-            content = new ObjectPanel(constructorArgs[0] as GameObject);
+            content = new ObjectPanel(constructorArgs[0] as HierarchicalObjectLayerGameObject);
             ObjectPanel panel = content as ObjectPanel;
             panel.OnClose.AddListener(CloseFloatingPanel);
             return content;
