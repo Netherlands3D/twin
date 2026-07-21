@@ -10,8 +10,6 @@ using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
-using Toggle = UnityEngine.UIElements.Toggle;
-using ToggleNL3D = Netherlands3D.UI.Components.Toggle;
 
 namespace Netherlands3D.UI.Components
 {
@@ -24,7 +22,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement colorBar;
         private Icon layerTypeIcon;
         private EditableNameField nameInputField;
-        private ToggleNL3D propertyToggle;
+        private Toggle propertyToggle;
 
         private PropertyPanelBehaviour propertyPanelBehaviour;
 
@@ -46,7 +44,7 @@ namespace Netherlands3D.UI.Components
         public IconImage LayerTypeIcon => layerTypeIcon.Image;
 
         private VisualElement indent;
-        private Toggle foldout;
+        private UnityEngine.UIElements.Toggle foldout;
         public float IndentWidth => indent.resolvedStyle.width;
         public Rect FoldoutWorldBound => foldout.worldBound;
         
@@ -64,7 +62,7 @@ namespace Netherlands3D.UI.Components
             layerTypeIcon = this.Q<Icon>("TypeIcon");
             colorBar = this.Q<VisualElement>("ColorBar");
             nameInputField = this.Q<EditableNameField>("NameInputField");
-            propertyToggle = this.Q<ToggleNL3D>("PropertyToggle");
+            propertyToggle = this.Q<Toggle>("PropertyToggle");
 
             RegisterCallback<ClickEvent>(OnClick);
             var dragManipulator = new DragManipulator(8);
@@ -152,7 +150,7 @@ namespace Netherlands3D.UI.Components
         {
             itemRoot = GetTreeViewItemRoot();
             indent = ItemRoot.Q("unity-tree-view__item-indent");
-            foldout = ItemRoot.Q<Toggle>(className: "unity-tree-view__item-toggle");
+            foldout = ItemRoot.Q<UnityEngine.UIElements.Toggle>(className: "unity-tree-view__item-toggle");
                 
             if (itemRoot == null) return;
             itemRoot.AddComponentStylesheetByType(GetType());
