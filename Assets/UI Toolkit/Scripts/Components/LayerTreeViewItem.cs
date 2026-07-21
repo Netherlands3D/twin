@@ -52,8 +52,8 @@ namespace Netherlands3D.UI.Components
         
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
-        public UnityEvent<int, bool> VisibilityToggleChanged = new UnityEvent<int, bool>();
-        public UnityEvent<int, bool> IsExpandedChanged;
+        public UnityEvent<int, bool> VisibilityToggleChanged = new();
+        public UnityEvent<int, bool> IsExpandedChanged = new();
 
         public LayerTreeViewItem()
         {
