@@ -9,9 +9,8 @@
 >
     <nl3d:Header icon="Object" text="Object transformeren"/>
     <ui:VisualElement name="Content" class="object-panel__body">
-       
+        <nl3d:Toggle name="Position" icon="Move" LabelText="Verplaatsen"/>
+        <nl3d:Toggle name="Rotation" icon="RotateV2" LabelText="Roteren"/>
+        <nl3d:Toggle name="Scale" icon="ScaleV2" LabelText="Verschalen"/>
     </ui:VisualElement>
-    <!-- <ui:VisualElement class="hide-object-panel__footer"> -->
-    <!--     <nl3d:Button name="HideButton" icon="Invisible" LabelText="Slu" class="hide-object-panel__hide-button"/> -->
-    <!-- </ui:VisualElement> -->
 </ui:UXML>
