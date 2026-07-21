@@ -10,6 +10,22 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private TransformHandleButtonsPanel handleButtonsPanel;
 
         private bool enableHandle = true;
+        
+        public GameObject Target
+        {
+            get
+            {
+                if (runtimeTransformHandle == null)
+                    return null;
+
+                var target = runtimeTransformHandle.target;
+
+                if (target == null)
+                    return null;
+
+                return target.gameObject;
+            }
+        }
 
         public UnityEvent<GameObject> SetTarget = new();
         public UnityEvent SnapTarget = new();

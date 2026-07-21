@@ -1,0 +1,17 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="ObjectPanel" 
+    class="object-panel"
+>
+    <nl3d:Header icon="Object" text="Object transformeren"/>
+    <ui:VisualElement name="Content" class="object-panel__body">
+       
+    </ui:VisualElement>
+    <!-- <ui:VisualElement class="hide-object-panel__footer"> -->
+    <!--     <nl3d:Button name="HideButton" icon="Invisible" LabelText="Slu" class="hide-object-panel__hide-button"/> -->
+    <!-- </ui:VisualElement> -->
+</ui:UXML>

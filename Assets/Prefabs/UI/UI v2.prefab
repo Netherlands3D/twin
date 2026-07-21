@@ -218,6 +218,7 @@ MonoBehaviour:
   panelBehaviours:
   - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
   - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
+  - {fileID: 11400000, guid: 101175000a89da4a8beb0a2532e32947, type: 2}
 --- !u!114 &2679958399476094032
 MonoBehaviour:
   m_ObjectHideFlags: 0
