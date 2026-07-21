@@ -49,8 +49,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private Action<Vector3, bool> removeMeasurementPointCallback;
         private Action<FirstPersonMeasurementElement> removeElementCallback;
         
-        
-
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
@@ -84,7 +82,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         public void HandleInput()
         {
-            if (FirstPersonViewerInput.PointerIsOverUIToolkit()) return;
+            if (App.UIRoot.IsOverUI(Pointer.current.position.ReadValue())) return;
             
             if (mouseLClick.action.WasPressedThisFrame())
             {

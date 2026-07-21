@@ -117,7 +117,7 @@ namespace Netherlands3D.FirstPersonViewer
             }
 
             // Relock only when unlocked, mouse pressed, and not clicking UI.
-            if (!cursorLocked && LeftClick.WasPressedThisFrame() && !PointerIsOverUIToolkit())
+            if (!cursorLocked && LeftClick.WasPressedThisFrame() && !App.UIRoot.IsOverUI(Mouse.current.position.ReadValue()))
             {
                 ToggleCursor(true);
             }
@@ -204,19 +204,5 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;
         public bool GetMouseLockModus() => lockMouseModus;
-
-        public static bool PointerIsOverUIToolkit()
-        {
-            VisualElement root = App.UIRoot?.Root;
-            if (root == null)
-                return false;
-
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Vector2 panelPosition = RuntimePanelUtils.ScreenToPanel(root.panel, mousePosition);
-
-            VisualElement picked = root.panel.Pick(panelPosition);
-
-            return picked != null;
-        }
     }
 }
