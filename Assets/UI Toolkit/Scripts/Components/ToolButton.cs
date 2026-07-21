@@ -20,7 +20,7 @@ namespace Netherlands3D.UI.Components
         }
         
         [UxmlAttribute("icon")]
-        public IconImage Image
+        public string Image
         {
             get => button.Image;
             set => button.Image = value;

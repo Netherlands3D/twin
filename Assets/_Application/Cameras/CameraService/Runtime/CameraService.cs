@@ -7,8 +7,10 @@ namespace Netherlands3D.Twin.Cameras
     public class CameraService : MonoBehaviour
     {
         [SerializeField] private List<Camera> cameraObjects;
-        
+        public UnityEvent<Vector3> OnPositionChanged;
         public UnityEvent<Camera> OnSwitchCamera = new();
+        
+        private Vector3 lastPosition;
 
         public Camera ActiveCamera
         {
@@ -70,6 +72,18 @@ namespace Netherlands3D.Twin.Cameras
             {
                 SwitchCamera(previous);
             }
+        }
+        
+        private void LateUpdate()
+        {
+            if (ActiveCamera.transform.position == lastPosition) return;
+            PositionChanged();
+        }
+        
+        private void PositionChanged()
+        {
+            OnPositionChanged.Invoke(ActiveCamera.transform.position);
+            lastPosition = ActiveCamera.transform.position;
         }
     }
 }

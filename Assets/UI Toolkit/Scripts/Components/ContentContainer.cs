@@ -100,7 +100,7 @@ namespace Netherlands3D.UI.Components
         }
 
         [UxmlAttribute("leading-icon")]
-        public IconImage LeadingIconImage
+        public string LeadingIconImage
         {
             get => leadingIcon.Image;
             set => leadingIcon.Image = value;
@@ -149,7 +149,7 @@ namespace Netherlands3D.UI.Components
         
         public int DropDownValue => dropDown.choices.IndexOf(dropDown.value);
 
-        public void SetDropdownValues(List<IconImage> values)
+        public void SetDropdownValues(List<string> values)
         {
             if(values == null || values.Count == 0) return;
             

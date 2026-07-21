@@ -1,4 +1,9 @@
+using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Services;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -44,6 +49,29 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
+            
+            // Ensure attribution is not visible upon start
+            OnShowAttribution("");
+            
+            // Cannot disable because events do not support replaying, meaning you could lose attribution information
+            // if attribution changed while object is disabled
+            schedule.Execute(() =>
+            {
+                ServiceLocator.GetService<CameraService>()?.OnPositionChanged.AddListener(OnActiveCameraPositionChanged);
+                ServiceLocator.GetService<LayerMessageService>()?.OnAttributionReceived.AddListener(OnShowAttribution);
+            });
+        }
+        
+        public void OnShowAttribution(string attribution) => Attribution = attribution;
+
+        public void OnActiveCameraPositionChanged(Vector3 position)
+        {
+            Coordinate coordinate = new Coordinate(position);
+            var rd = coordinate.Convert(CoordinateSystem.RDNAP);
+
+            X = (float)rd.easting;
+            Y = (float)rd.northing;
+            Z = (float)rd.height;
         }
     }
 }

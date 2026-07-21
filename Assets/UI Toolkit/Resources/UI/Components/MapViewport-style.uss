@@ -42,6 +42,6 @@
 .map-viewport .map-viewport__pin.icon {
     width: var(--spacing-8);
     height: var(--spacing-8);
-    --icon-image: var(--icon-locationpin);
+    background-image: var(--icon-locationpin);
     -unity-background-image-tint-color: var(--color-blue-700);
 }
