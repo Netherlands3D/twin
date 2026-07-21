@@ -31,9 +31,10 @@ namespace Netherlands3D
             DisableFPVUI();
         }
 
+        //todo: in the future we might want to create a list of huds we can switch between, so we avoid multiple true/false permutations, but for now we only have 2, so this is not needed yet
         public void DisableFPVUI()
         {
-            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false); //in the future we might want to create a list of huds we can switch between, but for now we only have 2, so this is not needed yet
+            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
             appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
 
