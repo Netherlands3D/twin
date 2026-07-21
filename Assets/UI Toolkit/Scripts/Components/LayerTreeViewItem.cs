@@ -10,6 +10,8 @@ using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
+using Toggle = UnityEngine.UIElements.Toggle;
+using ToggleNL3D = Netherlands3D.UI.Components.Toggle;
 
 namespace Netherlands3D.UI.Components
 {
@@ -22,7 +24,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement colorBar;
         private Icon layerTypeIcon;
         private EditableNameField nameInputField;
-        private Toggle propertyToggle;
+        private ToggleNL3D propertyToggle;
 
         private PropertyPanelBehaviour propertyPanelBehaviour;
 
@@ -44,13 +46,14 @@ namespace Netherlands3D.UI.Components
         public IconImage LayerTypeIcon => layerTypeIcon.Image;
 
         private VisualElement indent;
-        private VisualElement foldout;
+        private Toggle foldout;
         public float IndentWidth => indent.resolvedStyle.width;
         public Rect FoldoutWorldBound => foldout.worldBound;
         
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
         public UnityEvent<int, bool> VisibilityToggleChanged = new UnityEvent<int, bool>();
+        public UnityEvent<int, bool> IsExpandedChanged;
 
         public LayerTreeViewItem()
         {
@@ -61,7 +64,7 @@ namespace Netherlands3D.UI.Components
             layerTypeIcon = this.Q<Icon>("TypeIcon");
             colorBar = this.Q<VisualElement>("ColorBar");
             nameInputField = this.Q<EditableNameField>("NameInputField");
-            propertyToggle = this.Q<Toggle>("PropertyToggle");
+            propertyToggle = this.Q<ToggleNL3D>("PropertyToggle");
 
             RegisterCallback<ClickEvent>(OnClick);
             var dragManipulator = new DragManipulator(8);
@@ -136,13 +139,20 @@ namespace Netherlands3D.UI.Components
 
             if (!layoutReordered)
                 UpdateLayout();
+
+            foldout.RegisterValueChangedCallback(OnFoldoutToggleChanged);
+        }
+
+        private void OnFoldoutToggleChanged(ChangeEvent<bool> evt)
+        {
+            IsExpandedChanged.Invoke(LayerData.RootId, evt.newValue); //invoke an event to allow the parent panel to keep track of which items to expand on Rebuild
         }
 
         private void UpdateLayout()
         {
             itemRoot = GetTreeViewItemRoot();
             indent = ItemRoot.Q("unity-tree-view__item-indent");
-            foldout = ItemRoot.Q(className: "unity-tree-view__item-toggle");
+            foldout = ItemRoot.Q<Toggle>(className: "unity-tree-view__item-toggle");
                 
             if (itemRoot == null) return;
             itemRoot.AddComponentStylesheetByType(GetType());
@@ -163,6 +173,7 @@ namespace Netherlands3D.UI.Components
         {
             propertyPanelBehaviour.PropertySectionClosed.RemoveListener(UncheckPropertyToggle);
             propertyPanelBehaviour.PropertySectionOpened.RemoveListener(CheckPropertyToggle);
+            foldout.UnregisterValueChangedCallback(OnFoldoutToggleChanged);
         }
 
         private VisualElement GetTreeViewItemRoot()

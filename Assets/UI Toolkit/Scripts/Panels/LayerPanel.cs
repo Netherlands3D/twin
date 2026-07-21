@@ -25,7 +25,8 @@ namespace Netherlands3D.UI.Panels
         private TreeView treeView;
         private ScrollView scrollView;
         private const float scrollSpeed = 300f; // px/s
-
+        private HashSet<int> expandedIds = new();
+        
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
         private float dropMargin = 0.25f; //top 25% and bottom 25% are for reordering, 25%-75% is for reparenting
@@ -61,7 +62,6 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
 
             treeView = this.Q<TreeView>();
-            treeView.autoExpand = true;
 
             treeView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             treeView.selectionType = SelectionType.Multiple;
@@ -156,7 +156,7 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
-        private void ToggleSelection(int clickedRootIndex, bool active)
+        private void ToggleVisibilityOfSelection(int clickedRootIndex, bool active)
         {
             var selectedTreeIndices = treeView.selectedIndices.ToList(); 
             
@@ -288,9 +288,14 @@ namespace Netherlands3D.UI.Panels
             this.rootLayer = rootLayer;
             var tree = LayerTreeViewUtility.ToTreeViewItems(rootLayer, treeView);
             treeView.SetRootItems(tree);
+            foreach (var id in expandedIds)
+            {
+                treeView.ExpandItem(id);
+            }
+            
             treeView.RefreshItems();
         }
-
+        
         private VisualElement MakeItem()
         {
             var layerRowElement = new LayerTreeViewItem();
@@ -317,12 +322,21 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.Initialize(layerData);
             layerRowElement.SelectLayerItem.AddListener(SelectItemWithoutNotify);
             layerRowElement.DeselectLayerItem.AddListener(DeselectWithoutNotify);
-            layerRowElement.VisibilityToggleChanged.AddListener(ToggleSelection);
+            layerRowElement.VisibilityToggleChanged.AddListener(ToggleVisibilityOfSelection);
+            layerRowElement.IsExpandedChanged.AddListener(OnIsExpandedChanged);
 
             if (layerData.IsSelected)
             {
                 SelectItemWithoutNotify(layerRowElement);
             }
+        }
+
+        private void OnIsExpandedChanged(int rootId, bool isExpanded)
+        {
+            if(isExpanded)
+                expandedIds.Add(rootId);
+            else
+                expandedIds.Remove(rootId);
         }
 
         private void UnbindItem(VisualElement item, int index)
@@ -332,7 +346,9 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.RemoveLayerDataListeners(layerRowElement.LayerData);
             layerRowElement.SelectLayerItem.RemoveListener(SelectItemWithoutNotify);
             layerRowElement.DeselectLayerItem.RemoveListener(DeselectWithoutNotify);
-            layerRowElement.VisibilityToggleChanged.RemoveListener(ToggleSelection);
+            layerRowElement.VisibilityToggleChanged.RemoveListener(ToggleVisibilityOfSelection);
+            layerRowElement.IsExpandedChanged.RemoveListener(OnIsExpandedChanged);
+
         }
         
         private void DeselectWithoutNotify(LayerTreeViewItem item)
