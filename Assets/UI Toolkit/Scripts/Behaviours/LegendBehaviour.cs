@@ -1,10 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using KindMen.Uxios;
 using KindMen.Uxios.ExpectedTypesOfResponse;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.Wms;
 using UnityEngine;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
@@ -24,6 +29,7 @@ namespace Netherlands3D.Legend
         // One container per GetCapabilities URL.
         private static readonly Dictionary<string, LegendUrlContainer> containers = new();
         private readonly HashSet<string> pendingGetCapabilitiesRequests = new();
+        private readonly HashSet<string> runningInitializeRequests = new();
 
         private Coroutine activeImageDownloadCoroutine;
 
@@ -50,7 +56,7 @@ namespace Netherlands3D.Legend
         /// and, if this is the first time we see that URL, kicks off a background
         /// credentials request to start phase 2.
         /// </summary>
-        public void RegisterLayer(string wmsUrl, bool isActive)
+        private void RegisterLayer(string wmsUrl, bool isActive)
         {
             if (string.IsNullOrEmpty(wmsUrl))
             {
@@ -65,9 +71,35 @@ namespace Netherlands3D.Legend
                 Debug.LogWarning($"[WMSLegend] Could not extract layer name from: {wmsUrl}");
                 layerName = wmsUrl;
             }
-
+            
             containers[getCapabilitiesUrl].RegisterLayer(layerName, isActive);
             if (log) Debug.Log($"[WMSLegend] Registered layer '{layerName}' (active={isActive}) under {getCapabilitiesUrl}");
+        }
+        
+        public async void InitializeContainer(Uri url, StoredAuthorization auth, bool isActive)
+        {
+            var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(url.ToString(), ServiceType.Wms);
+
+            if (containers.ContainsKey(getCapabilitiesUrl) || runningInitializeRequests.Contains(getCapabilitiesUrl))
+                return;
+            
+            runningInitializeRequests.Add(getCapabilitiesUrl);
+            var result = await DownloadGetCapabilitiesToLocalCache(new Uri(getCapabilitiesUrl), auth, CancellationToken.None);
+            runningInitializeRequests.Remove(getCapabilitiesUrl);
+
+            var cachedDataPath = result.LocalFilePath;
+            var bodyContents = File.ReadAllText(cachedDataPath);
+
+            var getCapabilitiesUrl2 = new Uri(getCapabilitiesUrl);
+            if (OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(getCapabilitiesUrl2, bodyContents, ServiceType.Wms))
+            {
+                var request = new WmsGetCapabilities(getCapabilitiesUrl2, bodyContents);
+                BoundingBoxCache.AddBoundingBoxContainer(request);
+
+                var legends = request.GetLegendUrls();
+                SetLegendUrls(getCapabilitiesUrl, legends);
+            }
+            RegisterLayer(url.ToString(), isActive);
         }
 
         /// <summary>
@@ -250,6 +282,50 @@ namespace Netherlands3D.Legend
                 Debug.LogWarning($"[WMSLegend] Failed to download image for '{entry.LayerName}': {ex.Message}"));
 
             return promise;
+        }
+        
+        private Task<LocalFile> DownloadGetCapabilitiesToLocalCache(Uri url, StoredAuthorization auth, CancellationToken token)
+        {
+            var tcs = new TaskCompletionSource<LocalFile>();
+
+            var localFile = new LocalFile
+            {
+                SourceUrl = url.ToString(),
+                LocalFilePath = ""
+            };
+
+            var config = Config.Default();
+            config = auth.AddToConfig(config);
+            config.CancelToken = token;
+            var promise = Uxios.DefaultInstance.Get<FileInfo>(url, config);
+
+            // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
+            promise.Then(response =>
+            {
+                if (token.IsCancellationRequested)
+                {
+                    tcs.TrySetCanceled(token);
+                    return;
+                }
+                
+                var info = response.Data as FileInfo;
+                localFile.LocalFilePath = info.FullName;
+                tcs.TrySetResult(localFile);
+            });
+            promise.Catch(error =>
+            {
+                if (token.IsCancellationRequested)
+                {
+                    tcs.TrySetCanceled(token);
+                    return;
+                }
+                localFile.LocalFilePath = "";
+                Debug.LogError("Download failed: " + error.Message);
+
+                tcs.TrySetException(error);
+            });
+
+            return tcs.Task;
         }
     }
 }
