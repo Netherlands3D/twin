@@ -1,7 +1,9 @@
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Events;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Services
 {
@@ -13,7 +15,9 @@ namespace Netherlands3D.Twin.Services
         private int activeCounter;
         private DataTypeChain[] chains;
         
-
+        [SerializeField] private StringEvent layerSourceAttributionEvent;
+        public UnityEvent<string> OnAttributionReceived;
+        
         private void Awake()
         {
             layers = App.Layers;
@@ -25,7 +29,9 @@ namespace Netherlands3D.Twin.Services
         {
             snackbarService.OnHideMessage.AddListener(OnHideSnackbar);
             layers.LayerAdded.AddListener(OnLayerAdded);
+            layers.LayerRemoved.AddListener(OnLayerRemoved);
             layers.VisualizationCreated.AddListener(OnVisualizationCreated); // when the visualisation is created, we want to listen to potential error messages (eg. parse errors) to display
+            layerSourceAttributionEvent.AddListenerStarted(OnAttributionReceived.Invoke);
 
             foreach (var chain in chains)
             {
@@ -39,7 +45,10 @@ namespace Netherlands3D.Twin.Services
         {
             snackbarService.OnHideMessage.RemoveListener(OnHideSnackbar);
             layers.LayerAdded.RemoveListener(OnLayerAdded);
+            layers.LayerRemoved.AddListener(OnLayerRemoved);
             layers.VisualizationCreated.RemoveListener(OnVisualizationCreated);
+            layerSourceAttributionEvent.RemoveListenerStarted(OnAttributionReceived.Invoke);
+            
             foreach (var chain in chains)
             {
                 chain.CouldNotFindAdapter.RemoveListener(CouldNotFindAdapterMessage);
@@ -67,6 +76,17 @@ namespace Netherlands3D.Twin.Services
                 activeMessage += layerData.Name;
             activeCounter++;
             snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd", IconImage.Sheets);
+        }
+
+        //todo switch counter when adding -> removing or removing -> adding
+        private void OnLayerRemoved(LayerData layerData)
+        {
+            if (activeCounter > 0)
+                activeMessage += $" ,{layerData.Name}";
+            else
+                activeMessage += layerData.Name;
+            activeCounter++;
+            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol verwijderd");
         }
 
         private void CouldNotFindAdapterMessage(string message)

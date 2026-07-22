@@ -48,8 +48,10 @@ namespace Netherlands3D.UI.Behaviours
         private void Start()
         {
             PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            PolygonCreationService polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             inspectorPanel.OnShow += polygonSelectionService.EnablePolygonSelection;
             inspectorPanel.OnHide += polygonSelectionService.DisablePolygonSelection;
+            inspectorPanel.OnHide += polygonCreationService.SetGridInputModeToSelected;
         }
 
         private void OnEnable()
@@ -83,15 +85,16 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnToolWithPanelOpen(Tool toolWithPanel)
         {
-            activeToolWithPanel?.Close();
-            activePanel?.OnHide.RemoveListener(Close);
+            if (activeToolWithPanel != null)
+            {
+                activeToolWithPanel.Close();    
+            }
             activeToolWithPanel = toolWithPanel;
             
             Open();
             
             activePanel = CreatePanel(toolWithPanel.PanelType, toolWithPanel.PanelArgs);
             inspectorPanel.HeaderText = activePanel.Title;
-            activePanel.OnHide.AddListener(Close);
         }
 
         public void Open()

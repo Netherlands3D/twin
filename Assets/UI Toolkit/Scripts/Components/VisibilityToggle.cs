@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
@@ -8,15 +10,33 @@ namespace Netherlands3D.UI.Components
 {
     public enum VisibilityState
     {
-        Visible = IconImage.Visibility, 
-        Invisible = IconImage.Invisible, 
-        PartiallyVisible = IconImage.VisibilityMixed,
-        VisibleInInvisible = IconImage.VisibleInInvisible
+        Visible,
+        Invisible,
+        PartiallyVisible,
+        VisibleInInvisible
+        
+        // Visible = IconImage.Visibility, 
+        // Invisible = IconImage.Invisible, 
+        // PartiallyVisible = IconImage.VisibilityMixed,
+        // VisibleInInvisible = IconImage.VisibleInInvisible
     }
     
     [UxmlElement]
     public partial class VisibilityToggle : UnityEngine.UIElements.Toggle
     {
+        private static readonly Dictionary<VisibilityState, string> visibilityStateMap = new()
+        {
+            { VisibilityState.Visible, IconImage.VISIBILITY},
+            { VisibilityState.Invisible, IconImage.INVISIBLE },
+            { VisibilityState.PartiallyVisible, IconImage.VISIBILITY_MIXED },
+            { VisibilityState.VisibleInInvisible, IconImage.VISIBLE_IN_INVISIBLE }
+        };
+
+        public static string GetIconImage(VisibilityState state)
+        {
+            return visibilityStateMap[state];
+        }
+        
         // Query and cache icon component
         private Icon icon;
         private Icon Icon => icon ??= this.Q<Icon>("Icon");
@@ -24,8 +44,8 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("eye-state")]
         public VisibilityState Image
         {
-            get => (VisibilityState)Icon.Image;
-            set => Icon.Image = (IconImage)value;
+            get => visibilityStateMap.Keys.FirstOrDefault(k => visibilityStateMap[k] == Icon.Image); //todo: make this more reliable
+            set => Icon.Image = GetIconImage(value);
         }
 
         public VisibilityToggle()

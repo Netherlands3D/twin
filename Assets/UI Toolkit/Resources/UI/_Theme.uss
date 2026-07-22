@@ -120,7 +120,6 @@
     --icon-folder: url("project://database/Assets/Sprites/UI/Icons/Type=Folder,%20Color=white,%20Size=medium.png");
     --icon-forward: url("project://database/Assets/Sprites/UI/Icons/Type=Forward,%20Color=white,%20Size=medium.png");
     --icon-forwardblocked: url("project://database/Assets/Sprites/UI/Icons/Type=ForwardBlocked,%20Color=white,%20Size=medium.png");
-    --icon-fpv: url("project://database/Assets/Sprites/UI/Icons/Type=FPV,%20Color=white,%20Size=medium.png");
     --icon-height: url("project://database/Assets/Sprites/UI/Icons/Type=Height,%20Color=white,%20Size=medium.png");
     --icon-help: url("project://database/Assets/Sprites/UI/Icons/Type=Help,%20Color=white,%20Size=medium.png");
     --icon-picture: url("project://database/Assets/Sprites/UI/Icons/Type=Image,%20Color=white,%20Size=medium.png");
@@ -180,7 +179,6 @@
     --icon-up: url("project://database/Assets/Sprites/UI/Icons/Type=Up,%20Color=white,%20Size=medium.png");
     --icon-updatecredentials: url("project://database/Assets/Sprites/UI/Icons/Type=UpdateCredentials,%20Color=white,%20Size=medium.png");
     --icon-uploadfolder: url("project://database/Assets/Sprites/UI/Icons/Type=UploadFolder,%20Color=white,%20Size=medium.png");
-    --icon-urbanreleaf: url("project://database/Assets/Sprites/UI/Icons/Type=UrbanReleaf,%20Color=white,%20Size=medium.png");
     --icon-username: url("project://database/Assets/Sprites/UI/Icons/Type=Username,%20Color=white,%20Size=medium.png");
     --icon-usernamepassword: url("project://database/Assets/Sprites/UI/Icons/Type=UsernamePassword,%20Color=white,%20Size=medium.png");
     --icon-videocamera: url("project://database/Assets/Sprites/UI/Icons/Type=VideoCamera,%20Color=white,%20Size=medium.png");

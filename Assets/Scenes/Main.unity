@@ -487,12 +487,12 @@ PrefabInstance:
     - target: {fileID: 3034395081720571745, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
       propertyPath: OnViewerExited.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Show
+      value: DisableFPVUI
       objectReference: {fileID: 0}
     - target: {fileID: 3034395081720571745, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
       propertyPath: OnViewerEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Hide
+      value: EnableFPVUI
       objectReference: {fileID: 0}
     - target: {fileID: 3034395081720571745, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
@@ -2252,22 +2252,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.81698084
+      value: 0.37793317
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.5381209
+      value: 0.18128349
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.17311014
+      value: 0.81860805
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.11402249
+      value: -0.39266238
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -2540,11 +2540,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 873264101414426239, guid: 5ba1df40519b07e4c8a5b0993382af49,
-        type: 3}
-      propertyPath: OnOrientToNorth.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 767208763}
     - target: {fileID: 891704482898673965, guid: 5ba1df40519b07e4c8a5b0993382af49,
         type: 3}
       propertyPath: m_Name
@@ -2599,31 +2594,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5715699707642146679, guid: 5ba1df40519b07e4c8a5b0993382af49,
-        type: 3}
-      propertyPath: Search
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5715699707642146679, guid: 5ba1df40519b07e4c8a5b0993382af49,
-        type: 3}
-      propertyPath: sunTime
-      value: 
-      objectReference: {fileID: 307044924}
-    - target: {fileID: 6058517746134681627, guid: 5ba1df40519b07e4c8a5b0993382af49,
-        type: 3}
-      propertyPath: toolbar
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8246707263937376439, guid: 5ba1df40519b07e4c8a5b0993382af49,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8246707263937376439, guid: 5ba1df40519b07e4c8a5b0993382af49,
-        type: 3}
-      propertyPath: DeprecatedSearchPanel
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

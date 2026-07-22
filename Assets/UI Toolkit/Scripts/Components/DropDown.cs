@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement rootSettings;
         private VisualElement popup;
         
-        private List<IconImage> valueIcons;
+        private List<string> valueIcons;
 
         public enum DropDownStyle
         {
@@ -138,7 +138,7 @@ namespace Netherlands3D.UI.Components
             popup.style.left = left;
         }
 
-        public void SetValueIcons(List<IconImage> values)
+        public void SetValueIcons(List<string> values)
         {
             valueIcons = values;
         }

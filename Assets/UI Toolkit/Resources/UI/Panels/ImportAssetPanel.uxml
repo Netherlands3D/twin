@@ -7,19 +7,24 @@
     editor-extension-mode="False"
     name="ImportAssetPanel"
     class="import-asset-panel">
+    <nl3d:Breadcrumb leading-icon-image="Plus"/>
     <nl3d:ScrollView>
-        <nl3d:Button class="import-asset-panel__button-asset-library" name="GoToAssetLibraryButton" icon="Library" LabelText="Vanuit bibliotheek" />
-        <nl3d:Button class="import-asset-panel__button-upload" name="FileUploadButton" icon="Plus" LabelText="Uploaden vanaf deze computer" />       
-        <nl3d:ContentContainer class="import-asset-panel__open-url" container-type="NoFoldout" show-divider="true" leading-icon="LibraryAdd" text="Toevoegen vanaf link">
-            <ui:VisualElement name="Row">
-                <nl3d:Icon class="import-asset-panel__open-url-icon" />
-                <nl3d:TextField class="import-asset-panel__open-url-field" name="ImportUriField" />
-            </ui:VisualElement>
-            <nl3d:Button LabelText="Toevoegen" button-style="Normal" class="import-asset-panel__open-url-button" name="ImportUriButton" />
-        </nl3d:ContentContainer>
-        <nl3dP:ErrorPanel header-text="Eigen bestand toevoegen" message="Het bestand dat u probeert toe te voegen kon niet worden ingeladen. Controleer of het bestandstype wordt ondersteund en of u de juiste URL link heeft ingevoerd.">
-        </nl3dP:ErrorPanel>
-        <nl3dP:CredentialPanel>
-        </nl3dP:CredentialPanel>
+        <ui:VisualElement name="ImportAssetMainSection">
+            <nl3d:Button class="import-asset-panel__button-asset-library" name="GoToAssetLibraryButton" icon="Library" LabelText="Vanuit bibliotheek" />
+            <nl3d:Button class="import-asset-panel__button-selection-area" name="SelectionAreaButton" icon="Polygon" LabelText="Tekengebied toevoegen" />
+            <nl3d:Button class="import-asset-panel__button-upload" name="FileUploadButton" icon="Plus" LabelText="Uploaden vanaf deze computer" />       
+            <nl3d:ContentContainer class="import-asset-panel__open-url" container-type="NoFoldout" show-divider="true" leading-icon="LibraryAdd" text="Toevoegen vanaf link">
+                <ui:VisualElement name="Row">
+                    <nl3d:Icon class="import-asset-panel__open-url-icon" />
+                    <nl3d:TextField class="import-asset-panel__open-url-field" name="ImportUriField" />
+                </ui:VisualElement>
+                <nl3d:Button LabelText="Toevoegen" button-style="Normal" class="import-asset-panel__open-url-button" name="ImportUriButton" />
+            </nl3d:ContentContainer>
+            <nl3dP:ErrorPanel header-text="Eigen bestand toevoegen" message="Het bestand dat u probeert toe te voegen kon niet worden ingeladen. Controleer of het bestandstype wordt ondersteund en of u de juiste URL link heeft ingevoerd.">
+            </nl3dP:ErrorPanel>
+            <nl3dP:CredentialPanel>
+            </nl3dP:CredentialPanel>
+        </ui:VisualElement>
+        <nl3dP:SelectionAreaPanel/>
     </nl3d:ScrollView>
 </ui:UXML>

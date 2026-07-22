@@ -41,7 +41,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement itemRoot;
         public VisualElement ItemRoot => itemRoot;
         public VisibilityState VisibilityState => isActiveToggle.Image;
-        public IconImage LayerTypeIcon => layerTypeIcon.Image;
+        public string LayerTypeIcon => layerTypeIcon.Image;
 
         private VisualElement indent;
         private VisualElement foldout;
@@ -50,6 +50,7 @@ namespace Netherlands3D.UI.Components
         
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
+        public UnityEvent<int, bool> VisibilityToggleChanged = new UnityEvent<int, bool>();
 
         public LayerTreeViewItem()
         {
@@ -177,7 +178,13 @@ namespace Netherlands3D.UI.Components
 
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
         {
-            LayerData.ActiveSelf = evt.newValue;
+            //if the layer that is being toggled is selected, we want to toggle all the selected layers (through the LayerPanel that has access to all selected layers), if this layer is not selected, we only want to toggle this layer's visiblity
+            if(LayerData.IsSelected)
+                VisibilityToggleChanged.Invoke(LayerData.RootId, evt.newValue); //invoke an event to allow toggling of multi-selected items
+            else
+                LayerData.ActiveSelf = evt.newValue;
+            
+            evt.StopPropagation(); //avoid the layer from deselecting
         }
 
         private void UncheckPropertyToggle(LayerData layerData)

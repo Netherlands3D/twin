@@ -34,7 +34,7 @@
 }
 
 /* Outer circle */
-.unity-radio-button__checkmark-background {
+.radio-group .unity-radio-button__checkmark-background {
     flex-grow: 0;
     flex-shrink: 0;
     align-items: center;  
@@ -46,7 +46,7 @@
     padding: 0px;
     background-color: var(--color-white);
     border-color: var(--color-blue-700);
-    border-width: 1.5px;
+    border-width: var(--spacing-0_5);  
 }
 
 /* Dot */
