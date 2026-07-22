@@ -64,7 +64,8 @@ namespace Netherlands3D.Twin.UI
                 OnUpdateGizmoHandles.Invoke();
             }
         }
-        
+
+        //todo check why return runtimeTransformHandle?.target?.gameobject; crashes
         public GameObject Target
         {
             get

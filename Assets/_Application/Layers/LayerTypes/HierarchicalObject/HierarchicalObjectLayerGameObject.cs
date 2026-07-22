@@ -286,9 +286,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
             
-             //todo this works for now, but we should redesign this in such a manner so this dependency is not the way around
-             ObjectSelectorService selectionService = ServiceLocator.GetService<ObjectSelectorService>();
-             if(!selectionService.IsAnyToolActive()) return;
+            
+             if(!ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer).IsOpen) return;
             
              LayerData.SelectLayer(true);
         }

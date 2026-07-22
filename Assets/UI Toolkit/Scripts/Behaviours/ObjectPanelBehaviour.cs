@@ -25,8 +25,8 @@ namespace Netherlands3D.UI.Panels
             var pointerData = new PointerEventData(EventSystem.current);
             pointerData.position = pointerPos;
             EventSystem.current.RaycastAll(pointerData, results);
-            ObjectSelectorService selectionService = ServiceLocator.GetService<ObjectSelectorService>();
-            if(!selectionService.IsAnyToolActive()) return false;
+           
+            if(!ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer).IsOpen) return false;
             foreach (var raycast in results)
             {
                 if (!raycast.gameObject.TryGetComponent(out HierarchicalObjectLayerGameObject t))
