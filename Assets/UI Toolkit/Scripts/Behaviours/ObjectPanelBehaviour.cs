@@ -14,7 +14,7 @@ namespace Netherlands3D.UI.Panels
     [CreateAssetMenu(fileName = "ObjectPanelBehaviour", menuName = "ScriptableObjects/FloatingPanelBehaviours/ObjectPanelBehaviour", order = 1)]
     public class ObjectPanelBehaviour : FloatingPanelBehaviour
     {
-        private static readonly List<RaycastResult> results = new(8);
+        private List<RaycastResult> results = new();
         private LayerData target;
         
         public override bool ShouldBeActive()

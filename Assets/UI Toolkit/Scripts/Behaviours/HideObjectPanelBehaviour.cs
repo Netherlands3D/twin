@@ -11,6 +11,7 @@ namespace Netherlands3D.UI.Panels
     [CreateAssetMenu(fileName = "HideObjectPanelBehaviour", menuName = "ScriptableObjects/FloatingPanelBehaviours/HideObjectPanelBehaviour", order = 1)]
     public class HideObjectPanelBehaviour : FloatingPanelBehaviour
     {
+        //todo improve flow for specific imapping type?
         public override bool ShouldBeActive()
         {
             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();

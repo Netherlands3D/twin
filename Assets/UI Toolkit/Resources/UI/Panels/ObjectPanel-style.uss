@@ -6,10 +6,6 @@
     margin-bottom: var(--spacing-3);
 }
 
-/*.hide-object-panel__hide-button .icon {*/
-/*    -unity-background-image-tint-color: var(--color-blue-200);*/
-/*}*/
-
 
 .object-panel__body {
     flex-grow: 1;   
