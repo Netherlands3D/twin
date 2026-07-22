@@ -314,7 +314,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             else
             {
                 ToggleScatterPropertyData toggleScatterPropertyData = LayerData.LayerProperties.Get<ToggleScatterPropertyData>();
-                if (toggleScatterPropertyData != null && toggleScatterPropertyData.IsScattered)
+                if (toggleScatterPropertyData != null && toggleScatterPropertyData.IsScattered) //todo: check if this if is still needed, since we changed the Visualisation spawning
                 {
                     transformInterfaceToggle.ClearTransformTarget();
                     return;
