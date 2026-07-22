@@ -265,12 +265,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
-            if (LayerData.IsSelected)
+            if (LayerData.IsSelected) // when the layerdata is selected and the visibility changes, we need to attach/detach the transform handles
             {
                 if (isActive)
-                    OnSelect(LayerData);
+                    AttachToTransformHandles();
                 else
-                    OnDeselect(LayerData);
+                    ClearTransformHandles();
             }
 
             gameObject.SetActive(isActive);
@@ -295,6 +295,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnSelect(LayerData layer)
         {
+            AttachToTransformHandles();
+        }
+
+        public override void OnDeselect(LayerData layer)
+        {
+            ClearTransformHandles();
+        }
+        
+        private void AttachToTransformHandles()
+        {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (!transformInterfaceToggle)
@@ -313,11 +323,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transformInterfaceToggle.SetTransformTarget(gameObject);
                 transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
             }
-        }
-
-        public override void OnDeselect(LayerData layer)
-        {
-            ClearTransformHandles();
         }
 
         protected void ClearTransformHandles()
