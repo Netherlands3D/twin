@@ -3,6 +3,7 @@ using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -156,33 +157,14 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
-        private void ToggleSelection(int clickedRootIndex, bool active)
+        private void ToggleSelection(bool active)
         {
-            var selectedTreeIndices = treeView.selectedIndices.ToList(); 
-            
-            //convert the treeIndex to the rootIndex. The tree index ignores collapsed items, and only counts visible treeViewItems,
-            //the rootIndex is the stable index of the item in the tree (including collapsed items)
-            var toggledSelectedLayer = false;
-            for (var i = 0; i < selectedTreeIndices.Count; i++)
+            var root = rootLayer as RootLayer;
+            foreach (var selectedLayer in root.SelectedLayers)
             {
-                var treeIndex = selectedTreeIndices[i];
-                var rootIndex = treeView.GetIdForIndex(treeIndex);
-                if(rootIndex == clickedRootIndex)
-                {
-                    toggledSelectedLayer = true;
-                    break;
-                }
+                selectedLayer.ActiveSelf = active;
             }
             
-            if (!toggledSelectedLayer) //we toggled a different layer than the selected layers, don't toggle the selected layers
-                return;
-
-            foreach (var index in selectedTreeIndices) //make a copy of the indices, because they might change
-            {
-                var layerData = treeView.GetItemDataForIndex<LayerData>(index);
-                layerData.ActiveSelf = active;
-            }
-
             doRefresh = true;
         }
         

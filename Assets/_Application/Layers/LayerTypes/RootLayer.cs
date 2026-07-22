@@ -79,6 +79,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     ChildrenLayers.Insert(siblingIndex, layer);
                 else
                     ChildrenLayers.Add(layer);
+                
+                UpdateLayerTreeOrder(-1);
                 ChildrenChanged.Invoke();
             }
         }
