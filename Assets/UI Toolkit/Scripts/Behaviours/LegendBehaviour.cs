@@ -28,9 +28,8 @@ namespace Netherlands3D.Legend
 
         // One container per GetCapabilities URL.
         private static readonly Dictionary<string, LegendUrlContainer> containers = new();
-        private readonly HashSet<string> pendingGetCapabilitiesRequests = new();
-        private readonly HashSet<string> runningInitializeRequests = new();
-
+        private readonly Dictionary<string, Task> pendingGetCapabilityRequests = new();
+        
         private Coroutine activeImageDownloadCoroutine;
 
         private void Awake()
@@ -71,34 +70,39 @@ namespace Netherlands3D.Legend
                 Debug.LogWarning($"[WMSLegend] Could not extract layer name from: {wmsUrl}");
                 layerName = wmsUrl;
             }
-            
-            containers[getCapabilitiesUrl].RegisterLayer(layerName, isActive);
+
+            if (!containers.TryGetValue(getCapabilitiesUrl, out var container))
+            {
+                container = new LegendUrlContainer(getCapabilitiesUrl);
+                containers.Add(getCapabilitiesUrl, container);
+            }
+
+            container.RegisterLayer(layerName, isActive);
             if (log) Debug.Log($"[WMSLegend] Registered layer '{layerName}' (active={isActive}) under {getCapabilitiesUrl}");
         }
-        
+
         public async void InitializeContainer(Uri url, StoredAuthorization auth, bool isActive)
         {
             var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(url.ToString(), ServiceType.Wms);
 
-            if (containers.ContainsKey(getCapabilitiesUrl) || runningInitializeRequests.Contains(getCapabilitiesUrl))
-                return;
-            
-            runningInitializeRequests.Add(getCapabilitiesUrl);
-            var result = await DownloadGetCapabilitiesToLocalCache(new Uri(getCapabilitiesUrl), auth, CancellationToken.None);
-            runningInitializeRequests.Remove(getCapabilitiesUrl);
-
-            var cachedDataPath = result.LocalFilePath;
-            var bodyContents = File.ReadAllText(cachedDataPath);
-
-            var getCapabilitiesUrl2 = new Uri(getCapabilitiesUrl);
-            if (OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(getCapabilitiesUrl2, bodyContents, ServiceType.Wms))
+            if (containers.ContainsKey(getCapabilitiesUrl))
             {
-                var request = new WmsGetCapabilities(getCapabilitiesUrl2, bodyContents);
-                BoundingBoxCache.AddBoundingBoxContainer(request);
-
-                var legends = request.GetLegendUrls();
-                SetLegendUrls(getCapabilitiesUrl, legends);
+                RegisterLayer(url.ToString(), isActive);
+                return;
             }
+
+            if (pendingGetCapabilityRequests.TryGetValue(getCapabilitiesUrl, out var pending))
+            {
+                await pending;
+                RegisterLayer(url.ToString(), isActive);
+                return;
+            }
+
+            var task = DownloadAndPopulate(getCapabilitiesUrl, auth);
+            pendingGetCapabilityRequests[getCapabilitiesUrl] = task;
+            await task;
+            pendingGetCapabilityRequests.Remove(getCapabilitiesUrl);
+
             RegisterLayer(url.ToString(), isActive);
         }
 
@@ -206,7 +210,7 @@ namespace Netherlands3D.Legend
             if (log) Debug.Log($"[WMSLegend] Legend shown for {getCapabilitiesUrl}");
 
             // If credentials haven't come back yet, the DownloadImageUrls completion will trigger DownloadMissingImages for us.
-            if (pendingGetCapabilitiesRequests.Contains(getCapabilitiesUrl))
+            if (pendingGetCapabilityRequests.ContainsKey(getCapabilitiesUrl))
             {
                 if (log) Debug.Log($"[WMSLegend] Waiting for capability URLs before downloading images: {getCapabilitiesUrl}");
                 return;
@@ -284,21 +288,35 @@ namespace Netherlands3D.Legend
             return promise;
         }
         
+        private async Task DownloadAndPopulate(string getCapabilitiesUrl, StoredAuthorization auth)
+        {
+            var result = await DownloadGetCapabilitiesToLocalCache(new Uri(getCapabilitiesUrl), auth, CancellationToken.None);
+            var bodyContents = File.ReadAllText(result.LocalFilePath);
+
+            var uri = new Uri(getCapabilitiesUrl);
+            if (OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(uri, bodyContents, ServiceType.Wms))
+            {
+                var request = new WmsGetCapabilities(uri, bodyContents);
+                BoundingBoxCache.AddBoundingBoxContainer(request);
+                SetLegendUrls(getCapabilitiesUrl, request.GetLegendUrls());
+            }
+        }
+        
         private Task<LocalFile> DownloadGetCapabilitiesToLocalCache(Uri url, StoredAuthorization auth, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<LocalFile>();
-
+        
             var localFile = new LocalFile
             {
                 SourceUrl = url.ToString(),
                 LocalFilePath = ""
             };
-
+        
             var config = Config.Default();
             config = auth.AddToConfig(config);
             config.CancelToken = token;
             var promise = Uxios.DefaultInstance.Get<FileInfo>(url, config);
-
+        
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
             promise.Then(response =>
             {
@@ -321,10 +339,10 @@ namespace Netherlands3D.Legend
                 }
                 localFile.LocalFilePath = "";
                 Debug.LogError("Download failed: " + error.Message);
-
+        
                 tcs.TrySetException(error);
             });
-
+        
             return tcs.Task;
         }
     }

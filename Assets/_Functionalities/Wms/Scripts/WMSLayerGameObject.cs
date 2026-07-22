@@ -83,7 +83,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             ServiceLocator.GetService<LegendBehaviour>().InitializeContainer(urlPropertyData.Url, auth, LayerData.ActiveSelf);
-            // ServiceLocator.GetService<LegendBehaviour>().RegisterLayer(urlPropertyData.Url.ToString(), LayerData.ActiveSelf, auth);
+            // ServiceLocator.GetService<LegendBehaviour>().RegisterLayer(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
             
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
