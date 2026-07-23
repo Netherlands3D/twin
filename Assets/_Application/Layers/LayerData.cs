@@ -49,6 +49,7 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
+        [JsonIgnore] public bool IsExpanded { get; set; } = false; //is the UI expanded, if needed we can store this in the project to reload the same tree state
         
         [JsonIgnore]
         public string Name

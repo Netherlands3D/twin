@@ -51,7 +51,6 @@ namespace Netherlands3D.UI.Components
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
         public UnityEvent<int, bool> VisibilityToggleChanged = new();
-        public UnityEvent<int, bool> IsExpandedChanged = new();
 
         public LayerTreeViewItem()
         {
@@ -143,7 +142,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnFoldoutToggleChanged(ChangeEvent<bool> evt)
         {
-            IsExpandedChanged.Invoke(LayerData.RootId, evt.newValue); //invoke an event to allow the parent panel to keep track of which items to expand on Rebuild
+            LayerData.IsExpanded = evt.newValue;
         }
 
         private void UpdateLayout()
