@@ -3,7 +3,6 @@ using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
