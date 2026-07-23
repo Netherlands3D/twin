@@ -28,11 +28,18 @@ namespace Netherlands3D.UI.Components
         }               
 
         public VisualElement Content => this.Q("Content");
-
+        
         public InspectorPanel()
         {
             this.CloneComponentTree("Panels");
-            this.AddComponentStylesheet("Panels");           
+            this.AddComponentStylesheet("Panels");   
+    
+            RegisterCallback<ClickEvent>(OnClick);
+        }
+
+        private void OnClick(ClickEvent evt)
+        {
+            this.Q<BaseInspectorContentPanel>()?.OnInspectorClick(this);
         }
 
         public void Open()

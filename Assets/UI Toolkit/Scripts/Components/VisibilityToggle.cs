@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -14,11 +15,6 @@ namespace Netherlands3D.UI.Components
         Invisible,
         PartiallyVisible,
         VisibleInInvisible
-        
-        // Visible = IconImage.Visibility, 
-        // Invisible = IconImage.Invisible, 
-        // PartiallyVisible = IconImage.VisibilityMixed,
-        // VisibleInInvisible = IconImage.VisibleInInvisible
     }
     
     [UxmlElement]
@@ -41,11 +37,17 @@ namespace Netherlands3D.UI.Components
         private Icon icon;
         private Icon Icon => icon ??= this.Q<Icon>("Icon");
         
+        private VisibilityState state = VisibilityState.Visible;
+
         [UxmlAttribute("eye-state")]
         public VisibilityState Image
         {
-            get => visibilityStateMap.Keys.FirstOrDefault(k => visibilityStateMap[k] == Icon.Image); //todo: make this more reliable
-            set => Icon.Image = GetIconImage(value);
+            get => state;
+            set
+            {
+                state = value;
+                Icon.Image = GetIconImage(value);
+            }
         }
 
         public VisibilityToggle()
