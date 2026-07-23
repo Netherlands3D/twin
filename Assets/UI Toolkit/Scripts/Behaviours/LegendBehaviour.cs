@@ -55,7 +55,7 @@ namespace Netherlands3D.Legend
         /// and, if this is the first time we see that URL, kicks off a background
         /// credentials request to start phase 2.
         /// </summary>
-        private void RegisterLayer(string wmsUrl, bool isActive)
+        private void RegisterLayerInContainer(string wmsUrl, bool isActive)
         {
             if (string.IsNullOrEmpty(wmsUrl))
             {
@@ -71,39 +71,40 @@ namespace Netherlands3D.Legend
                 layerName = wmsUrl;
             }
 
-            if (!containers.TryGetValue(getCapabilitiesUrl, out var container))
-            {
-                container = new LegendUrlContainer(getCapabilitiesUrl);
-                containers.Add(getCapabilitiesUrl, container);
-            }
-
-            container.RegisterLayer(layerName, isActive);
+            containers[getCapabilitiesUrl].RegisterLayer(layerName, isActive);
             if (log) Debug.Log($"[WMSLegend] Registered layer '{layerName}' (active={isActive}) under {getCapabilitiesUrl}");
         }
 
-        public async void InitializeContainer(Uri url, StoredAuthorization auth, bool isActive)
+        // In order to be able to show a legend image need to do the following:
+        // 1. download the GetCapabilities
+        // 2. get the legend urls from the GetCapabilities
+        // 3. register the layer to use this url and whether or not it is active (we don't display legend images of inactive layers)
+        public async void RegisterLayer(Uri url, StoredAuthorization auth, bool isActive)
         {
             var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(url.ToString(), ServiceType.Wms);
-
+            
+            //in case we already have the container, either from the ImportAdapter as an optimization, or because this legend was requested before and we still kept the container
             if (containers.ContainsKey(getCapabilitiesUrl))
             {
-                RegisterLayer(url.ToString(), isActive);
+                RegisterLayerInContainer(url.ToString(), isActive);
                 return;
             }
 
+            //this layer belongs to the same wms getCapabilities as a layer that has already requested to download the getCapabilities. Wait for this to complete and use the resulting container
             if (pendingGetCapabilityRequests.TryGetValue(getCapabilitiesUrl, out var pending))
             {
                 await pending;
-                RegisterLayer(url.ToString(), isActive);
+                RegisterLayerInContainer(url.ToString(), isActive);
                 return;
             }
 
+            //the container does not exist and is not requested yet. download the getCapabilities to make a container with the legend image urls.
             var task = DownloadAndPopulate(getCapabilitiesUrl, auth);
             pendingGetCapabilityRequests[getCapabilitiesUrl] = task;
             await task;
             pendingGetCapabilityRequests.Remove(getCapabilitiesUrl);
 
-            RegisterLayer(url.ToString(), isActive);
+            RegisterLayerInContainer(url.ToString(), isActive);
         }
 
         /// <summary>
@@ -290,6 +291,7 @@ namespace Netherlands3D.Legend
         
         private async Task DownloadAndPopulate(string getCapabilitiesUrl, StoredAuthorization auth)
         {
+            //Download the GetCapabilities so we can create a container with the legend urls
             var result = await DownloadGetCapabilitiesToLocalCache(new Uri(getCapabilitiesUrl), auth, CancellationToken.None);
             var bodyContents = File.ReadAllText(result.LocalFilePath);
 
