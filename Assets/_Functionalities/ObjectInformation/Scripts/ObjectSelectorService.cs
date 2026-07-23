@@ -158,8 +158,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-       
-
         public bool IsAnyToolActive()
         {
             foreach (Tool tool in activeForTools)
@@ -167,18 +165,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     return true;
             return false;
         }
-        
-        private void OnLeftClick(InputAction.CallbackContext ctx)
+
+        private bool IsColliderClicked()
         {
-            //TODO this should be refactored when UITOOLKIT will be implemented fully
-            if(App.UIRoot.IsUIClicked())
-                return;
-            
-            //TODO this should be refactored when UITOOLKIT will be implemented fully
-            //is the click on any collider in the world that should be selected first then deselect
-            //also if turns out that this logic is needed after, this could be improved on,
-            //because now the object most in front of the raycasted position is not clicked first,
-            //colliders are prioritized first instead of features (runtime handles)
+            //dont select any feature if a gizmo handle is interacted with
+            //todo make sure these colliders are associated with gizmo colliders
             Vector2 screenPoint = Pointer.current.position.ReadValue();
             Ray ray = Camera.main.ScreenPointToRay(screenPoint);
             int hitCount = Physics.RaycastNonAlloc(ray, selectedColliderHits, Mathf.Infinity);
@@ -186,15 +177,26 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 for (int i = 0; i < hitCount; i++)
                 {
-                    //todo discuss if filter for clicknothingplane should be checked and excluded?
                     var hit = selectedColliderHits[i];
                     Collider col = hit.collider;
                     if (col != null)
                     {
-                        Deselect();
-                        return;
+                        return true;
                     }
                 }
+            }
+            return false;
+        }
+        
+        private void OnLeftClick(InputAction.CallbackContext ctx)
+        {
+            if(App.UIRoot.IsUIClicked())
+                return;
+
+            if (IsColliderClicked())
+            {
+                Deselect();
+                return;
             }
             
             //is the layerpanel or objectinspector tool active?
