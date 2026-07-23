@@ -45,11 +45,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private bool waitingForRelease = false;
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
-        private CameraInputSystemProvider cameraInputSystemProvider;
 
         [SerializeField] private Tool[] activeForTools;
         [SerializeField] private Material selectionMaterial;
-        [SerializeField] private RectTransform[] excludedUIForDeselection;
         
         [SerializeField] private InputActionAsset inputActionAsset;
         private InputAction leftClickAction;
@@ -81,7 +79,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Awake()
         {
-            cameraInputSystemProvider = Camera.main.GetComponent<CameraInputSystemProvider>();
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
             subObjectSelector = gameObject.AddComponent<SubObjectSelector>();
             featureSelector = gameObject.AddComponent<FeatureSelector>();
@@ -176,24 +173,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //TODO this should be refactored when UITOOLKIT will be implemented fully
             if(App.UIRoot.IsUIClicked())
                 return;
-            
-            //TODO this should be refactored when UITOOLKIT will be implemented fully
-            //is the click on any other button than the excluded ui elements then deselect
-            if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
-            {
-                if (clickedObject != null)
-                {
-                    Transform t = clickedObject.transform;
-                    foreach (var excluded in excludedUIForDeselection)
-                    {
-                        if (excluded != null && t.IsChildOf(excluded))
-                            return;
-                    }
-
-                    Deselect();
-                    return;
-                }
-            }
             
             //TODO this should be refactored when UITOOLKIT will be implemented fully
             //is the click on any collider in the world that should be selected first then deselect
