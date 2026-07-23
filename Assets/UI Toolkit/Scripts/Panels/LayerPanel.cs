@@ -190,6 +190,7 @@ namespace Netherlands3D.UI.Panels
                 var layerData = treeView.GetItemDataForIndex<LayerData>(index);
                 layerData.ActiveSelf = active;
             }
+            doRefresh = true;
         }
 
         private void OnFolderButtonClicked(ClickEvent evt)
