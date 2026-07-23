@@ -573,6 +573,7 @@ namespace Netherlands3D.UI.Panels
                 selectedLayer.SetParent(newParent, newSiblingIndex);
             }
 
+            newParent.IsExpanded = true;
             RequestSelection(selection);
         }
     }
