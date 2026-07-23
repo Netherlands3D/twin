@@ -1,7 +1,9 @@
+using System;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Functionalities;
-using Netherlands3D.UI_Toolkit;
 using System.Collections.Generic;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -13,7 +15,7 @@ namespace Netherlands3D
     public class AppRootBehaviour : MonoBehaviour
     {
         public VisualElement Root => appRoot;
-        
+
         private UIDocument appDocument;
         private VisualElement appRoot;
 
@@ -21,17 +23,25 @@ namespace Netherlands3D
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
-            appRoot = appDocument?.rootVisualElement.Q("App");
+            appRoot = appDocument?.rootVisualElement;
         }
 
-        public void Show()
+        private void Start()
         {
-            appRoot.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+            DisableFPVUI();
         }
 
-        public void Hide()
+        //todo: in the future we might want to create a list of huds we can switch between, so we avoid multiple true/false permutations, but for now we only have 2, so this is not needed yet
+        public void DisableFPVUI()
         {
-            appRoot.AddToClassList(UtilityClassConstants.HIDDEN);
+            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
+        }
+
+        public void EnableFPVUI()
+        {
+            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
 
         /// <summary>
@@ -60,39 +70,17 @@ namespace Netherlands3D
             return RuntimePanelUtils.ScreenToPanel(appRoot.panel, screenPos);
         }
 
-        public bool ClickedUI(Vector2 screenPos)
+        public bool IsOverUI(Vector2 screenPos)
         {
-            var picked = appRoot.panel.Pick(screenPos);
-            // block if we hit something other than the root background
-            if (picked != null && picked != appRoot)
-                return true;
-
-            var pointerPos = Pointer.current.position.ReadValue();
-            // block if we hit anything except the ClickNothingPanel . todo: remove this once transition to UI Toolkit is completed
-            var pointerData = new PointerEventData(EventSystem.current);
-            pointerData.position = pointerPos;
-            var results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerData, results);
-            bool clickedInWorld = false;
-            foreach (var result in results)
-            {
-                if (result.gameObject.layer == LayerMask.NameToLayer("UI"))
-                    break;
-                if (result.gameObject.GetComponent<ClickNothingPlane>())
-                    clickedInWorld = true;
-            }
-
-            if (clickedInWorld)
-            {
-                return false;
-            }
-
-            return true;
+            Vector2 panelPosition = RuntimePanelUtils.ScreenToPanel(appRoot.panel, screenPos);
+            VisualElement picked = appRoot.panel.Pick(panelPosition);
+            
+            return picked != null;
         }
 
         public bool IsUIClicked()
         {
-            return ClickedUI(GetPanelClickPosition());
+            return IsOverUI(GetPanelClickPosition());
         }
     }
 }

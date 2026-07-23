@@ -7,7 +7,7 @@
     name="FPVSettingsPanel" 
     class="fpv-settings-panel"
 >
-    <nl3d:ContentContainer name="FPVSection" leading-icon="FPV" text="First Person View instellingen">
+    <nl3d:ContentContainer name="FPVSection" leading-icon="fpv" text="First Person View instellingen">
         <nl3d:CheckboxToggle name="MouseLockToggle" LabelText="Mouse Locking (backspace om muis te ontgrendelen)"/>
         <nl3d:Slider name="MouseSensitivitySlider" label="Muisgevoeligheid" low-value="1" high-value="100"/>
     </nl3d:ContentContainer>

@@ -16,7 +16,7 @@ namespace Netherlands3D.UI.Components
             set => label.text = value;
         }
 
-        public IconImage Image
+        public string Image
         {
             get => icon.Image;
             set => icon.Image = value;
@@ -29,7 +29,7 @@ namespace Netherlands3D.UI.Components
 
             icon = this.Q<Icon>();
             label = this.Q<Label>();
-            Image = IconImage.Object;
+            Image = IconImage.OBJECT;
         }
     }
 }

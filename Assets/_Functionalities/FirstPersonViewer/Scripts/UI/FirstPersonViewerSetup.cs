@@ -40,7 +40,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             yield return null;
             Camera activeCam = ServiceLocator.GetService<FirstPersonViewer>().FirstPersonCamera.FPVCamera;
 
-            minimap.SetZoom(zoomScale);
+            minimap?.SetZoom(zoomScale);
             ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(activeCam);
         }
     }

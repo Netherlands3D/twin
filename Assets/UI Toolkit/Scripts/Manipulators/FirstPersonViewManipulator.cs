@@ -1,6 +1,6 @@
 ﻿using Netherlands3D.FirstPersonViewer;
-using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,7 +39,8 @@ public class FirstPersonViewManipulator : DragManipulator
     {
         base.OnDragEnded(endPosition);
 
-        if (!Interface.PointerIsOverUI())
+        var mousePos = Mouse.current.position.ReadValue();
+        if (!App.UIRoot.IsOverUI(mousePos))
         {
             EnterFPVMode();
         }
