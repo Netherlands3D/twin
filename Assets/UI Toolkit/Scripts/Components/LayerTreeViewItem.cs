@@ -41,7 +41,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement itemRoot;
         public VisualElement ItemRoot => itemRoot;
         public VisibilityState VisibilityState => isActiveToggle.Image;
-        public IconImage LayerTypeIcon => layerTypeIcon.Image;
+        public string LayerTypeIcon => layerTypeIcon.Image;
 
         private VisualElement indent;
         private UnityEngine.UIElements.Toggle foldout;

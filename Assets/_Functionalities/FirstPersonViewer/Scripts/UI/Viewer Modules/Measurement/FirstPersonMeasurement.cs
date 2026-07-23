@@ -1,4 +1,3 @@
-using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Samplers;
@@ -6,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace Netherlands3D.FirstPersonViewer.Measurement
 {
@@ -52,8 +49,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private Action<Vector3, bool> removeMeasurementPointCallback;
         private Action<FirstPersonMeasurementElement> removeElementCallback;
         
-        
-
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
@@ -87,7 +82,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         public void HandleInput()
         {
-            if (Interface.PointerIsOverUI()) return;
+            if (App.UIRoot.IsOverUI(Pointer.current.position.ReadValue())) return;
             
             if (mouseLClick.action.WasPressedThisFrame())
             {

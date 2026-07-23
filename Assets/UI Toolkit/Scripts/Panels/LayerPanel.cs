@@ -90,6 +90,7 @@ namespace Netherlands3D.UI.Panels
             
             App.Layers.LayerAdded.AddListener(OnLayerHierarchyChanged);
             App.Layers.LayerRemoved.AddListener(OnLayerHierarchyChanged);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             
             schedule.Execute(() =>
@@ -112,6 +113,12 @@ namespace Netherlands3D.UI.Panels
                     doReselect = false;
                 }
             }).Every(0); // 0ms = runs every frame
+        }
+
+        private void OnProjectChanged(ProjectData newProject)
+        {
+            rootLayer = newProject.RootLayer;
+            OnRequestRebuild();
         }
 
         private void OnLayerHierarchyChanged(LayerData changedLayer)

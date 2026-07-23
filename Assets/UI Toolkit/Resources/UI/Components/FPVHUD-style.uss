@@ -1,0 +1,20 @@
+.fpv-hud{
+    flex-grow: 1;
+}
+
+.fpv-hud__exit-bar{
+    position: absolute;
+}
+
+.fpv-hud__top-section {
+    flex-grow: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    align-items: center;
+}
+
+.fpv-hud__bottom-section{
+    align-items: flex-end; 
+    flex-direction: row;
+}

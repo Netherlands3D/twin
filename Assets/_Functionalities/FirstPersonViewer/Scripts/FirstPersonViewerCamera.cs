@@ -160,7 +160,7 @@ namespace Netherlands3D.FirstPersonViewer
             camPos.y = cameraHeightAboveGround;
             mainCam.transform.position = camPos;
 
-            if (input.LockInput || input.LockCamera) return;
+            if (input.LockInput || input.BlockCameraInput) return;
 
             Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
 
