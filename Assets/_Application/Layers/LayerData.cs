@@ -49,7 +49,7 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
-        [JsonIgnore] public bool IsExpanded { get; set; } = false; //is the UI expanded, if needed we can store this in the project to reload the same tree state
+        [DataMember] public bool IsExpanded { get; set; } = false; //is the UI expanded? we want to reload the same tree state between saving/loading projects, so it is stored in the projectData
         
         [JsonIgnore]
         public string Name
