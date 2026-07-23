@@ -97,8 +97,11 @@ namespace Netherlands3D.Tiles3D
                     anyChildLoading = true;
                 }
             }
-
-            if(anyChildLoading && immediately==false)
+            if(tile.isLoading==true)
+            {
+                delayedDisposeList.Add(tile);
+            }
+            else if(anyChildLoading && immediately==false)
             {
                 delayedDisposeList.Add(tile);
             }

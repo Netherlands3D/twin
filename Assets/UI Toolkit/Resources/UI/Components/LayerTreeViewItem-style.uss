@@ -64,7 +64,7 @@
 }
 
 .credentials-needed .layer-tree-view-item__visibility-toggle .icon{
-    --icon-image: var(--icon-warning);
+    background-image: var(--icon-warning);
     -unity-background-image-tint-color: var(--color-warning);
 }
 
@@ -73,11 +73,11 @@
 }
 
 .credentials-needed .layer-tree-view-item__icon.icon{
-     --icon-image: var(--icon-help);
+    background-image: var(--icon-help);
 }
 
 .credentials-needed .layer-tree-view-item__property-toggle .icon{
-    --icon-image: var(--icon-settings);
+    background-image: var(--icon-settings);
     -unity-background-image-tint-color: var(--color-warning);
 }
 

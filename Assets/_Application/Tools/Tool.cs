@@ -63,6 +63,8 @@ namespace Netherlands3D.Twin.Tools
             get => available;
             set => available = value;
         }
+        
+      
 
         /// <summary>
         /// Set availability for the user on/off.

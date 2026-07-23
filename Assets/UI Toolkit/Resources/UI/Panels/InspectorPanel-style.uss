@@ -57,6 +57,11 @@
     padding: 0px;
 }
 
+/* todo discuss if this is preferable, all contentcontainers in the inspector panel will have spacing between them with this */
+.inspector .inspector-content .contentcontainer{
+    margin-bottom: var(--spacing-2);
+}
+
 .inspector__section {
     flex-direction: row;
     align-items: center;
