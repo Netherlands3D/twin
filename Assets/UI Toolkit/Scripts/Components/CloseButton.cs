@@ -10,7 +10,7 @@ namespace Netherlands3D.UI.Components
         private Icon Icon => this.Q<Icon>("Icon");
 
         [UxmlAttribute("icon")]
-        public IconImage Image
+        public string Image
         {
             get => Icon.Image;
             set => Icon.Image = value;

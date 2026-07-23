@@ -99,7 +99,7 @@ namespace Netherlands3D.UI.Components
             LayerTypeIcon.Image = GetImage(layerData);
         }
 
-        private static IconImage GetImage(LayerData layerData)
+        private static string GetImage(LayerData layerData)
         {
             return LayerTypeSpriteLibrary.GetIconImage(layerData);
         }

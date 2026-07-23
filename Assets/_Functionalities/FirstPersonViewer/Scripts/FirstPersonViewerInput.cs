@@ -3,9 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using Netherlands3D.SelectionTools;
 using System;
+using Netherlands3D.Twin;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -30,7 +32,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Exit")]
         [SerializeField] private float exitDuration = 1;
-        [SerializeField] private float exitViewDelay = .15f;
+
         private float exitTimer;
         public UnityEvent<string> onShowSnackbarExit;
         [SerializeField] private string fpvExitText;
@@ -41,9 +43,9 @@ namespace Netherlands3D.FirstPersonViewer
 
         //Mouse Locking
         public bool LockInput => inputLocks.Count > 0;
-        public bool LockCamera { private set; get; }
+        public bool BlockCameraInput { private set; get; }
         private bool lockMouseModus;
-        private bool isLocked;
+        private bool cursorLocked;
         private bool isActive;
 
         //Events
@@ -76,14 +78,8 @@ namespace Netherlands3D.FirstPersonViewer
         public void OnFPVEnter()
         {
             //Only lock mouse when the locking modus is selected.
-            if (lockMouseModus)
-            {
-                isLocked = true;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-                onShowSnackbarExit.Invoke(fpvExitText);
-            }
-            else ToggleCursor(true);
+            RemoveInputLockConstrain(this); // always start clean
+            ToggleCursor(lockMouseModus);
         }
 
         private void OnDisable()
@@ -94,10 +90,9 @@ namespace Netherlands3D.FirstPersonViewer
         private void Update()
         {
             if (!isActive) return;
-            
-            HandleCursorLocking();
 
             isEditingInputfield = IsInputfieldSelected();
+            HandleCursorLocking();
 
             HandleExiting();
         }
@@ -107,54 +102,50 @@ namespace Netherlands3D.FirstPersonViewer
             //When editing an inputfield just block this function.
             if (isEditingInputfield) return;
 
+            // click to move mode
             if (!lockMouseModus)
             {
-                //Use the normal locking mode (Mouse Click)
-                bool isCurrentlyLocked = isLocked;
-                if (LeftClick.triggered && !isCurrentlyLocked)
-                {
-                    if (!Interface.PointerIsOverUI()) ToggleCursor(false);
-                }
-                else if (LeftClick.WasReleasedThisFrame() && isCurrentlyLocked) ToggleCursor(true);
-
+                BlockCameraInput = !LeftClick.IsPressed();
                 return;
             }
 
-            //When key is released release/lock mouse
-            if (ExitInput.WasReleasedThisFrame())
+            // lock cursor mode
+            if (ExitInput.WasReleasedThisFrame() && cursorLocked)
             {
-                ToggleCursor(isLocked);
-            }
-            else if (LeftClick.triggered && !Interface.PointerIsOverUI())
-            {
-                //When no UI object is detected lock the mouse to screen again, Lock Cursor.
                 ToggleCursor(false);
+                return;
             }
 
+            // Relock only when unlocked, mouse pressed, and not clicking UI.
+            if (!cursorLocked && LeftClick.WasPressedThisFrame() && !App.UIRoot.IsOverUI(Mouse.current.position.ReadValue()))
+            {
+                ToggleCursor(true);
+            }
         }
 
-        private void ToggleCursor(bool unlock)
+        private void ToggleCursor(bool lockCursor)
         {
             // Lock the mouse cursor to the screen using the old method to keep it centered (used by the Object Selector).
-            if (lockMouseModus)
+            cursorLocked = lockCursor;
+
+            Cursor.lockState = lockCursor
+                ? CursorLockMode.Locked
+                : CursorLockMode.None;
+
+            Cursor.visible = !lockCursor;
+
+            if (lockCursor)
             {
-                if (unlock) AddInputLockConstrain(this);
-                else RemoveInputLockConstrain(this);
-
-                Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
-                Cursor.visible = unlock;
-                if (!unlock) onShowSnackbarExit.Invoke(fpvExitText);
+                RemoveInputLockConstrain(this);
+                onShowSnackbarExit.Invoke(fpvExitText);
             }
-            else
+            else if (lockMouseModus) // only self-lock in lock-cursor modus
             {
-                if (unlock) WebGLCursor.Unlock();
-                else WebGLCursor.Lock();
+                AddInputLockConstrain(this);
             }
 
-            isLocked = !unlock;
-            LockCamera = unlock;
-
-            OnLockStateChanged.Invoke(isLocked);
+            BlockCameraInput = !lockCursor;
+            OnLockStateChanged.Invoke(cursorLocked);
         }
 
         //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 
@@ -162,18 +153,13 @@ namespace Netherlands3D.FirstPersonViewer
         {
             if (ExitInput.IsPressed() && !isEditingInputfield)
             {
-                exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
+                exitTimer -= Time.deltaTime;
 
-                //Delay x seconds before showing the progress. So the UI component isn't flickering
-                if (exitTimer < exitDuration - exitViewDelay)
+                float percentageTime = exitTimer / exitDuration;
+                ExitDuration.Invoke(percentageTime);
+                
+                if (exitTimer < 0)
                 {
-                    float percentageTime = Mathf.Clamp01(1f - ((exitTimer + exitViewDelay) / exitDuration));
-                    ExitDuration.Invoke(percentageTime);
-                }
-
-                if (exitTimer == 0)
-                {
-                    ExitDuration?.Invoke(-1);
                     OnInputExit.Invoke(exitModifier.IsPressed());
                 }
             }
@@ -190,7 +176,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             isActive = false;
             //TODO Move this to a application wide cursor manager.
-            ToggleCursor(true);
+            ToggleCursor(false);
         }
 
         public void AddInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Add(monoBehaviour);
@@ -201,18 +187,19 @@ namespace Netherlands3D.FirstPersonViewer
 
         public bool IsInputfieldSelected()
         {
-            GameObject selected = EventSystem.current.currentSelectedGameObject;
-
-            if (selected == null)
-            {
-                selectedUI = null;
-                return false;
-            }
-
-            if (selected == selectedUI) return isEditingInputfield;
-
-            selectedUI = selected;
-            return selected.GetComponent<TMP_InputField>() != null;
+            return false; //todo: rewrite this function for UI Toolkit. We have no inputfields in the MVP, so this is currently always false
+            // GameObject selected = EventSystem.current.currentSelectedGameObject;
+            //
+            // if (selected == null)
+            // {
+            //     selectedUI = null;
+            //     return false;
+            // }
+            //
+            // if (selected == selectedUI) return isEditingInputfield;
+            //
+            // selectedUI = selected;
+            // return selected.GetComponent<TMP_InputField>() != null;
         }
 
         public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;

@@ -1,10 +1,9 @@
+using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
-using System;
 using System.Collections.Generic;
 using Netherlands3D.Twin;
 using UnityEngine;
@@ -72,8 +71,8 @@ namespace Netherlands3D.FirstPersonViewer
             FirstPersonCamera.onSetupComplete.AddListener(OnAnimationCompleted);
 
             SetupFSM();
-
-            groundCallback = UpdateGroundPosition;
+            
+            groundCallback = UpdateGroundPosition; //we cache this because passing UpdateGroundPosition directly into the Raycast function will cause a GC alloc
         }
 
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
@@ -168,8 +167,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void CheckGroundCollision()
         {
-            if (Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance) isGrounded = true;
-            else isGrounded = false;
+            isGrounded = Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance;
         }
 
         public void SnapToGround()
