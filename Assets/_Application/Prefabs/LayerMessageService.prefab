@@ -45,6 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 868bb4a180b0e0a468d6a335821db96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.LayerMessageService
+  layerSourceAttributionEvent: {fileID: 11400000, guid: ed0a4e76488b45c46a5bf90e6d680af3,
+    type: 2}
+  OnAttributionReceived:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3396494835189726891
 MonoBehaviour:
   m_ObjectHideFlags: 0
