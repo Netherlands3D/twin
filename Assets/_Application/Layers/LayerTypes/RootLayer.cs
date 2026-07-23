@@ -80,7 +80,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 else
                     ChildrenLayers.Add(layer);
                 
-                UpdateLayerTreeOrder(-1);
+                UpdateLayerTreeOrder(-1); //recalculate the RootIndices since the hierarchy changed
                 ChildrenChanged.Invoke();
             }
         }
