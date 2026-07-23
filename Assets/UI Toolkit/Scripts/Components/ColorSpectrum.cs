@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Components
         private Vector2 center => new Vector2(colorSpectrumRadius, colorSpectrumRadius);
 
         private Vector2 selectorPosition = new Vector2(colorSpectrumRadius, colorSpectrumRadius);
-        private Vector2 pointerPosition = new Vector2(colorSpectrumRadius, colorSpectrumRadius);
+        private Vector2 pointerPositionWorldSpace = new Vector2(colorSpectrumRadius, colorSpectrumRadius);
 
         [UxmlAttribute("selector-position")]
         public Vector2 SelectorPosition
@@ -91,15 +91,15 @@ namespace Netherlands3D.UI.Components
 
         private void OnDragStarted(Vector2 startPosition)
         {
-            pointerPosition = startPosition;
-            SelectorPosition = startPosition;
+            pointerPositionWorldSpace = startPosition;
+            SelectorPosition = this.WorldToLocal(pointerPositionWorldSpace);
         }
 
 
         private void OnDragging(Vector2 delta)
         {
-            pointerPosition += delta; //raw pointer position
-            SelectorPosition = pointerPosition; //clamping happens internally
+            pointerPositionWorldSpace += delta; //raw pointer position
+            SelectorPosition = this.WorldToLocal(pointerPositionWorldSpace); //clamping happens internally
         }
 
         private void ApplySelectorPosition()
