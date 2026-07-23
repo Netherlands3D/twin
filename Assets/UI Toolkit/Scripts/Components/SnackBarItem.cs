@@ -40,7 +40,7 @@ namespace Netherlands3D.UI.Components
         }
 
         [UxmlAttribute("icon")]
-        public IconImage Image
+        public string Image
         {
             get => Icon.Image;
             set => Icon.Image = value;
@@ -52,10 +52,9 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             CloseButton.clicked += OnCloseClicked;
-            RegisterCallback<DetachFromPanelEvent>(OnDetachedFromPanel);
         }
 
-        public void SetMessage(string title, string details, SnackbarMessageType type, IconImage icon)
+        public void SetMessage(string title, string details, SnackbarMessageType type, string icon)
         {
             TitleLabel.text = title;
             DetailsLabel.text = details;
@@ -68,12 +67,6 @@ namespace Netherlands3D.UI.Components
         private void OnCloseClicked()
         {
             Closed?.Invoke(this);
-        }
-
-        private void OnDetachedFromPanel(DetachFromPanelEvent evt)
-        {
-            CloseButton.clicked -= OnCloseClicked;
-            UnregisterCallback<DetachFromPanelEvent>(OnDetachedFromPanel);
         }
     }
 }

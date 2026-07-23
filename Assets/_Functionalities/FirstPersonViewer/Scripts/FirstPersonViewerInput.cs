@@ -34,7 +34,6 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private float exitDuration = 1;
 
         private float exitTimer;
-        public UnityEvent<string> onShowSnackbarExit;
         [SerializeField] private string fpvExitText;
 
         private bool isEditingInputfield;
@@ -137,7 +136,7 @@ namespace Netherlands3D.FirstPersonViewer
             if (lockCursor)
             {
                 RemoveInputLockConstrain(this);
-                onShowSnackbarExit.Invoke(fpvExitText);
+                App.Debug.DisplayFpvUnlockMessage(fpvExitText);
             }
             else if (lockMouseModus) // only self-lock in lock-cursor modus
             {

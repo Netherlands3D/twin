@@ -23,7 +23,7 @@ namespace Netherlands3D.UI.Panels
             scrollView = this.Q<Components.ScrollView>();
         }
 
-        public SnackBarItem SetMessage(string title, string details, SnackBarItem.SnackbarMessageType type, IconImage icon)
+        public SnackBarItem SetMessage(string title, string details, SnackBarItem.SnackbarMessageType type, string icon)
         {
             var item = new SnackBarItem();
             item.SetMessage(title, details, type, icon);
@@ -38,7 +38,7 @@ namespace Netherlands3D.UI.Panels
         public void RemoveItem(SnackBarItem item)
         {
             item.Closed -= RemoveItem;
-            item.RemoveFromHierarchy();
+            scrollView.Remove(item);
 
             if (scrollView.childCount == 0)
                 Show(false);

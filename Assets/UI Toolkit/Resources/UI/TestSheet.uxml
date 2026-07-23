@@ -33,8 +33,9 @@
         </Netherlands3D.UI.Components.ContentContainer>
     </Netherlands3D.UI.Components.InspectorPanel>
     <Netherlands3D.UI.Components.MemoryStats/>
-    <Netherlands3D.UI.Components.FPSIndicator style="align-items: stretch;"/>
+    <Netherlands3D.UI.Components.FPSIndicator/>
     <Netherlands3D.UI.Components.DebugInfo style="display: flex;"/>
     <Netherlands3D.UI.Components.Footer/>
     <Netherlands3D.UI.Panels.SnackbarPanel/>
+    <Netherlands3D.UI.Panels.DefaultHUD/>
 </ui:UXML>

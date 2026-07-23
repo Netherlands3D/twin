@@ -14,16 +14,21 @@ namespace Netherlands3D.UI.Behaviours
         private DebugInfo debugInfo;
         private MemoryStats memoryStats;
         private FPSIndicator fpsIndicator;
-
+        private WaitForSeconds memoryUpdateWait;
+        
+        private int systemMemorySize;
         private float accumulatedFPS;
         private int frameCount;
         private float timeElapsed;
+        private const float BytesPerMegabyte = 1024f * 1024f;
 
         private void Awake()
         {
             debugInfo = App.UIRoot.Root.Q<DebugInfo>();
-            memoryStats = debugInfo.Q<MemoryStats>();
-            fpsIndicator = debugInfo.Q<FPSIndicator>();
+            memoryStats = debugInfo.MemoryStats;
+            fpsIndicator = debugInfo.FPSIndicator;
+            memoryUpdateWait = new WaitForSeconds(memoryUpdateInterval);
+            systemMemorySize = SystemInfo.systemMemorySize;
         }
 
         private void OnEnable()
@@ -57,23 +62,18 @@ namespace Netherlands3D.UI.Behaviours
 
         private IEnumerator MemoryTick()
         {
+            memoryStats.SystemValue = systemMemorySize;
+
             while (true)
             {
-                UpdateMemoryStats();
-                yield return new WaitForSeconds(memoryUpdateInterval);
+                memoryStats.ManagedValue = ConvertBytesToMegabytes(System.GC.GetTotalMemory(false));
+                yield return memoryUpdateWait;
             }
-        }
-
-        private void UpdateMemoryStats()
-        {
-            memoryStats.SystemValue = SystemInfo.systemMemorySize;
-            memoryStats.ManagedValue =
-                ConvertBytesToMegabytes(System.GC.GetTotalMemory(false));
         }
 
         private static float ConvertBytesToMegabytes(long bytes)
         {
-            return bytes / 1024f / 1024f;
+            return bytes / BytesPerMegabyte;
         }
     }
 }

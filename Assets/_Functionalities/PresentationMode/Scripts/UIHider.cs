@@ -1,7 +1,7 @@
+using Netherlands3D.Twin;
 using Netherlands3D.Services;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.PresentationModus.UIHider
@@ -14,9 +14,6 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
 
         private List<IPanelHider> panelHiders = new List<IPanelHider>();
         private bool hideUI;
-
-        [Header("Snackbar")]
-        [SerializeField] private UnityEvent showHideText;
 
         private void Start()
         {
@@ -64,7 +61,7 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
             hideUI = !hideUI;
 
             panelHiders.ForEach(panel => SetPanelHide(panel));
-            if (hideUI) showHideText.Invoke();
+            if (hideUI) App.Debug.DisplayPresentationModeExitMessage();
         }
 
         private void SetPanelHide(IPanelHider panel)

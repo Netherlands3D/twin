@@ -1,8 +1,8 @@
-using Netherlands3D.Twin;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using Netherlands3D.UI_Toolkit.Scripts;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -14,9 +14,10 @@ namespace Netherlands3D.Twin.Services
         private const float defaultWaitTime = 8f;
 
         private SnackbarPanel snackbarPanel;       
+        private readonly Dictionary<float, WaitForSeconds> waitForSecondsCache = new();
 
-        [SerializeField] private IconImage defaultInfoIcon = IconImage.Checkmark;
-        [SerializeField] private IconImage defaultWarningIcon = IconImage.Warning;
+        [SerializeField] private string defaultInfoIcon = IconImage.CHECKMARK;
+        [SerializeField] private string defaultWarningIcon = IconImage.WARNING;
 
         public UnityEvent OnShowMessage = new();
         public UnityEvent OnHideMessage = new();
@@ -37,12 +38,12 @@ namespace Netherlands3D.Twin.Services
             DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Warning, defaultWarningIcon, time);
         }
 
-        public void DisplayMessage(string newText, IconImage icon, float time = defaultWaitTime)
+        public void DisplayMessage(string newText, string icon, float time = defaultWaitTime)
         {
             DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Info, icon, time);
         }
 
-        private SnackBarItem DisplayText(string title, string details, SnackBarItem.SnackbarMessageType type, IconImage icon, float time = defaultWaitTime)
+        private SnackBarItem DisplayText(string title, string details, SnackBarItem.SnackbarMessageType type, string icon, float time = defaultWaitTime)
         {
             var item = snackbarPanel.SetMessage(title, details, type, icon);
             StartCoroutine(StartTimer(item, time));
@@ -50,14 +51,15 @@ namespace Netherlands3D.Twin.Services
             return item;
         }
 
-        public void DisplayEventMessage(string newText)
+        private WaitForSeconds GetWaitForSeconds(float duration)
         {
-            DisplayMessage(newText);
-        }
+            if (!waitForSecondsCache.TryGetValue(duration, out var waitForSeconds))
+            {
+                waitForSeconds = new WaitForSeconds(duration);
+                waitForSecondsCache[duration] = waitForSeconds;
+            }
 
-        public void DisplayEventError(string newText)
-        {
-            DisplayError(newText);
+            return waitForSeconds;
         }
 
         private IEnumerator StartTimer(SnackBarItem item, float duration)
@@ -65,7 +67,7 @@ namespace Netherlands3D.Twin.Services
             //TODO UI Toolkit, implement a slider here in the panel so the timer is visible to the user.
             OnShowMessage.Invoke();
 
-            yield return new WaitForSeconds(duration);
+            yield return GetWaitForSeconds(duration);
 
             snackbarPanel.RemoveItem(item);
             OnHideMessage.Invoke();

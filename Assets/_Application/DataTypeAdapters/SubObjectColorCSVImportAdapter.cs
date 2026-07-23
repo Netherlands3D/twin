@@ -1,5 +1,6 @@
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
@@ -15,7 +16,6 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     public class SubObjectColorCSVImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs>
     {
         [SerializeField] private CartesianTileSubObjectColorLayerGameObject layerGameObjectPrefab;
-        [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
         [SerializeField] private UnityEvent<float> progressEvent = new();
         private static CartesianTileSubObjectColorLayerGameObject activeCartesianTileSubObjectColorLayer; //todo: allow multiple datasets to exist
 
@@ -50,7 +50,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             //activeCartesianTileSubObjectColorLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
 
             activeCartesianTileSubObjectColorLayer.DestroyLayer();
-            csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");
+            App.LayerMessages.DisplayCsvReplacedMessage("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");          
         }
     }
 }
