@@ -58,7 +58,8 @@ namespace Netherlands3D.Twin.Services
 
         private void OnVisualizationCreated(LayerGameObject visualization)
         {
-            visualization.VisualisationError.AddListener(VisualizationErrorMessage);
+            //visualisationerror is automatically cleared when the visualisation is destroyed
+            visualization?.VisualisationError.AddListener(VisualizationErrorMessage);
         }
 
         private void OnHideSnackbar()
