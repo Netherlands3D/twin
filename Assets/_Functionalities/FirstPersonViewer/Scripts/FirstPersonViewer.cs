@@ -6,6 +6,7 @@ using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -87,6 +88,9 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void EnterViewer(ViewerState startState, Dictionary<string, object> settings)
         {
+            //We need to disable the runtimehandles (gizmo) because firstpersonview should not show this, therefor we deselect all layers
+            ProjectData.Current.RootLayer.DeselectAllLayers();
+            
             //Catch Postion picker double enter call (When FPS is low).
             if (FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy && startState == null) return;
 
