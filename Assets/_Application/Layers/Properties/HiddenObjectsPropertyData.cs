@@ -71,7 +71,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                     stylingRuleName,
                     Expression.EqualTo(
                         Expression.Get(VisibilityAttributeIdentifier),
-                        obj.id
+                        obj.layerFeature != null ? obj.layerFeature.Attributes[VisibilityAttributeIdentifier] : obj.id
                     )
                 );
                 stylingRule.Symbolizer.SetVisibility(obj.visible);
