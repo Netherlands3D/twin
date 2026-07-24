@@ -13,19 +13,8 @@
 
     border-radius: var(--spacing-2);
     border-width: 0px;
-    background-color: transparent;
+    background-color: red;
     overflow: hidden;
-}
-
-.map-viewport__map {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-
-    /* TODO: set background-image/RenderTexture */
-    background-color: var(--color-blue-100);
 }
 
 .map-viewport__overlay {
