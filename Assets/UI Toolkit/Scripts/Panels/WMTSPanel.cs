@@ -89,6 +89,8 @@ namespace Netherlands3D.UI.Panels
             var cameraService = ServiceLocator.GetService<CameraService>();
             cameraMoveTarget = cameraService.ActiveCamera;
             cameraService.OnSwitchCamera.AddListener(SetCamera);
+            
+            parent?.RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             
             Clamp();
@@ -97,10 +99,18 @@ namespace Netherlands3D.UI.Panels
             initialized = true;
         }
 
+        private void OnViewportGeometryChanged(GeometryChangedEvent evt)
+        {
+            Clamp();
+            UpdateLayerTiles();
+        }
+
+        
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             var cameraService = ServiceLocator.GetService<CameraService>();
             cameraService.OnSwitchCamera.RemoveListener(SetCamera);
+            parent?.UnregisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
         }
 
         private void SetCamera(Camera camera)
@@ -286,7 +296,7 @@ namespace Netherlands3D.UI.Panels
             var startY = Mathf.Max(0, Mathf.FloorToInt((localPosition.y - viewportSize.y) / tileSizeY));
  
             var endX = Mathf.CeilToInt((viewportSize.x - localPosition.x) / tileSizeX);
-            var endY = Mathf.FloorToInt((viewportSize.y + localPosition.y) / tileSizeY);
+            var endY = Mathf.CeilToInt((viewportSize.y + localPosition.y) / tileSizeY);
  
             var tilesToRemove = new List<Vector2>(tileList.Keys);
  
