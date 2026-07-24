@@ -2,10 +2,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ui="UnityEngine.UIElements"
     xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     editor-extension-mode="False"
+    class="map-viewport"
+    bottom-left="0, 300000"
+    top-right="280000, 620000"
+    layer-start-index="7"
 >
-    <ui:VisualElement class="map-viewport" name="MapViewportRoot">
+    <nl3dP:WMTSPanel class="map-viewport" name="MapViewportRoot">
         <!-- Map image/texture placeholder (TODO: set background-image / texture) -->
         <ui:VisualElement class="map-viewport__map" name="MapLayer" />
 
@@ -13,5 +18,5 @@
         <ui:VisualElement class="map-viewport__overlay" name="OverlayLayer" picking-mode="Ignore">
             <nl3d:Icon name="LocationPin" class="map-viewport__pin" picking-mode="Ignore" />
         </ui:VisualElement>
-    </ui:VisualElement>
+    </nl3dP:WMTSPanel>
 </ui:UXML>
