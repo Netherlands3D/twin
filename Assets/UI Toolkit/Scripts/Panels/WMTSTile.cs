@@ -1,7 +1,9 @@
+using System;
+using KindMen.Uxios;
 using Netherlands3D.Minimap;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 public class WMTSTile : VisualElement
 {
@@ -9,9 +11,8 @@ public class WMTSTile : VisualElement
 
     private int zoomLevel;
     private Vector2 tileKey;
-    private MinimapConfig config;
+    private MinimapConfig minimapConfig;
 
-    private UnityWebRequest uwr;
     private Texture2D texture;
     private float opacity;
 
@@ -32,7 +33,7 @@ public class WMTSTile : VisualElement
         tileKey = key;
         name = tileKey.x + "/" + tileKey.y;
 
-        this.config = config;
+        this.minimapConfig = config;
 
         style.width = size;
         style.height = size;
@@ -46,37 +47,29 @@ public class WMTSTile : VisualElement
 
     private void StartTextureDownload(int zoom, int x, int y)
     {
-        var tileImageUrl = config.ServiceUrl.Replace("{zoom}", zoom.ToString()).Replace("{x}", x.ToString()).Replace("{y}", y.ToString());
+        var tileImageUrl = this.minimapConfig.ServiceUrl.Replace("{zoom}", zoom.ToString()).Replace("{x}", x.ToString()).Replace("{y}", y.ToString());
 
-        uwr = UnityWebRequestTexture.GetTexture(tileImageUrl, true);
-        uwr.SendWebRequest();
-
-        // Todo: temp code replace this with Uxios?
-        downloadPollTask = schedule.Execute(() => CheckDownloadProgress(tileImageUrl)).Every(16);
+        var config = new Config();
+        var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(tileImageUrl), config);
+        promise.Then(response =>
+            {
+                texture = response.Data as Texture2D;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                style.backgroundImage = new StyleBackground(texture);
+                StartFadeIn();
+            }
+        );
+        promise.Catch(response =>
+            Debug.Log("Could not find minimap tile :" + tileImageUrl)
+        );
     }
 
-    private void CheckDownloadProgress(string tileImageUrl)
+    private void OnTextureDownloaded(Texture2D texture)
     {
-        if (uwr == null || !uwr.isDone) return;
-
-        downloadPollTask?.Pause();
-
-        if (uwr.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log("Could not find minimap tile :" + tileImageUrl);
-        }
-        else
-        {
-            texture = DownloadHandlerTexture.GetContent(uwr);
-            texture.wrapMode = TextureWrapMode.Clamp;
-            style.backgroundImage = new StyleBackground(texture);
-            StartFadeIn();
-        }
-
-        uwr.Dispose();
-        uwr = null;
+        style.backgroundImage = new StyleBackground(texture);
+        StartFadeIn();
     }
-
+    
     private void StartFadeIn()
     {
         opacity = 0f;
@@ -102,9 +95,6 @@ public class WMTSTile : VisualElement
     {
         downloadPollTask?.Pause();
         fadeTask?.Pause();
-
-        uwr?.Dispose();
-        uwr = null;
 
         if (texture != null)
         {
