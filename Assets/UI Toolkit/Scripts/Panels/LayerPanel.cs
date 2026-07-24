@@ -71,7 +71,6 @@ namespace Netherlands3D.UI.Panels
             treeView.unbindItem = UnbindItem;
 
             treeView.selectionChanged += OnSelectionChanged;
-            treeView.RegisterCallback<BlurEvent>(OnBlur);
 
             scrollView = treeView.Q<ScrollView>();
 
@@ -132,17 +131,18 @@ namespace Netherlands3D.UI.Panels
             App.Layers.LayerRemoved.RemoveListener(OnLayerHierarchyChanged);
         }
 
-        private void OnBlur(BlurEvent evt)
+        public override void OnInspectorClick(InspectorPanel inspector)
         {
             var pos = Pointer.current.position.ReadValue();
             var panelPos = RuntimePanelUtils.ScreenToPanel(
-                treeView.panel,
+                inspector.panel,
                 new Vector2(pos.x, Screen.height - pos.y)
             );
 
-            var inPanel = treeView.worldBound.Contains(panelPos) && scrollView.contentContainer.worldBound.Contains(panelPos);
+            var inInspectorPanel = inspector.worldBound.Contains(panelPos);
+            var inTreeViewLayerContainer = scrollView.contentContainer.worldBound.Contains(panelPos);
             var overButton = deleteButton.worldBound.Contains(panelPos) || folderButton.worldBound.Contains(panelPos);
-            if (!inPanel && !overButton)
+            if (inInspectorPanel && !inTreeViewLayerContainer && !overButton)
             {
                 treeView.ClearSelection();
                 referenceLayerItem = null;
@@ -164,8 +164,8 @@ namespace Netherlands3D.UI.Panels
 
         private void ToggleVisibilityOfSelection(int clickedRootIndex, bool active)
         {
-            var selectedTreeIndices = treeView.selectedIndices.ToList(); 
-            
+            var selectedTreeIndices = treeView.selectedIndices.ToList();
+
             //convert the treeIndex to the rootIndex. The tree index ignores collapsed items, and only counts visible treeViewItems,
             //the rootIndex is the stable index of the item in the tree (including collapsed items)
             var toggledSelectedLayer = false;
@@ -173,13 +173,13 @@ namespace Netherlands3D.UI.Panels
             {
                 var treeIndex = selectedTreeIndices[i];
                 var rootIndex = treeView.GetIdForIndex(treeIndex);
-                if(rootIndex == clickedRootIndex)
+                if (rootIndex == clickedRootIndex)
                 {
                     toggledSelectedLayer = true;
                     break;
                 }
             }
-            
+
             if (!toggledSelectedLayer) //we toggled a different layer than the selected layers, don't toggle the selected layers
                 return;
 
@@ -188,10 +188,9 @@ namespace Netherlands3D.UI.Panels
                 var layerData = treeView.GetItemDataForIndex<LayerData>(index);
                 layerData.ActiveSelf = active;
             }
-
             doRefresh = true;
         }
-        
+
         private void OnFolderButtonClicked(ClickEvent evt)
         {
             CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected

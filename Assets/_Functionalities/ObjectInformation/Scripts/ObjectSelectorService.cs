@@ -41,8 +41,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private float minClickDistance = 10;
         private float minClickTime = 0.5f;
         private float lastTimeClicked = 0;
-        private bool draggedBeforeRelease = false;
-        private bool waitingForRelease = false;
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
         private CameraInputSystemProvider cameraInputSystemProvider;
@@ -159,17 +157,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 OnAddObjectMapping(mapping);
             }
-        }
-
-       
-
-        public bool IsAnyToolActive()
-        {
-            foreach (Tool tool in activeForTools)
-                if (tool.IsOpen)
-                    return true;
-            return false;
-        }
+        }       
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
@@ -219,7 +207,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             
             //is the layerpanel or objectinspector tool active?
-            if (IsAnyToolActive())
+            if (ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer).IsOpen)
             {
                 string previousSelectedBagId = null;
                 bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();

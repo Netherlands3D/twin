@@ -9,5 +9,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Panels
     public abstract class BaseInspectorContentPanel : VisualElement
     {
         public abstract string Title { get; }
+        public virtual void OnInspectorClick(InspectorPanel inspector)
+        {
+        }
     }
 }
