@@ -44,6 +44,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private PolygonSelectionService polygonSelectionService;
         private InputService inputService;
         private ToolService toolService;
+        private CameraService cameraService;
 
         [SerializeField] private BoolEvent OnBlockCameraDragging;
 
@@ -55,6 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             toolService = ServiceLocator.GetService<ToolService>();
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            cameraService = ServiceLocator.GetService<CameraService>();
             
             //we have to listen to inputservice after it is initialized
             inputService = ServiceLocator.GetService<InputService>();
@@ -189,7 +191,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if(input == null) return;
             
             var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
-            var worldPosition = ServiceLocator.GetService<CameraService>().ActiveCamera.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            var worldPosition = cameraService.ActiveCamera.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             input.SetSelectionCurrentPosition(worldPosition);
             
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
