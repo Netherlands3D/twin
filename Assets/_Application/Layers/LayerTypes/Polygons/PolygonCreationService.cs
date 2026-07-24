@@ -107,7 +107,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
-                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Edit)
+                if(App.UIRoot.IsPointerOverUI() || input.Mode == PolygonInput.DrawMode.Edit)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -133,7 +133,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             else if (currentShapeType == ShapeType.Grid)
             {
-                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Selected)
+                if(App.UIRoot.IsPointerOverUI() || input.Mode == PolygonInput.DrawMode.Selected)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -220,7 +220,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                 if (!gridInput.DrawingArea && inputService.PolygonClickAction.IsPressed() && inputService.PolygonModifierAction.IsPressed())
                 {
-                    if (App.UIRoot.IsUIClicked() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
+                    if (App.UIRoot.IsPointerOverUI() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
 
                     gridInput.DrawingArea = true;
                     OnBlockCameraDragging.InvokeStarted(true);

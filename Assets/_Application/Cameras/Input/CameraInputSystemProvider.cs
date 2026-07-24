@@ -183,7 +183,7 @@ namespace Netherlands3D.Twin.Cameras.Input
 
         public void Update()
         {
-            if (App.UIRoot.IsUIClicked())
+            if (App.UIRoot.IsPointerOverUI())
             {
                 ingoringInput = true;
                 return;

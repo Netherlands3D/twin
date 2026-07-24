@@ -180,7 +180,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
-            if(App.UIRoot.IsUIClicked())
+            if(App.UIRoot.IsPointerOverUI())
                 return;
 
             if (IsColliderClicked())
