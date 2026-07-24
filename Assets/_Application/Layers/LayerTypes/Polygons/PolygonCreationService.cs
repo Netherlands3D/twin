@@ -7,6 +7,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -188,7 +189,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if(input == null) return;
             
             var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            var worldPosition = ServiceLocator.GetService<CameraService>().ActiveCamera.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             input.SetSelectionCurrentPosition(worldPosition);
             
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)

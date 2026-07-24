@@ -21,17 +21,17 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            TransformHandleInterfaceToggle handle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            if (handle != null) handle.SetTransformHandleEnabled(false);
-
-            StartCoroutine(SetupViewer());
+            // TransformHandleInterfaceToggle handle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            // //if (handle != null) handle.SetTransformHandleEnabled(false);
+            //
+            // StartCoroutine(SetupViewer());
         }
 
         private void OnDisable()
         {
             //When stopping Unity without null check this will always throw an error.
-            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(App.Cameras.PreviousCamera);
-            ServiceLocator.GetService<TransformHandleInterfaceToggle>()?.SetTransformHandleEnabled(true);
+            //ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(App.Cameras.PreviousCamera);
+            //ServiceLocator.GetService<TransformHandleInterfaceToggle>()?.SetTransformHandleEnabled(true);
         }
 
         private IEnumerator SetupViewer()

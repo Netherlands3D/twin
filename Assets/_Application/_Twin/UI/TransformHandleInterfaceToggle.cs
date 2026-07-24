@@ -211,11 +211,5 @@ namespace Netherlands3D.Twin.UI
                     break;
             }
         }
-
-        public void SetTransformHandleEnabled(bool enabled)
-        {
-            if(!enabled) ClearTransformTarget();
-            enableHandle = enabled;
-        }
     }
 }
