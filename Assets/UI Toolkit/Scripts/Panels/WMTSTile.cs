@@ -33,7 +33,7 @@ public class WMTSTile : VisualElement
         tileKey = key;
         name = tileKey.x + "/" + tileKey.y;
 
-        this.minimapConfig = config;
+        minimapConfig = config;
 
         style.width = size;
         style.height = size;

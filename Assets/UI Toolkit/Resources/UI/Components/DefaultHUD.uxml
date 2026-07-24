@@ -30,6 +30,6 @@
             <nl3d:ToolbarNavigation />
             <ui:VisualElement name="CameraSlider"/>
         </ui:VisualElement>
-        <nl3d:MapViewport bottom-left="0, 300000" top-right="280000, 620000" layer-start-index="7"/>
+        <nl3d:MapViewport bottom-left="0, 300000" top-right="280000, 620000" layer-start-index="3"/>
     </ui:VisualElement>
 </ui:UXML>
