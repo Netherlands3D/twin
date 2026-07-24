@@ -165,8 +165,8 @@ namespace Netherlands3D.UI.Panels
 
         private void ToggleSelection(int clickedRootIndex, bool active)
         {
-            var selectedTreeIndices = treeView.selectedIndices.ToList(); 
-            
+            var selectedTreeIndices = treeView.selectedIndices.ToList();
+
             //convert the treeIndex to the rootIndex. The tree index ignores collapsed items, and only counts visible treeViewItems,
             //the rootIndex is the stable index of the item in the tree (including collapsed items)
             var toggledSelectedLayer = false;
@@ -174,13 +174,13 @@ namespace Netherlands3D.UI.Panels
             {
                 var treeIndex = selectedTreeIndices[i];
                 var rootIndex = treeView.GetIdForIndex(treeIndex);
-                if(rootIndex == clickedRootIndex)
+                if (rootIndex == clickedRootIndex)
                 {
                     toggledSelectedLayer = true;
                     break;
                 }
             }
-            
+
             if (!toggledSelectedLayer) //we toggled a different layer than the selected layers, don't toggle the selected layers
                 return;
 
@@ -189,10 +189,9 @@ namespace Netherlands3D.UI.Panels
                 var layerData = treeView.GetItemDataForIndex<LayerData>(index);
                 layerData.ActiveSelf = active;
             }
-
             doRefresh = true;
         }
-        
+
         private void OnFolderButtonClicked(ClickEvent evt)
         {
             CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected
