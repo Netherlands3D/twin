@@ -6,9 +6,6 @@
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     editor-extension-mode="False"
     class="map-viewport"
-    bottom-left="0, 300000"
-    top-right="280000, 620000"
-    layer-start-index="7"
 >
     <nl3dP:WMTSPanel class="map-viewport" name="MapViewportRoot">
         <!-- Map image/texture placeholder (TODO: set background-image / texture) -->
