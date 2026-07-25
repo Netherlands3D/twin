@@ -62,7 +62,7 @@ namespace Netherlands3D.UI.Panels
             this.bottomLeft = bottomLeft;
             this.topRight = topRight;
             this.layerStartIndex = layerStartIndex;
-            
+
             layerIndex = layerStartIndex;
 
             // Use config values
@@ -78,21 +78,21 @@ namespace Netherlands3D.UI.Panels
 
             // Calculate map width in meters based on zoomlevel 0 setting values
             mapSizeInMeters = baseTileSize * pixelInMeters * scaleDenominator;
-            
+
             DetermineTopLeftOrigin();
             CalculateGridScaling();
             ActivateMapLayer();
-            
+
             // Calculate base meters in pixels to do calculations converting local coordinates to meters
             startMeterInPixels = (float)tileSizeInMeters / baseTileSize;
-            
+
             var cameraService = ServiceLocator.GetService<CameraService>();
             cameraMoveTarget = cameraService.ActiveCamera;
             cameraService.OnSwitchCamera.AddListener(SetCamera);
-            
+
             parent?.RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
-            
+
             Clamp();
             UpdateLayerTiles();
 
@@ -105,7 +105,7 @@ namespace Netherlands3D.UI.Panels
             UpdateLayerTiles();
         }
 
-        
+
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             var cameraService = ServiceLocator.GetService<CameraService>();
@@ -117,84 +117,83 @@ namespace Netherlands3D.UI.Panels
         {
             cameraMoveTarget = camera;
         }
-        
+
         private void Clamp()
         {
             if (parent == null) return;
- 
+
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
- 
+
             var maxPositionXInUnits = -(boundsInMeters.x / startMeterInPixels) * transform.scale.x;
-            var maxPositionYInUnits = (boundsInMeters.y / startMeterInPixels) * transform.scale.x;
- 
+            var maxPositionYInUnits = -(boundsInMeters.y / startMeterInPixels) * transform.scale.x;
+
             var xPadding = viewportSize.x * 0.5f;
             var yPadding = viewportSize.y * 0.5f;
- 
+
             var position = transform.position;
- 
+
             position.x = Mathf.Clamp(position.x, maxPositionXInUnits + viewportSize.x - xPadding, xPadding);
-            // Flip y for UI toolkit's coordinate system
-            position.y = Mathf.Clamp(position.y, -(maxPositionYInUnits + yPadding), -(viewportSize.y - yPadding));
- 
+            position.y = Mathf.Clamp(position.y, maxPositionYInUnits + viewportSize.y - yPadding, yPadding);
+
             transform.position = position;
         }
 
         public void ClickedMap(Vector2 panelPosition)
         {
             if (!initialized || cameraMoveTarget == null) return;
- 
+
             //WorldToLocal accounts for this element's own pan/zoom transform,
             //equivalent to the old transform.InverseTransformPoint.
             Vector2 localClickPosition = this.WorldToLocal(panelPosition);
- 
+
             var meterX = localClickPosition.x * startMeterInPixels;
             // Y-FLIP: local Y grows downward here, so this no longer needs negating
             // relative to the old RectTransform-based version.
             var meterY = -localClickPosition.y * startMeterInPixels;
- 
+
             var rdCoordinate = new Coordinate(
                 CoordinateSystem.RDNAP,
                 bottomLeft.x + meterX,
                 (float)topRight.y + meterY,
                 0.0d
             );
- 
+
             if (!rdCoordinate.IsValid()) return;
- 
+
             Vector3 unityCoordinate = rdCoordinate.ToUnity();
             unityCoordinate.y = cameraMoveTarget.transform.position.y;
- 
+
             if (moveCameraToClickedLocation)
             {
                 cameraMoveTarget.transform.position = unityCoordinate;
             }
         }
-        
+
         public Vector2 DeterminePositionOnMap(Coordinate sourceRDPosition)
         {
             var meterX = sourceRDPosition.easting - (float)bottomLeft.x;
             var meterY = sourceRDPosition.northing - (float)topRight.y;
- 
+
             var pixelX = meterX / startMeterInPixels;
             var pixelY = -(meterY / startMeterInPixels);
- 
+
             return new Vector2((float)pixelX, (float)pixelY);
         }
-        
+
         public void Zoom(int viewerZoom)
         {
             if (!initialized) return;
- 
+
             tileSize = baseTileSize / Mathf.Pow(2, viewerZoom);
             layerIndex = layerStartIndex + viewerZoom;
- 
+
             CalculateGridScaling();
             ActivateMapLayer();
- 
+
             Clamp();
             UpdateLayerTiles();
         }
-                
+
         public void Pan(Vector2 delta)
         {
             if (!initialized) return;
@@ -203,17 +202,17 @@ namespace Netherlands3D.UI.Panels
             Clamp();
             UpdateLayerTiles();
         }
-        
+
         private void ActivateMapLayer()
         {
             RemoveOtherLayers();
- 
+
             if (!tileLayers.ContainsKey(layerIndex))
             {
                 tileLayers.Add(layerIndex, new Dictionary<Vector2, WMTSTile>());
             }
         }
-        
+
         private void DetermineTopLeftOrigin()
         {
             switch (minimapConfig.TileMatrixSet.minimapOriginAlignment)
@@ -228,31 +227,31 @@ namespace Netherlands3D.UI.Panels
                     break;
             }
         }
-        
+
         private void CalculateGridScaling()
         {
             divide = Mathf.Pow(2, layerIndex);
             tileSizeInMeters = mapSizeInMeters / divide;
- 
+
             //The tile 0,0 its top left does not align with our region top left. So here we determine the offset.
             layerTilesOffset = new Vector2(
                 ((float)bottomLeft.x - (float)minimapTopLeft.x) / (float)tileSizeInMeters,
                 ((float)minimapTopLeft.y - (float)topRight.y) / (float)tileSizeInMeters
             );
- 
+
             //Based on tile numbering type
             tileOffset.x = Mathf.Floor(layerTilesOffset.x);
             tileOffset.y = Mathf.Floor(layerTilesOffset.y);
- 
+
             //Store the remaining value to offset layer
             layerTilesOffset.x -= tileOffset.x;
             layerTilesOffset.y -= tileOffset.y;
- 
+
             //Calculate the amount of tiles needed for our app bounding box
             boundsTiles.x = Mathf.CeilToInt(boundsInMeters.x / (float)tileSizeInMeters);
             boundsTiles.y = Mathf.CeilToInt(boundsInMeters.y / (float)tileSizeInMeters);
         }
-        
+
         public void ScaleMapOverOrigin(Vector2 origin, Vector3 newScale)
         {
             var origin3 = (Vector3)origin;
@@ -260,11 +259,11 @@ namespace Netherlands3D.UI.Panels
             var newOrigin = currentPosition - origin3;
             var relativeScale = newScale.x / transform.scale.x;
             var finalPosition = origin3 + newOrigin * relativeScale;
- 
+
             transform.scale = newScale;
             transform.position = finalPosition;
         }
-        
+
         private void RemoveOtherLayers()
         {
             var mapTileKeys = new List<int>(tileLayers.Keys);
@@ -276,39 +275,40 @@ namespace Netherlands3D.UI.Panels
                     {
                         tile.Value.Dispose();
                     }
+
                     tileLayers.Remove(layerKey);
                 }
             }
         }
- 
+
         private void UpdateLayerTiles()
         {
             if (parent == null || !tileLayers.TryGetValue(layerIndex, out var tileList)) return;
- 
+
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
             var localScale = transform.scale;
             var localPosition = transform.position;
- 
+
             var tileSizeX = tileSize * localScale.x;
             var tileSizeY = tileSize * localScale.y;
- 
+
             var startX = Mathf.Max(0, Mathf.FloorToInt(-localPosition.x / tileSizeX));
-            var startY = Mathf.Max(0, Mathf.FloorToInt((localPosition.y - viewportSize.y) / tileSizeY));
- 
+            var startY = Mathf.Max(0, Mathf.FloorToInt(-localPosition.y / tileSizeY));
+
             var endX = Mathf.CeilToInt((viewportSize.x - localPosition.x) / tileSizeX);
-            var endY = Mathf.CeilToInt((viewportSize.y + localPosition.y) / tileSizeY);
- 
+            var endY = Mathf.CeilToInt((viewportSize.y - localPosition.y) / tileSizeY);
+
             var tilesToRemove = new List<Vector2>(tileList.Keys);
- 
+
             for (int x = startX; x <= endX; x++)
             {
                 for (int y = startY; y <= endY; y++)
                 {
                     Vector2 tileKey;
- 
+
                     float tileXPosition = (x * tileSize) - (layerTilesOffset.x * tileSize);
                     float tileYPosition = (y * tileSize) - (layerTilesOffset.y * tileSize);
- 
+
                     switch (minimapConfig.TileMatrixSet.minimapOriginAlignment)
                     {
                         case TileMatrixSet.OriginAlignment.BottomLeft:
@@ -319,24 +319,23 @@ namespace Netherlands3D.UI.Panels
                             tileKey = new Vector2(x + tileOffset.x, y + tileOffset.y);
                             break;
                     }
- 
+
                     if (!tileList.TryGetValue(tileKey, out _))
                     {
                         var mapTile = new WMTSTile();
                         mapTile.Initialize(this, layerIndex, tileSize, tileXPosition, tileYPosition, tileKey, minimapConfig);
                         tileList.Add(tileKey, mapTile);
                     }
- 
+
                     tilesToRemove.Remove(tileKey);
                 }
             }
- 
+
             foreach (var tileKey in tilesToRemove)
             {
                 tileList[tileKey].Dispose();
                 tileList.Remove(tileKey);
             }
         }
-
     }
 }
