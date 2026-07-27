@@ -235,22 +235,20 @@ namespace Netherlands3D.UI.Panels
             tileSizeInMeters = mapSizeInMeters / divide;
 
             //The tile 0,0 its top left does not align with our region top left. So here we determine the offset.
-            layerTilesOffset = new Vector2(
-                ((float)bottomLeft.x - (float)minimapTopLeft.x) / (float)tileSizeInMeters,
-                ((float)minimapTopLeft.y - (float)topRight.y) / (float)tileSizeInMeters
-            );
+            double offsetXd = (bottomLeft.x - minimapTopLeft.x) / tileSizeInMeters;
+            double offsetYd = (minimapTopLeft.y - topRight.y) / tileSizeInMeters;
+
 
             //Based on tile numbering type
-            tileOffset.x = Mathf.Floor(layerTilesOffset.x);
-            tileOffset.y = Mathf.Floor(layerTilesOffset.y);
+            double tileOffsetXd = Math.Floor(offsetXd);
+            double tileOffsetYd = Math.Floor(offsetYd);
+            
+            tileOffset = new Vector2((float)tileOffsetXd, (float)tileOffsetYd);
+            // Fractional remainder is always in [0,1) - small magnitude, safe to store as float.
+            layerTilesOffset = new Vector2((float)(offsetXd - tileOffsetXd), (float)(offsetYd - tileOffsetYd));
 
-            //Store the remaining value to offset layer
-            layerTilesOffset.x -= tileOffset.x;
-            layerTilesOffset.y -= tileOffset.y;
-
-            //Calculate the amount of tiles needed for our app bounding box
-            boundsTiles.x = Mathf.CeilToInt(boundsInMeters.x / (float)tileSizeInMeters);
-            boundsTiles.y = Mathf.CeilToInt(boundsInMeters.y / (float)tileSizeInMeters);
+            boundsTiles.x = Mathf.CeilToInt((float)(boundsInMeters.x / tileSizeInMeters));
+            boundsTiles.y = Mathf.CeilToInt((float)(boundsInMeters.y / tileSizeInMeters));
         }
 
         public void ScaleMapOverOrigin(Vector2 origin, Vector3 newScale)
