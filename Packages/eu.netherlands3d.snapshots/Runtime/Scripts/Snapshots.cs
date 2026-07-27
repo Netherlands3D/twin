@@ -86,21 +86,61 @@ namespace Netherlands3D.Snapshots
         public LayerMask SnapshotLayers { get => snapshotLayers; set => snapshotLayers = value;}
 
         public void UseViewSize(bool useViewSize) => this.useViewSize = useViewSize;
-        
-        
 
         public void TakeSnapshot()
         {
-            var snapshotWidth = (useViewSize) ? Screen.width : width;
-            var snapshotHeight = (useViewSize) ? Screen.height : height;
+            var snapshotWidth = useViewSize ? Screen.width : width;
+            var snapshotHeight = useViewSize ? Screen.height : height;
 
-          
-            byte[] bytes = Snapshot.ToImageBytes(1024, 768, Camera.main, snapshotLayers, SnapshotFileType.png);
+            if (!sourceCamera)
+                sourceCamera = Camera.main;
+
+            // Cache camera state
+            RenderTexture previousTarget = sourceCamera.targetTexture;
+            int previousMask = sourceCamera.cullingMask;
+            RenderTexture previousActive = RenderTexture.active;
+
+            // Create render texture
+            RenderTexture renderTexture = new RenderTexture(snapshotWidth, snapshotHeight, 24, RenderTextureFormat.ARGB32);
+            renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
+            renderTexture.Create();
+
+            // Render using the ORIGINAL camera
+            if (snapshotLayers != default)
+                sourceCamera.cullingMask = snapshotLayers;
+
+            sourceCamera.targetTexture = renderTexture;
+            sourceCamera.Render();
+
+            // Read pixels
+            RenderTexture.active = renderTexture;
+
+            Texture2D texture = new Texture2D(snapshotWidth, snapshotHeight, TextureFormat.RGB24, false);
+            texture.ReadPixels(new Rect(0, 0, snapshotWidth, snapshotHeight), 0, 0);
+            texture.Apply();
+
+            // Restore camera state
+            sourceCamera.targetTexture = previousTarget;
+            sourceCamera.cullingMask = previousMask;
+            RenderTexture.active = previousActive;
+
+            renderTexture.Release();
+            Destroy(renderTexture);
+
+            byte[] bytes = fileType switch
+            {
+                SnapshotFileType.png => texture.EncodeToPNG(),
+                SnapshotFileType.jpg => texture.EncodeToJPG(),
+                SnapshotFileType.raw => texture.GetRawTextureData(),
+                _ => texture.EncodeToPNG()
+            };
+
+            Destroy(texture);
 
             var path = DetermineSaveLocation();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
+    DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
 #else
             File.WriteAllBytes(path, bytes);
 #endif
