@@ -8,8 +8,6 @@ namespace Netherlands3D.Twin.UI
     {
         [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
         public UnityEvent OnUpdateGizmoHandles;
-      
-        private bool enableHandle = true;
         private TransformAxes transformLocks;
         
         private bool positionInteractable;
@@ -95,8 +93,6 @@ namespace Netherlands3D.Twin.UI
 
         public void SetTransformTarget(GameObject targetGameObject)
         {
-            if (!enableHandle) return;
-
             //Set the target of the transform handle
             RuntimeTransformHandle.SetTarget(targetGameObject);
             SetTarget.Invoke(targetGameObject);
@@ -210,12 +206,6 @@ namespace Netherlands3D.Twin.UI
                     }
                     break;
             }
-        }
-
-        public void SetTransformHandleEnabled(bool enabled)
-        {
-            if(!enabled) ClearTransformTarget();
-            enableHandle = enabled;
         }
     }
 }
