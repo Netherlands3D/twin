@@ -5,12 +5,9 @@ using Netherlands3D.Minimap;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI.ExtensionMethods;
-using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -20,14 +17,15 @@ namespace Netherlands3D.UI.Components
     {
         private VisualElement mapLayer;
         private VisualElement overlayLayer;
+        
+        private Vector2 pointerDownPosition;
+        private const float dragDeadzone = 4f;
 
         private Icon locationPin;
         private bool showPin = true;
 
         WMTSPanel wmtsPanel;
-
-        private bool dragging;
-
+        
         private float zoomScale = 0.0f;
         private float minZoomScale = 0.0f;
         private float maxZoomScale = 10.0f;
@@ -63,13 +61,15 @@ namespace Netherlands3D.UI.Components
             mapLayer = this.Q<VisualElement>("MapLayer");
             overlayLayer = this.Q<VisualElement>("OverlayLayer");
             locationPin = this.Q<Icon>("LocationPin");
+            locationPin.style.transformOrigin = new TransformOrigin(Length.Percent(50), Length.Percent(100));
+
             wmtsPanel = this.Q<WMTSPanel>();
 
             // TODO: Implement clickable map viewport rendering.
             // This element should later display a map rendered (e.g. via a RenderTexture bridge or a custom tile renderer).
             // Pointer input (click/drag/scroll) should be forwarded to the map/navigation logic to place/update the pin and update coordinates.
 
-            var dragManipulator = new DragManipulator(0);
+            var dragManipulator = new DragManipulator(dragDeadzone);
             dragManipulator.DragStarted.AddListener(OnDragStarted);
             dragManipulator.Dragging.AddListener(OnDragging);
             dragManipulator.DragEnded.AddListener(OnDragEnded);
@@ -77,9 +77,10 @@ namespace Netherlands3D.UI.Components
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<WheelEvent>(OnScroll);
-            RegisterCallback<ClickEvent>(OnPointerClick);
+            RegisterCallback<PointerDownEvent>(OnPointerDown);
+            RegisterCallback<PointerUpEvent>(OnPointerUp);
             RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
-            wmtsPanel.TilesChanged.AddListener(UpdateLocationPin);
+            wmtsPanel.TilesChanged.AddListener(UpdateLocationPin); //make sure the pin stays in front of the tiles
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
         }
@@ -112,9 +113,11 @@ namespace Netherlands3D.UI.Components
             var cameraPosition = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RDNAP);
             Vector2 mapPosition = wmtsPanel.DeterminePositionOnMap(cameraPosition);
 
-            locationPin.style.translate = new Translate(mapPosition.x, mapPosition.y);
+            var iconSize = new Vector2(locationPin.resolvedStyle.width, locationPin.resolvedStyle.height);
+            var pinPosition = mapPosition - new Vector2(iconSize.x * 0.5f, iconSize.y);
+
+            locationPin.style.translate = new Translate(pinPosition.x, pinPosition.y);
             locationPin.transform.scale = Vector3.one / wmtsPanel.transform.scale.x;
-            
             locationPin.BringToFront(); //ensure the pin is always on top of the tiles
         }
         
@@ -240,7 +243,6 @@ namespace Netherlands3D.UI.Components
 
         private void OnDragStarted(Vector2 startPosition)
         {
-            dragging = true;
             wmtsPanel.CenterPointerInView = false;
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRABBING);
             StartedMapInteraction();
@@ -255,7 +257,6 @@ namespace Netherlands3D.UI.Components
 
         private void OnDragEnded(Vector2 endPosition)
         {
-            dragging = false;
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
             StoppedMapInteraction();
         }
@@ -277,22 +278,14 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        // public void OnPointerEnter(PointerEventData eventData)
-        // {
-        //     StartedMapInteraction();
-        // }
-        //
-        // public void OnPointerExit(PointerEventData eventData)
-        // {
-        //     if (!dragging)
-        //     {
-        //         StoppedMapInteraction();
-        //     }
-        // }
-
-        public void OnPointerClick(ClickEvent evt)
+        private void OnPointerDown(PointerDownEvent evt)
         {
-            if (dragging) return;
+            pointerDownPosition = evt.position;
+        }
+
+        private void OnPointerUp(PointerUpEvent evt)
+        {
+            if (Vector2.Distance(pointerDownPosition, evt.position) > dragDeadzone) return; //we cannot use the manipulator event functions to set isDragging to true or false, because this causes a race-condition.
 
             Debug.Log("Clicked on minimap");
             wmtsPanel.ClickedMap(evt.position);

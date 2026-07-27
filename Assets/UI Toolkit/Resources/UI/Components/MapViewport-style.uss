@@ -20,17 +20,8 @@
 .map-viewport__pin
 {
     position: absolute;
-}
-
-.map-viewport__overlay {
-    position: absolute;
-    left: 0;
-    right: 0;
+    left: 0; 
     top: 0;
-    bottom: 0;
-
-    justify-content: center;
-    align-items: center;
 }
 
 .map-viewport .map-viewport__pin.icon {
