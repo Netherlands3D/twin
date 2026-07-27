@@ -87,17 +87,15 @@ namespace Netherlands3D.Snapshots
 
         public void UseViewSize(bool useViewSize) => this.useViewSize = useViewSize;
         
-        private void Start()
-        {
-            if (!sourceCamera) sourceCamera = Camera.main;
-        }
+        
 
         public void TakeSnapshot()
         {
             var snapshotWidth = (useViewSize) ? Screen.width : width;
             var snapshotHeight = (useViewSize) ? Screen.height : height;
 
-            byte[] bytes = Snapshot.ToImageBytes(snapshotWidth, snapshotHeight, sourceCamera, snapshotLayers, fileType);
+          
+            byte[] bytes = Snapshot.ToImageBytes(1024, 768, Camera.main, snapshotLayers, SnapshotFileType.png);
 
             var path = DetermineSaveLocation();
 
