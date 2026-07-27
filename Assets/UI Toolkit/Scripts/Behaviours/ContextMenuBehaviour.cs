@@ -67,7 +67,7 @@ namespace Netherlands3D.UI.Panels
                 return;
             
             ClearActivePanel();
-            if(App.UIRoot.IsOverUI(panelPos))
+            if(App.UIRoot.IsPointerOverUI())
                 return;
             
             CheckAndSpawnPanel(panelPos);

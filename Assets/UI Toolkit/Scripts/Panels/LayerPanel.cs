@@ -25,7 +25,7 @@ namespace Netherlands3D.UI.Panels
         private TreeView treeView;
         private ScrollView scrollView;
         private const float scrollSpeed = 300f; // px/s
-
+        
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
         private float dropMargin = 0.25f; //top 25% and bottom 25% are for reordering, 25%-75% is for reparenting
@@ -61,7 +61,6 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
 
             treeView = this.Q<TreeView>();
-            treeView.autoExpand = true;
 
             treeView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             treeView.selectionType = SelectionType.Multiple;
@@ -153,7 +152,7 @@ namespace Netherlands3D.UI.Panels
         private void OnSelectionChanged(IEnumerable<object> selectedObjects)
         {
             var layerDatas = selectedObjects.Cast<LayerData>().ToList(); //Make a copy to ensure we have a collection that is not modified due to deselecting
-
+            
             ProjectData.Current.RootLayer.DeselectAllLayers();
 
             foreach (LayerData data in layerDatas)
@@ -163,7 +162,7 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
-        private void ToggleSelection(int clickedRootIndex, bool active)
+        private void ToggleVisibilityOfSelection(int clickedRootIndex, bool active)
         {
             var selectedTreeIndices = treeView.selectedIndices.ToList();
 
@@ -216,24 +215,12 @@ namespace Netherlands3D.UI.Panels
                 }
             }
 
+            newGroup.LayerData.IsExpanded = true;
             RebuildTree();
-
-            ExpandToItem(newGroup.LayerData);
-
+            
             RequestSelection(group ? layersToGroup : new List<LayerData>() { newGroup.LayerData });
         }
-
-        private void ExpandToItem(LayerData layerData)
-        {
-            // Walk up the hierarchy and collect all ancestors
-            var ancestors = layerData.GetAncestors();
-
-            foreach (var ancestor in ancestors)
-            {
-                treeView.ExpandItem(ancestor.RootId);
-            }
-        }
-
+        
         private List<LayerData> selectionToRestore = new List<LayerData>();
         private void RequestSelection(List<LayerData> selection)
         {
@@ -249,7 +236,7 @@ namespace Netherlands3D.UI.Panels
             {
                 indicesToSelect.Add(layer.RootId);
             }
-
+            
             treeView.SetSelection(indicesToSelect);
         }
 
@@ -294,7 +281,22 @@ namespace Netherlands3D.UI.Panels
             this.rootLayer = rootLayer;
             var tree = LayerTreeViewUtility.ToTreeViewItems(rootLayer, treeView);
             treeView.SetRootItems(tree);
+            ReExpandTree(rootLayer);
+            
             treeView.RefreshItems();
+        }
+
+        private void ReExpandTree(LayerData layer)
+        {
+            foreach (var child in layer.ChildrenLayers)
+            {
+                if (child.IsExpanded)
+                {
+                    treeView.ExpandItem(child.RootId, false, false);
+                    ReExpandTree(child);
+                }
+            }
+            OnRequestRefresh();
         }
 
         private VisualElement MakeItem()
@@ -323,14 +325,14 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.Initialize(layerData);
             layerRowElement.SelectLayerItem.AddListener(SelectItemWithoutNotify);
             layerRowElement.DeselectLayerItem.AddListener(DeselectWithoutNotify);
-            layerRowElement.VisibilityToggleChanged.AddListener(ToggleSelection);
+            layerRowElement.VisibilityToggleChanged.AddListener(ToggleVisibilityOfSelection);
 
             if (layerData.IsSelected)
             {
                 SelectItemWithoutNotify(layerRowElement);
             }
         }
-
+        
         private void UnbindItem(VisualElement item, int index)
         {
             if (item is not LayerTreeViewItem layerRowElement) return;
@@ -338,7 +340,8 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.RemoveLayerDataListeners(layerRowElement.LayerData);
             layerRowElement.SelectLayerItem.RemoveListener(SelectItemWithoutNotify);
             layerRowElement.DeselectLayerItem.RemoveListener(DeselectWithoutNotify);
-            layerRowElement.VisibilityToggleChanged.RemoveListener(ToggleSelection);
+            layerRowElement.VisibilityToggleChanged.RemoveListener(ToggleVisibilityOfSelection);
+
         }
         
         private void DeselectWithoutNotify(LayerTreeViewItem item)
@@ -568,6 +571,7 @@ namespace Netherlands3D.UI.Panels
                 selectedLayer.SetParent(newParent, newSiblingIndex);
             }
 
+            newParent.IsExpanded = true;
             RequestSelection(selection);
         }
     }

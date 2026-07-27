@@ -43,11 +43,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private float lastTimeClicked = 0;
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
-        private CameraInputSystemProvider cameraInputSystemProvider;
 
         [SerializeField] private Tool[] activeForTools;
         [SerializeField] private Material selectionMaterial;
-        [SerializeField] private RectTransform[] excludedUIForDeselection;
         
         [SerializeField] private InputActionAsset inputActionAsset;
         private InputAction leftClickAction;
@@ -79,7 +77,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Awake()
         {
-            cameraInputSystemProvider = Camera.main.GetComponent<CameraInputSystemProvider>();
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
             subObjectSelector = gameObject.AddComponent<SubObjectSelector>();
             featureSelector = gameObject.AddComponent<FeatureSelector>();
@@ -157,37 +154,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 OnAddObjectMapping(mapping);
             }
-        }       
-        
-        private void OnLeftClick(InputAction.CallbackContext ctx)
-        {
-            //TODO this should be refactored when UITOOLKIT will be implemented fully
-            if(App.UIRoot.IsUIClicked())
-                return;
-            
-            //TODO this should be refactored when UITOOLKIT will be implemented fully
-            //is the click on any other button than the excluded ui elements then deselect
-            if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
-            {
-                if (clickedObject != null)
-                {
-                    Transform t = clickedObject.transform;
-                    foreach (var excluded in excludedUIForDeselection)
-                    {
-                        if (excluded != null && t.IsChildOf(excluded))
-                            return;
-                    }
+        }  
 
-                    Deselect();
-                    return;
-                }
-            }
-            
-            //TODO this should be refactored when UITOOLKIT will be implemented fully
-            //is the click on any collider in the world that should be selected first then deselect
-            //also if turns out that this logic is needed after, this could be improved on,
-            //because now the object most in front of the raycasted position is not clicked first,
-            //colliders are prioritized first instead of features (runtime handles)
+        private bool IsColliderClicked()
+        {
+            //dont select any feature if a gizmo handle is interacted with
+            //todo make sure these colliders are associated with gizmo colliders
             Vector2 screenPoint = Pointer.current.position.ReadValue();
             Ray ray = Camera.main.ScreenPointToRay(screenPoint);
             int hitCount = Physics.RaycastNonAlloc(ray, selectedColliderHits, Mathf.Infinity);
@@ -195,15 +167,26 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 for (int i = 0; i < hitCount; i++)
                 {
-                    //todo discuss if filter for clicknothingplane should be checked and excluded?
                     var hit = selectedColliderHits[i];
                     Collider col = hit.collider;
                     if (col != null)
                     {
-                        Deselect();
-                        return;
+                        return true;
                     }
                 }
+            }
+            return false;
+        }
+        
+        private void OnLeftClick(InputAction.CallbackContext ctx)
+        {
+            if(App.UIRoot.IsPointerOverUI())
+                return;
+
+            if (IsColliderClicked())
+            {
+                Deselect();
+                return;
             }
             
             //is the layerpanel or objectinspector tool active?

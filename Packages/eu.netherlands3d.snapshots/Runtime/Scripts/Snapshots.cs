@@ -86,15 +86,16 @@ namespace Netherlands3D.Snapshots
         public LayerMask SnapshotLayers { get => snapshotLayers; set => snapshotLayers = value;}
 
         public void UseViewSize(bool useViewSize) => this.useViewSize = useViewSize;
+        
+        
 
         public void TakeSnapshot()
         {
             var snapshotWidth = (useViewSize) ? Screen.width : width;
             var snapshotHeight = (useViewSize) ? Screen.height : height;
 
-            // Cache camera retrieval, but ensure we check each time whether the camera is valid
-            if (!sourceCamera) sourceCamera = Camera.main;
-            byte[] bytes = Snapshot.ToImageBytes(snapshotWidth, snapshotHeight, sourceCamera, snapshotLayers, fileType);
+          
+            byte[] bytes = Snapshot.ToImageBytes(1024, 768, Camera.main, snapshotLayers, SnapshotFileType.png);
 
             var path = DetermineSaveLocation();
 
