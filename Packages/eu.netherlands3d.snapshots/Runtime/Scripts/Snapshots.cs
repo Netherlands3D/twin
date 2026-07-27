@@ -48,29 +48,6 @@ namespace Netherlands3D.Snapshots
 
         public UnityEvent<string> DownloadSnapshotComplete = new();
 
-        public int Width
-        {
-            get => width;
-            set
-            {
-                useViewSize = false;
-                width = value;
-            }
-        }
-
-        public int Height
-        {
-            get => height;
-            set
-            {
-                useViewSize = false;
-                height = value;
-            }
-        }
-
-        public string FileName { get => fileName; set => fileName = value; }
-        public string TargetPath { get => targetPath; set => targetPath = value; }
-
         public string FileType
         {
             get => fileType.ToString();
@@ -83,10 +60,6 @@ namespace Netherlands3D.Snapshots
             }
         }
 
-        public LayerMask SnapshotLayers { get => snapshotLayers; set => snapshotLayers = value;}
-
-        public void UseViewSize(bool useViewSize) => this.useViewSize = useViewSize;
-
         public void TakeSnapshot()
         {
             var snapshotWidth = useViewSize ? Screen.width : width;
@@ -94,32 +67,24 @@ namespace Netherlands3D.Snapshots
 
             if (!sourceCamera)
                 sourceCamera = Camera.main;
-
-            // Cache camera state
+         
             RenderTexture previousTarget = sourceCamera.targetTexture;
             int previousMask = sourceCamera.cullingMask;
             RenderTexture previousActive = RenderTexture.active;
-
-            // Create render texture
             RenderTexture renderTexture = new RenderTexture(snapshotWidth, snapshotHeight, 24, RenderTextureFormat.ARGB32);
             renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
             renderTexture.Create();
-
-            // Render using the ORIGINAL camera
-            if (snapshotLayers != default)
-                sourceCamera.cullingMask = snapshotLayers;
-
+         
+            sourceCamera.cullingMask = snapshotLayers;
             sourceCamera.targetTexture = renderTexture;
             sourceCamera.Render();
-
-            // Read pixels
+            
             RenderTexture.active = renderTexture;
 
             Texture2D texture = new Texture2D(snapshotWidth, snapshotHeight, TextureFormat.RGB24, false);
             texture.ReadPixels(new Rect(0, 0, snapshotWidth, snapshotHeight), 0, 0);
             texture.Apply();
-
-            // Restore camera state
+            
             sourceCamera.targetTexture = previousTarget;
             sourceCamera.cullingMask = previousMask;
             RenderTexture.active = previousActive;
