@@ -94,22 +94,19 @@ namespace Netherlands3D.Snapshots
 
             // Cache camera retrieval, but ensure we check each time whether the camera is valid
             if (!sourceCamera) sourceCamera = Camera.main;
-            byte[] bytes = Snapshot.ToImageBytes(1920, 1080, sourceCamera, snapshotLayers, SnapshotFileType.png);
-            
-            Texture2D texture = new Texture2D(1920, 1080);
-            texture.LoadImage(bytes);    
-            
+            byte[] bytes = Snapshot.ToImageBytes(snapshotWidth, snapshotHeight, sourceCamera, snapshotLayers, fileType);
+            Texture2D texture = new Texture2D(snapshotWidth, snapshotHeight);
+            texture.LoadImage(bytes);        
             bytes = texture.EncodeToPNG();
             Destroy(texture);
             
             var path = DetermineSaveLocation();
-            File.WriteAllBytes(path, bytes);
 
-// #if UNITY_WEBGL && !UNITY_EDITOR
-//             DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
-// #else
-            //File.WriteAllBytes(path, bytes);
-//#endif
+#if UNITY_WEBGL && !UNITY_EDITOR
+            DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
+#else
+            File.WriteAllBytes(path, bytes);
+#endif
         }
 
         public void OnSnapshotDownloadComplete(string message)
