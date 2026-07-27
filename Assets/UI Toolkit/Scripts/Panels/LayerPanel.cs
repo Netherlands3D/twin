@@ -326,7 +326,6 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.SelectLayerItem.AddListener(SelectItemWithoutNotify);
             layerRowElement.DeselectLayerItem.AddListener(DeselectWithoutNotify);
             layerRowElement.VisibilityToggleChanged.AddListener(ToggleVisibilityOfSelection);
-            // layerRowElement.IsExpandedChanged.AddListener(OnIsExpandedChanged);
 
             if (layerData.IsSelected)
             {
