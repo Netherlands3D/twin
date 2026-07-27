@@ -81,6 +81,9 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
 
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            ServiceLocator.GetService<LegendBehaviour>().RegisterLayer(urlPropertyData.Url, auth, LayerData.ActiveSelf);
+            
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
@@ -127,8 +130,8 @@ namespace Netherlands3D.Functionalities.Wms
             base.RegisterEventListeners();
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            ServiceLocator.GetService<LegendBehaviour>().RegisterLayer(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
+            // var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            // ServiceLocator.GetService<LegendBehaviour>().RegisterLayer(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
         }
 
         protected override void UnregisterEventListeners()
