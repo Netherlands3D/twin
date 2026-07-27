@@ -31,7 +31,7 @@ public class WMTSTile : VisualElement
     {
         zoomLevel = zoom;
         tileKey = key;
-        name = tileKey.x + "/" + tileKey.y;
+        name = tileKey.x + "/" + tileKey.y +  "/" + zoomLevel;
 
         minimapConfig = config;
 
