@@ -265,12 +265,12 @@ namespace Netherlands3D.UI.Components
             if (Time.time < lastScrollTime + scrollTimeOut)
                 return;
 
-            if (evt.delta.y > 0)
+            if (evt.delta.y < 0)
             {
                 ZoomIn(evt.localMousePosition);
                 lastScrollTime = Time.time;
             }
-            else if (evt.delta.y < 0)
+            else if (evt.delta.y > 0)
             {
                 ZoomOut(evt.localMousePosition);
                 lastScrollTime = Time.time;
