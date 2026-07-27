@@ -2,6 +2,8 @@ using System.Windows.Forms;
 using Netherlands3D.Coordinates;
 using Netherlands3D.JavascriptConnection;
 using Netherlands3D.Minimap;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Panels;
@@ -18,8 +20,8 @@ namespace Netherlands3D.UI.Components
     {
         private VisualElement mapLayer;
         private VisualElement overlayLayer;
-        private Icon locationPin;
 
+        private Icon locationPin;
         private bool showPin = true;
 
         WMTSPanel wmtsPanel;
@@ -47,14 +49,11 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        [UxmlAttribute("bottom-left")]
-        public Vector2Int BottomLeft { get; set; } //vector2Int is parsable in uxml
+        [UxmlAttribute("bottom-left")] public Vector2Int BottomLeft { get; set; } //vector2Int is parsable in uxml
 
-        [UxmlAttribute("top-right")]
-        public Vector2Int TopRight { get; set; } //vector2Int is parsable in uxml
+        [UxmlAttribute("top-right")] public Vector2Int TopRight { get; set; } //vector2Int is parsable in uxml
 
-        [UxmlAttribute("layer-start-index")]
-        public int LayerStartIndex { get; set; } = 6;
+        [UxmlAttribute("layer-start-index")] public int LayerStartIndex { get; set; } = 6;
 
         public MapViewport()
         {
@@ -79,8 +78,15 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<WheelEvent>(OnScroll);
             RegisterCallback<ClickEvent>(OnPointerClick);
+            RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
+            wmtsPanel.TilesChanged.AddListener(UpdateLocationPin);
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
+        }
+
+        private void OnViewportGeometryChanged(GeometryChangedEvent evt)
+        {
+            UpdateLocationPin();
         }
 
         /// Provides the WMTS config and RD bounds that can't be authored via UXML.
@@ -90,9 +96,28 @@ namespace Netherlands3D.UI.Components
         {
             //todo: can this function be removed somehow?
             wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
+            UpdateLocationPin();
+            var cameraService = ServiceLocator.GetService<CameraService>();
+            cameraService.OnPositionChanged.AddListener(OnCameraPositionChanged);
         }
 
+        private void OnCameraPositionChanged(Vector3 newPosition)
+        {
+            UpdateLocationPin();
+        }
 
+        public void UpdateLocationPin()
+        {
+            var activeCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
+            var cameraPosition = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RDNAP);
+            Vector2 mapPosition = wmtsPanel.DeterminePositionOnMap(cameraPosition);
+
+            locationPin.style.translate = new Translate(mapPosition.x, mapPosition.y);
+            locationPin.transform.scale = Vector3.one / wmtsPanel.transform.scale.x;
+            
+            locationPin.BringToFront(); //ensure the pin is always on top of the tiles
+        }
+        
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
             // Ensure pin visibility matches attribute

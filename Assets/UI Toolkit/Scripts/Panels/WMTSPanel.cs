@@ -6,6 +6,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -47,7 +48,8 @@ namespace Netherlands3D.UI.Panels
         private readonly Dictionary<int, Dictionary<Vector2, WMTSTile>> tileLayers = new();
         private bool initialized;
 
-
+        public UnityEvent TilesChanged = new();
+        
         public WMTSPanel()
         {
             this.CloneComponentTree("Panels");
@@ -104,8 +106,7 @@ namespace Netherlands3D.UI.Panels
             Clamp();
             UpdateLayerTiles();
         }
-
-
+        
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             var cameraService = ServiceLocator.GetService<CameraService>();
@@ -336,6 +337,8 @@ namespace Netherlands3D.UI.Panels
                 tileList[tileKey].Dispose();
                 tileList.Remove(tileKey);
             }
+
+            TilesChanged.Invoke();
         }
     }
 }

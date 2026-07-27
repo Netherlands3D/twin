@@ -17,6 +17,11 @@
     overflow: hidden;
 }
 
+.map-viewport__pin
+{
+    position: absolute;
+}
+
 .map-viewport__overlay {
     position: absolute;
     left: 0;
