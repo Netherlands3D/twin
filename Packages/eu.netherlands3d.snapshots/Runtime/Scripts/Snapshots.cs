@@ -18,7 +18,6 @@
 
 using SFB;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -87,21 +86,18 @@ namespace Netherlands3D.Snapshots
         public LayerMask SnapshotLayers { get => snapshotLayers; set => snapshotLayers = value;}
 
         public void UseViewSize(bool useViewSize) => this.useViewSize = useViewSize;
+        
+        private void Start()
+        {
+            if (!sourceCamera) sourceCamera = Camera.main;
+        }
 
         public void TakeSnapshot()
         {
-            StartCoroutine(TakeSnapShotEndOfFrame());
-        }
-
-        private IEnumerator TakeSnapShotEndOfFrame()
-        {
-            yield return new WaitForEndOfFrame();
             var snapshotWidth = (useViewSize) ? Screen.width : width;
             var snapshotHeight = (useViewSize) ? Screen.height : height;
 
-            // Cache camera retrieval, but ensure we check each time whether the camera is valid
-            if (!sourceCamera) sourceCamera = Camera.main;
-            byte[] bytes = Snapshot.ToImageBytes(1920, 1080, sourceCamera, snapshotLayers, SnapshotFileType.png);
+            byte[] bytes = Snapshot.ToImageBytes(snapshotWidth, snapshotHeight, sourceCamera, snapshotLayers, fileType);
 
             var path = DetermineSaveLocation();
 
