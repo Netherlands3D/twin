@@ -49,7 +49,7 @@ namespace Netherlands3D.UI.Panels
         private bool initialized;
 
         public UnityEvent TilesChanged = new();
-        
+
         public WMTSPanel()
         {
             this.CloneComponentTree("Panels");
@@ -106,7 +106,7 @@ namespace Netherlands3D.UI.Panels
             Clamp();
             UpdateLayerTiles();
         }
-        
+
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             var cameraService = ServiceLocator.GetService<CameraService>();
@@ -242,7 +242,7 @@ namespace Netherlands3D.UI.Panels
             //Based on tile numbering type
             double tileOffsetXd = Math.Floor(offsetXd);
             double tileOffsetYd = Math.Floor(offsetYd);
-            
+
             tileOffset = new Vector2((float)tileOffsetXd, (float)tileOffsetYd);
             // Fractional remainder is always in [0,1) - small magnitude, safe to store as float.
             layerTilesOffset = new Vector2((float)(offsetXd - tileOffsetXd), (float)(offsetYd - tileOffsetYd));
@@ -282,20 +282,20 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateLayerTiles()
         {
-            if (parent == null || !tileLayers.TryGetValue(layerIndex, out var tileList)) return;
+            if (parent == null || !tileLayers.TryGetValue(layerIndex, out var tileList))
+                return;
 
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
-            var localScale = transform.scale;
             var localPosition = transform.position;
+            var localScale = transform.scale;
+            
+            float tileStepX = tileSize * localScale.x;
+            float tileStepY = tileSize * localScale.y;
 
-            var tileSizeX = tileSize * localScale.x;
-            var tileSizeY = tileSize * localScale.y;
-
-            var startX = Mathf.Max(0, Mathf.FloorToInt(-localPosition.x / tileSizeX));
-            var startY = Mathf.Max(0, Mathf.FloorToInt(-localPosition.y / tileSizeY));
-
-            var endX = Mathf.CeilToInt((viewportSize.x - localPosition.x) / tileSizeX);
-            var endY = Mathf.CeilToInt((viewportSize.y - localPosition.y) / tileSizeY);
+            int startX = Mathf.Max(0, Mathf.FloorToInt(-localPosition.x / tileStepX));
+            int startY = Mathf.Max(0, Mathf.FloorToInt(-localPosition.y / tileStepY));
+            int endX = Mathf.CeilToInt((viewportSize.x - localPosition.x) / tileStepX);
+            int endY = Mathf.CeilToInt((viewportSize.y - localPosition.y) / tileStepY);
 
             var tilesToRemove = new List<Vector2>(tileList.Keys);
 
@@ -303,21 +303,27 @@ namespace Netherlands3D.UI.Panels
             {
                 for (int y = startY; y <= endY; y++)
                 {
-                    Vector2 tileKey;
-
-                    float tileXPosition = (x * tileSize) - (layerTilesOffset.x * tileSize);
-                    float tileYPosition = (y * tileSize) - (layerTilesOffset.y * tileSize);
+                    int tileCol;
+                    int tileRow;
 
                     switch (minimapConfig.TileMatrixSet.minimapOriginAlignment)
                     {
                         case TileMatrixSet.OriginAlignment.BottomLeft:
-                            tileKey = new Vector2(x + tileOffset.x, (float)(divide - 1) - (y + tileOffset.y));
+                            tileCol = x + (int)tileOffset.x;
+                            tileRow = (int)(divide - 1) - (y + (int)tileOffset.y);
                             break;
+
                         case TileMatrixSet.OriginAlignment.TopLeft:
                         default:
-                            tileKey = new Vector2(x + tileOffset.x, y + tileOffset.y);
+                            tileCol = x + (int)tileOffset.x;
+                            tileRow = y + (int)tileOffset.y;
                             break;
                     }
+
+                    Vector2 tileKey = new Vector2(tileCol, tileRow);
+                    
+                    float tileXPosition = (x - layerTilesOffset.x) * tileSize;
+                    float tileYPosition = (y - layerTilesOffset.y) * tileSize;
 
                     if (!tileList.TryGetValue(tileKey, out _))
                     {

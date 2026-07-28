@@ -24,7 +24,7 @@ namespace Netherlands3D.UI.Components
         private Icon locationPin;
         private bool showPin = true;
 
-        WMTSPanel wmtsPanel;
+        private WMTSPanel wmtsPanel;
         
         private float zoomScale = 0.0f;
         private float minZoomScale = 0.0f;
