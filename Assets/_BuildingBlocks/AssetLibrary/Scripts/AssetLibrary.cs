@@ -108,12 +108,6 @@ namespace Netherlands3D.AssetLibrary
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }
 
-        public void OpenTool(ToolItem item)
-        {
-            Tool tool = item.ScriptableToolObject as Tool;
-            tool.Open();
-        }
-
         public void Trigger(DataService dataService)
         {
             var endpoint = dataService.Endpoint;

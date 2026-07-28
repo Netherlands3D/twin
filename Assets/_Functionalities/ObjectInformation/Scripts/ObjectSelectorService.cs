@@ -17,6 +17,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -156,8 +157,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }  
 
-        private bool IsColliderClicked()
+        private bool IsColliderClicked(out HierarchicalObjectLayerGameObject ctxObject)
         {
+            ctxObject = null;
             //dont select any feature if a gizmo handle is interacted with
             //todo make sure these colliders are associated with gizmo colliders
             Vector2 screenPoint = Pointer.current.position.ReadValue();
@@ -171,6 +173,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Collider col = hit.collider;
                     if (col != null)
                     {
+                        HierarchicalObjectLayerGameObject target = col.GetComponent<HierarchicalObjectLayerGameObject>();
+                        if(target != null)
+                            ctxObject = target;
+                        
                         return true;
                     }
                 }
@@ -183,38 +189,40 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if(App.UIRoot.IsPointerOverUI())
                 return;
 
-            if (IsColliderClicked())
+            HierarchicalObjectLayerGameObject ctxObject;
+            if (IsColliderClicked(out ctxObject))
             {
+                if (ctxObject != null && !ctxObject.LayerData.IsSelected)
+                {
+                    ctxObject.LayerData.SelectLayer(true);
+                    OnSelectLayer.Invoke(ctxObject.LayerData);
+                }
                 Deselect();
                 return;
             }
             
-            //is the layerpanel or objectinspector tool active?
-            if (ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer).IsOpen)
+            string previousSelectedBagId = null;
+            bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
+            if (!isModifierPressed)
             {
-                string previousSelectedBagId = null;
-                bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
-                if (!isModifierPressed)
-                {
-                    previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
-                    Deselect();
-                }
-                //the following method calls need to run in order!
-                string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
-                IMapping mapping = FindObjectMapping();
-                bool mappingVisible = IsMappingVisible(mapping, bagId);
-                
-                //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
-                if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
-                {
-                    lastSelectedMappingLayerData.DeselectLayer();
-                    lastSelectedMappingLayerData = null;
-                }
-                if (mapping is MeshMapping map) 
-                    ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed);   
-                else if (mapping is FeatureMapping feature) 
-                    ProcessFeatureMappingSelection(feature);
+                previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
+                Deselect();
             }
+            //the following method calls need to run in order!
+            string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
+            IMapping mapping = FindObjectMapping();
+            bool mappingVisible = IsMappingVisible(mapping, bagId);
+                
+            //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
+            if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
+            {
+                lastSelectedMappingLayerData.DeselectLayer();
+                lastSelectedMappingLayerData = null;
+            }
+            if (mapping is MeshMapping map) 
+                ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed);   
+            else if (mapping is FeatureMapping feature) 
+                ProcessFeatureMappingSelection(feature);
         }
 
         private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed)
