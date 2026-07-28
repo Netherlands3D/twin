@@ -1,7 +1,6 @@
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
-using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
@@ -10,9 +9,7 @@ using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.UI;
-using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -29,7 +26,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
-        public UnityEvent<LayerData> OnSelectDifferentLayer = new();
         public UnityEvent<LayerData> OnSelectLayer = new();
         public UnityEvent OnNoLayerSelected = new();
 
@@ -44,14 +40,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private float lastTimeClicked = 0;
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
-
-        [SerializeField] private Tool[] activeForTools;
         [SerializeField] private Material selectionMaterial;
         
         [SerializeField] private InputActionAsset inputActionAsset;
         private InputAction leftClickAction;
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
 
+        private ToolService toolService;
 
         public void BlockBagId(string bagId, bool block)
         {
@@ -91,25 +86,27 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
-            foreach (Tool tool  in activeForTools) 
-                tool.onClose.AddListener(Deselect);
-            
             var map = inputActionAsset.FindActionMap("Camera", true);
             leftClickAction = map.FindAction("LeftClick", true);
 
             leftClickAction.performed += OnLeftClick;
             leftClickAction.Enable();
+            
+            toolService = Services.ServiceLocator.GetService<ToolService>();
+            
+            OnSelectLayer.AddListener(OpenLayerPanel);
+            OnNoLayerSelected.AddListener(CloseLayerPanel);
         }
 
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
-
-            foreach (Tool tool  in activeForTools) 
-                tool.onClose.RemoveListener(Deselect);
             
             leftClickAction.performed -= OnLeftClick;
             leftClickAction.Disable();
+            
+            OnSelectLayer.RemoveListener(OpenLayerPanel);
+            OnNoLayerSelected.RemoveListener(CloseLayerPanel);
         }
 
         private void OnProjectChanged(ProjectData data)
@@ -121,12 +118,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnAddSelectedLayer(LayerData data)
         {
-            //we need to check this before Isclicked because it checks if its over the ui
-            if (ProjectData.Current.RootLayer.SelectedLayers.Count > 0 && ProjectData.Current.RootLayer.SelectedLayers.Last() != data)
-            {
-                Deselect();
-                OnSelectDifferentLayer.Invoke(data);
-            }
             lastSelectedLayerData = data;
         }
 
@@ -147,15 +138,27 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
         
+      
         private void Start()
         {
+            
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
             foreach (ObjectMapping mapping in alreadyActiveMappings)
             {
                 OnAddObjectMapping(mapping);
             }
-        }  
+        }
+
+        private void OpenLayerPanel(LayerData layer)
+        {
+            toolService.GetTool(ToolType.Layer).Open();
+        }
+
+        private void CloseLayerPanel()
+        {
+            toolService.GetTool(ToolType.Layer).Close();
+        }
 
         private bool IsColliderClicked(out HierarchicalObjectLayerGameObject ctxObject)
         {

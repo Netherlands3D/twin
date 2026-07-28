@@ -47,8 +47,11 @@ namespace Netherlands3D.UI.Panels
 
             OnUpdate();
             
+            //todo this maybe should automatically happen by selecting the layer here? so we dont havev to spawn property panel / open layer tool
             PropertyPanelBehaviour propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
             propertyPanelBehaviour.SpawnPanel(target);
+            
+            ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer).Open();
         }
         
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
