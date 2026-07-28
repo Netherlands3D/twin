@@ -199,7 +199,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if(App.UIRoot.IsPointerOverUI())
                 return;
 
-            ProcessSelection();
+            ProcessSelection(true);
         }
         
         //keep this for now as this is triggering the context menu behaviour selection
@@ -208,10 +208,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if(App.UIRoot.IsPointerOverUI())
                 return;
 
-            ProcessSelection();
+            ProcessSelection(false);
         }
 
-        public void ProcessSelection()
+        public void ProcessSelection(bool primary)
         {
             selectedVisualisation = null;
             HierarchicalObjectLayerGameObject ctxObject;
@@ -235,7 +235,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (!isModifierPressed)
             {
                 previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
-                Deselect();
+                if(primary)
+                    Deselect();
             }
             //the following method calls need to run in order!
             string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
@@ -249,14 +250,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 lastSelectedMappingLayerData = null;
             }
             if (mapping is MeshMapping map) 
-                ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed);   
+                ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed, primary);   
             else if (mapping is FeatureMapping feature) 
                 ProcessFeatureMappingSelection(feature);
             else
                 OnNoLayerSelected.Invoke();
         }
 
-        private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed)
+        private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed, bool primary)
         {
             LayerData layerData = map.LayerData;
             if (!mappingVisible)
@@ -273,7 +274,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 selectedMappings.Add(bagId, map);
                 SelectSubObjectWithBagId?.Invoke(map, bagId);
             }
-            else
+            else if(primary)
             {
                 DeselectBagId(bagId);
                 selectedMappings.Remove(bagId);
