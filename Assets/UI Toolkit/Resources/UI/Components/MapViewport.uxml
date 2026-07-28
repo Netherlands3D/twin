@@ -5,15 +5,8 @@
     xmlns:nl3dP="Netherlands3D.UI.Panels"
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     editor-extension-mode="False"
-    class="map-viewport"
->
+    class="map-viewport">
     <nl3dP:WMTSPanel class="map-viewport__tile-container" name="MapViewportRoot">
-        <!-- Map image/texture placeholder (TODO: set background-image / texture) -->
-<!--        <ui:VisualElement class="map-viewport__map" name="MapLayer" />-->
-
-        <!-- Overlay: pin + other overlay content -->
-<!--        <ui:VisualElement class="map-viewport__overlay" name="OverlayLayer" picking-mode="Ignore">-->
-            <nl3d:Icon name="LocationPin" class="map-viewport__pin" picking-mode="Ignore" />
-<!--        </ui:VisualElement>-->
-        </nl3dP:WMTSPanel>
+        <nl3d:Icon name="LocationPin" class="map-viewport__pin" picking-mode="Ignore" />
+    </nl3dP:WMTSPanel>
 </ui:UXML>

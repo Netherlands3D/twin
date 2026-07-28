@@ -25,7 +25,7 @@ namespace Netherlands3D.UI.Components
         private bool showPin = true;
 
         private WMTSPanel wmtsPanel;
-        
+
         private float zoomScale = 0.0f;
         private float minZoomScale = 0.0f;
         private float maxZoomScale = 10.0f;
@@ -57,7 +57,7 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            
+
             locationPin = this.Q<Icon>("LocationPin");
             locationPin.style.transformOrigin = new TransformOrigin(Length.Percent(50), Length.Percent(100));
 
@@ -84,12 +84,13 @@ namespace Netherlands3D.UI.Components
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
         }
-        
+
         private void OnPointerEnter(PointerEnterEvent evt)
         {
             EnableInClassList("expanded", true);
+            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
         }
-        
+
         private void OnPointerLeave(PointerLeaveEvent evt)
         {
             if (isDragging)
@@ -98,6 +99,7 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
+            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
             EnableInClassList("expanded", false);
         }
 
@@ -136,7 +138,7 @@ namespace Netherlands3D.UI.Components
             locationPin.transform.scale = Vector3.one / wmtsPanel.transform.scale.x;
             locationPin.BringToFront(); //ensure the pin is always on top of the tiles
         }
-        
+
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
             // Ensure pin visibility matches attribute
@@ -150,44 +152,6 @@ namespace Netherlands3D.UI.Components
 
             lastScrollTime = -scrollTimeOut;
         }
-
-        /// <summary>
-        /// When the user starts interacting with the map
-        /// </summary>
-        private void StartedMapInteraction()
-        {
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
-
-            // StopAllCoroutines();
-        }
-
-        /// <summary>
-        /// When the user stops interacting with the map
-        /// </summary>
-        private void StoppedMapInteraction()
-        {
-            wmtsPanel.CenterPointerInView = true;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
-
-            // StopAllCoroutines();
-        }
-
-        /// <summary>
-        /// Scale the map over a set origin
-        /// </summary>
-        /// <param name="scaleOrigin"></param>
-        /// <param name="newScale"></param>
-        // public void ScaleMapOverOrigin(Vector3 scaleOrigin, Vector3 newScale)
-        // {
-        //     var targetPosition = mapTiles.position;
-        //     var origin = scaleOrigin;
-        //     var newOrigin = targetPosition - origin;
-        //     var relativeScale = newScale.x / mapTiles.localScale.x;
-        //     var finalPosition = origin + newOrigin * relativeScale;
-        //
-        //     mapTiles.localScale = newScale;
-        //     mapTiles.position = finalPosition;
-        // }
 
         /// <summary>
         /// Zoom in on the minimap
@@ -260,23 +224,25 @@ namespace Netherlands3D.UI.Components
         private void OnDragStarted(Vector2 startPosition)
         {
             isDragging = true;
-            wmtsPanel.CenterPointerInView = false;
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRABBING);
-            StartedMapInteraction();
-            //dragOffset = mapTiles.position - (Vector3)eventData.position;
+            wmtsPanel.CenterPointerInView = false;
         }
 
         private void OnDragging(Vector2 delta)
         {
             wmtsPanel.Pan(delta);
-            // mapTiles.transform.position = (Vector3)eventData.position + dragOffset;
         }
 
         private void OnDragEnded(Vector2 endPosition)
         {
             isDragging = false;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
-            StoppedMapInteraction();
+            wmtsPanel.CenterPointerInView = true;
+            Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, Pointer.current.position.ReadValue());
+
+            if (worldBound.Contains(panelPos))
+                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER); //pointer is still in the panel
+            else
+                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
         }
 
         public void OnScroll(WheelEvent evt)
@@ -303,11 +269,11 @@ namespace Netherlands3D.UI.Components
 
         private void OnPointerUp(PointerUpEvent evt)
         {
-            if(unexpandOnMouseUp)
+            if (unexpandOnMouseUp)
                 EnableInClassList("expanded", false);
 
             unexpandOnMouseUp = false;
-            
+
             if (Vector2.Distance(pointerDownPosition, evt.position) > dragDeadzone) return; //we cannot use the manipulator event functions to set isDragging to true or false, because this causes a race-condition.
 
             Debug.Log("Clicked on minimap");
