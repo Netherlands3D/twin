@@ -22,3 +22,9 @@
 .default-hud__properties-zone .default-hud__properties-zone-column {
     margin-left: var(--spacing-2);
 }
+
+.default-hud__bottom-section{
+    align-items: flex-end; 
+    flex-direction: row;
+    max-height: var(--spacing-11);
+}
