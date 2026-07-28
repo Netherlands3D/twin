@@ -98,6 +98,8 @@ namespace Netherlands3D.UI.Panels
         private void UpdateThumbnail(BagDataService.BagData bagData)
         {
             Dictionary<string, Coordinate> buildingIds = buildingPropertyData.BuildingIds;
+            if(buildingIds == null) return;
+            
             Coordinate coordinate = buildingIds[bagData.id];
             bagLink.text = bagData.id;
             bagLink.url = bagData.url;

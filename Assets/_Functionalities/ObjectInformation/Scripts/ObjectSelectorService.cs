@@ -232,7 +232,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             string previousSelectedBagId = null;
             bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
-            if (!isModifierPressed)//dont deselect when secondary buttons
+            if (!isModifierPressed)
             {
                 previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
                 Deselect();
@@ -273,7 +273,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 selectedMappings.Add(bagId, map);
                 SelectSubObjectWithBagId?.Invoke(map, bagId);
             }
-            else  
+            else if(!isModifierPressed || primary)
             {
                 DeselectBagId(bagId);
                 selectedMappings.Remove(bagId);
