@@ -4,6 +4,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Minimap;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
