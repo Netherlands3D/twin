@@ -7,9 +7,9 @@
     /* grenzen: voorkomt te klein/te groot */
     aspect-ratio: 1.6;
     min-width: 256px;
-    max-width: 320px; /* TODO: test on different screensizes if this is to big */
-    min-height: 160px;
-    max-height: 200px; /* TODO: test on different screensizes if this is to big */
+    max-width: 512px; /* TODO: test on different screensizes if this is to big */
+    min-height: 256px;
+    max-height: 512px; /* TODO: test on different screensizes if this is to big */
 
     border-radius: var(--spacing-2);
     border-width: 0px;
