@@ -7,8 +7,8 @@
     
     /* grenzen: voorkomt te klein/te groot */
     aspect-ratio: 1.6;
-    min-width: 256px;
-    max-width: 256px; /* TODO: test on different screensizes if this is to big */
+    min-width: 410px;
+    max-width: 410px; /* TODO: test on different screensizes if this is to big */
     min-height: 256px;
     max-height: 256px; /* TODO: test on different screensizes if this is to big */
 
@@ -18,8 +18,8 @@
     
     border-radius: var(--spacing-2);
     border-width: 0px;
-    background-color: red;
-    overflow: hidden;
+    background-color: var(--color-white);
+    overflow: hidden; 
 }
 
 .map-viewport__pin
