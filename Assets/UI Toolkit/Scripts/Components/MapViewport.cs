@@ -1,4 +1,3 @@
-using System.Windows.Forms;
 using Netherlands3D.Coordinates;
 using Netherlands3D.JavascriptConnection;
 using Netherlands3D.Minimap;
@@ -32,8 +31,8 @@ namespace Netherlands3D.UI.Components
         private float scrollTimeOut = 0.05f;
         private float lastScrollTime;
         private UnityEvent<int> OnZoomChanged = new();
-
-        //todo: make +/- buttons for zooming
+        private Button zoomInButton;
+        private Button zoomOutButton;
 
         [UxmlAttribute("show-pin")]
         public bool ShowPin
@@ -63,9 +62,10 @@ namespace Netherlands3D.UI.Components
 
             wmtsPanel = this.Q<WMTSPanel>();
 
-            // TODO: Implement clickable map viewport rendering.
-            // This element should later display a map rendered (e.g. via a RenderTexture bridge or a custom tile renderer).
-            // Pointer input (click/drag/scroll) should be forwarded to the map/navigation logic to place/update the pin and update coordinates.
+            zoomInButton = this.Q<Button>("ZoomIn");
+            zoomOutButton = this.Q<Button>("ZoomOut");
+            zoomInButton.RegisterCallback<ClickEvent>(OnZoomInClicked);
+            zoomOutButton.RegisterCallback<ClickEvent>(OnZoomOutClicked);
 
             var dragManipulator = new DragManipulator(dragDeadzone);
             dragManipulator.DragStarted.AddListener(OnDragStarted);
@@ -83,6 +83,16 @@ namespace Netherlands3D.UI.Components
             wmtsPanel.TilesChanged.AddListener(UpdateLocationPin); //make sure the pin stays in front of the tiles
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
+        }
+
+        private void OnZoomInClicked(ClickEvent evt)
+        {
+            ZoomIn(null);
+        }
+        
+        private void OnZoomOutClicked(ClickEvent evt)
+        {
+            ZoomOut(null);
         }
 
         private void OnPointerEnter(PointerEnterEvent evt)
@@ -123,6 +133,7 @@ namespace Netherlands3D.UI.Components
         private void OnCameraPositionChanged(Vector3 newPosition)
         {
             UpdateLocationPin();
+            wmtsPanel.MoveToPosition(newPosition);
         }
 
         public void UpdateLocationPin()
@@ -143,13 +154,7 @@ namespace Netherlands3D.UI.Components
         {
             // Ensure pin visibility matches attribute
             locationPin.style.display = showPin ? DisplayStyle.Flex : DisplayStyle.None;
-
             zoomScale = minZoomScale;
-
-            // var anchorOffset = rectTransform.pivot * defaultSizeDelta;
-            // rectTransform.pivot = new Vector2(0, 0);
-            // rectTransform.anchoredPosition -= anchorOffset;
-
             lastScrollTime = -scrollTimeOut;
         }
 
@@ -201,22 +206,11 @@ namespace Netherlands3D.UI.Components
         /// <param name="useMouse"></param>
         private void ZoomTowardsLocation(Vector2? panelPosition)
         {
+            //todo: null does not zoom correctly
+            
             //worldBound is already reported in panel space for runtime UI Toolkit panels.
             var zoomTarget = panelPosition ?? (Vector2)worldBound.center;
-
             wmtsPanel.ScaleMapOverOrigin(zoomTarget, Vector3.one * Mathf.Pow(2.0f, zoomScale));
-
-            // var zoomTarget = Vector3.zero;
-            // if (useMouse)
-            // {
-            //     zoomTarget = Mouse.current.position.ReadValue();
-            // }
-            // else
-            // {
-            //     zoomTarget = rectTransform.position + new Vector3(rectTransform.sizeDelta.x * 0.5f, rectTransform.sizeDelta.y * 0.5f);
-            // }
-            //
-            // ScaleMapOverOrigin(zoomTarget, Vector3.one * Mathf.Pow(2.0f, zoomScale));
         }
 
         #region Inputs

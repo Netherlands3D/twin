@@ -41,7 +41,6 @@ namespace Netherlands3D.UI.Panels
         private double scaleDenominator = 12288000;
         private double mapSizeInMeters;
         private Vector2 boundsInMeters;
-        private Vector2 boundsTiles;
         private Vector2 tileOffset;
         private Vector2 layerTilesOffset;
         private Vector2RD minimapTopLeft = new Vector2RD(-285401.92, 903401.92);
@@ -247,9 +246,6 @@ namespace Netherlands3D.UI.Panels
             tileOffset = new Vector2((float)tileOffsetXd, (float)tileOffsetYd);
             // Fractional remainder is always in [0,1) - small magnitude, safe to store as float.
             layerTilesOffset = new Vector2((float)(offsetXd - tileOffsetXd), (float)(offsetYd - tileOffsetYd));
-
-            boundsTiles.x = Mathf.CeilToInt((float)(boundsInMeters.x / tileSizeInMeters));
-            boundsTiles.y = Mathf.CeilToInt((float)(boundsInMeters.y / tileSizeInMeters));
         }
 
         public void ScaleMapOverOrigin(Vector2 origin, Vector3 newScale)
@@ -344,6 +340,18 @@ namespace Netherlands3D.UI.Panels
             }
 
             TilesChanged.Invoke();
+        }
+
+        public void MoveToPosition(Vector3 newPosition)
+        {
+            //todo: implement this function
+            
+            // if (!initialized) return;
+            //
+            // transform.position = newPosition;
+            // Clamp();
+            // UpdateLayerTiles();
+            //
         }
     }
 }
