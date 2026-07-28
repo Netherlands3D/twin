@@ -123,9 +123,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnRemoveSelectedLayer(LayerData data)
         {
-            // if(App.UIRoot.IsPointerOverUI())
-            //     return;
-            
             //we need to check this before Isclicked because it checks if its over the ui
             //this is to deselect the layer when there is clicked outside of any selectable from this layer
             if(ProjectData.Current.RootLayer.SelectedLayers.Count == 0)
@@ -138,7 +135,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
             }
         }
-        
       
         private void Start()
         {
