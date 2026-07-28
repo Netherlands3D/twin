@@ -7,4 +7,5 @@
     editor-extension-mode="False"
     name="WMTSPanel"
     class="wmts-panel">
+    <ui:VisualElement name="TileContainer"/>
 </ui:UXML>

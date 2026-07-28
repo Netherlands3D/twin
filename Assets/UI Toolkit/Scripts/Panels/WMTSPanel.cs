@@ -24,6 +24,7 @@ namespace Netherlands3D.UI.Panels
         [Tooltip("The start indexLayer of the map")]
         private int layerStartIndex = 6;
 
+        private VisualElement tileContainer;
         private MinimapConfig minimapConfig;
         private Vector2RD topRight;
         private Vector2RD bottomLeft;
@@ -47,15 +48,14 @@ namespace Netherlands3D.UI.Panels
 
         private readonly Dictionary<int, Dictionary<Vector2, WMTSTile>> tileLayers = new();
         private bool initialized;
-
-        public UnityEvent TilesChanged = new();
-
+        
         public WMTSPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
             pickingMode = PickingMode.Ignore; // MapViewport is the fixed viewport that handles all pointer input, this element moves and scales, so we don't handle input here.
+            tileContainer = this.Q<VisualElement>("TileContainer");
         }
 
         public void Initialize(MinimapConfig config, Vector2RD bottomLeft, Vector2RD topRight, int layerStartIndex = 6)
@@ -325,7 +325,7 @@ namespace Netherlands3D.UI.Panels
                     if (!tileList.TryGetValue(tileKey, out _))
                     {
                         var mapTile = new WMTSTile();
-                        mapTile.Initialize(this, layerIndex, tileSize, tileXPosition, tileYPosition, tileKey, minimapConfig);
+                        mapTile.Initialize(tileContainer, layerIndex, tileSize, tileXPosition, tileYPosition, tileKey, minimapConfig);
                         tileList.Add(tileKey, mapTile);
                     }
 
@@ -338,8 +338,6 @@ namespace Netherlands3D.UI.Panels
                 tileList[tileKey].Dispose();
                 tileList.Remove(tileKey);
             }
-
-            TilesChanged.Invoke();
         }
 
         public void MoveToPosition(Vector3 newWorldPosition)

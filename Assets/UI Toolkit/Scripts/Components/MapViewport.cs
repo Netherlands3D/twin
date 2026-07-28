@@ -86,11 +86,10 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<PointerDownEvent>(OnPointerDown);
             RegisterCallback<PointerUpEvent>(OnPointerUp);
             RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
-            wmtsPanel.TilesChanged.AddListener(UpdateLocationPin); //make sure the pin stays in front of the tiles
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
         }
-        
+
         /// Provides the WMTS config and RD bounds that can't be authored via UXML.
         /// Must be called once before the map is usable.
         /// </summary>
@@ -98,7 +97,6 @@ namespace Netherlands3D.UI.Components
         {
             //todo: can this function be removed somehow?
             wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
-            UpdateLocationPin();
             var cameraService = ServiceLocator.GetService<CameraService>();
             activeCamera = cameraService.ActiveCamera;
                 OnCameraPositionChanged(activeCamera.transform.position);
@@ -141,6 +139,7 @@ namespace Netherlands3D.UI.Components
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
         {
             UpdateLocationPin();
+            UpdateFrustum();
         }
         
         private void OnCameraPositionChanged(Vector3 newPosition)
@@ -167,7 +166,6 @@ namespace Netherlands3D.UI.Components
 
             locationPin.style.translate = new Translate(pinPosition.x, pinPosition.y);
             locationPin.transform.scale = Vector3.one / wmtsPanel.transform.scale.x;
-            locationPin.BringToFront(); //ensure the pin is always on top of the tiles
         }
         
         private void UpdateFrustum()
@@ -185,7 +183,6 @@ namespace Netherlands3D.UI.Components
                 //Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
                 cameraFrustumQuad.Redraw();
             }
-            cameraFrustumQuad.BringToFront();
         }
 
 
