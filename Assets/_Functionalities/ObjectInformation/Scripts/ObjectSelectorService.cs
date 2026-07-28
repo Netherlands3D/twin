@@ -22,6 +22,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public SubObjectSelector SubObjectSelector => subObjectSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
 
+        public HierarchicalObjectLayerGameObject SelectedVisualisation => selectedVisualisation;
+
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
@@ -32,6 +34,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private SubObjectSelector subObjectSelector;
         private List<IMapping> orderedMappings = new();
         private Dictionary<string, IMapping> selectedMappings = new();
+        private HierarchicalObjectLayerGameObject selectedVisualisation;
         private Vector3 lastWorldClickedPosition;
         private PointerToWorldPosition pointerToWorldPosition;
         private float minClickDistance = 10;
@@ -42,7 +45,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         [SerializeField] private Material selectionMaterial;
         
         [SerializeField] private InputActionAsset inputActionAsset;
-        private InputAction leftClickAction;
+        private InputAction leftClickAction, rightClickAction;
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
 
         private ToolService toolService;
@@ -87,9 +90,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             var map = inputActionAsset.FindActionMap("Camera", true);
             leftClickAction = map.FindAction("LeftClick", true);
+            rightClickAction = map.FindAction("RightClick", true);
 
             leftClickAction.performed += OnLeftClick;
             leftClickAction.Enable();
+            
+            rightClickAction.performed += OnRightClick;
+            rightClickAction.Enable();
             
             toolService = Services.ServiceLocator.GetService<ToolService>();
             
@@ -103,6 +110,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             leftClickAction.performed -= OnLeftClick;
             leftClickAction.Disable();
+            
+            rightClickAction.performed -= OnRightClick;
+            rightClickAction.Disable();
             
             OnSelectLayer.RemoveListener(OpenLayerPanel);
             OnNoLayerSelected.RemoveListener(CloseLayerPanel);
@@ -137,7 +147,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
       
         private void Start()
         {
-            
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
             foreach (ObjectMapping mapping in alreadyActiveMappings)
@@ -164,6 +173,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             Vector2 screenPoint = Pointer.current.position.ReadValue();
             Ray ray = Camera.main.ScreenPointToRay(screenPoint);
             int hitCount = Physics.RaycastNonAlloc(ray, selectedColliderHits, Mathf.Infinity);
+            //we have to loop through all potential colliders in case of a gizmo handle on top of another visualisation
+            bool hasHit = false;
             if (hitCount > 0)
             {
                 for (int i = 0; i < hitCount; i++)
@@ -175,12 +186,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         HierarchicalObjectLayerGameObject target = col.GetComponent<HierarchicalObjectLayerGameObject>();
                         if(target != null)
                             ctxObject = target;
-                        
-                        return true;
+
+                        hasHit = true;
                     }
                 }
             }
-            return false;
+            return hasHit;
         }
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
@@ -188,12 +199,31 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if(App.UIRoot.IsPointerOverUI())
                 return;
 
+            ProcessSelection();
+        }
+        
+        //keep this for now as this is triggering the context menu behaviour selection
+        private void OnRightClick(InputAction.CallbackContext ctx)
+        {
+            if(App.UIRoot.IsPointerOverUI())
+                return;
+
+            ProcessSelection();
+        }
+
+        public void ProcessSelection()
+        {
+            selectedVisualisation = null;
             HierarchicalObjectLayerGameObject ctxObject;
             if (IsColliderClicked(out ctxObject))
             {
-                if (ctxObject != null && !ctxObject.LayerData.IsSelected)
+                if (ctxObject != null)
                 {
-                    ctxObject.LayerData.SelectLayer(true);
+                    selectedVisualisation = ctxObject;
+                    if (!ctxObject.LayerData.IsSelected)
+                    {
+                        ctxObject.LayerData.SelectLayer(true);
+                    }
                     OnSelectLayer.Invoke(ctxObject.LayerData);
                 }
                 Deselect();
@@ -236,7 +266,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 layerData.SelectLayer(true);
                     
             lastSelectedMappingLayerData = layerData;
-            OnSelectLayer.Invoke(layerData);
 
             if (!selectedMappings.ContainsKey(bagId) && previousBagId != bagId)
             {
@@ -250,6 +279,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 selectedMappings.Remove(bagId);
                 SelectSubObjectWithBagId?.Invoke(selectedMappings.Count > 0 ? map : null, bagId);
             }
+            
+            OnSelectLayer.Invoke(layerData);
         }
 
         public void SelectBagId(string bagId, Coordinate coordinate)
@@ -270,7 +301,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 layerData.SelectLayer(true);
                     
             lastSelectedMappingLayerData = layerData;
-            OnSelectLayer.Invoke(layerData);
             SelectFeatureMapping(feature);
 
             string key = feature.Id;
@@ -288,6 +318,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             selectedMappings.TryAdd(key, feature);
             SelectFeature?.Invoke(feature);
+            OnSelectLayer.Invoke(layerData);
         }
 
         public T GetReplacedMapping<T>(T mapping) where T : IMapping
