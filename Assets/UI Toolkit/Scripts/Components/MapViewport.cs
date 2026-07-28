@@ -199,18 +199,25 @@ namespace Netherlands3D.UI.Components
                 OnZoomChanged.Invoke((int)zoomScale);
             }
         }
-
+        
         /// <summary>
         /// Zoom on a given location on the minimap
         /// </summary>
         /// <param name="useMouse"></param>
         private void ZoomTowardsLocation(Vector2? panelPosition)
         {
-            //todo: null does not zoom correctly
-            
-            //worldBound is already reported in panel space for runtime UI Toolkit panels.
-            var zoomTarget = panelPosition ?? (Vector2)worldBound.center;
-            wmtsPanel.ScaleMapOverOrigin(zoomTarget, Vector3.one * Mathf.Pow(2.0f, zoomScale));
+            Vector2 mapLocalTarget;
+            if (panelPosition.HasValue)
+            {
+                mapLocalTarget = wmtsPanel.parent.WorldToLocal(panelPosition.Value);
+            }
+            else
+            {
+                // Center of the viewport in its own local space already
+                mapLocalTarget = new Vector2(wmtsPanel.parent.resolvedStyle.width, wmtsPanel.parent.resolvedStyle.height) * 0.5f;
+            }
+
+            wmtsPanel.ScaleMapOverOrigin(mapLocalTarget, Vector3.one * Mathf.Pow(2.0f, zoomScale));
         }
 
         #region Inputs
@@ -246,12 +253,12 @@ namespace Netherlands3D.UI.Components
 
             if (evt.delta.y < 0)
             {
-                ZoomIn(evt.localMousePosition);
+                ZoomIn(evt.mousePosition);
                 lastScrollTime = Time.time;
             }
             else if (evt.delta.y > 0)
             {
-                ZoomOut(evt.localMousePosition);
+                ZoomOut(evt.mousePosition);
                 lastScrollTime = Time.time;
             }
         }
