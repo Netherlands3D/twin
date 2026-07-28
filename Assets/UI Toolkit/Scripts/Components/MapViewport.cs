@@ -24,6 +24,8 @@ namespace Netherlands3D.UI.Components
         private bool showPin = true;
 
         private WMTSPanel wmtsPanel;
+        private Camera activeCamera;
+        private CustomQuad cameraFrustumQuad;
 
         private float zoomScale = 0.0f;
         private float minZoomScale = 0.0f;
@@ -74,6 +76,8 @@ namespace Netherlands3D.UI.Components
             dragManipulator.Dragging.AddListener(OnDragging);
             dragManipulator.DragEnded.AddListener(OnDragEnded);
             this.AddManipulator(dragManipulator);
+            
+            cameraFrustumQuad = this.Q<CustomQuad>("CameraFrustum");
 
             RegisterCallback<PointerEnterEvent>(OnPointerEnter);
             RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
@@ -86,12 +90,27 @@ namespace Netherlands3D.UI.Components
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
         }
+        
+        /// Provides the WMTS config and RD bounds that can't be authored via UXML.
+        /// Must be called once before the map is usable.
+        /// </summary>
+        public void Initialize(MinimapConfig config)
+        {
+            //todo: can this function be removed somehow?
+            wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
+            UpdateLocationPin();
+            var cameraService = ServiceLocator.GetService<CameraService>();
+            activeCamera = cameraService.ActiveCamera;
+                OnCameraPositionChanged(activeCamera.transform.position);
+            cameraService.OnPositionChanged.AddListener(OnCameraPositionChanged);
+            cameraService.OnSwitchCamera.AddListener(OnCameraSwitch);
+        }
 
         private void OnZoomInClicked(ClickEvent evt)
         {
             ZoomIn(null);
         }
-        
+
         private void OnZoomOutClicked(ClickEvent evt)
         {
             ZoomOut(null);
@@ -115,33 +134,29 @@ namespace Netherlands3D.UI.Components
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, false);
+            var pos = ServiceLocator.GetService<CameraService>().ActiveCamera.transform.position;
+            wmtsPanel.MoveToPosition(pos);
         }
 
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
         {
             UpdateLocationPin();
         }
-
-        /// Provides the WMTS config and RD bounds that can't be authored via UXML.
-        /// Must be called once before the map is usable.
-        /// </summary>
-        public void Initialize(MinimapConfig config)
-        {
-            //todo: can this function be removed somehow?
-            wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
-            UpdateLocationPin();
-            var cameraService = ServiceLocator.GetService<CameraService>();
-            OnCameraPositionChanged(cameraService.ActiveCamera.transform.position);
-            cameraService.OnPositionChanged.AddListener(OnCameraPositionChanged);
-        }
-
+        
         private void OnCameraPositionChanged(Vector3 newPosition)
         {
             UpdateLocationPin();
+            UpdateFrustum();
             wmtsPanel.MoveToPosition(newPosition);
         }
-
-        public void UpdateLocationPin()
+        
+        private void OnCameraSwitch(Camera newCamera)
+        {
+            activeCamera = newCamera;
+            OnCameraPositionChanged(activeCamera.transform.position);
+        }
+        
+        private void UpdateLocationPin()
         {
             var activeCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
             var cameraPosition = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RDNAP);
@@ -154,6 +169,25 @@ namespace Netherlands3D.UI.Components
             locationPin.transform.scale = Vector3.one / wmtsPanel.transform.scale.x;
             locationPin.BringToFront(); //ensure the pin is always on top of the tiles
         }
+        
+        private void UpdateFrustum()
+        {
+            CameraExtents.GetRDExtent(activeCamera);
+            var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);
+            if (cameraCorners != null)
+            {
+                //Align quad with camera extent points
+                cameraFrustumQuad.QuadVertices[0] = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP));
+                cameraFrustumQuad.QuadVertices[1] = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP));
+                cameraFrustumQuad.QuadVertices[2] = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP));
+                cameraFrustumQuad.QuadVertices[3] = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP));
+
+                //Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
+                cameraFrustumQuad.Redraw();
+            }
+            cameraFrustumQuad.BringToFront();
+        }
+
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
