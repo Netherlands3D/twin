@@ -342,16 +342,25 @@ namespace Netherlands3D.UI.Panels
             TilesChanged.Invoke();
         }
 
-        public void MoveToPosition(Vector3 newPosition)
+        public void MoveToPosition(Vector3 newWorldPosition)
         {
-            //todo: implement this function
-            
-            // if (!initialized) return;
-            //
-            // transform.position = newPosition;
-            // Clamp();
-            // UpdateLayerTiles();
-            //
+            if (!initialized || !CenterPointerInView) return;
+
+            var rdCoordinate = new Coordinate(newWorldPosition).Convert(CoordinateSystem.RDNAP);
+            Vector2 mapPosition = DeterminePositionOnMap(rdCoordinate);
+
+            CenterOnLocalPosition(mapPosition);
+        }
+
+        private void CenterOnLocalPosition(Vector2 localPosition)
+        {
+            if (parent == null) return;
+
+            var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
+            transform.position = -(Vector3)(localPosition * transform.scale.x) + (Vector3)(viewportSize * 0.5f);
+
+            Clamp();
+            UpdateLayerTiles();
         }
     }
 }
