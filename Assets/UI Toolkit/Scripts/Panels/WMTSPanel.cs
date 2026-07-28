@@ -48,7 +48,9 @@ namespace Netherlands3D.UI.Panels
 
         private readonly Dictionary<int, Dictionary<Vector2, WMTSTile>> tileLayers = new();
         private bool initialized;
-        
+
+        public UnityEvent TilesChanged = new();
+
         public WMTSPanel()
         {
             this.CloneComponentTree("Panels");
@@ -338,6 +340,8 @@ namespace Netherlands3D.UI.Panels
                 tileList[tileKey].Dispose();
                 tileList.Remove(tileKey);
             }
+
+            TilesChanged.Invoke();
         }
 
         public void MoveToPosition(Vector3 newWorldPosition)

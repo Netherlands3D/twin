@@ -86,6 +86,7 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<PointerDownEvent>(OnPointerDown);
             RegisterCallback<PointerUpEvent>(OnPointerUp);
             RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
+            wmtsPanel.TilesChanged.AddListener(UpdateLocationPin); //make sure the pin stays in front of the tiles
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
         }
