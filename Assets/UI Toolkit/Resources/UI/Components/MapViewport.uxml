@@ -9,4 +9,8 @@
     <nl3dP:WMTSPanel class="map-viewport__tile-container" name="MapViewportRoot">
         <nl3d:Icon name="LocationPin" class="map-viewport__pin" picking-mode="Ignore" />
     </nl3dP:WMTSPanel>
+    <ui:VisualElement class="map-viewport__controls">
+        <nl3d:Button name="ZoomIn" icon="Plus" button-style="IconOnly" class="map-viewport__zoom-button"/>
+        <nl3d:Button name="ZoomOut" icon="Down" button-style="IconOnly" class="map-viewport__zoom-button"/>
+    </ui:VisualElement>
 </ui:UXML>

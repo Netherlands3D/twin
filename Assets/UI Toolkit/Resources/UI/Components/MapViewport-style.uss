@@ -1,5 +1,4 @@
 .map-viewport {
-    
     position: relative;
     flex-shrink: 1;
     flex-grow: 1;
@@ -41,4 +40,15 @@
     max-width: 512px; /* TODO: test on different screensizes if this is to big */
     min-height: 512px;
     max-height: 512px; /* TODO: test on different screensizes if this is to big */
+}
+
+.map-viewport__controls {
+    position: absolute;
+    right: var(--spacing-2);
+    bottom: var(--spacing-2);
+    flex-direction: column;
+}
+
+.button.map-viewport__zoom-button{
+    margin-top: var(--spacing-1);
 }
