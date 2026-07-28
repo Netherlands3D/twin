@@ -135,6 +135,7 @@
     --icon-map: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=medium.png");
     --icon-measure: url("project://database/Assets/Sprites/UI/Icons/Type=Measure,%20Color=white,%20Size=medium.png");
     --icon-metadata: url("project://database/Assets/Sprites/UI/Icons/Type=MetaData,%20Color=white,%20Size=medium.png");
+    --icon-minus: url("project://database/Assets/Sprites/UI/Icons/Type=Minus,%20Color=white,%20Size=medium.png");
     --icon-moon: url("project://database/Assets/Sprites/UI/Icons/Moon.svg");
     --icon-move: url("project://database/Assets/Sprites/UI/Icons/Type=Move,%20Color=white,%20Size=medium.png");
     --icon-next: url("project://database/Assets/Sprites/UI/Icons/Type=Next,%20Color=white,%20Size=medium.png");

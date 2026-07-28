@@ -11,6 +11,6 @@
     </nl3dP:WMTSPanel>
     <ui:VisualElement class="map-viewport__controls">
         <nl3d:Button name="ZoomIn" icon="Plus" button-style="IconOnly" class="map-viewport__zoom-button"/>
-        <nl3d:Button name="ZoomOut" icon="Down" button-style="IconOnly" class="map-viewport__zoom-button"/>
+        <nl3d:Button name="ZoomOut" icon="Minus" button-style="IconOnly" class="map-viewport__zoom-button"/>
     </ui:VisualElement>
 </ui:UXML>
