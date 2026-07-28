@@ -20,7 +20,7 @@ using UnityEngine.EventSystems;
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     [RequireComponent(typeof(WorldTransform))]
-    public class HierarchicalObjectLayerGameObject : LayerGameObject, IVisualizationWithPropertyData //,IPointerClickHandler
+    public class HierarchicalObjectLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
@@ -283,14 +283,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 LayerData.DeselectLayer();
             }
         }
-
-        // public void OnPointerClick(PointerEventData eventData)
-        // {
-        //     if (eventData.button != PointerEventData.InputButton.Left)
-        //         return;
-        //     
-        //      LayerData.SelectLayer(true);
-        // }
 
         public override void OnSelect(LayerData layer)
         {

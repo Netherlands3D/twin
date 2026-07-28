@@ -11,7 +11,6 @@ using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
-using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {

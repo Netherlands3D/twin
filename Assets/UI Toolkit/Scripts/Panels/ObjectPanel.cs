@@ -1,9 +1,7 @@
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;

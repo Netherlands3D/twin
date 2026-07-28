@@ -14,10 +14,6 @@ namespace Netherlands3D.UI.Panels
         //todo improve flow for specific imapping type?
         public override bool ShouldBeActive()
         {
-            // ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            // Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
-            // return selectedMappings.Values.Any(m => m is FeatureMapping);
-            
             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
             Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
             
