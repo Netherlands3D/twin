@@ -51,6 +51,8 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("top-right")] public Vector2Int TopRight { get; set; } //vector2Int is parsable in uxml
 
         [UxmlAttribute("layer-start-index")] public int LayerStartIndex { get; set; } = 6;
+        [UxmlAttribute("resize-on-hover")] public bool ResizeOnHover { get; set; } = false;
+        private const string EXPANDED_USS_CLASS = "expanded";
 
         public MapViewport()
         {
@@ -97,7 +99,8 @@ namespace Netherlands3D.UI.Components
 
         private void OnPointerEnter(PointerEnterEvent evt)
         {
-            EnableInClassList("expanded", true);
+            if(ResizeOnHover)
+                EnableInClassList(EXPANDED_USS_CLASS, true);
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
         }
 
@@ -110,7 +113,8 @@ namespace Netherlands3D.UI.Components
             }
 
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
-            EnableInClassList("expanded", false);
+            if(ResizeOnHover)
+                EnableInClassList(EXPANDED_USS_CLASS, false);
         }
 
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
@@ -271,8 +275,8 @@ namespace Netherlands3D.UI.Components
 
         private void OnPointerUp(PointerUpEvent evt)
         {
-            if (unexpandOnMouseUp)
-                EnableInClassList("expanded", false);
+            if (unexpandOnMouseUp && ResizeOnHover)
+                EnableInClassList(EXPANDED_USS_CLASS, false);
 
             unexpandOnMouseUp = false;
 

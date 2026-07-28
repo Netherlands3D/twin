@@ -40,10 +40,10 @@
 }
 
 .map-viewport.expanded{
-    /*min-width: 512px;*/
-    /*max-width: 512px; !* TODO: test on different screensizes if this is to big *!*/
-    /*min-height: 512px;*/
-    /*max-height: 512px; !* TODO: test on different screensizes if this is to big *!*/
+    min-width: 512px;
+    max-width: 512px; /* TODO: test on different screensizes if this is to big */
+    min-height: 512px;
+    max-height: 512px; /* TODO: test on different screensizes if this is to big */
 
     /*translate: -51px -128px;*/
 }
