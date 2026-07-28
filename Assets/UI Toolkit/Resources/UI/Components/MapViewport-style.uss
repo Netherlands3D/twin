@@ -3,15 +3,10 @@
     flex-shrink: 1;
     flex-grow: 1;
     align-items: flex-end;
-    
-    /* grenzen: voorkomt te klein/te groot */
-    aspect-ratio: 1.6;
-    min-width: 410px;
-    max-width: 410px; /* TODO: test on different screensizes if this is to big */
-    min-height: 256px;
-    max-height: 256px; /* TODO: test on different screensizes if this is to big */
 
-    transition-property: min-width, min-height, max-width, max-height;
+    transform-origin: 50% 50%;
+
+    transition-property: min-width, min-height, max-width, max-height, translate;
     transition-duration: 0.25s;
     transition-timing-function: ease-out;
     
@@ -19,6 +14,15 @@
     border-width: 0px;
     background-color: var(--color-white);
     overflow: hidden; 
+}
+
+.map-viewport--fixed-size{
+    aspect-ratio: 1.6;
+    /* grenzen: voorkomt te klein/te groot */
+    min-width: 410px;
+    max-width: 410px; /* TODO: test on different screensizes if this is to big */
+    min-height: 256px;
+    max-height: 256px; /* TODO: test on different screensizes if this is to big */
 }
 
 .map-viewport__pin
@@ -36,10 +40,12 @@
 }
 
 .map-viewport.expanded{
-    min-width: 512px;
-    max-width: 512px; /* TODO: test on different screensizes if this is to big */
-    min-height: 512px;
-    max-height: 512px; /* TODO: test on different screensizes if this is to big */
+    /*min-width: 512px;*/
+    /*max-width: 512px; !* TODO: test on different screensizes if this is to big *!*/
+    /*min-height: 512px;*/
+    /*max-height: 512px; !* TODO: test on different screensizes if this is to big *!*/
+
+    /*translate: -51px -128px;*/
 }
 
 .map-viewport__controls {

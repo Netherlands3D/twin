@@ -127,6 +127,7 @@ namespace Netherlands3D.UI.Components
             wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
             UpdateLocationPin();
             var cameraService = ServiceLocator.GetService<CameraService>();
+            OnCameraPositionChanged(cameraService.ActiveCamera.transform.position);
             cameraService.OnPositionChanged.AddListener(OnCameraPositionChanged);
         }
 

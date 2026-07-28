@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.AddressSearch;
+using Netherlands3D.Minimap;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
@@ -51,6 +52,11 @@ namespace Netherlands3D.UI.Panels
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+
+        public LocationSearchPanel(MinimapConfig config) : this()
+        {
+            this.Q<MapViewport>().Initialize(config);
         }
 
         /// <summary>Populate the results list. Starts in an unselected state.</summary>
