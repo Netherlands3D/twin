@@ -1,6 +1,7 @@
 using System;
 using KindMen.Uxios;
 using Netherlands3D.Minimap;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -17,23 +18,16 @@ public class WMTSTile : VisualElement
     private Texture2D texture;
     private float opacity;
 
-    private IVisualElementScheduledItem downloadPollTask;
-    private IVisualElementScheduledItem fadeTask;
-
     private const float tileOverlap = 1f; // to fix seams
 
     public WMTSTile()
     {
+        this.CloneComponentTree("Components");
+        this.AddComponentStylesheet("Components");
+        
         pickingMode = PickingMode.Ignore;
-        style.position = Position.Absolute;
-        visual = new VisualElement { pickingMode = PickingMode.Ignore };
-        visual.style.position = Position.Absolute;
-        visual.style.left = 0;
-        visual.style.top = 0;
-        visual.style.opacity = 0f;
-        visual.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
+        visual = this.Q<VisualElement>("Visual");
         visual.style.transformOrigin = new TransformOrigin(Length.Percent(0), Length.Percent(0));
-        Add(visual);
     }
 
     public void Initialize(VisualElement container, int zoom, float size, float xPosition, float yPosition, Vector2 key, MinimapConfig config)
@@ -83,30 +77,11 @@ public class WMTSTile : VisualElement
 
     private void StartFadeIn()
     {
-        opacity = 0f;
-        visual.style.opacity = opacity;
-
-        fadeTask = schedule.Execute(() =>
-        {
-            opacity += fadeSpeed * (16f / 1000f);
-            if (opacity >= 1.0f)
-            {
-                opacity = 1.0f;
-                visual.style.opacity = opacity;
-                fadeTask?.Pause();
-            }
-            else
-            {
-                visual.style.opacity = opacity;
-            }
-        }).Every(16);
+        visual.AddToClassList("visible");
     }
 
     public void Dispose()
     {
-        downloadPollTask?.Pause();
-        fadeTask?.Pause();
-
         if (texture != null)
         {
             Object.Destroy(texture);
