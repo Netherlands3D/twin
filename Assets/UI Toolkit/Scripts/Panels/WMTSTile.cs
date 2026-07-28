@@ -20,6 +20,8 @@ public class WMTSTile : VisualElement
     private IVisualElementScheduledItem downloadPollTask;
     private IVisualElementScheduledItem fadeTask;
 
+    private const float tileOverlap = 1f; // to fix seams
+
     public WMTSTile()
     {
         pickingMode = PickingMode.Ignore;
@@ -51,8 +53,8 @@ public class WMTSTile : VisualElement
         transform.position = new Vector3(xPosition, yPosition, 0f);
 
         // Inner node: handles scale (shrunk down)
-        visual.style.width = nativeSize;
-        visual.style.height = nativeSize;
+        visual.style.width = nativeSize + tileOverlap;
+        visual.style.height = nativeSize + tileOverlap;
         visual.transform.scale = new Vector3(size / nativeSize, size / nativeSize, 1f);
 
         container.Add(this);
