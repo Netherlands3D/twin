@@ -235,7 +235,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (!isModifierPressed)
             {
                 previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
-                if(primary)
+                if(primary) //dont deselect when secondary buttons
                     Deselect();
             }
             //the following method calls need to run in order!
@@ -274,7 +274,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 selectedMappings.Add(bagId, map);
                 SelectSubObjectWithBagId?.Invoke(map, bagId);
             }
-            else if(primary)
+            else if(primary) //when this is not the primary button, we dont want to deselect like a toggle
             {
                 DeselectBagId(bagId);
                 selectedMappings.Remove(bagId);
