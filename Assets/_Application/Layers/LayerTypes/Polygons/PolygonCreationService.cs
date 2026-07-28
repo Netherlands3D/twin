@@ -110,7 +110,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
-                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Edit)
+                if(App.UIRoot.IsPointerOverUI() || input.Mode == PolygonInput.DrawMode.Edit)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -136,7 +136,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             else if (currentShapeType == ShapeType.Grid)
             {
-                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Selected)
+                if(App.UIRoot.IsPointerOverUI() || input.Mode == PolygonInput.DrawMode.Selected)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -223,7 +223,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                 if (!gridInput.DrawingArea && inputService.PolygonClickAction.IsPressed() && inputService.PolygonModifierAction.IsPressed())
                 {
-                    if (App.UIRoot.IsUIClicked() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
+                    if (App.UIRoot.IsPointerOverUI() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
 
                     gridInput.DrawingArea = true;
                     OnBlockCameraDragging.InvokeStarted(true);
@@ -427,13 +427,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.OriginalPolygon = newPolygon;
         }
 
+        private bool preventRemovingPolygon = false;
         public void CancelLastCreatedGridLayer()
         {
-            //for now this works because we only give the user the option to manipulate the current selected grid layer and nothing else until finishing 
-            //within the polygon grid tool. But maybe this would be more safe to use a cached last created grid layer instead
-            if(polygonSelectionService.SelectedLayer == null) return;
+            if(polygonSelectionService.SelectedLayer == null || preventRemovingPolygon) return;
             
             App.Layers.Remove(polygonSelectionService.SelectedLayer);
+        }
+
+        //enable this to prevent the auto removal of the last created polygon when a panel is closed while creating a polygon without confirmation
+        public void SetPreventRemovingPolygon(bool remove)
+        {
+            preventRemovingPolygon = remove;
         }
 
         public void SetPolygonToCreate()
@@ -480,6 +485,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public void SetGridInputModeToSelected()
         {
             EnablePolygonInputByType(ShapeType.Grid);
+            gridInput.SetDrawMode(PolygonInput.DrawMode.Selected);
+        }
+
+        public void SetGridInputModeToSelectedWithoutNotify()
+        {
             gridInput.SetDrawMode(PolygonInput.DrawMode.Selected);
         }
     }

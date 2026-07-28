@@ -50,6 +50,7 @@ namespace Netherlands3D.UI.Panels
         private void OnGridButtonClicked()
         {
             toolService.GetTool(ToolType.PolygonGrid).Open();
+            polygonCreationService.SetPreventRemovingPolygon(false);
             polygonCreationService.SetGridInputModeToCreate();
         }
     }
