@@ -232,11 +232,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             string previousSelectedBagId = null;
             bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
-            if (!isModifierPressed)
+            if (!isModifierPressed)//dont deselect when secondary buttons
             {
                 previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
-                if(primary) //dont deselect when secondary buttons
-                    Deselect();
+                Deselect();
             }
             //the following method calls need to run in order!
             string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
@@ -268,19 +267,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     
             lastSelectedMappingLayerData = layerData;
 
-            if (!selectedMappings.ContainsKey(bagId) && previousBagId != bagId)
+            if (!selectedMappings.ContainsKey(bagId) && (previousBagId != bagId || !primary))
             {
                 SelectBagId(bagId, !isModifierPressed);
                 selectedMappings.Add(bagId, map);
                 SelectSubObjectWithBagId?.Invoke(map, bagId);
             }
-            else if(primary) //when this is not the primary button, we dont want to deselect like a toggle
+            else  
             {
                 DeselectBagId(bagId);
                 selectedMappings.Remove(bagId);
                 SelectSubObjectWithBagId?.Invoke(selectedMappings.Count > 0 ? map : null, bagId);
             }
-            
+
             OnSelectLayer.Invoke(layerData);
         }
 
