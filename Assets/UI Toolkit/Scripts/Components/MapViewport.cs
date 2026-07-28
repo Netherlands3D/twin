@@ -75,6 +75,8 @@ namespace Netherlands3D.UI.Components
             dragManipulator.DragEnded.AddListener(OnDragEnded);
             this.AddManipulator(dragManipulator);
 
+            RegisterCallback<PointerEnterEvent>(OnPointerEnter);
+            RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<WheelEvent>(OnScroll);
             RegisterCallback<PointerDownEvent>(OnPointerDown);
@@ -83,6 +85,16 @@ namespace Netherlands3D.UI.Components
             wmtsPanel.TilesChanged.AddListener(UpdateLocationPin); //make sure the pin stays in front of the tiles
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
+        }
+        
+        private void OnPointerEnter(PointerEnterEvent evt)
+        {
+            EnableInClassList("expanded", true);
+        }
+        
+        private void OnPointerLeave(PointerLeaveEvent evt)
+        {
+            EnableInClassList("expanded", false);
         }
 
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
