@@ -8,6 +8,7 @@ using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -15,11 +16,10 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class MapViewport : VisualElement
     {
-        private VisualElement mapLayer;
-        private VisualElement overlayLayer;
-        
         private Vector2 pointerDownPosition;
         private const float dragDeadzone = 4f;
+        private bool isDragging;
+        private bool unexpandOnMouseUp;
 
         private Icon locationPin;
         private bool showPin = true;
@@ -57,9 +57,7 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-
-            mapLayer = this.Q<VisualElement>("MapLayer");
-            overlayLayer = this.Q<VisualElement>("OverlayLayer");
+            
             locationPin = this.Q<Icon>("LocationPin");
             locationPin.style.transformOrigin = new TransformOrigin(Length.Percent(50), Length.Percent(100));
 
@@ -94,6 +92,12 @@ namespace Netherlands3D.UI.Components
         
         private void OnPointerLeave(PointerLeaveEvent evt)
         {
+            if (isDragging)
+            {
+                unexpandOnMouseUp = true;
+                return;
+            }
+
             EnableInClassList("expanded", false);
         }
 
@@ -255,6 +259,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnDragStarted(Vector2 startPosition)
         {
+            isDragging = true;
             wmtsPanel.CenterPointerInView = false;
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRABBING);
             StartedMapInteraction();
@@ -269,6 +274,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnDragEnded(Vector2 endPosition)
         {
+            isDragging = false;
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
             StoppedMapInteraction();
         }
@@ -297,6 +303,11 @@ namespace Netherlands3D.UI.Components
 
         private void OnPointerUp(PointerUpEvent evt)
         {
+            if(unexpandOnMouseUp)
+                EnableInClassList("expanded", false);
+
+            unexpandOnMouseUp = false;
+            
             if (Vector2.Distance(pointerDownPosition, evt.position) > dragDeadzone) return; //we cannot use the manipulator event functions to set isDragging to true or false, because this causes a race-condition.
 
             Debug.Log("Clicked on minimap");
