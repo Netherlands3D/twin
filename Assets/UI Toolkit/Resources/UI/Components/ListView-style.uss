@@ -1,16 +1,16 @@
 @import url("ScrollView-style.uss");
 
 .unity-collection-view__item{
-    border-width: var(--spacing-0_5);
-    border-radius: var(--spacing-2);
+    /* border-width: var(--spacing-0_5); */
+   /*  border-radius: var(--spacing-2); */
 }
 
 .unity-collection-view__item:checked {
     background-color: var(--color-blue-100);
     border-color: var(--color-blue-700);
-    border-width: var(--spacing-0_5);
+   /*  border-width:  var(--spacing-0_5); */
 }
 
 .unity-collection-view__item:hover {
-    background-color: var(--color-blue-100);
+    background-color: var(--color-blue-200);
 }
