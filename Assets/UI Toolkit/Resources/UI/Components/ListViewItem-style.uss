@@ -39,9 +39,9 @@
     background-color: var(--color-blue-100);
 } */
 
- .listview-item:checked .listview-item__container{
-    background-color:  var(--color-selection);
-}
+/* .listview-item:checked .listview-item__container{*/
+/*    background-color:  var(--color-selection);*/
+/*}*/
 
 
   /*   border-width: 2px;

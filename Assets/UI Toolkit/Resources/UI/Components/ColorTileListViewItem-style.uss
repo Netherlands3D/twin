@@ -15,7 +15,8 @@
 }
 
 .color-tile-listview-item .icon {
-    margin: 0 var(--spacing-2) 0 0;
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
 }
 
 
