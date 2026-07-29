@@ -42,3 +42,8 @@
  .listview-item:checked .listview-item__container{
     background-color:  var(--color-selection);
 }
+
+.listview-item--menu .listview-item__container {
+    border-width: 2px;
+    border-radius: var(--spacing-2);
+}

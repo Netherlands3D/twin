@@ -33,6 +33,7 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
 
             listView = this.Q<ListView>();
+            listView.AddToClassList("listview-item--menu");
             breadcrumb = this.Q<Breadcrumb>();
             importButton = this.Q<Button>("ImportButton");
             importButton.RegisterCallback<ClickEvent>(ImportAssets);
