@@ -22,7 +22,6 @@ namespace Netherlands3D.UI.Panels
         private VisualElement thumbnailContainer;
         
         private ListView propertiesListView;
-        private ListView PropertysListView => propertiesListView ??= this.Q<ListView>();
 
         private Dictionary<string, object> empty = new() {{ "geen informatie", null} };
 
@@ -32,12 +31,15 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
 
             thumbnailContainer = this.Q<VisualElement>("ThumbnailContainer");
-            
-            PropertysListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            PropertysListView.selectionType = SelectionType.None;
-            
-            PropertysListView.makeItem = MakeListViewItem;
-            PropertysListView.bindItem = BindListViewItem;
+
+            propertiesListView = this.Q<ListView>();
+
+
+            propertiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            propertiesListView.selectionType = SelectionType.None;
+
+            propertiesListView.makeItem = MakeListViewItem;
+            propertiesListView.bindItem = BindListViewItem;
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
@@ -73,21 +75,23 @@ namespace Netherlands3D.UI.Panels
                     Value = kv.Value?.ToString()
                 })
                 .ToList();
-            PropertysListView.itemsSource = list;
+            propertiesListView.itemsSource = list;
         }
         
         private VisualElement MakeListViewItem()
         {
             KeyValue kv = new KeyValue();
             kv.ShowDivider(true);
-            return kv;
+            var listViewItem = new ListViewItem(kv);
+            return listViewItem;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not KeyValue element) return;
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<KeyValue>() is not KeyValue element) return;
             
-            var kv = (KeyValue)PropertysListView.itemsSource[index];
+            var kv = (KeyValue)propertiesListView.itemsSource[index];
             element.Key = kv.Key;
             element.Value = kv.Value;
         }
