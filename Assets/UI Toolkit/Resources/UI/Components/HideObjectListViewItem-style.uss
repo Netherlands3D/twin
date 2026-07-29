@@ -3,6 +3,9 @@
     flex-direction: row;
     align-items: center;
 
+    flex-grow: 1;
+
+
     transition-property: background-color;
     transition-duration: 0.1s;
     transition-timing-function: ease-in;
