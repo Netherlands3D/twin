@@ -1,1 +1,10 @@
 @import url("ScrollView-style.uss");
+
+.unity-collection-view__item:checked{
+    background-color: var(--color-blue-200);
+}
+
+.unity-collection-view__item:hover{
+    background-color: var(--color-blue-100);
+}
+
