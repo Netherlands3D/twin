@@ -7,16 +7,12 @@
 }
 
 .listview-item__container{    
-    
-    /*margin-bottom: var(--spacing-2);*/
-    /*margin-right: var(--spacing-2);*/
+  
     display: flex;
     flex-direction: row;
     align-items: center;
 
     border-color:  var(--color-blue-200);
-    /*border-width: 2px;*/
-    /*border-radius:var(--spacing-2);*/
 }
 
 .listview-item > * {
