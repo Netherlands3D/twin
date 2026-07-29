@@ -3,6 +3,7 @@ using Netherlands3D.Services;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Netherlands3D.UI_Toolkit.Scripts;
 
 namespace Netherlands3D.Twin.PresentationModus.UIHider
 {
@@ -61,7 +62,7 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
             hideUI = !hideUI;
 
             panelHiders.ForEach(panel => SetPanelHide(panel));
-            if (hideUI) App.Debug.DisplayPresentationModeExitMessage();
+            App.Debug.DisplayMessage("Druk op H om de presentatiemodus te verlaten.", IconImage.PRESENTATION_CHART);
         }
 
         private void SetPanelHide(IPanelHider panel)

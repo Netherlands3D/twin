@@ -2,6 +2,7 @@ using DG.Tweening;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
+using Netherlands3D.UI_Toolkit.Scripts;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -69,7 +70,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void CopyCoordinates()
         {
-            App.Debug.DisplayFpvCopyCoordinatesMessage(copySnackbarText);
+            App.Debug.DisplayMessage(copySnackbarText, IconImage.COPY_PASTE);
             WebGLClipboard.Copy(currentCoordinates.ToString());
         }
 

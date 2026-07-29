@@ -141,6 +141,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 message += "\n" + extension;
             }
 
+            // TODO: Route unsupported extension warnings through a generic layer message flow.
             App.LayerMessages.UnsupportedExtensionsMessage(message);
         }
 

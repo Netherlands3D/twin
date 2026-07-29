@@ -68,6 +68,7 @@
 .icon.image-folder { background-image: var(--icon-folder); }
 .icon.image-forward { background-image: var(--icon-forward); }
 .icon.image-forward-blocked { background-image: var(--icon-forwardblocked); }
+.icon.image-fpv { background-image: var(--icon-fpv); }
 .icon.image-height { background-image: var(--icon-height); }
 .icon.image-help { background-image: var(--icon-help); }
 .icon.image-picture { background-image: var(--icon-picture); }

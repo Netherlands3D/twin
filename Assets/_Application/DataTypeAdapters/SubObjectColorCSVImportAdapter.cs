@@ -48,7 +48,8 @@ namespace Netherlands3D.Twin.DataTypeAdapters
         private void RemovePreviousColoring()
         {
             //activeCartesianTileSubObjectColorLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
-
+            // TODO: Replace this direct message with a proper layer replacement flow,
+            // for example activeCartesianTileSubObjectColorLayer.ReplaceLayer(layer).
             activeCartesianTileSubObjectColorLayer.DestroyLayer();
             App.LayerMessages.DisplayCsvReplacedMessage("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");          
         }

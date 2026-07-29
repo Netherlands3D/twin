@@ -1,13 +1,11 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System;
 using Netherlands3D.Twin;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
+using Netherlands3D.UI_Toolkit.Scripts;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -136,7 +134,7 @@ namespace Netherlands3D.FirstPersonViewer
             if (lockCursor)
             {
                 RemoveInputLockConstrain(this);
-                App.Debug.DisplayFpvUnlockMessage(fpvExitText);
+                App.Debug.DisplayMessage(fpvExitText, IconImage.FPV);
             }
             else if (lockMouseModus) // only self-lock in lock-cursor modus
             {

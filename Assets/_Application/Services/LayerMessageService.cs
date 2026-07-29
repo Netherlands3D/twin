@@ -109,11 +109,14 @@ namespace Netherlands3D.Twin.Services
             snackbarService.DisplayError(message);
         }
 
+        // TODO: Replace this specific method with a generic layer message flow.
+        // Now only used in Tile3DLayerGameObject.cs
         public void UnsupportedExtensionsMessage(string message)
         {
             snackbarService.DisplayError(message);
         }
 
+        // TODO: Replace this specific CSV message with a generic layer replacement message flow.
         public void DisplayCsvReplacedMessage(string message)
         {
             snackbarService.DisplayMessage(message, IconImage.SHEETS);

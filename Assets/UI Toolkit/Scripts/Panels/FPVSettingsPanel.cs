@@ -6,6 +6,7 @@ using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Slider = Netherlands3D.UI.Components.Slider;
 using Toggle = UnityEngine.UIElements.Toggle;
+using Netherlands3D.UI_Toolkit.Scripts;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -82,7 +83,7 @@ namespace Netherlands3D.UI.Panels
         private void OnMouseLockModeChanged(ChangeEvent<bool> evt)
         {
             ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.SetMouseLockModus(evt.newValue);
-            App.Debug.DisplayFunctionPreferencesSavedMessage();
+            App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
         }
     }
 }

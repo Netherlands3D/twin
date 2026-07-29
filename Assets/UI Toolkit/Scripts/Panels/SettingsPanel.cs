@@ -11,6 +11,7 @@ using ListView = UnityEngine.UIElements.ListView;
 using QualitySettings = UnityEngine.QualitySettings;
 using RadioButtonGroup = UnityEngine.UIElements.RadioButtonGroup;
 using ScrollView = Netherlands3D.UI.Components.ScrollView;
+using Netherlands3D.UI_Toolkit.Scripts;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -69,7 +70,7 @@ namespace Netherlands3D.UI.Panels
             toggle.RegisterValueChangedCallback(evt =>
             { 
                 functionality.IsEnabled = evt.newValue;
-                App.Debug.DisplayFunctionPreferencesSavedMessage();
+                App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
             });
         }
 
@@ -77,7 +78,7 @@ namespace Netherlands3D.UI.Panels
         {
             var level = (GraphicsQualityLevel)evt.newValue;
             Twin.Quality.QualitySettings.SetGraphicsQuality(level, true);
-            App.Debug.DisplayFunctionPreferencesSavedMessage();
+            App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
         }
     }
 }
