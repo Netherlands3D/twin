@@ -41,3 +41,9 @@
 .building-information-thumbnail__container{
     flex-shrink: 0;
 }
+
+.building-information-address__list-view .unity-label{  
+    margin: 0 0 0 0;
+    padding: 0;
+
+}
