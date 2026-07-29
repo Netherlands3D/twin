@@ -18,7 +18,6 @@ namespace Netherlands3D.UI.Panels
     public partial class FeatureInformationPropertySection : VisualElement, IVisualizationWithPropertyData
     { 
         private FeaturePropertyData featurePropertyData;
-        private Coroutine downloadProcess;
         private VisualElement thumbnailContainer;
         
         private ListView propertiesListView;
