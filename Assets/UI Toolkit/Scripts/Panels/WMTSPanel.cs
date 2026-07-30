@@ -127,18 +127,18 @@ namespace Netherlands3D.UI.Panels
 
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
 
-            var maxPositionXInUnits = -(boundsInMeters.x / startMeterInPixels) * transform.scale.x;
-            var maxPositionYInUnits = -(boundsInMeters.y / startMeterInPixels) * transform.scale.x;
+            var maxPositionXInUnits = -(boundsInMeters.x / startMeterInPixels) * resolvedStyle.scale.value.x;
+            var maxPositionYInUnits = -(boundsInMeters.y / startMeterInPixels) * resolvedStyle.scale.value.x;
 
             var xPadding = viewportSize.x * 0.5f;
             var yPadding = viewportSize.y * 0.5f;
 
-            var position = transform.position;
+            var position = resolvedStyle.translate;
 
             position.x = Mathf.Clamp(position.x, maxPositionXInUnits + viewportSize.x - xPadding, xPadding);
             position.y = Mathf.Clamp(position.y, maxPositionYInUnits + viewportSize.y - yPadding, yPadding);
 
-            transform.position = position;
+            style.translate = position;
         }
 
         public void ClickedMap(Vector2 panelPosition)
@@ -185,7 +185,7 @@ namespace Netherlands3D.UI.Panels
 
         public Vector2 LocalToViewport(Vector2 localPosition)
         {
-            return (Vector2)transform.position + localPosition * transform.scale.x;
+            return (Vector2)resolvedStyle.translate + localPosition * resolvedStyle.scale.value.x;
         }
         
         public void Zoom(int viewerZoom)
@@ -208,7 +208,7 @@ namespace Netherlands3D.UI.Panels
         {
             if (!initialized) return;
 
-            transform.position += (Vector3)delta;
+            style.translate = resolvedStyle.translate + (Vector3)delta;
             Clamp();
             UpdateLayerTiles();
 
@@ -262,13 +262,13 @@ namespace Netherlands3D.UI.Panels
         public void ScaleMapOverOrigin(Vector2 origin, Vector3 newScale)
         {
             var origin3 = (Vector3)origin;
-            var currentPosition = transform.position;
+            var currentPosition = resolvedStyle.translate;
             var newOrigin = currentPosition - origin3;
-            var relativeScale = newScale.x / transform.scale.x;
+            var relativeScale = newScale.x / resolvedStyle.scale.value.x;
             var finalPosition = origin3 + newOrigin * relativeScale;
 
-            transform.scale = newScale;
-            transform.position = finalPosition;
+            style.scale = newScale;
+            style.translate = finalPosition;
             
             currentCenterLocalPosition = CalculateCurrentCenterLocalPosition();
         }
@@ -276,7 +276,7 @@ namespace Netherlands3D.UI.Panels
         private Vector2 CalculateCurrentCenterLocalPosition()
         {
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
-            return (viewportSize * 0.5f - (Vector2)transform.position) / transform.scale.x;
+            return (viewportSize * 0.5f - (Vector2)resolvedStyle.translate) / resolvedStyle.scale.value.x;
         }
         
         private void RemoveOtherLayers()
@@ -302,8 +302,8 @@ namespace Netherlands3D.UI.Panels
                 return;
 
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
-            var localPosition = transform.position;
-            var localScale = transform.scale;
+            var localPosition = resolvedStyle.translate;
+            var localScale = resolvedStyle.scale.value;
             
             float tileStepX = tileSize * localScale.x;
             float tileStepY = tileSize * localScale.y;
@@ -377,7 +377,7 @@ namespace Netherlands3D.UI.Panels
             currentCenterLocalPosition = localPosition;
             
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
-            transform.position = -(Vector3)(localPosition * transform.scale.x) + (Vector3)(viewportSize * 0.5f);
+            style.translate = -(Vector3)(localPosition * resolvedStyle.scale.value.x) + (Vector3)(viewportSize * 0.5f);
 
             Clamp();
             UpdateLayerTiles();

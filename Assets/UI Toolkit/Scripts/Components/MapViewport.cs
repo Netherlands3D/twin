@@ -163,7 +163,7 @@ namespace Netherlands3D.UI.Components
             var pinPosition = mapPosition - new Vector2(iconSize.x * 0.5f, iconSize.y);
 
             locationPin.style.translate = new Translate(pinPosition.x, pinPosition.y);
-            locationPin.transform.scale = Vector3.one / wmtsPanel.transform.scale.x;
+            locationPin.style.scale = Vector3.one / wmtsPanel.resolvedStyle.scale.value.x;
         }
         
         private void UpdateFrustum()
