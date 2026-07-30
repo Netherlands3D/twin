@@ -22,10 +22,7 @@ namespace Netherlands3D.UI.Panels
         private MinimapConfig minimapConfig;
         private Vector2RD topRight;
         private Vector2RD bottomLeft;
-
-        private bool moveCameraToClickedLocation = true;
-        private Camera cameraMoveTarget;
-
+        
         private int layerIndex;
         private float tileSize = 256;
         private float baseTileSize;
@@ -85,24 +82,15 @@ namespace Netherlands3D.UI.Panels
             // Calculate base meters in pixels to do calculations converting local coordinates to meters
             startMeterInPixels = (float)tileSizeInMeters / baseTileSize;
 
-            var cameraService = ServiceLocator.GetService<CameraService>();
-            cameraMoveTarget = cameraService.ActiveCamera;
-            cameraService.OnSwitchCamera.AddListener(SetCamera);
-
             parent?.RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
-            cameraService.OnPositionChanged.AddListener(OnCameraPositionChanged);
 
             Clamp();
             UpdateLayerTiles();
 
             initialized = true;
         }
-
-        private void OnCameraPositionChanged(Vector3 newWorldPosition)
-        {
-            MoveToPosition(newWorldPosition);
-        }
+        
 
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
         {
@@ -111,14 +99,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            var cameraService = ServiceLocator.GetService<CameraService>();
-            cameraService.OnSwitchCamera.RemoveListener(SetCamera);
             parent?.UnregisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
-        }
-
-        private void SetCamera(Camera camera)
-        {
-            cameraMoveTarget = camera;
         }
 
         private void Clamp()
@@ -141,9 +122,9 @@ namespace Netherlands3D.UI.Panels
             style.translate = position;
         }
 
-        public void ClickedMap(Vector2 panelPosition)
+        public Coordinate GetCoordinateFromPanelPosition(Vector2 panelPosition)
         {
-            if (!initialized || cameraMoveTarget == null) return;
+            if (!initialized) return new Coordinate();
 
             //WorldToLocal accounts for this element's own pan/zoom transform,
             //equivalent to the old transform.InverseTransformPoint.
@@ -155,21 +136,13 @@ namespace Netherlands3D.UI.Panels
             var meterY = -localClickPosition.y * startMeterInPixels;
 
             var rdCoordinate = new Coordinate(
-                CoordinateSystem.RDNAP,
+                CoordinateSystem.RD,
                 bottomLeft.x + meterX,
                 (float)topRight.y + meterY,
                 0.0d
             );
 
-            if (!rdCoordinate.IsValid()) return;
-
-            Vector3 unityCoordinate = rdCoordinate.ToUnity();
-            unityCoordinate.y = cameraMoveTarget.transform.position.y;
-
-            if (moveCameraToClickedLocation)
-            {
-                cameraMoveTarget.transform.position = unityCoordinate;
-            }
+            return rdCoordinate;
         }
 
         public Vector2 DeterminePositionOnMap(Coordinate sourceRDPosition)
@@ -181,11 +154,6 @@ namespace Netherlands3D.UI.Panels
             var pixelY = -(meterY / startMeterInPixels);
 
             return new Vector2((float)pixelX, (float)pixelY);
-        }
-
-        public Vector2 LocalToViewport(Vector2 localPosition)
-        {
-            return (Vector2)resolvedStyle.translate + localPosition * resolvedStyle.scale.value.x;
         }
         
         public void Zoom(int viewerZoom)
@@ -200,7 +168,7 @@ namespace Netherlands3D.UI.Panels
 
             Clamp();
             UpdateLayerTiles();
-            
+
             currentCenterLocalPosition = CalculateCurrentCenterLocalPosition();
         }
 
@@ -269,7 +237,7 @@ namespace Netherlands3D.UI.Panels
 
             style.scale = newScale;
             style.translate = finalPosition;
-            
+
             currentCenterLocalPosition = CalculateCurrentCenterLocalPosition();
         }
 
@@ -278,7 +246,7 @@ namespace Netherlands3D.UI.Panels
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
             return (viewportSize * 0.5f - (Vector2)resolvedStyle.translate) / resolvedStyle.scale.value.x;
         }
-        
+
         private void RemoveOtherLayers()
         {
             var mapTileKeys = new List<int>(tileLayers.Keys);
@@ -304,7 +272,7 @@ namespace Netherlands3D.UI.Panels
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
             var localPosition = resolvedStyle.translate;
             var localScale = resolvedStyle.scale.value;
-            
+
             float tileStepX = tileSize * localScale.x;
             float tileStepY = tileSize * localScale.y;
 
@@ -337,7 +305,7 @@ namespace Netherlands3D.UI.Panels
                     }
 
                     Vector2 tileKey = new Vector2(tileCol, tileRow);
-                    
+
                     float tileXPosition = (x - layerTilesOffset.x) * tileSize;
                     float tileYPosition = (y - layerTilesOffset.y) * tileSize;
 
@@ -360,22 +328,20 @@ namespace Netherlands3D.UI.Panels
 
             TilesChanged.Invoke();
         }
-        
-        private void MoveToPosition(Vector3 newWorldPosition)
+
+        public void MoveToPosition(Coordinate newCoordinate)
         {
             if (!initialized) return;
-            
-            var rdCoordinate = new Coordinate(newWorldPosition).Convert(CoordinateSystem.RDNAP);
+
+            var rdCoordinate = newCoordinate.Convert(CoordinateSystem.RDNAP);
             Vector2 mapPosition = DeterminePositionOnMap(rdCoordinate);
             CenterOnLocalPosition(mapPosition);
         }
 
         private void CenterOnLocalPosition(Vector2 localPosition)
         {
-            if (parent == null) return;
-            
             currentCenterLocalPosition = localPosition;
-            
+
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
             style.translate = -(Vector3)(localPosition * resolvedStyle.scale.value.x) + (Vector3)(viewportSize * 0.5f);
 

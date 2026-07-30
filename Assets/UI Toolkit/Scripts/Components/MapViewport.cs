@@ -24,7 +24,7 @@ namespace Netherlands3D.UI.Components
         private bool showPin = true;
 
         private WMTSPanel wmtsPanel;
-        private Camera activeCamera;
+        private Coordinate currentWorldCoordinate;
         private CustomQuad cameraFrustumQuad;
 
         private float zoomScale = 0.0f;
@@ -35,6 +35,8 @@ namespace Netherlands3D.UI.Components
         private UnityEvent<int> OnZoomChanged = new();
         private Button zoomInButton;
         private Button zoomOutButton;
+        
+        public UnityEvent<Coordinate> CoordinateMoveRequested = new();
 
         [UxmlAttribute("show-pin")]
         public bool ShowPin
@@ -54,6 +56,8 @@ namespace Netherlands3D.UI.Components
 
         [UxmlAttribute("layer-start-index")] public int LayerStartIndex { get; set; } = 6;
         [UxmlAttribute("resize-on-hover")] public bool ResizeOnHover { get; set; } = false;
+        [UxmlAttribute("move-to-clicked-location")] private bool MoveCameraToClickedLocation { get; set; } = true;
+
         private const string EXPANDED_USS_CLASS = "expanded";
 
         public MapViewport()
@@ -86,9 +90,14 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<PointerDownEvent>(OnPointerDown);
             RegisterCallback<PointerUpEvent>(OnPointerUp);
             RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
-            wmtsPanel.TilesChanged.AddListener(UpdateLocationPin); //make sure the pin stays in front of the tiles
+            wmtsPanel.TilesChanged.AddListener(OnTilesChanged);
 
             OnZoomChanged.AddListener(wmtsPanel.Zoom);
+        }
+
+        private void OnTilesChanged()
+        {
+            UpdateLocationPin(currentWorldCoordinate);
         }
 
         /// Provides the WMTS config and RD bounds that can't be authored via UXML.
@@ -98,11 +107,6 @@ namespace Netherlands3D.UI.Components
         {
             //todo: can this function be removed somehow?
             wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
-            var cameraService = ServiceLocator.GetService<CameraService>();
-            activeCamera = cameraService.ActiveCamera;
-                OnCameraPositionChanged(activeCamera.transform.position);
-            cameraService.OnPositionChanged.AddListener(OnCameraPositionChanged);
-            cameraService.OnSwitchCamera.AddListener(OnCameraSwitch);
         }
 
         private void OnZoomInClicked(ClickEvent evt)
@@ -137,28 +141,21 @@ namespace Netherlands3D.UI.Components
 
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
         {
-            UpdateLocationPin();
+            UpdateLocationPin(currentWorldCoordinate);
             UpdateFrustum();
         }
-        
-        private void OnCameraPositionChanged(Vector3 newWorldPosition)
-        {
-            UpdateLocationPin();
-            UpdateFrustum();
-        }
-        
-        private void OnCameraSwitch(Camera newCamera)
-        {
-            activeCamera = newCamera;
-            OnCameraPositionChanged(activeCamera.transform.position);
-        }
-        
-        private void UpdateLocationPin()
-        {
-            var activeCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
-            var cameraPosition = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RDNAP);
-            Vector2 mapPosition = wmtsPanel.DeterminePositionOnMap(cameraPosition);
 
+        public void SetLocation(Coordinate coordinate)
+        {
+            currentWorldCoordinate = coordinate;
+            wmtsPanel.MoveToPosition(coordinate);
+            UpdateLocationPin(coordinate);
+            UpdateFrustum();
+        }
+        
+        private void UpdateLocationPin(Coordinate coordinate)
+        {
+            Vector2 mapPosition = wmtsPanel.DeterminePositionOnMap(coordinate);
             var iconSize = new Vector2(locationPin.resolvedStyle.width, locationPin.resolvedStyle.height);
             var pinPosition = mapPosition - new Vector2(iconSize.x * 0.5f, iconSize.y);
 
@@ -166,28 +163,28 @@ namespace Netherlands3D.UI.Components
             locationPin.style.scale = Vector3.one / wmtsPanel.resolvedStyle.scale.value.x;
         }
         
-        private void UpdateFrustum() 
+        public void UpdateFrustum() 
         {
             //todo: this is currently not working as intended
             return;
-            CameraExtents.GetRDExtent(activeCamera);
-            var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);
-            if (cameraCorners != null)
-            {
-                //Align quad with camera extent points
-                var mapCoord0= wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP));
-                var mapCoord1 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP));
-                var mapCoord2 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP));
-                var mapCoord3 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP));
-
-                cameraFrustumQuad.QuadVertices[0] = wmtsPanel.LocalToViewport(mapCoord0);
-                cameraFrustumQuad.QuadVertices[1] = wmtsPanel.LocalToViewport(mapCoord1);
-                cameraFrustumQuad.QuadVertices[2] = wmtsPanel.LocalToViewport(mapCoord2);
-                cameraFrustumQuad.QuadVertices[3] = wmtsPanel.LocalToViewport(mapCoord3);
-                
-                //Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
-                cameraFrustumQuad.Redraw();
-            }
+            // CameraExtents.GetRDExtent(activeCamera);
+            // var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);
+            // if (cameraCorners != null)
+            // {
+            //     //Align quad with camera extent points
+            //     var mapCoord0= wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP));
+            //     var mapCoord1 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP));
+            //     var mapCoord2 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP));
+            //     var mapCoord3 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP));
+            //
+            //     cameraFrustumQuad.QuadVertices[0] = wmtsPanel.LocalToViewport(mapCoord0);
+            //     cameraFrustumQuad.QuadVertices[1] = wmtsPanel.LocalToViewport(mapCoord1);
+            //     cameraFrustumQuad.QuadVertices[2] = wmtsPanel.LocalToViewport(mapCoord2);
+            //     cameraFrustumQuad.QuadVertices[3] = wmtsPanel.LocalToViewport(mapCoord3);
+            //     
+            //     //Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
+            //     cameraFrustumQuad.Redraw();
+            // }
         }
 
 
@@ -316,7 +313,11 @@ namespace Netherlands3D.UI.Components
 
             if (Vector2.Distance(pointerDownPosition, evt.position) > dragDeadzone) return; //we cannot use the manipulator event functions to set isDragging to true or false, because this causes a race-condition.
 
-            wmtsPanel.ClickedMap(evt.position);
+            if(MoveCameraToClickedLocation)
+            {
+                var rdCoordinate = wmtsPanel.GetCoordinateFromPanelPosition(evt.position);
+                CoordinateMoveRequested.Invoke(rdCoordinate);
+            }
         }
 
         #endregion Interfaces
