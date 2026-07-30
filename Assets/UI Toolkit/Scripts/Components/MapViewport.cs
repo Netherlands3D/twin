@@ -166,8 +166,10 @@ namespace Netherlands3D.UI.Components
             locationPin.style.scale = Vector3.one / wmtsPanel.resolvedStyle.scale.value.x;
         }
         
-        private void UpdateFrustum()
+        private void UpdateFrustum() 
         {
+            //todo: this is currently not working as intended
+            return;
             CameraExtents.GetRDExtent(activeCamera);
             var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);
             if (cameraCorners != null)
