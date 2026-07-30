@@ -10,6 +10,7 @@
     <nl3d:Breadcrumb leading-icon-image="Plus"/>
     <nl3d:ScrollView>
         <ui:VisualElement name="ImportAssetMainSection">
+            
             <nl3d:Button class="import-asset-panel__button-asset-library" name="GoToAssetLibraryButton" icon="Library" LabelText="Vanuit bibliotheek" />
             <nl3d:Button class="import-asset-panel__button-selection-area" name="SelectionAreaButton" icon="Polygon" LabelText="Tekengebied toevoegen" />
             <nl3d:Button class="import-asset-panel__button-upload" name="FileUploadButton" icon="Plus" LabelText="Uploaden vanaf deze computer" />       

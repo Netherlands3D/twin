@@ -77,7 +77,7 @@ namespace Netherlands3D.UI.Panels
             if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
 
             string propertyName = swatchesListView.itemsSource[index] as string;
-            item.userData = propertyName;
+            tile.userData = propertyName;
             tile.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
             var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
@@ -116,10 +116,11 @@ namespace Netherlands3D.UI.Panels
 
             foreach (var index in swatchesListView.selectedIndices)
             {
-                var element = swatchesListView.GetRootElementForIndex(index) as ColorTileListViewItem;
-                if (element != null)
+                var element = swatchesListView.GetRootElementForIndex(index) as ListViewItem;
+                ColorTileListViewItem tile = element.Q<ColorTileListViewItem>();
+                if (tile != null)
                 {
-                    element.Tile.Color = color;
+                    tile.Tile.Color = color;
                 }
             }
         }
