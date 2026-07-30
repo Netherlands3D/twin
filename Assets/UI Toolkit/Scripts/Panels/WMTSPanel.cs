@@ -15,12 +15,6 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class WMTSPanel : VisualElement
     {
-        /// <summary>
-        /// Reserved for the pointer/marker feature (not implemented in this pass).
-        /// Kept as a no-op property so callers that already reference it keep compiling.
-        /// </summary>
-        public bool CenterPointerInView { get; set; } = true;
-
         [Tooltip("The start indexLayer of the map")]
         private int layerStartIndex = 6;
 
@@ -96,6 +90,7 @@ namespace Netherlands3D.UI.Panels
 
             parent?.RegisterCallback<GeometryChangedEvent>(OnViewportGeometryChanged);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            cameraService.OnPositionChanged.AddListener(OnCameraPositionChanged);
 
             Clamp();
             UpdateLayerTiles();
@@ -103,10 +98,20 @@ namespace Netherlands3D.UI.Panels
             initialized = true;
         }
 
+        private void OnCameraPositionChanged(Vector3 newWorldPosition)
+        {
+            // if(movedByClick)
+            // {
+            //     movedByClick = false;
+            //     CenterOnLocalPosition(lastClickedPanelPosition);
+            //     return;
+            // }
+            MoveToPosition(newWorldPosition);
+        }
+
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
         {
-            Clamp();
-            UpdateLayerTiles();
+            CenterOnLocalPosition(currentCenterLocalPosition);
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
@@ -183,6 +188,11 @@ namespace Netherlands3D.UI.Panels
             return new Vector2((float)pixelX, (float)pixelY);
         }
 
+        public Vector2 LocalToViewport(Vector2 localPosition)
+        {
+            return (Vector2)transform.position + localPosition * transform.scale.x;
+        }
+        
         public void Zoom(int viewerZoom)
         {
             if (!initialized) return;
@@ -195,6 +205,8 @@ namespace Netherlands3D.UI.Panels
 
             Clamp();
             UpdateLayerTiles();
+            
+            currentCenterLocalPosition = CalculateCurrentCenterLocalPosition();
         }
 
         public void Pan(Vector2 delta)
@@ -204,6 +216,8 @@ namespace Netherlands3D.UI.Panels
             transform.position += (Vector3)delta;
             Clamp();
             UpdateLayerTiles();
+
+            currentCenterLocalPosition = CalculateCurrentCenterLocalPosition();
         }
 
         private void ActivateMapLayer()
@@ -260,8 +274,16 @@ namespace Netherlands3D.UI.Panels
 
             transform.scale = newScale;
             transform.position = finalPosition;
+            
+            currentCenterLocalPosition = CalculateCurrentCenterLocalPosition();
         }
 
+        private Vector2 CalculateCurrentCenterLocalPosition()
+        {
+            var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
+            return (viewportSize * 0.5f - (Vector2)transform.position) / transform.scale.x;
+        }
+        
         private void RemoveOtherLayers()
         {
             var mapTileKeys = new List<int>(tileLayers.Keys);
@@ -343,21 +365,22 @@ namespace Netherlands3D.UI.Panels
 
             TilesChanged.Invoke();
         }
-
-        public void MoveToPosition(Vector3 newWorldPosition)
+        
+        private void MoveToPosition(Vector3 newWorldPosition)
         {
-            if (!initialized || !CenterPointerInView) return;
-
+            if (!initialized) return;
+            
             var rdCoordinate = new Coordinate(newWorldPosition).Convert(CoordinateSystem.RDNAP);
             Vector2 mapPosition = DeterminePositionOnMap(rdCoordinate);
-
             CenterOnLocalPosition(mapPosition);
         }
 
         private void CenterOnLocalPosition(Vector2 localPosition)
         {
             if (parent == null) return;
-
+            
+            currentCenterLocalPosition = localPosition;
+            
             var viewportSize = new Vector2(parent.resolvedStyle.width, parent.resolvedStyle.height);
             transform.position = -(Vector3)(localPosition * transform.scale.x) + (Vector3)(viewportSize * 0.5f);
 

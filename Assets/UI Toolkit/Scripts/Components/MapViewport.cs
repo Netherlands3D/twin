@@ -133,8 +133,6 @@ namespace Netherlands3D.UI.Components
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, false);
-            var pos = ServiceLocator.GetService<CameraService>().ActiveCamera.transform.position;
-            wmtsPanel.MoveToPosition(pos);
         }
 
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
@@ -143,11 +141,10 @@ namespace Netherlands3D.UI.Components
             UpdateFrustum();
         }
         
-        private void OnCameraPositionChanged(Vector3 newPosition)
+        private void OnCameraPositionChanged(Vector3 newWorldPosition)
         {
             UpdateLocationPin();
             UpdateFrustum();
-            wmtsPanel.MoveToPosition(newPosition);
         }
         
         private void OnCameraSwitch(Camera newCamera)
@@ -263,7 +260,6 @@ namespace Netherlands3D.UI.Components
         {
             isDragging = true;
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRABBING);
-            wmtsPanel.CenterPointerInView = false;
         }
 
         private void OnDragging(Vector2 delta)
@@ -274,7 +270,6 @@ namespace Netherlands3D.UI.Components
         private void OnDragEnded(Vector2 endPosition)
         {
             isDragging = false;
-            wmtsPanel.CenterPointerInView = true;
             Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, Pointer.current.position.ReadValue());
 
             if (worldBound.Contains(panelPos))
