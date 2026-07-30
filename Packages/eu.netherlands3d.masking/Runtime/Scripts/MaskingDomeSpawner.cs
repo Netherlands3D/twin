@@ -24,6 +24,8 @@ namespace Netherlands3D.Masking
         private int bitIndexPropertyID;
         
         [SerializeField] private VisualDome domeVisualisation;
+        public bool IsPointerOnDome => isPointerOnDome;
+        private bool isPointerOnDome;
 
         private Camera mainCamera;
         private Vector3 cameraLookatPosition = Vector3.zero;
@@ -49,6 +51,8 @@ namespace Netherlands3D.Masking
             clickPlacementAction.action.performed += EndTap;
 
             StickToPointer();
+            
+            domeVisualisation.onHoveringChange.AddListener(OnPointerOnDome);
         }
 
         private void OnDisable()
@@ -63,6 +67,8 @@ namespace Netherlands3D.Masking
             {
                 ResetGlobalShaderVariables();
             }
+            
+            domeVisualisation.onHoveringChange.RemoveListener(OnPointerOnDome);
         }
 
         /// <summary>
@@ -72,6 +78,12 @@ namespace Netherlands3D.Masking
         {
             domeVisualisation.AnimateIn();
             waitForInitialPlacement = true;
+        }
+
+        private void OnPointerOnDome(bool onDome)
+        {
+            isPointerOnDome = onDome;
+            Debug.Log("OnPointerOnDome +" + onDome);
         }
 
         public void SpawnDisappearAnimation()
