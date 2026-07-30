@@ -9,3 +9,11 @@
 .feature-information-thumbnail__container{
     flex-shrink: 0;
 }
+
+.feature-information-address__list-view .unity-collection-view__item:checked {
+    background-color: transparent;
+}
+
+.feature-information-address__list-view .unity-collection-view__item:hover {
+    background-color: transparent;
+}
