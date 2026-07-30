@@ -118,7 +118,6 @@ namespace Netherlands3D.Masking
             }
 
             waitForInitialPlacement = false;
-            domeVisualisation.AllowInteraction = true;
         }      
 
         void Update()
