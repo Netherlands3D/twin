@@ -173,11 +173,16 @@ namespace Netherlands3D.UI.Components
             if (cameraCorners != null)
             {
                 //Align quad with camera extent points
-                cameraFrustumQuad.QuadVertices[0] = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP));
-                cameraFrustumQuad.QuadVertices[1] = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP));
-                cameraFrustumQuad.QuadVertices[2] = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP));
-                cameraFrustumQuad.QuadVertices[3] = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP));
+                var mapCoord0= wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP));
+                var mapCoord1 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP));
+                var mapCoord2 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP));
+                var mapCoord3 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP));
 
+                cameraFrustumQuad.QuadVertices[0] = wmtsPanel.LocalToViewport(mapCoord0);
+                cameraFrustumQuad.QuadVertices[1] = wmtsPanel.LocalToViewport(mapCoord1);
+                cameraFrustumQuad.QuadVertices[2] = wmtsPanel.LocalToViewport(mapCoord2);
+                cameraFrustumQuad.QuadVertices[3] = wmtsPanel.LocalToViewport(mapCoord3);
+                
                 //Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
                 cameraFrustumQuad.Redraw();
             }
@@ -309,7 +314,6 @@ namespace Netherlands3D.UI.Components
 
             if (Vector2.Distance(pointerDownPosition, evt.position) > dragDeadzone) return; //we cannot use the manipulator event functions to set isDragging to true or false, because this causes a race-condition.
 
-            Debug.Log("Clicked on minimap");
             wmtsPanel.ClickedMap(evt.position);
         }
 

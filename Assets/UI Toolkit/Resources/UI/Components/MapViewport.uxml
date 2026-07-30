@@ -8,8 +8,8 @@
     class="map-viewport">
     <nl3dP:WMTSPanel name="MapViewportRoot" class="map-viewport__tile-container" >
         <nl3d:Icon name="LocationPin" class="map-viewport__pin" picking-mode="Ignore" />
-        <nl3d:CustomQuad name="CameraFrustum" color="red"/>
     </nl3dP:WMTSPanel>
+    <nl3d:CustomQuad name="CameraFrustum" color="red"/>
     <ui:VisualElement class="map-viewport__controls">
         <nl3d:Button name="ZoomIn" icon="Plus" button-style="IconOnly" class="map-viewport__zoom-button"/>
         <nl3d:Button name="ZoomOut" icon="Minus" button-style="IconOnly" class="map-viewport__zoom-button"/>
