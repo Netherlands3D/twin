@@ -43,6 +43,7 @@ namespace Netherlands3D.UI.Panels
         private readonly Dictionary<int, Dictionary<Vector2, WMTSTile>> tileLayers = new();
         private bool initialized;
 
+        private Vector2 currentCenterLocalPosition;
         public UnityEvent TilesChanged = new();
 
         public WMTSPanel()
@@ -100,12 +101,6 @@ namespace Netherlands3D.UI.Panels
 
         private void OnCameraPositionChanged(Vector3 newWorldPosition)
         {
-            // if(movedByClick)
-            // {
-            //     movedByClick = false;
-            //     CenterOnLocalPosition(lastClickedPanelPosition);
-            //     return;
-            // }
             MoveToPosition(newWorldPosition);
         }
 
