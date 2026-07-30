@@ -25,6 +25,8 @@ namespace Netherlands3D.Masking
         private int maskingBitIndex = 22;
         
         [SerializeField] private VisualDome domeVisualisation;
+        [SerializeField] private Transform tempCanvas;
+        
         public bool IsPointerOnDome => isPointerOnDome;
         private bool isPointerOnDome;
 
@@ -33,13 +35,9 @@ namespace Netherlands3D.Masking
 
         private bool waitForInitialPlacement = false;
 
-        private void Start() {
-            mainCamera = Camera.main;
-            
+        private void Awake() {
             GetPropertyIDs();
             ApplyGlobalShaderVariables();
-            
-            //ToggleDome listener opruimen  van prefab en koppelen
         }
 
         public void SetMaskingBitIndex(int bitIndex)
@@ -50,7 +48,13 @@ namespace Netherlands3D.Masking
             Shader.SetGlobalInt(bitIndexPropertyID, bitIndex);
         }
 
-        private void OnEnable() {
+        public void SetDomeEnabled()
+        {
+            mainCamera = Camera.main;
+            
+            tempCanvas.gameObject.SetActive(true);
+            domeVisualisation.gameObject.SetActive(true);
+            
             Shader.EnableKeyword(sphericalMaskFeatureKeyword);
 
             clickPlacementAction.action.Enable();
@@ -61,9 +65,12 @@ namespace Netherlands3D.Masking
             
             domeVisualisation.onHoveringChange.AddListener(OnPointerOnDome);
         }
-
-        private void OnDisable()
+        
+        public void SetDomeDisabled()
         {
+            tempCanvas.gameObject.SetActive(false);
+            domeVisualisation.gameObject.SetActive(false);
+            
             Shader.DisableKeyword(sphericalMaskFeatureKeyword);
 
             // Unsubscribe and disable the click action when the script is disabled

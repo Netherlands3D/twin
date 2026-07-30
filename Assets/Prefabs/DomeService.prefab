@@ -293,6 +293,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 82421394, guid: 273f161db5cda784ba2a95d15b93e9f1,
         type: 3}
+    - target: {fileID: 4275165303546903011, guid: baace213b95c7fb45bd3f3bc71721fcd,
+        type: 3}
+      propertyPath: tempCanvas
+      value: 
+      objectReference: {fileID: 1953225443898561991}
     - target: {fileID: 4968342278220154164, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -324,10 +329,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5546791445585588271, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3917354445413730076}
-    - targetCorrespondingSourceObject: {fileID: 5546791445585588271, guid: baace213b95c7fb45bd3f3bc71721fcd,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 3992916370638977595}
     - targetCorrespondingSourceObject: {fileID: 5546791445585588271, guid: baace213b95c7fb45bd3f3bc71721fcd,
         type: 3}
@@ -346,6 +347,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4135085171464154188}
   m_SourcePrefab: {fileID: 100100000, guid: baace213b95c7fb45bd3f3bc71721fcd, type: 3}
+--- !u!224 &1953225443898561991 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 704520207210357227, guid: baace213b95c7fb45bd3f3bc71721fcd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1359442034952221740}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4079329228172817214 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3044720345821234962, guid: baace213b95c7fb45bd3f3bc71721fcd,
@@ -389,21 +396,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1359442034952221740}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3917354445413730076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6784563138714027011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cb6afab94bbce746972b7cf4261fc28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: 227995b5c76ec204c99f00a265308a86, type: 2}
-  invertBoolean: 0
-  disableAtLateStart: 1
 --- !u!114 &3992916370638977595
 MonoBehaviour:
   m_ObjectHideFlags: 0
