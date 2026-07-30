@@ -8,6 +8,7 @@ using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.UI_Toolkit;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
@@ -49,6 +50,22 @@ namespace Netherlands3D.UI.Panels
             {
                 LoadCatalog(assetLibrary.Catalog);
             });
+            listView.selectionChanged += objects =>
+            {
+                var items = listView.itemsSource.Cast<ICatalogItem>().ToList();
+
+                var validIndices = listView.selectedIndices
+                    .Where(i => IsImportable(items[i]))
+                    .ToList();
+
+                if (validIndices.Count != listView.selectedIndices.Count())
+                {
+                    listView.SetSelection(validIndices);
+                    return;
+                }
+
+                UpdateImportButton();
+            };
         }
 
         public async void LoadCatalog(ICatalog catalog)
@@ -134,6 +151,20 @@ namespace Netherlands3D.UI.Panels
             }
 
             listView.ClearSelection();
+        }
+
+        private bool IsImportable(ICatalogItem catalogItem)
+        {
+            return  catalogItem is RecordItem || catalogItem is DataService;
+        }
+
+        private void UpdateImportButton()
+        {
+            var selectedItems = listView.selectedItems
+                .Cast<ICatalogItem>()
+                .ToList();
+            
+            importButton.EnableInClassList(UtilityClassConstants.HIDDEN, selectedItems.Count == 0);
         }
 
         private void BindListViewItem(VisualElement item, int index)
