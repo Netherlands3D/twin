@@ -23,12 +23,11 @@ namespace Netherlands3D.UI.Panels
         public override string Title => "Importeren";
 
         public const string supportedFileTypes = "obj,csv,json,geojson,glb";
-
-        private ListView listView;
+        
         private Breadcrumb breadcrumb;
-        private Button uploadButton;
-        private Button goToAssetLibraryButton;
-        private Button selectionAreaButton;
+        private ListViewItem uploadButton;
+        private ListViewItem goToAssetLibraryButton;
+        private ListViewItem selectionAreaButton;
         private TextField importUriField;
         private Button importUriButton;
         private ErrorPanel errorPanel;
@@ -48,9 +47,9 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
 
             //listView = this.Q<ListView>();
-            uploadButton = this.Q<Button>("FileUploadButton");
-            goToAssetLibraryButton = this.Q<Button>("GoToAssetLibraryButton");
-            selectionAreaButton = this.Q<Button>("SelectionAreaButton");
+            uploadButton = this.Q<ListViewItem>("FileUploadButton");
+            goToAssetLibraryButton = this.Q<ListViewItem>("GoToAssetLibraryButton");
+            selectionAreaButton = this.Q<ListViewItem>("SelectionAreaButton");
             importUriField = this.Q<TextField>("ImportUriField");
             importUriButton = this.Q<Button>("ImportUriButton");
             errorPanel = this.Q<ErrorPanel>();
@@ -70,12 +69,6 @@ namespace Netherlands3D.UI.Panels
             credentialPanel.OnConfirmCredentials.AddListener(ApplyCredentials);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             
-            // listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            // listView.selectionType = SelectionType.None;
-
-            // listView.makeItem = MakeListViewItem;
-            // listView.bindItem = BindListViewItem;
-
             //we dont want to show the warning first but immediately start with the input of credentials instead
             credentialPanel.StartWithInput();
 
