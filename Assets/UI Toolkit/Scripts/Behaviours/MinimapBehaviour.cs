@@ -3,6 +3,7 @@ using Netherlands3D.Minimap;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -31,13 +32,14 @@ namespace Netherlands3D
 
         private void MoveCameraToCoordinate(Coordinate newCoordinate)
         {
-            
             if (!newCoordinate.IsValid()) return;
             
-            Vector3 unityCoordinate = newCoordinate.ToUnity();
-            unityCoordinate.y = activeCamera.transform.position.y;
-            
-            activeCamera.transform.position = unityCoordinate;
+            var coord = newCoordinate.Convert(CoordinateSystem.RDNAP);
+            coord.height = activeCamera.transform.position.y;
+            if (!activeCamera.TryGetComponent<WorldTransform>(out var worldTransform))
+                return;
+
+            worldTransform.MoveToCoordinate(coord);
         }
 
         private void OnCameraPositionChanged(Vector3 newWorldPosition)

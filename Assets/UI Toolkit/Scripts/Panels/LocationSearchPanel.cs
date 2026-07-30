@@ -24,6 +24,8 @@ namespace Netherlands3D.UI.Panels
         private NumberField CoordinateXField => coordinateXField ??= this.Q<NumberField>("CoordinateXField");
         private NumberField coordinateYField;
         private NumberField CoordinateYField => coordinateYField ??= this.Q<NumberField>("CoordinateYField");
+        private MapViewport minimap;
+        private MapViewport Minimap => minimap ??= this.Q<MapViewport>();
 
         private List<SuggestionResult> currentSuggestions = new();
 
@@ -56,7 +58,7 @@ namespace Netherlands3D.UI.Panels
 
         public LocationSearchPanel(MinimapConfig config) : this()
         {
-            this.Q<MapViewport>().Initialize(config);
+            Minimap.Initialize(config);
         }
 
         /// <summary>Populate the results list. Starts in an unselected state.</summary>
@@ -84,6 +86,7 @@ namespace Netherlands3D.UI.Panels
         {
             CoordinateXField.SetValueWithoutNotify(x);
             CoordinateYField.SetValueWithoutNotify(y);
+            // Minimap.SetLocation();
         }
 
         /// <summary>Toggle invalid style for both coordinate fields.</summary>
