@@ -1,6 +1,7 @@
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -44,7 +45,7 @@ namespace Netherlands3D.Twin.Services
         {
             snackbarService.OnHideMessage.RemoveListener(OnHideSnackbar);
             layers.LayerAdded.RemoveListener(OnLayerAdded);
-            layers.LayerRemoved.AddListener(OnLayerRemoved);
+            layers.LayerRemoved.RemoveListener(OnLayerRemoved);
             layers.VisualizationCreated.RemoveListener(OnVisualizationCreated);
             layerSourceAttributionEvent.RemoveListenerStarted(OnAttributionReceived.Invoke);
             
@@ -75,7 +76,7 @@ namespace Netherlands3D.Twin.Services
             else
                 activeMessage += layerData.Name;
             activeCounter++;
-            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd");
+            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd", IconImage.SHEETS);
         }
 
         //todo switch counter when adding -> removing or removing -> adding
@@ -107,6 +108,19 @@ namespace Netherlands3D.Twin.Services
         private void VisualizationErrorMessage(string message)
         {
             snackbarService.DisplayError(message);
+        }
+
+        // TODO: Replace this specific method with a generic layer message flow.
+        // Now only used in Tile3DLayerGameObject.cs
+        public void UnsupportedExtensionsMessage(string message)
+        {
+            snackbarService.DisplayError(message);
+        }
+
+        // TODO: Replace this specific CSV message with a generic layer replacement message flow.
+        public void DisplayCsvReplacedMessage(string message)
+        {
+            snackbarService.DisplayMessage(message, IconImage.SHEETS);
         }
     }
 }

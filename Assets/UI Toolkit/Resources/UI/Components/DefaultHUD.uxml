@@ -10,7 +10,7 @@
     <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
         <ui:VisualElement picking-mode="Ignore" name="LeftSection">
             <nl3d:HamburgerMenu/>
-            <ui:VisualElement picking-mode="Ignore" class="default-hud__inspector-zone" style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement picking-mode="Ignore" class="default-hud__inspector-zone">
                 <nl3d:ToolbarMain picking-mode="Ignore"/>
                 <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
                 <nl3dP:LegendPanel />
@@ -24,9 +24,12 @@
             <nl3dP:PropertiesPanel name="PropertiesPanel" class="default-hud__properties-zone-column"/>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="BottomSection" picking-mode="Ignore" style="align-items: flex-end; flex-direction: row;">
-        <nl3d:Footer/>
-        <ui:VisualElement name="BottomTools" picking-mode="Ignore" style="flex-shrink: 0; flex-basis: auto;">
+    <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
+        <ui:VisualElement name="BottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
+            <nl3d:DebugInfo/>
+            <nl3d:Footer/>
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomTools" picking-mode="Ignore" class="default-hud__bottom-tools">
             <nl3d:ToolbarNavigation />
             <ui:VisualElement name="CameraSlider"/>
         </ui:VisualElement>

@@ -11,6 +11,11 @@
     align-items: center;
 }
 
+.default-hud__inspector-zone {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
 .default-hud__properties-zone {
     position: absolute;
     right: 0;
@@ -21,4 +26,22 @@
 
 .default-hud__properties-zone .default-hud__properties-zone-column {
     margin-left: var(--spacing-2);
+}
+
+.default-hud__bottom-section {
+    flex-direction: row;
+    flex-shrink: 0;
+    align-items: flex-end;
+}
+
+.default-hud__bottom-info {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
+.default-hud__bottom-tools {
+    flex-shrink: 0;
 }
