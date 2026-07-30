@@ -44,13 +44,13 @@ namespace Netherlands3D.UI.Components
         public string LayerTypeIcon => layerTypeIcon.Image;
 
         private VisualElement indent;
-        private VisualElement foldout;
+        private UnityEngine.UIElements.Toggle foldout;
         public float IndentWidth => indent.resolvedStyle.width;
         public Rect FoldoutWorldBound => foldout.worldBound;
         
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
-        public UnityEvent<int, bool> VisibilityToggleChanged = new UnityEvent<int, bool>();
+        public UnityEvent<int, bool> VisibilityToggleChanged = new();
 
         public LayerTreeViewItem()
         {
@@ -136,13 +136,20 @@ namespace Netherlands3D.UI.Components
 
             if (!layoutReordered)
                 UpdateLayout();
+
+            foldout.RegisterValueChangedCallback(OnFoldoutToggleChanged);
+        }
+
+        private void OnFoldoutToggleChanged(ChangeEvent<bool> evt)
+        {
+            LayerData.IsExpanded = evt.newValue;
         }
 
         private void UpdateLayout()
         {
             itemRoot = GetTreeViewItemRoot();
             indent = ItemRoot.Q("unity-tree-view__item-indent");
-            foldout = ItemRoot.Q(className: "unity-tree-view__item-toggle");
+            foldout = ItemRoot.Q<UnityEngine.UIElements.Toggle>(className: "unity-tree-view__item-toggle");
                 
             if (itemRoot == null) return;
             itemRoot.AddComponentStylesheetByType(GetType());
@@ -163,6 +170,7 @@ namespace Netherlands3D.UI.Components
         {
             propertyPanelBehaviour.PropertySectionClosed.RemoveListener(UncheckPropertyToggle);
             propertyPanelBehaviour.PropertySectionOpened.RemoveListener(CheckPropertyToggle);
+            foldout.UnregisterValueChangedCallback(OnFoldoutToggleChanged);
         }
 
         private VisualElement GetTreeViewItemRoot()

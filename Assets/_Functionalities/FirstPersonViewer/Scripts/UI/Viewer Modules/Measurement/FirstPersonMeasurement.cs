@@ -82,7 +82,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         public void HandleInput()
         {
-            if (App.UIRoot.IsOverUI(Pointer.current.position.ReadValue())) return;
+            if (App.UIRoot.IsPointerOverUI()) return;
             
             if (mouseLClick.action.WasPressedThisFrame())
             {

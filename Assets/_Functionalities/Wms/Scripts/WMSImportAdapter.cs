@@ -52,7 +52,8 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 var request = new WmsGetCapabilities(url, bodyContents);
                 BoundingBoxCache.AddBoundingBoxContainer(request);
-
+                
+                //since we already have the GetCapabilities downloaded, we can set the legend urls. this will save a webrequest to re-download the GetCapabilities when the legends are requested.
                 var legends = request.GetLegendUrls();
                 ServiceLocator.GetService<LegendBehaviour>().SetLegendUrls(url.ToString(), legends);
 

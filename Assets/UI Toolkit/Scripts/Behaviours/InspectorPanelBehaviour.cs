@@ -51,7 +51,7 @@ namespace Netherlands3D.UI.Behaviours
             PolygonCreationService polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             inspectorPanel.OnShow += polygonSelectionService.EnablePolygonSelection;
             inspectorPanel.OnHide += polygonSelectionService.DisablePolygonSelection;
-            inspectorPanel.OnHide += polygonCreationService.SetGridInputModeToSelected;
+            inspectorPanel.OnHide += polygonCreationService.SetGridInputModeToSelectedWithoutNotify;
         }
 
         private void OnEnable()

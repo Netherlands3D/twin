@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3822504923427240547}
   - component: {fileID: 4759327881244281210}
   - component: {fileID: 840209856476251670}
-  - component: {fileID: 3396860488134915228}
   - component: {fileID: 2562595831614236368}
   - component: {fileID: 2858451392867820117}
   - component: {fileID: 161295898398469103}
@@ -51,12 +50,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultProjectFileName: ProjectTemplate.nl3d
   projectDataStore: {fileID: 11400000, guid: d44646dfa83fba241ac198123f4db956, type: 2}
-  undoStack: []
-  redoStack: []
   applicationActionMap: {fileID: -944628639613478452, guid: ada4cb215956c0845b3d6b4c9796c6f9,
     type: 3}
-  fileOpener: {fileID: 0}
-  undoStackSize: 10
   OnSaveStarted:
     m_PersistentCalls:
       m_Calls:
@@ -105,11 +100,10 @@ MonoBehaviour:
   OnLoadCompleted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161295898398469103}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Projects.ProjectDataVersionUpgrader,
-          eu.netherlands3d.twin
-        m_MethodName: UpdateProjectVersion
-        m_Mode: 0
+      - m_Target: {fileID: 11400000, guid: 04532d925262d428a882e0fae89db4d1, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -118,10 +112,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 04532d925262d428a882e0fae89db4d1, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 1
+      - m_Target: {fileID: 161295898398469103}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Projects.ProjectDataVersionUpgrader,
+          eu.netherlands3d.twin
+        m_MethodName: UpdateProjectVersion
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -160,35 +155,6 @@ MonoBehaviour:
   OnLocalCacheFailed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3396860488134915228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2174600510305605328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b7e70441345c14ab89bfbaf4f57f18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: 438ef627724d04ded9e086dd8a748b4c, type: 2}
-  trigger:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4759327881244281210}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Projects.ProjectDataHandler,
-          Assembly-CSharp
-        m_MethodName: SaveProject
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2562595831614236368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!114 &161295898398469103
 MonoBehaviour:
   m_ObjectHideFlags: 0

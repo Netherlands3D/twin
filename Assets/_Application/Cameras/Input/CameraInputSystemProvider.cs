@@ -183,13 +183,12 @@ namespace Netherlands3D.Twin.Cameras.Input
 
         public void Update()
         {
-            //Optionaly ignore camera input when the pointer is interacting with UI
-            if (!isDragging && OverLockingObject(out GameObject clickedObject))
+            if (App.UIRoot.IsPointerOverUI())
             {
                 ingoringInput = true;
                 return;
             }
-
+            
             //Main inputs
             var dragging = !lockDraggingInput && dragAction.IsPressed();
 

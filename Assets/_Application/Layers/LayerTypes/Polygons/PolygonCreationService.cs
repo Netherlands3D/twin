@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -39,6 +44,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private PolygonSelectionService polygonSelectionService;
         private InputService inputService;
         private ToolService toolService;
+        private CameraService cameraService;
 
         [SerializeField] private BoolEvent OnBlockCameraDragging;
 
@@ -50,6 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             toolService = ServiceLocator.GetService<ToolService>();
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            cameraService = ServiceLocator.GetService<CameraService>();
             
             //we have to listen to inputservice after it is initialized
             inputService = ServiceLocator.GetService<InputService>();
@@ -103,7 +110,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
             {
-                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Edit)
+                if(App.UIRoot.IsPointerOverUI() || input.Mode == PolygonInput.DrawMode.Edit)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -129,7 +136,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             else if (currentShapeType == ShapeType.Grid)
             {
-                if(App.UIRoot.IsUIClicked() || input.Mode == PolygonInput.DrawMode.Selected)
+                if(App.UIRoot.IsPointerOverUI() || input.Mode == PolygonInput.DrawMode.Selected)
                     return;
 
                 var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
@@ -184,7 +191,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if(input == null) return;
             
             var currentPointerPosition = inputService.PolygonPointerAction.ReadValue<Vector2>();
-            var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
+            var worldPosition = cameraService.ActiveCamera.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             input.SetSelectionCurrentPosition(worldPosition);
             
             if (currentShapeType == ShapeType.Line || currentShapeType == ShapeType.Polygon)
@@ -216,7 +223,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                 if (!gridInput.DrawingArea && inputService.PolygonClickAction.IsPressed() && inputService.PolygonModifierAction.IsPressed())
                 {
-                    if (App.UIRoot.IsUIClicked() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
+                    if (App.UIRoot.IsPointerOverUI() || gridInput.Mode == PolygonInput.DrawMode.Selected) return;
 
                     gridInput.DrawingArea = true;
                     OnBlockCameraDragging.InvokeStarted(true);
@@ -291,10 +298,57 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             gridInput.SetSelectionVisualEnabled(false);
             currentShapeType =  ShapeType.Undefined;
         }
+        
+        public void ConvertToLayer(Feature feature)
+        {
+            if (feature == null)
+            {
+                Debug.LogError("Feature mapping not set, cannot convert anything to layer.");
+                return;
+            }
+            
+            if (feature.Geometry is MultiPolygon multiPolygon)
+            {
+                if (multiPolygon.Coordinates.Count == 1) //no folder for a single polygon
+                {
+                    CreatePolygonLayerForFeature(multiPolygon.Coordinates[0], feature);
+                    return;
+                }
+
+                var builder = new LayerBuilder().OfType("folder").NamedAs(feature.Id);
+                var folder = App.Layers.Add(builder);
+                foreach (var polygon in multiPolygon.Coordinates)
+                {
+                    var layer = CreatePolygonLayerForFeature(polygon, feature);
+                    layer.LayerData.SetParent(folder.LayerData);
+                }
+            }
+            else if (feature.Geometry is Polygon polygon)
+            {
+                CreatePolygonLayerForFeature(polygon,  feature);
+            }
+        }
+
+        private Layer CreatePolygonLayerForFeature(Polygon polygon, Feature feature)
+        {
+            var solidPolygon = polygon.Coordinates[0];
+            var list = GeometryVisualizationFactory.ConvertToUnityCoordinates(solidPolygon, GeoJSONParser.GetCoordinateSystem(feature.CRS));
+
+            var polygonPropertyData = new PolygonSelectionLayerPropertyData();
+            polygonPropertyData.OriginalPolygon = list;
+            
+            var preset = new PolygonLayerPreset.Args(
+                feature.Id,
+                ShapeType.Polygon,
+                list
+            );
+            var layer = App.Layers.Add(preset);
+            polygonSelectionService.RegisterPolygon(layer.LayerData);
+            return layer;
+        }
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
-            
             var preset = new PolygonLayerPreset.Args(
                 "Polygon",
                 ShapeType.Polygon,
@@ -373,13 +427,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.OriginalPolygon = newPolygon;
         }
 
+        private bool preventRemovingPolygon = false;
         public void CancelLastCreatedGridLayer()
         {
-            //for now this works because we only give the user the option to manipulate the current selected grid layer and nothing else until finishing 
-            //within the polygon grid tool. But maybe this would be more safe to use a cached last created grid layer instead
-            if(polygonSelectionService.SelectedLayer == null) return;
+            if(polygonSelectionService.SelectedLayer == null || preventRemovingPolygon) return;
             
             App.Layers.Remove(polygonSelectionService.SelectedLayer);
+        }
+
+        //enable this to prevent the auto removal of the last created polygon when a panel is closed while creating a polygon without confirmation
+        public void SetPreventRemovingPolygon(bool remove)
+        {
+            preventRemovingPolygon = remove;
         }
 
         public void SetPolygonToCreate()
@@ -426,6 +485,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public void SetGridInputModeToSelected()
         {
             EnablePolygonInputByType(ShapeType.Grid);
+            gridInput.SetDrawMode(PolygonInput.DrawMode.Selected);
+        }
+
+        public void SetGridInputModeToSelectedWithoutNotify()
+        {
             gridInput.SetDrawMode(PolygonInput.DrawMode.Selected);
         }
     }

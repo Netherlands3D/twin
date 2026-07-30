@@ -265,9 +265,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
-            if (!isActive && LayerData.IsSelected)
+            if (LayerData.IsSelected) // when the layerdata is selected and the visibility changes, we need to attach/detach the transform handles
             {
-                LayerData.DeselectLayer();
+                if (isActive)
+                    AttachToTransformHandles();
+                else
+                    ClearTransformHandles();
             }
 
             gameObject.SetActive(isActive);
@@ -283,14 +286,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            //todo this works for now, but we should redesign this in such a manner so this dependency is not the way around
-            ObjectSelectorService selectionService = ServiceLocator.GetService<ObjectSelectorService>();
-            if(!selectionService.IsAnyToolActive()) return;
+            if (eventData.button != PointerEventData.InputButton.Left)
+                return;
             
-            LayerData.SelectLayer(true);
+            
+             if(!ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer).IsOpen) return;
+            
+             LayerData.SelectLayer(true);
         }
 
         public override void OnSelect(LayerData layer)
+        {
+            AttachToTransformHandles();
+        }
+
+        public override void OnDeselect(LayerData layer)
+        {
+            ClearTransformHandles();
+        }
+        
+        private void AttachToTransformHandles()
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
@@ -301,7 +316,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             else
             {
                 ToggleScatterPropertyData toggleScatterPropertyData = LayerData.LayerProperties.Get<ToggleScatterPropertyData>();
-                if (toggleScatterPropertyData != null && toggleScatterPropertyData.IsScattered)
+                if (toggleScatterPropertyData != null && toggleScatterPropertyData.IsScattered) //todo: check if this if is still needed, since we changed the Visualisation spawning
                 {
                     transformInterfaceToggle.ClearTransformTarget();
                     return;
@@ -310,11 +325,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transformInterfaceToggle.SetTransformTarget(gameObject);
                 transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
             }
-        }
-
-        public override void OnDeselect(LayerData layer)
-        {
-            ClearTransformHandles();
         }
 
         protected void ClearTransformHandles()

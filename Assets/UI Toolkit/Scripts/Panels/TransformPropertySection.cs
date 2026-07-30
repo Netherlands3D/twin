@@ -64,8 +64,8 @@ namespace Netherlands3D.UI.Panels
         private void OnRotationChanged()
         {
             var x = rotation.xField.GetValueAsDouble();
-            var y = rotation.yField.GetValueAsDouble();
-            var z = rotation.zField.GetValueAsDouble();
+            var y = rotation.zField.GetValueAsDouble(); //flip y and z since z is up in our world
+            var z = rotation.yField.GetValueAsDouble();
 
             transformPropertyData.EulerRotation = new Vector3((float)x, (float)y, (float)z);
         }
@@ -73,8 +73,8 @@ namespace Netherlands3D.UI.Panels
         private void OnScaleChanged()
         {
             var x = scale.xField.GetValueAsDouble();
-            var y = scale.yField.GetValueAsDouble();
-            var z = scale.zField.GetValueAsDouble();
+            var y = scale.zField.GetValueAsDouble(); //flip y and z since z is up in our world
+            var z = scale.yField.GetValueAsDouble();
 
             float scaleMultiplier = transformPropertyData.ScaleUnitCharacter == "%" ? 100f : 1f;
             transformPropertyData.LocalScale = new Vector3((float)x / scaleMultiplier, (float)y / scaleMultiplier, (float)z / scaleMultiplier);
@@ -135,8 +135,8 @@ namespace Netherlands3D.UI.Panels
         private void UpdateRotationFields(Vector3 eulerAngles)
         {
             rotation.xField.SetValueWithoutNotify(eulerAngles.x);
-            rotation.yField.SetValueWithoutNotify(eulerAngles.y);
-            rotation.zField.SetValueWithoutNotify(eulerAngles.z);
+            rotation.yField.SetValueWithoutNotify(eulerAngles.z); //flip y and z since z is up in our world
+            rotation.zField.SetValueWithoutNotify(eulerAngles.y); 
         }
 
         private void UpdateScalingFields(Vector3 newScale)
@@ -147,8 +147,8 @@ namespace Netherlands3D.UI.Panels
             var z = newScale.z * scaleMultiplier;
 
             scale.xField.SetValueWithoutNotify(x);
-            scale.yField.SetValueWithoutNotify(y);
-            scale.zField.SetValueWithoutNotify(z);
+            scale.zField.SetValueWithoutNotify(y); //flip y and z since z is up in our world
+            scale.yField.SetValueWithoutNotify(z);
         }
     }
 }

@@ -114,7 +114,7 @@ namespace Netherlands3D.FirstPersonViewer
             }
 
             // Relock only when unlocked, mouse pressed, and not clicking UI.
-            if (!cursorLocked && LeftClick.WasPressedThisFrame() && !App.UIRoot.IsOverUI(Mouse.current.position.ReadValue()))
+            if (!cursorLocked && LeftClick.WasPressedThisFrame() && !App.UIRoot.IsPointerOverUI())
             {
                 ToggleCursor(true);
             }
