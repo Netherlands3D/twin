@@ -1,16 +1,8 @@
 .footer {
     flex-direction: column;
-    flex-shrink: 1;
-    flex-grow: 1;
-    align-self: flex-end;
-    align-content: flex-end;
-    min-height: var(--spacing-7);
-    max-height: var(--spacing-11);
-    margin-left: 0px;
-    margin-top: 0px;
-    margin-right: var(--spacing-3);
-    margin-bottom: 0px;
-    background-color: transparent;
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin: 0 var(--spacing-3) 0 0;
 }
 
 .footer Label {
@@ -32,6 +24,7 @@
     flex-direction: row;
     flex-shrink: 0;
     flex-grow: 0;
+    flex-wrap: wrap;
     align-items: flex-end;
 }
 

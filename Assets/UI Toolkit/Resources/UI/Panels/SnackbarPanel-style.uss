@@ -1,14 +1,21 @@
 .snackbar-panel {
-    width: 380px;
+    width: 480px;
     height: auto;
+    min-height: var(--spacing-14);
+    max-height: 240px;
     background-color: var(--color-white);
-    border-radius: var(--border-radius-md);
-    max-height: 600px;
+    border-radius: var(--border-radius-lg);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-200);
     padding: var(--spacing-4);
     position: absolute;
-    top: 0;
+    top: var(--spacing-15);
     left: 50%;
     translate: -50% 0;
+}
+
+.snackbar-panel__content {
+    flex-direction: column;
 }
 
 .snackbar-text

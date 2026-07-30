@@ -1,6 +1,8 @@
-using Netherlands3D.Twin;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
+using Netherlands3D.UI_Toolkit.Scripts;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -9,13 +11,13 @@ namespace Netherlands3D.Twin.Services
 {
     public class SnackbarService : MonoBehaviour
     {
-        private const float defaultWaitTime = 5f;
-        [SerializeField] private Color infoColor = Color.black;
-        [SerializeField] private Color errorColor = Color.red;
+        private const float defaultWaitTime = 8f;
 
         private SnackbarPanel snackbarPanel;       
-        private Coroutine activeCoroutine;
-        private float timer;
+        private readonly Dictionary<float, WaitForSeconds> waitForSecondsCache = new();
+
+        [SerializeField] private string defaultInfoIcon = IconImage.CHECKMARK;
+        [SerializeField] private string defaultWarningIcon = IconImage.WARNING;
 
         public UnityEvent OnShowMessage = new();
         public UnityEvent OnHideMessage = new();
@@ -28,40 +30,46 @@ namespace Netherlands3D.Twin.Services
 
         public void DisplayMessage(string newText, float time = defaultWaitTime)
         {
-            DisplayText(newText, infoColor, time);
+            DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Info, defaultInfoIcon, time);
         }
 
         public void DisplayError(string newText, float time = defaultWaitTime)
         {
-            DisplayText(newText, errorColor, time);
+            DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Warning, defaultWarningIcon, time);
         }
 
-        public void DisplayMessage(string newText, Color color, float time = defaultWaitTime)
+        public void DisplayMessage(string newText, string icon, float time = defaultWaitTime)
         {
-            DisplayText(newText, color, time);
-        }       
-
-        private void DisplayText(string newText, Color color, float time = defaultWaitTime)
-        {
-            if (activeCoroutine != null)
-                StopCoroutine(activeCoroutine);
-            snackbarPanel.SetText(newText);
-            snackbarPanel.SetTextColor(color);
-            activeCoroutine = StartCoroutine(StartTimer(time));
+            DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Info, icon, time);
         }
 
-        private IEnumerator StartTimer(float duration)
+        private SnackBarItem DisplayText(string title, string details, SnackBarItem.SnackbarMessageType type, string icon, float time = defaultWaitTime)
+        {
+            var item = snackbarPanel.SetMessage(title, details, type, icon);
+            StartCoroutine(StartTimer(item, time));
+
+            return item;
+        }
+
+        private WaitForSeconds GetWaitForSeconds(float duration)
+        {
+            if (!waitForSecondsCache.TryGetValue(duration, out var waitForSeconds))
+            {
+                waitForSeconds = new WaitForSeconds(duration);
+                waitForSecondsCache[duration] = waitForSeconds;
+            }
+
+            return waitForSeconds;
+        }
+
+        private IEnumerator StartTimer(SnackBarItem item, float duration)
         {
             //TODO UI Toolkit, implement a slider here in the panel so the timer is visible to the user.
-            snackbarPanel.Show(true);
             OnShowMessage.Invoke();
-            timer = duration;
-            while (timer > 0)
-            {
-                timer -= Time.deltaTime;
-                yield return null;
-            }         
-            snackbarPanel.Show(false);
+
+            yield return GetWaitForSeconds(duration);
+
+            snackbarPanel.RemoveItem(item);
             OnHideMessage.Invoke();
         }
     }

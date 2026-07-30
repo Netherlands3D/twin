@@ -21,7 +21,6 @@ MonoBehaviour:
     value2: 462945
     value3: 0
   Functionalities:
-  - {fileID: 11400000, guid: 3da8bf8309a3baa4da8b4dba6d2283d9, type: 2}
   - {fileID: 11400000, guid: 77c433a944001411a9376d15fb427d17, type: 2}
   - {fileID: 11400000, guid: 73566e5fce73b5440b33ed107ed5be94, type: 2}
   corsProxyUrl: 

@@ -45,9 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8324d57b1db3e4c14a162e4a25028214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.UI.Snackbar
-  waitTime: 5
   infoColor: {r: 0, g: 0, b: 0, a: 1}
   errorColor: {r: 1, g: 0, b: 0, a: 1}
+  defaultInfoIcon: 47
+  defaultWarningIcon: 17
+  OnShowMessage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHideMessage:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1211302813786462128
 MonoBehaviour:
   m_ObjectHideFlags: 0

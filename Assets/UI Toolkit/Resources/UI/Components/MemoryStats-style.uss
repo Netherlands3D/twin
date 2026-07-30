@@ -1,0 +1,20 @@
+.memory-stats {
+    flex-shrink: 1;
+    flex-grow: 0;
+    margin: 0 var(--spacing-3) 0 0;
+}
+
+.memory-stats Label {
+    margin: 0px;
+    padding: 0px;
+    color: var(--color-white);
+    white-space: pre-wrap;
+}
+
+.memory-stats__content {
+    flex-direction: row;
+    flex-shrink: 1;
+    flex-grow: 0;
+    flex-wrap: wrap;
+    align-items: center;
+}
