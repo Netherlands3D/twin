@@ -149,8 +149,6 @@ namespace Netherlands3D.UI.Panels
                         break;
                 }
             }
-
-            listView.ClearSelection();
         }
 
         private bool IsImportable(ICatalogItem catalogItem)
