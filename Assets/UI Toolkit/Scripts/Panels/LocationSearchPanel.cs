@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.AddressSearch;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Minimap;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -86,7 +87,6 @@ namespace Netherlands3D.UI.Panels
         {
             CoordinateXField.SetValueWithoutNotify(x);
             CoordinateYField.SetValueWithoutNotify(y);
-            // Minimap.SetLocation();
         }
 
         /// <summary>Toggle invalid style for both coordinate fields.</summary>
@@ -96,6 +96,11 @@ namespace Netherlands3D.UI.Panels
             CoordinateYField.EnableInClassList("invalid", !valid);
         }
 
+        public void SetMinimapLocation(Coordinate coordinate)
+        {
+            Minimap.SetLocation(coordinate);
+        }
+        
         private void OnAttachToPanel(AttachToPanelEvent _)
         {
             AddressSearch.QueryChanged += OnAddressSearchQueryChanged;

@@ -195,6 +195,7 @@ namespace Netherlands3D.UI.Behaviours
             var rd = coordinate.Convert(CoordinateSystem.RD);
             panel?.SetCoordinates((int)rd.easting, (int)rd.northing);
             panel?.SetCoordinateValidity(rd.IsValid());
+            panel?.SetMinimapLocation(rd);
         }
     }
 }
