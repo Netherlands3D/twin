@@ -10,7 +10,7 @@
     flex-shrink: 0;
     flex-grow: 0;
     align-self: flex-start;
-    /*min-height: 30%;*/
+    min-height: 65%;
     min-width: var(--inspector-min-width);
     width: var(--inspector-width);
     max-width: var(--inspector-max-width);
@@ -53,7 +53,7 @@
 }
 
 .inspector .inspector-content {
-    flex-grow: 0;
+    flex-grow: 1;
     flex-shrink: 1;
     padding: 0px;
 }
