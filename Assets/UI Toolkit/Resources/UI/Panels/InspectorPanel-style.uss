@@ -11,6 +11,7 @@
     flex-grow: 0;
     align-self: flex-start;
     min-height: 65%;
+    max-height: 100%;
     min-width: var(--inspector-min-width);
     width: var(--inspector-width);
     max-width: var(--inspector-max-width);
