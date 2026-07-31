@@ -33,7 +33,7 @@ namespace Netherlands3D.Functionalities.Wms
         public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
         
         //The following is needed to send a valid getMap request to check for credentials. We don't want to waste many resources, so request a texture of 1x1 px
-        public const string testBBox = "0,300000,280000,625000"; //needed for credential check
+        public const string testBBox = "0,300000,280000,625000";
         private static readonly Regex WidthRegex = new(@"([?&]width=)\d+", RegexOptions.IgnoreCase);
         private static readonly Regex HeightRegex = new(@"([?&]height=)\d+", RegexOptions.IgnoreCase);
         
