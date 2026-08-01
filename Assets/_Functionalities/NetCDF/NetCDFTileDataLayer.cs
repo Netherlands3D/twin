@@ -9,6 +9,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.Utility;
 using Newtonsoft.Json;
+using PureHDF;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.NetCDF
@@ -444,33 +445,29 @@ namespace Netherlands3D.Functionalities.NetCDF
     // Pull the PureHDF.dll out of the lib/netstandard2.0/ (or similar) folder inside
     // Drop that single .dll into Assets/Plugins/ in your Unity project
 
+    using (var stream = new MemoryStream(ncBytes))
+    using (var file = H5File.Open(stream, leaveOpen: true))
+    {
+        var dataset = file.Dataset("effective-type-cloud-area-fraction-atm");
 
+        Debug.Log("Dataset found");
 
+        Debug.Log(dataset.Space.Dimensions);
 
+        var cloud = dataset.Read<float[,,]>();
 
-    var cloudReader = new CloudFractionReader(ncBytes);
-    float[,] cloudData = cloudReader.GetCloudLayer(0);
+        Debug.Log("Cloud size: " + cloud.Length);
+        Debug.Log("First value: " + cloud[0,0,0]);
+    }
 
-
-    Debug.Log(
-        $"Cloud data loaded: {cloudData.GetLength(0)} x {cloudData.GetLength(1)}"
-    );
-
-
-
-//
-// Example value check
-//
-
-    Debug.Log(
-        $"Cloud value [0,0]: {cloudData[0,0]}"
-    );
-
-
+    // var cloudReader = new CloudFractionReader(ncBytes);
+    // float[,] cloudData = cloudReader.GetCloudLayer(0);
 
     callback?.Invoke(tileChange);
 }
-        
+
+       
+       
         private void OnDownloadedNetCDFMetadata(IResponse response)
         {
             string json = response.Data as string;
