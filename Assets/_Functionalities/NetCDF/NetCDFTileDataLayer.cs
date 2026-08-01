@@ -438,6 +438,16 @@ namespace Netherlands3D.Functionalities.NetCDF
 // 6. Read cloud fraction data
 //
 
+   
+    // Download the .nupkg directly from https://www.nuget.org/packages/PureHDF (there's a "Download package" link on the page)
+    // Rename it to .zip, extract it
+    // Pull the PureHDF.dll out of the lib/netstandard2.0/ (or similar) folder inside
+    // Drop that single .dll into Assets/Plugins/ in your Unity project
+
+
+
+
+
     var cloudReader = new CloudFractionReader(ncBytes);
     float[,] cloudData = cloudReader.GetCloudLayer(0);
 
