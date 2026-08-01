@@ -26,6 +26,7 @@ MonoBehaviour:
     - {fileID: -1524728736553013956, guid: 9462ac35a03ed4ade9a4e14ea76906a3, type: 3}
     - {fileID: 1737505678239128256, guid: ba974bcd30ea6407f8cbbc1779e309b4, type: 3}
     - {fileID: 4477177290477694669, guid: f60b3c7f11823a9ce86527101bac825b, type: 3}
+    - {fileID: 2667843920677619674, guid: 8e3a4a527026893879718f3776721a71, type: 3}
   - groupName: ObjectenBibliotheek
     autoPopulateUI: 1
     prefabs:
@@ -62,6 +63,7 @@ MonoBehaviour:
     - {fileID: 7611614742349668521, guid: 7ddb78a6acbf44d4e84910b5684042b7, type: 3}
     - {fileID: 8209116542904522024, guid: 9c30c9cc071ed4343b05fb7ded7859d2, type: 3}
     - {fileID: 4033951798068751712, guid: 72d5fc36c601a427dac350e2b1146f0f, type: 3}
+    - {fileID: 2667843920677619674, guid: 8e3a4a527026893879718f3776721a71, type: 3}
   - groupName: Urban Releaf
     autoPopulateUI: 0
     prefabs:

@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.NetCDF.LayerPresets;
+using Netherlands3D.Functionalities.Wms.LayerPresets;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;

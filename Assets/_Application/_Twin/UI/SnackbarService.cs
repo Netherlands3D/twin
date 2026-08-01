@@ -45,6 +45,9 @@ namespace Netherlands3D.Twin.Services
         {
             if (activeCoroutine != null)
                 StopCoroutine(activeCoroutine);
+            if(snackbarPanel == null)
+                return;
+            
             snackbarPanel.SetText(newText);
             snackbarPanel.SetTextColor(color);
             activeCoroutine = StartCoroutine(StartTimer(time));
