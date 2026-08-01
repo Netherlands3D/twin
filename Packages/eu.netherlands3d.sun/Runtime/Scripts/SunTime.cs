@@ -20,6 +20,7 @@ using System;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
 namespace Netherlands3D.Sun
@@ -52,6 +53,8 @@ namespace Netherlands3D.Sun
         private float longitude;
         private float latitude;
         private DateTime time;
+        private float nightAmbient = 0.00f;
+        private float maxAmbient = 1.00f;
 
         public DateTime Time
         {
@@ -64,6 +67,11 @@ namespace Netherlands3D.Sun
                 time = value;
                 UpdateTimeOfDayPartsFromTime();
                 SetDirection();
+                
+               
+            
+              
+                
                 timeOfDayChanged.Invoke(time);
             }
         }
@@ -157,6 +165,9 @@ namespace Netherlands3D.Sun
                 second,
                 Time.Millisecond,
                 Time.Kind);
+            
+            
+           
         }
 
         public void SetHour(int hour)
@@ -266,6 +277,15 @@ namespace Netherlands3D.Sun
             angles.y = (float)azi * Mathf.Rad2Deg;
 
             sunDirectionalLight.transform.localRotation = Quaternion.Euler(angles);
+            float altitudeDegrees = (float)alt * Mathf.Rad2Deg;
+
+            float sunHeight = Mathf.Clamp01(altitudeDegrees / 10f);
+
+            float v = nightAmbient + sunHeight * maxAmbient;
+
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+            RenderSettings.ambientLight = new Color(v, v, v, 1f);
+            Debug.Log(v);
         }
 
         //call this when the origin changes to recalculate the origin and set the sun position without calling the time change event
