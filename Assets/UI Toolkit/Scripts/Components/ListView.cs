@@ -93,6 +93,11 @@ namespace Netherlands3D.UI.Components
             selectionChanged += OnSelectionChanged;
             
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+
+            RegisterCallback<PointerMoveEvent>(evt =>
+            {
+                lastPointerPosition = evt.position;
+            });
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
