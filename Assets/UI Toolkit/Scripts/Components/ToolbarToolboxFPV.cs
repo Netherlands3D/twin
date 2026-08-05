@@ -1,4 +1,5 @@
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -34,6 +35,7 @@ namespace Netherlands3D.UI.Components
         {
             FirstPersonViewer.FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
             fpv.ExitViewer(true);
+            App.UIRoot.DisableFPVUI();
         }
         
         private void SnapToGround()
