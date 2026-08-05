@@ -404,7 +404,7 @@ namespace Netherlands3D.Tiles3D
                 tile.content.tilesetReader = this;
                 tile.content.State = Content.ContentLoadState.NOTLOADING;
                 tile.content.ParentTile = tile;
-                tile.content.uri = GetFullContentUri(tile);
+                //tile.content.uri = GetFullContentUri(tile);
                 tile.content.parseAssetMetaData = parseAssetMetadata;
                 tile.content.onTileLoadCompleted.AddListener(OnTileLoaded.Invoke);
 #if SUBOBJECT
@@ -692,7 +692,7 @@ namespace Netherlands3D.Tiles3D
             }
         }
 
-        private string GetFullContentUri(Tile tile)
+        public string GetFullContentUri(Tile tile)
         {
             var relativeContentUrl = tile.contentUri;
 

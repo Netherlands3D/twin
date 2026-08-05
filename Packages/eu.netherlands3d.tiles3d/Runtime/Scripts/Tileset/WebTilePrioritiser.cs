@@ -137,10 +137,7 @@ namespace Netherlands3D.Tiles3D
                                     Dispose(tile);
                                     delayedDisposeList.RemoveAt(i);
                                 }
-                                else
-                                {
-                                Debug.Log("tilesdispose delayed");
-                                }
+                                
                             }
                             else
                             {

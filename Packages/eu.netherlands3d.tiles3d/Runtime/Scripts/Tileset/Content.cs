@@ -11,7 +11,7 @@ namespace Netherlands3D.Tiles3D
     [System.Serializable]
     public class Content : MonoBehaviour, IDisposable
     {
-        public string uri = "";
+        //public string uri = "";
         public Coordinate contentCoordinate;
         public CoordinateSystem contentcoordinateSystem;
 
@@ -101,7 +101,7 @@ namespace Netherlands3D.Tiles3D
             TIleContentLoader.debugLog = verbose;
             runningContentRequest = StartCoroutine(
            TIleContentLoader.DownloadContent(
-               uri,
+               parentTile.tileSet.GetFullContentUri(parentTile),
                transform,
                ParentTile,
                DownloadedData,
