@@ -6,10 +6,12 @@
     --inspector-section-header-margin-top: var(--spacing-2);
     --inspector-section-header-spacing: var(--spacing-1);
    
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-shrink: 0;
     flex-grow: 0;
-    align-self: stretch;
+    align-self: flex-start;
+    min-height: 65%;
+    max-height: 65%;
     min-width: var(--inspector-min-width);
     width: var(--inspector-width);
     max-width: var(--inspector-max-width);
