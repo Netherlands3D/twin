@@ -17,6 +17,8 @@ namespace Netherlands3D.UI.Components
         private List<int> lastSelectedIndices = new();
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
 
+        [UxmlAttribute("empty-text")]
+        public string EmptyText { get; set; } = "Deze lijst is leeg";
 
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
@@ -87,6 +89,15 @@ namespace Netherlands3D.UI.Components
             if (base.bindItem == null) this.bindItem = DefaultBind;
 
             selectionChanged += OnSelectionChanged;
+            
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+        }
+
+        private void OnGeometryChanged(GeometryChangedEvent evt)
+        {
+            var emptyLabel = this.Q<Label>(className: "unity-list-view__empty-label"); //the label only spawns after an empty list has been rendered
+            if (emptyLabel != null)
+                emptyLabel.text = EmptyText;
         }
 
         /// <summary>
