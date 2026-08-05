@@ -126,12 +126,12 @@ namespace Netherlands3D.Tiles3D
                     var tile = delayedDisposeList[i];
                     int loadingchildcount = tile.CountLoadingChildren();
 
-                    foreach (var child in tile.children)
-                    {
+                    //foreach (var child in tile.children)
+                    //{
                         if (loadingchildcount==0)
                         {
                             if(tile.content !=null)
-                             {
+                            {
                                 if(tile.content.State == Content.ContentLoadState.DOWNLOADED || tile.content.State == Content.ContentLoadState.NOTLOADING)
                                 {
                                     Dispose(tile);
@@ -148,7 +148,7 @@ namespace Netherlands3D.Tiles3D
                             delayedDisposeList.RemoveAt(i);
                             }
                         }
-                    }
+                    //}
 
                     
                 }
