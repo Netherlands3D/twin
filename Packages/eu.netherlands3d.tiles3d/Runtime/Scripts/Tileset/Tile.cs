@@ -42,9 +42,8 @@ namespace Netherlands3D.Tiles3D
         
 
         //tileproperties
-
+        
         public TileTransform tileTransform = TileTransform.Identity();
-        public double[] transform = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
         public double geometricError;
         public float screenSpaceError = float.MaxValue;
         public string refine;
@@ -170,41 +169,10 @@ namespace Netherlands3D.Tiles3D
             set => unityBounds = value;
         }
 
-        public Vector3 EulerRotationToVertical()
-        {
-            float posX = (float)(transform[12] / 1000); // measured for earth-center to prime meridian (greenwich)
-            float posY = (float)(transform[13] / 1000); // measured from earth-center to 90degrees east at equator
-            float posZ = (float)(transform[14] / 1000); // measured from earth-center to nothpole
+        
 
-            float angleX = -Mathf.Rad2Deg * Mathf.Atan(posY / posZ);
-            float angleY = -Mathf.Rad2Deg * Mathf.Atan(posX / posZ);
-            float angleZ = -Mathf.Rad2Deg * Mathf.Atan(posY / posX);
-            Vector3 result = new Vector3(angleX, angleY, angleZ);
-            return result;
-        }
 
-        public Quaternion RotationToVertical()
-        {
-            float posX = (float)(transform[12] / 1000000); // measured for earth-center to prime meridian (greenwich)
-            float posY = (float)(transform[13] / 1000000); // measured from earth-center to 90degrees east at equator
-            float posZ = (float)(transform[14] / 1000000); // measured from earth-center to nothpole
 
-            Quaternion rotation = Quaternion.FromToRotation(new Vector3(posX, posY, posZ), new Vector3(0, 0, 1));
-
-            return rotation;
-        }
-
-        public bool ChildrenHaveContent()
-        {
-            if (children.Count > 0) { 
-                foreach (var child in children)
-                {
-                    if (!child.content || child.content.State != Content.ContentLoadState.DOWNLOADED) return false;
-                    break;
-                }
-            }
-            return true;
-        }
 
         public int GetNestingDepth()
         {
