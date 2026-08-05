@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement orbitContainer;
         private DragManipulator dragManipulator;
 
-        private Vector2 dragStartPosition;
+        private Vector2 pointerPositionWorldSpace;
         private Vector2 previousPointerPosition;
         private float angle;
 
@@ -48,17 +48,20 @@ namespace Netherlands3D.UI.Components
 
         private void OnDragStarted(Vector2 startPosition)
         {
-            dragStartPosition = startPosition;
-            previousPointerPosition = startPosition;
+            pointerPositionWorldSpace = startPosition;
+            previousPointerPosition = this.WorldToLocal(pointerPositionWorldSpace);
         }
 
-        private void OnDragging(Vector2 deltaFromStart)
+        private void OnDragging(Vector2 delta)
         {
+            pointerPositionWorldSpace += delta;
+            var currentPosition = this.WorldToLocal(pointerPositionWorldSpace);
+
             var center = new Vector2(
                 OrbitContainer.layout.x + OrbitContainer.layout.width * 0.5f,
                 OrbitContainer.layout.y + OrbitContainer.layout.height * 0.5f
             );
-            var currentPosition = dragStartPosition + deltaFromStart;
+
             var previous = previousPointerPosition - center;
             var current = currentPosition - center;
 
@@ -68,8 +71,8 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            var delta = Mathf.Atan2(current.y, current.x) - Mathf.Atan2(previous.y, previous.x);
-            var deltaDegrees = delta * Mathf.Rad2Deg;
+            var deltaAngle = Mathf.Atan2(current.y, current.x) - Mathf.Atan2(previous.y, previous.x);
+            var deltaDegrees = deltaAngle * Mathf.Rad2Deg;
 
             SetAngleWithoutNotify(angle + deltaDegrees);
             previousPointerPosition = currentPosition;
