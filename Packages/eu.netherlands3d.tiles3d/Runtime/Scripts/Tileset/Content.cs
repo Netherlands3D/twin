@@ -176,7 +176,7 @@ namespace Netherlands3D.Tiles3D
                 StopCoroutine(runningContentRequest);       
             }
            
-            State = ContentLoadState.DOWNLOADED;
+            //State = ContentLoadState.DOWNLOADED;
 
             if (gltf != null)
             {

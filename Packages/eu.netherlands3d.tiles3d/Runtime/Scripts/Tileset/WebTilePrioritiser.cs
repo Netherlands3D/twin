@@ -97,18 +97,20 @@ namespace Netherlands3D.Tiles3D
                     anyChildLoading = true;
                 }
             }
-            if(tile.isLoading==true)
+
+            if(anyChildLoading && immediately==false)
             {
                 delayedDisposeList.Add(tile);
             }
-            else if(anyChildLoading && immediately==false)
+            else if(tile.content !=null)
             {
-                delayedDisposeList.Add(tile);
-            }
-            else
-            {
+                if(tile.content.State == Content.ContentLoadState.DOWNLOADED)
+                {
                 Dispose(tile);
+                }
+                else{delayedDisposeList.Add(tile);}
             }
+            else{delayedDisposeList.Add(tile);};
 
         }
 
@@ -128,8 +130,23 @@ namespace Netherlands3D.Tiles3D
                     {
                         if (loadingchildcount==0)
                         {
+                            if(tile.content !=null)
+                             {
+                                if(tile.content.State == Content.ContentLoadState.DOWNLOADED || tile.content.State == Content.ContentLoadState.NOTLOADING)
+                                {
+                                    Dispose(tile);
+                                    delayedDisposeList.RemoveAt(i);
+                                }
+                                else
+                                {
+                                Debug.Log("tilesdispose delayed");
+                                }
+                            }
+                            else
+                            {
                             Dispose(tile);
                             delayedDisposeList.RemoveAt(i);
+                            }
                         }
                     }
 
