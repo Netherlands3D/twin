@@ -9,9 +9,6 @@ namespace Netherlands3D.UI.Components
     {
         public Vector2[] QuadVertices { get; set; } = new Vector2[4];
 
-        [UxmlAttribute("color")] 
-        public Color Color { get; set; } = Color.white;
-
         public CustomQuad()
         {
             this.CloneComponentTree("Components");
@@ -25,13 +22,14 @@ namespace Netherlands3D.UI.Components
         private void GenerateVisualContent(MeshGenerationContext mgc)
         {
             MeshWriteData mesh = mgc.Allocate(4, 6);
-
+            var color = resolvedStyle.color;
+            
             for (int i = 0; i < 4; i++)
             {
                 mesh.SetNextVertex(new Vertex
                 {
                     position = QuadVertices[i],
-                    tint = Color
+                    tint = color
                 });
             }
 

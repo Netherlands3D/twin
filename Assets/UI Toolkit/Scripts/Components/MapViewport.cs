@@ -165,26 +165,24 @@ namespace Netherlands3D.UI.Components
         
         public void UpdateFrustum() 
         {
-            //todo: this is currently not working as intended
-            return;
-            // CameraExtents.GetRDExtent(activeCamera);
-            // var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);
-            // if (cameraCorners != null)
-            // {
-            //     //Align quad with camera extent points
-            //     var mapCoord0= wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP));
-            //     var mapCoord1 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP));
-            //     var mapCoord2 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP));
-            //     var mapCoord3 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP));
-            //
-            //     cameraFrustumQuad.QuadVertices[0] = wmtsPanel.LocalToViewport(mapCoord0);
-            //     cameraFrustumQuad.QuadVertices[1] = wmtsPanel.LocalToViewport(mapCoord1);
-            //     cameraFrustumQuad.QuadVertices[2] = wmtsPanel.LocalToViewport(mapCoord2);
-            //     cameraFrustumQuad.QuadVertices[3] = wmtsPanel.LocalToViewport(mapCoord3);
-            //     
-            //     //Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
-            //     cameraFrustumQuad.Redraw();
-            // }
+            CameraExtents.GetRDExtent(Camera.main);
+            var cameraCorners = CameraExtents.GetWorldSpaceCorners(Camera.main);
+            if (cameraCorners != null)
+            {
+                //Align quad with camera extent points
+                var mapCoord0= wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP));
+                var mapCoord1 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP));
+                var mapCoord2 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP));
+                var mapCoord3 = wmtsPanel.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP));
+            
+                cameraFrustumQuad.QuadVertices[0] = wmtsPanel.ChangeCoordinatesTo(cameraFrustumQuad.parent, mapCoord0);
+                cameraFrustumQuad.QuadVertices[1] = wmtsPanel.ChangeCoordinatesTo(cameraFrustumQuad.parent, mapCoord3);
+                cameraFrustumQuad.QuadVertices[2] = wmtsPanel.ChangeCoordinatesTo(cameraFrustumQuad.parent, mapCoord2);
+                cameraFrustumQuad.QuadVertices[3] = wmtsPanel.ChangeCoordinatesTo(cameraFrustumQuad.parent, mapCoord1);
+                
+                //todo Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
+                cameraFrustumQuad.Redraw();
+            }
         }
 
 
@@ -256,6 +254,7 @@ namespace Netherlands3D.UI.Components
             }
 
             wmtsPanel.ScaleMapOverOrigin(mapLocalTarget, Vector3.one * Mathf.Pow(2.0f, zoomScale));
+            UpdateFrustum();
         }
 
         #region Inputs
@@ -264,11 +263,13 @@ namespace Netherlands3D.UI.Components
         {
             isDragging = true;
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRABBING);
+            UpdateFrustum();
         }
 
         private void OnDragging(Vector2 delta)
         {
             wmtsPanel.Pan(delta);
+            UpdateFrustum();
         }
 
         private void OnDragEnded(Vector2 endPosition)
@@ -280,6 +281,8 @@ namespace Netherlands3D.UI.Components
                 ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER); //pointer is still in the panel
             else
                 ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
+            
+            UpdateFrustum();
         }
 
         public void OnScroll(WheelEvent evt)
