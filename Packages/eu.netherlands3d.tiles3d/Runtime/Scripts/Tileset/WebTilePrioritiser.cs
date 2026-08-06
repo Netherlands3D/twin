@@ -121,31 +121,16 @@ namespace Netherlands3D.Tiles3D
         {
             if (delayedDisposeList.Count > 0)
             {
-                for (int i = delayedDisposeList.Count - 1; i >= 0; i--)
+                int listcount = delayedDisposeList.Count;
+                for (int i = listcount - 1; i >= 0; i--)
                 {
                     var tile = delayedDisposeList[i];
+                    if(tile == null)continue;
                     int loadingchildcount = tile.CountLoadingChildren();
-
-                    //foreach (var child in tile.children)
-                    //{
-                        if (loadingchildcount==0)
-                        {
-                            if(tile.content !=null)
-                            {
-                                if(tile.content.State == Content.ContentLoadState.DOWNLOADED || tile.content.State == Content.ContentLoadState.NOTLOADING)
-                                {
-                                    Dispose(tile);
-                                    delayedDisposeList.RemoveAt(i);
-                                }
-                                
-                            }
-                            else
-                            {
-                            Dispose(tile);
-                            delayedDisposeList.RemoveAt(i);
-                            }
-                        }
-                    //}
+                    if (loadingchildcount==0)
+                    {
+                        delayedDisposeList.RemoveAt(i);
+                    }
 
                     
                 }

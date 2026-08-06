@@ -453,7 +453,10 @@ namespace Netherlands3D.Tiles3D
 
                 if(IsInViewFrustrum(ofCamera)==false)
                 {
+                    if (ChildrenHaveContentActive()==false)
+                    {
                     DestroyChildTiles();
+                    }
                 }
 
             }
