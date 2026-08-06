@@ -429,7 +429,7 @@ namespace Netherlands3D.Tiles3D
             }
         }
     
-        public bool ChildrenHaveContent()
+        public bool ChildrenHaveContentActive()
         {
             bool result = false;
 
@@ -440,7 +440,7 @@ namespace Netherlands3D.Tiles3D
             }
             foreach (Tile child in children)
             {
-                if (child.ChildrenHaveContent()==true)
+                if (child.ChildrenHaveContentActive()==true)
                 { return true;}
             }
             return false;
