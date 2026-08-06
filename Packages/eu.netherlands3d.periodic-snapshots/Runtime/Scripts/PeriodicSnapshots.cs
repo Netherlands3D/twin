@@ -207,6 +207,8 @@ namespace Netherlands3D.Snapshots
                 sourceCamera.targetTexture = renderTexture;
 
                 sourceCamera.Render();
+                
+                yield return new WaitForEndOfFrame(); //we need more time in between to prevent corruption
 
                 RenderTexture.active = renderTexture;
 
