@@ -62,10 +62,7 @@ namespace Netherlands3D.Functionalities.NetCDF
 
         
 
-       private IEnumerator DownloadTile(
-            TileChange tileChange,
-            Tile tile,
-            Action<TileChange> callback = null)
+        protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             
             // var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7900166245345724691}
   - component: {fileID: -8300356283678966299}
   - component: {fileID: -7699739382070360042}
+  - component: {fileID: 3274747810722394710}
   m_Layer: 0
   m_Name: NetCDFLayer
   m_TagString: Untagged
@@ -54,6 +55,7 @@ MonoBehaviour:
   VisualisationError:
     m_PersistentCalls:
       m_Calls: []
+  Resolution: {x: 1000, y: 1000}
 --- !u!114 &8881982197711854992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,6 +77,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onLayerDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+  compressLoadedTextures: 0
+  projectorPrefab: {fileID: 0}
+  onLogMessage:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7900166245345724691
@@ -139,3 +146,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3274747810722394710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Credentials.CredentialHandler

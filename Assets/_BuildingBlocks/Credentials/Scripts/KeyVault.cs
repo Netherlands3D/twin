@@ -37,7 +37,8 @@ namespace Netherlands3D.Credentials
             { typeof(Code), (uri, args) => new Code(uri, args[0]) },
             { typeof(Token), (uri, args) => new Token(uri, args[0]) },
             { typeof(UsernamePassword), (uri, args) => new UsernamePassword(uri, args[1], args[0]) }, //order is Password before Username, because we need a consistent order to use passwordOrKey
-            { typeof(BearerToken), (uri, args) => new BearerToken(uri, args[0]) }
+            { typeof(BearerToken), (uri, args) => new BearerToken(uri, args[0]) },
+            { typeof(AuthorizationToken), (uri, args) => new AuthorizationToken(uri, args[0]) },
         };
 
         private StoredAuthorization.StoredAuthorization CreateStoredAuthorization(Type storedAuthorizationType, Uri uri, params string[] args)
