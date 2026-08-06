@@ -129,8 +129,6 @@ namespace Netherlands3D.Snapshots
             }
 
             onStartGenerating.Invoke();
-            
-            yield return WarmupGPU(); //we need to active the gpu otherwise it will pixelate 
 
             var cachedTimeOfDay = sunTime.GetTime();
             for (var index = 0; index < moments.Count; index++)
@@ -364,37 +362,6 @@ namespace Netherlands3D.Snapshots
 
             timeStampTexture.Apply();
             return timeStampTexture;
-        }
-        
-        private IEnumerator WarmupGPU()
-        {
-            Camera camera = ServiceLocator.GetService<CameraService>().ActiveCamera;
-
-            RenderTexture warmupTexture = new RenderTexture(
-                16,
-                16,
-                24,
-                RenderTextureFormat.ARGB32
-            );
-
-            warmupTexture.Create();
-
-            RenderTexture previousTarget = camera.targetTexture;
-            RenderTexture previousActive = RenderTexture.active;
-
-            camera.targetTexture = warmupTexture;
-
-            yield return new WaitForEndOfFrame();
-
-            camera.Render();
-
-            yield return new WaitForEndOfFrame();
-
-            camera.targetTexture = previousTarget;
-            RenderTexture.active = previousActive;
-
-            warmupTexture.Release();
-            Destroy(warmupTexture);
         }
     }
 }
