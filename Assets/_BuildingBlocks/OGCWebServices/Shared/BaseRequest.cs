@@ -8,14 +8,16 @@ namespace Netherlands3D.OgcWebServices.Shared
     public enum ServiceType
     {
         Wfs,
-        Wms
+        Wms,
+        Wcs
     }
 
     public enum RequestType
     {
         GetCapabilities,
         GetFeature,
-        GetMap
+        GetMap,
+        GetCoverage
     }
 
     public abstract class BaseRequest

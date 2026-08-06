@@ -18,17 +18,18 @@ namespace Netherlands3D.Functionalities.NetCDF
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
-    [RequireComponent(typeof(NetCDFTileDataLayer))]
-    public class NetCDFLayerGameObject : CartesianTileLayerGameObject, IVisualizationWithPropertyData
+    [RequireComponent(typeof(WCSTileDataLayer))]
+    public class WCSLayerGameObject : CartesianTileLayerGameObject, IVisualizationWithPropertyData
     {
-        private NetCDFTileDataLayer netCDFLayer;
+        private WCSTileDataLayer netCDFLayer;
+        public Vector2Int Resolution = Vector2Int.one * 1000;
    
         public override BoundingBox Bounds => netCDFLayer?.BoundingBox;
         
         protected override void OnVisualizationInitialize()
         {
             base.OnVisualizationInitialize();
-            netCDFLayer = GetComponent<NetCDFTileDataLayer>();
+            netCDFLayer = GetComponent<WCSTileDataLayer>();
         }
 
         protected override void OnVisualizationReady()
