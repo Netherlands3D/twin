@@ -134,8 +134,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void Start()
         {
             InputService inputService = ServiceLocator.GetService<InputService>();
-            inputService.LeftClickUpAction.performed += OnLeftClick;
-            inputService.RightClickUpAction.performed += OnRightClick;
+            inputService.LeftClickUpAction.performed += OnLeftClickUp;
+            inputService.RightClickUpAction.performed += OnRightClickUp;
+            inputService.LeftClickAction.performed += OnLeftClick;
+            inputService.RightClickAction.performed += OnRightClick;
             
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
@@ -148,9 +150,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnDestroy()
         {
             InputService inputService = ServiceLocator.GetService<InputService>();
-            inputService.LeftClickUpAction.performed -= OnLeftClick;
-            inputService.RightClickUpAction.performed -= OnRightClick;
-
+            inputService.LeftClickUpAction.performed -= OnLeftClickUp;
+            inputService.RightClickUpAction.performed -= OnRightClickUp;
+            inputService.LeftClickAction.performed -= OnLeftClick;
+            inputService.RightClickAction.performed -= OnRightClick;
         }
 
         private void OpenLayerPanel(LayerData layer)
@@ -192,17 +195,35 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return hasHit;
         }
 
+        private Vector2 pointerDownPosition;
+        
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
+            pointerDownPosition = Mouse.current.position.ReadValue();
+        }
+
+        private void OnRightClick(InputAction.CallbackContext ctx)
+        {
+            pointerDownPosition = Mouse.current.position.ReadValue();
+        }
+
+        private void OnLeftClickUp(InputAction.CallbackContext ctx)
+        {
             if (App.UIRoot.IsPointerOverUI())
+                return;
+            
+            if(Vector2.Distance(pointerDownPosition, Mouse.current.position.ReadValue()) > minClickDistance)
                 return;
 
             ProcessSelection(true);
         }
 
-        private void OnRightClick(InputAction.CallbackContext ctx)
+        private void OnRightClickUp(InputAction.CallbackContext ctx)
         {
             if (App.UIRoot.IsPointerOverUI())
+                return;
+            
+            if(Vector2.Distance(pointerDownPosition, Mouse.current.position.ReadValue()) > minClickDistance)
                 return;
 
             ProcessSelection(false);
