@@ -28,16 +28,31 @@ namespace Netherlands3D.UI.Components
                 evt.target = this;
                 label.text = value;
                 inputField.SetValueWithoutNotify(value);
+                CalculateOverflow();
                 SendEvent(evt);
             }
         }
 
         public bool IsEditing => label.ClassListContains(UtilityClassConstants.HIDDEN);
         
+        private VisualElement labelContainer;
+
+        private IVisualElementScheduledItem tickerSchedule;
+
+        private float textWidth;
+        private float availableWidth;
+
+        [UxmlAttribute]
+        public float ScrollSpeed { get; set; } = 100f;
+
+        private float scrollPosition;
+        private bool isOverflowing;
+        
         public void SetValueWithoutNotify(string newValue)
         {
             label.text = newValue;
             inputField.SetValueWithoutNotify(newValue);
+            CalculateOverflow();
         }
         
         public EditableNameField()
@@ -46,6 +61,10 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             label = this.Q<Label>("Label");
+            RegisterCallback<PointerEnterEvent>(OnLabelHoverEnter);
+            RegisterCallback<PointerLeaveEvent>(OnLabelHoverExit);
+            RegisterCallback<GeometryChangedEvent>(OnLabelGeometryChanged);
+            
             label.focusable = true;
             inputField = this.Q<TextField>("InputField");
 
@@ -118,6 +137,84 @@ namespace Netherlands3D.UI.Components
         private void OnNavigationSubmitted(NavigationSubmitEvent evt)
         {
             StopEditing();
+        }
+        
+        private void OnLabelGeometryChanged(GeometryChangedEvent evt)
+        {
+            CalculateOverflow();
+        }
+        
+        private void CalculateOverflow()
+        {
+            if (label == null)
+                return;
+
+            textWidth = label.MeasureTextSize(
+                label.text,
+                float.PositiveInfinity,
+                MeasureMode.Undefined,
+                label.resolvedStyle.height,
+                MeasureMode.Exactly
+            ).x;
+
+
+            availableWidth = resolvedStyle.width;
+            ResetTicker();
+        }
+        
+        private void OnLabelHoverEnter(PointerEnterEvent evt)
+        {
+            if(textWidth < availableWidth) return;
+            
+            StartTicker();
+        }
+        
+        private void OnLabelHoverExit(PointerLeaveEvent evt)
+        {
+            StopTicker();
+        }
+
+        private void StartTicker()
+        {
+            if (tickerSchedule != null)
+                return;
+
+            scrollPosition = 0;
+
+            tickerSchedule = schedule.Execute(() =>
+            {
+                scrollPosition -= ScrollSpeed * Time.deltaTime;
+                if (scrollPosition < -textWidth)
+                    scrollPosition = availableWidth;
+
+                label.style.translate = new Translate(
+                    scrollPosition,
+                    0,
+                    0
+                );
+
+            });
+
+            tickerSchedule.Every(16);
+        }
+        
+        private void StopTicker()
+        {
+            tickerSchedule?.Pause();
+            tickerSchedule = null;
+
+            ResetTicker();
+        }
+
+
+        private void ResetTicker()
+        {
+            scrollPosition = 0;
+
+            if(label != null)
+            {
+                label.style.translate = new Translate(0,0,0);
+            }
         }
     }
 }
