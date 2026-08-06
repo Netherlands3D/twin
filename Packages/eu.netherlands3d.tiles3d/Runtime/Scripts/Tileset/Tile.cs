@@ -428,5 +428,51 @@ namespace Netherlands3D.Tiles3D
                 content = null;
             }
         }
+    
+        public bool ChildrenHaveContent()
+        {
+            bool result = false;
+
+            if (content!=null)
+            { 
+                result = true;
+                return result;
+            }
+            foreach (Tile child in children)
+            {
+                if (child.ChildrenHaveContent()==true)
+                { return true;}
+            }
+            return false;
+        }
+        public void DestroyChildTilesIfTilesetOutOfView(Camera ofCamera)
+        {
+
+            if (contentUri.Contains(".json") || contentUri.Contains(".subtree"))
+            {
+
+                if(IsInViewFrustrum(ofCamera)==false)
+                {
+                    DestroyChildTiles();
+                }
+
+            }
+            else
+            {
+                foreach (Tile child in children)
+                {
+                    child.DestroyChildTilesIfTilesetOutOfView(ofCamera);
+                }
+            }
+
+        }
+        private void DestroyChildTiles()
+        {
+            for (int i = children.Count - 1; i >= 0 ; i--)
+            {
+                children[i].DestroyChildTiles();
+                children[i] = null;
+            }
+        }
     }
 }

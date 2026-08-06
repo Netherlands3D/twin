@@ -456,6 +456,7 @@ namespace Netherlands3D.Tiles3D
 
                 SetSSEComponent(currentCamera);
                 DisposeTilesOutsideView(currentCamera);
+                destroyOutOfViewTilesets(currentCamera);
                 foreach (var child in root.children)
                 {
                     LoadInViewRecursively(child, currentCamera);
@@ -464,6 +465,15 @@ namespace Netherlands3D.Tiles3D
                 yield return null;
             }
         }
+
+private void destroyOutOfViewTilesets(Camera currentCamera)
+        {
+            foreach (Tile child in root.children)
+            {
+                child.DestroyChildTilesIfTilesetOutOfView(currentCamera);
+            }
+        }
+
 
         /// <summary>
         /// Check for tiles in our visibile tiles list that moved out of the view / max distance.
