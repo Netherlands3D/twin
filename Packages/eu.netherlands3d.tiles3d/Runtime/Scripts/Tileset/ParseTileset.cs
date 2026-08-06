@@ -23,7 +23,6 @@ namespace Netherlands3D.Tiles3D
         internal static Tile ReadTileset(JSONNode rootnode, Read3DTileset tileset)
         {
             Tile root = new Tile();
-            Debug.Log("tile created");
             root.tileSet = tileset;
             
             TilingMethod tilingMethod = TilingMethod.ExplicitTiling;
@@ -61,7 +60,6 @@ namespace Netherlands3D.Tiles3D
                     if (rootTile.children.Count==0 )
                     {
                         Tile childTile = new Tile();
-                        Debug.Log("tile created");
                         childTile.tileSet = tileset;
                         childTile = ReadExplicitNode(rootnode, childTile);
                         childTile.parent = rootTile;
@@ -75,7 +73,6 @@ namespace Netherlands3D.Tiles3D
                     if(DebugLog)
                         Debug.Log("Implicit tiling"); 
                     rootTile = new Tile();
-                    Debug.Log("tile created");
                     rootTile.tileSet = tileset;
                     rootTile = ReadExplicitNode(rootnode, rootTile);
                     rootTile.level = 0;
@@ -140,7 +137,6 @@ namespace Netherlands3D.Tiles3D
                 for (int i = 0; i < childrenNode.Count; i++)
                 {
                     var childTile = new Tile();
-                    Debug.Log("tile created");
                     childTile.tileSet = tile.tileSet;
                     childTile.parent = tile;
                     tile.children.Add(ReadExplicitNode(childrenNode[i], childTile));
