@@ -14,7 +14,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Legend;
 
-namespace Netherlands3D.Functionalities.NetCDF
+namespace Netherlands3D.Functionalities.Wcs
 {
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer

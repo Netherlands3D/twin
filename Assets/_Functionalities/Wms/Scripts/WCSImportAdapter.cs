@@ -4,6 +4,7 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.NetCDF;
 using Netherlands3D.Functionalities.NetCDF.LayerPresets;
 using Netherlands3D.Functionalities.Wcs;
+using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Functionalities.Wms.LayerPresets;
 using Netherlands3D.Legend;
 using Netherlands3D.OgcWebServices.Shared;
@@ -11,7 +12,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.Wcs
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WCSImportAdapter", fileName = "WCSImportAdapter", order = 0)]
     public class WCSImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs[]>

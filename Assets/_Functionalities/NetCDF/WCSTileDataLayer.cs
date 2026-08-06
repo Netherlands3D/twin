@@ -13,8 +13,15 @@ using Newtonsoft.Json;
 using PureHDF;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.NetCDF
+namespace Netherlands3D.Functionalities.Wcs
 {
+    //https://anonymous.api.dataplatform.knmi.nl/wms/adaguc-server?dataset=msg_cpp_products&service=WCS&request=getcapabilities
+    //1 dont inherit from imageprojectilayer
+    //2 finish download method
+    //3 create volumetric array from 250x250x250
+    
+    
+    
     public class WCSTileDataLayer : ImageProjectionLayer
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
