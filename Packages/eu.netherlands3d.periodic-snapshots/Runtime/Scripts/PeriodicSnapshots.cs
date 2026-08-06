@@ -129,12 +129,13 @@ namespace Netherlands3D.Snapshots
             }
 
             onStartGenerating.Invoke();
+            
+            yield return WarmupGPU(); //we need to active the gpu otherwise it will pixelate 
 
             var cachedTimeOfDay = sunTime.GetTime();
             for (var index = 0; index < moments.Count; index++)
             {
                 onProgress.Invoke(1f / moments.Count * (index + 1));
-                yield return new WaitForEndOfFrame();
                 yield return TakeSnapshot(moments[index], path);
                 
             }
@@ -179,6 +180,8 @@ namespace Netherlands3D.Snapshots
             sunTime.SetHour(moment.hour);
             sunTime.SetMinutes(0);
             sunTime.SetSeconds(0);
+            
+            yield return new WaitForEndOfFrame();
             
             var snapshotWidth = useViewSize ? Screen.width : width;
             var snapshotHeight = useViewSize ? Screen.height : height;
@@ -359,6 +362,37 @@ namespace Netherlands3D.Snapshots
 
             timeStampTexture.Apply();
             return timeStampTexture;
+        }
+        
+        private IEnumerator WarmupGPU()
+        {
+            Camera camera = ServiceLocator.GetService<CameraService>().ActiveCamera;
+
+            RenderTexture warmupTexture = new RenderTexture(
+                16,
+                16,
+                24,
+                RenderTextureFormat.ARGB32
+            );
+
+            warmupTexture.Create();
+
+            RenderTexture previousTarget = camera.targetTexture;
+            RenderTexture previousActive = RenderTexture.active;
+
+            camera.targetTexture = warmupTexture;
+
+            yield return new WaitForEndOfFrame();
+
+            camera.Render();
+
+            yield return new WaitForEndOfFrame();
+
+            camera.targetTexture = previousTarget;
+            RenderTexture.active = previousActive;
+
+            warmupTexture.Release();
+            Destroy(warmupTexture);
         }
     }
 }
