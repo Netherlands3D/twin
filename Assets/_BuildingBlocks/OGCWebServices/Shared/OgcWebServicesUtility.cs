@@ -106,6 +106,14 @@ namespace Netherlands3D.OgcWebServices.Shared
             }
 
             var serviceTypeString = serviceType.ToString().ToUpper();
+            switch (serviceType) //todo improve on this!
+            {
+                case ServiceType.Wcs when bodyContents.Contains("<WMS_Capabilities"):
+                    return false;
+
+                case ServiceType.Wms when bodyContents.Contains("<WCS_Capabilities"):
+                    return false;
+            }
 
             // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
             // Body should contain ("<WMS_Capabilities") || contents.Contains("<wms:WMS_Capabilities") for wms

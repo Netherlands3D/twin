@@ -8,8 +8,7 @@ namespace Netherlands3D.Functionalities.Wcs
 {
     public class GetCoverageRequest : BaseRequest
     {
-        private const string DefaultFallbackVersion = "2.0.1";
-
+        private const string DefaultFallbackVersion = "1.0.0";
         public GetCoverageRequest(Uri sourceUrl, string xml) : base(sourceUrl)
         {
         }

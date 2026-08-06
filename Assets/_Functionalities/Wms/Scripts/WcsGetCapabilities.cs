@@ -21,7 +21,11 @@ namespace Netherlands3D.Functionalities.Wcs
             { "wcs", "http://www.opengis.net/wcs/2.0" }
         };
         
-        public bool CapableOfBoundingBoxes => xmlDocument.SelectSingleNode("//*[local-name()='WGS84BoundingBox' or local-name()='BoundingBox']", namespaceManager) != null;
+        public bool CapableOfBoundingBoxes =>
+            xmlDocument.SelectSingleNode(
+                "//*[local-name()='lonLatEnvelope']",
+                namespaceManager
+            ) != null;
 
         public WcsGetCapabilities(Uri url, string xml) : base(url, xml)
         {
@@ -45,20 +49,15 @@ namespace Netherlands3D.Functionalities.Wcs
         {
             var coverageNames = new List<string>();
 
-            var coverageNodes = xmlDocument.SelectNodes(
-                "//*[local-name()='CoverageSummary']",
-                namespaceManager);
+            var nodes = xmlDocument.SelectNodes(
+                "//*[local-name()='CoverageOfferingBrief']/*[local-name()='name']",
+                namespaceManager
+            );
 
-            foreach (XmlNode coverageNode in coverageNodes)
+            foreach (XmlNode node in nodes)
             {
-                var coverageId = coverageNode.SelectSingleNode(
-                    "*[local-name()='CoverageId']",
-                    namespaceManager);
-
-                if (coverageId != null && !string.IsNullOrEmpty(coverageId.InnerText))
-                {
-                    coverageNames.Add(coverageId.InnerText);
-                }
+                if (!string.IsNullOrEmpty(node.InnerText))
+                    coverageNames.Add(node.InnerText);
             }
 
             return coverageNames;
