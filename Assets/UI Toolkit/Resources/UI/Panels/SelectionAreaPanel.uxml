@@ -6,7 +6,16 @@
     editor-extension-mode="False"
     name="SelectionAreaPanel"
     class="selection-area-panel">
-        <nl3d:Button name="PolygonButton" LabelText="Polygoon" icon="Polygon"/>
-        <nl3d:Button name="LineButton" LabelText="Lijn" icon="Line"/>
-        <nl3d:Button name="GridButton" LabelText="Grid" icon="OrthogonalView"/>
+        <nl3d:ListViewItem name="PolygonButton" >
+            <nl3d:Icon image="Polygon"/>
+            <ui:Label text="Polygoon"/>
+        </nl3d:ListViewItem>
+        <nl3d:ListViewItem name="LineButton" >
+            <nl3d:Icon image="Line"/>
+            <ui:Label text="Lijn"/>
+        </nl3d:ListViewItem>
+        <nl3d:ListViewItem name="GridButton" >
+            <nl3d:Icon image="OrthogonalView"/>
+            <ui:Label text="Grid"/>
+        </nl3d:ListViewItem>
 </ui:UXML>
