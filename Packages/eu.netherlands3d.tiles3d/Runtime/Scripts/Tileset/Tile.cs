@@ -435,8 +435,8 @@ namespace Netherlands3D.Tiles3D
 
             if (content!=null)
             { 
-                result = true;
-                return result;
+
+                return true;
             }
             foreach (Tile child in children)
             {
@@ -471,6 +471,7 @@ namespace Netherlands3D.Tiles3D
         }
         private void DestroyChildTiles()
         {
+            if(children.Count == null) return;
             for (int i = children.Count - 1; i >= 0 ; i--)
             {
                 children[i].DestroyChildTiles();

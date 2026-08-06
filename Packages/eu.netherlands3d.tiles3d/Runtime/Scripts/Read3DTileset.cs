@@ -482,13 +482,6 @@ private void destroyOutOfViewTilesets(Camera currentCamera)
         /// <param name="currentCamera">Camera to use for visibility check</param>
         private void DisposeTilesOutsideView(Camera currentCamera)
         {
-            for (int i = visibleTiles.Count - 1; i >= 0; i--)
-            {
-                var tile = visibleTiles[i];
-                var closestPointOnBounds = tile.ContentBounds.ClosestPoint(currentCamera.transform.position); //Returns original point when inside the bounds
-                CalculateTileScreenSpaceError(tile, currentCamera, closestPointOnBounds);
-            }
-
             //Clean up list op previously loaded tiles outside of view
             for (int i = visibleTiles.Count - 1; i >= 0; i--)
             {
@@ -501,7 +494,8 @@ private void destroyOutOfViewTilesets(Camera currentCamera)
                     continue;
                 }
 
-
+                var closestPointOnBounds = tile.ContentBounds.ClosestPoint(currentCamera.transform.position); //Returns original point when inside the bounds
+                CalculateTileScreenSpaceError(tile, currentCamera, closestPointOnBounds);
                 var enoughDetail = tile.screenSpaceError < maximumScreenSpaceError;
                 if (enoughDetail) // tile has (more then) enoug detail
                 {
