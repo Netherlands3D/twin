@@ -1,3 +1,4 @@
+using System;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
@@ -8,6 +9,7 @@ using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,8 +46,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private bool filterDuplicateFeatures = true;
         [SerializeField] private Material selectionMaterial;
         
-        [SerializeField] private InputActionAsset inputActionAsset;
-        private InputAction leftClickAction, rightClickAction;
+       
+    
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
 
         private ToolService toolService;
@@ -88,16 +90,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
-            var map = inputActionAsset.FindActionMap("Camera", true);
-            leftClickAction = map.FindAction("LeftClick", true);
-            rightClickAction = map.FindAction("RightClick", true);
-
-            leftClickAction.performed += OnLeftClick;
-            leftClickAction.Enable();
-            
-            rightClickAction.performed += OnRightClick;
-            rightClickAction.Enable();
-            
             toolService = Services.ServiceLocator.GetService<ToolService>();
             
             OnSelectLayer.AddListener(OpenLayerPanel);
@@ -107,13 +99,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
-            
-            leftClickAction.performed -= OnLeftClick;
-            leftClickAction.Disable();
-            
-            rightClickAction.performed -= OnRightClick;
-            rightClickAction.Disable();
-            
+       
             OnSelectLayer.RemoveListener(OpenLayerPanel);
             OnNoLayerSelected.RemoveListener(CloseLayerPanel);
         }
@@ -147,12 +133,24 @@ namespace Netherlands3D.Functionalities.ObjectInformation
       
         private void Start()
         {
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.LeftClickUpAction.performed += OnLeftClick;
+            inputService.RightClickUpAction.performed += OnRightClick;
+            
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
             foreach (ObjectMapping mapping in alreadyActiveMappings)
             {
                 OnAddObjectMapping(mapping);
             }
+        }
+
+        private void OnDestroy()
+        {
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.LeftClickUpAction.performed -= OnLeftClick;
+            inputService.RightClickUpAction.performed -= OnRightClick;
+
         }
 
         private void OpenLayerPanel(LayerData layer)
@@ -193,19 +191,18 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             return hasHit;
         }
-        
+
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
-            if(App.UIRoot.IsPointerOverUI())
+            if (App.UIRoot.IsPointerOverUI())
                 return;
 
             ProcessSelection(true);
         }
-        
-        //keep this for now as this is triggering the context menu behaviour selection
+
         private void OnRightClick(InputAction.CallbackContext ctx)
         {
-            if(App.UIRoot.IsPointerOverUI())
+            if (App.UIRoot.IsPointerOverUI())
                 return;
 
             ProcessSelection(false);
@@ -400,8 +397,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPointSync.ToUnity()) < minClickDistance;
-            lastWorldClickedPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
+            Vector3 worldPoint = pointerToWorldPosition.GetWorldPointSync();
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, worldPoint) < minClickDistance;
+            lastWorldClickedPosition = worldPoint;
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;

@@ -55,7 +55,7 @@
                     "name": "Up",
                     "type": "Button",
                     "id": "440ace12-2ce8-40eb-a9b0-d16eb8556076",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -127,6 +127,24 @@
                     "name": "Touch",
                     "type": "Button",
                     "id": "c89ef584-936c-4a84-8740-5b2e713d2960",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightClickUp",
+                    "type": "Button",
+                    "id": "e86cb7ef-13a4-4b1a-9134-f9015d918563",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftClickUp",
+                    "type": "Button",
+                    "id": "95ff9532-65f3-4b52-9065-9abbbe8b8a96",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -527,6 +545,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Touch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e0698598-9724-4661-bcd8-e5c12ecab146",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightClickUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a88ecf9c-ffe5-411d-a7eb-e204a93e372b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftClickUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
