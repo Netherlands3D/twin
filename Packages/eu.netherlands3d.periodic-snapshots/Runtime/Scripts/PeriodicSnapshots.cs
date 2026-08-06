@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
+using Netherlands3D.Services;
 using Netherlands3D.Sun;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -51,17 +53,17 @@ namespace Netherlands3D.Snapshots
             }
         }
 
-        [SerializeField] private Camera sourceCamera;
+        [SerializeField] private bool useViewSize = true;
+        [SerializeField] private int width = 1024;
+        [SerializeField] private int height = 768;
         [SerializeField] private SunTime sunTime;
-        [SerializeField] private int snapshotWidth = 1024;
-        [SerializeField] private int snapshotHeight = 768;
         [SerializeField] private Texture2D timeStampLabelBackground;
         [SerializeField] private int labelPaddingWidth = 10;
         [SerializeField] private int labelPaddingHeight = 10;
         [SerializeField] private Color timeStampTextColor = Color.white;
         [SerializeField] private string archiveName = "snapshot-series-";
         [SerializeField] private string timeStampDateFormat = "yyyy-MM-dd HH:mm";
-
+        [SerializeField] private SnapshotFileType fileType = SnapshotFileType.png;
         [SerializeField] private LayerMask snapshotLayers;
         [SerializeField] private List<Moment> moments = new();
 
@@ -74,10 +76,6 @@ namespace Netherlands3D.Snapshots
         [Tooltip("Generating can take a while, this event can be used to hide a loader")]
         public UnityEvent onFinishedGenerating = new();
 
-        private void Start()
-        {
-            if (!sourceCamera) sourceCamera = Camera.main;
-        }
 
         private void OnValidate()
         {
@@ -183,7 +181,12 @@ namespace Netherlands3D.Snapshots
 
             // Skip frame to give rendering time to update.
             yield return null;
+            
+            var snapshotWidth = useViewSize ? Screen.width : width;
+            var snapshotHeight = useViewSize ? Screen.height : height;
 
+            Camera sourceCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
+            
             RenderTexture previousTarget = sourceCamera.targetTexture;
             int previousMask = sourceCamera.cullingMask;
             RenderTexture previousActive = RenderTexture.active;
@@ -218,19 +221,22 @@ namespace Netherlands3D.Snapshots
                     new Rect(0, 0, snapshotWidth, snapshotHeight),
                     0,
                     0);
-
-                byte[] bytes = snapshotTexture.EncodeToPNG();
-
-                // Keep this part exactly as before.
+              
                 DateTime dateTime = moment.ToDateTime();
 
                 Texture2D texture = CreateTimestampTexture(
-                    bytes,
+                    snapshotTexture.EncodeToPNG(),
                     dateTime,
                     snapshotWidth,
                     snapshotHeight);
 
-                bytes = texture.EncodeToPNG();
+                byte[] bytes = fileType switch
+                {
+                    SnapshotFileType.png => texture.EncodeToPNG(),
+                    SnapshotFileType.jpg => texture.EncodeToJPG(),
+                    SnapshotFileType.raw => texture.GetRawTextureData(),
+                    _ => texture.EncodeToPNG()
+                };
 
                 Destroy(texture);
 
