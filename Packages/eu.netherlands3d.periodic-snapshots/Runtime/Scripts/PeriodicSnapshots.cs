@@ -134,8 +134,9 @@ namespace Netherlands3D.Snapshots
             for (var index = 0; index < moments.Count; index++)
             {
                 onProgress.Invoke(1f / moments.Count * (index + 1));
-
+                yield return new WaitForEndOfFrame();
                 yield return TakeSnapshot(moments[index], path);
+                
             }
             sunTime.SetTime(cachedTimeOfDay);
 
@@ -178,9 +179,6 @@ namespace Netherlands3D.Snapshots
             sunTime.SetHour(moment.hour);
             sunTime.SetMinutes(0);
             sunTime.SetSeconds(0);
-
-            // Skip frame to give rendering time to update.
-            yield return null;
             
             var snapshotWidth = useViewSize ? Screen.width : width;
             var snapshotHeight = useViewSize ? Screen.height : height;
