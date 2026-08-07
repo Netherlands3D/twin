@@ -12,6 +12,7 @@ using Netherlands3D.Twin.Utility;
 using Newtonsoft.Json;
 using PureHDF;
 using UnityEngine;
+using GeoTiffReader;
 
 namespace Netherlands3D.Functionalities.Wcs
 {
@@ -108,7 +109,7 @@ namespace Netherlands3D.Functionalities.Wcs
             var configWithPayload = Config.BasedOn(requestConfig);
             configWithPayload = configWithPayload.WithPayload(new WCSTileDataLayerChangePayload(tileChange, url));
 
-            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), configWithPayload);
+            var promise = Uxios.DefaultInstance.Get<byte[]>(new Uri(url), configWithPayload);
             promise.Then(OnDownloadedTexture);
             promise.Catch(OnFailedToDownloadTexture);
 
@@ -121,9 +122,129 @@ namespace Netherlands3D.Functionalities.Wcs
             var payload = response.Config.GetPayload<WCSTileDataLayerChangePayload>();
             var tileKey = payload.TileKey;
             byte[] data = response.Data as byte[];
-            Debug.Log(data);
+
+            try
+            {
+                using (var stream = new MemoryStream(data))
+                using (var file = H5File.Open(stream, leaveOpen: true))
+                {
+                    Debug.Log("HDF opened");
+
+                    // Read coordinate datasets
+                    var xDataset = file.Dataset("x");
+                    var yDataset = file.Dataset("y");
+
+                    double[] x = xDataset.Read<double[]>();
+                    double[] y = yDataset.Read<double[]>();
+
+                    Debug.Log($"Grid size X:{x.Length} Y:{y.Length}");
+                    Debug.Log($"X range: {x.First()} -> {x.Last()}");
+                    Debug.Log($"Y range: {y.First()} -> {y.Last()}");
+
+                    var datasets = file.Children();
+
+                    var layerName = "";
+
+                    foreach (var child in file.Children())
+                    {
+                        var name = child.Name;
+
+                        if (name != "x" &&
+                            name != "y" &&
+                            name != "time" &&
+                            name != "crs")
+                        {
+                            layerName = name;
+                            break;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(layerName))
+                    {
+                        Debug.LogError("No data layer found");
+                        return;
+                    }
+
+                    Debug.Log($"Detected layer: {layerName}");
+
+                    var dataDataset = file.Dataset(layerName);
+
+                    float[] values = dataDataset.Read<float[]>();
+                   
+
+                    Texture2D texture = new Texture2D(
+                        256,
+                        256,
+                        TextureFormat.RFloat,
+                        false
+                    );
+
+                    Color[] pixels = new Color[values.Length];
+
+                    float min = float.MaxValue;
+                    float max = float.MinValue;
+
+// Find range
+                    foreach (float v in values)
+                    {
+                        if (float.IsNaN(v))
+                            continue;
+
+                        min = Mathf.Min(min, v);
+                        max = Mathf.Max(max, v);
+                    }
+
+                    Debug.Log($"Data range: {min} -> {max}");
+
+
+// Convert values to pixels
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        float v = values[i];
+
+                        if (float.IsNaN(v))
+                        {
+                            pixels[i] = Color.clear;
+                            continue;
+                        }
+
+                        float normalized = Mathf.InverseLerp(min, max, v);
+
+                        pixels[i] = new Color(
+                            normalized,
+                            normalized,
+                            normalized,
+                            1
+                        );
+                    }
+
+                    texture.SetPixels(pixels);
+                    texture.Apply();
+
+                    // CRS metadata
+                    try
+                    {
+                        var crs = file.Dataset("crs");
+
+                        foreach (var attr in crs.Attributes())
+                        {
+                            Debug.Log(
+                                $"CRS {attr.Name}: {attr.Read<string>()}"
+                            );
+                        }
+                    }
+                    catch
+                    {
+                        Debug.Log("No CRS metadata found");
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.Log(exception);
+            }
         }
-        
+
         private void OnFailedToDownloadTexture(Exception exception)
         {
             // An unknown exception occurred - log the outcome and don't do much since we don't know anything about

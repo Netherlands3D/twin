@@ -108,7 +108,8 @@ namespace Netherlands3D.OgcWebServices.Shared
         public static BoundingBoxContainer AddBoundingBoxContainer(IGetCapabilities getCapabilities)
         {
             var bounds = getCapabilities.GetBounds();
-            BoundingBoxContainers.TryAdd(getCapabilities.GetCapabilitiesUri.ToString(), bounds); //use tryadd to avoid issues when adding the same GetCapabilities twice in the application
+            string capabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(getCapabilities.GetCapabilitiesUri.ToString(), getCapabilities.ServiceType);
+            BoundingBoxContainers.TryAdd(capabilitiesUrl, bounds); //use tryadd to avoid issues when adding the same GetCapabilities twice in the application
             return bounds;
         }
     }

@@ -55,7 +55,7 @@ MonoBehaviour:
   VisualisationError:
     m_PersistentCalls:
       m_Calls: []
-  Resolution: {x: 1000, y: 1000}
+  Resolution: {x: 256, y: 256}
 --- !u!114 &8881982197711854992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,11 +77,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onLayerDisabled:
-    m_PersistentCalls:
-      m_Calls: []
-  compressLoadedTextures: 0
-  projectorPrefab: {fileID: 0}
-  onLogMessage:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7900166245345724691

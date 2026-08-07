@@ -26,7 +26,7 @@ namespace Netherlands3D.Functionalities.Wcs
         private WCSTileDataLayer wcsLayer;
         private ICredentialHandler credentialHandler;
         
-        public Vector2Int Resolution = Vector2Int.one * 1000;
+        public Vector2Int Resolution = Vector2Int.one * 256;
    
         public override BoundingBox Bounds => wcsLayer?.BoundingBox;
         
