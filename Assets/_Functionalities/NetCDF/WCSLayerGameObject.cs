@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
+using Netherlands3D.Coordinates;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
@@ -25,6 +26,8 @@ namespace Netherlands3D.Functionalities.Wcs
     {
         private WCSTileDataLayer wcsLayer;
         private ICredentialHandler credentialHandler;
+        
+        [SerializeField] private GameObject volumePrefab;
         
         public Vector2Int Resolution = Vector2Int.one * 256;
    
@@ -104,12 +107,16 @@ namespace Netherlands3D.Functionalities.Wcs
         {
             base.RegisterEventListeners();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            
+            wcsLayer.OnDataLoaded.AddListener(UpdateVolume);
         }
 
         protected override void UnregisterEventListeners()
         {
             base.UnregisterEventListeners();
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            
+            wcsLayer.OnDataLoaded.RemoveListener(UpdateVolume);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -144,5 +151,334 @@ namespace Netherlands3D.Functionalities.Wcs
 
             wcsLayer.BoundingBox = boundingBoxContainer.GlobalBoundingBox;
         }
+       
+        
+        public class CloudTileData
+        {
+            public Texture2D cloudFraction;
+            public Texture2D cloudHeight;
+            public Texture3D volume;
+            public float maxCloudHeight;
+            public GameObject volumeObject;
+            
+        }
+
+        public static Dictionary<Vector2Int, CloudTileData> CloudTiles = new();
+
+
+        private void UpdateVolume(Texture2D texture, Vector2Int tileKey, Vector2 dataBounds)
+        {
+            var coverageName =
+                OgcWebServicesUtility.GetParameterFromURL(
+                    wcsLayer.Url,
+                    "coverageid"
+                )
+                ??
+                OgcWebServicesUtility.GetParameterFromURL(
+                    wcsLayer.Url,
+                    "coverage"
+                );
+
+
+            if (!CloudTiles.TryGetValue(tileKey, out var tile))
+            {
+                tile = new CloudTileData();
+                CloudTiles.Add(tileKey, tile);
+            }
+
+            if (coverageName.Contains("cloud_area_fraction"))
+            {
+                tile.cloudFraction = texture;
+            }
+            else if (coverageName.Contains("height_at_cloud_top"))
+            {
+                tile.cloudHeight = texture;
+                tile.maxCloudHeight = dataBounds.y - dataBounds.x;
+            }
+            else
+            {
+                return;
+            }
+            // Rebuild only this tile
+            tile.volume = CreateCloudVolume(tile.cloudFraction, tile.cloudHeight);
+           //tile.volume = CreatePyramidVolume(128, 128);
+            if (tile.volume != null)
+            {
+                float scale = 1000f / Mathf.Abs(StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.Size.ToUnity().x);
+                if (tile.volumeObject == null)
+                {
+                    tile.volumeObject = Instantiate(volumePrefab);
+                    tile.volumeObject.name = $"CloudVolume_{tileKey.x}_{tileKey.y}";
+                    tile.volumeObject.transform.localScale = new Vector3(
+                        1000f,
+                        tile.maxCloudHeight * scale,
+                        1000f
+                    );
+                    
+                }
+                float halfHeight = tile.maxCloudHeight * scale * 0.5f;
+                tile.volumeObject.transform.position = new Coordinate(CoordinateSystem.RDNAP, tileKey.x + 0.5f * wcsLayer.tileSize, tileKey.y + 0.5f * wcsLayer.tileSize, halfHeight).ToUnity();
+                MeshRenderer renderer = tile.volumeObject.GetComponent<MeshRenderer>();
+                renderer.material.SetTexture("_CloudVolume", tile.volume);
+                Debug.Log($"Created cloud volume x{tile.volume.width}y{tile.volume.height}z{tile.volume.depth}key x{tileKey.x}y{tileKey.y}");
+            }
+        }
+
+      private Texture3D CreateCloudVolume(Texture2D cloudFraction, Texture2D cloudHeight)
+{
+    int width;
+    int height;
+
+    if (cloudFraction != null)
+    {
+        width = cloudFraction.width;
+        height = cloudFraction.height;
+    }
+    else if (cloudHeight != null)
+    {
+        width = cloudHeight.width;
+        height = cloudHeight.height;
+    }
+    else
+    {
+        Debug.LogError("No cloud data available");
+        return null;
+    }
+
+
+    int depth = 64; // altitude layers
+
+
+    // X = map width
+    // Y = altitude
+    // Z = map height
+    Texture3D cloudVolume = new Texture3D(
+        width,
+        depth,
+        height,
+        TextureFormat.RFloat,
+        false
+    );
+
+
+    Color[] voxels =
+        new Color[width * depth * height];
+
+
+    Color[] fractionPixels = null;
+    Color[] heightPixels = null;
+
+
+    if (cloudFraction != null)
+        fractionPixels = cloudFraction.GetPixels();
+
+    if (cloudHeight != null)
+        heightPixels = cloudHeight.GetPixels();
+
+
+
+    float defaultCloudHeight = 4000f / 12000f;
+
+
+    // Y is now altitude
+    for (int y = 0; y < depth; y++)
+    {
+        float altitude01 =
+            y / (float)(depth - 1);
+
+
+        for (int z = 0; z < height; z++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+
+                int index2D =
+                    z * width + x;
+
+
+                float coverage = 1f;
+
+                if (fractionPixels != null)
+                {
+                    coverage =
+                        fractionPixels[index2D].r;
+                }
+
+
+                float cloudTop =
+                    defaultCloudHeight;
+
+
+                if (heightPixels != null)
+                {
+                    cloudTop =
+                        heightPixels[index2D].r;
+                }
+
+
+                float density = 0f;
+
+
+                float cloudBase = 0.15f;
+
+
+                if (altitude01 > cloudBase &&
+                    altitude01 < cloudTop)
+                {
+
+                    float height01 =
+                        (altitude01 - cloudBase) /
+                        (cloudTop - cloudBase);
+
+
+                    // smooth cloud vertical profile
+                    float profile =
+                        Mathf.Sin(
+                            height01 * Mathf.PI
+                        );
+
+
+                    density =
+                        coverage * profile;
+                }
+
+
+                // Texture3D indexing:
+                // X + Y*width + Z*width*depth
+                int index3D =
+                    x +
+                    y * width +
+                    z * width * depth;
+
+
+                voxels[index3D] =
+                    new Color(
+                        density,
+                        0f,
+                        0f,
+                        1f
+                    );
+            }
+        }
+    }
+
+
+    cloudVolume.SetPixels(voxels);
+    cloudVolume.Apply();
+
+
+    cloudVolume.wrapMode =
+        TextureWrapMode.Clamp;
+
+    cloudVolume.filterMode =
+        FilterMode.Bilinear;
+
+
+    return cloudVolume;
+}
+       
+       public Texture3D CreatePyramidVolume(int size, int depth)
+    {
+        Texture3D volume = new Texture3D(
+            size,
+            size,
+            depth,
+            TextureFormat.RFloat,
+            false
+        );
+
+        Color[] voxels =
+            new Color[size * size * depth];
+
+
+        for (int z = 0; z < depth; z++)
+        {
+            float z01 = z / (float)(depth - 1);
+
+
+            // pyramid gets narrower towards the top
+            float pyramidWidth =
+                Mathf.Lerp(1.0f, 0.0f, z01);
+
+
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+
+                    float x01 =
+                        x / (float)(size - 1);
+
+                    float y01 =
+                        y / (float)(size - 1);
+
+
+                    // center coordinates -1 to 1
+                    float px =
+                        x01 * 2 - 1;
+
+                    float py =
+                        y01 * 2 - 1;
+
+
+                    float distance =
+                        Mathf.Max(
+                            Mathf.Abs(px),
+                            Mathf.Abs(py)
+                        );
+
+
+                    float density = 0;
+
+
+                    if(distance < pyramidWidth)
+                    {
+                        // soft edges
+                        float edge =
+                            1 -
+                            distance / pyramidWidth;
+
+
+                        density =
+                            Mathf.SmoothStep(
+                                0,
+                                1,
+                                edge
+                            );
+                    }
+
+
+                    int index =
+                        x +
+                        y * size +
+                        z * size * size;
+
+
+                    voxels[index] =
+                        new Color(
+                            density,
+                            0,
+                            0,
+                            1
+                        );
+                }
+            }
+        }
+
+
+        volume.SetPixels(voxels);
+        volume.Apply();
+
+
+        volume.wrapMode =
+            TextureWrapMode.Clamp;
+
+        volume.filterMode =
+            FilterMode.Bilinear;
+
+
+        return volume;
+    }
+        
     }
 }

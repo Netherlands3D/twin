@@ -155,6 +155,8 @@ namespace Netherlands3D.UI.Panels
 
         private void OnImport(string value)
         {
+            value =
+                "https://api.dataplatform.knmi.nl/wms/adaguc-server?dataset=msg_cpp_products&service=WCS&request=getcapabilities";
             //hide the credential error as we dont want to show this on inputting the uri without credentials when they are required
             credentialPanel.ShowError(false);
             try
@@ -163,6 +165,8 @@ namespace Netherlands3D.UI.Panels
                 Uri uri = new Uri(value);
 
                 credentialHandler.Uri = uri;
+                credentialHandler.PasswordOrKeyOrTokenOrCode =
+                    "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6IjFkZjc5MTdiNzk1NjQ0NWM5NGU3NjFjMGNlZGJiNmJkIiwiaCI6Im11cm11cjEyOCJ9";
                 credentialHandler.ApplyCredentials();
             }
             catch (Exception e)

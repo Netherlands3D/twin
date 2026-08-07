@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using PureHDF;
 using UnityEngine;
 using GeoTiffReader;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.Wcs
 {
@@ -20,13 +21,11 @@ namespace Netherlands3D.Functionalities.Wcs
     
     public class WCSTileDataLayer : Layer
     {
-        //testing
-        public Texture2D testtexture = null;
-        
-        
         private const string DefaultEpsgCoordinateSystem = "28992";
 
         private Config requestConfig { get; set; } = Config.Default();
+
+        public UnityEvent<Texture2D, Vector2Int, Vector2> OnDataLoaded = new();
       
 
         private string _url = "";
@@ -84,16 +83,6 @@ namespace Netherlands3D.Functionalities.Wcs
 
         protected virtual IEnumerator DownloadData(TileChange tileChange, Action<TileChange> callback = null)
         {
-            
-            // var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
-            // var getCapabilitiesUrl = new Uri(getCapabilitiesString);
-            // BoundingBoxCache.Instance.GetBoundingBoxContainer(
-            //     getCapabilitiesUrl,
-            //     auth,
-            //     (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
-            //     SetBoundingBox
-            // );
-            
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
             if (!tiles.ContainsKey(tileKey))
             {
@@ -106,10 +95,7 @@ namespace Netherlands3D.Functionalities.Wcs
             var mapData = MapFilters.FromUrlWCS(new Uri(Url));
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
-            string url = Url.Replace("{0}", boundingBox.ToString()); //StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.ToString());
-
-            // Because requestConfig is by-ref, changing it will change all requests in flight; as such we clone the config before
-            // assigning a payload
+            string url = Url.Replace("{0}", StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.ToString()); //boundingBox.ToString()); //
             var configWithPayload = Config.BasedOn(requestConfig);
             configWithPayload = configWithPayload.WithPayload(new WCSTileDataLayerChangePayload(tileChange, url));
 
@@ -132,18 +118,11 @@ namespace Netherlands3D.Functionalities.Wcs
                 using (var stream = new MemoryStream(data))
                 using (var file = H5File.Open(stream, leaveOpen: true))
                 {
-                    Debug.Log("HDF opened");
-
-                    // Read coordinate datasets
                     var xDataset = file.Dataset("x");
                     var yDataset = file.Dataset("y");
 
                     double[] x = xDataset.Read<double[]>();
                     double[] y = yDataset.Read<double[]>();
-
-                    Debug.Log($"Grid size X:{x.Length} Y:{y.Length}");
-                    Debug.Log($"X range: {x.First()} -> {x.Last()}");
-                    Debug.Log($"Y range: {y.First()} -> {y.Last()}");
 
                     var datasets = file.Children();
 
@@ -169,12 +148,14 @@ namespace Netherlands3D.Functionalities.Wcs
                         return;
                     }
 
-                    Debug.Log($"Detected layer: {layerName}");
+                    //Debug.Log($"Detected layer: {layerName}");
 
                     var dataDataset = file.Dataset(layerName);
 
                     float[] values = dataDataset.Read<float[]>();
-                    testtexture = CreateDebugTexture(values, 256, 256);
+                    Vector2 dataBounds;
+                    Texture2D result = CreateDataTexture(values, out dataBounds, 256, 256);
+                    OnDataLoaded.Invoke(result, tileKey, dataBounds);
 
                     // CRS metadata
                     try
@@ -183,14 +164,12 @@ namespace Netherlands3D.Functionalities.Wcs
 
                         foreach (var attr in crs.Attributes())
                         {
-                            Debug.Log(
-                                $"CRS {attr.Name}: {attr.Read<string>()}"
-                            );
+                            //Debug.Log($"CRS {attr.Name}: {attr.Read<string>()}");
                         }
                     }
                     catch
                     {
-                        Debug.Log("No CRS metadata found");
+                        //Debug.Log("No CRS metadata found");
                     }
                 }
             }
@@ -335,8 +314,9 @@ namespace Netherlands3D.Functionalities.Wcs
             }
         }
         
-        private Texture2D CreateDebugTexture(float[] values, int width = 256, int height = 256)
+        private Texture2D CreateDataTexture(float[] values, out Vector2 dataBounds, int width = 256, int height = 256)
         {
+            dataBounds = Vector2.zero;
             if (values == null || values.Length == 0)
             {
                 Debug.LogError("No values supplied");
@@ -373,18 +353,7 @@ namespace Netherlands3D.Functionalities.Wcs
                 if (v < min) min = v;
                 if (v > max) max = v;
             }
-
-            Debug.Log(
-                $"Raster debug\n" +
-                $"Size: {width}x{height}\n" +
-                $"Values: {values.Length}\n" +
-                $"Range: {min} -> {max}\n" +
-                $"NaN: {nanCount}\n" +
-                $"Infinity: {infCount}\n" +
-                $"First: {values[0]}\n" +
-                $"Last: {values[^1]}"
-            );
-
+            dataBounds = new Vector2(min, max);
             Texture2D texture = new Texture2D(
                 width,
                 height,
@@ -424,16 +393,7 @@ namespace Netherlands3D.Functionalities.Wcs
 
             texture.SetPixels(pixels);
             texture.Apply(false, false);
-
-            Debug.Log("Texture created successfully");
-
             return texture;
-        }
-
-        private string GetAPIKey()
-        {
-            return
-                "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6IjRjZGY2M2FjYTk1MjRiMzU4N2UwZTNjMjM5NWZlMTlmIiwiaCI6Im11cm11cjEyOCJ9";
         }
     }
 }

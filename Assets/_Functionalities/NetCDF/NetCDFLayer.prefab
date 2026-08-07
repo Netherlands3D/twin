@@ -55,7 +55,10 @@ MonoBehaviour:
   VisualisationError:
     m_PersistentCalls:
       m_Calls: []
+  volumePrefab: {fileID: 5126074058067690994, guid: 5530ab42eb22a72e1a8904518edb9cd2,
+    type: 3}
   Resolution: {x: 256, y: 256}
+  volumeTexture: {fileID: 0}
 --- !u!114 &8881982197711854992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,6 +80,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onLayerDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDataLoaded:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7900166245345724691
