@@ -26,7 +26,7 @@ namespace Netherlands3D.Functionalities.Wcs
         private Config requestConfig { get; set; } = Config.Default();
 
         public UnityEvent<Texture2D, Vector2Int, Vector2> OnDataLoaded = new();
-      
+        public UnityEvent<Vector2Int> OnTileDestroyed = new();
 
         private string _url = "";
 
@@ -95,7 +95,7 @@ namespace Netherlands3D.Functionalities.Wcs
             var mapData = MapFilters.FromUrlWCS(new Uri(Url));
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
-            string url = Url.Replace("{0}", StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.ToString()); //boundingBox.ToString()); //
+            string url = Url.Replace("{0}", boundingBox.ToString()); //StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.ToString()); //
             var configWithPayload = Config.BasedOn(requestConfig);
             configWithPayload = configWithPayload.WithPayload(new WCSTileDataLayerChangePayload(tileChange, url));
 
@@ -312,6 +312,7 @@ namespace Netherlands3D.Functionalities.Wcs
 
                 Destroy(tile.gameObject);
             }
+            OnTileDestroyed.Invoke(tileKey);
         }
         
         private Texture2D CreateDataTexture(float[] values, out Vector2 dataBounds, int width = 256, int height = 256)
