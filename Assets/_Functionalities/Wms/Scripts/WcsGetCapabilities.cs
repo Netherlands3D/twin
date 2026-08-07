@@ -4,6 +4,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Utility;
 using System.Xml;
+using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wcs
 {
@@ -83,59 +84,141 @@ namespace Netherlands3D.Functionalities.Wcs
 
             var container = new BoundingBoxContainer(Url.ToString());
 
+            // WCS 1.0 uses CoverageOfferingBrief
             var coverageNodes = xmlDocument.SelectNodes(
-                "//*[local-name()='CoverageSummary']",
-                namespaceManager);
+                "//*[local-name()='CoverageOfferingBrief']");
+
+            if (coverageNodes == null)
+            {
+                boundingBoxContainer = container;
+                return container;
+            }
 
             foreach (XmlNode coverageNode in coverageNodes)
             {
+                // WCS 1.0 uses <name>
                 var coverageId = coverageNode.SelectSingleNode(
-                    "*[local-name()='CoverageId']",
-                    namespaceManager)?.InnerText;
+                    "*[local-name()='name']")?.InnerText;
 
                 if (string.IsNullOrEmpty(coverageId))
                     continue;
 
+                // WCS 1.0 uses lonLatEnvelope
                 var bboxNode = coverageNode.SelectSingleNode(
-                    ".//*[local-name()='WGS84BoundingBox']",
-                    namespaceManager);
+                    ".//*[local-name()='lonLatEnvelope']");
 
                 if (bboxNode == null)
                     continue;
 
-                var lower = bboxNode.SelectSingleNode(
-                    "*[local-name()='LowerCorner']",
-                    namespaceManager)?.InnerText;
+                var bbox = ParseBoundingBox(
+                    bboxNode,
+                    CoordinateSystem.CRS84);
 
-                var upper = bboxNode.SelectSingleNode(
-                    "*[local-name()='UpperCorner']",
-                    namespaceManager)?.InnerText;
-
-                if (string.IsNullOrEmpty(lower) || string.IsNullOrEmpty(upper))
+                if (bbox == null)
                     continue;
-
-                var lowerValues = lower.Split(' ');
-                var upperValues = upper.Split(' ');
-
-                if (lowerValues.Length < 2 || upperValues.Length < 2)
-                    continue;
-
-                var bbox = new BoundingBox(
-                    new Coordinate(
-                        CoordinateSystem.CRS84,
-                        double.Parse(lowerValues[0]),
-                        double.Parse(lowerValues[1])),
-                    new Coordinate(
-                        CoordinateSystem.CRS84,
-                        double.Parse(upperValues[0]),
-                        double.Parse(upperValues[1]))
-                );
 
                 container.LayerBoundingBoxes[coverageId] = bbox;
+
+                // Some consumers expect a global bbox fallback
+                if (container.GlobalBoundingBox == null)
+                    container.GlobalBoundingBox = bbox;
             }
 
             boundingBoxContainer = container;
             return container;
+        }
+
+        private BoundingBox ParseBoundingBox(XmlNode node, CoordinateSystem crs)
+        {
+            if (node == null)
+                return null;
+
+            var positions = node.SelectNodes(
+                "*[local-name()='pos']");
+
+            if (positions == null || positions.Count < 2)
+                return null;
+
+            var lower = positions[0].InnerText
+                .Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+
+            var upper = positions[1].InnerText
+                .Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+
+            if (lower.Length < 2 || upper.Length < 2)
+                return null;
+
+            if (!double.TryParse(
+                    lower[0],
+                    System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var minX))
+                return null;
+
+            if (!double.TryParse(
+                    lower[1],
+                    System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var minY))
+                return null;
+
+            if (!double.TryParse(
+                    upper[0],
+                    System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var maxX))
+                return null;
+
+            if (!double.TryParse(
+                    upper[1],
+                    System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var maxY))
+                return null;
+
+            return new BoundingBox(
+                new Coordinate(
+                    crs,
+                    minX,
+                    minY),
+                new Coordinate(
+                    crs,
+                    maxX,
+                    maxY));
+        }
+        
+        public string GetSpatialReference(string coverageName)
+        {
+            var coverageNode = xmlDocument.SelectSingleNode(
+                $"//*[local-name()='CoverageOfferingBrief']" +
+                $"[*[local-name()='name' and text()='{coverageName}']]",
+                namespaceManager
+            );
+
+            if (coverageNode == null)
+            {
+                Debug.LogWarning($"WCS coverage '{coverageName}' was not found in capabilities.");
+                return null;
+            }
+
+            var envelopeNode = coverageNode.SelectSingleNode(
+                "*[local-name()='lonLatEnvelope']",
+                namespaceManager
+            );
+
+            var srsName = envelopeNode?.Attributes?["srsName"]?.Value;
+
+            if (string.IsNullOrEmpty(srsName))
+            {
+                Debug.LogWarning($"WCS coverage '{coverageName}' has no CRS.");
+                return null;
+            }
+
+            // ADAGUC advertises CRS84 but accepts EPSG:4326 for GetCoverage.
+            if (srsName.Contains("CRS84", StringComparison.OrdinalIgnoreCase))
+                return "EPSG:4326";
+
+            return srsName;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Netherlands3D.Functionalities.Wcs
     public class GetCoverageRequest : BaseRequest
     {
         private const string DefaultFallbackVersion = "1.0.0";
+
         public GetCoverageRequest(Uri sourceUrl, string xml) : base(sourceUrl)
         {
         }
@@ -24,9 +25,13 @@ namespace Netherlands3D.Functionalities.Wcs
                 Debug.LogWarning("WCS version could not be determined, defaulting to " + DefaultFallbackVersion);
             }
 
+            var coverage = version.StartsWith("2.")
+                ? parameters.Single("coverageid")
+                : parameters.Single("coverage");
+
             var wcsParam = new MapFilters
             {
-                name = parameters.Single("coverageid") ?? parameters.Single("coverage"),
+                name = coverage,
                 spatialReferenceType = "CRS",
                 spatialReference = defaultCoordinateSystemReference,
                 version = version,
@@ -36,7 +41,7 @@ namespace Netherlands3D.Functionalities.Wcs
                 transparent = false
             };
 
-            var crs = parameters.Single("CRS");
+            var crs = parameters.Single("CRS") ?? parameters.Single("SRS");
             wcsParam.spatialReference = !string.IsNullOrEmpty(crs)
                 ? crs
                 : defaultCoordinateSystemReference;

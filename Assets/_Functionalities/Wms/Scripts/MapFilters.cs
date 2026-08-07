@@ -61,7 +61,7 @@ namespace Netherlands3D.Functionalities.Wms
                 name = queryParameters.Single("coverage"),
                 version = version,
                 spatialReferenceType = "CRS",
-                spatialReference = queryParameters.Single("CRS"),
+                spatialReference = "EPSG:4326",
                 width = parsedWidth,
                 height = parsedHeight,
             };
@@ -132,7 +132,7 @@ namespace Netherlands3D.Functionalities.Wms
             string format = queryParameters.Single("FORMAT");
             if (format is not "NetCDF4" and not "GeoTIFF")
             {
-                format = "NetCDF4";
+                format = "GeoTIFF";
             }
             uriBuilder.SetQueryParameter("FORMAT", format);
 

@@ -70,7 +70,8 @@ namespace Netherlands3D.Functionalities.Wcs
                         version = request.GetVersion(),
                         width = layerPrefab.Resolution.x,
                         height = layerPrefab.Resolution.y,
-                        spatialReferenceType = "CRS"
+                        spatialReferenceType = "CRS",
+                        spatialReference = request.GetSpatialReference(coverageNames[i])
                     };
 
                     var preset = CreatePreset(map, url);

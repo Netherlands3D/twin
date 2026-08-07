@@ -15,14 +15,9 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wcs
 {
-    //https://anonymous.api.dataplatform.knmi.nl/wms/adaguc-server?dataset=msg_cpp_products&service=WCS&request=getcapabilities
-    //1 dont inherit from imageprojectilayer
-    //2 finish download method
-    //3 create volumetric array from 250x250x250
     
     
-    
-    public class WCSTileDataLayer : ImageProjectionLayer
+    public class WCSTileDataLayer : Layer
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
 
@@ -39,6 +34,19 @@ namespace Netherlands3D.Functionalities.Wcs
                 _url = value;
                 if (!_url.Contains("{0}"))
                     Debug.LogError("WFS URL does not contain a '{0}' placeholder for the bounding box.", gameObject);
+            }
+        }
+        
+        private BoundingBox boundingBox;
+
+        public BoundingBox BoundingBox
+        {
+            get => boundingBox;
+            set
+            {
+                boundingBox = value;
+                var crs2D = CoordinateSystems.To2D(value.CoordinateSystem);
+                boundingBox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             }
         }
 
@@ -69,7 +77,7 @@ namespace Netherlands3D.Functionalities.Wcs
 
         
 
-        protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
+        protected virtual IEnumerator DownloadData(TileChange tileChange, Action<TileChange> callback = null)
         {
             
             // var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
@@ -155,6 +163,74 @@ namespace Netherlands3D.Functionalities.Wcs
 
             return boundingBox;
         }
+        
+        private BoundingBox DetermineBoundingBox(TileChange tileChange, CoordinateSystem system)
+        {
+            var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
+            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
+
+            var boundingBox = new BoundingBox(bottomLeft, topRight);
+            boundingBox.Convert(system);
+
+            return boundingBox;
+        }
+        
+        public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
+        {
+            var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
+
+            switch (tileChange.action)
+            {
+                case TileAction.Create:
+                    Tile newTile = CreateNewTile(tileKey);
+                    tiles.Add(tileKey, newTile);
+                    var tileBox = DetermineBoundingBox(tileChange, CoordinateSystem.RD);
+                    if (IsInExtents(tileBox))
+                    {
+                        tiles[tileKey].runningCoroutine = StartCoroutine(DownloadData(tileChange, callback));
+                    }
+                    else
+                    {
+                        callback?.Invoke(tileChange); //nothing to download, call this to continue loading tiles
+                    }
+
+                    break;
+                case TileAction.Upgrade:
+                    tiles[tileKey].unityLOD++;
+                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadData(tileChange, callback));
+                    break;
+                case TileAction.Downgrade:
+                    tiles[tileKey].unityLOD--;
+                    tiles[tileKey].runningCoroutine = StartCoroutine(DownloadData(tileChange, callback));
+                    break;
+                case TileAction.Remove:
+                    InteruptRunningProcesses(tileKey);
+                    RemoveGameObjectFromTile(tileKey);
+                    tiles.Remove(tileKey);
+                    callback?.Invoke(tileChange);
+                    return;
+            }
+        }
+        
+        private Tile CreateNewTile(Vector2Int tileKey)
+        {
+            Tile tile = new()
+            {
+                unityLOD = 0,
+                tileKey = tileKey,
+                layer = transform.gameObject.GetComponent<Layer>()
+            };
+
+            return tile;
+        }
+        
+        private bool IsInExtents(BoundingBox tileBox)
+        {
+            if (BoundingBox == null) //no bounds set, so we don't know the extents and always need to load the tile
+                return true;
+
+            return BoundingBox.Intersects(tileBox);
+        }
 
         public record WCSTileDataLayerChangePayload(TileChange TileChange, string Url)
         {
@@ -187,13 +263,6 @@ namespace Netherlands3D.Functionalities.Wcs
         {
             return
                 "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6IjRjZGY2M2FjYTk1MjRiMzU4N2UwZTNjMjM5NWZlMTlmIiwiaCI6Im11cm11cjEyOCJ9";
-        }
-        
-        public record NetCDFTileDataLayerChangePayload(TileChange TileChange, string Url)
-        {
-            public TileChange TileChange { get; } = TileChange;
-            public string Url  { get; } = Url;
-            public Vector2Int TileKey => new(TileChange.X, TileChange.Y);
         }
     }
 }

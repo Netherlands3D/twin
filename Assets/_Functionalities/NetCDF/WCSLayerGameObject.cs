@@ -72,7 +72,6 @@ namespace Netherlands3D.Functionalities.Wcs
             wcsLayer.SetAuthorization(auth);
             LayerData.HasValidCredentials = true;           
             wcsLayer.isEnabled = LayerData.ActiveInHierarchy;
-            wcsLayer.RefreshTiles();
         }
 
         public void ClearCredentials()
