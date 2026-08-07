@@ -11,7 +11,6 @@ using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
-using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -36,9 +35,9 @@ namespace Netherlands3D.UI.Panels
             
             ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
             selectorService.OnSelectLayer.AddListener(SpawnPanel);
-            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo ui-toolkit: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
+            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel);
             
-            //whenever we close a tool, a property section 
+            //whenever we close the layerpanel also close any propertysection
             ToolService toolService = ServiceLocator.GetService<ToolService>();
             toolService.GetTool(ToolType.Layer).onClose.AddListener(ClearActivePanel);
         }

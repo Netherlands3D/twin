@@ -1,5 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
+using Netherlands3D.Masking;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -33,7 +33,7 @@ namespace Netherlands3D.UI.Panels
         
         public override bool ShouldBeActive()
         {
-            return domeTool.IsOpen;
+            return domeTool.IsOpen && ServiceLocator.GetService<DomeService>().IsPointerOnDome;
         }
     }
 }

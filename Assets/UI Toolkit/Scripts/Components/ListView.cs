@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -16,6 +17,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement hoveredElement;
         private List<int> lastSelectedIndices = new();
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
+        private Vector2 lastPointerPosition;
 
         [UxmlAttribute("empty-text")]
         public string EmptyText { get; set; } = "Deze lijst is leeg";
@@ -91,6 +93,11 @@ namespace Netherlands3D.UI.Components
             selectionChanged += OnSelectionChanged;
             
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+
+            RegisterCallback<PointerMoveEvent>(evt =>
+            {
+                lastPointerPosition = evt.position;
+            });
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -117,12 +124,40 @@ namespace Netherlands3D.UI.Components
 
         private void OnSelectionChanged(IEnumerable<object> obj)
         {
+            var referenceLayer = hoveredElement;
+            if (referenceLayer == null)
+                referenceLayer = FindClosestElement(lastPointerPosition);
+            
             this.OnSelectionChanged(
-                hoveredElement,
+                referenceLayer,
                 indexDictionary,
                 lastSelectedIndices,
                 ref firstSelectedIndex,
                 ref lastDirection);
+        }
+        
+        private VisualElement FindClosestElement(Vector2 pointerPosition)
+        {
+            VisualElement closest = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var element in indexDictionary.Keys)
+            {
+                if (element == null)
+                    continue;
+
+                Vector2 elementPosition = element.worldBound.position;
+
+                float distance = Mathf.Abs(pointerPosition.y - elementPosition.y);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = element;
+                }
+            }
+
+            return closest;
         }
     }
 }
