@@ -20,6 +20,10 @@ namespace Netherlands3D.Functionalities.Wcs
     
     public class WCSTileDataLayer : Layer
     {
+        //testing
+        public Texture2D testtexture = null;
+        
+        
         private const string DefaultEpsgCoordinateSystem = "28992";
 
         private Config requestConfig { get; set; } = Config.Default();
@@ -102,7 +106,7 @@ namespace Netherlands3D.Functionalities.Wcs
             var mapData = MapFilters.FromUrlWCS(new Uri(Url));
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
-            string url = Url.Replace("{0}", boundingBox.ToString());
+            string url = Url.Replace("{0}", boundingBox.ToString()); //StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.ToString());
 
             // Because requestConfig is by-ref, changing it will change all requests in flight; as such we clone the config before
             // assigning a payload
@@ -170,56 +174,7 @@ namespace Netherlands3D.Functionalities.Wcs
                     var dataDataset = file.Dataset(layerName);
 
                     float[] values = dataDataset.Read<float[]>();
-                   
-
-                    Texture2D texture = new Texture2D(
-                        256,
-                        256,
-                        TextureFormat.RFloat,
-                        false
-                    );
-
-                    Color[] pixels = new Color[values.Length];
-
-                    float min = float.MaxValue;
-                    float max = float.MinValue;
-
-// Find range
-                    foreach (float v in values)
-                    {
-                        if (float.IsNaN(v))
-                            continue;
-
-                        min = Mathf.Min(min, v);
-                        max = Mathf.Max(max, v);
-                    }
-
-                    Debug.Log($"Data range: {min} -> {max}");
-
-
-// Convert values to pixels
-                    for (int i = 0; i < values.Length; i++)
-                    {
-                        float v = values[i];
-
-                        if (float.IsNaN(v))
-                        {
-                            pixels[i] = Color.clear;
-                            continue;
-                        }
-
-                        float normalized = Mathf.InverseLerp(min, max, v);
-
-                        pixels[i] = new Color(
-                            normalized,
-                            normalized,
-                            normalized,
-                            1
-                        );
-                    }
-
-                    texture.SetPixels(pixels);
-                    texture.Apply();
+                    testtexture = CreateDebugTexture(values, 256, 256);
 
                     // CRS metadata
                     try
@@ -378,6 +333,101 @@ namespace Netherlands3D.Functionalities.Wcs
 
                 Destroy(tile.gameObject);
             }
+        }
+        
+        private Texture2D CreateDebugTexture(float[] values, int width = 256, int height = 256)
+        {
+            if (values == null || values.Length == 0)
+            {
+                Debug.LogError("No values supplied");
+                return null;
+            }
+
+            if (values.Length != width * height)
+            {
+                Debug.LogError(
+                    $"Value count mismatch. Values: {values.Length}, Expected: {width * height}"
+                );
+                return null;
+            }
+
+            float min = float.MaxValue;
+            float max = float.MinValue;
+            int nanCount = 0;
+            int infCount = 0;
+
+            foreach (float v in values)
+            {
+                if (float.IsNaN(v))
+                {
+                    nanCount++;
+                    continue;
+                }
+
+                if (float.IsInfinity(v))
+                {
+                    infCount++;
+                    continue;
+                }
+
+                if (v < min) min = v;
+                if (v > max) max = v;
+            }
+
+            Debug.Log(
+                $"Raster debug\n" +
+                $"Size: {width}x{height}\n" +
+                $"Values: {values.Length}\n" +
+                $"Range: {min} -> {max}\n" +
+                $"NaN: {nanCount}\n" +
+                $"Infinity: {infCount}\n" +
+                $"First: {values[0]}\n" +
+                $"Last: {values[^1]}"
+            );
+
+            Texture2D texture = new Texture2D(
+                width,
+                height,
+                TextureFormat.RGBA32,
+                false
+            );
+
+            Color[] pixels = new Color[values.Length];
+
+            float range = max - min;
+
+            if (range <= 0)
+            {
+                Debug.LogWarning("No value range, texture will be flat");
+                range = 1;
+            }
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                float v = values[i];
+
+                if (float.IsNaN(v) || float.IsInfinity(v))
+                {
+                    pixels[i] = Color.magenta;
+                    continue;
+                }
+
+                float normalized = (v - min) / range;
+
+                pixels[i] = new Color(
+                    normalized,
+                    normalized,
+                    normalized,
+                    1f
+                );
+            }
+
+            texture.SetPixels(pixels);
+            texture.Apply(false, false);
+
+            Debug.Log("Texture created successfully");
+
+            return texture;
         }
 
         private string GetAPIKey()
