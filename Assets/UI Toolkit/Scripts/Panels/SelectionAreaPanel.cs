@@ -1,5 +1,6 @@
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
@@ -9,9 +10,9 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class SelectionAreaPanel : VisualElement
     {
-        private Button polygonButton;
-        private Button lineButton;
-        private Button gridButton;
+        private ListViewItem polygonButton;
+        private ListViewItem lineButton;
+        private ListViewItem gridButton;
         
         private PolygonCreationService polygonCreationService;
         private ToolService toolService;
@@ -21,33 +22,33 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            polygonButton = this.Q<Button>("PolygonButton");
-            lineButton = this.Q<Button>("LineButton");
-            gridButton = this.Q<Button>("GridButton");
+            polygonButton = this.Q<ListViewItem>("PolygonButton");
+            lineButton = this.Q<ListViewItem>("LineButton");
+            gridButton = this.Q<ListViewItem>("GridButton");
             
             polygonCreationService = Services.ServiceLocator.GetService<PolygonCreationService>();
             toolService = Services.ServiceLocator.GetService<ToolService>();
 
-            lineButton.clicked += OnLineButtonClicked;
-            polygonButton.clicked += OnPolygonButtonClicked;
-            gridButton.clicked += OnGridButtonClicked;
+            lineButton.RegisterCallback<ClickEvent>(OnLineButtonClicked);
+            polygonButton.RegisterCallback<ClickEvent>(OnPolygonButtonClicked);
+            gridButton.RegisterCallback<ClickEvent>(OnGridButtonClicked);
         }
 
-        private void OnPolygonButtonClicked()
+        private void OnPolygonButtonClicked(ClickEvent evt)
         {
             polygonButton.SetActivePseudoState(true);
             lineButton.SetActivePseudoState(false);
             polygonCreationService.SetPolygonToCreate();
         }
         
-        private void OnLineButtonClicked()
+        private void OnLineButtonClicked(ClickEvent evt)
         {
             polygonButton.SetActivePseudoState(false);
             lineButton.SetActivePseudoState(true);
             polygonCreationService.SetLineInputToCreate();
         }
 
-        private void OnGridButtonClicked()
+        private void OnGridButtonClicked(ClickEvent evt)
         {
             toolService.GetTool(ToolType.PolygonGrid).Open();
             polygonCreationService.SetPreventRemovingPolygon(false);

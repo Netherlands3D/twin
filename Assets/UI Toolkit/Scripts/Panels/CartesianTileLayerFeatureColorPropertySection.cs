@@ -19,36 +19,37 @@ namespace Netherlands3D.UI.Panels
         
         private CartesianTileLayerFeatureColorPropertyData stylingPropertyData;
         private ListView swatchesListView;
-        private ListView SwatchesListView => swatchesListView ??= this.Q<ListView>();
         private List<CartesianTileLayerFeatureColorPropertyData.ColorData> colorData = new();
         
         public CartesianTileLayerFeatureColorPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
+
+            swatchesListView = this.Q<ListView>();
             
-            SwatchesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            SwatchesListView.selectionType = SelectionType.Multiple;
+            swatchesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            swatchesListView.selectionType = SelectionType.Multiple;
             
-            SwatchesListView.makeItem = MakeListViewItem;
-            SwatchesListView.bindItem = BindListViewItem;
+            swatchesListView.makeItem = MakeListViewItem;
+            swatchesListView.bindItem = BindListViewItem;
             
             
             //when clicked outside the listview, deselect the current selection
-            SwatchesListView.RegisterCallback<BlurEvent>(evt =>
+            swatchesListView.RegisterCallback<BlurEvent>(evt =>
             {
                 var pos = Pointer.current.position.ReadValue();
                 var panelPos = RuntimePanelUtils.ScreenToPanel(
-                    SwatchesListView.panel,
+                    swatchesListView.panel,
                     new Vector2(pos.x, Screen.height - pos.y)
                 );
-                if (!SwatchesListView.worldBound.Contains(panelPos) && !ColorPicker.worldBound.Contains(panelPos))
+                if (!swatchesListView.worldBound.Contains(panelPos) && !ColorPicker.worldBound.Contains(panelPos))
                 {
-                    SwatchesListView.ClearSelection();
+                    swatchesListView.ClearSelection();
                 }
             });
             
-            SwatchesListView.selectedIndicesChanged += indices =>
+            swatchesListView.selectedIndicesChanged += indices =>
             {
                 //show selection in world when items in panel are selected
                 ColorPicker.SetVisible(indices.Any());
@@ -68,20 +69,24 @@ namespace Netherlands3D.UI.Panels
             {
                 ColorPicker.SetColorInputComponentsWithoutNotify(item.Tile.Color);
             });
-            return item;
+            var listViewItem = new ListViewItem(item);
+            return listViewItem;
+            //return item;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not ColorTileListViewItem listViewItem) return;
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
+            //if (item.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
            
-            string color = SwatchesListView.itemsSource[index] as string;
-            listViewItem.Tile.ColorHex = color;
+            string color = swatchesListView.itemsSource[index] as string;
+            tile.Tile.ColorHex = color;
             
             string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
             //layer names usually will look like Twin_Something, lets use only the second part of the split on _
             string name = layerName.Contains('_') ? layerName.Split('_')[1] : layerName;
-            listViewItem.Tile.LabelText = name;
+            tile.Tile.LabelText = name;
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -105,15 +110,15 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateSwatches()
         {
-            SwatchesListView.itemsSource = stylingPropertyData.GetUsedColorTypes();
-            SwatchesListView.RefreshItems();
+            swatchesListView.itemsSource = stylingPropertyData.GetUsedColorTypes();
+            swatchesListView.RefreshItems();
         }
         
         private void OnPickColor(Color color)
         {
             colorData.Clear();
             //since we apply styling to multiple stylingrules we have to use the notify == false and invoke styling changed afterwards
-            foreach (int i in SwatchesListView.selectedIndices)
+            foreach (int i in swatchesListView.selectedIndices)
             {
                 string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(i);
                 CartesianTileLayerFeatureColorPropertyData.ColorData data = new();

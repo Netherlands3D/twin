@@ -5,6 +5,10 @@
     height: var(--spacing-8);
 }
 
+.layer-tree-view-item{
+    flex-grow: 1;
+}
+
 .layer-tree-view-item:hover {
     background-color: transparent;
 }
