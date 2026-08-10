@@ -48,8 +48,8 @@
     flex-grow: 1;
     height: 1px;
     min-height: 1px;
-    margin-bottom: var(--spacing-3);
-    margin-top: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
+    margin-top: var(--spacing-2);
     background-color: var(--divider-bg-color);
     border-radius: 0.5px;
 }
