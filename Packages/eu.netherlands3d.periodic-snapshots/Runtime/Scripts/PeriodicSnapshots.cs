@@ -76,21 +76,20 @@ namespace Netherlands3D.Snapshots
         [Tooltip("Generating can take a while, this event can be used to hide a loader")]
         public UnityEvent onFinishedGenerating = new();
 
-
+        private Camera sourceCamera;
+        private RenderTexture previousTarget;
+        private int previousMask;
+        private RenderTexture previousActive;
+        private RenderTexture renderTexture;
+        private int snapshotWidth;
+        private int snapshotHeight;
+        
         private void OnValidate()
         {
             foreach (var moment in moments)
             {
                 moment.name = $"{moment.day}-{moment.month} {moment.hour}:00";
             }
-        }
-
-        public void TakeSnapshots()
-        {
-            string timestamp = $"{DateTime.Now:yyyy-MM-ddTHH-mm}";
-            var path = FetchPath(timestamp);
-
-            StartCoroutine(TakeSnapshotsAcrossFrames(timestamp, path));
         }
 
         public void DownloadSnapshots()
@@ -128,6 +127,20 @@ namespace Netherlands3D.Snapshots
                 yield break;
             }
 
+            sourceCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
+            previousTarget = sourceCamera.targetTexture;
+            previousMask = sourceCamera.cullingMask;
+            previousActive = RenderTexture.active;
+            
+            sourceCamera.cullingMask = snapshotLayers;
+            snapshotWidth = useViewSize ? Screen.width : width;
+            snapshotHeight = useViewSize ? Screen.height : height;
+            renderTexture = new RenderTexture(snapshotWidth, snapshotHeight, 24, RenderTextureFormat.ARGB32);
+            renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
+            sourceCamera.targetTexture = renderTexture;
+            
+            yield return null;
+            
             onStartGenerating.Invoke();
 
             var cachedTimeOfDay = sunTime.GetTime();
@@ -147,6 +160,16 @@ namespace Netherlands3D.Snapshots
 
             // Make sure no rounding errors occur and set it to 1f
             onProgress.Invoke(1f);
+            
+            sourceCamera.targetTexture = previousTarget;
+            sourceCamera.cullingMask = previousMask;
+            RenderTexture.active = previousActive;
+            
+            if (renderTexture != null)
+            {
+               
+                Destroy(renderTexture);
+            }
 
             onFinishedGenerating.Invoke();
         }
@@ -179,34 +202,15 @@ namespace Netherlands3D.Snapshots
             sunTime.SetMinutes(0);
             sunTime.SetSeconds(0);
             
-            var snapshotWidth = useViewSize ? Screen.width : width;
-            var snapshotHeight = useViewSize ? Screen.height : height;
-
-            Camera sourceCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
+            yield return null; //wait frame
             
-            RenderTexture previousTarget = sourceCamera.targetTexture;
-            int previousMask = sourceCamera.cullingMask;
-            RenderTexture previousActive = RenderTexture.active;
-
-            RenderTexture renderTexture = new RenderTexture(
-                snapshotWidth,
-                snapshotHeight,
-                24,
-                RenderTextureFormat.ARGB32);
-
-            renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
-            renderTexture.Create();
-
             Texture2D snapshotTexture = null;
-
             try
             {
-                sourceCamera.cullingMask = snapshotLayers;
-                sourceCamera.targetTexture = renderTexture;
-
+                renderTexture.Create();
                 sourceCamera.Render();
 
-                yield return null; //wait frame
+               
                 
                 RenderTexture.active = renderTexture;
 
@@ -245,16 +249,7 @@ namespace Netherlands3D.Snapshots
             }
             finally
             {
-                sourceCamera.targetTexture = previousTarget;
-                sourceCamera.cullingMask = previousMask;
-                RenderTexture.active = previousActive;
-
-                if (renderTexture != null)
-                {
-                    renderTexture.Release();
-                    Destroy(renderTexture);
-                }
-
+                renderTexture.Release();
                 if (snapshotTexture != null)
                 {
                     Destroy(snapshotTexture);
