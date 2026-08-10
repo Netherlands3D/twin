@@ -41,10 +41,7 @@ namespace Netherlands3D.UI.Components
 
         private float textWidth;
         private float availableWidth;
-
-        [UxmlAttribute]
-        public float ScrollSpeed { get; set; } = 100f;
-
+        private float ScrollSpeed = 60f;
         private float scrollPosition;
         private bool isOverflowing;
         
@@ -194,8 +191,7 @@ namespace Netherlands3D.UI.Components
                 );
 
             });
-
-            tickerSchedule.Every(16);
+            tickerSchedule.Every(0);
         }
         
         private void StopTicker()
