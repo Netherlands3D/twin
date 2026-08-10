@@ -369,8 +369,12 @@ namespace Netherlands3D.UI.Panels
                         idsToRemove.Add(objectId);
                 }
             }
+
+            //all objects that were made visible while this panel was alive, should be removed from data
             foreach (string id in idsToRemove)
+            {
                 stylingPropertyData.RemoveVisibilityForSubObjectById(id);
+            }
         }
     }
 }

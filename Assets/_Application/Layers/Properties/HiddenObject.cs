@@ -36,6 +36,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             hiddenObjectsPropertyData.SelectionMaterial = selectionMaterial;
+            hiddenObjectsPropertyData.OnHiddenObjectDataStylingRuleRemoved.AddListener(OnHiddenObjectRemoved);
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
@@ -81,6 +82,11 @@ namespace Netherlands3D.Twin.layers.properties
             {
                 Interaction.ApplyColors(kv.Value, visualization.LayerData.Id.ToString());
             }
+        }
+
+        private void OnHiddenObjectRemoved(string id)
+        {
+            Interaction.RemoveLayerColor(visualization.LayerData.Id.ToString(), id);
         }
         
          //a simple debugging method to have x items hidden on startup in the hiddenobjects property panel

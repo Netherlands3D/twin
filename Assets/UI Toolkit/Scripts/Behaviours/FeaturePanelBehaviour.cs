@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net.Geometry;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using UnityEngine;
@@ -15,7 +16,13 @@ namespace Netherlands3D.UI.Panels
         {
             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
             Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
-            return selectedMappings.Values.Any(m => m is FeatureMapping);
+            
+            IEnumerable<FeatureMapping> featureMappings = selectedMappings.Values.OfType<FeatureMapping>();
+            foreach (FeatureMapping featureMapping in featureMappings)
+                if (featureMapping.Feature != null && (featureMapping.Feature.Geometry is Polygon || featureMapping.Feature.Geometry is MultiPolygon))
+                    return true;
+            
+            return false;
         }
 
         public override object GetData()

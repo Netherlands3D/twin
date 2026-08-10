@@ -181,23 +181,80 @@ namespace Netherlands3D.Snapshots
             sunTime.SetMinutes(0);
             sunTime.SetSeconds(0);
 
-            // Skip frame to give rendering time to do its magic
+            // Skip frame to give rendering time to update.
             yield return null;
 
-            byte[] bytes = Snapshot.ToImageBytes(
+            RenderTexture previousTarget = sourceCamera.targetTexture;
+            int previousMask = sourceCamera.cullingMask;
+            RenderTexture previousActive = RenderTexture.active;
+
+            RenderTexture renderTexture = new RenderTexture(
                 snapshotWidth,
                 snapshotHeight,
-                sourceCamera,
-                snapshotLayers,
-                SnapshotFileType.png
-            );
+                24,
+                RenderTextureFormat.ARGB32);
 
-            DateTime dateTime = moment.ToDateTime();
-            Texture2D texture = CreateTimestampTexture(bytes, dateTime, snapshotWidth, snapshotHeight);
-            bytes = texture.EncodeToPNG();
-            Destroy(texture);
+            renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
+            renderTexture.Create();
 
-            File.WriteAllBytes($"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png", bytes);
+            Texture2D snapshotTexture = null;
+
+            try
+            {
+                sourceCamera.cullingMask = snapshotLayers;
+                sourceCamera.targetTexture = renderTexture;
+
+                sourceCamera.Render();
+
+                RenderTexture.active = renderTexture;
+
+                snapshotTexture = new Texture2D(
+                    snapshotWidth,
+                    snapshotHeight,
+                    TextureFormat.RGB24,
+                    false);
+
+                snapshotTexture.ReadPixels(
+                    new Rect(0, 0, snapshotWidth, snapshotHeight),
+                    0,
+                    0);
+
+                byte[] bytes = snapshotTexture.EncodeToPNG();
+
+                // Keep this part exactly as before.
+                DateTime dateTime = moment.ToDateTime();
+
+                Texture2D texture = CreateTimestampTexture(
+                    bytes,
+                    dateTime,
+                    snapshotWidth,
+                    snapshotHeight);
+
+                bytes = texture.EncodeToPNG();
+
+                Destroy(texture);
+
+                File.WriteAllBytes(
+                    $"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png",
+                    bytes);
+            }
+            finally
+            {
+                sourceCamera.targetTexture = previousTarget;
+                sourceCamera.cullingMask = previousMask;
+                RenderTexture.active = previousActive;
+
+                if (renderTexture != null)
+                {
+                    renderTexture.Release();
+                    Destroy(renderTexture);
+                }
+
+                if (snapshotTexture != null)
+                {
+                    Destroy(snapshotTexture);
+                }
+            }
         }
 
         public Texture2D CreateTimestampTexture(byte[] bytes, DateTime time, int width, int height)
