@@ -250,6 +250,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void ExitViewer(bool exitOriginalPosition)
         {
+            SetMovementVisual(null);
             OnViewerExited.Invoke(exitOriginalPosition);
 
             Input.ViewerExited();

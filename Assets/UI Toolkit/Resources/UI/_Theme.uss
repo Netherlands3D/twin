@@ -78,7 +78,10 @@
     --color-text: var(--color-blue-900);
     --color-selection: rgba(0, 120, 250, 0.2);
     --color-link-text: rgb(51, 102, 204);
-    --color-warning: rgb(227, 86, 86);
+    --color-warning: var(--color-red);
+    --color-red: rgb(227, 86, 86);
+    --color-orange: rgb(227, 172, 86);
+    --color-green: rgb(86, 172, 86);
 
     /* ColorPicker sprites */
     --image-color-wheel: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/ColorWheel.png");
@@ -135,6 +138,7 @@
     --icon-map: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=medium.png");
     --icon-measure: url("project://database/Assets/Sprites/UI/Icons/Type=Measure,%20Color=white,%20Size=medium.png");
     --icon-metadata: url("project://database/Assets/Sprites/UI/Icons/Type=MetaData,%20Color=white,%20Size=medium.png");
+    --icon-minus: url("project://database/Assets/Sprites/UI/Icons/Type=Minus,%20Color=white,%20Size=medium.png");
     --icon-moon: url("project://database/Assets/Sprites/UI/Icons/Moon.svg");
     --icon-move: url("project://database/Assets/Sprites/UI/Icons/Type=Move,%20Color=white,%20Size=medium.png");
     --icon-next: url("project://database/Assets/Sprites/UI/Icons/Type=Next,%20Color=white,%20Size=medium.png");

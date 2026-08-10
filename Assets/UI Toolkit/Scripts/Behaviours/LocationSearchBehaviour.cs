@@ -118,10 +118,16 @@ namespace Netherlands3D.UI.Behaviours
                 panel?.SetCoordinateValidity(false);
                 return;
             }
-
+            
             if (!TryGetMainCameraRd(out var mainCamera, out var currentRd)) return;
-
+            
             var targetCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, currentRd.northing, currentRd.height);
+            if (!targetCoordinate.IsValid())
+            {
+                panel.SetCoordinateValidity(false);
+                return;
+            }
+            
             MoveMainCamera(mainCamera, targetCoordinate);
         }
 
@@ -137,6 +143,12 @@ namespace Netherlands3D.UI.Behaviours
                 return;
 
             var targetCoordinate = new Coordinate(CoordinateSystem.RDNAP, currentRd.easting, y, currentRd.height);
+            if (!targetCoordinate.IsValid())
+            {
+                panel.SetCoordinateValidity(false);
+                return;
+            }
+            
             MoveMainCamera(mainCamera, targetCoordinate);
         }
 
@@ -195,6 +207,7 @@ namespace Netherlands3D.UI.Behaviours
             var rd = coordinate.Convert(CoordinateSystem.RD);
             panel?.SetCoordinates((int)rd.easting, (int)rd.northing);
             panel?.SetCoordinateValidity(rd.IsValid());
+            panel?.SetMinimapLocation(rd);
         }
     }
 }

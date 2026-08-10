@@ -86,6 +86,7 @@
 .icon.image-map { background-image: var(--icon-map); }
 .icon.image-measure { background-image: var(--icon-measure); }
 .icon.image-meta-data { background-image: var(--icon-metadata); }
+.icon.image-minus { background-image: var(--icon-minus); }
 .icon.image-moon { background-image: var(--icon-moon); }
 .icon.image-move { background-image: var(--icon-move); }
 .icon.image-next { background-image: var(--icon-next); }

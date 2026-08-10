@@ -19,6 +19,9 @@ namespace Netherlands3D.UI.Components
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
         private Vector2 lastPointerPosition;
 
+        [UxmlAttribute("empty-text")]
+        public string EmptyText { get; set; } = "Deze lijst is leeg";
+
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
         /// </summary>
@@ -89,10 +92,19 @@ namespace Netherlands3D.UI.Components
 
             selectionChanged += OnSelectionChanged;
             
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+
             RegisterCallback<PointerMoveEvent>(evt =>
             {
                 lastPointerPosition = evt.position;
             });
+        }
+
+        private void OnGeometryChanged(GeometryChangedEvent evt)
+        {
+            var emptyLabel = this.Q<Label>(className: "unity-list-view__empty-label"); //the label only spawns after an empty list has been rendered
+            if (emptyLabel != null)
+                emptyLabel.text = EmptyText;
         }
 
         /// <summary>

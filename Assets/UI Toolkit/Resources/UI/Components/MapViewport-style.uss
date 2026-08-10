@@ -3,40 +3,33 @@
     flex-shrink: 1;
     flex-grow: 1;
     align-items: flex-end;
-    
-    /* grenzen: voorkomt te klein/te groot */
-    aspect-ratio: 1.6;
-    min-width: 256px;
-    max-width: 320px; /* TODO: test on different screensizes if this is to big */
-    min-height: 160px;
-    max-height: 200px; /* TODO: test on different screensizes if this is to big */
 
+    transform-origin: 50% 50%;
+
+    transition-property: min-width, min-height, max-width, max-height, translate;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+    
     border-radius: var(--spacing-2);
     border-width: 0px;
-    background-color: transparent;
-    overflow: hidden;
+    background-color: var(--color-white);
+    overflow: hidden; 
 }
 
-.map-viewport__map {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-
-    /* TODO: set background-image/RenderTexture */
-    background-color: var(--color-blue-100);
+.map-viewport--fixed-size{
+    aspect-ratio: 1.6;
+    /* grenzen: voorkomt te klein/te groot */
+    min-width: 410px;
+    max-width: 410px; /* TODO: test on different screensizes if this is to big */
+    min-height: 256px;
+    max-height: 256px; /* TODO: test on different screensizes if this is to big */
 }
 
-.map-viewport__overlay {
+.map-viewport__pin
+{
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 0; 
     top: 0;
-    bottom: 0;
-
-    justify-content: center;
-    align-items: center;
 }
 
 .map-viewport .map-viewport__pin.icon {
@@ -44,4 +37,24 @@
     height: var(--spacing-8);
     background-image: var(--icon-locationpin);
     -unity-background-image-tint-color: var(--color-blue-700);
+}
+
+.map-viewport.expanded{
+    min-width: 512px;
+    max-width: 512px; /* TODO: test on different screensizes if this is to big */
+    min-height: 512px;
+    max-height: 512px; /* TODO: test on different screensizes if this is to big */
+
+    /*translate: -51px -128px;*/
+}
+
+.map-viewport__controls {
+    position: absolute;
+    right: var(--spacing-2);
+    bottom: var(--spacing-2);
+    flex-direction: column;
+}
+
+.button.map-viewport__zoom-button{
+    margin-top: var(--spacing-1);
 }

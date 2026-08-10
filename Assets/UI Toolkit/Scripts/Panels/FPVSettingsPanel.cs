@@ -1,10 +1,12 @@
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Slider = Netherlands3D.UI.Components.Slider;
 using Toggle = UnityEngine.UIElements.Toggle;
+using Netherlands3D.UI_Toolkit.Scripts;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -51,8 +53,8 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            fpvFunctionality?.OnEnable.AddListener(SetFPVSectionActive);
-            fpvFunctionality?.OnDisable.AddListener(SetFPVSectionInactive);
+            fpvFunctionality?.OnEnable.RemoveListener(SetFPVSectionActive);
+            fpvFunctionality?.OnDisable.RemoveListener(SetFPVSectionInactive);
 
             mouseLockToggle.UnregisterValueChangedCallback(OnMouseLockModeChanged);
             mouseSensitivitySlider.UnregisterValueChangedCallback(OnSensitivityChanged);
@@ -81,6 +83,7 @@ namespace Netherlands3D.UI.Panels
         private void OnMouseLockModeChanged(ChangeEvent<bool> evt)
         {
             ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.SetMouseLockModus(evt.newValue);
+            App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
         }
     }
 }
