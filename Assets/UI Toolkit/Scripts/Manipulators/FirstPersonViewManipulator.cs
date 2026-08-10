@@ -42,6 +42,7 @@ public class FirstPersonViewManipulator : DragManipulator
         var mousePos = Mouse.current.position.ReadValue();
         if (!App.UIRoot.IsPointerOverUI())
         {
+            App.UIRoot.EnableFPVUI();
             EnterFPVMode();
         }
 
