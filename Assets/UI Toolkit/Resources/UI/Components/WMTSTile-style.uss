@@ -1,0 +1,20 @@
+.wmts-tile{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.wmts-tile__visual{
+    position:absolute;
+    left:0;
+    top:0;
+    opacity: 0;
+    -unity-background-scale-mode: scale-and-crop;
+
+    transition-property: opacity;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+}
+.wmts-tile__visual.visible{
+    opacity: 1;
+}
