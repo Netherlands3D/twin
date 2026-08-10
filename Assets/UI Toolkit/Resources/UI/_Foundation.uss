@@ -41,3 +41,15 @@
     -unity-background-image-tint-color: var(--color-blue-900-alpha);
     position: absolute;
 }
+
+.panel-divider {
+    --divider-bg-color: var(--color-blue-200);
+    display: flex;
+    flex-grow: 1;
+    height: 1px;
+    min-height: 1px;
+    margin-bottom: var(--spacing-3);
+    margin-top: var(--spacing-3);
+    background-color: var(--divider-bg-color);
+    border-radius: 0.5px;
+}

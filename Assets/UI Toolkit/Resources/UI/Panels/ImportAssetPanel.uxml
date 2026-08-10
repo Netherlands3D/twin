@@ -8,9 +8,9 @@
     name="ImportAssetPanel"
     class="import-asset-panel">
     <nl3d:Breadcrumb leading-icon-image="Plus"/>
+    <ui:VisualElement name="Divider" class="panel-divider" />
     <nl3d:ScrollView>
         <ui:VisualElement name="ImportAssetMainSection">
-            
             <nl3d:ListViewItem name="GoToAssetLibraryButton" >
                 <nl3d:Icon image="Library"/>
                 <ui:Label text="Vanuit bibliotheek"/>
