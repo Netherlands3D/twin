@@ -179,8 +179,6 @@ namespace Netherlands3D.Snapshots
             sunTime.SetMinutes(0);
             sunTime.SetSeconds(0);
             
-            yield return new WaitForEndOfFrame();
-            
             var snapshotWidth = useViewSize ? Screen.width : width;
             var snapshotHeight = useViewSize ? Screen.height : height;
 
@@ -207,9 +205,9 @@ namespace Netherlands3D.Snapshots
                 sourceCamera.targetTexture = renderTexture;
 
                 sourceCamera.Render();
-                
-                yield return new WaitForEndOfFrame(); //we need more time in between to prevent corruption
 
+                yield return null; //wait frame
+                
                 RenderTexture.active = renderTexture;
 
                 snapshotTexture = new Texture2D(
@@ -239,11 +237,11 @@ namespace Netherlands3D.Snapshots
                     _ => texture.EncodeToPNG()
                 };
 
-                Destroy(texture);
-
                 File.WriteAllBytes(
                     $"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png",
                     bytes);
+                
+                Destroy(texture);
             }
             finally
             {
