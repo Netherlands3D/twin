@@ -154,14 +154,22 @@ namespace Netherlands3D.UI.Panels
             RecordItem recordItem = catalogItem as RecordItem;
             if(recordItem != null)
             {
-                if (recordItem.Url.IsRemoteAsset())
-                    icon = IconImage.LINK;
+                if (recordItem.Url != null)
+                {
+                    if (recordItem.Url.IsRemoteAsset())
+                        icon = IconImage.LINK;
+                    else
+                    {
+                        string prefabId = recordItem.Url.AbsolutePath.Trim('/');
+                        icon = LayerTypeSpriteLibrary.GetIconImage(prefabId);
+                    }
+                }
                 else
                 {
-                    string prefabId = recordItem.Url.AbsolutePath.Trim('/');
-                    icon = LayerTypeSpriteLibrary.GetIconImage(prefabId);
+                    //todo add a type of icon when this is happening
+                    icon = IconImage.WARNING;
                 }
-            }         
+            }
 
             assetItem.Image = icon;
             listViewItem.userData = catalogItem;
