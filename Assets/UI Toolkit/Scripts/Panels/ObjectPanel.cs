@@ -1,9 +1,7 @@
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
@@ -47,8 +45,11 @@ namespace Netherlands3D.UI.Panels
 
             OnUpdate();
             
+            //todo this maybe should automatically happen by selecting the layer here? so we dont havev to spawn property panel / open layer tool
             PropertyPanelBehaviour propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
             propertyPanelBehaviour.SpawnPanel(target);
+            
+            ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer).Open();
         }
         
         private void OnDetachFromPanel(DetachFromPanelEvent evt)

@@ -1,6 +1,6 @@
 ﻿.sun-time-panel {
     --sun-time-label-width: var(--spacing-20);
-    --sun-time-label-spacing: var(--spacing-3);
+    --sun-time-label-spacing: var(--spacing-1);
     --sun-shadow-cell-margin: 3px;
     
     display: flex;
