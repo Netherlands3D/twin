@@ -172,7 +172,7 @@ namespace Netherlands3D.Tiles3D
                 priorityScore += DistanceScore(tile);
                 priorityScore += InViewCenterScore(tile.ContentBounds.center, screenCenterScore);
                 priorityScore += sseScore(tile);
-                int loadedChildren = tile.CountLoadedChildren();
+                //not used int loadedChildren = tile.CountLoadedChildren();
                 int loadedParents = tile.CountLoadedParents();
                 if (loadedParents<1) // no parents loaded
                 {
