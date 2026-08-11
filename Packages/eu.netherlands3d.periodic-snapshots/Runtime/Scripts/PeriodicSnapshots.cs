@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
+using Netherlands3D.Services;
 using Netherlands3D.Sun;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -51,17 +53,17 @@ namespace Netherlands3D.Snapshots
             }
         }
 
-        [SerializeField] private Camera sourceCamera;
+        [SerializeField] private bool useViewSize = true;
+        [SerializeField] private int width = 1024;
+        [SerializeField] private int height = 768;
         [SerializeField] private SunTime sunTime;
-        [SerializeField] private int snapshotWidth = 1024;
-        [SerializeField] private int snapshotHeight = 768;
         [SerializeField] private Texture2D timeStampLabelBackground;
         [SerializeField] private int labelPaddingWidth = 10;
         [SerializeField] private int labelPaddingHeight = 10;
         [SerializeField] private Color timeStampTextColor = Color.white;
         [SerializeField] private string archiveName = "snapshot-series-";
         [SerializeField] private string timeStampDateFormat = "yyyy-MM-dd HH:mm";
-
+        [SerializeField] private SnapshotFileType fileType = SnapshotFileType.png;
         [SerializeField] private LayerMask snapshotLayers;
         [SerializeField] private List<Moment> moments = new();
 
@@ -74,25 +76,20 @@ namespace Netherlands3D.Snapshots
         [Tooltip("Generating can take a while, this event can be used to hide a loader")]
         public UnityEvent onFinishedGenerating = new();
 
-        private void Start()
-        {
-            if (!sourceCamera) sourceCamera = Camera.main;
-        }
-
+        private Camera sourceCamera;
+        private RenderTexture previousTarget;
+        private int previousMask;
+        private RenderTexture previousActive;
+        private RenderTexture renderTexture;
+        private int snapshotWidth;
+        private int snapshotHeight;
+        
         private void OnValidate()
         {
             foreach (var moment in moments)
             {
                 moment.name = $"{moment.day}-{moment.month} {moment.hour}:00";
             }
-        }
-
-        public void TakeSnapshots()
-        {
-            string timestamp = $"{DateTime.Now:yyyy-MM-ddTHH-mm}";
-            var path = FetchPath(timestamp);
-
-            StartCoroutine(TakeSnapshotsAcrossFrames(timestamp, path));
         }
 
         public void DownloadSnapshots()
@@ -130,14 +127,28 @@ namespace Netherlands3D.Snapshots
                 yield break;
             }
 
+            sourceCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
+            previousTarget = sourceCamera.targetTexture;
+            previousMask = sourceCamera.cullingMask;
+            previousActive = RenderTexture.active;
+            
+            sourceCamera.cullingMask = snapshotLayers;
+            snapshotWidth = useViewSize ? Screen.width : width;
+            snapshotHeight = useViewSize ? Screen.height : height;
+            renderTexture = new RenderTexture(snapshotWidth, snapshotHeight, 24, RenderTextureFormat.ARGB32);
+            renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
+            sourceCamera.targetTexture = renderTexture;
+            
+            yield return null;
+            
             onStartGenerating.Invoke();
 
             var cachedTimeOfDay = sunTime.GetTime();
             for (var index = 0; index < moments.Count; index++)
             {
                 onProgress.Invoke(1f / moments.Count * (index + 1));
-
                 yield return TakeSnapshot(moments[index], path);
+                
             }
             sunTime.SetTime(cachedTimeOfDay);
 
@@ -149,6 +160,16 @@ namespace Netherlands3D.Snapshots
 
             // Make sure no rounding errors occur and set it to 1f
             onProgress.Invoke(1f);
+            
+            sourceCamera.targetTexture = previousTarget;
+            sourceCamera.cullingMask = previousMask;
+            RenderTexture.active = previousActive;
+            
+            if (renderTexture != null)
+            {
+               
+                Destroy(renderTexture);
+            }
 
             onFinishedGenerating.Invoke();
         }
@@ -180,32 +201,17 @@ namespace Netherlands3D.Snapshots
             sunTime.SetHour(moment.hour);
             sunTime.SetMinutes(0);
             sunTime.SetSeconds(0);
-
-            // Skip frame to give rendering time to update.
-            yield return null;
-
-            RenderTexture previousTarget = sourceCamera.targetTexture;
-            int previousMask = sourceCamera.cullingMask;
-            RenderTexture previousActive = RenderTexture.active;
-
-            RenderTexture renderTexture = new RenderTexture(
-                snapshotWidth,
-                snapshotHeight,
-                24,
-                RenderTextureFormat.ARGB32);
-
-            renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
-            renderTexture.Create();
-
+            
+            yield return null; //wait frame
+            
             Texture2D snapshotTexture = null;
-
             try
             {
-                sourceCamera.cullingMask = snapshotLayers;
-                sourceCamera.targetTexture = renderTexture;
-
+                renderTexture.Create();
                 sourceCamera.Render();
 
+               
+                
                 RenderTexture.active = renderTexture;
 
                 snapshotTexture = new Texture2D(
@@ -218,38 +224,32 @@ namespace Netherlands3D.Snapshots
                     new Rect(0, 0, snapshotWidth, snapshotHeight),
                     0,
                     0);
-
-                byte[] bytes = snapshotTexture.EncodeToPNG();
-
-                // Keep this part exactly as before.
+              
                 DateTime dateTime = moment.ToDateTime();
 
                 Texture2D texture = CreateTimestampTexture(
-                    bytes,
+                    snapshotTexture.EncodeToPNG(),
                     dateTime,
                     snapshotWidth,
                     snapshotHeight);
 
-                bytes = texture.EncodeToPNG();
-
-                Destroy(texture);
+                byte[] bytes = fileType switch
+                {
+                    SnapshotFileType.png => texture.EncodeToPNG(),
+                    SnapshotFileType.jpg => texture.EncodeToJPG(),
+                    SnapshotFileType.raw => texture.GetRawTextureData(),
+                    _ => texture.EncodeToPNG()
+                };
 
                 File.WriteAllBytes(
                     $"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png",
                     bytes);
+                
+                Destroy(texture);
             }
             finally
             {
-                sourceCamera.targetTexture = previousTarget;
-                sourceCamera.cullingMask = previousMask;
-                RenderTexture.active = previousActive;
-
-                if (renderTexture != null)
-                {
-                    renderTexture.Release();
-                    Destroy(renderTexture);
-                }
-
+                renderTexture.Release();
                 if (snapshotTexture != null)
                 {
                     Destroy(snapshotTexture);
