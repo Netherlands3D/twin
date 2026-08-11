@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
+using ListView = Netherlands3D.UI.Components.ListView;
 using TextField = Netherlands3D.UI.Components.TextField;
 
 namespace Netherlands3D.UI.Panels
@@ -22,11 +23,11 @@ namespace Netherlands3D.UI.Panels
         public override string Title => "Importeren";
 
         public const string supportedFileTypes = "obj,csv,json,geojson,glb";
-
+        
         private Breadcrumb breadcrumb;
-        private Button uploadButton;
-        private Button goToAssetLibraryButton;
-        private Button selectionAreaButton;
+        private ListViewItem uploadButton;
+        private ListViewItem goToAssetLibraryButton;
+        private ListViewItem selectionAreaButton;
         private TextField importUriField;
         private Button importUriButton;
         private ErrorPanel errorPanel;
@@ -45,9 +46,10 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            uploadButton = this.Q<Button>("FileUploadButton");
-            goToAssetLibraryButton = this.Q<Button>("GoToAssetLibraryButton");
-            selectionAreaButton = this.Q<Button>("SelectionAreaButton");
+            //listView = this.Q<ListView>();
+            uploadButton = this.Q<ListViewItem>("FileUploadButton");
+            goToAssetLibraryButton = this.Q<ListViewItem>("GoToAssetLibraryButton");
+            selectionAreaButton = this.Q<ListViewItem>("SelectionAreaButton");
             importUriField = this.Q<TextField>("ImportUriField");
             importUriButton = this.Q<Button>("ImportUriButton");
             errorPanel = this.Q<ErrorPanel>();
@@ -66,7 +68,7 @@ namespace Netherlands3D.UI.Panels
             credentialPanel.SetEnabled(false);
             credentialPanel.OnConfirmCredentials.AddListener(ApplyCredentials);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-
+            
             //we dont want to show the warning first but immediately start with the input of credentials instead
             credentialPanel.StartWithInput();
 

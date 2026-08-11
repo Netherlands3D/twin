@@ -49,6 +49,8 @@ MonoBehaviour:
     type: 3}
   applicationActionMap: {fileID: -944628639613478452, guid: ada4cb215956c0845b3d6b4c9796c6f9,
     type: 3}
+  cameraInputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
+    type: 3}
 --- !u!114 &7182869950344535394
 MonoBehaviour:
   m_ObjectHideFlags: 0

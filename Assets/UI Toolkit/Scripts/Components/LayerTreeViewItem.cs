@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
@@ -133,7 +132,6 @@ namespace Netherlands3D.UI.Components
                 propertyPanelBehaviour.PropertySectionOpened.AddListener(CheckPropertyToggle);
                 propertyPanelBehaviour.PropertySectionClosed.AddListener(UncheckPropertyToggle);
             }
-
             if (!layoutReordered)
                 UpdateLayout();
 
@@ -230,6 +228,9 @@ namespace Netherlands3D.UI.Components
                 RemoveLayerDataListeners(previous);
             
             userData = layerData;
+            
+            //update the toggle if the propertysection was already active
+            CheckPropertyToggle(propertyPanelBehaviour.activeLayer);
 
             SetAppearance(layerData);
 

@@ -24,7 +24,6 @@ namespace Netherlands3D.UI.Panels
         private Label yearValue;
         private BagDataService.BagRequestHandle handle;
         private ListView addressListView;
-        private ListView AddressListView => addressListView ??= this.Q<ListView>();
 
         public BuildingInformationPropertySection()
         {
@@ -35,12 +34,14 @@ namespace Netherlands3D.UI.Panels
             bagLink = this.Q<Hyperlink>("Link");
             statusValue = this.Q<Label>("StatusValue");
             yearValue = this.Q<Label>("YearValue");
+
+            addressListView = this.Q<ListView>();
+
+            addressListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            addressListView.selectionType = SelectionType.None;
             
-            AddressListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            AddressListView.selectionType = SelectionType.None;
-            
-            AddressListView.makeItem = MakeListViewItem;
-            AddressListView.bindItem = BindListViewItem;
+            addressListView.makeItem = MakeListViewItem;
+            addressListView.bindItem = BindListViewItem;
             
             RegisterCallback<DetachFromPanelEvent>(_ =>
             {
@@ -78,26 +79,31 @@ namespace Netherlands3D.UI.Panels
         
         public void PopulateAddresses(List<string> addresses)
         {
-            AddressListView.itemsSource = addresses;
-            AddressListView.RefreshItems();
+            addressListView.itemsSource = addresses;
+            addressListView.RefreshItems();
         }
         
         private VisualElement MakeListViewItem()
         {
-            return new Label();
+            Label label = new Label();
+            ListViewItem listViewItem = new ListViewItem(label);
+            return listViewItem;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not Label listViewItem) return;
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<Label>() is not Label label) return;
             
-             string text = AddressListView.itemsSource[index] as string;
-             listViewItem.text = text;
+            string text = addressListView.itemsSource[index] as string;
+            label.text = text;
         }
         
         private void UpdateThumbnail(BagDataService.BagData bagData)
         {
             Dictionary<string, Coordinate> buildingIds = buildingPropertyData.BuildingIds;
+            if(buildingIds == null) return;
+            
             Coordinate coordinate = buildingIds[bagData.id];
             bagLink.text = bagData.id;
             bagLink.url = bagData.url;

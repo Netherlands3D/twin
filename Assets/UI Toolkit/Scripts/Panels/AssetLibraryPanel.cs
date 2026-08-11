@@ -8,6 +8,7 @@ using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.UI_Toolkit;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
@@ -49,6 +50,22 @@ namespace Netherlands3D.UI.Panels
             {
                 LoadCatalog(assetLibrary.Catalog);
             });
+            listView.selectionChanged += objects =>
+            {
+                var items = listView.itemsSource.Cast<ICatalogItem>().ToList();
+
+                var validIndices = listView.selectedIndices
+                    .Where(i => IsImportable(items[i]))
+                    .ToList();
+
+                if (validIndices.Count != listView.selectedIndices.Count())
+                {
+                    listView.SetSelection(validIndices);
+                    return;
+                }
+
+                UpdateImportButton();
+            };
         }
 
         public async void LoadCatalog(ICatalog catalog)
@@ -132,8 +149,20 @@ namespace Netherlands3D.UI.Panels
                         break;
                 }
             }
+        }
 
-            listView.ClearSelection();
+        private bool IsImportable(ICatalogItem catalogItem)
+        {
+            return  catalogItem is RecordItem || catalogItem is DataService;
+        }
+
+        private void UpdateImportButton()
+        {
+            var selectedItems = listView.selectedItems
+                .Cast<ICatalogItem>()
+                .ToList();
+            
+            importButton.EnableInClassList(UtilityClassConstants.HIDDEN, selectedItems.Count == 0);
         }
 
         private void BindListViewItem(VisualElement item, int index)
@@ -154,14 +183,22 @@ namespace Netherlands3D.UI.Panels
             RecordItem recordItem = catalogItem as RecordItem;
             if(recordItem != null)
             {
-                if (recordItem.Url.IsRemoteAsset())
-                    icon = IconImage.LINK;
+                if (recordItem.Url != null)
+                {
+                    if (recordItem.Url.IsRemoteAsset())
+                        icon = IconImage.LINK;
+                    else
+                    {
+                        string prefabId = recordItem.Url.AbsolutePath.Trim('/');
+                        icon = LayerTypeSpriteLibrary.GetIconImage(prefabId);
+                    }
+                }
                 else
                 {
-                    string prefabId = recordItem.Url.AbsolutePath.Trim('/');
-                    icon = LayerTypeSpriteLibrary.GetIconImage(prefabId);
+                    //todo add a type of icon when this is happening
+                    icon = IconImage.WARNING;
                 }
-            }         
+            }
 
             assetItem.Image = icon;
             listViewItem.userData = catalogItem;

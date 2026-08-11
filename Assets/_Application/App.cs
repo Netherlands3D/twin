@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin
         public static SnackbarService Snackbar => ServiceLocator.GetService<SnackbarService>();
         public static LayerMessageService LayerMessages => ServiceLocator.GetService<LayerMessageService>();
         public static DebugMessageService Debug => ServiceLocator.GetService<DebugMessageService>();
+        public static DomeService Dome => ServiceLocator.GetService<DomeService>();
+        
 
     }
 }

@@ -30,7 +30,6 @@ namespace Netherlands3D.Masking
         [SerializeField] private AnimationCurve appearAnimationCurve;
         [SerializeField] private AnimationCurve movedAnimationCurve;
         [SerializeField] private float appearTime = 0.5f;
-        SphereCollider sphereCollider;
 
         private Vector3 offset;
 
@@ -43,24 +42,11 @@ namespace Netherlands3D.Masking
         [Header("References")]
         [SerializeField] private DomeScaleHandle scaleHandle;
 
-        public bool AllowInteraction
-        {
-            get => sphereCollider.enabled;
-            set
-            {
-                sphereCollider.enabled = value;
-            }
-        }
-
         private void Awake()
         {
             mainCamera = Camera.main;
-                
-            sphereCollider = GetComponent<SphereCollider>();
             meshRenderer = this.GetComponent<MeshRenderer>();
             domeMaterial = meshRenderer.material;
-
-            sphereCollider.enabled = false;
         }
 
         private void Start()

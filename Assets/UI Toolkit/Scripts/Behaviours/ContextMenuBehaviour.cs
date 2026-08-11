@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using Netherlands3D.Twin;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
@@ -44,6 +42,7 @@ namespace Netherlands3D.UI.Panels
             leftClickAction.performed -= OnLeftClick;
             longPressAction.performed -= OnRightClick;
             touchAction.performed -= OnLeftClick;
+            
             ClearActivePanel();
             floatingPanel = null;
         }
@@ -70,6 +69,7 @@ namespace Netherlands3D.UI.Panels
             if(App.UIRoot.IsPointerOverUI())
                 return;
             
+            //todo we should probably wait one frame here to have all systems updated
             CheckAndSpawnPanel(panelPos);
         }
         
@@ -81,8 +81,6 @@ namespace Netherlands3D.UI.Panels
             
             ClearActivePanel();
         }
-
-       
 
         private bool IsActivePanelClicked(Vector2 screenPos)
         {

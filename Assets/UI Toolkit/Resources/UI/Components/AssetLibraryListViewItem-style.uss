@@ -8,5 +8,5 @@
 }
 
 .asset-library-listview-item .icon {
-    margin: var(--spacing-2);
+   align-self: center;
 }
