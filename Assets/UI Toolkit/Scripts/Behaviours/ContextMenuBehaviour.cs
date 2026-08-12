@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using System.Collections.Generic;
@@ -54,6 +55,14 @@ namespace Netherlands3D.UI.Panels
             foreach (var buttonBehaviour in floatingButtonBehaviour)
             {
                 buttonBehaviour.Dispose();
+            }
+        }
+
+        private void Update()
+        {
+            foreach (var buttonBehaviour in floatingButtonBehaviour)
+            {
+                buttonBehaviour.UpdateBehaviour();
             }
         }
 

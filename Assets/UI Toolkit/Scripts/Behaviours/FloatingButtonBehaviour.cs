@@ -11,7 +11,7 @@ namespace Netherlands3D.UI.Panels
         public virtual void Initialize(VisualElement parent)
         {
             this.content = parent;
-            FloatingElement floatingButton = new FloatingElement();
+            floatingButton = new FloatingElement();
             VisualElement element = SpawnFloatingButtonContent();
             floatingButton.Add(element);
             content.Add(floatingButton);
@@ -24,5 +24,7 @@ namespace Netherlands3D.UI.Panels
         }
 
         public abstract VisualElement SpawnFloatingButtonContent();
+        
+        public abstract void UpdateBehaviour();
     }
 }

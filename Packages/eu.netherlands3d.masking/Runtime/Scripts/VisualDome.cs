@@ -39,8 +39,10 @@ namespace Netherlands3D.Masking
         public UnityEvent deselected = new();
         public UnityEvent<bool> onHoveringChange = new();
 
+        public Transform ScaleAnchor => scaleAnchor;
+        
         [Header("References")]
-        [SerializeField] private DomeScaleHandle scaleHandle;
+        [SerializeField] private Transform scaleAnchor;
 
         private void Awake()
         {

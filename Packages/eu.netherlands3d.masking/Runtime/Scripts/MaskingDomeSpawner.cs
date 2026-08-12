@@ -24,6 +24,8 @@ namespace Netherlands3D.Masking
         private int bitIndexPropertyID;
         private int maskingBitIndex = 22;
         
+        public VisualDome DomeVisualisation => domeVisualisation;
+        
         [SerializeField] private VisualDome domeVisualisation;
         [SerializeField] private Transform tempCanvas;
         
@@ -97,7 +99,6 @@ namespace Netherlands3D.Masking
         private void OnPointerOnDome(bool onDome)
         {
             isPointerOnDome = onDome;
-            Debug.Log("OnPointerOnDome +" + onDome);
         }
 
         public void SpawnDisappearAnimation()

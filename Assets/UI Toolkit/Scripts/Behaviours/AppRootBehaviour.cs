@@ -70,6 +70,12 @@ namespace Netherlands3D
             return RuntimePanelUtils.ScreenToPanel(appRoot.panel, screenPos);
         }
 
+        public Vector2 GetUIPositionFromScreenPosition(Vector2 screenPos)
+        {
+            screenPos.y = Screen.height - screenPos.y;
+            return RuntimePanelUtils.ScreenToPanel(appRoot.panel, screenPos);
+        }
+
         public bool IsPointerOverUI()
         {
             Vector2 panelPosition = GetPanelClickPosition();

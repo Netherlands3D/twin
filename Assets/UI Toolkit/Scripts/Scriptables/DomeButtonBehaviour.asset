@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0abb9f034087949a9748d1a6716689, type: 3}
   m_Name: DomeButtonBehaviour
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Panels.DomeButtonBehaviour
+  blockCameraDragListener: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220,
+    type: 2}
+  styleOnHover: 18
