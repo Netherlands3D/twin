@@ -176,6 +176,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
   - {fileID: 11400000, guid: 101175000a89da4a8beb0a2532e32947, type: 2}
   - {fileID: 11400000, guid: 193046eec53862a7380ad41ce7521c3f, type: 2}
+  floatingButtonBehaviour:
+  - {fileID: 11400000, guid: b39f0c433614c7547967510a0332c622, type: 2}
 --- !u!114 &2679958399476094032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,7 +497,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1a852118643daa48b5b3f2eaa0c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI_Toolkit.Scripts.Behaviours.ToolbarTopBehaviour
-  snapshotEvent: {fileID: 11400000, guid: b1c270f3fc728cc4ea719d048fa6ea7f, type: 2}
 --- !u!1 &6344507626500150337
 GameObject:
   m_ObjectHideFlags: 0
