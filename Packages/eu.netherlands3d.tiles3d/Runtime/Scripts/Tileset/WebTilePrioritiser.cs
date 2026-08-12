@@ -90,9 +90,9 @@ namespace Netherlands3D.Tiles3D
             tile.requestedDispose = true;
             tile.childrenCountDelayingDispose = 0;
 
-            if (tile.CountLoadingChildren()+tile.CountLoadedChildren()>0) // there are active children
+            if (tile.loadingChildren+tile.loadedChildren>0) // there are active children
             {
-                if (tile.CountLoadingChildren() > 0)
+                if (tile.loadingChildren > 0)
                 {
                     anyChildLoading = true;
                 }

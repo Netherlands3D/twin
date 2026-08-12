@@ -19,7 +19,7 @@ namespace Netherlands3D.Tiles3D
         //webtileprioritizer properties
         public int priority = 0;
         public int childrenCountDelayingDispose = 0;
-
+        public int loadingChildren=0;
         //BoundingVolume properties
         internal bool boundsAvailable = false;
         private Bounds unityBounds = new Bounds();
@@ -55,15 +55,16 @@ namespace Netherlands3D.Tiles3D
             int result = 0;
             if (refine == "ADD")
             {
+                loadingChildren=0;
                 return 0;
             }
             foreach (var childTile in children)
             {
                 if (childTile.content != null)
                 {
-                    if (childTile.contentUri.Contains(".json") == false)
+                    if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
                     {
-                        if (childTile.content.State != Content.ContentLoadState.DOWNLOADED)
+                        if (childTile.isLoading)
                         {
                             result += 1;
                         }
@@ -72,7 +73,7 @@ namespace Netherlands3D.Tiles3D
                 }
             }
            
-            
+            loadingChildren=result;
             return result;
         }
         public int loadedChildren;
@@ -80,14 +81,14 @@ namespace Netherlands3D.Tiles3D
         {
             int result = 0;
             if (refine=="ADD")
-            {
+            {   loadedChildren =0;
                 return 0;
             }
             foreach (var childTile in children)
             {
                 if (childTile.content != null)
                 {
-                    if (childTile.contentUri.Contains(".json") == false)
+                    if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
                     {
 
                         if (childTile.content.State != Content.ContentLoadState.DOWNLOADING)
@@ -433,49 +434,46 @@ namespace Netherlands3D.Tiles3D
         {
             bool result = false;
 
-            if (content!=null)
-            { 
 
-                return true;
-            }
-            foreach (Tile child in children)
-            {
-                if (child.ChildrenHaveContentActive()==true)
+            if(loadedChildren+loadingChildren>0)
+
                 { return true;}
-            }
+
             return false;
         }
         public void DestroyChildTilesIfTilesetOutOfView(Camera ofCamera)
         {
 
+            if(ChildrenHaveContentActive())
+            {
+                return;
+            }
             if (contentUri.Contains(".json") || contentUri.Contains(".subtree"))
             {
-
                 if(IsInViewFrustrum(ofCamera)==false)
-                {
-                    if (ChildrenHaveContentActive()==false)
                     {
                     DestroyChildTiles();
                     }
-                }
-
             }
             else
             {
                 foreach (Tile child in children)
-                {
-                    child.DestroyChildTilesIfTilesetOutOfView(ofCamera);
-                }
+                    {
+                        child.DestroyChildTilesIfTilesetOutOfView(ofCamera);
+                    }
             }
+
+            
 
         }
         private void DestroyChildTiles()
         {
-            if(children.Count == null) return;
+            if(children.Count == 0) return;
             for (int i = children.Count - 1; i >= 0 ; i--)
             {
                 children[i].DestroyChildTiles();
                 children[i] = null;
+                children.RemoveAt(i);
             }
         }
     }

@@ -453,7 +453,8 @@ namespace Netherlands3D.Tiles3D
                 currentCamera.transform.GetPositionAndRotation(out currentCameraPosition, out currentCameraRotation);
                 lastCameraAngle = (currentCamera.orthographic ? currentCamera.orthographicSize : currentCamera.fieldOfView);
                 currentCamera.transform.GetPositionAndRotation(out lastCameraPosition, out lastCameraRotation);
-
+                root.CountLoadingChildren();
+                root.CountLoadedChildren();
                 SetSSEComponent(currentCamera);
                 DisposeTilesOutsideView(currentCamera);
                 destroyOutOfViewTilesets(currentCamera);
@@ -519,9 +520,9 @@ private void destroyOutOfViewTilesets(Camera currentCamera)
                     {
                         // tile should remain
                     }
-                    else if (tile.CountLoadingChildren() == 0)
+                    else if (tile.loadingChildren == 0)
                     {
-                        if (tile.CountLoadedChildren() > 0)
+                        if (tile.loadedChildren > 0)
                         {
                             tilePrioritiser.RequestDispose(tile);
 
