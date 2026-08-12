@@ -6,12 +6,12 @@ namespace Netherlands3D.UI.Panels
     public abstract class FloatingButtonBehaviour : ScriptableObject
     {     
         protected VisualElement content;
-        protected FloatingButton floatingButton;
+        protected FloatingElement floatingButton;
 
         public virtual void Initialize(VisualElement parent)
         {
             this.content = parent;
-            FloatingButton floatingButton = new FloatingButton();
+            FloatingElement floatingButton = new FloatingElement();
             VisualElement element = SpawnFloatingButtonContent();
             floatingButton.Add(element);
             content.Add(floatingButton);

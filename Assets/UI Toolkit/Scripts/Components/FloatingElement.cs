@@ -6,12 +6,12 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
 {
-    public class FloatingButton : VisualElement
+    public class FloatingElement : VisualElement
     {
  
         private Vector2 screenPosition;
         
-        public FloatingButton()
+        public FloatingElement()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");

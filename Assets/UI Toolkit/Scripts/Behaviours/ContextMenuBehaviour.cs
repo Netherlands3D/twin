@@ -126,17 +126,5 @@ namespace Netherlands3D.UI.Panels
                 break;
             }
         }
-
-
-        public void AddFloatingElement()
-        {
-            FloatingButton floatingButton = new FloatingButton();
-            floatingElementsContent.Add(floatingButton);
-        }
-
-        public void RemoveFloatingElement(FloatingButton button)
-        {
-            floatingElementsContent.Remove(button);
-        }
     }
 }
