@@ -164,6 +164,8 @@ namespace Netherlands3D.Twin.Samplers
         {
             if (camera == null) camera = Camera.main;
 
+            if (depthCamera == null) return;
+
             depthCamera.transform.position = camera.transform.position;
             if (camera.orthographic)
             {
