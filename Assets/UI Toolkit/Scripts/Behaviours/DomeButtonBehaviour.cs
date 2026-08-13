@@ -32,6 +32,7 @@ namespace Netherlands3D.UI.Panels
             ToolService toolService = ServiceLocator.GetService<ToolService>();
             toolService.GetTool(ToolType.Dome).onOpen.AddListener(OnEnableDome);
             toolService.GetTool(ToolType.Dome).onClose.AddListener(OnDisableDome);
+            OnDisableDome();
             
         }
 
@@ -44,7 +45,6 @@ namespace Netherlands3D.UI.Panels
         {
             domeButton.EnableInClassList(UtilityClassConstants.HIDDEN, false);
         }
-
 
         public override VisualElement SpawnFloatingButtonContent()
         {
