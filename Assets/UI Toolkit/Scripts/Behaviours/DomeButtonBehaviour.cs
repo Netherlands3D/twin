@@ -49,7 +49,7 @@ namespace Netherlands3D.UI.Panels
         public override VisualElement SpawnFloatingButtonContent()
         {
             domeButton = new Button();
-            domeButton.Type = Button.ButtonType.transparent;
+            domeButton.Type = Button.ButtonType.Standard;
             domeButton.name = "DomeButton";
             domeButton.ShowIcon = Button.ButtonStyle.IconOnly;
             domeButton.Image = IconImage.SCALE_V_2;
