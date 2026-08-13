@@ -26,6 +26,7 @@ namespace Netherlands3D.UI.Components
         private WMTSPanel wmtsPanel;
         private Coordinate currentWorldCoordinate;
         private CustomQuad cameraFrustumQuad;
+        private PointerStyleService pointerStyleService;
 
         private float zoomScale = 0.0f;
         private float minZoomScale = 0.0f;
@@ -105,7 +106,7 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         public void Initialize(MinimapConfig config)
         {
-            //todo: can this function be removed somehow?
+            pointerStyleService = ServiceLocator.GetService<PointerStyleService>();
             wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
         }
 
@@ -123,7 +124,7 @@ namespace Netherlands3D.UI.Components
         {
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, true);
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            pointerStyleService.ChangeCursor(PointerStyleService.Style.POINTER);
         }
 
         private void OnPointerLeave(PointerLeaveEvent evt)
@@ -134,7 +135,7 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
+            pointerStyleService.ChangeCursor(PointerStyleService.Style.AUTO);
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, false);
         }
@@ -262,7 +263,7 @@ namespace Netherlands3D.UI.Components
         private void OnDragStarted(Vector2 startPosition)
         {
             isDragging = true;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRABBING);
+            pointerStyleService.ChangeCursor(PointerStyleService.Style.GRABBING);
             UpdateFrustum();
         }
 
@@ -278,9 +279,9 @@ namespace Netherlands3D.UI.Components
             Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, Pointer.current.position.ReadValue());
 
             if (worldBound.Contains(panelPos))
-                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER); //pointer is still in the panel
+                pointerStyleService.ChangeCursor(PointerStyleService.Style.POINTER); //pointer is still in the panel
             else
-                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
+                pointerStyleService.ChangeCursor(PointerStyleService.Style.AUTO);
             
             UpdateFrustum();
         }

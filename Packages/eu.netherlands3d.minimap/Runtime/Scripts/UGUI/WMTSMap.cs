@@ -109,7 +109,7 @@ namespace Netherlands3D.Minimap
 		/// <summary>
 		/// The minimap UI that handles all the UI
 		/// </summary>
-		private MinimapUI parentMinimapUI;
+		//private MinimapUI parentMinimapUI;
 		/// <summary>
 		/// The rect transform of the minimap
 		/// </summary>
@@ -128,8 +128,8 @@ namespace Netherlands3D.Minimap
 
         private void Awake()
         {
-			parentMinimapUI = GetComponentInParent<MinimapUI>();
-			parentUIRectTransform = (RectTransform)parentMinimapUI.transform;
+			//parentMinimapUI = GetComponentInParent<MinimapUI>();
+			//parentUIRectTransform = (RectTransform)parentMinimapUI.transform;
 			mapRectTransform = GetComponent<RectTransform>();
         }
 

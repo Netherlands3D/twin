@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using Netherlands3D.JavascriptConnection;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Masking
@@ -37,8 +36,6 @@ namespace Netherlands3D.Masking
 
         [Header("Events")]
         public UnityEvent<bool> dragging = new();
-        public UnityEvent selected = new();
-        public UnityEvent deselected = new();
         public UnityEvent<bool> onHoveringChange = new();
 
         public Transform ScaleAnchor => scaleAnchor;
@@ -52,7 +49,6 @@ namespace Netherlands3D.Masking
         {
             mainCamera = Camera.main;
             meshRenderer = this.GetComponent<MeshRenderer>();
-            domeMaterial = meshRenderer.material;
         }
 
         private void Start()
@@ -143,7 +139,6 @@ namespace Netherlands3D.Masking
 
             //Default to dragging the object    
             meshRenderer.material = highlighMaterial;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRAB);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -161,8 +156,6 @@ namespace Netherlands3D.Masking
         {
             isDragging = false;
             dragging.Invoke(false);
-
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -214,21 +207,19 @@ namespace Netherlands3D.Masking
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            ChangeHoverState(true);
+            hovering = true;
+            onHoveringChange.Invoke(hovering);
 
             if (!isDragging)
             {
-                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
                 meshRenderer.material = highlighMaterial;
             }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            ChangeHoverState(false);
-
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
-
+            hovering = false;
+            onHoveringChange.Invoke(hovering);
             if (!isDragging)
             {
                 meshRenderer.material = defaultMaterial;
@@ -238,12 +229,6 @@ namespace Netherlands3D.Masking
         public void ChangeScalingMode(bool scaling)
         {
             meshRenderer.material = scaling ? scaleMaterial : defaultMaterial;
-        }
-
-        public void ChangeHoverState(bool hovering)
-        {
-            this.hovering = hovering;
-            onHoveringChange.Invoke(hovering);
         }
     }
 }
