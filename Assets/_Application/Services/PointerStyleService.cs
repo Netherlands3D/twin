@@ -1,9 +1,13 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Netherlands3D
 {
     public class PointerStyleService : MonoBehaviour
     {
+        [DllImport("__Internal")]
+        private static extern string SetCSSCursor(string cursorName = "auto");
+        
        public enum Style
         {
             AUTO,

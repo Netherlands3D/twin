@@ -20,12 +20,7 @@ namespace Netherlands3D.UI.Panels
         //todo give tooltip
         
         [SerializeField] private BoolEvent blockCameraDragListener;
-        
-        [DllImport("__Internal")]
-        private static extern string SetCSSCursor(string cursorName = "auto");
-        
         private Button domeButton;
-        
         private PointerStyleService pointerStyleService;
 
         public override void Initialize(VisualElement parent)
