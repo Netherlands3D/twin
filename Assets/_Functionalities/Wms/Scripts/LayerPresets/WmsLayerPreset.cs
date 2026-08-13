@@ -31,7 +31,7 @@ namespace Netherlands3D.Functionalities.Wms.LayerPresets
         {
             return builder
                 .OfType(PrefabIdentifier)
-                .NamedAs(args.Filters.title ?? args.Filters.name)
+                .NamedAs(args.Filters.name)
                 .AddProperty(new LayerURLPropertyData(args.Filters.ToUrlBasedOn(args.Url)))
                 .WhenBuilt(layerData => layerData.ActiveSelf = args.DefaultEnabled);
         }

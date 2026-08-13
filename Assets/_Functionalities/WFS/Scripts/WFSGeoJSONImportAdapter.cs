@@ -149,7 +149,10 @@ namespace Netherlands3D.Functionalities.Wfs
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
-            return new WfsLayerPreset.Args(getFeatureUrl, title);
+            return new WfsLayerPreset.Args(
+                getFeatureUrl,
+                title
+            );
         }
 
         private UriBuilder CreateLayerGetFeatureUri(string featureType, string sourceUrl, string crs, string geoJsonOutputFormatString)

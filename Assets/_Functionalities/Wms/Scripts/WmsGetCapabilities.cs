@@ -178,8 +178,6 @@ namespace Netherlands3D.Functionalities.Wms
                 var layerNameNode = GetInnerTextForNode(mapNode, "Name");
                 if (string.IsNullOrEmpty(layerNameNode)) continue;
 
-                var layerTitleNode = GetInnerTextForNode(mapNode, "Title");
-                
                 // Extract styles for the layer
                 var styles = ExtractStyles(mapNode);
 
@@ -199,7 +197,6 @@ namespace Netherlands3D.Functionalities.Wms
                 var map = new MapFilters()
                 {
                     name = layerNameNode,
-                    title = layerTitleNode,
                     version = mapTemplate.version,
                     width = mapTemplate.width,
                     height = mapTemplate.height,
