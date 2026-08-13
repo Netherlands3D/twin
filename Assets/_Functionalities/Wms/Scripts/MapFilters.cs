@@ -14,6 +14,7 @@ namespace Netherlands3D.Functionalities.Wms
         public int width;
         public int height;
         public bool transparent;
+        public string title;
 
         public static MapFilters FromUrl(Uri url)
         {
@@ -32,6 +33,7 @@ namespace Netherlands3D.Functionalities.Wms
             return new MapFilters
             {
                 name = queryParameters.Single("layers"),
+                title = null,
                 version = version,
                 spatialReferenceType = spatialReferenceType,
                 spatialReference = queryParameters.Single(spatialReferenceType),
