@@ -2,9 +2,11 @@ using System.Runtime.InteropServices;
 using Netherlands3D.Events;
 using Netherlands3D.Masking;
 using Netherlands3D.Twin;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 
@@ -34,61 +36,76 @@ namespace Netherlands3D.UI.Panels
             domeButton.Type = Button.ButtonType.transparent;
             domeButton.name = "DomeButton";
             domeButton.ShowIcon = Button.ButtonStyle.IconOnly;
-            domeButton.Image = "scalev2";
+            domeButton.Image = IconImage.SCALE_V_2;
+
             domeButton.RegisterCallback<PointerDownEvent>(evt =>
             {
-                VisualDome domeVisualisation = App.Dome.Spawner.DomeVisualisation;
+                VisualDome dome = App.Dome.Spawner.DomeVisualisation;
                 mainCamera = App.Cameras.ActiveCamera;
-                pointerStartDragPosition = mainCamera.ScreenToViewportPoint(evt.position);
-                pointerObjectStartPosition = mainCamera.WorldToViewportPoint(domeVisualisation.transform.position);
+
+                pointerStartDragPosition = mainCamera.ScreenToViewportPoint(Pointer.current.position.ReadValue());
+                pointerObjectStartPosition = mainCamera.WorldToViewportPoint(dome.transform.position);
                 pointerObjectStartPosition.z = 0; //Remove depth
 
                 startDistance = Vector3.Distance(pointerStartDragPosition, pointerObjectStartPosition);
 
-                startScale = domeVisualisation.transform.localScale;
+                startScale = dome.transform.localScale;
                 dragging = true;
-                onDragChange.Invoke(dragging);
-                Debug.Log("dome down!");
+                onDragChange.Invoke(true);
+
+                domeButton.CapturePointer(evt.pointerId);
             }, TrickleDown.TrickleDown);
+
             domeButton.RegisterCallback<PointerUpEvent>(evt =>
             {
                 dragging = false;
                 onDragChange.Invoke(dragging);
+
                 Debug.Log("dome up!");
             });
+
             domeButton.RegisterCallback<PointerEnterEvent>(evt =>
             {
                 ChangeCursor(StyleOnHover);
+
                 hovering = true;
                 onHoveringChange.Invoke(IsHovering);
             });
+
             domeButton.RegisterCallback<PointerLeaveEvent>(evt =>
             {
                 // Always change back cursor to CSS default 'auto'
                 ChangeCursor(Style.AUTO);
+
                 hovering = false;
                 onHoveringChange.Invoke(IsHovering);
             });
+
             return domeButton;
         }
 
         private Camera mainCamera;
+
         [SerializeField] private float scaleMultiplier = 2.0f;
 
         private Vector3 startScale = Vector3.one;
         private Vector3 pointerStartDragPosition;
         private Vector3 pointerObjectStartPosition;
+        private Vector3 minimumStartDragScale = Vector3.one * 100;
 
         private float startDistance;
 
-         [Header("Events")]
+        [Header("Events")]
         public UnityEvent<bool> onHoveringChange = new();
         public UnityEvent<bool> onDragChange = new();
 
         private bool hovering = false;
         private bool dragging = false;
 
-        public bool IsHovering { get => hovering; }
+        public bool IsHovering
+        {
+            get => hovering;
+        }
 
         public override void UpdateBehaviour()
         {
@@ -101,12 +118,12 @@ namespace Netherlands3D.UI.Panels
 
             if (dragging)
             {
-                var pointerViewportPoint = mainCamera.ScreenToViewportPoint(screenPos);
-                var distancePointerMoved = Vector3.Distance(pointerViewportPoint, pointerObjectStartPosition) / startDistance;
+                VisualDome dome = App.Dome.Spawner.DomeVisualisation;
+                var pointerViewportPoint = mainCamera.ScreenToViewportPoint(Pointer.current.position.ReadValue());
 
-                //Scale
-                VisualDome domeVisualisation = App.Dome.Spawner.DomeVisualisation;
-                domeVisualisation.transform.localScale = startScale * distancePointerMoved * scaleMultiplier;
+                float dist = Vector3.Distance(pointerViewportPoint, pointerObjectStartPosition);
+                var distancePointerMoved = dist / startDistance;
+                dome.transform.localScale = Vector3.Lerp(dome.transform.localScale, startScale * distancePointerMoved, Time.deltaTime * 60);
             }
         }
 
@@ -150,15 +167,21 @@ namespace Netherlands3D.UI.Panels
 
         [SerializeField]
         private Style styleOnHover = Style.POINTER;
+
         public static Style cursorType = Style.AUTO;
 
-        public Style StyleOnHover { get => styleOnHover; set => styleOnHover = value; }
+        public Style StyleOnHover
+        {
+            get => styleOnHover;
+            set => styleOnHover = value;
+        }
 
         public static void ChangeCursor(Style type)
         {
             cursorType = type;
 
             var cursorString = "";
+
             switch (cursorType)
             {
                 case Style.AUTO:

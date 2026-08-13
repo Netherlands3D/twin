@@ -27,7 +27,6 @@ namespace Netherlands3D.Masking
         public VisualDome DomeVisualisation => domeVisualisation;
         
         [SerializeField] private VisualDome domeVisualisation;
-        [SerializeField] private Transform tempCanvas;
         
         public bool IsPointerOnDome => isPointerOnDome;
         private bool isPointerOnDome;
@@ -53,8 +52,6 @@ namespace Netherlands3D.Masking
         public void SetDomeEnabled()
         {
             mainCamera = Camera.main;
-            
-            tempCanvas.gameObject.SetActive(true);
             domeVisualisation.gameObject.SetActive(true);
             
             Shader.EnableKeyword(sphericalMaskFeatureKeyword);
@@ -70,7 +67,6 @@ namespace Netherlands3D.Masking
         
         public void SetDomeDisabled()
         {
-            tempCanvas.gameObject.SetActive(false);
             domeVisualisation.gameObject.SetActive(false);
             
             Shader.DisableKeyword(sphericalMaskFeatureKeyword);
