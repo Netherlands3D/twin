@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Netherlands3D.JavascriptConnection;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Masking
 {
@@ -44,6 +46,8 @@ namespace Netherlands3D.Masking
         [Header("References")]
         [SerializeField] private Transform scaleAnchor;
 
+        private Vector3 targetScale;
+
         private void Awake()
         {
             mainCamera = Camera.main;
@@ -61,18 +65,14 @@ namespace Netherlands3D.Masking
 
         private void Update() {
             this.transform.rotation = mainCamera.transform.rotation;
+            
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * 60);
         }
 
-        public void MoveToScreenPoint(Vector2 screenPoint)
+        public void MoveToScreenPoint()
         {
-            transform.position = PointerWorldPosition(screenPoint);
+            UpdateFromPointerPosition();
             ScaleByCameraDistance();
-        }
-
-        public void AnimateIn()
-        {
-            InteruptAnimation();
-            animationCoroutine = StartCoroutine(Animate());
         }
 
         public void InteruptAnimation()
@@ -83,25 +83,48 @@ namespace Netherlands3D.Masking
             }
         }
 
-        private IEnumerator Animate()
+        public void SetTargetScale(Vector3 targetScale)
+        {
+            this.targetScale = targetScale;
+        }
+
+        public void AnimateIn()
+        {
+            InteruptAnimation();
+            animationCoroutine = StartCoroutine(
+                Animate(ScaleByCameraDistance())
+            );
+        }
+
+        public void AnimateOut(Action onFinish = null)
+        {
+            InteruptAnimation();
+            animationCoroutine = StartCoroutine(
+                Animate(Vector3.zero, onFinish)
+            );
+        }
+
+        private IEnumerator Animate(Vector3 towardsScale, Action onFinish = null)
         {
             var animationTime = 0.0f;
-
-            var targetScale = hovering ? this.transform.localScale : ScaleByCameraDistance();
-            var animationCurve = hovering ? movedAnimationCurve : appearAnimationCurve;
+            var startScale = transform.localScale;
 
             while (animationTime < appearTime)
             {
                 animationTime += Time.deltaTime;
                 var curveTime = animationTime / appearTime;
-                var curveValue = animationCurve.Evaluate(curveTime);
+                var curveValue = appearAnimationCurve.Evaluate(curveTime);
 
-                this.transform.localScale = targetScale * curveValue;
+                targetScale = Vector3.Lerp(
+                    startScale,
+                    towardsScale,
+                    curveValue
+                );
 
                 yield return null;
             }
-
-            this.transform.localScale = targetScale;
+            targetScale = towardsScale;
+            onFinish?.Invoke();
             animationCoroutine = null;
         }
 
@@ -130,7 +153,7 @@ namespace Netherlands3D.Masking
             if (isDragging)
             {
                 // Update the object's position based on the pointer position
-                transform.position = PointerWorldPosition(eventData.position) - offset;
+                UpdateFromPointerPosition();
             }
         }
 
@@ -173,10 +196,15 @@ namespace Netherlands3D.Masking
         {
             if (!isDragging) return;
 
-            transform.position = PointerWorldPosition(eventData.position) - offset;
+            UpdateFromPointerPosition();
             ScaleByCameraDistance();
 
             AnimateIn();
+        }
+
+        public void UpdateFromPointerPosition()
+        {
+            transform.position = PointerWorldPosition(Pointer.current.position.ReadValue()) - offset;
         }
 
         private void DeterminePointerStartOffset(Vector3 pointerPosition)

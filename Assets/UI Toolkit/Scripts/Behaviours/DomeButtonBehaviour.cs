@@ -1,7 +1,9 @@
 using System.Runtime.InteropServices;
 using Netherlands3D.Events;
 using Netherlands3D.Masking;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,16 +25,30 @@ namespace Netherlands3D.UI.Panels
         private static extern string SetCSSCursor(string cursorName = "auto");
         
         private Button domeButton;
-        
+
         public override void Initialize(VisualElement parent)
         {
             base.Initialize(parent);
-            onHoveringChange.Invoke(false);
+            ToolService toolService = ServiceLocator.GetService<ToolService>();
+            toolService.GetTool(ToolType.Dome).onOpen.AddListener(OnEnableDome);
+            toolService.GetTool(ToolType.Dome).onClose.AddListener(OnDisableDome);
+            
         }
+
+        private void OnDisableDome()
+        {
+            domeButton.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+        }
+
+        private void OnEnableDome()
+        {
+            domeButton.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+        }
+
 
         public override VisualElement SpawnFloatingButtonContent()
         {
-            Button domeButton = new Button();
+            domeButton = new Button();
             domeButton.Type = Button.ButtonType.transparent;
             domeButton.name = "DomeButton";
             domeButton.ShowIcon = Button.ButtonStyle.IconOnly;
@@ -51,7 +67,6 @@ namespace Netherlands3D.UI.Panels
 
                 startScale = dome.transform.localScale;
                 dragging = true;
-                onDragChange.Invoke(true);
 
                 domeButton.CapturePointer(evt.pointerId);
             }, TrickleDown.TrickleDown);
@@ -59,7 +74,6 @@ namespace Netherlands3D.UI.Panels
             domeButton.RegisterCallback<PointerUpEvent>(evt =>
             {
                 dragging = false;
-                onDragChange.Invoke(dragging);
 
                 Debug.Log("dome up!");
             });
@@ -69,7 +83,6 @@ namespace Netherlands3D.UI.Panels
                 ChangeCursor(StyleOnHover);
 
                 hovering = true;
-                onHoveringChange.Invoke(IsHovering);
             });
 
             domeButton.RegisterCallback<PointerLeaveEvent>(evt =>
@@ -78,7 +91,6 @@ namespace Netherlands3D.UI.Panels
                 ChangeCursor(Style.AUTO);
 
                 hovering = false;
-                onHoveringChange.Invoke(IsHovering);
             });
 
             return domeButton;
@@ -91,24 +103,14 @@ namespace Netherlands3D.UI.Panels
         private Vector3 startScale = Vector3.one;
         private Vector3 pointerStartDragPosition;
         private Vector3 pointerObjectStartPosition;
-        private Vector3 minimumStartDragScale = Vector3.one * 100;
 
         private float startDistance;
-
-        [Header("Events")]
-        public UnityEvent<bool> onHoveringChange = new();
-        public UnityEvent<bool> onDragChange = new();
-
         private bool hovering = false;
         private bool dragging = false;
 
-        public bool IsHovering
-        {
-            get => hovering;
-        }
-
         public override void UpdateBehaviour()
         {
+            VisualDome dome = App.Dome.Spawner.DomeVisualisation;
             var worldPos = App.Dome.Spawner.DomeVisualisation.ScaleAnchor.position;
             var screenPos = App.Cameras.ActiveCamera.WorldToScreenPoint(worldPos);
             Vector2 panelPos = App.UIRoot.GetUIPositionFromScreenPosition(screenPos);
@@ -118,13 +120,20 @@ namespace Netherlands3D.UI.Panels
 
             if (dragging)
             {
-                VisualDome dome = App.Dome.Spawner.DomeVisualisation;
                 var pointerViewportPoint = mainCamera.ScreenToViewportPoint(Pointer.current.position.ReadValue());
-
                 float dist = Vector3.Distance(pointerViewportPoint, pointerObjectStartPosition);
                 var distancePointerMoved = dist / startDistance;
-                dome.transform.localScale = Vector3.Lerp(dome.transform.localScale, startScale * distancePointerMoved, Time.deltaTime * 60);
+                dome.SetTargetScale(startScale * distancePointerMoved);
             }
+        }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            ChangeCursor(Style.AUTO);
+            ToolService toolService = ServiceLocator.GetService<ToolService>();
+            toolService.GetTool(ToolType.Dome).onOpen.RemoveListener(OnEnableDome);
+            toolService.GetTool(ToolType.Dome).onClose.RemoveListener(OnDisableDome);
         }
 
         public enum Style
@@ -291,11 +300,6 @@ namespace Netherlands3D.UI.Panels
 #if !UNITY_EDITOR && UNITY_WEBGL
             SetCSSCursor(cursorString);
 #endif
-        }
-
-        public void OnDisable()
-        {
-            ChangeCursor(Style.AUTO);
         }
     }
 }
