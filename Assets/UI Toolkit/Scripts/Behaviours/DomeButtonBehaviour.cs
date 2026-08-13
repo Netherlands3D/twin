@@ -92,12 +92,14 @@ namespace Netherlands3D.UI.Panels
                 startDistance = Vector3.Distance(pointerStartDragPosition, pointerObjectStartPosition);
 
                 startScale = dome.transform.localScale;
+                domeButton.AddToClassList("grabbing");
                 dragging = true;
             }, TrickleDown.TrickleDown);
 
             domeButton.RegisterCallback<PointerUpEvent>(evt =>
             {
                 dragging = false;
+                domeButton.RemoveFromClassList("grabbing");
             });
 
             domeButton.RegisterCallback<PointerEnterEvent>(evt =>
