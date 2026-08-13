@@ -41,6 +41,7 @@ namespace Netherlands3D.CartesianTiles
         {
             foreach (DataSet dataset in Datasets)
             {
+                dataset.maximumDistance = Mathf.Min(dataset.maximumDistance, 4000);
                 dataset.maximumDistanceSquared = dataset.maximumDistance * dataset.maximumDistance;
             }
         }
