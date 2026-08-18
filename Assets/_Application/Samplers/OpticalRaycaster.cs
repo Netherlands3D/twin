@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Samplers
 
         [Header("Events")][SerializeField] public UnityEvent<Vector3> OnDepthSampled;
 
-        private const int maxRequests = 3;
+        private const int maxRequests = 0;
         private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
 
         public const float MinimumDepth = 0.0001f;
@@ -37,12 +37,13 @@ namespace Netherlands3D.Twin.Samplers
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, Camera camera, int cullingMask = defaultRaycastLayers)
         {
-            if (activeRequests.Count > maxRequests)
+            //if (activeRequests.Count > maxRequests)
             {
                 callback.Invoke(Vector3.zero, false);
                 return;
             }
 
+            
             OpticalRequest opticalRequest = GetRequest();
             opticalRequest.SetActiveCamera(camera); 
             opticalRequest.SetCullingMask(cullingMask);
@@ -56,7 +57,7 @@ namespace Netherlands3D.Twin.Samplers
 
         public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[], bool> callback, int cullingMask = ~0)
         {
-            if (activeRequests.Count > maxRequests)
+            //if (activeRequests.Count > maxRequests)
             {
                 callback.Invoke(null, false);
                 return;
@@ -80,7 +81,7 @@ namespace Netherlands3D.Twin.Samplers
 
         public void GetWorldPointFromDirectionAsync(Vector3 worldPosition, Vector3 direction, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
         {
-            if (activeRequests.Count > maxRequests)
+            //if (activeRequests.Count > maxRequests)
             {
                 callback.Invoke(Vector3.zero, false);
                 return;

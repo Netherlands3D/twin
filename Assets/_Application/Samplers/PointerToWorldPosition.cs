@@ -9,9 +9,9 @@ namespace Netherlands3D.Twin.Samplers
 {
     public class PointerToWorldPosition : MonoBehaviour
     {       
-        public Coordinate WorldPoint => worldPoint;
-        public Coordinate WorldPointSync => worldPointSync;
-        public Vector3 WorldPointHeightMap => worldPointHeightMap;
+        public Coordinate WorldPoint => GetCoordinateSync();
+        public Coordinate WorldPointSync => GetCoordinateSync();
+        //public Vector3 WorldPointHeightMap => worldPointHeightMap;
         public bool debugHeightmapPosition = false;
         
         private OpticalRaycaster opticalRaycaster;
@@ -45,13 +45,19 @@ namespace Netherlands3D.Twin.Samplers
             };
         }
 
-        private void Update()
+        private Coordinate GetCoordinateSync()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, activeCamera);
-            worldPointHeightMap = GetWorldPoint(screenPoint, activeCamera);
+            //opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, activeCamera);
+            //worldPointHeightMap = GetWorldPoint(screenPoint, activeCamera);
 
             worldPointSync = new Coordinate(opticalRaycaster.GetWorldPointAtCameraScreenPoint(activeCamera, screenPoint));
+            return worldPointSync;
+        }
+
+        private void Update()
+        {
+         
 
             if(debugHeightmapPosition)
             {
@@ -69,20 +75,20 @@ namespace Netherlands3D.Twin.Samplers
             }
         }
 
-        public void GetPointerWorldPointAsync(Action<Vector3> result)
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
-            opticalRaycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
-            {
-                if (hit)
-                    result.Invoke(point);
-                else
-                {
-                    Vector3 position = GetWorldPoint();
-                    result.Invoke(position);
-                }  
-            });
-        }
+        // public void GetPointerWorldPointAsync(Action<Vector3> result)
+        // {
+        //     var screenPoint = Pointer.current.position.ReadValue();
+        //     opticalRaycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
+        //     {
+        //         if (hit)
+        //             result.Invoke(point);
+        //         else
+        //         {
+        //             Vector3 position = GetWorldPoint();
+        //             result.Invoke(position);
+        //         }  
+        //     });
+        // }
 
         public Vector3 GetWorldPoint()
         {
