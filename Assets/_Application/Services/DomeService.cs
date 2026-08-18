@@ -9,19 +9,14 @@ namespace Netherlands3D
     [RequireComponent(typeof(MaskingDomeSpawner))]
     public class DomeService : MonoBehaviour
     {
-        public MaskingDomeSpawner Spawner => spawner;
+        public MaskingDomeSpawner Spawner => spawner ??= GetComponent<MaskingDomeSpawner>();
         public bool IsPointerOnDome => Spawner.IsPointerOnDome;
         
         private MaskingDomeSpawner spawner;
 
-        private void Awake()
-        {
-            spawner = GetComponent<MaskingDomeSpawner>();
-        }
-
         private void Start()
         {
-            spawner.SetMaskingBitIndex(MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
+            Spawner.SetMaskingBitIndex(MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
             DisableDome();
         }
 
@@ -41,7 +36,7 @@ namespace Netherlands3D
 
         private void EnableDome()
         {
-            spawner.SetDomeEnabled();
+            Spawner.SetDomeEnabled();
         }
 
         private void DisableDome()
