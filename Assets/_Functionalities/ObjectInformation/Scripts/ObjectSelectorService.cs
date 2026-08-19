@@ -23,7 +23,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
-
         public HierarchicalObjectLayerGameObject SelectedVisualisation => selectedVisualisation;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
@@ -84,13 +83,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+
+            InitSelectionConditions();
         }
 
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
-            toolService = Services.ServiceLocator.GetService<ToolService>();
+            toolService = ServiceLocator.GetService<ToolService>();
             
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
@@ -207,24 +208,61 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             pointerDownPosition = Mouse.current.position.ReadValue();
         }
 
+        private List<Func<bool>> selectionConditions = new();
+
+        private void InitSelectionConditions()
+        {
+            selectionConditions = new List<Func<bool>>
+            {
+                CanSelectBecauseNotOverUI,
+                CanSelectBecauseWithinClickDistance
+            };
+        }
+
+        private bool CanSelectBecauseNotOverUI()
+        {
+            return !App.UIRoot.IsPointerOverUI();
+        }
+
+        private bool CanSelectBecauseWithinClickDistance()
+        {
+            return Vector2.Distance(
+                pointerDownPosition,
+                Mouse.current.position.ReadValue()
+            ) <= minClickDistance;
+        }
+
+        private bool CanProcessSelection()
+        {
+            foreach (var condition in selectionConditions)
+            {
+                if (!condition())
+                    return false;
+            }
+
+            return true;
+        }
+
+        public void AddSelectionPredicate(Func<bool> predicate)
+        {
+            selectionConditions.Add(predicate);
+        }
+
+        public void RemoveSelectionPredicate(Func<bool> predicate)
+        {
+            selectionConditions.Remove(predicate);
+        }
+
         private void OnLeftClickUp(InputAction.CallbackContext ctx)
         {
-            if (App.UIRoot.IsPointerOverUI())
-                return;
-            
-            if(Vector2.Distance(pointerDownPosition, Mouse.current.position.ReadValue()) > minClickDistance)
-                return;
+            if (!CanProcessSelection()) return;
 
             ProcessSelection(true);
         }
 
         private void OnRightClickUp(InputAction.CallbackContext ctx)
         {
-            if (App.UIRoot.IsPointerOverUI())
-                return;
-            
-            if(Vector2.Distance(pointerDownPosition, Mouse.current.position.ReadValue()) > minClickDistance)
-                return;
+            if (!CanProcessSelection()) return;
 
             ProcessSelection(false);
         }
