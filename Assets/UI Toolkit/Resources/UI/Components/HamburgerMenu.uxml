@@ -2,7 +2,7 @@
     <ui:VisualElement name="ButtonGroup" class="hamburger-menu__group">
         <nl3d:Button name="Open" button-type="transparent" button-style="IconOnly" icon="UploadFolder" tooltip="Laad een bestand in"/>
         <nl3d:Button name="Save" button-type="transparent" button-style="IconOnly" icon="Save" tooltip="Sla huidige scene op"/>
-        <nl3d:ToolButton name="Settings" button-type="transparent" button-style="IconOnly" icon="Settings" toolType="Settings" tooltip="Settings"/>
+        <nl3d:ToolButton name="Settings" button-type="transparent" button-style="IconOnly" icon="Settings" toolType="Settings" tooltip="Instellingen"/>
         <nl3d:Button name="Help" button-type="transparent" button-style="IconOnly" icon="Help" tooltip="Meer informatie"/>
     </ui:VisualElement>
 </ui:UXML>

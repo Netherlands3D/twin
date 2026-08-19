@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,7 +14,7 @@ namespace Netherlands3D
 
         private const float TooltipOffset = 6f;
 
-        private readonly List<VisualElement> registeredElements = new();
+        private VisualElement hoveredTooltipElement;
 
         private void Awake()
         {
@@ -56,15 +55,8 @@ namespace Netherlands3D
         {
             UnregisterTooltips();
 
-            root.Query<VisualElement>().ForEach(element =>
-            {
-                if (element == null || element == tooltipLabel || string.IsNullOrWhiteSpace(element.tooltip))
-                    return;
-
-                element.RegisterCallback<PointerEnterEvent>(ShowTooltip);
-                element.RegisterCallback<PointerLeaveEvent>(HideTooltip);
-                registeredElements.Add(element);
-            });
+            root.RegisterCallback<PointerEnterEvent>(ShowTooltip, TrickleDown.TrickleDown);
+            root.RegisterCallback<PointerLeaveEvent>(HideTooltip, TrickleDown.TrickleDown);
         }
 
         private void ShowTooltip(PointerEnterEvent evt)
@@ -72,9 +64,11 @@ namespace Netherlands3D
             if (root == null || tooltipLabel == null)
                 return;
 
-            if (evt.currentTarget is not VisualElement element || string.IsNullOrWhiteSpace(element.tooltip))
+            VisualElement element = FindTooltipElement(evt.target as VisualElement);
+            if (element == null)
                 return;
 
+            hoveredTooltipElement = element;
             tooltipLabel.text = element.tooltip;
 
             tooltipLabel.style.display = DisplayStyle.Flex;
@@ -85,10 +79,14 @@ namespace Netherlands3D
 
         private void HideTooltip(PointerLeaveEvent evt)
         {
-            if (tooltipLabel == null)
+            if (tooltipLabel == null || hoveredTooltipElement == null)
+                return;
+
+            if (evt.target != hoveredTooltipElement)
                 return;
 
             tooltipLabel.style.display = DisplayStyle.None;
+            hoveredTooltipElement = null;
         }
 
         private void OnDisable()
@@ -102,13 +100,25 @@ namespace Netherlands3D
 
         private void UnregisterTooltips()
         {
-            foreach (VisualElement element in registeredElements)
+            if (root == null)
+                return;
+
+            root.UnregisterCallback<PointerEnterEvent>(ShowTooltip, TrickleDown.TrickleDown);
+            root.UnregisterCallback<PointerLeaveEvent>(HideTooltip, TrickleDown.TrickleDown);
+            hoveredTooltipElement = null;
+        }
+
+        private VisualElement FindTooltipElement(VisualElement element)
+        {
+            while (element != null && element != root && element != tooltipLabel)
             {
-                element?.UnregisterCallback<PointerEnterEvent>(ShowTooltip);
-                element?.UnregisterCallback<PointerLeaveEvent>(HideTooltip);
+                if (!string.IsNullOrWhiteSpace(element.tooltip))
+                    return element;
+
+                element = element.parent;
             }
 
-            registeredElements.Clear();
+            return null;
         }
 
         private void PositionTooltip(VisualElement element)
