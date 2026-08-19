@@ -30,7 +30,6 @@ namespace Netherlands3D.UI.Panels
         private UnityAction<IMapping> waitForMappingLoaded;
         private HiddenObjectsPropertyData stylingPropertyData;
         private ListView listView;
-        private ListView ListView => listView ??= this.Q<ListView>();
         private List<string> objectIds = new();
         private List<string> toggledObjectIds = new();
         private bool showSelection = true;
@@ -40,33 +39,36 @@ namespace Netherlands3D.UI.Panels
         public HiddenObjectsPropertySection()
         {
             this.CloneComponentTree("Panels");
-            this.AddComponentStylesheet("Panels");    
-            
-            ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            ListView.selectionType = SelectionType.Multiple;
-            
-            ListView.makeItem = MakeListViewItem;
-            ListView.bindItem = BindListViewItem;
-            
-            
-            ListView.RegisterCallback<AttachToPanelEvent>(evt =>
+            this.AddComponentStylesheet("Panels");
+
+            listView = this.Q<ListView>();
+
+
+            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            listView.selectionType = SelectionType.Multiple;
+
+            listView.makeItem = MakeListViewItem;
+            listView.bindItem = BindListViewItem;
+
+
+            listView.RegisterCallback<AttachToPanelEvent>(evt =>
             {
                 //when clicked outside the listview, deselect the current selection
-                ListView.RegisterCallback<BlurEvent>(evt =>
+                listView.RegisterCallback<BlurEvent>(evt =>
                 {
                     var pos = Pointer.current.position.ReadValue();
                     var panelPos = RuntimePanelUtils.ScreenToPanel(
-                        ListView.panel,
+                        listView.panel,
                         new Vector2(pos.x, Screen.height - pos.y)
                     );
-                    if (!ListView.worldBound.Contains(panelPos))
+                    if (!listView.worldBound.Contains(panelPos))
                     {
                         ClearSelection();
                     }
                 });
             });
-            
-            ListView.selectedIndicesChanged += indices =>
+
+            listView.selectedIndicesChanged += indices =>
             {
                 //show selection in world when items in panel are selected
                 UpdateSelectionForIndices(indices);
@@ -86,7 +88,7 @@ namespace Netherlands3D.UI.Panels
             
             foreach (int i in indices)
             {
-                var id = ListView.itemsSource[i] as string;
+                var id = listView.itemsSource[i] as string;
                 bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(id);
                 if (visibility == true)
                 {
@@ -102,7 +104,9 @@ namespace Netherlands3D.UI.Panels
             item.ShowToggle(true);
             item.OnToggleVisibility.AddListener(ToggleVisibilityForSelectedFeatures);
             item.RegisterCallback<PointerUpEvent>(HiddenFeatureSelected);
-            return item;
+
+            var listViewItem = new ListViewItem(item);
+            return listViewItem;
         }
         
         private void HiddenFeatureSelected(PointerUpEvent evt)
@@ -113,12 +117,13 @@ namespace Netherlands3D.UI.Panels
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not HideObjectListViewItem listViewItem) return;
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<HideObjectListViewItem>() is not HideObjectListViewItem element) return;           
            
-            string mapping = ListView.itemsSource[index] as string;
+            string mapping = listView.itemsSource[index] as string;
             bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(mapping);
-            listViewItem.SetToggleValue(visibility == true);
-            listViewItem.ID = mapping;
+            element.SetToggleValue(visibility == true);
+            element.ID = mapping;
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -138,7 +143,7 @@ namespace Netherlands3D.UI.Panels
 
         private void ClearSelection()
         {
-            ListView.ClearSelection();
+            listView.ClearSelection();
             DestroyGhostMesh();
         }
 
@@ -156,7 +161,7 @@ namespace Netherlands3D.UI.Panels
                         objectIds.Add(objectId);
                 }
             }
-            ListView.itemsSource = objectIds;
+            listView.itemsSource = objectIds;
             listView.RefreshItems();
         }
 
@@ -215,21 +220,21 @@ namespace Netherlands3D.UI.Panels
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
         {
             //is the new layer not selected yet and is no modifier pressed, then clear selection and select the new layer
-            int index = ListView.itemsSource.IndexOf(objectId);
-            if (index >= 0 && !ListView.selectedIndices.Contains(index))
+            int index = listView.itemsSource.IndexOf(objectId);
+            if (index >= 0 && !listView.selectedIndices.Contains(index))
             {
                 if(MultiSelectionUtility.NoModifierKeyPressed())
                     ClearSelection();
-                
-                ListView.AddToSelection(index);
+
+                listView.AddToSelection(index);
             }
             
             toggledObjectIds.Clear();
             List<HiddenObjectsPropertyData.SubObjectData> stylingData = new();
             //toggle the selection of items
-            foreach (int i in ListView.selectedIndices.ToList())
+            foreach (int i in listView.selectedIndices.ToList())
             {
-                var id = ListView.itemsSource[i] as string;
+                var id = listView.itemsSource[i] as string;
                 if(visible)
                     toggledObjectIds.Add(id);
                 var data = ToggleVisibilityForFeature(id, visible);
@@ -369,8 +374,12 @@ namespace Netherlands3D.UI.Panels
                         idsToRemove.Add(objectId);
                 }
             }
+
+            //all objects that were made visible while this panel was alive, should be removed from data
             foreach (string id in idsToRemove)
+            {
                 stylingPropertyData.RemoveVisibilityForSubObjectById(id);
+            }
         }
     }
 }

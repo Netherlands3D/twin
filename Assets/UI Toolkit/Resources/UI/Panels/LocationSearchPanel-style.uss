@@ -38,3 +38,8 @@
 .location-search-panel__coordinate-field.invalid .unity-base-text-field__input {
     color: var(--color-warning);
 }
+
+.location-search-panel__minimap{
+    margin-top: var(--spacing-3);
+    max-height: 320px;
+}

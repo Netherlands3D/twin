@@ -9,6 +9,7 @@ namespace Netherlands3D.Services
         [Header("InputPolygon")]
         [SerializeField] private InputActionAsset inputPolygonActionAsset;
         [SerializeField] private InputActionAsset applicationActionMap;
+        [SerializeField] private InputActionAsset cameraInputActionAsset;
         
         private InputAction openProjectAction;
         private InputAction saveProjectAction;
@@ -16,6 +17,7 @@ namespace Netherlands3D.Services
         private InputAction redoAction;
         
         private InputActionMap polygonSelectionActionMap;
+        private InputActionMap cameraInputActionMap;
         
         private InputAction polygonPointerAction;
         private InputAction polygonTapAction;
@@ -25,6 +27,8 @@ namespace Netherlands3D.Services
         private InputAction polygonModifierAction;
         private InputAction polygonClickAction;
 
+        private InputAction leftClickAction, rightClickAction, leftClickUpAction, rightClickUpAction;
+        
         public InputAction PolygonPointerAction => polygonPointerAction ??= polygonSelectionActionMap.FindAction("Point");
         public InputAction PolygonTapAction => polygonTapAction ??= polygonSelectionActionMap.FindAction("Tap");
         public InputAction PolygonEscapeAction => polygonEscapeAction ??= polygonSelectionActionMap.FindAction("Escape");
@@ -35,6 +39,11 @@ namespace Netherlands3D.Services
         
         public InputAction OpenProjectAction => openProjectAction ??= applicationActionMap.FindAction("Projects/Open");
         public InputAction SaveProjectAction => saveProjectAction ??= applicationActionMap.FindAction("Projects/Save");
+        
+        public InputAction LeftClickAction => leftClickAction ??= cameraInputActionMap.FindAction("LeftClick");
+        public InputAction RightClickAction => rightClickAction ??= cameraInputActionMap.FindAction("RightClick");
+        public InputAction LeftClickUpAction => leftClickUpAction ??= cameraInputActionMap.FindAction("LeftClickUp");
+        public InputAction RightClickUpAction => rightClickUpAction ??= cameraInputActionMap.FindAction("RightClickUp");
 
         void Awake()
         {
@@ -44,6 +53,10 @@ namespace Netherlands3D.Services
                 Debug.LogWarning("polygonSelectionActionMap was not enabled, but assigned as the input action map. Enabling the input action map", this);
                 polygonSelectionActionMap.Enable();
             }
+            
+            cameraInputActionMap = cameraInputActionAsset.FindActionMap("Camera", true);
+            if(!cameraInputActionMap.enabled)
+                cameraInputActionMap.Enable();
         }
 
         private void OnEnable()

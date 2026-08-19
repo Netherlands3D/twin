@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -17,6 +18,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement hoveredElement;
         private List<int> lastSelectedIndices = new();
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
+        private Vector2 lastPointerPosition;
 
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
@@ -51,6 +53,10 @@ namespace Netherlands3D.UI.Components
 
             selectionChanged += OnSelectionChanged;
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            RegisterCallback<PointerMoveEvent>(evt =>
+            {
+                lastPointerPosition = evt.position;
+            });
         }
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
@@ -59,8 +65,11 @@ namespace Netherlands3D.UI.Components
         
         private void OnSelectionChanged(IEnumerable<object> obj)
         {
+            var referenceLayer = hoveredElement;
+            if (referenceLayer == null)
+                referenceLayer = FindClosestElement(lastPointerPosition);
             this.OnSelectionChanged(
-                hoveredElement,
+                referenceLayer,
                 indexDictionary,
                 lastSelectedIndices,
                 ref firstSelectedIndex,
@@ -75,6 +84,30 @@ namespace Netherlands3D.UI.Components
         public VisualElement GetItemFromIndex(int index)
         {
             return indexDictionary.FirstOrDefault(p => p.Value == index).Key;
+        }
+        
+        private VisualElement FindClosestElement(Vector2 pointerPosition)
+        {
+            VisualElement closest = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var element in indexDictionary.Keys)
+            {
+                if (element == null)
+                    continue;
+
+                Vector2 elementPosition = element.worldBound.position;
+
+                float distance = Mathf.Abs(pointerPosition.y - elementPosition.y);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = element;
+                }
+            }
+
+            return closest;
         }
     }
 }

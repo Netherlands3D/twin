@@ -308,8 +308,10 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.Dragging.AddListener(OnDraggingLayerItem);
             layerRowElement.DragEnded.AddListener(OnDraggingLayerItemEnded);
             layerRowElement.RegisterCallback<ClickEvent>(SetReferenceLayer);
+
+           
             
-            return layerRowElement;
+            return new ListViewItem(layerRowElement);
         }
 
         private void SetReferenceLayer(ClickEvent evt)
@@ -319,7 +321,10 @@ namespace Netherlands3D.UI.Panels
 
         private void BindItem(VisualElement item, int index)
         {
-            if (item is not LayerTreeViewItem layerRowElement) return;
+
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<LayerTreeViewItem>() is not LayerTreeViewItem layerRowElement) return;
+          
 
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             layerRowElement.Initialize(layerData);
@@ -335,7 +340,8 @@ namespace Netherlands3D.UI.Panels
         
         private void UnbindItem(VisualElement item, int index)
         {
-            if (item is not LayerTreeViewItem layerRowElement) return;
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<LayerTreeViewItem>() is not LayerTreeViewItem layerRowElement) return;
 
             layerRowElement.RemoveLayerDataListeners(layerRowElement.LayerData);
             layerRowElement.SelectLayerItem.RemoveListener(SelectItemWithoutNotify);
@@ -346,7 +352,7 @@ namespace Netherlands3D.UI.Panels
         
         private void DeselectWithoutNotify(LayerTreeViewItem item)
         {
-            var index = treeView.GetIndexFromElement(item);
+            var index = treeView.GetIndexFromElement(item.GetFirstAncestorOfType<ListViewItem>());
             if (treeView.selectedIndices.Contains(index))
             {
                 var newSelection = treeView.selectedIndices.ToList();
@@ -357,7 +363,7 @@ namespace Netherlands3D.UI.Panels
 
         private void SelectItemWithoutNotify(LayerTreeViewItem item)
         {
-            var index = treeView.GetIndexFromElement(item);
+            var index = treeView.GetIndexFromElement(item.GetFirstAncestorOfType<ListViewItem>());
             var newIndices = treeView.selectedIndices.ToList();
             newIndices.Add(index);
             treeView.SetSelectionWithoutNotify(newIndices);

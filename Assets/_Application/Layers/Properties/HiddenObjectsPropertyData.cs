@@ -5,6 +5,7 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
@@ -16,6 +17,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         public const string VisibilityIdentifier = "visibility";
         
         [JsonIgnore] private Material selectionMaterial;
+        
+        [JsonIgnore] public readonly UnityEvent<string> OnHiddenObjectDataStylingRuleRemoved = new();
         
         [JsonIgnore]
         public Material SelectionMaterial
@@ -117,7 +120,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void RemoveVisibilityForSubObjectById(string id)
         {
             var stylingRuleKey = VisibilityStyleRuleKey(id);
-            bool dataRemoved = StylingRules.Remove(stylingRuleKey);
+            RemoveStylingRule(stylingRuleKey);
+            OnHiddenObjectDataStylingRuleRemoved.Invoke(id);
         }
         
         private string VisibilityStyleRuleKey(string visibilityIdentifier)

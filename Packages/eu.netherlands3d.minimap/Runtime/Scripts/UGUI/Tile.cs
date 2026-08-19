@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Minimap
 {
@@ -39,7 +37,7 @@ namespace Netherlands3D.Minimap
 		{
 			zoomLevel = zoom;
 			tileKey = key;
-			name = tileKey.x + "/" + tileKey.y;
+			name = tileKey.x + "/" + tileKey.y +  "/" + zoomLevel;
 
 			this.config = config;
 

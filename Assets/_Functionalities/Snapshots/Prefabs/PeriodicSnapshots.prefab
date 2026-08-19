@@ -75,6 +75,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8822905259358557482, guid: d127ab15eec73284a97c81a8479b05a4,
         type: 3}
+      propertyPath: useViewSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8822905259358557482, guid: d127ab15eec73284a97c81a8479b05a4,
+        type: 3}
       propertyPath: timeStampDateFormat
       value: dd-MM HH:mm
       objectReference: {fileID: 0}
