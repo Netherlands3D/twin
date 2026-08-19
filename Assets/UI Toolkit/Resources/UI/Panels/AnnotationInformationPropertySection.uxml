@@ -1,0 +1,17 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    name="AnnotationInformationPropertySection"
+    >
+
+    <nl3d:ContentContainer leading-icon="SelectionPointer" text="Informatie annotatie">
+        <ui:VisualElement class="annotation-information__container">
+            <ui:VisualElement class="annotation-information-thumbnail__container" name="ThumbnailContainer" />
+            <ui:Label name="EmptyThumbnailLabel" text="Geen afbeelding" class="annotation-information-thumbnail__empty-label" />
+        </ui:VisualElement>
+        <nl3d:ListView name="AnnotationInformationListView" class="annotation-information__list-view"/>
+    </nl3d:ContentContainer>
+</ui:UXML>
