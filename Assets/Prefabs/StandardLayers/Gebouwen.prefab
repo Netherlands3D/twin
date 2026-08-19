@@ -56,14 +56,14 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.12.16/lod2.2simplified100/buildings-{x}_{y}.2.2.100.bin
+    path: https://assets.netherlands3d.eu/publicassets/Buildings_2025/tiles12m/Buildings-{x}_{y}.12.bin
     pathQuery: 
     maximumDistance: 8000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.12.16/lod2.2/buildings-{x}_{y}.2.2.bin
+    path: https://assets.netherlands3d.eu/publicassets/Buildings_2025/tiles/Buildings-{x}_{y}.2.2.bin
     pathQuery: 
     maximumDistance: 3000
     maximumDistanceSquared: 0
@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040e59742c03762f891b4749d60c2b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugFeatures: 0
 --- !u!114 &8885966354490939882
 MonoBehaviour:
   m_ObjectHideFlags: 0
