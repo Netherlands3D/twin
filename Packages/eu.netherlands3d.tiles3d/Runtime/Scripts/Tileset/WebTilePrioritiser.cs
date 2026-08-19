@@ -125,7 +125,11 @@ namespace Netherlands3D.Tiles3D
                 for (int i = listcount - 1; i >= 0; i--)
                 {
                     var tile = delayedDisposeList[i];
-                    if(tile == null)continue;
+                    if(tile == null)
+                    {
+                        delayedDisposeList.RemoveAt(i);
+                        continue;
+                    }
                     int loadingchildcount = tile.CountLoadingChildren();
                     if (loadingchildcount==0)
                     {
