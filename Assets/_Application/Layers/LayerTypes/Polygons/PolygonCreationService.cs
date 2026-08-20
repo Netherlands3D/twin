@@ -31,6 +31,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public GridInput GridInput => gridInput;
         public PolygonInput PolygonInput => polygonInput;
         public PolygonInput LineInput => lineInput;
+
+        public bool IsPolygonInputActive => currentShapeType != ShapeType.Undefined;
         
         [SerializeField] private GridInput gridInput;
         [SerializeField] private PolygonInput polygonInput;

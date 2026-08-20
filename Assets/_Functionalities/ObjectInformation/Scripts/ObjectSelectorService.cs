@@ -16,6 +16,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -33,6 +34,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
+        private PolygonSelectionService polygonSelectionService;
         private List<IMapping> orderedMappings = new();
         private Dictionary<string, IMapping> selectedMappings = new();
         private HierarchicalObjectLayerGameObject selectedVisualisation;
@@ -88,6 +90,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
             toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
@@ -192,6 +195,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return hasHit;
         }
 
+        private bool TrySelectPolygon()
+        {
+            LayerData selectedPolygon = polygonSelectionService.ProcessPolygonSelection();
+            return selectedPolygon != null;
+        }
+
         private Vector2 pointerDownPosition;
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
@@ -278,6 +287,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     }
                     OnSelectLayer.Invoke(ctxObject.LayerData);
                 }
+                Deselect();
+                return;
+            }
+
+            if (TrySelectPolygon() || polygonSelectionService.IsEditingPolygon)
+            {
                 Deselect();
                 return;
             }
