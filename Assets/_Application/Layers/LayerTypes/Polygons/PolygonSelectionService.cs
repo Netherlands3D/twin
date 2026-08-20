@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.SelectionTools;
@@ -15,22 +16,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     public class PolygonSelectionService : MonoBehaviour
     {
         public LayerData SelectedLayer => selectedLayer;
-    
+
         public bool PolygonSelectionEnabled => polygonSelectionEnabled;
-        
+
         private LayerData selectedLayer;
-        private List<LayerData> layers = new(); 
+        private List<LayerData> layers = new();
         private PointerToWorldPosition pointerToWorldPosition;
         private PolygonCreationService polygonCreationService;
         private ObjectSelectorService objectSelectorService;
-        
+
         [SerializeField] private Tool layerTool;
 
         public UnityEvent<bool> OnPolygonSelectionEnabled = new();
         public UnityEvent OnDeselectActivePolygon = new();
         public UnityEvent OnSelectActivePolygon = new();
         private bool polygonSelectionEnabled = false;
-        
+
         private void Awake()
         {
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
@@ -41,7 +42,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             polygonCreationService.OnInputTypeChanged.AddListener(OnUpdateInputType);
             objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            
+
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
         }
@@ -49,17 +50,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnDisable()
         {
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
-            
+
             polygonCreationService.OnInputTypeChanged.RemoveListener(OnUpdateInputType);
-            
+
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
             ProjectData.Current.OnDataChanged.RemoveListener(RegisterPolygons);
         }
 
         private void OnUpdateInputType(ShapeType type)
         {
-            
+            if (type == ShapeType.Undefined)
+            {
+                objectSelectorService.RemoveSelectionPredicate(CantSelectPredicate());
+            }
+            else
+            {
+                objectSelectorService.AddSelectionPredicate(CantSelectPredicate());
+            }
         }
+
+        private Func<bool> CantSelectPredicate() => () => false;
         
         public void EnablePolygonSelection()
         {
