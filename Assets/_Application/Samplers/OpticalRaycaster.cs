@@ -29,25 +29,7 @@ namespace Netherlands3D.Twin.Samplers
         private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
 
         public const float MinimumDepth = 0.0001f;
-
-        public void GetWorldPointFromDirectionAsync(Vector3 worldPosition, Vector3 direction, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
-        {
-            if (activeRequests.Count > maxRequests)
-            {
-                callback.Invoke(Vector3.zero, false);
-                return;
-            }
-
-            OpticalRequest opticalRequest = GetRequest();
-            opticalRequest.SetCullingMask(cullingMask);
-            opticalRequest.SetScreenPoint(worldPosition);
-            opticalRequest.AlignCameraFromDirection(direction);
-            opticalRequest.UpdateShaders();
-            opticalRequest.SetResultCallback(callback);
-            opticalRequest.framesActive = 0;
-            activeRequests.Add(opticalRequest);
-        }
-
+        
         private void Update()
         {
             if (activeRequests.Count == 0) return;
@@ -89,7 +71,7 @@ namespace Netherlands3D.Twin.Samplers
         {
             Destroy(samplerTexture);
         }
-
+        
         /// <summary>
         /// Get's the worldPoint synchronously.
         /// </summary>
@@ -110,9 +92,19 @@ namespace Netherlands3D.Twin.Samplers
 
             return pixel.a > 0;
         }
+        
+        public bool TryGetWorldPointFromDirection(Vector3 origin, Vector3 direction, out Vector3 hitPosition, int cullingMask = defaultRaycastLayers)
+        {
+            AlignDepthCameraFromPositionToDirection(origin, direction);
 
+            depthCamera.cullingMask = cullingMask;
+            RenderDepthCamera();
+        
+            var pixel = samplerTexture.GetPixel(0, 0);
+            hitPosition = new Vector3(pixel.r, pixel.g, pixel.b);
 
-
+            return pixel.a > 0;
+        }
         
         public void AlignWithCamera(Camera camera, Vector3 screenPoint)
         {
@@ -279,7 +271,7 @@ namespace Netherlands3D.Twin.Samplers
         {
             requestMultipointPool.Push(callback);
         }
-
+        
         //the following classes are private because they should only be used within optical raycaster
         private sealed class OpticalRequest
         {

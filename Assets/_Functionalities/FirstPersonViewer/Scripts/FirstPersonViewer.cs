@@ -163,7 +163,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * (FirstPersonCamera.CameraHeightOffset + 0.05f), Vector3.down, groundCallback, snappingCullingMask);
+            var isHit = raycaster.TryGetWorldPointFromDirection(transform.position + Vector3.up * (FirstPersonCamera.CameraHeightOffset + 0.05f), Vector3.down, out var hitPosition, snappingCullingMask);
+            groundCallback(hitPosition, isHit);
         }
 
         private void UpdateGroundPosition(Vector3 point, bool hit)
@@ -237,17 +238,14 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void ResetToGround()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * 100, Vector3.down, (point, hit) =>
+            if (raycaster.TryGetWorldPointFromDirection(transform.position + Vector3.up * 100, Vector3.down, out var point, snappingCullingMask))
             {
-                if (hit)
-                {
-                    SetVelocity(Vector2.zero);
-                    yPositionTarget = point.y;
-                    transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GetGroundHeightOffset(), transform.position.z);
+                SetVelocity(Vector2.zero);
+                yPositionTarget = point.y;
+                transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GetGroundHeightOffset(), transform.position.z);
 
-                    OnResetToGround.Invoke();
-                }
-            }, snappingCullingMask);
+                OnResetToGround.Invoke();
+            }
         }
 
         public void ExitViewer(bool exitOriginalPosition)
