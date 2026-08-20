@@ -40,6 +40,11 @@
     -unity-background-image-tint-color: var(--color-white);
 }
 
+/*todo the -3px shifts the right edge towards the button edge, find out why */ 
+.hamburger-menu .unity-foldout__content {
+    right: -3px;
+}
+
 .hamburger-menu .unity-toggle__input > .unity-label {
     display: none;
     color: var(--color-white);
