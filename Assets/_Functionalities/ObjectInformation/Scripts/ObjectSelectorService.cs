@@ -44,11 +44,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
         [SerializeField] private Material selectionMaterial;
-        
-       
-    
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
-
         private ToolService toolService;
 
         public void BlockBagId(string bagId, bool block)

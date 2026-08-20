@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -21,13 +22,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private List<LayerData> layers = new(); 
         private PointerToWorldPosition pointerToWorldPosition;
         private PolygonCreationService polygonCreationService;
+        private ObjectSelectorService objectSelectorService;
         
         [SerializeField] private Tool layerTool;
 
         public UnityEvent<bool> OnPolygonSelectionEnabled = new();
         public UnityEvent OnDeselectActivePolygon = new();
         public UnityEvent OnSelectActivePolygon = new();
-        
         private bool polygonSelectionEnabled = false;
         
         private void Awake()
@@ -38,6 +39,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnEnable()
         {
             polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
+            polygonCreationService.OnInputTypeChanged.AddListener(OnUpdateInputType);
+            objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
         }
@@ -45,6 +49,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnDisable()
         {
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
+            
+            polygonCreationService.OnInputTypeChanged.RemoveListener(OnUpdateInputType);
+            
+            ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
+            ProjectData.Current.OnDataChanged.RemoveListener(RegisterPolygons);
+        }
+
+        private void OnUpdateInputType(ShapeType type)
+        {
+            
         }
         
         public void EnablePolygonSelection()

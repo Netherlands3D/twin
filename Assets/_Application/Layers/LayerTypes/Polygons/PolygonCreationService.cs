@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
@@ -13,6 +12,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Services;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
@@ -51,6 +51,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private ShapeType currentShapeType = ShapeType.Undefined;
         private Plane worldPlane = new(Vector3.up, Vector3.zero);
         private bool canCreatePolygon = true;
+        
+        public UnityEvent<ShapeType> OnInputTypeChanged = new();
+
 
         private void Start()
         {
@@ -259,12 +262,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             if (layer == null)
             {
-                EnablePolygonInputByType(ShapeType.Undefined);
+                UpdateInputType(ShapeType.Undefined);
                 return;
             }
             
             PolygonSelectionLayerPropertyData data = layer.GetProperty<PolygonSelectionLayerPropertyData>();
-            EnablePolygonInputByType(data.ShapeType);
+            UpdateInputType(data.ShapeType);
             var polygonAsUnityPoints = data.OriginalPolygon.ToUnityPositions().ToList();
             if(data.PolygonBoundingBox == null)
                 return;
@@ -282,12 +285,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        private void EnablePolygonInputByType(ShapeType type)
+        private void UpdateInputType(ShapeType type)
         {
             currentShapeType = type;
             polygonInput.gameObject.SetActive(currentShapeType == ShapeType.Polygon);
             lineInput.gameObject.SetActive(currentShapeType == ShapeType.Line);
             gridInput.gameObject.SetActive(currentShapeType == ShapeType.Grid);
+            
+            OnInputTypeChanged.Invoke(type);
         }
         
         public void ClearInputs()
@@ -296,7 +301,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.ClearPolygon(true);
             polygonInput.ClearPolygon(true);
             gridInput.SetSelectionVisualEnabled(false);
-            currentShapeType =  ShapeType.Undefined;
+            UpdateInputType(ShapeType.Undefined);
         }
         
         public void ConvertToLayer(Feature feature)
@@ -444,47 +449,47 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public void SetPolygonToCreate()
         {
             polygonSelectionService.SelectedLayer?.DeselectLayer();
-            EnablePolygonInputByType(ShapeType.Polygon);
+            UpdateInputType(ShapeType.Polygon);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Create);
         }
         
         public void SetPolygonToEdit()
         {
             polygonSelectionService.SelectedLayer?.DeselectLayer();
-            EnablePolygonInputByType(ShapeType.Polygon);
+            UpdateInputType(ShapeType.Polygon);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
         }
 
         public void SetLineInputToCreate()
         {
             polygonSelectionService.SelectedLayer?.DeselectLayer();
-            EnablePolygonInputByType(ShapeType.Line);
+            UpdateInputType(ShapeType.Line);
             lineInput.SetDrawMode(PolygonInput.DrawMode.Create);
         }
 
         public void SetLineInputToEdit()
         {
             polygonSelectionService.SelectedLayer?.DeselectLayer();
-            EnablePolygonInputByType(ShapeType.Line);
+            UpdateInputType(ShapeType.Line);
             lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
         }
 
         public void SetGridInputModeToCreate()
         {
             polygonSelectionService.SelectedLayer?.DeselectLayer();
-            EnablePolygonInputByType(ShapeType.Grid);
+            UpdateInputType(ShapeType.Grid);
             gridInput.SetDrawMode(PolygonInput.DrawMode.Create);
         }
 
         public void SetGridInputModeToEdit()
         {
-            EnablePolygonInputByType(ShapeType.Grid);
+            UpdateInputType(ShapeType.Grid);
             gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
         }
 
         public void SetGridInputModeToSelected()
         {
-            EnablePolygonInputByType(ShapeType.Grid);
+            UpdateInputType(ShapeType.Grid);
             gridInput.SetDrawMode(PolygonInput.DrawMode.Selected);
         }
 
