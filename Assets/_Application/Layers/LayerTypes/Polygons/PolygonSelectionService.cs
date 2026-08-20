@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.SelectionTools;
@@ -19,19 +19,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public bool PolygonSelectionEnabled => polygonSelectionEnabled;
         public bool IsEditingPolygon => polygonCreationService.IsPolygonInputActive;
-
+        
         private LayerData selectedLayer;
         private List<LayerData> layers = new();
         private PointerToWorldPosition pointerToWorldPosition;
         private PolygonCreationService polygonCreationService;
-
+        
         [SerializeField] private Tool layerTool;
 
         public UnityEvent<bool> OnPolygonSelectionEnabled = new();
         public UnityEvent OnDeselectActivePolygon = new();
         public UnityEvent OnSelectActivePolygon = new();
         private bool polygonSelectionEnabled = false;
-
+        
         private void Awake()
         {
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
@@ -120,7 +120,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public LayerData ProcessPolygonSelection()
         {
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(App.Cameras.ActiveCamera);
-            var worldPoint = pointerToWorldPosition.WorldPoint.ToUnity();
+            var worldPoint = pointerToWorldPosition.GetPointerWorldPoint();
 
             foreach (var layer in layers)
             {               
@@ -219,7 +219,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             return null;
         }
-
+        
         public void SetSelectedLayerForPolygonSelectionProperty(PolygonSelectionLayerPropertyData polygonPropertyData)
         {
             LayerData data = FindLayerForPolygonSelectionProperty(polygonPropertyData);

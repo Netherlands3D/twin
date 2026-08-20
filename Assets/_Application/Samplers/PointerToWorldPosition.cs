@@ -3,26 +3,32 @@ using UnityEngine;
 using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Cameras;
 
 namespace Netherlands3D.Twin.Samplers
 {
     public class PointerToWorldPosition : MonoBehaviour
-    {       
-        public Coordinate WorldPoint => worldPoint;
+    {      
+        [Obsolete("Use GetPointerWorldPoint() instead.", false)]
+        public Vector3 WorldPoint => GetPointerWorldPoint();
         [Obsolete("Removed. Use WorldPoint instead.", true)]
         public Coordinate WorldPointSync => default;
-        public Vector3 WorldPointHeightMap => worldPointHeightMap;
         public bool debugHeightmapPosition = false;
         
         private OpticalRaycaster opticalRaycaster;
-        private Action<Vector3, bool> worldPointCallback;
-        private Coordinate worldPoint;
         private Vector3 worldPointHeightMap;
         private float maxDistance = 10000;
 
         private GameObject testPosition;
         private Camera activeCamera;
+
+        private CachedPointerWorldPoint cachedPointerWorldPoint;
+
+        private struct CachedPointerWorldPoint
+        {
+            public int FrameCount;
+            public Vector2 PointerPosition;
+            public Vector3 PointerWorldPosition;
+        }
 
         private void Awake()
         {
@@ -31,29 +37,37 @@ namespace Netherlands3D.Twin.Samplers
 
         private void Start()
         {
+            
             activeCamera = App.Cameras.ActiveCamera;
             App.Cameras.OnSwitchCamera.AddListener(SetActiveCamera);
-            worldPointCallback = (w,h) =>
-            {
-                if (h)
-                    worldPoint = new Coordinate(w);
-                else
-                {
-                    Vector3 position = GetWorldPoint();
-                    worldPoint = new Coordinate(position);
-                }
-            };
         }
 
-        private void Update()
+        private Vector3 GetOrCalculatePointerWorldPoint()
+        {
+            if (Time.frameCount == cachedPointerWorldPoint.FrameCount || Pointer.current.position.ReadValue() == cachedPointerWorldPoint.PointerPosition)
+            {
+                return cachedPointerWorldPoint.PointerWorldPosition;
+            }
+
+            cachedPointerWorldPoint = new CachedPointerWorldPoint()
+            {
+                FrameCount = Time.frameCount,
+                PointerPosition = Pointer.current.position.ReadValue(),
+                PointerWorldPosition = CalculatePointerWorldPoint()
+            };      
+            return cachedPointerWorldPoint.PointerWorldPosition;
+        }
+
+        private Vector3 CalculatePointerWorldPoint()
         {
             var screenPoint = Pointer.current.position.ReadValue();
+            Vector3 worldPosition = default;
             Vector3 worldPositionHeightMap = default;
             var hasWorldPosition = opticalRaycaster.TryGetWorldPoint(activeCamera, screenPoint, out var worldPositionRaycaster);
 
             if (hasWorldPosition)
             {
-                worldPoint = new Coordinate(worldPositionRaycaster);
+                worldPosition = worldPositionRaycaster;
             }
            
             if (!hasWorldPosition || debugHeightmapPosition)
@@ -63,7 +77,7 @@ namespace Netherlands3D.Twin.Samplers
 
             if (!hasWorldPosition)
             {
-                worldPoint = new Coordinate(worldPositionHeightMap);
+                worldPosition = worldPositionHeightMap;
             }
 
             if(debugHeightmapPosition)
@@ -74,20 +88,33 @@ namespace Netherlands3D.Twin.Samplers
                     testPosition.transform.localScale = Vector3.one * 10;
                     testPosition.GetComponent<Renderer>().material.color = Color.green;
                 }
-                testPosition.transform.position = GetWorldPoint();
+                testPosition.transform.position = GetPointerWorldPoint();
             }
             else if(testPosition != null)
             {
                 Destroy(testPosition);
             }
-        }
 
+            return worldPosition;
+        }
+        
+        public Vector3 GetPointerWorldPoint()
+        {
+            return GetOrCalculatePointerWorldPoint();
+        }
+        
+        /// <summary>
+        /// Gets worldPoint underneath the pointer using the heightMap texture.
+        /// </summary>
         public Vector3 GetWorldPoint()
         {
             var screenPoint = Pointer.current.position.ReadValue();
             return GetWorldPoint(screenPoint, activeCamera);
         }
-
+        
+        /// <summary>
+        /// Gets worldPoint using the heightMap texture.
+        /// </summary>
         public Vector3 GetWorldPoint(Vector2 screenPosition)
         {
            return GetWorldPoint(screenPosition, activeCamera);

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Samplers;
 
@@ -16,7 +16,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public override void SetSelectionCurrentPosition(Vector3 position)
         {
-            var point = pointerToWorldPosition.WorldPoint.ToUnity();
+            var point = pointerToWorldPosition.GetPointerWorldPoint();
+
             if (point != Vector3.zero)
                 base.SetSelectionCurrentPosition(point);
             else
