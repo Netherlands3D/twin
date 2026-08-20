@@ -10,6 +10,8 @@ namespace Netherlands3D.Twin.Samplers
     public class PointerToWorldPosition : MonoBehaviour
     {       
         public Coordinate WorldPoint => worldPoint;
+        [Obsolete("Removed. Use WorldPoint instead.", true)]
+        public Coordinate WorldPointSync => default;
         public Vector3 WorldPointHeightMap => worldPointHeightMap;
         public bool debugHeightmapPosition = false;
         
