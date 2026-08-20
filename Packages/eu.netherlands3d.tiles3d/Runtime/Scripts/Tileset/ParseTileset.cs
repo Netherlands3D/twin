@@ -24,6 +24,7 @@ namespace Netherlands3D.Tiles3D
         {
             Tile root = new Tile();
             root.tileSet = tileset;
+            
             TilingMethod tilingMethod = TilingMethod.ExplicitTiling;
             double[] transformValues = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
             JSONNode transformNode = rootnode["transform"];
@@ -35,7 +36,7 @@ namespace Netherlands3D.Tiles3D
                 }
             }
             root.tileTransform = new TileTransform(transformValues);
-            root.transform = transformValues;
+            
             JSONNode implicitTilingNode = rootnode["implicitTiling"];
             if (implicitTilingNode != null)
             {
@@ -49,11 +50,12 @@ namespace Netherlands3D.Tiles3D
                     if(DebugLog)
                         Debug.Log("Explicit tiling");
                     Tile rootTile = new Tile();
+                    Debug.Log("tile created");
                     rootTile.tileSet = tileset;
                     rootTile.tileTransform = root.tileTransform;
                     root = ReadExplicitNode(rootnode, rootTile);
                     
-                    rootTile.transform = root.transform;
+                    
 
                     if (rootTile.children.Count==0 )
                     {
@@ -76,11 +78,9 @@ namespace Netherlands3D.Tiles3D
                     rootTile.level = 0;
                     rootTile.X = 0;
                     rootTile.Y = 0;
-                    rootTile.transform = root.transform;
                     rootTile.tileTransform = root.tileTransform;
                     ReadImplicitTiling(rootnode,rootTile);
 
-                    rootTile.transform = root.transform;
                     root = rootTile;
                     break;
                 default:
@@ -138,7 +138,6 @@ namespace Netherlands3D.Tiles3D
                 {
                     var childTile = new Tile();
                     childTile.tileSet = tile.tileSet;
-                    childTile.transform = tile.transform;
                     childTile.parent = tile;
                     tile.children.Add(ReadExplicitNode(childrenNode[i], childTile));
                 }
