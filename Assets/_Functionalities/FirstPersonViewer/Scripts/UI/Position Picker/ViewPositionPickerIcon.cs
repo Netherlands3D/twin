@@ -47,15 +47,13 @@ namespace Netherlands3D.FirstPersonViewer
 
             arrow.transform.localPosition = arrowPosition;
 
-            raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
+            var hit = raycaster.TryGetWorldPoint(Camera.main, screenPoint, out var point, snappingCullingMask);
+            if (hit)
             {
-                if (hit)
-                {
-                    //When the async call returns: If the object is destroyed. We don't need a position update.
-                    if (locationSphere == null) return;
-                    locationSphere.transform.position = point;
-                }
-            }, snappingCullingMask);
+                //When the async call returns: If the object is destroyed. We don't need a position update.
+                if (locationSphere == null) return;
+                locationSphere.transform.position = point;
+            }
         }
     }
 }

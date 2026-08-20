@@ -17,7 +17,6 @@ namespace Netherlands3D.Twin.Samplers
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
         private Vector3 worldPointHeightMap;
-        private Coordinate worldPointSync;
         private float maxDistance = 10000;
 
         private GameObject testPosition;
@@ -79,21 +78,6 @@ namespace Netherlands3D.Twin.Samplers
             {
                 Destroy(testPosition);
             }
-        }
-
-        public void GetPointerWorldPointAsync(Action<Vector3> result)
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
-            opticalRaycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
-            {
-                if (hit)
-                    result.Invoke(point);
-                else
-                {
-                    Vector3 position = GetWorldPoint();
-                    result.Invoke(position);
-                }  
-            });
         }
 
         public Vector3 GetWorldPoint()

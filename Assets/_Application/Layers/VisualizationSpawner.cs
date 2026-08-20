@@ -84,27 +84,25 @@ namespace Netherlands3D.Twin.Layers
             // Wrap the callback in a Task so that we can stay async
             var tcs = new TaskCompletionSource<LayerGameObject>();
 
-            opticalRaycaster.GetWorldPointAsync(centerOfViewport, async (position, isHit) =>
+            var isHit = opticalRaycaster.TryGetWorldPoint(Camera.main, centerOfViewport, out var position);
+            try
             {
-                try
+                LayerGameObject result;
+                if (isHit)
                 {
-                    LayerGameObject result;
-                    if (isHit)
-                    {
-                        result = await SpawnObjectAt(prefab, position, prefab.transform.rotation);
-                    }
-                    else
-                    {
-                        result = await SpawnObjectAtSpawnPoint(prefab);
-                    }
-                    tcs.SetResult(result);
+                    result = await SpawnObjectAt(prefab, position, prefab.transform.rotation);
                 }
-                catch (Exception ex)
+                else
                 {
-                    tcs.SetException(ex);
+                    result = await SpawnObjectAtSpawnPoint(prefab);
                 }
-            });
-
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+            
             return await tcs.Task;
         }
 

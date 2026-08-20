@@ -89,14 +89,20 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                  clickPosition = Pointer.current.position.ReadValue();
                  float heldTime = Time.time - LastClickTime;
                  if (heldTime > maxClickDuration)
-                    raycaster.GetWorldPointAsync(clickPosition, setMeasurementPointCallback, App.Cameras.ActiveCamera, measurementLayerMask);
+                 {
+                     var hit = raycaster.TryGetWorldPoint(App.Cameras.ActiveCamera, clickPosition, out var worldPosition, measurementLayerMask);
+                     setMeasurementPointCallback(worldPosition, hit);
+                 }
 
                  LastClickTime = Time.time;
             }
             if (mouseRClick.action.WasPressedThisFrame())
             {
-                if(measurementSegments.Count > 0)
-                    raycaster.GetWorldPointAsync(Pointer.current.position.ReadValue(), removeMeasurementPointCallback, App.Cameras.ActiveCamera, measurementLayerMask);
+                if (measurementSegments.Count > 0)
+                {
+                    var hit = raycaster.TryGetWorldPoint(App.Cameras.ActiveCamera, Pointer.current.position.ReadValue(), out var worldPosition, measurementLayerMask);
+                    removeMeasurementPointCallback(worldPosition, hit);
+                }
             }
         }
 

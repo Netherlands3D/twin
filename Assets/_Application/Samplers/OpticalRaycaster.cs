@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,54 +29,6 @@ namespace Netherlands3D.Twin.Samplers
         private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
 
         public const float MinimumDepth = 0.0001f;
-
-        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
-        {
-            GetWorldPointAsync(screenPoint, callback, Camera.main, cullingMask);
-        }
-
-        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, Camera camera, int cullingMask = defaultRaycastLayers)
-        {
-            if (activeRequests.Count > maxRequests)
-            {
-                callback.Invoke(Vector3.zero, false);
-                return;
-            }
-
-            OpticalRequest opticalRequest = GetRequest();
-            opticalRequest.SetActiveCamera(camera); 
-            opticalRequest.SetCullingMask(cullingMask);
-            opticalRequest.SetScreenPoint(screenPoint);
-            opticalRequest.AlignWithCamera();
-            opticalRequest.UpdateShaders();
-            opticalRequest.SetResultCallback(callback);
-            opticalRequest.framesActive = 0;
-            activeRequests.Add(opticalRequest);
-        }
-
-        public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[], bool> callback, int cullingMask = ~0)
-        {
-            if (activeRequests.Count > maxRequests)
-            {
-                callback.Invoke(null, false);
-                return;
-            }
-
-            MultiPointCallback multipointCallback = GetMultipointCallback();
-            multipointCallback.SetCallbackCompletion(callback);
-
-            for (int i = 0; i < 4; i++)
-            {
-                OpticalRequest opticalRequest = GetRequest();
-                opticalRequest.SetCullingMask(cullingMask);
-                opticalRequest.SetScreenPoint(screenPoints[i]);
-                opticalRequest.AlignWithCamera();
-                opticalRequest.UpdateShaders();
-                opticalRequest.SetResultCallback(multipointCallback.pointCallbacks[i]);
-                opticalRequest.framesActive = 0;
-                activeRequests.Add(opticalRequest);
-            }
-        }
 
         public void GetWorldPointFromDirectionAsync(Vector3 worldPosition, Vector3 direction, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
         {
@@ -139,23 +91,6 @@ namespace Netherlands3D.Twin.Samplers
         }
 
         /// <summary>
-        /// Only use this method if it is used continiously in Update.
-        /// If one sample is needed, use AlignDepthCameraToScreenPoint, and GetSamplerCameraWorldPoint
-        /// in a Coroutine with a WaitForEndOfFrame between every step.
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("Use TryGetWorldPoint instead.", false)]
-        public Vector3 GetWorldPointAtCameraScreenPoint(Camera camera, Vector3 screenPoint)
-        {
-            if (depthCamera == null) return Vector3.zero;
-
-            AlignWithCamera(camera, screenPoint);
-            RenderDepthCamera();
-
-            return GetDepthCameraWorldPoint();
-        }
-        
-        /// <summary>
         /// Get's the worldPoint synchronously.
         /// </summary>
         /// <param name="camera"></param>
@@ -176,13 +111,8 @@ namespace Netherlands3D.Twin.Samplers
             return pixel.a > 0;
         }
 
-        public Vector3 GetWorldPointFromPosition(Vector3 position, Vector3 direction)
-        {
-            AlignDepthCameraFromPositionToDirection(position, direction);
-            RenderDepthCamera();
 
-            return GetDepthCameraWorldPoint();
-        }
+
         
         public void AlignWithCamera(Camera camera, Vector3 screenPoint)
         {

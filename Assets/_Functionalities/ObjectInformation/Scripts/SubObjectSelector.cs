@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
@@ -163,7 +163,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             foundObject = null;
             string bagId = null;
-            Vector3 groundPosition = pointerToWorldPosition.GetWorldPointSync();
+            Vector3 groundPosition = pointerToWorldPosition.WorldPoint.ToUnity();
             Coordinate coord = new Coordinate(groundPosition);
             List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)

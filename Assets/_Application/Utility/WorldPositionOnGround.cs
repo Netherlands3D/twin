@@ -24,7 +24,8 @@ namespace Netherlands3D.Twin
             while(!positionFound && this != null)
             {
                 Vector3 screenPoint = Camera.main.WorldToScreenPoint(worldXZ);
-                opticalRaycaster.GetWorldPointAsync(screenPoint, Callback, 1 << LayerMask.NameToLayer("Terrain"));
+                var isHit = opticalRaycaster.TryGetWorldPoint(Camera.main, screenPoint, out var worldPoint, 1 << LayerMask.NameToLayer("Terrain"));
+                Callback(worldPoint, isHit);
                 yield return waitSecond;
             }
             if(positionFound)
