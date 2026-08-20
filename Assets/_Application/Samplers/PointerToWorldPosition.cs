@@ -1,4 +1,4 @@
-using UnityEngine.InputSystem;
+﻿using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
 using Netherlands3D.Coordinates;
@@ -47,10 +47,23 @@ namespace Netherlands3D.Twin.Samplers
         private void Update()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, activeCamera);
-            worldPointHeightMap = GetWorldPoint(screenPoint, activeCamera);
+            Vector3 worldPositionHeightMap = default;
+            var hasWorldPosition = opticalRaycaster.TryGetWorldPoint(activeCamera, screenPoint, out var worldPositionRaycaster);
 
+            if (hasWorldPosition)
+            {
+                worldPoint = new Coordinate(worldPositionRaycaster);
+            }
            
+            if (!hasWorldPosition || debugHeightmapPosition)
+            {
+                worldPositionHeightMap = GetWorldPoint(screenPoint, activeCamera);
+            }
+
+            if (!hasWorldPosition)
+            {
+                worldPoint = new Coordinate(worldPositionHeightMap);
+            }
 
             if(debugHeightmapPosition)
             {
@@ -83,12 +96,6 @@ namespace Netherlands3D.Twin.Samplers
             });
         }
 
-        public Vector3 GetWorldPointSync()
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
-            return opticalRaycaster.GetWorldPointAtCameraScreenPoint(App.Cameras.ActiveCamera, screenPoint);
-        }
-        
         public Vector3 GetWorldPoint()
         {
             var screenPoint = Pointer.current.position.ReadValue();
@@ -106,6 +113,9 @@ namespace Netherlands3D.Twin.Samplers
             return GetWorldPoint(screenPoint, activeCamera);
         }
 
+        /// <summary>
+        /// Gets worldPoint using the heightMap texture.
+        /// </summary>
         public Vector3 GetWorldPoint(Vector2 screenPosition, Camera camera)
         {            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);

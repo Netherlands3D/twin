@@ -144,6 +144,7 @@ namespace Netherlands3D.Twin.Samplers
         /// in a Coroutine with a WaitForEndOfFrame between every step.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("Use TryGetWorldPoint instead.", false)]
         public Vector3 GetWorldPointAtCameraScreenPoint(Camera camera, Vector3 screenPoint)
         {
             if (depthCamera == null) return Vector3.zero;
@@ -152,6 +153,27 @@ namespace Netherlands3D.Twin.Samplers
             RenderDepthCamera();
 
             return GetDepthCameraWorldPoint();
+        }
+        
+        /// <summary>
+        /// Get's the worldPoint synchronously.
+        /// </summary>
+        /// <param name="camera"></param>
+        /// <param name="screenPoint"></param>
+        /// <param name="worldPosition"></param>
+        /// <param name="cullingMask"></param>
+        /// <returns></returns>
+        public bool TryGetWorldPoint(Camera camera, Vector2 screenPoint, out Vector3 worldPosition, int cullingMask = defaultRaycastLayers)
+        {
+            AlignWithCamera(camera, screenPoint);
+            
+            depthCamera.cullingMask = cullingMask;
+            RenderDepthCamera();
+            
+            var pixel = samplerTexture.GetPixel(0, 0);
+            worldPosition = new Vector3(pixel.r, pixel.g, pixel.b);
+
+            return pixel.a > 0;
         }
 
         public Vector3 GetWorldPointFromPosition(Vector3 position, Vector3 direction)
