@@ -1,0 +1,55 @@
+.toolbar-scenario {
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 1;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.toolbar-scenario__label {
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0 0 0 var(--spacing-2);
+    min-height: var(--spacing-11);
+    height: var(--spacing-11);
+    color: var(--color-white);
+    text-shadow: 0 2px 2px var(--color-blue-900);
+    -unity-text-align: middle-center;
+}
+
+.toolbar-scenario .divider {
+  width: var(--spacing-0_5);
+  height: auto;
+  min-height: var(--spacing-7);
+  margin: var(--spacing-2);
+  background-color: var(--color-white);
+}
+
+.toolbar-scenario__button-group {
+    flex-grow: 0;
+    flex-shrink: 1;
+    margin: 0;
+    min-width: 0;
+    max-width: 100%;
+    background-color: transparent;
+}
+
+.toolbar-scenario__button-group > .unity-base-field__input {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    align-content: flex-start;
+}
+
+.toolbar-scenario__button-group .toolbar-scenario__button {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-right: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+}
