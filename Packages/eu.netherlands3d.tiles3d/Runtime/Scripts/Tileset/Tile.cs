@@ -62,6 +62,7 @@ namespace Netherlands3D.Tiles3D
             {
                 if (childTile.content != null)
                 {
+                    //todo make this a method
                     if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
                     {
                         if (childTile.isLoading)
@@ -88,6 +89,7 @@ namespace Netherlands3D.Tiles3D
             {
                 if (childTile.content != null)
                 {
+                    //todo make this a method
                     if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
                     {
 
@@ -432,14 +434,7 @@ namespace Netherlands3D.Tiles3D
     
         public bool ChildrenHaveContentActive()
         {
-            bool result = false;
-
-
-            if(loadedChildren+loadingChildren>0)
-
-                { return true;}
-
-            return false;
+            return loadedChildren+loadingChildren>0;
         }
         public void DestroyChildTilesIfTilesetOutOfView(Camera ofCamera)
         {
@@ -448,6 +443,7 @@ namespace Netherlands3D.Tiles3D
             {
                 return;
             }
+            //todo use inverse of method that needs be created for this
             if (contentUri.Contains(".json") || contentUri.Contains(".subtree"))
             {
                 if(IsInViewFrustrum(ofCamera)==false)
