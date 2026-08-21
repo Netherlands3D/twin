@@ -6,9 +6,7 @@
     editor-extension-mode="False"  
     class="toolbar-navigation"
 >
-    <ui:VisualElement class="toolbar-navigation__button toolbar-navigation__fpv" name="FPV">
-        <nl3d:Icon image="Fpv" color="White"/>
-    </ui:VisualElement>
-    <nl3d:Button class="toolbar-navigation__button toolbar-navigation__compass" name="North" button-type="transparent" button-style="IconOnly" icon="NorthArrow" />
+    <nl3d:Button class="toolbar-navigation__button" name="FPV" button-type="transparent" button-style="IconOnly" icon="Fpv" />
+    <nl3d:Button class="toolbar-navigation__button" name="North" button-type="transparent" button-style="IconOnly" icon="NorthArrow" />
     <nl3d:Toggle class="toolbar-navigation__button" name="Perspective" toggle-type="transparent" toggle-style="IconOnly" icon="OrthogonalView" />
 </ui:UXML>
