@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public override void SetSelectionCurrentPosition(Vector3 position)
         {
-            var point = pointerToWorldPosition.GetPointerWorldPoint();
+            var point = pointerToWorldPosition.GetOpticalWorldPoint();
 
             if (point != Vector3.zero)
                 base.SetSelectionCurrentPosition(point);

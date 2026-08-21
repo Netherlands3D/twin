@@ -1,6 +1,5 @@
 ﻿using UnityEngine.InputSystem;
 using UnityEngine;
-using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 
@@ -8,10 +7,6 @@ namespace Netherlands3D.Twin.Samplers
 {
     public class PointerToWorldPosition : MonoBehaviour
     {      
-        [Obsolete("Use GetPointerWorldPoint() instead.", false)]
-        public Vector3 WorldPoint => GetPointerWorldPoint();
-        [Obsolete("Removed. Use WorldPoint instead.", true)]
-        public Coordinate WorldPointSync => default;
         public bool debugHeightmapPosition = false;
         
         private OpticalRaycaster opticalRaycaster;
@@ -21,9 +16,9 @@ namespace Netherlands3D.Twin.Samplers
         private GameObject testPosition;
         private Camera activeCamera;
 
-        private CachedPointerWorldPoint cachedPointerWorldPoint;
+        private CachedOpticalWorldPoint cachedOpticalWorldPoint;
 
-        private struct CachedPointerWorldPoint
+        private struct CachedOpticalWorldPoint
         {
             public int FrameCount;
             public Vector2 PointerPosition;
@@ -40,10 +35,10 @@ namespace Netherlands3D.Twin.Samplers
             activeCamera = App.Cameras.ActiveCamera;
             App.Cameras.OnSwitchCamera.AddListener(SetActiveCamera);
         }
-
-        public Vector3 GetPointerWorldPoint()
+        
+        public Vector3 GetOpticalWorldPoint()
         {
-            return GetOrCalculatePointerWorldPoint();
+            return GetOrCalculateOpticalWorldPoint();
         }
         
         /// <summary>
@@ -103,23 +98,23 @@ namespace Netherlands3D.Twin.Samplers
 
         public void SetActiveCamera(Camera camera) => activeCamera = camera;
         
-        private Vector3 GetOrCalculatePointerWorldPoint()
+        private Vector3 GetOrCalculateOpticalWorldPoint()
         {
-            if (Time.frameCount == cachedPointerWorldPoint.FrameCount || Pointer.current.position.ReadValue() == cachedPointerWorldPoint.PointerPosition)
+            if (Time.frameCount == cachedOpticalWorldPoint.FrameCount || Pointer.current.position.ReadValue() == cachedOpticalWorldPoint.PointerPosition)
             {
-                return cachedPointerWorldPoint.PointerWorldPosition;
+                return cachedOpticalWorldPoint.PointerWorldPosition;
             }
 
-            cachedPointerWorldPoint = new CachedPointerWorldPoint()
+            cachedOpticalWorldPoint = new CachedOpticalWorldPoint()
             {
                 FrameCount = Time.frameCount,
                 PointerPosition = Pointer.current.position.ReadValue(),
-                PointerWorldPosition = CalculatePointerWorldPoint()
+                PointerWorldPosition = CalculateOpticalWorldPoint()
             };      
-            return cachedPointerWorldPoint.PointerWorldPosition;
+            return cachedOpticalWorldPoint.PointerWorldPosition;
         }
 
-        private Vector3 CalculatePointerWorldPoint()
+        private Vector3 CalculateOpticalWorldPoint()
         {
             var screenPoint = Pointer.current.position.ReadValue();
             Vector3 worldPosition = default;
@@ -149,7 +144,7 @@ namespace Netherlands3D.Twin.Samplers
                     testPosition.transform.localScale = Vector3.one * 10;
                     testPosition.GetComponent<Renderer>().material.color = Color.green;
                 }
-                testPosition.transform.position = GetPointerWorldPoint();
+                testPosition.transform.position = GetOpticalWorldPoint();
             }
             else if(testPosition != null)
             {

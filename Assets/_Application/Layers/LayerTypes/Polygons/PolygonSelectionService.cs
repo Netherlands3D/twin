@@ -119,8 +119,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public LayerData ProcessPolygonSelection()
         {
-            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(App.Cameras.ActiveCamera);
-            var worldPoint = pointerToWorldPosition.GetPointerWorldPoint();
+            var camera = App.Cameras.ActiveCamera;
+            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
+            var worldPoint = pointerToWorldPosition.GetOpticalWorldPoint();
 
             foreach (var layer in layers)
             {               
