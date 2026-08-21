@@ -35,6 +35,26 @@ namespace Netherlands3D.Twin.Samplers
             activeCamera = App.Cameras.ActiveCamera;
             App.Cameras.OnSwitchCamera.AddListener(SetActiveCamera);
         }
+
+        void Update()
+        {
+            if (debugHeightmapPosition)
+            {
+                var screenPoint = Pointer.current.position.ReadValue();
+                if (testPosition == null)
+                {
+                    testPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    testPosition.transform.localScale = Vector3.one * 10;
+                    testPosition.GetComponent<Renderer>().material.color = Color.green;
+                }
+
+                testPosition.transform.position = GetWorldPoint(screenPoint, activeCamera);;
+            }
+            else if(testPosition != null)
+            {
+                Destroy(testPosition);
+            }
+        }
         
         public Vector3 GetOpticalWorldPoint()
         {
@@ -118,39 +138,16 @@ namespace Netherlands3D.Twin.Samplers
         {
             var screenPoint = Pointer.current.position.ReadValue();
             Vector3 worldPosition = default;
-            Vector3 worldPositionHeightMap = default;
-            var hasWorldPosition = opticalRaycaster.TryGetWorldPoint(activeCamera, screenPoint, out var worldPositionRaycaster);
-            
-            if (hasWorldPosition)
+            if (opticalRaycaster.TryGetWorldPoint(activeCamera, screenPoint, out var hitPoint))
             {
-                worldPosition = worldPositionRaycaster;
+                worldPosition = hitPoint;
             }
-
-            if (!hasWorldPosition || debugHeightmapPosition)
+            else
             {
-                worldPositionHeightMap = GetWorldPoint(screenPoint, activeCamera);
-            }
-            
-            if (!hasWorldPosition)
-            {
+                var worldPositionHeightMap = GetWorldPoint(screenPoint, activeCamera);
                 worldPosition = worldPositionHeightMap;
             }
-
-            if(debugHeightmapPosition)
-            {
-                if(testPosition == null)
-                {
-                    testPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    testPosition.transform.localScale = Vector3.one * 10;
-                    testPosition.GetComponent<Renderer>().material.color = Color.green;
-                }
-                testPosition.transform.position = GetOpticalWorldPoint();
-            }
-            else if(testPosition != null)
-            {
-                Destroy(testPosition);
-            }
-
+           
             return worldPosition;
         }
         
