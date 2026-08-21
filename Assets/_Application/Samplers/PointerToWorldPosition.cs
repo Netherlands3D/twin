@@ -37,67 +37,10 @@ namespace Netherlands3D.Twin.Samplers
 
         private void Start()
         {
-            
             activeCamera = App.Cameras.ActiveCamera;
             App.Cameras.OnSwitchCamera.AddListener(SetActiveCamera);
         }
 
-        private Vector3 GetOrCalculatePointerWorldPoint()
-        {
-            if (Time.frameCount == cachedPointerWorldPoint.FrameCount || Pointer.current.position.ReadValue() == cachedPointerWorldPoint.PointerPosition)
-            {
-                return cachedPointerWorldPoint.PointerWorldPosition;
-            }
-
-            cachedPointerWorldPoint = new CachedPointerWorldPoint()
-            {
-                FrameCount = Time.frameCount,
-                PointerPosition = Pointer.current.position.ReadValue(),
-                PointerWorldPosition = CalculatePointerWorldPoint()
-            };      
-            return cachedPointerWorldPoint.PointerWorldPosition;
-        }
-
-        private Vector3 CalculatePointerWorldPoint()
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
-            Vector3 worldPosition = default;
-            Vector3 worldPositionHeightMap = default;
-            var hasWorldPosition = opticalRaycaster.TryGetWorldPoint(activeCamera, screenPoint, out var worldPositionRaycaster);
-
-            if (hasWorldPosition)
-            {
-                worldPosition = worldPositionRaycaster;
-            }
-           
-            if (!hasWorldPosition || debugHeightmapPosition)
-            {
-                worldPositionHeightMap = GetWorldPoint(screenPoint, activeCamera);
-            }
-
-            if (!hasWorldPosition)
-            {
-                worldPosition = worldPositionHeightMap;
-            }
-
-            if(debugHeightmapPosition)
-            {
-                if(testPosition == null)
-                {
-                    testPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    testPosition.transform.localScale = Vector3.one * 10;
-                    testPosition.GetComponent<Renderer>().material.color = Color.green;
-                }
-                testPosition.transform.position = GetPointerWorldPoint();
-            }
-            else if(testPosition != null)
-            {
-                Destroy(testPosition);
-            }
-
-            return worldPosition;
-        }
-        
         public Vector3 GetPointerWorldPoint()
         {
             return GetOrCalculatePointerWorldPoint();
@@ -159,6 +102,62 @@ namespace Netherlands3D.Twin.Samplers
         }
 
         public void SetActiveCamera(Camera camera) => activeCamera = camera;
+        
+        private Vector3 GetOrCalculatePointerWorldPoint()
+        {
+            if (Time.frameCount == cachedPointerWorldPoint.FrameCount || Pointer.current.position.ReadValue() == cachedPointerWorldPoint.PointerPosition)
+            {
+                return cachedPointerWorldPoint.PointerWorldPosition;
+            }
+
+            cachedPointerWorldPoint = new CachedPointerWorldPoint()
+            {
+                FrameCount = Time.frameCount,
+                PointerPosition = Pointer.current.position.ReadValue(),
+                PointerWorldPosition = CalculatePointerWorldPoint()
+            };      
+            return cachedPointerWorldPoint.PointerWorldPosition;
+        }
+
+        private Vector3 CalculatePointerWorldPoint()
+        {
+            var screenPoint = Pointer.current.position.ReadValue();
+            Vector3 worldPosition = default;
+            Vector3 worldPositionHeightMap = default;
+            var hasWorldPosition = opticalRaycaster.TryGetWorldPoint(activeCamera, screenPoint, out var worldPositionRaycaster);
+            
+            if (hasWorldPosition)
+            {
+                worldPosition = worldPositionRaycaster;
+            }
+
+            if (!hasWorldPosition || debugHeightmapPosition)
+            {
+                worldPositionHeightMap = GetWorldPoint(screenPoint, activeCamera);
+            }
+            
+            if (!hasWorldPosition)
+            {
+                worldPosition = worldPositionHeightMap;
+            }
+
+            if(debugHeightmapPosition)
+            {
+                if(testPosition == null)
+                {
+                    testPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    testPosition.transform.localScale = Vector3.one * 10;
+                    testPosition.GetComponent<Renderer>().material.color = Color.green;
+                }
+                testPosition.transform.position = GetPointerWorldPoint();
+            }
+            else if(testPosition != null)
+            {
+                Destroy(testPosition);
+            }
+
+            return worldPosition;
+        }
         
         private void OnDestroy()
         {
