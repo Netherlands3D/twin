@@ -47,11 +47,6 @@ namespace Netherlands3D.Twin.Samplers
         /// <summary>
         /// Get's the worldPoint synchronously.
         /// </summary>
-        /// <param name="camera"></param>
-        /// <param name="screenPoint"></param>
-        /// <param name="worldPosition"></param>
-        /// <param name="cullingMask"></param>
-        /// <returns></returns>
         public bool TryGetWorldPoint(Camera camera, Vector2 screenPoint, out Vector3 worldPosition, int cullingMask = defaultRaycastLayers)
         {
             AlignWithCamera(camera, screenPoint);
