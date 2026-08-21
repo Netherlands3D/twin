@@ -48,9 +48,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   depthCamera: {fileID: 8573467817945822858}
-  OnDepthSampled:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &4123874669779357784
 MonoBehaviour:
   m_ObjectHideFlags: 0
