@@ -74,13 +74,13 @@ namespace Netherlands3D.Twin.Samplers
             }
         }
 
-        public void AlignDepthCameraFromPositionToDirection(Vector3 position, Vector3 direction)
+        private void AlignDepthCameraFromPositionToDirection(Vector3 position, Vector3 direction)
         {
             //Align depth camera 
             depthCamera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(direction));
         }
 
-        public void RenderDepthCamera()
+        private void RenderDepthCamera()
         {
             //Read pixels from the depth texture
             depthCamera.Render();
