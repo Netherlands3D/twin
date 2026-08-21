@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1552071124099096867}
   - component: {fileID: 8885966354490939882}
   - component: {fileID: 886315986121191821}
+  - component: {fileID: 6600993147516098572}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -175,3 +176,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c084be5c84d8f65b3ac964cd1244059b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.Gebouwen
+--- !u!114 &6600993147516098572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c773ad61e38e6859e9993bf91c1e87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.CartesianTileLayerFeatureColoring
