@@ -454,8 +454,7 @@ namespace Netherlands3D.Tiles3D
             {
                 return;
             }
-            //todo use inverse of method that needs be created for this
-            if (contentUri.Contains(".json") || contentUri.Contains(".subtree"))
+            if (HasNoJsonOrSubtreeExtention == 1)
             {
                 if(IsInViewFrustrum(ofCamera)==false)
                     {
