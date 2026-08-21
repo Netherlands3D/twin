@@ -454,7 +454,7 @@ namespace Netherlands3D.Tiles3D
             {
                 return;
             }
-            if (HasNoJsonOrSubtreeExtention == 1)
+            if (IsLeaf)
             {
                 if(IsInViewFrustrum(ofCamera)==false)
                     {
@@ -468,18 +468,29 @@ namespace Netherlands3D.Tiles3D
                         child.DestroyChildTilesIfTilesetOutOfView(ofCamera);
                     }
             }
-
-            
-
         }
+
+        public bool IsLeaf = true;
+
+        public void AddChild(Tile child)
+        {
+            children.Add(child);
+            IsLeaf = false;
+        }
+
+        public void RemoveChild(Tile child)
+        {
+            children.Remove(child);
+            IsLeaf = children.Count == 0;
+        }
+        
         private void DestroyChildTiles()
         {
             if(children.Count == 0) return;
             for (int i = children.Count - 1; i >= 0 ; i--)
             {
                 children[i].DestroyChildTiles();
-                children[i] = null;
-                children.RemoveAt(i);
+                RemoveChild(children[i]);
             }
         }
     }

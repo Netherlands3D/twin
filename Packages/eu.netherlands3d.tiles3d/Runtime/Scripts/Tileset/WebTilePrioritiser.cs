@@ -122,6 +122,7 @@ namespace Netherlands3D.Tiles3D
                     int loadingchildcount = tile.CountLoadingChildren();
                     if (loadingchildcount==0)
                     {
+                        Dispose(tile);
                         delayedDisposeList.RemoveAt(i);
                     }
                 }
