@@ -49,6 +49,21 @@ namespace Netherlands3D.Tiles3D
         public string refine;
         public string contentUri = "";
         public Content content; //Gltf content
+        private byte hasNoJsonOrSubtreeExtention = 0; //0 not initialized, 1 has either one, 2 has none
+
+        public byte HasNoJsonOrSubtreeExtention
+        {
+            get
+            {
+                if (hasNoJsonOrSubtreeExtention == 0)
+                {
+                    hasNoJsonOrSubtreeExtention = 1;
+                    if(contentUri.Contains(".json") == false && contentUri.Contains(".subtree")==false)
+                        hasNoJsonOrSubtreeExtention = 2;
+                }
+                return hasNoJsonOrSubtreeExtention;
+            }
+        }
 
         public int CountLoadingChildren()
         {
@@ -62,8 +77,7 @@ namespace Netherlands3D.Tiles3D
             {
                 if (childTile.content != null)
                 {
-                    //todo make this a method
-                    if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
+                    if (childTile.HasNoJsonOrSubtreeExtention == 2)
                     {
                         if (childTile.isLoading)
                         {
@@ -89,22 +103,19 @@ namespace Netherlands3D.Tiles3D
             {
                 if (childTile.content != null)
                 {
-                    //todo make this a method
-                    if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
+                    if (childTile.HasNoJsonOrSubtreeExtention == 2)
                     {
-
                         if (childTile.content.State != Content.ContentLoadState.DOWNLOADING)
                         {
                             result++;
                         }
-
                     }
                 }
             }
-                foreach (var childTile in children)
-                {
-                    result += childTile.CountLoadedChildren();
-                }
+            foreach (var childTile in children)
+            {
+                result += childTile.CountLoadedChildren();
+            }
             loadedChildren = result;
             return result;
         }
