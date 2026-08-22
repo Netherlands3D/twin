@@ -94,28 +94,26 @@ namespace Netherlands3D.Tiles3D
         public int loadedChildren;
         public int CountLoadedChildren()
         {
-            int result = 0;
-            if (refine=="ADD")
-            {   loadedChildren =0;
+            if (refine == "ADD")
+            {
+                loadedChildren = 0;
                 return 0;
             }
+
+            int result = 0;
+
             foreach (var childTile in children)
             {
-                if (childTile.content != null)
+                if (childTile.content != null &&
+                    childTile.HasNoJsonOrSubtreeExtention == 2 &&
+                    childTile.content.State != Content.ContentLoadState.DOWNLOADING)
                 {
-                    if (childTile.HasNoJsonOrSubtreeExtention == 2)
-                    {
-                        if (childTile.content.State != Content.ContentLoadState.DOWNLOADING)
-                        {
-                            result++;
-                        }
-                    }
+                    result++;
                 }
-            }
-            foreach (var childTile in children)
-            {
+
                 result += childTile.CountLoadedChildren();
             }
+
             loadedChildren = result;
             return result;
         }
@@ -454,7 +452,7 @@ namespace Netherlands3D.Tiles3D
             {
                 return;
             }
-            if (IsLeaf)
+            if (HasNoJsonOrSubtreeExtention == 1)
             {
                 if(IsInViewFrustrum(ofCamera)==false)
                     {
