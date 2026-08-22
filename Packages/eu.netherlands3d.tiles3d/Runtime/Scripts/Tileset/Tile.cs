@@ -204,7 +204,7 @@ namespace Netherlands3D.Tiles3D
             loaded
         }
 
-
+        private Vector3 lastCameraPosition;
 
         public bool IsInViewFrustrum(Camera ofCamera)
         {
@@ -222,10 +222,14 @@ namespace Netherlands3D.Tiles3D
             }
             if (boundsAvailable)
             {
+                if (ofCamera.transform.position == lastCameraPosition)
+                    return inView;
+                
                 inView = false;
                 if (IsPointInbounds(new Coordinate(ofCamera.transform.position).Convert(tileSet.contentCoordinateSystem),8000d))
                 {
                     inView= ofCamera.InView(unityBounds);
+                    lastCameraPosition = ofCamera.transform.position;
                 }
                 
             }
