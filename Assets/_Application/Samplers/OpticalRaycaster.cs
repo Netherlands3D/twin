@@ -74,24 +74,6 @@ namespace Netherlands3D.Twin.Samplers
             return pixel.a > 0;
         }
 
-        private void AlignWithCamera(Camera camera, Vector3 screenPoint)
-        {
-            if (camera == null) camera = Camera.main;
-
-            depthCamera.transform.position = camera.transform.position;
-            if (camera.orthographic)
-            {
-                Vector3 worldPoint = camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)); 
-                depthCamera.transform.position = worldPoint - camera.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
-                depthCamera.transform.LookAt(worldPoint);
-            }
-            else
-            {
-                Vector3 worldPoint = camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane));
-                depthCamera.transform.LookAt(worldPoint);
-            }
-        }
-
         private void AlignDepthCameraFromPositionToDirection(Vector3 position, Vector3 direction)
         {
             //Align depth camera 
