@@ -24,13 +24,13 @@ namespace Netherlands3D.Masking
         private bool isDragging = false;
         [SerializeField] private float scale = 1.0f;
 
-
         private Coroutine animationCoroutine;
 
         [Header("Scale in animation")]
         [SerializeField] private AnimationCurve appearAnimationCurve;
         [SerializeField] private AnimationCurve movedAnimationCurve;
         [SerializeField] private float appearTime = 0.5f;
+        [SerializeField] private float scaleSpeed = 60.0f;
 
         private Vector3 offset;
 
@@ -62,7 +62,7 @@ namespace Netherlands3D.Masking
         private void Update() {
             this.transform.rotation = mainCamera.transform.rotation;
             
-            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * 60);
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * scaleSpeed);
         }
 
         public void MoveToScreenPoint()

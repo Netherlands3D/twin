@@ -9,7 +9,6 @@ namespace Netherlands3D.Masking
         [Header("Placement actions")]
         [SerializeField] private InputActionReference clickPlacementAction;
         [SerializeField] private float maxCameraTravelToPlacement = 20.0f; 
-       // [SerializeField] private DisappearDome disappearEffect;
         [SerializeField] private float margin;
 
         [Header("Global shader settings")]
