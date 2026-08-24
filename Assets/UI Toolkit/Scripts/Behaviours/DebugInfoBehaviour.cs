@@ -62,10 +62,9 @@ namespace Netherlands3D.UI.Behaviours
 
         private IEnumerator MemoryTick()
         {
-            memoryStats.SystemValue = systemMemorySize;
-
             while (true)
             {
+                memoryStats.SystemValue = SystemInfo.systemMemorySize;
                 memoryStats.ManagedValue = ConvertBytesToMegabytes(System.GC.GetTotalMemory(false));
                 yield return memoryUpdateWait;
             }
@@ -75,5 +74,7 @@ namespace Netherlands3D.UI.Behaviours
         {
             return bytes / BytesPerMegabyte;
         }
+        
+        
     }
 }

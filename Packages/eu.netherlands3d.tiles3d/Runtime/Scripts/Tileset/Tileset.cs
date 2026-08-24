@@ -138,6 +138,8 @@ namespace Netherlands3D.Tiles3D
         public string tilesetUrl;
         public Version version = Version.unsupported;
 
+        public string rootUrl="";
+
         public childTile rootnode;
         public TilingMethod tilingMethod{
         get{ return rootnode.tilingMethod; }        
@@ -146,13 +148,7 @@ namespace Netherlands3D.Tiles3D
         
         
 
-        public Tileset(string tileseturl, DownloadHelper downloadHelper=null)
-        {
-            this.downloadHelper = downloadHelper;
-            tilesetUrl = tileseturl;
-            getDownloadHelper();
-            downloadHelper.downloadData(tileseturl, receiveTileset);
-        }
+ 
         private void getDownloadHelper()
         {
             if (downloadHelper == null)
