@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
 namespace Netherlands3D.Twin.Samplers
@@ -8,7 +9,7 @@ namespace Netherlands3D.Twin.Samplers
         [SerializeField] private Camera depthCamera;
         private Texture2D samplerTexture;
         private RenderTexture renderTexture;
-        private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
+        public const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
         private const int MINIMUM_DEPTH_BUFFER_FORMAT = 16; //In the render graph API, the output Render Texture must have a depth buffer, this is the minimum value to keep the render texture light weight.
         
         void Start()
@@ -44,23 +45,7 @@ namespace Netherlands3D.Twin.Samplers
             Destroy(renderTexture);
         }
         
-        /// <summary>
-        /// Get's the worldPoint synchronously.
-        /// </summary>
-        public bool TryGetWorldPoint(Camera camera, Vector2 screenPoint, out Vector3 worldPosition, int cullingMask = defaultRaycastLayers)
-        {
-            AlignWithCamera(camera, screenPoint);
-            
-            depthCamera.cullingMask = cullingMask;
-            RenderDepthCamera();
-            
-            var pixel = samplerTexture.GetPixel(0, 0);
-            worldPosition = new Vector3(pixel.r, pixel.g, pixel.b);
-
-            return pixel.a > 0;
-        }
-        
-        public bool TryGetWorldPointFromDirection(Vector3 origin, Vector3 direction, out Vector3 hitPosition, int cullingMask = defaultRaycastLayers)
+        public bool Raycast(Vector3 origin, Vector3 direction, out Vector3 hitPosition, int cullingMask = defaultRaycastLayers)
         {
             AlignDepthCameraFromPositionToDirection(origin, direction);
 

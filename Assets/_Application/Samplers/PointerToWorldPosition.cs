@@ -120,7 +120,8 @@ namespace Netherlands3D.Twin.Samplers
         
         private Vector3 GetOrCalculateOpticalWorldPoint()
         {
-            if (Time.frameCount == cachedOpticalWorldPoint.FrameCount || Pointer.current.position.ReadValue() == cachedOpticalWorldPoint.PointerPosition)
+            if (Time.frameCount == cachedOpticalWorldPoint.FrameCount 
+                && Pointer.current.position.ReadValue() == cachedOpticalWorldPoint.PointerPosition)
             {
                 return cachedOpticalWorldPoint.PointerWorldPosition;
             }
@@ -138,7 +139,8 @@ namespace Netherlands3D.Twin.Samplers
         {
             var screenPoint = Pointer.current.position.ReadValue();
             Vector3 worldPosition = default;
-            if (opticalRaycaster.TryGetWorldPoint(activeCamera, screenPoint, out var hitPoint))
+            var ray = activeCamera.ScreenPointToRay(screenPoint);
+            if (opticalRaycaster.Raycast(ray.origin, ray.direction, out var hitPoint))
             {
                 worldPosition = hitPoint;
             }

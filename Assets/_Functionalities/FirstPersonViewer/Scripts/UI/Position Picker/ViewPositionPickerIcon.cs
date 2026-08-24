@@ -47,7 +47,8 @@ namespace Netherlands3D.FirstPersonViewer
 
             arrow.transform.localPosition = arrowPosition;
 
-            var hit = raycaster.TryGetWorldPoint(Camera.main, screenPoint, out var point, snappingCullingMask);
+            var ray = Camera.main.ScreenPointToRay(screenPoint);
+            var hit = raycaster.Raycast(ray.origin, ray.direction, out var point, snappingCullingMask);
             if (hit)
             {
                 //When the async call returns: If the object is destroyed. We don't need a position update.

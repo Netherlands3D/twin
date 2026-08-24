@@ -84,7 +84,8 @@ namespace Netherlands3D.Twin.Layers
             // Wrap the callback in a Task so that we can stay async
             var tcs = new TaskCompletionSource<LayerGameObject>();
 
-            var isHit = opticalRaycaster.TryGetWorldPoint(Camera.main, centerOfViewport, out var position);
+            var ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+            var isHit = opticalRaycaster.Raycast(ray.origin, ray.direction, out var position);
             try
             {
                 LayerGameObject result;

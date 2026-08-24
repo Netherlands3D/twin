@@ -14,6 +14,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private const float POINT_DELETE_DISTANCE = 1f;
 
         private OpticalRaycaster raycaster;
+        private PointerToWorldPosition pointerToWorldPosition;
         
         public List<FirstPersonMeasurementSegment> Segments => measurementSegments;
 
@@ -52,6 +53,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+            pointerToWorldPosition = ServiceLocator.GetService<PointerToWorldPosition>();
 
             setMeasurementPointCallback = SetMeasuringPoint;
             removeMeasurementPointCallback = RemoveMeasuringPoint;
@@ -90,7 +92,8 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                  float heldTime = Time.time - LastClickTime;
                  if (heldTime > maxClickDuration)
                  {
-                     var hit = raycaster.TryGetWorldPoint(App.Cameras.ActiveCamera, clickPosition, out var worldPosition, measurementLayerMask);
+                     var ray = App.Cameras.ActiveCamera.ScreenPointToRay(clickPosition);
+                     var hit = raycaster.Raycast(ray.origin, ray.direction, out var worldPosition, measurementLayerMask);
                      setMeasurementPointCallback(worldPosition, hit);
                  }
 
@@ -100,7 +103,8 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             {
                 if (measurementSegments.Count > 0)
                 {
-                    var hit = raycaster.TryGetWorldPoint(App.Cameras.ActiveCamera, Pointer.current.position.ReadValue(), out var worldPosition, measurementLayerMask);
+                    var ray = App.Cameras.ActiveCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
+                    var hit = raycaster.Raycast(ray.origin, ray.direction, out var worldPosition, measurementLayerMask);
                     removeMeasurementPointCallback(worldPosition, hit);
                 }
             }
