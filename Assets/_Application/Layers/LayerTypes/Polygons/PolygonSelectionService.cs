@@ -47,8 +47,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             ProjectData.Current.OnDataChanged.RemoveListener(RegisterPolygons);
         }
-
-        private Func<bool> CantSelectPredicate() => () => false;
         
         public void EnablePolygonSelection()
         {

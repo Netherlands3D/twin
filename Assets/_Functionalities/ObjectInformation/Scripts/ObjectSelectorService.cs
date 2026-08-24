@@ -219,17 +219,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             selectionConditions = new List<Func<bool>>
             {
-                CanSelectBecauseNotOverUI,
-                CanSelectBecauseWithinClickDistance
+                IsNotOverUI,
+                IsWithinClickDistance
             };
         }
 
-        private bool CanSelectBecauseNotOverUI()
+        private bool IsNotOverUI()
         {
             return !App.UIRoot.IsPointerOverUI();
         }
 
-        private bool CanSelectBecauseWithinClickDistance()
+        private bool IsWithinClickDistance()
         {
             return Vector2.Distance(
                 pointerDownPosition,
