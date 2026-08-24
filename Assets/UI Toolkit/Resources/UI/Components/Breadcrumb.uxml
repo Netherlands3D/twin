@@ -1,18 +1,5 @@
-<ui:UXML 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:ui="UnityEngine.UIElements" 
-    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
-    xmlns:nl3d="Netherlands3D.UI.Components"
-    editor-extension-mode="False" 
-    class="breadcrumb text-base"
->
-  <!-- Optional backbutton (style with-backbutton) -->
-  <nl3d:BackButton name="BackButton" class="backbutton" />
-
-  <!-- Optional leading icon (style with-icon) -->
-  <nl3d:Icon name="Icon" class="leadingicon" />
-
-  <!-- Trail: build C#-logic for crumbs + separators here -->
-  <ui:VisualElement name="Trail" class="trail" />
-
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="breadcrumb text-base">
+    <nl3d:BackButton name="BackButton" tooltip="Terug" class="backbutton"/>
+    <nl3d:Icon name="Icon" class="leadingicon"/>
+    <ui:VisualElement name="Trail" class="trail"/>
 </ui:UXML>
