@@ -2,21 +2,22 @@
 using UnityEngine;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 
 namespace Netherlands3D.Twin.Samplers
 {
     public class PointerToWorldPosition : MonoBehaviour
     {      
         public bool debugHeightmapPosition = false;
-        
+
         private OpticalRaycaster opticalRaycaster;
         private Vector3 worldPointHeightMap;
         private float maxDistance = 10000;
 
         private GameObject testPosition;
-        private Camera activeCamera;
 
         private CachedOpticalWorldPoint cachedOpticalWorldPoint;
+        private CameraService cameraService;
 
         private struct CachedOpticalWorldPoint
         {
@@ -28,12 +29,7 @@ namespace Netherlands3D.Twin.Samplers
         private void Awake()
         {
             opticalRaycaster = GetComponent<OpticalRaycaster>();
-        }
-
-        private void Start()
-        {
-            activeCamera = App.Cameras.ActiveCamera;
-            App.Cameras.OnSwitchCamera.AddListener(SetActiveCamera);
+            cameraService = App.Cameras;
         }
 
         void Update()
@@ -48,7 +44,7 @@ namespace Netherlands3D.Twin.Samplers
                     testPosition.GetComponent<Renderer>().material.color = Color.green;
                 }
 
-                testPosition.transform.position = GetWorldPointUsingHeightMap(screenPoint, activeCamera);;
+                testPosition.transform.position = GetWorldPointUsingHeightMap(screenPoint);;
             }
             else if(testPosition != null)
             {
@@ -67,30 +63,24 @@ namespace Netherlands3D.Twin.Samplers
         public Vector3 GetWorldPointUsingHeightMap()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            return GetWorldPointUsingHeightMap(screenPoint, activeCamera);
+            return GetWorldPointUsingHeightMap(screenPoint);
         }
-        
+
+        public Vector3 GetWorldPointCenterViewUsingHeightMap()
+        {
+            var screenPoint = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+            return GetWorldPointUsingHeightMap(screenPoint);
+        }
+
         /// <summary>
         /// Gets worldPoint using the heightMap texture.
         /// </summary>
         public Vector3 GetWorldPointUsingHeightMap(Vector2 screenPosition)
         {
-           return GetWorldPointUsingHeightMap(screenPosition, activeCamera);
-        }
-
-        public Vector3 GetWorldPointCenterView()
-        {
-            var screenPoint = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-            return GetWorldPointUsingHeightMap(screenPoint, activeCamera);
-        }
-
-        /// <summary>
-        /// Gets worldPoint using the heightMap texture.
-        /// </summary>
-        public Vector3 GetWorldPointUsingHeightMap(Vector2 screenPosition, Camera camera)
-        {            
+            var activeCamera = cameraService.ActiveCamera;
+            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
-            var screenRay = camera.ScreenPointToRay(screenPosition);
+            var screenRay = activeCamera.ScreenPointToRay(screenPosition);
             worldPlane.Raycast(screenRay, out float distance);
             Vector3 position;
             //when no valid point is found in for the raycast, lets invert the distance so we get a point in the sky
@@ -115,8 +105,6 @@ namespace Netherlands3D.Twin.Samplers
             Vector3 intersection = origin + dir * t;
             return intersection;
         }
-
-        public void SetActiveCamera(Camera camera) => activeCamera = camera;
         
         private Vector3 GetOrCalculateOpticalWorldPoint()
         {
@@ -137,6 +125,8 @@ namespace Netherlands3D.Twin.Samplers
 
         private Vector3 CalculateOpticalWorldPoint()
         {
+            var activeCamera = cameraService.ActiveCamera;
+            
             var screenPoint = Pointer.current.position.ReadValue();
             Vector3 worldPosition = default;
             var ray = activeCamera.ScreenPointToRay(screenPoint);
@@ -146,16 +136,11 @@ namespace Netherlands3D.Twin.Samplers
             }
             else
             {
-                var worldPositionHeightMap = GetWorldPointUsingHeightMap(screenPoint, activeCamera);
+                var worldPositionHeightMap = GetWorldPointUsingHeightMap(screenPoint);
                 worldPosition = worldPositionHeightMap;
             }
            
             return worldPosition;
-        }
-        
-        private void OnDestroy()
-        {
-            App.Cameras.OnSwitchCamera.RemoveListener(SetActiveCamera);
         }
     }
 }

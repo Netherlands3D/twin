@@ -7,7 +7,7 @@ namespace Netherlands3D.Twin.Utility
     {
         public static Vector3 GetSpawnPoint()
         {
-            return GameObject.FindAnyObjectByType<PointerToWorldPosition>().GetWorldPointCenterView();
+            return GameObject.FindAnyObjectByType<PointerToWorldPosition>().GetWorldPointCenterViewUsingHeightMap();
         }
     }
 }

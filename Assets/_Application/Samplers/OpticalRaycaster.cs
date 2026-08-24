@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
 namespace Netherlands3D.Twin.Samplers
@@ -12,11 +11,17 @@ namespace Netherlands3D.Twin.Samplers
         public const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
         private const int MINIMUM_DEPTH_BUFFER_FORMAT = 16; //In the render graph API, the output Render Texture must have a depth buffer, this is the minimum value to keep the render texture light weight.
         
-        void Start()
+        void Awake()
         {
             //We will only render on demand using camera.Render()
             depthCamera.enabled = false;
+        }
             
+        private void InitializeRenderResources()
+        {
+            if (renderTexture == null)
+                return;
+
             //because of webgl we cannot create a rendertexture with the prefered format.
             //the following error will occur in webgl if done so:
             //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
@@ -39,14 +44,25 @@ namespace Netherlands3D.Twin.Samplers
 
         private void OnDestroy()
         {
+            if (depthCamera != null)
+                depthCamera.targetTexture = null;
+
+            if (samplerTexture != null)
             Destroy(samplerTexture);
-            depthCamera.targetTexture = null; 
+
+            if (renderTexture != null)
+            {
+                if (renderTexture.IsCreated())
             renderTexture.Release();
+
             Destroy(renderTexture);
         }
-        
+        }
+
         public bool Raycast(Vector3 origin, Vector3 direction, out Vector3 hitPosition, int cullingMask = defaultRaycastLayers)
         {
+            InitializeRenderResources();
+            
             AlignDepthCameraFromPositionToDirection(origin, direction);
 
             depthCamera.cullingMask = cullingMask;

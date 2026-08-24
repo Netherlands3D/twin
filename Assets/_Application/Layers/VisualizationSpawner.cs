@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -78,13 +79,11 @@ namespace Netherlands3D.Twin.Layers
                 // if there is no optical raycaster - we fallback to the ObjectPlacementUtility's SpawnPoint
                 return await SpawnObjectAtSpawnPoint(prefab);
             }
-
-            var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0); //todo: replace with utility function
-
+            
             // Wrap the callback in a Task so that we can stay async
             var tcs = new TaskCompletionSource<LayerGameObject>();
 
-            var ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+            var ray = App.Cameras.ActiveCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));
             var isHit = opticalRaycaster.Raycast(ray.origin, ray.direction, out var position);
             try
             {

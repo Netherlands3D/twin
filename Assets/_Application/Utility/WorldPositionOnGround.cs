@@ -1,6 +1,7 @@
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using System.Collections;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -11,6 +12,12 @@ namespace Netherlands3D.Twin
         private bool positionFound = false;
         private Vector3 worldXZ;
         private WaitForSeconds waitSecond = new WaitForSeconds(1f);
+        private CameraService cameraService;
+
+        void Awake()
+        {
+            cameraService = App.Cameras;
+        }
         
         void Start()
         {
@@ -23,8 +30,8 @@ namespace Netherlands3D.Twin
         {
             while(!positionFound && this != null)
             {
-                Vector3 screenPoint = Camera.main.WorldToScreenPoint(worldXZ);
-                var ray = Camera.main.ScreenPointToRay(screenPoint);
+                Vector3 screenPoint = cameraService.ActiveCamera.WorldToScreenPoint(worldXZ);
+                var ray = cameraService.ActiveCamera.ScreenPointToRay(screenPoint);
                 var isHit = opticalRaycaster.Raycast(ray.origin, ray.direction, out var worldPoint, 1 << LayerMask.NameToLayer("Terrain"));
                 Callback(worldPoint, isHit);
                 yield return waitSecond;
