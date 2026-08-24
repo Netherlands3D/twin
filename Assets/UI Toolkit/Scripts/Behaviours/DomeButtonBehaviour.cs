@@ -1,13 +1,9 @@
-using System.Runtime.InteropServices;
-using Netherlands3D.Events;
 using Netherlands3D.Masking;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI.Components;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
@@ -17,10 +13,10 @@ namespace Netherlands3D.UI.Panels
     [CreateAssetMenu(fileName = "DomeButtonBehaviour", menuName = "ScriptableObjects/FloatingButtonBehaviours/DomeButtonBehaviour", order = 1)]
     public class DomeButtonBehaviour : FloatingButtonBehaviour
     {
-        
-        [SerializeField] private BoolEvent blockCameraDragListener;
-        private Button domeButton;
+        private DomeButton domeButton;
         private ToolService toolService;
+        
+        [SerializeField] private PointerStyle.Style styleOnHover = PointerStyle.Style.GRABBING;
 
         public override void Initialize(VisualElement parent)
         {
@@ -67,14 +63,9 @@ namespace Netherlands3D.UI.Panels
 
         public override VisualElement SpawnFloatingButtonContent()
         {
-            domeButton = new Button();
-            domeButton.Type = Button.ButtonType.Standard;
-            domeButton.name = "DomeButton";
-            domeButton.tooltip = "Verschaal de dome";
-            domeButton.ShowIcon = Button.ButtonStyle.IconOnly;
-            domeButton.Image = IconImage.SCALE_V_2;
-
-            domeButton.RegisterCallback<PointerDownEvent>(evt =>
+            domeButton = new DomeButton();
+            Button button = domeButton.Q<Button>();
+            button.RegisterCallback<PointerDownEvent>(evt =>
             {
                 VisualDome dome = App.Dome.Spawner.DomeVisualisation;
                 mainCamera = App.Cameras.ActiveCamera;
@@ -86,23 +77,23 @@ namespace Netherlands3D.UI.Panels
                 startDistance = Vector3.Distance(pointerStartDragPosition, pointerObjectStartPosition);
 
                 startScale = dome.transform.localScale;
-                domeButton.AddToClassList("grabbing");
+                button.AddToClassList("grabbing");
                 dragging = true;
             }, TrickleDown.TrickleDown);
 
-            domeButton.RegisterCallback<PointerUpEvent>(evt =>
+            button.RegisterCallback<PointerUpEvent>(evt =>
             {
                 dragging = false;
-                domeButton.RemoveFromClassList("grabbing");
-            });
+                button.RemoveFromClassList("grabbing");
+            }, TrickleDown.TrickleDown);
 
-            domeButton.RegisterCallback<PointerEnterEvent>(evt =>
+            button.RegisterCallback<PointerEnterEvent>(evt =>
             {
-                PointerStyle.ChangeCursor(PointerStyle.StyleOnHover);
+                PointerStyle.ChangeCursor(styleOnHover);
                 hovering = true;
             });
 
-            domeButton.RegisterCallback<PointerLeaveEvent>(evt =>
+            button.RegisterCallback<PointerLeaveEvent>(evt =>
             {
                 // Always change back cursor to CSS default 'auto'
                 PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
@@ -126,9 +117,10 @@ namespace Netherlands3D.UI.Panels
 
         public override void UpdateBehaviour()
         {
+            mainCamera = App.Cameras.ActiveCamera;
             VisualDome dome = App.Dome.Spawner.DomeVisualisation;
             var worldPos = App.Dome.Spawner.DomeVisualisation.ScaleAnchor.position;
-            var screenPos = App.Cameras.ActiveCamera.WorldToScreenPoint(worldPos);
+            var screenPos = mainCamera.WorldToScreenPoint(worldPos);
             Vector2 panelPos = App.UIRoot.GetUIPositionFromScreenPosition(screenPos);
             var contentPos = content.worldBound.position;
             var localPos = panelPos - contentPos;

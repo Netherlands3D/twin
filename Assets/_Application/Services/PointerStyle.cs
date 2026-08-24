@@ -8,11 +8,6 @@ namespace Netherlands3D
         [DllImport("__Internal")]
         private static extern string SetCSSCursor(string cursorName = "auto");
 
-        static PointerStyle()
-        {
-            styleOnHover = Style.GRABBING;
-            cursorType = Style.AUTO;
-        }
         
        public enum Style
         {
@@ -51,25 +46,13 @@ namespace Netherlands3D
             NESW_RESIZE,
             NWSE_RESIZE
         }
-
-        [SerializeField]
-        private static Style styleOnHover = Style.POINTER;
-
-        public static Style cursorType = Style.AUTO;
-
-        public static Style StyleOnHover
-        {
-            get => styleOnHover;
-            set => styleOnHover = value;
-        }
+    
 
         public static void ChangeCursor(Style type)
         {
-            cursorType = type;
-
             var cursorString = "";
 
-            switch (cursorType)
+            switch (type)
             {
                 case Style.AUTO:
                     cursorString = "auto";

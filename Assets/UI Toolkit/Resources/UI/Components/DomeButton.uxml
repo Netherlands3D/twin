@@ -1,0 +1,3 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="backbutton iconbutton unity-button">
+    <nl3d:Button name="DomeButton" button-type="Standard" button-style="IconOnly" icon="ScaleV2" class="domebutton" tooltip="Verschaal de dome"/>
+</ui:UXML>

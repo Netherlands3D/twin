@@ -9,10 +9,15 @@ namespace Netherlands3D
     [RequireComponent(typeof(MaskingDomeSpawner))]
     public class DomeService : MonoBehaviour
     {
-        public MaskingDomeSpawner Spawner => spawner ??= GetComponent<MaskingDomeSpawner>();
+        public MaskingDomeSpawner Spawner => spawner;
         public bool IsPointerOnDome => Spawner.IsPointerOnDome;
         
         private MaskingDomeSpawner spawner;
+
+        private void Awake()
+        {
+            spawner = GetComponent<MaskingDomeSpawner>();
+        }
 
         private void Start()
         {
