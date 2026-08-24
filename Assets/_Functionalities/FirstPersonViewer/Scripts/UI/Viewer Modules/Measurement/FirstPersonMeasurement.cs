@@ -14,7 +14,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private const float POINT_DELETE_DISTANCE = 1f;
 
         private OpticalRaycaster raycaster;
-        private PointerToWorldPosition pointerToWorldPosition;
         
         public List<FirstPersonMeasurementSegment> Segments => measurementSegments;
 
@@ -53,7 +52,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-            pointerToWorldPosition = ServiceLocator.GetService<PointerToWorldPosition>();
 
             setMeasurementPointCallback = SetMeasuringPoint;
             removeMeasurementPointCallback = RemoveMeasuringPoint;
