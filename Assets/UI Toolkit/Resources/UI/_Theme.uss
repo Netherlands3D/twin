@@ -163,6 +163,7 @@
     --icon-scalev1: url("project://database/Assets/Sprites/UI/Icons/Type=ScaleV1,%20Color=white,%20Size=medium.png");
     --icon-scalev2: url("project://database/Assets/Sprites/UI/Icons/Type=ScaleV2,%20Color=white,%20Size=medium.png");
     --icon-scatterobject: url("project://database/Assets/Sprites/UI/Icons/Type=ScatterObject,%20Color=white,%20Size=medium.png");
+    --icon-scenario: url("project://database/Assets/Sprites/UI/Icons/Type=Scenario,%20Color=white,%20Size=medium.png");
     --icon-search: url("project://database/Assets/Sprites/UI/Icons/Type=Search,%20Color=white,%20Size=medium.png");
     --icon-section: url("project://database/Assets/Sprites/UI/Icons/Type=Section,%20Color=white,%20Size=medium.png");
     --icon-selectionbox: url("project://database/Assets/Sprites/UI/Icons/Type=SelectionBox,%20Color=white,%20Size=medium.png");

@@ -293,6 +293,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnPropertiesChanged(LayerPropertyData propertyData)
         {
+            UpdateLayerTypeIcon();
             LoadProperties(LayerData.LayerProperties);
         }
 
@@ -362,9 +363,9 @@ namespace Netherlands3D.UI.Components
             layerTypeIcon.Image = LayerTypeSpriteLibrary.GetIconImage(LayerData); //todo test if the icon updates when setting prefab (scatter)
         }
 
-        private void UpdateNameLabels(LayerData layerData, string newName)
+        private void UpdateNameLabels(LayerData layerData, string _)
         {
-            nameInputField.SetValueWithoutNotify(newName);
+            nameInputField.SetValueWithoutNotify(layerData.Name);
         }
 
         public bool HasPropertiesWithPanel(List<LayerPropertyData> properties)

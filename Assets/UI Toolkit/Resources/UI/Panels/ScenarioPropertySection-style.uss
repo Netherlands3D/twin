@@ -1,0 +1,14 @@
+.scenario-property-section__explanation {
+    margin-top: var(--spacing-3);
+    padding: var(--spacing-3);
+    background-color: var(--color-blue-50);
+    border-radius: var(--border-radius-md);
+}
+
+.scenario-property-section__explanation .unity-label {
+    white-space: normal;
+}
+
+.scenario-property-section__tip {
+    margin-top: var(--spacing-4);
+}

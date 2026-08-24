@@ -62,6 +62,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void OnLayerAdded(LayerData layer)
         {
             SubscribeToLayer(layer);
+            if (layer.HasProperty<ScenarioPropertyData>())
+                selectedScenario = layer;
             RebuildScenarios();
         }
         
@@ -81,10 +83,39 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             RebuildScenarios();
         }
 
-        private void OnLayerNameChanged(LayerData layer, string _)
+        private void OnLayerNameChanged(LayerData layer, string name)
         {
-            UpdateScenarioProperty(layer);
+            if (!layer.HasProperty<FolderPropertyData>() || !TryGetScenarioName(name, out var scenarioName))
+            {
+                RebuildScenarios();
+                return;
+            }
+
+            layer.Name = scenarioName;
+            selectedScenario = layer;
+            SetScenarioState(layer, true);
+        }
+
+        private void OnLayerPropertyChanged(LayerPropertyData _)
+        {
             RebuildScenarios();
+        }
+
+        private static bool TryGetScenarioName(string name, out string scenarioName)
+        {
+            scenarioName = null;
+
+            if (string.IsNullOrWhiteSpace(name) || !name.StartsWith(ScenarioPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            scenarioName = name.Substring(ScenarioPrefix.Length).Trim();
+
+            if (string.IsNullOrWhiteSpace(scenarioName))
+                scenarioName = "Nieuw scenario";
+
+            return true;
         }
 
         private void RebuildScenarios()
@@ -96,9 +127,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 .GetFlatHierarchy();
 
             RefreshLayerSubscriptions(layers);
-
-            foreach (var layer in layers)
-                UpdateScenarioProperty(layer);
 
             scenarios.Clear();
             scenarios.AddRange(
@@ -181,10 +209,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             }
         }
 
-        private static void SetScenarioActive(
-    LayerData scenario,
-    bool active
-)
+        private static void SetScenarioActive(LayerData scenario, bool active)
         {
             scenario.ActiveSelf = active;
 
@@ -209,21 +234,16 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             return index >= 0 ? index : null;
         }
 
-        private static void UpdateScenarioProperty(
-            LayerData layer
-        )
+        public static void SetScenarioState(LayerData layer, bool isScenario)
         {
-            var hasScenarioName =
-                IsScenarioName(layer.Name);
-
-            if (hasScenarioName &&
-                layer.HasProperty<FolderPropertyData>() &&
-                !layer.HasProperty<ScenarioPropertyData>())
+            if (isScenario)
             {
+                if (layer.HasProperty<ScenarioPropertyData>())
+                    return;
+
                 layer.SetProperty(new ScenarioPropertyData());
 
-                var folderProperty =
-                    layer.GetProperty<FolderPropertyData>();
+                var folderProperty = layer.GetProperty<FolderPropertyData>();
 
                 if (folderProperty != null)
                     layer.RemoveProperty(folderProperty);
@@ -231,17 +251,15 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 return;
             }
 
-            if (!hasScenarioName &&
-                layer.HasProperty<ScenarioPropertyData>())
-            {
-                layer.SetProperty(new FolderPropertyData());
+            if (layer.HasProperty<FolderPropertyData>())
+                return;
 
-                var scenarioProperty =
-                    layer.GetProperty<ScenarioPropertyData>();
+            layer.SetProperty(new FolderPropertyData());
 
-                if (scenarioProperty != null)
-                    layer.RemoveProperty(scenarioProperty);
-            }
+            var scenarioProperty = layer.GetProperty<ScenarioPropertyData>();
+
+            if (scenarioProperty != null)
+                layer.RemoveProperty(scenarioProperty);
         }
 
         private static bool IsScenarioName(string name)
@@ -283,9 +301,9 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (!subscribedLayers.Add(layer))
                 return;
 
-            layer.NameChanged.AddListener(
-                OnLayerNameChanged
-            );
+            layer.NameChanged.AddListener(OnLayerNameChanged);
+            layer.PropertySet.AddListener(OnLayerPropertyChanged);
+            layer.PropertyRemoved.AddListener(OnLayerPropertyChanged);
         }
 
         private void UnsubscribeFromLayer(LayerData layer)
@@ -293,18 +311,18 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (!subscribedLayers.Remove(layer))
                 return;
 
-            layer.NameChanged.RemoveListener(
-                OnLayerNameChanged
-            );
+            layer.NameChanged.RemoveListener(OnLayerNameChanged);
+            layer.PropertySet.RemoveListener(OnLayerPropertyChanged);
+            layer.PropertyRemoved.RemoveListener(OnLayerPropertyChanged);
         }
 
         private void UnsubscribeFromAllLayers()
         {
             foreach (var layer in subscribedLayers)
             {
-                layer.NameChanged.RemoveListener(
-                    OnLayerNameChanged
-                );
+                layer.NameChanged.RemoveListener(OnLayerNameChanged);
+                layer.PropertySet.RemoveListener(OnLayerPropertyChanged);
+                layer.PropertyRemoved.RemoveListener(OnLayerPropertyChanged);
             }
 
             subscribedLayers.Clear();

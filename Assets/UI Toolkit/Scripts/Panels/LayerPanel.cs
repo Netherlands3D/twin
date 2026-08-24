@@ -37,6 +37,7 @@ namespace Netherlands3D.UI.Panels
         private LayerTreeViewItem referenceLayerItem;
         private Button hoveredButton;
 
+        private Button scenarioButton;
         private Button folderButton;
         private Button deleteButton;
         
@@ -78,6 +79,9 @@ namespace Netherlands3D.UI.Panels
             PopulateLayerPanel(ProjectData.Current.RootLayer);
 
             //bottom buttons
+            scenarioButton = this.Q<Button>("ScenarioButton");
+            scenarioButton.RegisterCallback<ClickEvent>(OnScenarioButtonClicked);
+
             folderButton = this.Q<Button>("FolderButton");
             folderButton.RegisterCallback<ClickEvent>(OnFolderButtonClicked);
 
@@ -129,6 +133,7 @@ namespace Netherlands3D.UI.Panels
         {
             App.Layers.LayerAdded.RemoveListener(OnLayerHierarchyChanged);
             App.Layers.LayerRemoved.RemoveListener(OnLayerHierarchyChanged);
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
         }
 
         public override void OnInspectorClick(InspectorPanel inspector)
@@ -141,7 +146,7 @@ namespace Netherlands3D.UI.Panels
 
             var inInspectorPanel = inspector.worldBound.Contains(panelPos);
             var inTreeViewLayerContainer = scrollView.contentContainer.worldBound.Contains(panelPos);
-            var overButton = deleteButton.worldBound.Contains(panelPos) || folderButton.worldBound.Contains(panelPos);
+            var overButton = deleteButton.worldBound.Contains(panelPos) || folderButton.worldBound.Contains(panelPos) || scenarioButton.worldBound.Contains(panelPos);
             if (inInspectorPanel && !inTreeViewLayerContainer && !overButton)
             {
                 treeView.ClearSelection();
@@ -191,6 +196,57 @@ namespace Netherlands3D.UI.Panels
             doRefresh = true;
         }
 
+        private void OnScenarioButtonClicked(ClickEvent evt)
+        {
+            CreateScenarioAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected
+        }
+
+        private void CreateScenarioAndGroupLayers(bool group)
+        {
+            var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList();
+            layersToGroup = layersToGroup.OrderBy(layer => layer.RootId).ToList();
+
+            var newScenario = App.Layers.Add(new ScenarioPreset.Args(GetUniqueScenarioName()));
+
+            var referenceLayer = referenceLayerItem?.LayerData;
+            var siblingIndex = referenceLayer == null ? -1 : referenceLayer.SiblingIndex;
+
+            newScenario.LayerData.SetParent(referenceLayer?.ParentLayer, siblingIndex);
+
+            if (group)
+            {
+                foreach (var selectedLayer in layersToGroup)
+                    selectedLayer.SetParent(newScenario.LayerData);
+            }
+
+            newScenario.LayerData.IsExpanded = true;
+
+            RebuildTree();
+
+            RequestSelection(
+                group ? layersToGroup : new List<LayerData> { newScenario.LayerData });
+        }
+
+        private string GetUniqueScenarioName()
+        {
+            const string defaultName = "Nieuw scenario";
+
+            var existingNames = ProjectData.Current.RootLayer
+                .GetFlatHierarchy()
+                .Select(layer => layer.Name)
+                .ToHashSet();
+
+            if (!existingNames.Contains(defaultName))
+                return defaultName;
+
+            var suffix = 2;
+
+            while (existingNames.Contains($"{defaultName} {suffix}"))
+                suffix++;
+
+            return $"{defaultName} {suffix}";
+        }
+
         private void OnFolderButtonClicked(ClickEvent evt)
         {
             CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected
@@ -199,7 +255,7 @@ namespace Netherlands3D.UI.Panels
         private void CreateFolderAndGroupLayers(bool group)
         {
             var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList(); //make a copy with ToList because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
-            layersToGroup.OrderBy(l => l.RootId);
+            layersToGroup = layersToGroup.OrderBy(layer => layer.RootId).ToList();
 
             var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
             var referenceLayer = referenceLayerItem?.LayerData;
@@ -524,6 +580,10 @@ namespace Netherlands3D.UI.Panels
                     DeleteSelectedLayers();
                 else if (hoveredButton == folderButton)
                     CreateFolderAndGroupLayers(true); //always group when dragging on the button
+                else if (hoveredButton == scenarioButton)
+                {
+                    CreateScenarioAndGroupLayers(true); //always group when dragging on the button
+                }
             }
             else if (hoveredItem != null)
             {
