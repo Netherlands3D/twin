@@ -2,10 +2,7 @@
     --menu-bg-color: transparent;
     --menu-border-color: var(--color-white);
     --menu-border-width: var(--spacing-0_5);
-    --menu-border-radius: var(--spacing-2);
-
-    /* Button styling overrides */
-    --hamburger-button-size: var(--spacing-6);
+    --menu-border-radius: var(--spacing-2);   
     --hamburger-button-bg: transparent;
     --hamburger-button-bg-hover: var(--color-blue-700-hover);
 
@@ -15,12 +12,11 @@
     align-items: center; 
     align-self: flex-start;
     margin-bottom: var(--spacing-2);
-    padding: 0;
-    height: var(--spacing-11);
     background-color: var(--menu-bg-color);
     border-color: var(--menu-border-color);
     border-width: var(--menu-border-width);
-    border-radius: var(--menu-border-radius);
+    border-radius: var(--menu-border-radius);    
+    max-height: var(--spacing-11);
 }
 
 .hamburger-menu .unity-foldout__toggle {
@@ -33,27 +29,26 @@
     padding: 0;
     align-items: center;
 }
-
 /* Use the Foldout checkmark as hamburger icon */
 .hamburger-menu .unity-foldout__checkmark {
     background-image: var(--icon-burgermenu);
-    width: var(--hamburger-button-size);
-    height: var(--hamburger-button-size);
     margin: var(--spacing-2);
-    border-radius: var(--spacing-2);
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    align-items: center;   
     background-color: var(--hamburger-button-bg);
     -unity-background-image-tint-color: var(--color-white);
+}
+
+/*todo the -3px shifts the right edge towards the button edge, find out why */ 
+.hamburger-menu .unity-foldout__content {
+    right: -3px;
 }
 
 .hamburger-menu .unity-toggle__input > .unity-label {
     display: none;
     color: var(--color-white);
     margin-left: var(--spacing-8);
-}
-
-/* Commented out internal foldout label for now (feature reserved for later) */
-.hamburger-menu.is-expanded  .unity-toggle__input > .unity-label {
-    /* display: flex; */
 }
 
 .hamburger-menu:hover {
@@ -66,43 +61,16 @@
     background-color: transparent;
 }
 
-.hamburger-menu .unity-foldout__content {
-    translate: 2px 0;
-    flex-direction: row;
-    margin-left: var(--spacing-4);
-    padding: 0;
-    width: auto;
-    min-width: 0;
-}
-
 .hamburger-menu__group {
     flex-direction: row;
-    flex-shrink: 0;
-    flex-grow: 0;
-    width: auto;
-    min-width: auto;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    background-color: transparent;
 }
 
-.hamburger-menu__group .button {
-    --button-margin: 0px;
-    width: var(--spacing-10);
-    min-width: var(--spacing-10);
+.hamburger-menu__group .button {   
     border-color: transparent;
-    border-radius: var(--spacing-1);
+    max-height: var(--spacing-11);
 }
 
 .hamburger-menu__group .button:hover {
     border-color: var(--color-blue-700);
 }
 
-/* Only the outer corners are rounded */
-.hamburger-menu__group .button.is-last {
-    width: var(--spacing-11);
-    min-width: var(--spacing-11);
-    border-top-right-radius: var(--spacing-2);
-    border-bottom-right-radius: var(--spacing-2);
-}
