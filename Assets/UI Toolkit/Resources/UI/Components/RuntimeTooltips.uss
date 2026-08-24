@@ -1,0 +1,12 @@
+.runtime-tooltip {
+    max-width: 260px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: white;
+    background-color: rgba(20, 20, 20, 0.95);
+    border-radius: 4px;
+    font-size: 13px;
+    white-space: normal;
+}

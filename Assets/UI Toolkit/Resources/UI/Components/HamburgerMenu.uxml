@@ -1,21 +1,8 @@
-<ui:UXML 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:ui="UnityEngine.UIElements" 
-  xmlns:nl3d="Netherlands3D.UI.Components" 
-  noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
-  editor-extension-mode="False" 
-  class="hamburger-menu text-header unity-foldout">
-
-  <!--
-    NOTE:
-    - Project title uses Foldout's internal Label (unity-label). Hidden via USS.
-    - Hamburger icon uses Foldout's internal checkmark (unity-foldout__checkmark), restyled via USS.
-  -->
-
-  <ui:VisualElement name="ButtonGroup" class="hamburger-menu__group">
-    <nl3d:Button name="Open" button-type="transparent" button-style="IconOnly" icon="UploadFolder" />
-    <nl3d:Button name="Save" button-type="transparent" button-style="IconOnly" icon="Save" />
-    <nl3d:ToolButton name="Settings" button-type="transparent" button-style="IconOnly" icon="Settings" toolType="Settings" />
-    <nl3d:Button name="Help" button-type="transparent" button-style="IconOnly" icon="Help" />
-  </ui:VisualElement>
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="hamburger-menu text-header unity-foldout">
+    <ui:VisualElement name="ButtonGroup" class="hamburger-menu__group">
+        <nl3d:Button name="Open" button-type="transparent" button-style="IconOnly" icon="UploadFolder" tooltip="Laad een bestand in"/>
+        <nl3d:Button name="Save" button-type="transparent" button-style="IconOnly" icon="Save" tooltip="Sla huidige scene op"/>
+        <nl3d:ToolButton name="Settings" button-type="transparent" button-style="IconOnly" icon="Settings" toolType="Settings" tooltip="Instellingen"/>
+        <nl3d:Button name="Help" button-type="transparent" button-style="IconOnly" icon="Help" tooltip="Meer informatie"/>
+    </ui:VisualElement>
 </ui:UXML>
