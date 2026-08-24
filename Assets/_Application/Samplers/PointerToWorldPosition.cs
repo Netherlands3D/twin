@@ -48,7 +48,7 @@ namespace Netherlands3D.Twin.Samplers
                     testPosition.GetComponent<Renderer>().material.color = Color.green;
                 }
 
-                testPosition.transform.position = GetWorldPoint(screenPoint, activeCamera);;
+                testPosition.transform.position = GetWorldPointUsingHeightMap(screenPoint, activeCamera);;
             }
             else if(testPosition != null)
             {
@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin.Samplers
             }
         }
         
-        public Vector3 GetOpticalWorldPoint()
+        public Vector3 GetWorldPointUsingOpticalRaycaster()
         {
             return GetOrCalculateOpticalWorldPoint();
         }
@@ -64,30 +64,30 @@ namespace Netherlands3D.Twin.Samplers
         /// <summary>
         /// Gets worldPoint underneath the pointer using the heightMap texture.
         /// </summary>
-        public Vector3 GetWorldPoint()
+        public Vector3 GetWorldPointUsingHeightMap()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            return GetWorldPoint(screenPoint, activeCamera);
+            return GetWorldPointUsingHeightMap(screenPoint, activeCamera);
         }
         
         /// <summary>
         /// Gets worldPoint using the heightMap texture.
         /// </summary>
-        public Vector3 GetWorldPoint(Vector2 screenPosition)
+        public Vector3 GetWorldPointUsingHeightMap(Vector2 screenPosition)
         {
-           return GetWorldPoint(screenPosition, activeCamera);
+           return GetWorldPointUsingHeightMap(screenPosition, activeCamera);
         }
 
         public Vector3 GetWorldPointCenterView()
         {
             var screenPoint = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-            return GetWorldPoint(screenPoint, activeCamera);
+            return GetWorldPointUsingHeightMap(screenPoint, activeCamera);
         }
 
         /// <summary>
         /// Gets worldPoint using the heightMap texture.
         /// </summary>
-        public Vector3 GetWorldPoint(Vector2 screenPosition, Camera camera)
+        public Vector3 GetWorldPointUsingHeightMap(Vector2 screenPosition, Camera camera)
         {            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
             var screenRay = camera.ScreenPointToRay(screenPosition);
@@ -146,7 +146,7 @@ namespace Netherlands3D.Twin.Samplers
             }
             else
             {
-                var worldPositionHeightMap = GetWorldPoint(screenPoint, activeCamera);
+                var worldPositionHeightMap = GetWorldPointUsingHeightMap(screenPoint, activeCamera);
                 worldPosition = worldPositionHeightMap;
             }
            

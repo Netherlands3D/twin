@@ -163,7 +163,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             foundObject = null;
             string bagId = null;
-            Vector3 groundPosition = pointerToWorldPosition.GetOpticalWorldPoint();
+            Vector3 groundPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
             Coordinate coord = new Coordinate(groundPosition);
             List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)

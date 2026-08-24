@@ -121,7 +121,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             var camera = App.Cameras.ActiveCamera;
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
-            var worldPoint = pointerToWorldPosition.GetOpticalWorldPoint();
+            var worldPoint = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
 
             foreach (var layer in layers)
             {               

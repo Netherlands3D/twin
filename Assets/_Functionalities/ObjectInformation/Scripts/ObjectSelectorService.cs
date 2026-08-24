@@ -466,8 +466,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.GetOpticalWorldPoint()) < minClickDistance;
-            lastWorldClickedPosition = pointerToWorldPosition.GetOpticalWorldPoint();
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster()) < minClickDistance;
+            lastWorldClickedPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;
