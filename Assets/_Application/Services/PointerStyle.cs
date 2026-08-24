@@ -3,10 +3,16 @@ using UnityEngine;
 
 namespace Netherlands3D
 {
-    public class PointerStyleService : MonoBehaviour
+    public static class PointerStyle
     {
         [DllImport("__Internal")]
         private static extern string SetCSSCursor(string cursorName = "auto");
+
+        static PointerStyle()
+        {
+            styleOnHover = Style.GRABBING;
+            cursorType = Style.AUTO;
+        }
         
        public enum Style
         {
@@ -47,17 +53,17 @@ namespace Netherlands3D
         }
 
         [SerializeField]
-        private Style styleOnHover = Style.POINTER;
+        private static Style styleOnHover = Style.POINTER;
 
-        public Style cursorType = Style.AUTO;
+        public static Style cursorType = Style.AUTO;
 
-        public Style StyleOnHover
+        public static Style StyleOnHover
         {
             get => styleOnHover;
             set => styleOnHover = value;
         }
 
-        public void ChangeCursor(Style type)
+        public static void ChangeCursor(Style type)
         {
             cursorType = type;
 

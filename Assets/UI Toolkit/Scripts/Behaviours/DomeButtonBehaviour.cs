@@ -17,23 +17,21 @@ namespace Netherlands3D.UI.Panels
     [CreateAssetMenu(fileName = "DomeButtonBehaviour", menuName = "ScriptableObjects/FloatingButtonBehaviours/DomeButtonBehaviour", order = 1)]
     public class DomeButtonBehaviour : FloatingButtonBehaviour
     {
-        //todo give tooltip
         
         [SerializeField] private BoolEvent blockCameraDragListener;
         private Button domeButton;
-        private PointerStyleService pointerStyleService;
+        private ToolService toolService;
 
         public override void Initialize(VisualElement parent)
         {
             base.Initialize(parent);
-            ToolService toolService = ServiceLocator.GetService<ToolService>();
+            toolService = ServiceLocator.GetService<ToolService>();
             toolService.GetTool(ToolType.Dome).onOpen.AddListener(OnEnableDome);
             toolService.GetTool(ToolType.Dome).onClose.AddListener(OnDisableDome);
             
             App.Dome.Spawner.DomeVisualisation.dragging.AddListener(OnDragDome);
             App.Dome.Spawner.DomeVisualisation.onHoveringChange.AddListener(OnHoverDome);
             
-            pointerStyleService = ServiceLocator.GetService<PointerStyleService>();
             OnDisableDome();
             
         }
@@ -51,9 +49,9 @@ namespace Netherlands3D.UI.Panels
         private void OnDragDome(bool drag)
         {
             if (drag)
-                pointerStyleService.ChangeCursor(PointerStyleService.Style.GRAB);
+                PointerStyle.ChangeCursor(PointerStyle.Style.GRAB);
             else
-                pointerStyleService.ChangeCursor(PointerStyleService.Style.POINTER);
+                PointerStyle.ChangeCursor(PointerStyle.Style.POINTER);
         }
 
         private void OnHoverDome(bool hover)
@@ -61,10 +59,10 @@ namespace Netherlands3D.UI.Panels
             if (hover)
             {
                 if(!dragging)
-                    pointerStyleService.ChangeCursor(PointerStyleService.Style.POINTER);
+                    PointerStyle.ChangeCursor(PointerStyle.Style.POINTER);
             }
             else
-                pointerStyleService.ChangeCursor(PointerStyleService.Style.AUTO);
+                PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
         }
 
         public override VisualElement SpawnFloatingButtonContent()
@@ -72,6 +70,7 @@ namespace Netherlands3D.UI.Panels
             domeButton = new Button();
             domeButton.Type = Button.ButtonType.Standard;
             domeButton.name = "DomeButton";
+            domeButton.tooltip = "Verschaal de dome";
             domeButton.ShowIcon = Button.ButtonStyle.IconOnly;
             domeButton.Image = IconImage.SCALE_V_2;
 
@@ -99,14 +98,14 @@ namespace Netherlands3D.UI.Panels
 
             domeButton.RegisterCallback<PointerEnterEvent>(evt =>
             {
-                pointerStyleService.ChangeCursor(pointerStyleService.StyleOnHover);
+                PointerStyle.ChangeCursor(PointerStyle.StyleOnHover);
                 hovering = true;
             });
 
             domeButton.RegisterCallback<PointerLeaveEvent>(evt =>
             {
                 // Always change back cursor to CSS default 'auto'
-                pointerStyleService.ChangeCursor(PointerStyleService.Style.AUTO);
+                PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
                 hovering = false;
             });
 
@@ -147,8 +146,7 @@ namespace Netherlands3D.UI.Panels
         public override void Dispose()
         {
             base.Dispose();
-            pointerStyleService.ChangeCursor(PointerStyleService.Style.AUTO);
-            ToolService toolService = ServiceLocator.GetService<ToolService>();
+            PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
             toolService.GetTool(ToolType.Dome).onOpen.RemoveListener(OnEnableDome);
             toolService.GetTool(ToolType.Dome).onClose.RemoveListener(OnDisableDome);
         }

@@ -23,6 +23,17 @@ namespace Netherlands3D.UI.Panels
         private FloatingPanelBehaviour selectedBehaviour;
         private VisualElement floatingElementsContent;
 
+        private void Start()
+        {
+            floatingElementsContent = new VisualElement();
+            App.UIRoot.Root.Add(floatingElementsContent);
+            
+            foreach (var buttonBehaviour in floatingButtonBehaviour)
+            {             
+                buttonBehaviour.Initialize(floatingElementsContent);
+            }
+        }
+
         void OnEnable()
         {
             floatingPanel = new FloatingPanel();
@@ -40,14 +51,17 @@ namespace Netherlands3D.UI.Panels
             leftClickAction.performed += OnLeftClick;
             longPressAction.performed += OnRightClick;
             touchAction.performed += OnLeftClick;
-
-
-            floatingElementsContent = new VisualElement();
-            App.UIRoot.Root.Add(floatingElementsContent);
-            foreach (var buttonBehaviour in floatingButtonBehaviour)
-            {             
-                buttonBehaviour.Initialize(floatingElementsContent);
-            }
+        }
+        
+        void OnDisable()
+        {
+            rightClickAction.performed -= OnRightClick;
+            leftClickAction.performed -= OnLeftClick;
+            longPressAction.performed -= OnRightClick;
+            touchAction.performed -= OnLeftClick;
+            
+            ClearActivePanel();
+            floatingPanel = null;
         }
 
         private void OnDestroy()
@@ -64,17 +78,6 @@ namespace Netherlands3D.UI.Panels
             {
                 buttonBehaviour.UpdateBehaviour();
             }
-        }
-
-        void OnDisable()
-        {
-            rightClickAction.performed -= OnRightClick;
-            leftClickAction.performed -= OnLeftClick;
-            longPressAction.performed -= OnRightClick;
-            touchAction.performed -= OnLeftClick;
-            
-            ClearActivePanel();
-            floatingPanel = null;
         }
 
         public void ClearActivePanel()
