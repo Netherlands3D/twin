@@ -124,6 +124,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 decimalCount = value;
+                Debug.Log(GetFormatString(value));
                 formatString = GetFormatString(value);
             }
         }
@@ -335,7 +336,7 @@ namespace Netherlands3D.UI.Components
             if (decimals == 0)
                 return "0";
 
-            string zeros = new string('#', decimals);
+            string zeros = new string('0', decimals);
             return $"0.{zeros}";
         }
     }
