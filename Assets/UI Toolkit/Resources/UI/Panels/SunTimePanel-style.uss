@@ -3,7 +3,6 @@
     --sun-time-label-spacing: var(--spacing-1);
     --sun-shadow-cell-margin: 3px;
     
-    display: flex;
     flex-direction: column;
     opacity: 1;
     transition-property: opacity;
