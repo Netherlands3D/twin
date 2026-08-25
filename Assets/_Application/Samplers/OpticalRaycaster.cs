@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin.Samplers
             
         private void InitializeRenderResources()
         {
-            if (renderTexture == null)
+            if (renderTexture != null)
                 return;
 
             //because of webgl we cannot create a rendertexture with the prefered format.
