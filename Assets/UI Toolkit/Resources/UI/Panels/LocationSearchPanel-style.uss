@@ -9,10 +9,6 @@
     padding: var(--spacing-3);
 }
 
-.location-search-panel.hidden {
-    display: none;
-}
-
 .location-search-panel .auto-complete {
     margin-bottom: var(--field-spacing);
 }
