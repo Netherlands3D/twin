@@ -43,7 +43,8 @@ namespace Netherlands3D.UI.Components
         public void UpdateCompass(float yawInDegrees)
         {
             North.Q<Icon>().style.rotate = new StyleRotate(new Rotate(yawInDegrees));
-            North.EnableInClassList("toolbar-navigation__compass--north", yawInDegrees is > 359.0f or < 1.0f);
+            /*Disabled to keep the north arrow base style at all camera angles.*/
+            // North.EnableInClassList("toolbar-navigation__compass--north", yawInDegrees is > 359.0f or < 1.0f);
         }
 
         private void OnToggleOrthographicView(ChangeEvent<bool> evt)

@@ -28,13 +28,3 @@
 .app--functionality-first-person-viewer .toolbar-navigation__button.toolbar-navigation__fpv {
     display: flex;
 }
-
-/* We need a deep hierarchy level because of the specificity in the button component */
-.toolbar-navigation .toolbar-navigation__button.toolbar-navigation__compass .icon {
-    --icon-tint-color: var(--color-blue-700);
-}
-
-/* We need a deep hierarchy level because of the specificity in the button component */
-.toolbar-navigation .toolbar-navigation__button.toolbar-navigation__compass.toolbar-navigation__compass--north .icon {
-    --icon-tint-color: var(--color-white);
-}
