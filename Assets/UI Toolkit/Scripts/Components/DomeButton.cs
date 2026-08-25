@@ -41,14 +41,14 @@ namespace Netherlands3D.UI.Components
                 startDistance = Vector3.Distance(pointerStartDragPosition, pointerObjectStartPosition);
 
                 startScale = dome.transform.localScale;
-                button.AddToClassList("grabbing");
+                AddToClassList("grabbing");
                 dragging = true;
             }, TrickleDown.TrickleDown);
 
             button.RegisterCallback<PointerUpEvent>(evt =>
             {
                 dragging = false;
-                button.RemoveFromClassList("grabbing");
+                RemoveFromClassList("grabbing");
             }, TrickleDown.TrickleDown);
 
             button.RegisterCallback<PointerEnterEvent>(evt =>
