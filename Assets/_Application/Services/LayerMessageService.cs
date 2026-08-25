@@ -1,6 +1,7 @@
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.Events;
@@ -71,6 +72,8 @@ namespace Netherlands3D.Twin.Services
 
         private void OnLayerAdded(LayerData layerData)
         {
+            if(layerData is RootLayer) return;
+            
             if (activeCounter > 0)
                 activeMessage += $" ,{layerData.Name}";
             else
@@ -82,6 +85,8 @@ namespace Netherlands3D.Twin.Services
         //todo switch counter when adding -> removing or removing -> adding
         private void OnLayerRemoved(LayerData layerData)
         {
+            if(layerData is RootLayer) return;
+            
             if (activeCounter > 0)
                 activeMessage += $" ,{layerData.Name}";
             else
