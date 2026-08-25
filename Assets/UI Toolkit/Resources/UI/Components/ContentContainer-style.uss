@@ -26,22 +26,22 @@
 .contentcontainer .unity-foldout__content {
     margin-left: 0;
 }
-.contentcontainer .unity-foldout__toggle {
+.contentcontainer > .unity-foldout__toggle {
     margin: 0;
 }
 
-.contentcontainer:checked .unity-foldout__toggle > .unity-toggle__input {
+.contentcontainer:checked > .unity-foldout__toggle > .unity-toggle__input {
     margin-bottom: var(--spacing-3);
 }
 
-.contentcontainer .unity-foldout__checkmark {
+.contentcontainer > .unity-foldout__toggle > .unity-toggle__input > .unity-foldout__checkmark {
     background-image: var(--icon-chevronright); 
     width: var(--spacing-6);
     height: var(--spacing-6);
     margin: 0;
 }
 
-.contentcontainer:checked .unity-foldout__checkmark {
+.contentcontainer:checked > .unity-foldout__toggle > .unity-toggle__input > .unity-foldout__checkmark  {
     background-image: var(--icon-chevrondown);
 }
 
@@ -51,7 +51,7 @@
     color: var(--color-text);
 }
 
-.contentcontainer.unity-foldout__content {
+.contentcontainer > .unity-foldout__content {
     margin: 0;
 }
 
