@@ -78,7 +78,6 @@ namespace Netherlands3D.Twin.Cameras
 
             // Pull forward camera to make sure that what is in center of the screen stays there
             Vector3 screenPosition = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
-            pointer.GetWorldPointCenterViewUsingHeightMap();
             Vector3 target = pointer.GetWorldPointUsingHeightMap(screenPosition);            
             var cameraLookWorldPosition = target;
             cameraLookWorldPosition.y = transform.position.y;
