@@ -13,6 +13,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -329,7 +330,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnLayerDataParentChanged()
         {
-            LayerData.LayerProperties.Get<ToggleScatterPropertyData>().AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
+            var allowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
+            LayerData.LayerProperties.Get<ToggleScatterPropertyData>().AllowScatter = allowScatter;
+
+            var propertyPanelService = ServiceLocator.GetService<PropertyPanelBehaviour>();
+            if (propertyPanelService.activeLayer == LayerData) //reload the property section if the settings changed
+            {
+                propertyPanelService.SpawnPanel(LayerData);
+            }
         }
 
         private void OnImportedObjectVisualized(GameObject importedObject)
