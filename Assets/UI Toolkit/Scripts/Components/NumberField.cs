@@ -124,7 +124,6 @@ namespace Netherlands3D.UI.Components
             set
             {
                 decimalCount = value;
-                Debug.Log(GetFormatString(value));
                 formatString = GetFormatString(value);
             }
         }
