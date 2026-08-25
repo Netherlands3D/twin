@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
@@ -16,6 +17,7 @@ namespace Netherlands3D.Twin.Layers
     public class VisualizationSpawner : ILayerSpawner
     {
         private readonly PrefabLibrary prefabLibrary;
+        private PointerToWorldPosition pointerToWorldPosition;
 
         public VisualizationSpawner(PrefabLibrary prefabLibrary)
         {
@@ -125,8 +127,10 @@ namespace Netherlands3D.Twin.Layers
 
         private async Task<LayerGameObject> SpawnObjectAtSpawnPoint(
             LayerGameObject prefab
-        ) {
-            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
+        )
+        {
+            pointerToWorldPosition ??= ServiceLocator.GetService<PointerToWorldPosition>();
+            var spawnPoint = pointerToWorldPosition.GetWorldPointCenterViewUsingHeightMap();
 
             return await SpawnObjectAt(prefab, spawnPoint, Quaternion.identity);
         }
