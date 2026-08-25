@@ -135,6 +135,7 @@ namespace Netherlands3D.UI.Panels
                 floatingPanel.SetEnabled(true);
                 floatingPanel.Add(floatingPanelContent);
                 floatingPanel.SetPosition(screenPos);
+                floatingPanel.BringToFront();
                 break;
             }
         }
