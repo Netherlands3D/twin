@@ -282,7 +282,6 @@ namespace Netherlands3D.UI.Components
             }
 
             headerDivider.EnableInClassList(UtilityClassConstants.HIDDEN, !showDivider);
-            UnityEngine.Debug.Log("created divider ");
         }
 
         // /// <summary>
