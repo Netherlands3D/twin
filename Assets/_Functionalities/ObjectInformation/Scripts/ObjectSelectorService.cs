@@ -184,10 +184,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Collider col = hit.collider;
                     if (col != null)
                     {
-                        HierarchicalObjectLayerGameObject target = col.GetComponent<HierarchicalObjectLayerGameObject>();
-                        if(target != null)
+                        HierarchicalObjectLayerGameObject target = col.GetComponentInChildren<HierarchicalObjectLayerGameObject>();
+                        if (target == null)
+                            target = col.GetComponentInParent<HierarchicalObjectLayerGameObject>();
+                        if (target != null)
                             ctxObject = target;
-
                         hasHit = true;
                     }
                 }
