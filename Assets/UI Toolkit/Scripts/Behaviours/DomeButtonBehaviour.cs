@@ -54,7 +54,7 @@ namespace Netherlands3D.UI.Panels
         {
             if (hover)
             {
-                if(!dragging)
+                if(!domeButton.Dragging)
                     PointerStyle.ChangeCursor(PointerStyle.Style.POINTER);
             }
             else
@@ -64,74 +64,25 @@ namespace Netherlands3D.UI.Panels
         public override VisualElement SpawnFloatingButtonContent()
         {
             domeButton = new DomeButton();
-            Button button = domeButton.Q<Button>();
-            button.RegisterCallback<PointerDownEvent>(evt =>
-            {
-                VisualDome dome = App.Dome.Spawner.DomeVisualisation;
-                mainCamera = App.Cameras.ActiveCamera;
-
-                pointerStartDragPosition = mainCamera.ScreenToViewportPoint(Pointer.current.position.ReadValue());
-                pointerObjectStartPosition = mainCamera.WorldToViewportPoint(dome.transform.position);
-                pointerObjectStartPosition.z = 0; //Remove depth
-
-                startDistance = Vector3.Distance(pointerStartDragPosition, pointerObjectStartPosition);
-
-                startScale = dome.transform.localScale;
-                button.AddToClassList("grabbing");
-                dragging = true;
-            }, TrickleDown.TrickleDown);
-
-            button.RegisterCallback<PointerUpEvent>(evt =>
-            {
-                dragging = false;
-                button.RemoveFromClassList("grabbing");
-            }, TrickleDown.TrickleDown);
-
-            button.RegisterCallback<PointerEnterEvent>(evt =>
-            {
-                PointerStyle.ChangeCursor(styleOnHover);
-                hovering = true;
-            });
-
-            button.RegisterCallback<PointerLeaveEvent>(evt =>
-            {
-                // Always change back cursor to CSS default 'auto'
-                PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
-                hovering = false;
-            });
-
+            domeButton.SetStyleOnHover(styleOnHover);
             return domeButton;
         }
 
-        private Camera mainCamera;
-
         [SerializeField] private float scaleMultiplier = 2.0f;
-
-        private Vector3 startScale = Vector3.one;
-        private Vector3 pointerStartDragPosition;
-        private Vector3 pointerObjectStartPosition;
-
-        private float startDistance;
-        private bool hovering = false;
-        private bool dragging = false;
 
         public override void UpdateBehaviour()
         {
-            mainCamera = App.Cameras.ActiveCamera;
             VisualDome dome = App.Dome.Spawner.DomeVisualisation;
             var worldPos = App.Dome.Spawner.DomeVisualisation.ScaleAnchor.position;
-            var screenPos = mainCamera.WorldToScreenPoint(worldPos);
+            var screenPos =  App.Cameras.ActiveCamera.WorldToScreenPoint(worldPos);
             Vector2 panelPos = App.UIRoot.GetUIPositionFromScreenPosition(screenPos);
             var contentPos = content.worldBound.position;
             var localPos = panelPos - contentPos;
             floatingButton.SetPosition(localPos);
 
-            if (dragging)
+            if (domeButton.Dragging)
             {
-                var pointerViewportPoint = mainCamera.ScreenToViewportPoint(Pointer.current.position.ReadValue());
-                float dist = Vector3.Distance(pointerViewportPoint, pointerObjectStartPosition);
-                var distancePointerMoved = dist / startDistance;
-                dome.SetTargetScale(startScale * distancePointerMoved);
+                dome.SetTargetScale(domeButton.GetDistanceScale());
             }
         }
         
