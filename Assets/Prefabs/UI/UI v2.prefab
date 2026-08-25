@@ -92,6 +92,7 @@ Transform:
   - {fileID: 1955165290551131509}
   - {fileID: 3977341333048145246}
   - {fileID: 5246216560922750945}
+  - {fileID: 4765081458409217524}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -509,7 +510,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1a852118643daa48b5b3f2eaa0c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI_Toolkit.Scripts.Behaviours.ToolbarTopBehaviour
-  snapshotEvent: {fileID: 11400000, guid: b1c270f3fc728cc4ea719d048fa6ea7f, type: 2}
 --- !u!1 &6344507626500150337
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,3 +638,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.MinimapBehaviour
   minimapConfig: {fileID: 11400000, guid: e6d0b533c91ab9249906b9d224cb6b6f, type: 2}
+--- !u!1 &8929667644022415580
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4765081458409217524}
+  - component: {fileID: 8036814369229748236}
+  m_Layer: 0
+  m_Name: Scenario's
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4765081458409217524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929667644022415580}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8036814369229748236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929667644022415580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31145f616687fe94aa6b20d5e03b7023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.Layers.UI.HierarchyInspector.ScenarioManager

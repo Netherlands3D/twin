@@ -14,7 +14,7 @@
     height: var(--toolbar-height);
     min-height: var(--toolbar-height);
     max-height: var(--toolbar-max-height);
-    margin: 0 var(--spacing-1) var(--spacing-3) var(--spacing-3);
+    margin: 0 var(--spacing-2) 0 var(--spacing-2);
     background-color: transparent;
 }
 

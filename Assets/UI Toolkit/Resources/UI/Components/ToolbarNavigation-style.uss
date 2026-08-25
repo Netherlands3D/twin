@@ -25,6 +25,10 @@
     border-radius: var(--spacing-2);
 }
 
+.toolbar-navigation__button.toolbar-navigation__fpv .label {
+    display: none;
+}
+
 .app--functionality-first-person-viewer .toolbar-navigation__button.toolbar-navigation__fpv {
     display: flex;
 }

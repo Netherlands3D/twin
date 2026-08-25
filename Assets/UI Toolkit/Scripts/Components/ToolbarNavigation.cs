@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Components
     {
         private Button North => this.Q<Button>("North");
         private Toggle Perspective => this.Q<Toggle>("Perspective");
-        private VisualElement FPV => this.Q<VisualElement>("FPV");
+        private Button FPV => this.Q<Button>("FPV");
         
         public ToolbarNavigation()
         {
