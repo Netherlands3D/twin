@@ -2,6 +2,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.JavascriptConnection;
 using Netherlands3D.Minimap;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
@@ -163,10 +164,11 @@ namespace Netherlands3D.UI.Components
             locationPin.style.scale = Vector3.one / wmtsPanel.resolvedStyle.scale.value.x;
         }
         
-        public void UpdateFrustum() 
+        public void UpdateFrustum()
         {
-            CameraExtents.GetRDExtent(Camera.main);
-            var cameraCorners = CameraExtents.GetWorldSpaceCorners(Camera.main);
+            Camera current = App.Cameras.ActiveCamera;
+            CameraExtents.GetRDExtent(current);
+            var cameraCorners = CameraExtents.GetWorldSpaceCorners(current);
             if (cameraCorners != null)
             {
                 //Align quad with camera extent points

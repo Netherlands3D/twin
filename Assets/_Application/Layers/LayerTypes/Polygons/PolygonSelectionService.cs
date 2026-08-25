@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -14,22 +16,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     public class PolygonSelectionService : MonoBehaviour
     {
         public LayerData SelectedLayer => selectedLayer;
-    
+
         public bool PolygonSelectionEnabled => polygonSelectionEnabled;
-        
+        public bool IsEditingPolygon => polygonCreationService.IsPolygonInputActive;
+
         private LayerData selectedLayer;
-        private List<LayerData> layers = new(); 
+        private List<LayerData> layers = new();
         private PointerToWorldPosition pointerToWorldPosition;
         private PolygonCreationService polygonCreationService;
-        
+
         [SerializeField] private Tool layerTool;
 
         public UnityEvent<bool> OnPolygonSelectionEnabled = new();
         public UnityEvent OnDeselectActivePolygon = new();
         public UnityEvent OnSelectActivePolygon = new();
-        
         private bool polygonSelectionEnabled = false;
-        
+
         private void Awake()
         {
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
@@ -38,13 +40,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnEnable()
         {
             polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
-            ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
         }
 
         private void OnDisable()
         {
-            ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
+            ProjectData.Current.OnDataChanged.RemoveListener(RegisterPolygons);
         }
         
         public void EnablePolygonSelection()
@@ -116,10 +117,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        private void ProcessClick()
+        public LayerData ProcessPolygonSelection()
         {
-            var camera = Camera.main;
-            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
+            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(App.Cameras.ActiveCamera);
             var worldPoint = pointerToWorldPosition.WorldPoint.ToUnity();
 
             foreach (var layer in layers)
@@ -128,13 +128,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 if (wasSelected && polygonSelectionEnabled)
                 {
                     layer.SelectLayer(true);
-                    return; //select only one
+                    return layer; //select only one
                 }
                 else
                 {
                     layer.DeselectLayer(); //deselect if the click wasn't in the polygon and the multiselect modifier keys aren't pressed
                 }
             }
+
+            return null;
         }
         
         private bool PolygonWasSelected(LayerData layer, Plane[] frustumPlanes, Vector3 worldPoint)
