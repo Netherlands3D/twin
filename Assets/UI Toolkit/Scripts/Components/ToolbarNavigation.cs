@@ -50,7 +50,6 @@ namespace Netherlands3D.UI.Components
         private void OnToggleOrthographicView(ChangeEvent<bool> evt)
         {
             ServiceLocator.GetService<CameraService>().ActiveCamera.GetComponent<FreeCamera>()?.EnableOrtographic(evt.newValue);
-            UpdatePerspectiveIcon();
         }
 
         private void UpdatePerspectiveIcon()
