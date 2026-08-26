@@ -13,12 +13,8 @@ namespace Netherlands3D.Twin.Layers
     public class LayerBuilder : ILayerBuilder
     {
         internal string Type { get; private set; }
-        internal Vector3? Position { get; private set; }
-        internal Quaternion? Rotation { get; private set; }
-        internal Uri Url { get; private set; }
         private string Name { get; set; }
         private Color? Color { get; set; }
-        internal StoredAuthorization Credentials { get; set; }
         internal List<LayerPropertyData> Properties { get; } = new();
         [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
         private Action<LayerData> whenBuilt;
@@ -52,20 +48,6 @@ namespace Netherlands3D.Twin.Layers
             return this;
         }
 
-        public ILayerBuilder At(Uri url)
-        {
-            Url = url;
-
-            return this;
-        }
-
-        public ILayerBuilder WithCredentials(StoredAuthorization creds)
-        {
-            Credentials = creds;
-            
-            return this;
-        }
-
         public ILayerBuilder AddProperty(LayerPropertyData property)
         {
             Properties.Add(property);
@@ -76,20 +58,6 @@ namespace Netherlands3D.Twin.Layers
         public ILayerBuilder AddProperties(params LayerPropertyData[] properties)
         {
             Properties.AddRange(properties);
-            
-            return this;
-        }
-
-        public ILayerBuilder PositionedAt(Vector3 position)
-        {
-            Position = position;
-            
-            return this;
-        }
-
-        public ILayerBuilder Rotated(Quaternion rotation)
-        {
-            Rotation = rotation;
             
             return this;
         }

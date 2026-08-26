@@ -1,238 +1,313 @@
+using System;
+using Netherlands3D.UI.Components;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
     public class ScenarioManager : MonoBehaviour
     {
-        [Header("UI wiring")]
-        [SerializeField] private RectTransform scenarioToggleContainer;
-        [SerializeField] private Scenario scenarioTogglePrefab;
+        private const string ScenarioPrefix = "Scenario:";
 
-        private readonly List<Scenario> scenarios = new();
-        private Scenario selectedScenario;
+        private readonly List<LayerData> scenarios = new();
+        private readonly HashSet<LayerData> subscribedLayers = new();
 
-        private void Awake()
-        {
-            if (!scenarioToggleContainer || !scenarioTogglePrefab)
-            {
-                Debug.LogError("ScenarioToggleContainer or ScenarioTogglePrefab is NOT assigned in the inspector.");
-            }
-        }
-
-        private void Start()
-        {
-            SetScenarioContainerEnabled(false);
-        }
+        private ToolbarScenario toolbar;
+        private LayerData selectedScenario;
 
         private void OnEnable()
         {
+            toolbar = App.UIRoot.Root.Q<ToolbarScenario>();
+
+            if (toolbar == null)
+            {
+                Debug.LogError(
+                    "ToolbarScenario is missing from the UI Toolkit hierarchy."
+                );
+                return;
+            }
+
+            toolbar.SelectionChanged += OnToolbarSelectionChanged;
+
             App.Layers.LayerAdded.AddListener(OnLayerAdded);
-            App.Layers.LayerRemoved.AddListener(OnLayerDeleted);
-            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
+            App.Layers.LayerRemoved.AddListener(OnLayerRemoved);
+            ProjectData.Current.OnDataChanged.AddListener(
+                OnProjectDataChanged
+            );
+
+            RebuildScenarios();
         }
 
         private void OnDisable()
         {
+            if (toolbar != null)
+            {
+                toolbar.SelectionChanged -=
+                    OnToolbarSelectionChanged;
+            }
+
             App.Layers.LayerAdded.RemoveListener(OnLayerAdded);
-            App.Layers.LayerRemoved.RemoveListener(OnLayerDeleted);
-            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
+            App.Layers.LayerRemoved.RemoveListener(OnLayerRemoved);
+            ProjectData.Current.OnDataChanged.RemoveListener(
+                OnProjectDataChanged
+            );
+
+            UnsubscribeFromAllLayers();
         }
 
         private void OnLayerAdded(LayerData layer)
         {
-            layer.NameChanged.AddListener(ConvertToScenario);
-            layer.NameChanged.AddListener(ConvertScenarioToFolder);
-            layer.NameChanged.AddListener(UpdateLabelForScenario);  
-
-            if (layer.HasProperty<ScenarioPropertyData>())
-            {
-                RebuildScenarioUI();
-            }            
+            SubscribeToLayer(layer);
+            RebuildScenarios();
         }
         
-        private void OnLayerDeleted(LayerData layer)
+        private void OnLayerRemoved(LayerData layer)
         {
-            layer.NameChanged.RemoveListener(ConvertToScenario);
-            layer.NameChanged.RemoveListener(ConvertScenarioToFolder);
-            layer.NameChanged.RemoveListener(UpdateLabelForScenario);
+            UnsubscribeFromLayer(layer);
 
-            if (layer.HasProperty<ScenarioPropertyData>())
+            if (selectedScenario == layer)
+                selectedScenario = null;
+
+            RebuildScenarios();
+        }
+
+        private void OnProjectDataChanged(ProjectData _)
+        {
+            selectedScenario = null;
+            RebuildScenarios();
+        }
+
+        private void OnLayerNameChanged(LayerData layer, string _)
+        {
+            UpdateScenarioProperty(layer);
+            RebuildScenarios();
+        }
+
+        private void RebuildScenarios()
+        {
+            if (toolbar == null)
+                return;
+
+            var layers = ProjectData.Current.RootLayer
+                .GetFlatHierarchy();
+
+            RefreshLayerSubscriptions(layers);
+
+            foreach (var layer in layers)
+                UpdateScenarioProperty(layer);
+
+            scenarios.Clear();
+            scenarios.AddRange(
+                layers.Where(
+                    layer =>
+                        layer.HasProperty<ScenarioPropertyData>()
+                )
+            );
+
+            if (selectedScenario != null &&
+                !scenarios.Contains(selectedScenario))
             {
-                RemoveScenario(layer);
-                DeselectScenario(layer);
-                if (scenarios.Count == 0)
-                    SetScenarioContainerEnabled(false);
-                
-                RebuildScenarioUI();
+                selectedScenario = null;
             }
+
+            // Preserve existing behaviour: automatically select
+            // the first scenario when scenarios exist.
+            if (selectedScenario == null && scenarios.Count > 0)
+                selectedScenario = scenarios[0];
+
+            ApplyScenarioVisibility();
+
+            var labels = scenarios
+                .Select(scenario => GetScenarioLabel(scenario.Name))
+                .ToList();
+
+            toolbar.SetScenarios(
+                labels,
+                GetSelectedScenarioIndex()
+            );
         }
 
-        private void OnProjectDataChanged(ProjectData newProject)
+        private void OnToolbarSelectionChanged(int? selectedIndex)
         {
-            RebuildScenarioUI();
-        }
-        
-        private void ConvertToScenario(LayerData folder, string name)
-        {
-            if(IsScenarioTag(folder.Name) && folder.HasProperty<FolderPropertyData>())
+            if (!selectedIndex.HasValue)
             {
-                folder.SetProperty(new ScenarioPropertyData());
-                folder.RemoveProperty(folder.GetProperty<FolderPropertyData>());
-                AddScenario(folder);
-                SetScenarioContainerEnabled(true);
-                SelectScenario(folder);
-            }
-        }
-
-        private void ConvertScenarioToFolder(LayerData scenario, string name)
-        {
-            if (!IsScenarioTag(scenario.Name) && scenario.HasProperty<ScenarioPropertyData>())
-            {
-                scenario.SetProperty(new FolderPropertyData());
-                scenario.RemoveProperty(scenario.GetProperty<FolderPropertyData>());
-                RemoveScenario(scenario);
-                DeselectScenario(scenario);
-                if (scenarios.Count == 0)
-                    SetScenarioContainerEnabled(false);
-            }
-        }   
-        
-        private bool IsScenarioTag(string tag)
-        {
-            return tag.StartsWith("Scenario:") || tag.StartsWith("scenario:");
-        }
-
-        private void AddScenario(LayerData layer)
-        {
-            Scenario scenario = Instantiate(scenarioTogglePrefab, scenarioToggleContainer);
-            scenario.SetLabel(layer.Name);
-            scenario.SetLayer(layer);
-            scenarios.Add(scenario);
-            scenario.VisibilityChanged.AddListener(v => OnScenarioVisiblityChanged(v, scenario));
-            
-        }
-
-        private void OnScenarioVisiblityChanged(bool visible, Scenario scenario)
-        {
-            if (visible)
-            {
-                if (selectedScenario != scenario)
+                if (selectedScenario != null)
                 {
-                    if(selectedScenario != null)
-                        DeselectScenario(selectedScenario.Layer);
-                    SelectScenario(scenario.Layer);
+                    SetScenarioActive(
+                        selectedScenario,
+                        false
+                    );
                 }
+
+                selectedScenario = null;
+                return;
+            }
+
+            if (selectedIndex.Value < 0 ||
+                selectedIndex.Value >= scenarios.Count)
+            {
+                return;
+            }
+
+            var newScenario = scenarios[selectedIndex.Value];
+
+            if (selectedScenario == newScenario)
+                return;
+
+            if (selectedScenario != null)
+            {
+                SetScenarioActive(
+                    selectedScenario,
+                    false
+                );
+            }
+
+            selectedScenario = newScenario;
+            SetScenarioActive(selectedScenario, true);
+        }
+
+        private void ApplyScenarioVisibility()
+        {
+            foreach (var scenario in scenarios)
+            {
+                SetScenarioActive(
+                    scenario,
+                    scenario == selectedScenario
+                );
+            }
+        }
+
+        private static void SetScenarioActive(
+    LayerData scenario,
+    bool active
+)
+        {
+            scenario.ActiveSelf = active;
+
+            if (active)
+            {
+                if (!scenario.IsSelected)
+                    scenario.SelectLayer();
             }
             else
-                DeselectScenario(scenario.Layer);
-        }
-
-        private void RemoveScenario(LayerData layer)
-        {
-            foreach (var scenario in scenarios)
             {
-                if (scenario.Layer == layer)
-                {
-                    scenarios.Remove(scenario);
-                    Destroy(scenario.gameObject);
-                    return;
-                }
+                if (scenario.IsSelected)
+                    scenario.DeselectLayer();
             }
         }
 
-        private void SelectScenario(LayerData layer)
+        private int? GetSelectedScenarioIndex()
         {
-            foreach (var scenario in scenarios)
+            if (selectedScenario == null)
+                return null;
+
+            var index = scenarios.IndexOf(selectedScenario);
+            return index >= 0 ? index : null;
+        }
+
+        private static void UpdateScenarioProperty(
+            LayerData layer
+        )
+        {
+            var hasScenarioName =
+                IsScenarioName(layer.Name);
+
+            if (hasScenarioName &&
+                layer.HasProperty<FolderPropertyData>() &&
+                !layer.HasProperty<ScenarioPropertyData>())
             {
-                if (scenario.Layer == layer)
-                {
-                    ActivateScenario(scenario.Layer, true);
-                    selectedScenario = scenario;
-                    layer.SelectLayer();
-                    return;
-                }
+                layer.SetProperty(new ScenarioPropertyData());
+
+                var folderProperty =
+                    layer.GetProperty<FolderPropertyData>();
+
+                if (folderProperty != null)
+                    layer.RemoveProperty(folderProperty);
+
+                return;
+            }
+
+            if (!hasScenarioName &&
+                layer.HasProperty<ScenarioPropertyData>())
+            {
+                layer.SetProperty(new FolderPropertyData());
+
+                var scenarioProperty =
+                    layer.GetProperty<ScenarioPropertyData>();
+
+                if (scenarioProperty != null)
+                    layer.RemoveProperty(scenarioProperty);
             }
         }
 
-        private void DeselectScenario(LayerData layer)
+        private static bool IsScenarioName(string name)
         {
-            foreach (var scenario in scenarios)
-            {
-                if (scenario.Layer == layer)
-                {
-                    ActivateScenario(scenario.Layer, false);
-                    if(selectedScenario?.Layer == layer)
-                        selectedScenario = null;
-                  
-                    layer.DeselectLayer();
-                    return;
-                }
-            }
+            return !string.IsNullOrWhiteSpace(name) &&
+                   name.StartsWith(
+                       ScenarioPrefix,
+                       StringComparison.OrdinalIgnoreCase
+                   );
         }
 
-        private void SetScenarioContainerEnabled(bool enabled)
+        private static string GetScenarioLabel(string name)
         {
-            scenarioToggleContainer.gameObject.SetActive(enabled);
+            if (!IsScenarioName(name))
+                return name;
+
+            return name
+                .Substring(ScenarioPrefix.Length)
+                .Trim();
         }
 
-        private void RebuildScenarioUI()
+        private void RefreshLayerSubscriptions(
+            IReadOnlyCollection<LayerData> layers
+        )
         {
-            // Default: hide the scenario bar; only show when we actually have scenarios
-            SetScenarioContainerEnabled(false);
- 
-            // Clear existing UI
-            Scenario[] markers = scenarioToggleContainer.GetComponentsInChildren<Scenario>();
-            foreach (Scenario marker in markers)
-            {
-                Destroy(marker.gameObject);
-            }
-            scenarios.Clear();
-            // Find scenario folders in the whole layer tree
-            List<LayerData> layers = ProjectData.Current.RootLayer.GetFlatHierarchy();
-            foreach (LayerData layer in layers)
-            {
-                ConvertToScenario(layer, layer.Name);
-                if (layer.HasProperty<ScenarioPropertyData>())
-                    AddScenario(layer);
-            }
-            if (!scenarios.Any())  return;
-            
-            SetScenarioContainerEnabled(true);
-            
-            if(selectedScenario?.Layer == scenarios[0].Layer) return;
-            
-            SelectScenario(scenarios[0].Layer);          
+            var removedLayers = subscribedLayers
+                .Where(layer => !layers.Contains(layer))
+                .ToList();
+
+            foreach (var layer in removedLayers)
+                UnsubscribeFromLayer(layer);
+
+            foreach (var layer in layers)
+                SubscribeToLayer(layer);
         }
 
-        private void ActivateScenario(LayerData activeFolder, bool activate)
+        private void SubscribeToLayer(LayerData layer)
         {
-            foreach (var scenario in scenarios)
-            {
-                if (scenario.Layer == activeFolder)
-                {
-                    scenario.Toggle.isOn = activate;
-                    scenario.Layer.ActiveSelf = activate;
-                }
-                
-            }
+            if (!subscribedLayers.Add(layer))
+                return;
+
+            layer.NameChanged.AddListener(
+                OnLayerNameChanged
+            );
         }
 
-        private void UpdateLabelForScenario(LayerData layer, string name)
+        private void UnsubscribeFromLayer(LayerData layer)
         {
-            if(!layer.HasProperty<ScenarioPropertyData>()) return;
+            if (!subscribedLayers.Remove(layer))
+                return;
 
-            foreach (Scenario s in scenarios)
+            layer.NameChanged.RemoveListener(
+                OnLayerNameChanged
+            );
+        }
+
+        private void UnsubscribeFromAllLayers()
+        {
+            foreach (var layer in subscribedLayers)
             {
-                if (s.Layer == layer)
-                {
-                    s.SetLabel(name);
-                    return;
-                }
+                layer.NameChanged.RemoveListener(
+                    OnLayerNameChanged
+                );
             }
+
+            subscribedLayers.Clear();
         }
     }
 }

@@ -2,6 +2,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.JavascriptConnection;
 using Netherlands3D.Minimap;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
@@ -105,7 +106,6 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         public void Initialize(MinimapConfig config)
         {
-            //todo: can this function be removed somehow?
             wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
         }
 
@@ -123,7 +123,7 @@ namespace Netherlands3D.UI.Components
         {
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, true);
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            PointerStyle.ChangeCursor(PointerStyle.Style.POINTER);
         }
 
         private void OnPointerLeave(PointerLeaveEvent evt)
@@ -134,7 +134,7 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
+            PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, false);
         }
@@ -163,10 +163,11 @@ namespace Netherlands3D.UI.Components
             locationPin.style.scale = Vector3.one / wmtsPanel.resolvedStyle.scale.value.x;
         }
         
-        public void UpdateFrustum() 
+        public void UpdateFrustum()
         {
-            CameraExtents.GetRDExtent(Camera.main);
-            var cameraCorners = CameraExtents.GetWorldSpaceCorners(Camera.main);
+            Camera current = App.Cameras.ActiveCamera;
+            CameraExtents.GetRDExtent(current);
+            var cameraCorners = CameraExtents.GetWorldSpaceCorners(current);
             if (cameraCorners != null)
             {
                 //Align quad with camera extent points
@@ -262,7 +263,7 @@ namespace Netherlands3D.UI.Components
         private void OnDragStarted(Vector2 startPosition)
         {
             isDragging = true;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRABBING);
+            PointerStyle.ChangeCursor(PointerStyle.Style.GRABBING);
             UpdateFrustum();
         }
 
@@ -278,9 +279,9 @@ namespace Netherlands3D.UI.Components
             Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, Pointer.current.position.ReadValue());
 
             if (worldBound.Contains(panelPos))
-                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER); //pointer is still in the panel
+                PointerStyle.ChangeCursor(PointerStyle.Style.POINTER); //pointer is still in the panel
             else
-                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
+                PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
             
             UpdateFrustum();
         }
