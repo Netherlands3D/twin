@@ -28,12 +28,55 @@ namespace Netherlands3D.Functionalities.LASImporter
 
         public void EnsureClassification(byte classification, int count, Color color)
         {
+            var countChanged = !classificationCounts.TryGetValue(classification, out var previousCount)
+                               || previousCount != count;
             classificationCounts[classification] = count;
             var key = ClassificationStyleRuleKey(classification);
             if (StylingRules.ContainsKey(key))
+            {
+                if (countChanged)
+                    OnStylingChanged.Invoke();
+
                 return;
+            }
 
             SetColorByClassification(classification, LASClassificationColors.GetName(classification), color);
+        }
+
+        public void SetClassifications(IReadOnlyDictionary<byte, int> classifications)
+        {
+            var changed = classificationCounts.Count != classifications.Count;
+            foreach (var (classification, count) in classifications)
+            {
+                if (!classificationCounts.TryGetValue(classification, out var previousCount) || previousCount != count)
+                {
+                    changed = true;
+                    break;
+                }
+            }
+
+            classificationCounts.Clear();
+            foreach (var (classification, count) in classifications)
+            {
+                classificationCounts[classification] = count;
+                var key = ClassificationStyleRuleKey(classification);
+                if (StylingRules.ContainsKey(key))
+                    continue;
+
+                var rule = new StylingRule(
+                    LASClassificationColors.GetName(classification),
+                    Expression.EqualTo(
+                        Expression.Get(ClassificationIdKey),
+                        classification.ToString()
+                    )
+                );
+                rule.Symbolizer.SetFillColor(LASClassificationColors.ForClassification(classification));
+                StylingRules[key] = rule;
+                changed = true;
+            }
+
+            if (changed)
+                OnStylingChanged.Invoke();
         }
 
         public IEnumerable<byte> GetClassifications()

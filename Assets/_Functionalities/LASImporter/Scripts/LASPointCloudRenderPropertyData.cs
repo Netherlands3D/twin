@@ -16,6 +16,8 @@ namespace Netherlands3D.Functionalities.LASImporter
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "LasPointCloudRenderSettings")]
     public class LASPointCloudRenderPropertyData : LayerPropertyData
     {
+        private const int DefaultPointBudgetLimit = 2000000;
+
         [DataMember] private LASPointColorMode colorMode = LASPointColorMode.FileColors;
         [DataMember] private float pointSizePixels = 4f;
         [DataMember] private float pointSizeReferenceDistance = 200f;
@@ -25,7 +27,11 @@ namespace Netherlands3D.Functionalities.LASImporter
         [DataMember] private int maxPointsPerChunkMesh = 45000;
         [DataMember] private float lodDistanceMultiplier = 3f;
 
+        [JsonIgnore] private int pointBudgetLimit = DefaultPointBudgetLimit;
+        [JsonIgnore] private bool maxLoadedPointsSetByUser;
         [JsonIgnore] public readonly UnityEvent RenderSettingsChanged = new();
+        [JsonIgnore] public readonly UnityEvent PointBudgetLimitChanged = new();
+        [JsonIgnore] public readonly UnityEvent PointBudgetChanged = new();
 
         public LASPointCloudRenderPropertyData()
         {
@@ -66,7 +72,24 @@ namespace Netherlands3D.Functionalities.LASImporter
         public float PointSizePixels
         {
             get => pointSizePixels;
-            set => SetAndNotify(ref pointSizePixels, Mathf.Max(0.1f, value));
+            set
+            {
+                var newValue = Mathf.Max(0.1f, value);
+                var pointSizeChanged = Mathf.Abs(pointSizePixels - newValue) >= 0.001f;
+                var minPointSizeChanged = minPointSizePixels > newValue;
+                var maxPointSizeChanged = maxPointSizePixels < newValue;
+
+                if (!pointSizeChanged && !minPointSizeChanged && !maxPointSizeChanged)
+                    return;
+
+                pointSizePixels = newValue;
+                if (minPointSizeChanged)
+                    minPointSizePixels = newValue;
+                if (maxPointSizeChanged)
+                    maxPointSizePixels = newValue;
+
+                RenderSettingsChanged.Invoke();
+            }
         }
 
         public float PointSizeReferenceDistance
@@ -90,8 +113,18 @@ namespace Netherlands3D.Functionalities.LASImporter
         public int MaxLoadedPoints
         {
             get => maxLoadedPoints;
-            set => SetAndNotify(ref maxLoadedPoints, Mathf.Max(1, value));
+            set
+            {
+                var newValue = Mathf.Clamp(value, 1, PointBudgetLimit);
+                if (maxLoadedPoints == newValue) return;
+                maxLoadedPoints = newValue;
+                maxLoadedPointsSetByUser = true;
+                RenderSettingsChanged.Invoke();
+                PointBudgetChanged.Invoke();
+            }
         }
+
+        public int PointBudgetLimit => Mathf.Max(1, pointBudgetLimit);
 
         public int MaxPointsPerChunkMesh
         {
@@ -103,6 +136,33 @@ namespace Netherlands3D.Functionalities.LASImporter
         {
             get => lodDistanceMultiplier;
             set => SetAndNotify(ref lodDistanceMultiplier, Mathf.Max(0.01f, value));
+        }
+
+        public void SetPointBudgetLimit(ulong pointCount)
+        {
+            var newPointBudgetLimit = pointCount > int.MaxValue ? int.MaxValue : Mathf.Max(1, (int)pointCount);
+            var pointBudgetLimitChanged = pointBudgetLimit != newPointBudgetLimit;
+
+            pointBudgetLimit = newPointBudgetLimit;
+            var maxLoadedPointsChanged = false;
+            if (maxLoadedPoints <= 1 && !maxLoadedPointsSetByUser)
+            {
+                maxLoadedPoints = GetSafePointBudget(pointBudgetLimit);
+                maxLoadedPointsChanged = true;
+            }
+            else if (maxLoadedPoints > pointBudgetLimit)
+            {
+                maxLoadedPoints = pointBudgetLimit;
+                maxLoadedPointsChanged = true;
+            }
+
+            if (pointBudgetLimitChanged || maxLoadedPointsChanged)
+                PointBudgetLimitChanged.Invoke();
+        }
+
+        private static int GetSafePointBudget(int limit)
+        {
+            return Mathf.Clamp(DefaultPointBudgetLimit, 1, Mathf.Max(1, limit));
         }
 
         private void SetAndNotify(ref float field, float value)

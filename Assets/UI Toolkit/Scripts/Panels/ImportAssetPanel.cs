@@ -22,7 +22,7 @@ namespace Netherlands3D.UI.Panels
     {
         public override string Title => "Importeren";
 
-        public const string supportedFileTypes = "obj,csv,json,geojson,glb";
+        public const string supportedFileTypes = "obj,csv,json,geojson,glb,las";
         
         private Breadcrumb breadcrumb;
         private ListViewItem uploadButton;

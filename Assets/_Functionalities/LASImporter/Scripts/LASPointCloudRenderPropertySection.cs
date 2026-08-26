@@ -1,101 +1,76 @@
 using System.Collections.Generic;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.UI.Properties;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using RadioButtonGroup = Netherlands3D.UI.Components.RadioButtonGroup;
+using Slider = Netherlands3D.UI.Components.Slider;
 
 namespace Netherlands3D.Functionalities.LASImporter
 {
-    [PropertySection(typeof(LASPointCloudRenderPropertyData))]
-    public class LASPointCloudRenderPropertySection : MonoBehaviour, IVisualizationWithPropertyData
+    [UxmlElement]
+    [PropertySection(typeof(LASPointCloudRenderPropertyData), PropertySectionCategory.Settings)]
+    public partial class LASPointCloudRenderPropertySection : VisualElement, IVisualizationWithPropertyData
     {
-        private const float MaxLoadedPointsSliderLimit = 5000000f;
-        private const float MaxPointsPerChunkSliderLimit = 65000f;
-
-        [SerializeField] private Toggle completeToggle;
-        [SerializeField] private Toggle strokeToggle;
-        [SerializeField] private Toggle fillToggle;
-        [SerializeField] private Slider strokeWidthSlider;
-        [SerializeField] private Slider densitySlider;
-        [SerializeField] private Slider scatterSlider;
-        [SerializeField] private Slider angleSlider;
-        [SerializeField] private GameObject angleTitleLabel;
-        [SerializeField] private DoubleSlider heightRangeSlider;
-        [SerializeField] private DoubleSlider diameterRangeSlider;
-
         private LASPointCloudRenderPropertyData propertyData;
         private bool updatingPanel;
 
-        private void Awake()
+        private readonly List<LASPointColorMode> colorModeIndices = new()
         {
-            ConfigureControls();
+            LASPointColorMode.FileColors,
+            LASPointColorMode.Classification
+        };
+
+        private RadioButtonGroup colorModeRadioButtonGroup;
+        private Slider pointSizeSlider;
+        private Slider referenceDistanceSlider;
+        private Slider pointBudgetSlider;
+
+        public LASPointCloudRenderPropertySection()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
+
+            colorModeRadioButtonGroup = this.Q<RadioButtonGroup>("Kleurmodus");
+            pointSizeSlider = this.Q<Slider>("PuntGrootte");
+            referenceDistanceSlider = this.Q<Slider>("ReferentieAfstand");
+            pointBudgetSlider = this.Q<Slider>("PuntenBudget");
+
+            colorModeRadioButtonGroup.RegisterValueChangedCallback(OnColorModeChanged);
+            pointSizeSlider.RegisterValueChangedCallback(OnPointSizeChanged);
+            referenceDistanceSlider.RegisterValueChangedCallback(OnReferenceDistanceChanged);
+            pointBudgetSlider.RegisterValueChangedCallback(OnPointBudgetChanged);
+
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
-        private void OnEnable()
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            completeToggle.onValueChanged.AddListener(SetColorModeToFileColors);
-            strokeToggle.onValueChanged.AddListener(SetColorModeToClassification);
-            fillToggle.onValueChanged.AddListener(SetColorModeToSingleColor);
-            strokeWidthSlider.onValueChanged.AddListener(HandlePointSizeChange);
-            densitySlider.onValueChanged.AddListener(HandleReferenceDistanceChange);
-            scatterSlider.onValueChanged.AddListener(HandleLodDistanceChange);
-            heightRangeSlider.onMinValueChanged.AddListener(HandleMinPointSizeChange);
-            heightRangeSlider.onMaxValueChanged.AddListener(HandleMaxPointSizeChange);
-            diameterRangeSlider.onMinValueChanged.AddListener(HandleMaxPointsPerChunkChange);
-            diameterRangeSlider.onMaxValueChanged.AddListener(HandleMaxLoadedPointsChange);
-        }
-
-        private void OnDisable()
-        {
-            completeToggle.onValueChanged.RemoveListener(SetColorModeToFileColors);
-            strokeToggle.onValueChanged.RemoveListener(SetColorModeToClassification);
-            fillToggle.onValueChanged.RemoveListener(SetColorModeToSingleColor);
-            strokeWidthSlider.onValueChanged.RemoveListener(HandlePointSizeChange);
-            densitySlider.onValueChanged.RemoveListener(HandleReferenceDistanceChange);
-            scatterSlider.onValueChanged.RemoveListener(HandleLodDistanceChange);
-            heightRangeSlider.onMinValueChanged.RemoveListener(HandleMinPointSizeChange);
-            heightRangeSlider.onMaxValueChanged.RemoveListener(HandleMaxPointSizeChange);
-            diameterRangeSlider.onMinValueChanged.RemoveListener(HandleMaxPointsPerChunkChange);
-            diameterRangeSlider.onMaxValueChanged.RemoveListener(HandleMaxLoadedPointsChange);
-
-            if (propertyData != null)
-                propertyData.RenderSettingsChanged.RemoveListener(UpdatePanel);
+            RemovePropertyDataListeners();
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            if (propertyData != null)
-                propertyData.RenderSettingsChanged.RemoveListener(UpdatePanel);
+            RemovePropertyDataListeners();
 
             propertyData = properties.Get<LASPointCloudRenderPropertyData>();
             if (propertyData == null)
                 return;
 
             propertyData.RenderSettingsChanged.AddListener(UpdatePanel);
+            propertyData.PointBudgetLimitChanged.AddListener(UpdatePanel);
             UpdatePanel();
         }
 
-        private void ConfigureControls()
+        private void RemovePropertyDataListeners()
         {
-            strokeWidthSlider.minValue = 0.5f;
-            strokeWidthSlider.maxValue = 20f;
+            if (propertyData == null)
+                return;
 
-            densitySlider.minValue = 25f;
-            densitySlider.maxValue = 1000f;
-            densitySlider.wholeNumbers = true;
-
-            scatterSlider.minValue = 0.5f;
-            scatterSlider.maxValue = 8f;
-
-            heightRangeSlider.ConfigureRange(0.5f, 20f, false, 0.1f);
-            diameterRangeSlider.ConfigureRange(1000f, MaxLoadedPointsSliderLimit, true, 1000f);
-
-            if (angleSlider)
-                angleSlider.gameObject.SetActive(false);
-
-            if (angleTitleLabel)
-                angleTitleLabel.SetActive(false);
+            propertyData.RenderSettingsChanged.RemoveListener(UpdatePanel);
+            propertyData.PointBudgetLimitChanged.RemoveListener(UpdatePanel);
         }
 
         private void UpdatePanel()
@@ -105,78 +80,42 @@ namespace Netherlands3D.Functionalities.LASImporter
 
             updatingPanel = true;
 
-            completeToggle.SetIsOnWithoutNotify(propertyData.ColorMode == LASPointColorMode.FileColors);
-            strokeToggle.SetIsOnWithoutNotify(propertyData.ColorMode == LASPointColorMode.Classification);
-            fillToggle.SetIsOnWithoutNotify(propertyData.ColorMode == LASPointColorMode.SingleColor);
-            strokeWidthSlider.SetValueWithoutNotify(propertyData.PointSizePixels);
-            densitySlider.SetValueWithoutNotify(propertyData.PointSizeReferenceDistance);
-            scatterSlider.SetValueWithoutNotify(propertyData.LodDistanceMultiplier);
-            heightRangeSlider.SetMinValueWithoutNotify(propertyData.MinPointSizePixels);
-            heightRangeSlider.SetMaxValueWithoutNotify(propertyData.MaxPointSizePixels);
-            diameterRangeSlider.SetMinValueWithoutNotify(Mathf.Min(propertyData.MaxPointsPerChunkMesh, MaxPointsPerChunkSliderLimit));
-            diameterRangeSlider.SetMaxValueWithoutNotify(Mathf.Min(propertyData.MaxLoadedPoints, MaxLoadedPointsSliderLimit));
+            var pointBudgetLimit = propertyData.PointBudgetLimit;
+            pointBudgetSlider.highValue = pointBudgetLimit;
+
+            var colorModeIndex = colorModeIndices.IndexOf(propertyData.ColorMode);
+            colorModeRadioButtonGroup.SetValueWithoutNotify(Mathf.Max(0, colorModeIndex));
+            pointSizeSlider.SetValueWithoutNotify(propertyData.PointSizePixels);
+            referenceDistanceSlider.SetValueWithoutNotify(propertyData.PointSizeReferenceDistance);
+            pointBudgetSlider.SetValueWithoutNotify(Mathf.Clamp(propertyData.MaxLoadedPoints, 1, pointBudgetLimit));
 
             updatingPanel = false;
         }
 
-        private void SetColorModeToFileColors(bool isOn)
+        private void OnColorModeChanged(ChangeEvent<int> evt)
         {
-            if (!isOn || updatingPanel) return;
-            propertyData.ColorMode = LASPointColorMode.FileColors;
+            if (updatingPanel || propertyData == null || evt.newValue < 0 || evt.newValue >= colorModeIndices.Count)
+                return;
+
+            propertyData.ColorMode = colorModeIndices[evt.newValue];
         }
 
-        private void SetColorModeToClassification(bool isOn)
-        {
-            if (!isOn || updatingPanel) return;
-            propertyData.ColorMode = LASPointColorMode.Classification;
-        }
-
-        private void SetColorModeToSingleColor(bool isOn)
-        {
-            if (!isOn || updatingPanel) return;
-            propertyData.ColorMode = LASPointColorMode.SingleColor;
-        }
-
-        private void HandlePointSizeChange(float newValue)
+        private void OnPointSizeChanged(ChangeEvent<float> evt)
         {
             if (updatingPanel || propertyData == null) return;
-            propertyData.PointSizePixels = newValue;
+            propertyData.PointSizePixels = evt.newValue;
         }
 
-        private void HandleReferenceDistanceChange(float newValue)
+        private void OnReferenceDistanceChanged(ChangeEvent<float> evt)
         {
             if (updatingPanel || propertyData == null) return;
-            propertyData.PointSizeReferenceDistance = newValue;
+            propertyData.PointSizeReferenceDistance = evt.newValue;
         }
 
-        private void HandleLodDistanceChange(float newValue)
+        private void OnPointBudgetChanged(ChangeEvent<float> evt)
         {
             if (updatingPanel || propertyData == null) return;
-            propertyData.LodDistanceMultiplier = newValue;
-        }
-
-        private void HandleMaxLoadedPointsChange(float newValue)
-        {
-            if (updatingPanel || propertyData == null) return;
-            propertyData.MaxLoadedPoints = Mathf.RoundToInt(newValue);
-        }
-
-        private void HandleMinPointSizeChange(float newValue)
-        {
-            if (updatingPanel || propertyData == null) return;
-            propertyData.MinPointSizePixels = newValue;
-        }
-
-        private void HandleMaxPointSizeChange(float newValue)
-        {
-            if (updatingPanel || propertyData == null) return;
-            propertyData.MaxPointSizePixels = newValue;
-        }
-
-        private void HandleMaxPointsPerChunkChange(float newValue)
-        {
-            if (updatingPanel || propertyData == null) return;
-            propertyData.MaxPointsPerChunkMesh = Mathf.RoundToInt(newValue);
+            propertyData.MaxLoadedPoints = Mathf.RoundToInt(evt.newValue);
         }
     }
 }
