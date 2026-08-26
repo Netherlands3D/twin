@@ -31,11 +31,19 @@ namespace Netherlands3D.UI.Panels
         {
             base.SpawnFloatingPanelContent(floatingPanel);
             content = new HideObjectPanel(constructorArgs[0] as Dictionary<string, IMapping>);
+            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            objectSelectorService.SelectSubObjectWithBagId.AddListener(OnUpdateMappings);
             HideObjectPanel panel = content as HideObjectPanel;
             panel.OnClose.AddListener(CloseFloatingPanel);
             return content;
         }
 
+        private void OnUpdateMappings(MeshMapping mapping, string bagId)
+        {
+            HideObjectPanel panel = content as HideObjectPanel;
+            panel.UpdateContent();
+        }
+        
         private void CloseFloatingPanel()
         {
             floatingPanel.OnClose.Invoke();
@@ -48,7 +56,11 @@ namespace Netherlands3D.UI.Panels
         {
             HideObjectPanel panel = content as HideObjectPanel;
             panel.OnClose.RemoveListener(CloseFloatingPanel);
+            
             base.Dispose();
+            
+            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            objectSelectorService.SelectSubObjectWithBagId.RemoveListener(OnUpdateMappings);
         }
     }
 }
