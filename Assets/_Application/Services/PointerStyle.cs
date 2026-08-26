@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-namespace Netherlands3D.JavascriptConnection
+namespace Netherlands3D
 {
-    public class ChangePointerStyleHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public static class PointerStyle
     {
         [DllImport("__Internal")]
         private static extern string SetCSSCursor(string cursorName = "auto");
 
-        public enum Style
+        
+       public enum Style
         {
             AUTO,
             DEFAULT,
@@ -48,19 +46,13 @@ namespace Netherlands3D.JavascriptConnection
             NESW_RESIZE,
             NWSE_RESIZE
         }
-
-        [SerializeField]
-        private Style styleOnHover = Style.POINTER;
-        public static Style cursorType = Style.AUTO;
-
-        public Style StyleOnHover { get => styleOnHover; set => styleOnHover = value; }
+    
 
         public static void ChangeCursor(Style type)
         {
-            cursorType = type;
-
             var cursorString = "";
-            switch (cursorType)
+
+            switch (type)
             {
                 case Style.AUTO:
                     cursorString = "auto";
@@ -169,22 +161,6 @@ namespace Netherlands3D.JavascriptConnection
 #if !UNITY_EDITOR && UNITY_WEBGL
             SetCSSCursor(cursorString);
 #endif
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            ChangeCursor(StyleOnHover);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            // Always change back cursor to CSS default 'auto'
-            ChangeCursor(Style.AUTO);
-        }
-
-        public void OnDisable()
-        {
-            ChangeCursor(Style.AUTO);
         }
     }
 }

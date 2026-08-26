@@ -146,6 +146,8 @@ namespace Netherlands3D.Twin.Samplers
         /// <returns></returns>
         public Vector3 GetWorldPointAtCameraScreenPoint(Camera camera, Vector3 screenPoint)
         {
+            if (depthCamera == null) return Vector3.zero;
+
             AlignWithCamera(camera, screenPoint);
             RenderDepthCamera();
 
@@ -163,8 +165,6 @@ namespace Netherlands3D.Twin.Samplers
         public void AlignWithCamera(Camera camera, Vector3 screenPoint)
         {
             if (camera == null) camera = Camera.main;
-
-            if (depthCamera == null) return;
 
             depthCamera.transform.position = camera.transform.position;
             if (camera.orthographic)

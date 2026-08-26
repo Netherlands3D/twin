@@ -1,5 +1,8 @@
+using System;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -10,14 +13,27 @@ namespace Netherlands3D.UI.Panels
     {
         [SerializeField] private InputActionAsset inputActionAsset;
         [SerializeField] private FloatingPanelBehaviour[] panelBehaviours;
-        
+        [SerializeField] private FloatingButtonBehaviour[] floatingButtonBehaviour;
+
         private InputAction rightClickAction;
         private InputAction leftClickAction;
         private InputAction longPressAction;
         private InputAction touchAction;
         private FloatingPanel floatingPanel;
-        private VisualElement content;
+        private VisualElement floatingPanelContent;
         private FloatingPanelBehaviour selectedBehaviour;
+        private VisualElement floatingElementsContent;
+
+        private void Start()
+        {
+            floatingElementsContent = new VisualElement();
+            App.UIRoot.Root.Add(floatingElementsContent);
+            
+            foreach (var buttonBehaviour in floatingButtonBehaviour)
+            {             
+                buttonBehaviour.Initialize(floatingElementsContent);
+            }
+        }
 
         void OnEnable()
         {
@@ -25,6 +41,7 @@ namespace Netherlands3D.UI.Panels
             App.UIRoot.Root.Add(floatingPanel);
             floatingPanel.OnClose.AddListener(ClearActivePanel);
             floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            
             var map = inputActionAsset.FindActionMap("Camera", true);
             rightClickAction = map.FindAction("RightClick", true);
             leftClickAction = map.FindAction("LeftClick", true);
@@ -36,7 +53,7 @@ namespace Netherlands3D.UI.Panels
             longPressAction.performed += OnRightClick;
             touchAction.performed += OnLeftClick;
         }
-
+        
         void OnDisable()
         {
             rightClickAction.performed -= OnRightClick;
@@ -48,14 +65,30 @@ namespace Netherlands3D.UI.Panels
             floatingPanel = null;
         }
 
+        private void OnDestroy()
+        {
+            foreach (var buttonBehaviour in floatingButtonBehaviour)
+            {
+                buttonBehaviour.Dispose();
+            }
+        }
+
+        private void Update()
+        {
+            foreach (var buttonBehaviour in floatingButtonBehaviour)
+            {
+                buttonBehaviour.UpdateBehaviour();
+            }
+        }
+
         public void ClearActivePanel()
         {
-            if (content == null)
+            if (floatingPanelContent == null)
                 return;
 
             selectedBehaviour?.Dispose();
-            floatingPanel.Remove(content);
-            content = null;
+            floatingPanel.Remove(floatingPanelContent);
+            floatingPanelContent = null;
             floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
 
@@ -99,10 +132,11 @@ namespace Netherlands3D.UI.Panels
 
                 selectedBehaviour = panelBehaviour;
                 var data = panelBehaviour.GetData();
-                content = panelBehaviour.SpawnFloatingPanelContent(floatingPanel, data);
+                floatingPanelContent = panelBehaviour.SpawnFloatingPanelContent(floatingPanel, data);
                 floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, false);
-                floatingPanel.Add(content);
+                floatingPanel.Add(floatingPanelContent);
                 floatingPanel.SetPosition(screenPos);
+                floatingPanel.BringToFront();
                 break;
             }
         }

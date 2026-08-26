@@ -9,7 +9,6 @@ namespace Netherlands3D.Masking
         [Header("Placement actions")]
         [SerializeField] private InputActionReference clickPlacementAction;
         [SerializeField] private float maxCameraTravelToPlacement = 20.0f; 
-        [SerializeField] private DisappearDome disappearEffect;
         [SerializeField] private float margin;
 
         [Header("Global shader settings")]
@@ -24,8 +23,9 @@ namespace Netherlands3D.Masking
         private int bitIndexPropertyID;
         private int maskingBitIndex = 22;
         
+        public VisualDome DomeVisualisation => domeVisualisation;
+        
         [SerializeField] private VisualDome domeVisualisation;
-        [SerializeField] private Transform tempCanvas;
         
         public bool IsPointerOnDome => isPointerOnDome;
         private bool isPointerOnDome;
@@ -51,8 +51,6 @@ namespace Netherlands3D.Masking
         public void SetDomeEnabled()
         {
             mainCamera = Camera.main;
-            
-            tempCanvas.gameObject.SetActive(true);
             domeVisualisation.gameObject.SetActive(true);
             
             Shader.EnableKeyword(sphericalMaskFeatureKeyword);
@@ -61,49 +59,36 @@ namespace Netherlands3D.Masking
             clickPlacementAction.action.started += StartTap;
             clickPlacementAction.action.performed += EndTap;
 
-            StickToPointer();
+            domeVisualisation.MoveToScreenPoint();
+            domeVisualisation.AnimateIn();
+            waitForInitialPlacement = true;
             
             domeVisualisation.onHoveringChange.AddListener(OnPointerOnDome);
         }
         
         public void SetDomeDisabled()
         {
-            tempCanvas.gameObject.SetActive(false);
-            domeVisualisation.gameObject.SetActive(false);
-            
-            Shader.DisableKeyword(sphericalMaskFeatureKeyword);
-
-            // Unsubscribe and disable the click action when the script is disabled
-            clickPlacementAction.action.performed -= StartTap;
-            clickPlacementAction.action.Disable();
-
-            if(resetMaskOnDisable)
+            domeVisualisation.AnimateOut(() =>
             {
-                ResetGlobalShaderVariables();
-            }
+                domeVisualisation.gameObject.SetActive(false);
+                Shader.DisableKeyword(sphericalMaskFeatureKeyword);
             
-            domeVisualisation.onHoveringChange.RemoveListener(OnPointerOnDome);
-        }
+                clickPlacementAction.action.performed -= StartTap;
+                clickPlacementAction.action.Disable();
 
-        /// <summary>
-        /// Initial start will make dome follow pointer untill first click
-        /// </summary>
-        private void StickToPointer()
-        {
-            domeVisualisation.AnimateIn();
-            waitForInitialPlacement = true;
+                if(resetMaskOnDisable)
+                {
+                    ResetGlobalShaderVariables();
+                }
+            
+                domeVisualisation.onHoveringChange.RemoveListener(OnPointerOnDome);
+            });
         }
+        
 
         private void OnPointerOnDome(bool onDome)
         {
             isPointerOnDome = onDome;
-            Debug.Log("OnPointerOnDome +" + onDome);
-        }
-
-        public void SpawnDisappearAnimation()
-        {
-            var newDisappearEffect = Instantiate(disappearEffect.gameObject,this.transform.parent);
-            newDisappearEffect.GetComponent<DisappearDome>().DisappearFrom(domeVisualisation.transform.position, domeVisualisation.transform.localScale);
         }
 
         private void StartTap(InputAction.CallbackContext context)
@@ -133,13 +118,12 @@ namespace Netherlands3D.Masking
 
         private void PlaceDome()
         {
-            if(!EventSystem.current.IsPointerOverGameObject()){
-                Vector2 pointerPosition = Pointer.current.position.ReadValue();
+            if(!EventSystem.current.IsPointerOverGameObject())
+            {
+                if (!waitForInitialPlacement)
+                    domeVisualisation.AnimateOut();
 
-                if(!waitForInitialPlacement)
-                    SpawnDisappearAnimation();
-
-                domeVisualisation.MoveToScreenPoint(pointerPosition);
+                domeVisualisation.MoveToScreenPoint();
                 domeVisualisation.AnimateIn();
             }
 
@@ -150,7 +134,7 @@ namespace Netherlands3D.Masking
         {
             if(waitForInitialPlacement)
             {
-                domeVisualisation.MoveToScreenPoint(Pointer.current.position.ReadValue());
+                domeVisualisation.MoveToScreenPoint();
             }
 
             if (domeVisualisation.transform.hasChanged)
