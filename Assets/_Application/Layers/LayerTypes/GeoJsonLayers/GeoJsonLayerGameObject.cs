@@ -145,7 +145,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
-            if (isActive && startLoadingDataWhenLayerBecomesActive)
+            if (!LayerData.HasValidCredentials) //in case we activate the layer for the first time, and we have invalid credentials, reset the loading flag and wait for valid credentials
+            {
+                startLoadingDataWhenLayerBecomesActive = false;
+                return; 
+            }
+            
+            if (isActive && startLoadingDataWhenLayerBecomesActive) //in case we activate the layer with valid credentials for the first time, and we are still waiting for a load, parse the data.
             {
                 var auth = credentialHandler.Authorization;
                 var uri =  auth.SanitizeUrl(credentialHandler.Uri);
