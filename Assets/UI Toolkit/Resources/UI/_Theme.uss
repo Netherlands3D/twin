@@ -82,6 +82,7 @@
     --color-red: rgb(227, 86, 86);
     --color-orange: rgb(227, 172, 86);
     --color-green: rgb(86, 172, 86);
+    --color-tooltip: rgba(47, 53, 80, 0.9);
 
     /* ColorPicker sprites */
     --image-color-wheel: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/ColorWheel.png");
