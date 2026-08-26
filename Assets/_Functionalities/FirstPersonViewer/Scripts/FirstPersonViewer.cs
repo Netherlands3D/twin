@@ -256,6 +256,7 @@ namespace Netherlands3D.FirstPersonViewer
             Input.ViewerExited();
 
             App.Cameras.SwitchToPreviousCamera();
+            App.UIRoot.DisableFPVUI();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
