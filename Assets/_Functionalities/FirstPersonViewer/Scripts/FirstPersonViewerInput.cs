@@ -186,12 +186,21 @@ namespace Netherlands3D.FirstPersonViewer
         public bool IsInputfieldSelected()
         {
             var focusedElement = App.UIRoot.Root?.focusController?.focusedElement as VisualElement;
+            return IsTextInputField(focusedElement);
+        }
 
-            return focusedElement is TextField
-                || focusedElement is IntegerField
-                || focusedElement is FloatField
-                || focusedElement is DoubleField
-                || focusedElement is LongField;
+        private static bool IsTextInputField(VisualElement element)
+        {
+            for (var type = element?.GetType(); type != null; type = type.BaseType)
+            {
+                if (type.IsGenericType &&
+                    type.GetGenericTypeDefinition() == typeof(TextInputBaseField<>))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;
