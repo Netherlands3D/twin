@@ -43,12 +43,13 @@
 /*todo the -3px shifts the right edge towards the button edge, find out why */ 
 .hamburger-menu .unity-foldout__content {
     right: -3px;
+    margin-left: 0; /* overriding the hamburger menu spacing between icon and buttons when folded out!*/
 }
 
 .hamburger-menu .unity-toggle__input > .unity-label {
     display: none;
     color: var(--color-white);
-    margin-left: var(--spacing-8);
+    margin-left: var(--spacing-2);
 }
 
 .hamburger-menu:hover {
