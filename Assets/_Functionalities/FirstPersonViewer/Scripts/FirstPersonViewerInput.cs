@@ -191,13 +191,14 @@ namespace Netherlands3D.FirstPersonViewer
 
         private static bool IsTextInputField(VisualElement element)
         {
-            for (var type = element?.GetType(); type != null; type = type.BaseType)
+            var type = element?.GetType();
+            while (type != null)
             {
-                if (type.IsGenericType &&
-                    type.GetGenericTypeDefinition() == typeof(TextInputBaseField<>))
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(TextInputBaseField<>))
                 {
                     return true;
                 }
+                type = type.BaseType;
             }
 
             return false;
