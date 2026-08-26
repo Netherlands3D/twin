@@ -42,7 +42,6 @@ namespace Netherlands3D.UI.Components
         private NumberFieldFormat valueFormat = NumberFieldFormat.Double;
         private float scrollStep = 1f;
         private string unitCharacter = string.Empty;
-        private string formatString;
         private int decimalCount;
         private bool labelVisible;
 
@@ -124,7 +123,6 @@ namespace Netherlands3D.UI.Components
             set
             {
                 decimalCount = value;
-                formatString = GetFormatString(value);
             }
         }
         
@@ -154,7 +152,6 @@ namespace Netherlands3D.UI.Components
                 ApplyLabelTypography();
                 ApplyPlaceholder();
                 RegisterScrollCallback();
-                formatString = GetFormatString(DecimalCount);
             });
         }
 
@@ -238,10 +235,10 @@ namespace Netherlands3D.UI.Components
                     formatted = FormatAsTime(value);
                     break;
                 case NumberFieldFormat.Double:
-                    formatted = value.ToString(formatString, CultureInfo.InvariantCulture);
+                    formatted = value.ToString($"F{DecimalCount}", CultureInfo.InvariantCulture);
                     break;
                 default:
-                    formatted = value.ToString(formatString, CultureInfo.InvariantCulture);
+                    formatted = value.ToString($"F{DecimalCount}", CultureInfo.InvariantCulture);
                     break;
             }
 
@@ -328,15 +325,6 @@ namespace Netherlands3D.UI.Components
         public int GetValueAsInt()
         {
             return (int)GetValueAsDouble();
-        }
-        
-        private static string GetFormatString(int decimals)
-        {
-            if (decimals == 0)
-                return "0";
-
-            string zeros = new string('0', decimals);
-            return $"0.{zeros}";
         }
     }
 }
