@@ -75,7 +75,3 @@
     margin-top: var(--inspector-section-header-margin-top);
     margin-bottom: var(--inspector-section-header-spacing);
 }
-
-.inspector.active {
-    display: flex;
-}

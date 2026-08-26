@@ -281,7 +281,7 @@ namespace Netherlands3D.UI.Components
         private void SetAppearance(LayerData layerData)
         {
             var validCredentials = layerData.HasValidCredentials;
-            isActiveToggle.SetEnabled(validCredentials);
+            isActiveToggle.SetEnabled(validCredentials); // make the visibility toggle un-interactable
             ItemRoot.EnableInClassList("credentials-needed", !validCredentials);
 
             UpdateNameLabels(layerData, layerData.Name);
