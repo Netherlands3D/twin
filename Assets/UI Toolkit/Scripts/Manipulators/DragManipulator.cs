@@ -28,7 +28,7 @@ public class DragManipulator : PointerManipulator
 
     protected override void RegisterCallbacksOnTarget()
     {
-        target.RegisterCallback<PointerDownEvent>(OnPointerDown);
+        target.RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
         target.RegisterCallback<PointerMoveEvent>(OnPointerMove);
         target.RegisterCallback<PointerUpEvent>(OnPointerUp);
         target.RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
@@ -36,7 +36,7 @@ public class DragManipulator : PointerManipulator
 
     protected override void UnregisterCallbacksFromTarget()
     {
-        target.UnregisterCallback<PointerDownEvent>(OnPointerDown);
+        target.UnregisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
         target.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
         target.UnregisterCallback<PointerUpEvent>(OnPointerUp);
         target.UnregisterCallback<PointerLeaveEvent>(OnPointerLeave);
