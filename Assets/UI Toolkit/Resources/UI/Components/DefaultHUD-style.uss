@@ -16,11 +16,11 @@
 }
 
 .default-hud__top-section {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
+    position: absolute;
+    left: 484px;
+    right: 428px;
+    top: 0;
     min-width: 0;
-    align-self: flex-start;
     align-items: center;
     overflow: hidden;
 }
@@ -35,6 +35,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     align-self: flex-start;
+    margin-left: auto;
     min-height: 0;
     max-height: 100%;
     padding-bottom: 224px;

@@ -4,7 +4,7 @@
     flex-shrink: 1;
     width: 100%;
     min-width: 0;
-    max-width: 100%;
+    max-width: 1920px;
     justify-content: center;
     align-items: flex-start;
 }
@@ -17,16 +17,17 @@
     min-height: var(--spacing-11);
     height: var(--spacing-11);
     color: var(--color-white);
-    text-shadow: 0 2px 2px var(--color-blue-900);
+    text-shadow: 1px 2px 0 var(--color-blue-900);
     -unity-text-align: middle-center;
 }
 
 .toolbar-scenario .divider {
-  width: var(--spacing-0_5);
-  height: auto;
-  min-height: var(--spacing-7);
-  margin: var(--spacing-2);
-  background-color: var(--color-white);
+    width: var(--spacing-0_5);
+    height: auto;
+    min-height: var(--spacing-7);
+    margin: var(--spacing-2);
+    background-color: var(--color-white);
+    border-radius: 1px;
 }
 
 .toolbar-scenario__button-group {
@@ -50,6 +51,17 @@
 .toolbar-scenario__button-group .toolbar-scenario__button {
     flex-grow: 0;
     flex-shrink: 0;
+    min-width: var(--spacing-28);
+    max-width: 280px;
+    min-height: var(--spacing-11);
+    max-height: var(--spacing-15); 
     margin-right: var(--spacing-2);
     margin-bottom: var(--spacing-2);
+}
+
+.toolbar-scenario__button-group .toolbar-scenario__button > #Label {
+    min-width: 0;
+    max-height: var(--spacing-10);
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
