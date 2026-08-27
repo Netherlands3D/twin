@@ -20,7 +20,7 @@ public class FirstPersonViewManipulator : DragManipulator
         "Buildings"
     );
 
-    public FirstPersonViewManipulator(VisualElement draggedElement, float deadzone) : base(deadzone)
+    public FirstPersonViewManipulator(VisualElement draggedElement, float deadzone) : base(deadzone, TrickleDown.TrickleDown)
     {
         this.draggedElement = draggedElement;
     }
