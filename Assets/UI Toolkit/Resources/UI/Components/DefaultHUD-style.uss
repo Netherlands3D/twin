@@ -16,11 +16,12 @@
 }
 
 .default-hud__top-section {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
     min-width: 0;
-    align-self: flex-start;
+    min-height: var(--spacing-14);
     align-items: center;
     overflow: hidden;
 }
@@ -35,6 +36,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     align-self: flex-start;
+    margin-left: auto;
     min-height: 0;
     max-height: 100%;
     padding-bottom: 224px;
@@ -48,7 +50,11 @@
 }
 
 .default-hud__top-section > .toolbar-scenario {
+    align-self: stretch;
+    width: auto;
     margin-top: var(--spacing-3);
+    margin-left: 484px;
+    margin-right: 484px;
 }
 
 .default-hud__bottom-section {
