@@ -4,6 +4,7 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class FirstPersonViewManipulator : DragManipulator
 {
@@ -40,7 +41,10 @@ public class FirstPersonViewManipulator : DragManipulator
         base.OnDragEnded(endPosition);
 
         var mousePos = Mouse.current.position.ReadValue();
-        if (!App.UIRoot.IsPointerOverUI())
+        var picked = App.UIRoot.Root.panel.Pick(App.UIRoot.GetPanelClickPosition());
+        var isPointerOverUI = App.UIRoot.IsPointerOverUI(out picked);
+        isPointerOverUI = isPointerOverUI && picked != target;
+        if (!isPointerOverUI)
         {
             App.UIRoot.EnableFPVUI();
             EnterFPVMode();
