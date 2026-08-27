@@ -24,11 +24,14 @@ namespace Netherlands3D.UI.Components
         public string HelpUrl
         {
             get => helpUrl;
-            set
-            {
-                helpUrl = value;
-                if (Icon != null) Icon.tooltip = string.IsNullOrEmpty(value) ? null : "Meer informatie";
-            }
+            set => helpUrl = value;
+        }
+        
+        [UxmlAttribute("help-tooltip")]
+        public string HelpTooltip
+        {
+            get => Icon.tooltip;
+            set => Icon.tooltip = value;
         }
 
         public HelpButton()
