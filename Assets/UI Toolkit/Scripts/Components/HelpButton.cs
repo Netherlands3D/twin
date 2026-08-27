@@ -26,13 +26,6 @@ namespace Netherlands3D.UI.Components
             get => helpUrl;
             set => helpUrl = value;
         }
-        
-        [UxmlAttribute("help-tooltip")]
-        public string HelpTooltip
-        {
-            get => Icon.tooltip;
-            set => Icon.tooltip = value;
-        }
 
         public HelpButton()
         {
