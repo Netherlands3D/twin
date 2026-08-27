@@ -202,6 +202,6 @@
 
     --inspector-border-radius: var(--spacing-2);
     --inspector-min-width: 320px;
-    --inspector-width: 400px;
+    --inspector-width: 420px;
     --inspector-max-width: 520px;
 }
