@@ -12,11 +12,16 @@
 .toolbar-scenario__label {
     flex-grow: 0;
     flex-shrink: 0;
+    min-width: 0;
     padding: 0;
     margin: 0 0 0 var(--spacing-2);
     min-height: var(--spacing-11);
     height: var(--spacing-11);
     color: var(--color-white);
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     text-shadow: 1px 2px 0 var(--color-blue-900);
     -unity-text-align: middle-center;
 }
@@ -50,8 +55,9 @@
 
 .toolbar-scenario__button-group .toolbar-scenario__button {
     flex-grow: 0;
-    flex-shrink: 0;
-    min-width: var(--spacing-28);
+    flex-shrink: 1;
+    min-width: var(--spacing-11);
+    min-width: 0;
     max-width: 280px;
     min-height: var(--spacing-11);
     max-height: var(--spacing-15); 

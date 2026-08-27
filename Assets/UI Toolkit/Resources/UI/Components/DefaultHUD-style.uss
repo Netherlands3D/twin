@@ -17,10 +17,11 @@
 
 .default-hud__top-section {
     position: absolute;
-    left: 484px;
-    right: 428px;
+    left: 0;
+    right: 0;
     top: 0;
     min-width: 0;
+    min-height: var(--spacing-14);
     align-items: center;
     overflow: hidden;
 }
@@ -49,7 +50,11 @@
 }
 
 .default-hud__top-section > .toolbar-scenario {
+    align-self: stretch;
+    width: auto;
     margin-top: var(--spacing-3);
+    margin-left: 484px;
+    margin-right: 484px;
 }
 
 .default-hud__bottom-section {
