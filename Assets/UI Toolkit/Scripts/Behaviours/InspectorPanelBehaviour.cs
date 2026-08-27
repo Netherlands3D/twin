@@ -125,6 +125,10 @@ namespace Netherlands3D.UI.Behaviours
             return panel;
         }
 
-        private void OpenHelp() => Application.OpenURL(HelpUrl);
+        private void OpenHelp()
+        {
+            Application.OpenURL(HelpUrl);
+            toolService.GetTool(ToolType.Help).Close(); // close the tool so it can be opened again when the user wants to click on the help button again
+        }
     }
 }
