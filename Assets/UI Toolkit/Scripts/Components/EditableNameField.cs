@@ -91,7 +91,7 @@ namespace Netherlands3D.UI.Components
             label.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
 
-            inputField.Focus();
+            schedule.Execute(() => { inputField.Focus();}); // we need to wait until the layout engine processes the new Display: flex of the input field before we can select focus the element
         }
         
         private void StopEditing()
