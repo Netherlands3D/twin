@@ -56,7 +56,7 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-6m/Terrain{x}_{y}.6.bin
+    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked_simplified100/Terrain{x}_{y}.1.100.bin
     pathQuery: 
     maximumDistance: 8000
     maximumDistanceSquared: 0
