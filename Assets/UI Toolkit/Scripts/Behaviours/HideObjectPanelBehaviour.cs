@@ -60,7 +60,7 @@ namespace Netherlands3D.UI.Panels
             base.Dispose();
             
             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            objectSelectorService.SelectSubObjectWithBagId.RemoveListener(OnUpdateMappings);
+            objectSelectorService.SelectSubObjectWithBagId.RemoveListener(OnUpdateMappings); //todo: if the panel is destroyed outside of this script, the OnUpdateMappings would give a NullReferenceException
         }
     }
 }
