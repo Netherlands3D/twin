@@ -6,6 +6,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -43,10 +44,10 @@ namespace Netherlands3D.UI.Panels
 
             listView.makeItem = MakeListViewItem;
             listView.bindItem = BindListViewItem;
-           
-            PopulateBagIds(data.Keys.ToList());
-
+            
             mappings = data;
+           
+            UpdateContent();
 
             Button.clicked += OnClose.Invoke;
             
@@ -58,9 +59,9 @@ namespace Netherlands3D.UI.Panels
             Button.clicked -= OnClose.Invoke;
         }
 
-        public void PopulateBagIds(List<string> mappings)
+        public void UpdateContent()
         {
-            listView.itemsSource = mappings;
+            listView.itemsSource = mappings.Keys.ToList();
             listView.RefreshItems();
         }
         
@@ -75,7 +76,7 @@ namespace Netherlands3D.UI.Panels
                 if (mappings[id] is not MeshMapping map) return;
               
                 Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, map.ObjectMapping.items[id]);
-                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
+                App.Cameras.ActiveCamera.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
