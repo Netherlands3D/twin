@@ -79,6 +79,12 @@ namespace Netherlands3D.Functionalities
             PolygonCreationService creationService = ServiceLocator.GetService<PolygonCreationService>();
             creationService.GridInput.whenDrawingArea.AddListener(SetDuringSelectionAreaBounds);
             creationService.GridInput.whenAreaIsSelected.AddListener(SetSelectionAreaBounds);
+            
+            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
+            northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
+            northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);
+            southWestTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleRight);
+            southWestTooltip.SetSnappingSide(TextPopout.SnappingSide.Right);          
         }
 
         private void OnDisable()
@@ -167,6 +173,15 @@ namespace Netherlands3D.Functionalities
         {
             this.selectedArea = selectedAreaBounds;
             OnSelectionBoundsChanged.Invoke(this.selectedArea);
+        }
+
+        private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
+        {
+            var popout = Instantiate(popoutPrefab, canvasTransform);
+            popout.RectTransform().SetPivot(pivotPoint);
+            popout.transform.SetSiblingIndex(0);
+
+            return popout;
         }
 
         // TODO: This should be moved to the Coordinates package and make it configurable whether you want a 2D (where
