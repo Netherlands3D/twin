@@ -331,7 +331,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void OnLayerDataParentChanged()
         {
             var allowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
-            LayerData.LayerProperties.Get<ToggleScatterPropertyData>().AllowScatter = allowScatter;
+            var meshIsScatterable = MeshIsWithinMaxScatterVertexCount();
+            LayerData.LayerProperties.Get<ToggleScatterPropertyData>().AllowScatter = allowScatter && meshIsScatterable;
 
             var propertyPanelService = ServiceLocator.GetService<PropertyPanelBehaviour>();
             if (propertyPanelService.activeLayer == LayerData) //reload the property section if the settings changed
@@ -391,7 +392,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             ScatterGenerationSettingsPropertyData scatterGenerationSettings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             scatterGenerationSettings.IsEditable = true;
             App.Layers.VisualizeAs(LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
-           
+        }
+
+        private bool MeshIsWithinMaxScatterVertexCount()
+        {
+            var meshFilters = transform.GetComponentsInChildren<MeshFilter>();
+            int vertexCount = 0;
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
+                vertexCount += meshFilters[i].sharedMesh.vertexCount;
+                if (vertexCount > 65535)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
