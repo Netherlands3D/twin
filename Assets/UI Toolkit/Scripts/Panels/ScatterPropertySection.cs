@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -67,7 +68,7 @@ namespace Netherlands3D.UI.Panels
             convertToggle.RegisterValueChangedCallback(OnConvertToggleValueChanged);
             convertToggle.SetValueWithoutNotify(convertToScatterPropertyData.IsScattered);
 
-            convertToScatterPropertyData.IsScatteredChanged.AddListener(SetScatterSettingsSectionVisible);
+            convertToScatterPropertyData.IsScatteredChanged.AddListener(ReloadProperties);
             SetScatterSettingsSectionVisible(convertToScatterPropertyData.IsScattered);
 
             settings = properties.Get<ScatterGenerationSettingsPropertyData>();
@@ -94,6 +95,10 @@ namespace Netherlands3D.UI.Panels
             diameterSliderRange.RegisterValueChangedCallback(OnDiameterRangeChanged);
         }
 
+        private void ReloadProperties(bool isScattered)
+        {
+            ServiceLocator.GetService<PropertyPanelBehaviour>().RefreshPropertiesPanelAtEndOfFrame();
+        }
 
         private void SetEntireSectionVisible(bool isVisible)
         {
