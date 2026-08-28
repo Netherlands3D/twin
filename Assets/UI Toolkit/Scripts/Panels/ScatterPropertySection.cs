@@ -69,7 +69,6 @@ namespace Netherlands3D.UI.Panels
             convertToggle.SetValueWithoutNotify(convertToScatterPropertyData.IsScattered);
 
             convertToScatterPropertyData.IsScatteredChanged.AddListener(ReloadProperties);
-            SetScatterSettingsSectionVisible(convertToScatterPropertyData.IsScattered);
 
             settings = properties.Get<ScatterGenerationSettingsPropertyData>();
             if (settings == null)
@@ -118,11 +117,6 @@ namespace Netherlands3D.UI.Panels
         private void OnConvertToggleValueChanged(ChangeEvent<bool> evt)
         {
             convertToScatterPropertyData.IsScattered = evt.newValue;
-        }
-
-        private void SetScatterSettingsSectionVisible(bool isScattered)
-        {
-            scatterSettingsSection.EnableInClassList(UtilityClassConstants.HIDDEN, !isScattered);
         }
 
         private void OnScatterSettingsChanged()
