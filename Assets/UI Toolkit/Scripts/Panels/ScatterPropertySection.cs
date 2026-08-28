@@ -61,9 +61,9 @@ namespace Netherlands3D.UI.Panels
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             convertToScatterPropertyData = properties.Get<ToggleScatterPropertyData>();
-            SetEntireSectionVisible(convertToScatterPropertyData.AllowScatter);
+            SetEntireSectionEnabled(convertToScatterPropertyData.AllowScatter);
 
-            convertToScatterPropertyData.AllowScatterChanged.AddListener(SetEntireSectionVisible);
+            convertToScatterPropertyData.AllowScatterChanged.AddListener(SetEntireSectionEnabled);
             convertToggle.RegisterValueChangedCallback(OnConvertToggleValueChanged);
             convertToggle.SetValueWithoutNotify(convertToScatterPropertyData.IsScattered);
 
@@ -95,9 +95,9 @@ namespace Netherlands3D.UI.Panels
         }
 
 
-        private void SetEntireSectionVisible(bool isVisible)
+        private void SetEntireSectionEnabled(bool isVisible)
         {
-            EnableInClassList(UtilityClassConstants.HIDDEN, !isVisible);
+            SetEnabled(isVisible);
         }
 
         private void SetRotationSliderVisible(bool autoRotate)
