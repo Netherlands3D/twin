@@ -1,7 +1,6 @@
 .inspector {
     --inspector-bg-color: var(--color-white);
     --inspector-border-radius: var(--spacing-2);
-    --inspector-width: 400px;
     --inspector-section-spacing: var(--spacing-3);
     --inspector-section-header-margin-top: var(--spacing-2);
     --inspector-section-header-spacing: var(--spacing-1);
