@@ -362,7 +362,9 @@ namespace Netherlands3D.Twin.Cameras.Input
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Camera cam = App.Cameras.ActiveCamera;
+            Camera cam = App.Cameras?.ActiveCamera;
+            if(!cam)
+                return;
 
             Vector3 touchPos1World = cam.ScreenToWorldPoint(new Vector3(previousPrimaryPointerPosition.x, previousPrimaryPointerPosition.y, cam.nearClipPlane + 1));
             Vector3 touchPos2World = cam.ScreenToWorldPoint(new Vector3(previousSecondaryPointerPosition.x, previousSecondaryPointerPosition.y, cam.nearClipPlane + 1));
