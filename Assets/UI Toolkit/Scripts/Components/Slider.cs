@@ -30,7 +30,7 @@ namespace Netherlands3D.UI.Components
             if (string.IsNullOrEmpty(label))
                 label = "Label";
 
-            //showInputField = false;
+            showInputField = false;
             fill = true;
 
             RegisterCallback<AttachToPanelEvent>(_ => BuildSliderRow());
