@@ -30,7 +30,7 @@ namespace Netherlands3D.UI.Components
             if (string.IsNullOrEmpty(label))
                 label = "Label";
 
-            showInputField = false;
+            //showInputField = false;
             fill = true;
 
             RegisterCallback<AttachToPanelEvent>(_ => BuildSliderRow());
@@ -86,6 +86,16 @@ namespace Netherlands3D.UI.Components
         }
 
         private NumberField inputField;
+        
+        public override void SetValueWithoutNotify(float newValue)
+        {
+            base.SetValueWithoutNotify(newValue);
+            
+            if (inputField == null)
+                return;
+
+            inputField.SetValueWithoutNotify(value);
+        }
 
         private NumberField CreateInputField()
         {
