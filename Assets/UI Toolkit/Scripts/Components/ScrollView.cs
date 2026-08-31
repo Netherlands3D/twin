@@ -15,7 +15,6 @@ namespace Netherlands3D.UI.Components
     public partial class ScrollView : UnityEngine.UIElements.ScrollView
     {
         private float itemGap = 12f;
-        private int _lastGapChildCount = -1;
 
         [UxmlAttribute("mode")]
         public ScrollViewMode Mode
@@ -32,7 +31,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 itemGap = value;
-                ApplyItemGap(force: true);
+                ApplyItemGap();
             }
         }
 
@@ -76,24 +75,21 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 HookGapHandlers();
-                ApplyItemGap(force: true);
+                ApplyItemGap();
             });
         }
 
-        private void ApplyItemGap(bool force = false)
+        private void ApplyItemGap()
         {
             var cont = contentContainer;
             if (cont == null) return;
 
             int count = cont.childCount;
-            if (!force && count == _lastGapChildCount) return;
-            _lastGapChildCount = count;
 
-            float gap = itemGap;
             for (int i = 0; i < count; i++)
             {
                 var child = cont.ElementAt(i);
-                child.style.marginTop = (i == 0) ? 0 : gap;
+                child.style.marginTop = (i == 0) ? 0 : itemGap;
             }
         }
 
