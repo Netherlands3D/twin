@@ -13,8 +13,7 @@ namespace Netherlands3D
         private Label tooltipLabel;
 
         private const float TooltipOffset = 6f;
-        private const float TooltipTopNudge = 14f;
-        private const float TooltipDownwardOffset = -14f;
+        private const float TooltipTopOffset = 14f;
 
         private VisualElement hoveredTooltipElement;
 
@@ -143,7 +142,7 @@ namespace Netherlands3D
 
             float minLeft = TooltipOffset;
             float maxLeft = Mathf.Max(minLeft, rootWidth - tooltipWidth - TooltipOffset);
-            float minTop = TooltipOffset + TooltipTopNudge;
+            float minTop = TooltipOffset + TooltipTopOffset;
             float maxTop = Mathf.Max(minTop, rootHeight - tooltipHeight - TooltipOffset);
 
             float left = elementMax.x + TooltipOffset;
@@ -152,9 +151,9 @@ namespace Netherlands3D
 
             left = Mathf.Clamp(left, minLeft, maxLeft);
 
-            float top = elementMin.y - TooltipTopNudge;
+            float top = elementMin.y - TooltipTopOffset;
             if (top < minTop)
-                top = elementMax.y + TooltipDownwardOffset;
+                top = elementMax.y + TooltipTopOffset;
 
             top = Mathf.Clamp(top, minTop, maxTop);
 
