@@ -165,6 +165,8 @@ namespace Netherlands3D.UI.Components
         
         public void UpdateFrustum()
         {
+            if(App.Cameras == null) return;
+            
             Camera current = App.Cameras.ActiveCamera;
             CameraExtents.GetRDExtent(current);
             var cameraCorners = CameraExtents.GetWorldSpaceCorners(current);

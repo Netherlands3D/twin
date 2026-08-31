@@ -71,7 +71,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         public void CopyCoordinates()
         {
             App.Debug.DisplayMessage(copySnackbarText, IconImage.COPY_PASTE);
-            WebGLClipboard.Copy(currentCoordinates.ToString());
+            //WebGLClipboard.Copy(currentCoordinates.ToString());
         }
 
         public void OnPointerEnter(PointerEventData eventData)
