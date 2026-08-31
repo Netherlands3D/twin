@@ -70,7 +70,6 @@ namespace Netherlands3D.Masking
         public void MoveToScreenPoint()
         {
             UpdateFromPointerPosition();
-            ScaleByCameraDistance();
         }
 
         public void InteruptAnimation()
@@ -193,8 +192,6 @@ namespace Netherlands3D.Masking
             if (!isDragging) return;
 
             UpdateFromPointerPosition();
-            ScaleByCameraDistance();
-
             AnimateIn();
         }
 
