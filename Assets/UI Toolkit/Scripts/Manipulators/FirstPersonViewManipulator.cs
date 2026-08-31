@@ -4,11 +4,15 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class FirstPersonViewManipulator : DragManipulator
 {
+    private readonly VisualElement draggedElement;
+    
     private Vector2 totalDrag;
     private Vector2 layoutPositionAtDragStart;
+    
 
     private readonly LayerMask layers = LayerMask.GetMask(
         "Default",
@@ -16,8 +20,9 @@ public class FirstPersonViewManipulator : DragManipulator
         "Buildings"
     );
 
-    public FirstPersonViewManipulator(float deadzone) : base(deadzone)
+    public FirstPersonViewManipulator(VisualElement draggedElement, float deadzone) : base(deadzone, TrickleDown.TrickleDown)
     {
+        this.draggedElement = draggedElement;
     }
 
     protected override void OnDragStarted(Vector2 startPosition)
@@ -31,8 +36,8 @@ public class FirstPersonViewManipulator : DragManipulator
     {
         base.OnDrag(delta);
         totalDrag += delta;
-        target.style.top = layoutPositionAtDragStart.y + totalDrag.y;
-        target.style.left = layoutPositionAtDragStart.x + totalDrag.x;
+        draggedElement.style.top = layoutPositionAtDragStart.y + totalDrag.y;
+        draggedElement.style.left = layoutPositionAtDragStart.x + totalDrag.x;
     }
 
     protected override void OnDragEnded(Vector2 endPosition)
@@ -40,7 +45,10 @@ public class FirstPersonViewManipulator : DragManipulator
         base.OnDragEnded(endPosition);
 
         var mousePos = Mouse.current.position.ReadValue();
-        if (!App.UIRoot.IsPointerOverUI())
+        var picked = App.UIRoot.Root.panel.Pick(App.UIRoot.GetPanelClickPosition());
+        var isPointerOverUI = App.UIRoot.IsPointerOverUI(out picked);
+        isPointerOverUI = isPointerOverUI && picked != draggedElement;
+        if (!isPointerOverUI)
         {
             App.UIRoot.EnableFPVUI();
             EnterFPVMode();
@@ -51,8 +59,8 @@ public class FirstPersonViewManipulator : DragManipulator
 
     private void ResetTarget()
     {
-        target.style.top = 0;
-        target.style.left = 0;
+        draggedElement.style.top = 0;
+        draggedElement.style.left = 0;
         totalDrag = Vector2.zero;
     }
 

@@ -76,7 +76,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void OnFPVEnter()
         {
             //Only lock mouse when the locking modus is selected.
-            RemoveInputLockConstrain(this); // always start clean
+            inputLocks.Clear(); // always start clean
             ToggleCursor(lockMouseModus);
         }
 
