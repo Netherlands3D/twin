@@ -72,10 +72,11 @@ namespace Netherlands3D.UI.Panels
             convertToggle.RegisterValueChangedCallback(OnConvertToggleValueChanged);
             convertToggle.SetValueWithoutNotify(convertToScatterPropertyData.IsScattered);
 
+            convertToScatterPropertyData.IsEditableChanged.AddListener(ReloadProperties);
             convertToScatterPropertyData.IsScatteredChanged.AddListener(ReloadProperties);
 
             settings = properties.Get<ScatterGenerationSettingsPropertyData>();
-            if (settings == null)
+            if (settings == null || !convertToScatterPropertyData.IsScattered) //if the scatter settings don't exist, or the layer is not set to be scattered, disable scatter settings part of the panel
             {
                 scatterSettingsSection.EnableInClassList(UtilityClassConstants.HIDDEN, true);
                 return;
@@ -104,6 +105,8 @@ namespace Netherlands3D.UI.Panels
         {
             convertToScatterPropertyData.AllowScatterChanged.RemoveListener(SetScatterToggleActive);
             convertToScatterPropertyData.IsScatteredChanged.RemoveListener(ReloadProperties);
+            convertToScatterPropertyData.IsEditableChanged.RemoveListener(ReloadProperties);
+
             settings.ScatterSettingsChanged.RemoveListener(OnScatterSettingsChanged);
             settings.ScatterDistributionChanged.RemoveListener(OnScatterSettingsChanged);
             settings.ScatterShapeChanged.RemoveListener(OnScatterSettingsChanged);
