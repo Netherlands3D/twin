@@ -129,6 +129,7 @@ namespace Netherlands3D.UI.Panels
         {
             App.Layers.LayerAdded.RemoveListener(OnLayerHierarchyChanged);
             App.Layers.LayerRemoved.RemoveListener(OnLayerHierarchyChanged);
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
         }
 
         public override void OnInspectorClick(InspectorPanel inspector)

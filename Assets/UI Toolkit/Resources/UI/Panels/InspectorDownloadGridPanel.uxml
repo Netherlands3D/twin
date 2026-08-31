@@ -17,14 +17,14 @@
             <ui:VisualElement class="inspector-download-grid__number-fields-row">
                 <ui:Label text="Hoekpunt ZW" class="inspector-download-grid__number-fields-text inspector-download-grid__item"/>
                 <nl3d:Button name="ButtonCopyZw" class="inspector-download-grid__button-copy inspector-download-grid__item" icon="CopyPaste" button-style="IconOnly"/>
-                <nl3d:NumberField name="ZW_X" number-field-style="Small" class="inspector-download-grid__item"/>
-                <nl3d:NumberField name="ZW_Y" number-field-style="Small" class="inspector-download-grid__item inspector-download-grid__item-last"/>
+                <nl3d:NumberField name="ZW_X" label-text="X" number-field-style="Small" class="inspector-download-grid__item"/>
+                <nl3d:NumberField name="ZW_Y" label-text="Y" number-field-style="Small" class="inspector-download-grid__item inspector-download-grid__item-last"/>
             </ui:VisualElement>
             <ui:VisualElement class="inspector-download-grid__number-fields-row">
                 <ui:Label text="Hoekpunt NO" class="inspector-download-grid__number-fields-text inspector-download-grid__item"/>
                 <nl3d:Button name="ButtonCopyNo" class="inspector-download-grid__button-copy inspector-download-grid__item" icon="CopyPaste" button-style="IconOnly"/>
-                <nl3d:NumberField name="NO_X" number-field-style="Small" class="inspector-download-grid__item"/>
-                <nl3d:NumberField name="NO_Y" number-field-style="Small" class="inspector-download-grid__item inspector-download-grid__item-last"/>
+                <nl3d:NumberField name="NO_X" label-text="X" number-field-style="Small" class="inspector-download-grid__item"/>
+                <nl3d:NumberField name="NO_Y" label-text="Y" number-field-style="Small" class="inspector-download-grid__item inspector-download-grid__item-last"/>
             </ui:VisualElement>
             <nl3d:Hyperlink text="Productbeschrijving 3D basisvoorziening" url="https://3d.kadaster.nl/productbeschrijving/"/>
             <nl3d:Hyperlink text="Gebruiksvoorwaarden 3DBag" url="https://docs.3dbag.nl/en/copyright/"/>

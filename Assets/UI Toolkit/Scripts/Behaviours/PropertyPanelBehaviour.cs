@@ -23,6 +23,8 @@ namespace Netherlands3D.UI.Panels
         public LayerData activeLayer;
         public UnityEvent<LayerData> PropertySectionOpened;
         public UnityEvent<LayerData> PropertySectionClosed;
+
+        private bool refreshRequested = false;
         
         private void Start()
         {
@@ -58,7 +60,21 @@ namespace Netherlands3D.UI.Panels
             activeLayer = null;
         }
 
-       public void SpawnPanel(LayerData layer)
+        public void RefreshPropertiesPanelAtEndOfFrame() //we do this only once per frame, since multiple objects can request a refresh in the same frame.
+        {
+            refreshRequested = true;
+        }
+        
+        private void Update()
+        {
+            if (refreshRequested)
+            {
+                SpawnPanel(activeLayer);
+                refreshRequested = false;
+            }
+        }
+
+        public void SpawnPanel(LayerData layer)
         {
             ClearActivePanel();
             propertiesPanel.SetVisible(true);

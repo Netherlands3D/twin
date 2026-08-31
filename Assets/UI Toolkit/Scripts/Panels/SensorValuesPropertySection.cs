@@ -62,6 +62,10 @@ namespace Netherlands3D.UI.Panels
         {
             SetColorPickerState(ColorPickerState.None);
             ColorPicker.ColorChanged.RemoveListener(OnColorPicked);
+            propertyData.OnMinValueChanged.RemoveListener(UpdateMinimumSlider);
+            propertyData.OnMaxValueChanged.RemoveListener(UpdateMaximumSlider);
+            propertyData.OnMinColorChanged.RemoveListener(UpdateMinimumColor);
+            propertyData.OnMaxColorChanged.RemoveListener(UpdateMaximumColor);
         }
 
         private void OnMinimumColorTileClicked(ClickEvent evt)

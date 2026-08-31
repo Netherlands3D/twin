@@ -25,6 +25,7 @@
     --spacing-20: 80px;
     --spacing-21: 84px;
     --spacing-24: 96px;
+    --spacing-25: 100px;
     --spacing-28: 112px;
     --spacing-32: 128px;
     --spacing-36: 144px;

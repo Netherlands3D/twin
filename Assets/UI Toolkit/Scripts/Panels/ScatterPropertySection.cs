@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -71,11 +72,11 @@ namespace Netherlands3D.UI.Panels
             convertToggle.RegisterValueChangedCallback(OnConvertToggleValueChanged);
             convertToggle.SetValueWithoutNotify(convertToScatterPropertyData.IsScattered);
 
-            convertToScatterPropertyData.IsScatteredChanged.AddListener(SetScatterSettingsSectionVisible);
-            SetScatterSettingsSectionVisible(convertToScatterPropertyData.IsScattered);
+            convertToScatterPropertyData.IsEditableChanged.AddListener(ReloadProperties);
+            convertToScatterPropertyData.IsScatteredChanged.AddListener(ReloadProperties);
 
             settings = properties.Get<ScatterGenerationSettingsPropertyData>();
-            if (settings == null)
+            if (settings == null || !convertToScatterPropertyData.IsScattered) //if the scatter settings don't exist, or the layer is not set to be scattered, disable scatter settings part of the panel
             {
                 scatterSettingsSection.EnableInClassList(UtilityClassConstants.HIDDEN, true);
                 return;
@@ -96,8 +97,26 @@ namespace Netherlands3D.UI.Panels
             rotationSlider.RegisterValueChangedCallback(OnRotationValueChanged);
             heightSliderRange.RegisterValueChangedCallback(OnHeightRangeChanged);
             diameterSliderRange.RegisterValueChangedCallback(OnDiameterRangeChanged);
+            
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            convertToScatterPropertyData.AllowScatterChanged.RemoveListener(SetScatterToggleActive);
+            convertToScatterPropertyData.IsScatteredChanged.RemoveListener(ReloadProperties);
+            convertToScatterPropertyData.IsEditableChanged.RemoveListener(ReloadProperties);
+
+            settings.ScatterSettingsChanged.RemoveListener(OnScatterSettingsChanged);
+            settings.ScatterDistributionChanged.RemoveListener(OnScatterSettingsChanged);
+            settings.ScatterShapeChanged.RemoveListener(OnScatterSettingsChanged);
+            settings.AutoRotateToLineChanged.RemoveListener(SetRotationSliderVisible);
+        }
+
+        private void ReloadProperties(bool isScattered)
+        {
+            ServiceLocator.GetService<PropertyPanelBehaviour>().RefreshPropertiesPanelAtEndOfFrame();
+        }
 
         private void SetScatterToggleActive(bool active)
         {
@@ -118,11 +137,6 @@ namespace Netherlands3D.UI.Panels
         private void OnConvertToggleValueChanged(ChangeEvent<bool> evt)
         {
             convertToScatterPropertyData.IsScattered = evt.newValue;
-        }
-
-        private void SetScatterSettingsSectionVisible(bool isScattered)
-        {
-            scatterSettingsSection.EnableInClassList(UtilityClassConstants.HIDDEN, !isScattered);
         }
 
         private void OnScatterSettingsChanged()
