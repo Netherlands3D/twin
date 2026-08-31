@@ -1,17 +1,10 @@
 .listview-item {
-    /*transition-property: background-color;*/
-    /*transition-duration: 0.1s;*/
-    /*transition-timing-function: ease-in;*/
-
     background-color: transparent;
 }
 
 .listview-item__container{    
-  
-    display: flex;
     flex-direction: row;
     align-items: center;
-
     border-color:  var(--color-blue-200);
 }
 
@@ -19,15 +12,9 @@
     align-items: center;
 }
 
-.unity-collection-view__item{
-    /* border-width: var(--spacing-0_5); */
-    /*  border-radius: var(--spacing-2); */
-}
-
 .unity-collection-view__item:checked {
     background-color: var(--color-blue-100);
     border-color: var(--color-blue-700);
-    /*  border-width:  var(--spacing-0_5); */
 }
 
 .unity-collection-view__item:hover {

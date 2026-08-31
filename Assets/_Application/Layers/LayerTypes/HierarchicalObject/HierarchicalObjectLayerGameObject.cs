@@ -13,6 +13,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -27,6 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public bool DebugBoundingBox = false;
 
         private int snappingCullingMask = 0;
+        private bool meshIsScatterable = true;
 
         private BoundingBox CalculateWorldBoundsFromRenderers()
         {
@@ -83,9 +85,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             UpdatePosition(transformProperty.Position);
             UpdateRotation(transformProperty.EulerRotation);
             UpdateScale(transformProperty.LocalScale);
+            meshIsScatterable = MeshIsWithinMaxScatterVertexCount();
             
             ToggleScatterPropertyData scatterProperty = LayerData.GetProperty<ToggleScatterPropertyData>();
-            if(scatterProperty != null) scatterProperty.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
+            if(scatterProperty != null)
+            {
+                scatterProperty.IsEditable = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();  //we want to show the panel if the layer is scatterable
+                scatterProperty.AllowScatter = meshIsScatterable;  //we want to show a message why we cannot scatter when the layer is scatterable but the mesh is not
+            }
 
             WorldTransform.RecalculatePositionAndRotation();
             previousCoordinate = WorldTransform.Coordinate;
@@ -192,7 +199,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                         transform.localScale,
                         scaleUnitCharacter);
             InitProperty<ColorPropertyData>(properties);
-            InitProperty<ToggleScatterPropertyData>(properties, p => p.AllowScatter = true);
+            InitProperty<ToggleScatterPropertyData>(properties, p =>
+            {
+                p.IsEditable = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>(); //we want to show the panel if the layer is scatterable
+                p.AllowScatter = meshIsScatterable; //we want to show a message why we cannot scatter when the layer is scatterable but the mesh is not
+            });
         }
 
         protected override void RegisterEventListeners()
@@ -329,7 +340,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnLayerDataParentChanged()
         {
-            LayerData.LayerProperties.Get<ToggleScatterPropertyData>().AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
+            var layerCanScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
+            var toggleScatterPropertyData = LayerData.LayerProperties.Get<ToggleScatterPropertyData>();
+            toggleScatterPropertyData.IsEditable = layerCanScatter;  //we want to show the panel if the layer is scatterable
+            toggleScatterPropertyData.AllowScatter = meshIsScatterable; //we want to show a message why we cannot scatter when the layer is scatterable but the mesh is not
+
+            var propertyPanelService = ServiceLocator.GetService<PropertyPanelBehaviour>();
+            if (propertyPanelService.activeLayer == LayerData) //reload the property section if the settings changed
+            {
+                propertyPanelService.SpawnPanel(LayerData);
+            }
         }
 
         private void OnImportedObjectVisualized(GameObject importedObject)
@@ -383,7 +403,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             ScatterGenerationSettingsPropertyData scatterGenerationSettings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             scatterGenerationSettings.IsEditable = true;
             App.Layers.VisualizeAs(LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
-           
+        }
+
+        private bool MeshIsWithinMaxScatterVertexCount()
+        {
+            var meshFilters = transform.GetComponentsInChildren<MeshFilter>();
+            int vertexCount = 0;
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
+                vertexCount += meshFilters[i].sharedMesh.vertexCount;
+                if (vertexCount > 65535)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

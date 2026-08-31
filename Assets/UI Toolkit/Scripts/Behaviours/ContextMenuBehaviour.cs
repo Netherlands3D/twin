@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
+using Netherlands3D.UI_Toolkit;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,8 +40,8 @@ namespace Netherlands3D.UI.Panels
             floatingPanel = new FloatingPanel();
             App.UIRoot.Root.Add(floatingPanel);
             floatingPanel.OnClose.AddListener(ClearActivePanel);
-            floatingPanel.SetEnabled(false);     
-
+            floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            
             var map = inputActionAsset.FindActionMap("Camera", true);
             rightClickAction = map.FindAction("RightClick", true);
             leftClickAction = map.FindAction("LeftClick", true);
@@ -88,7 +89,7 @@ namespace Netherlands3D.UI.Panels
             selectedBehaviour?.Dispose();
             floatingPanel.Remove(floatingPanelContent);
             floatingPanelContent = null;
-            floatingPanel.SetEnabled(false);
+            floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
 
         private void OnRightClick(InputAction.CallbackContext ctx)
@@ -132,7 +133,7 @@ namespace Netherlands3D.UI.Panels
                 selectedBehaviour = panelBehaviour;
                 var data = panelBehaviour.GetData();
                 floatingPanelContent = panelBehaviour.SpawnFloatingPanelContent(floatingPanel, data);
-                floatingPanel.SetEnabled(true);
+                floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, false);
                 floatingPanel.Add(floatingPanelContent);
                 floatingPanel.SetPosition(screenPos);
                 floatingPanel.BringToFront();

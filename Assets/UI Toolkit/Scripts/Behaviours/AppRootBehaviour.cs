@@ -78,8 +78,13 @@ namespace Netherlands3D
 
         public bool IsPointerOverUI()
         {
+            return IsPointerOverUI(out _);
+        }
+        
+        public bool IsPointerOverUI(out VisualElement picked)
+        {
             Vector2 panelPosition = GetPanelClickPosition();
-            VisualElement picked = appRoot.panel.Pick(panelPosition);
+            picked = appRoot.panel.Pick(panelPosition);
             return picked != null;
         }
     }
