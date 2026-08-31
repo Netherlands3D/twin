@@ -23,6 +23,7 @@ namespace Netherlands3D.Masking
         private bool hovering = false;
         private bool isDragging = false;
         [SerializeField] private float scale = 1.0f;
+         private float maxScale = 200f;
 
         private Coroutine animationCoroutine;
 
@@ -182,7 +183,7 @@ namespace Netherlands3D.Masking
             if(!mainCamera) return Vector3.one;
 
             var distanceScale = Mathf.Max(1.0f, scale * Vector3.Distance(mainCamera.transform.position, transform.position));
-            return Vector3.one * distanceScale;
+            return  Vector3.one * Mathf.Min(maxScale, distanceScale);
         }
 
         public void OnPointerClick(PointerEventData eventData)
