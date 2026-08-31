@@ -103,7 +103,7 @@ namespace Netherlands3D.UI.Panels
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             convertToScatterPropertyData.AllowScatterChanged.RemoveListener(SetScatterToggleActive);
-            convertToScatterPropertyData.IsScatteredChanged.RemoveListener(SetScatterSettingsSectionVisible);
+            convertToScatterPropertyData.IsScatteredChanged.RemoveListener(ReloadProperties);
             settings.ScatterSettingsChanged.RemoveListener(OnScatterSettingsChanged);
             settings.ScatterDistributionChanged.RemoveListener(OnScatterSettingsChanged);
             settings.ScatterShapeChanged.RemoveListener(OnScatterSettingsChanged);
