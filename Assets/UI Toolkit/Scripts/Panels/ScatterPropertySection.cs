@@ -96,6 +96,18 @@ namespace Netherlands3D.UI.Panels
             rotationSlider.RegisterValueChangedCallback(OnRotationValueChanged);
             heightSliderRange.RegisterValueChangedCallback(OnHeightRangeChanged);
             diameterSliderRange.RegisterValueChangedCallback(OnDiameterRangeChanged);
+            
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            convertToScatterPropertyData.AllowScatterChanged.RemoveListener(SetScatterToggleActive);
+            convertToScatterPropertyData.IsScatteredChanged.RemoveListener(SetScatterSettingsSectionVisible);
+            settings.ScatterSettingsChanged.RemoveListener(OnScatterSettingsChanged);
+            settings.ScatterDistributionChanged.RemoveListener(OnScatterSettingsChanged);
+            settings.ScatterShapeChanged.RemoveListener(OnScatterSettingsChanged);
+            settings.AutoRotateToLineChanged.RemoveListener(SetRotationSliderVisible);
         }
 
 
