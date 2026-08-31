@@ -186,6 +186,13 @@ namespace Netherlands3D.UI.Components
             }
         }
 
+        [UxmlAttribute("help-tooltip")]
+        public string HelpTooltip
+        {
+            get => helpButton.tooltip;
+            set => helpButton.tooltip = value;
+        }
+
         public ContentContainer()
         {
             this.CloneComponentTree("Components");
