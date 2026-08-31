@@ -19,11 +19,12 @@ namespace Netherlands3D.Masking
         private Material domeMaterial;
         private MeshRenderer meshRenderer;
         private Camera mainCamera;
-
+        private float maxCameraDistance = 1500; //todo make this the same constant everywhere?
+        private float minCameraDistance = 100;
+        
         private bool hovering = false;
         private bool isDragging = false;
         [SerializeField] private float scale = 1.0f;
-         private float maxScale = 200f;
 
         private Coroutine animationCoroutine;
 
@@ -44,7 +45,7 @@ namespace Netherlands3D.Masking
         [Header("References")]
         [SerializeField] private Transform scaleAnchor;
 
-        private Vector3 targetScale;
+        private Vector3 targetScale = Vector3.zero;
 
         private void Awake()
         {
@@ -182,8 +183,9 @@ namespace Netherlands3D.Masking
         {
             if(!mainCamera) return Vector3.one;
 
-            var distanceScale = Mathf.Max(1.0f, scale * Vector3.Distance(mainCamera.transform.position, transform.position));
-            return  Vector3.one * Mathf.Min(maxScale, distanceScale);
+            float cameraDistance = Mathf.Clamp(mainCamera.transform.position.y, minCameraDistance, maxCameraDistance);
+            var distanceScale = Mathf.Max(1.0f, scale * Mathf.Min(cameraDistance, Vector3.Distance(mainCamera.transform.position, transform.position)));
+            return  Vector3.one * distanceScale;
         }
 
         public void OnPointerClick(PointerEventData eventData)
