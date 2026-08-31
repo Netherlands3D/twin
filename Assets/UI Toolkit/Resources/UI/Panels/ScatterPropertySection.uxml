@@ -1,4 +1,9 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False"
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns:ui="UnityEngine.UIElements" 
+         xmlns:nl3d="Netherlands3D.UI.Components"
+         xmlns:nl3dP="Netherlands3D.UI.Panels"
+         noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+         editor-extension-mode="False"
          name="ScatterPropertySection" class="scatter-property-section">
     <nl3d:ContentContainer leading-icon="ScatterObject" text="Object verspreiden">
         <ui:VisualElement name="ToggleScatterSection">
@@ -13,5 +18,10 @@
             <nl3d:SliderRange  name="HoogteVariatie" label="Hoogte variatie (m)" low-value="0" high-value="50" class="scatter-property-section__scatter-control" />
             <nl3d:SliderRange  name="DiameterVariatie" label="Diameter variatie (m)" low-value="0" high-value="50" class="scatter-property-section__scatter-control" />
         </ui:VisualElement>
+            <ui:VisualElement name="CannotScatterErrorPanel" class="scatter-property-section__error-panel">
+                <nl3d:Icon image="Warning" color="Warning"/>
+                <ui:Label text="|" class="scatter-property-section__error-message-text scatter-property-section__error-message-divider"/>
+                <ui:Label text="Dit object heeft meer dan 65535 vertices en kan daarom niet in een gebied verspreid worden." class="scatter-property-section__error-message-text"/>
+            </ui:VisualElement>
     </nl3d:ContentContainer>
 </ui:UXML>
