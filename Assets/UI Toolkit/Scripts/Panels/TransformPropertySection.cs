@@ -95,8 +95,16 @@ namespace Netherlands3D.UI.Panels
             UpdateScalingFields(transformPropertyData.LocalScale);
 
             SetTransformLocks(properties);
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            transformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
+            transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
+            transformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
+        }
+        
         private void SetUnitCharacter(XYZField fields, string unitCharacter)
         {
             fields.xField.UnitCharacter = unitCharacter;
