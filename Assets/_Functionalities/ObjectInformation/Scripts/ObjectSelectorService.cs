@@ -90,7 +90,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
             toolService = ServiceLocator.GetService<ToolService>();
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
@@ -138,6 +137,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             inputService.RightClickUpAction.performed += OnRightClickUp;
             inputService.LeftClickAction.performed += OnLeftClick;
             inputService.RightClickAction.performed += OnRightClick;
+            
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
