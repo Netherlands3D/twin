@@ -123,7 +123,7 @@ namespace Netherlands3D.UI.Components
         {
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, true);
-            PointerStyle.ChangeCursor(PointerStyle.Style.POINTER);
+            PointerStyle.ChangeCursor(PointerStyle.Style.GRAB);
         }
 
         private void OnPointerLeave(PointerLeaveEvent evt)
@@ -276,10 +276,9 @@ namespace Netherlands3D.UI.Components
         private void OnDragEnded(Vector2 endPosition)
         {
             isDragging = false;
-            Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, Pointer.current.position.ReadValue());
 
-            if (worldBound.Contains(panelPos))
-                PointerStyle.ChangeCursor(PointerStyle.Style.POINTER); //pointer is still in the panel
+            if (worldBound.Contains(endPosition))
+                PointerStyle.ChangeCursor(PointerStyle.Style.GRAB); //pointer is still in the panel
             else
                 PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
             
