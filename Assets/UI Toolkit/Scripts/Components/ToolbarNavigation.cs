@@ -23,6 +23,7 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             var fpvIcon = FPV.Q<Icon>();
+            fpvIcon.pickingMode = PickingMode.Ignore;
             var fpvManipulator = new FirstPersonViewManipulator(fpvIcon, 0);
             FPV.AddManipulator(fpvManipulator);
             
@@ -38,7 +39,8 @@ namespace Netherlands3D.UI.Components
 
         private void OnFPVPointerEnter(PointerEnterEvent evt)
         {
-            PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
+            if(!isDragging)
+                PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
         }
         
         private void OnFPVPointerLeave(PointerLeaveEvent evt)
