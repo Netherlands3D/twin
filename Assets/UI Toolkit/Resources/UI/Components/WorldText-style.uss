@@ -1,13 +1,17 @@
 .world-text
 {
-    min-width: var(--spacing-2_5);
-    min-height: var(--spacing-2_5);
+  
+}
+
+.world-text > .editable-name-field{
     background-color: var(--color-white);
 }
 
 .world-text__position {
     border-radius: 20px;
-    border-width: 2px;
+    border-width: 5px;
     border-color: var(--color-black);
-    background-color: var(--color-red);
+    background-color: var(--color-white);
+    height: 20px;
+    width: 20px;
 }

@@ -1,4 +1,5 @@
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -13,6 +14,7 @@ namespace Netherlands3D.UI.Components
         private SnappingSide snappingSide = SnappingSide.Above;
         
         
+        
         public WorldText()
         {
             this.CloneComponentTree("Components");
@@ -20,6 +22,8 @@ namespace Netherlands3D.UI.Components
             
             nameField = this.Q<EditableNameField>();
             position = this.Q<VisualElement>("Position");
+            
+            RegisterCallback<GeometryChangedEvent>(UpdateSnapping);
         }
 
         public void SetText(string text)
@@ -29,11 +33,18 @@ namespace Netherlands3D.UI.Components
 
         public void SetSnappingSide(SnappingSide snappingSide)
         {
+            this.snappingSide = snappingSide;
+        }
+
+        private void UpdateSnapping(GeometryChangedEvent evt)
+        {
             switch (snappingSide)
             {
                 case SnappingSide.Left:
                 {
-                    nameField.style.transformOrigin = new TransformOrigin(-0.5f, 0);
+                    float offsetX = -(nameField.resolvedStyle.width * 0.5f) - (position.resolvedStyle.width * 0.5f);
+                    float offsetY = (nameField.resolvedStyle.height * 0.5f) + (position.resolvedStyle.height * 0.5f);
+                    nameField.style.translate = new Translate(offsetX, offsetY, 0);
                     break;
                 }
                 case SnappingSide.Right:

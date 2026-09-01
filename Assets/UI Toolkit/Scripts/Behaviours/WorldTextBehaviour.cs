@@ -37,7 +37,7 @@ namespace Netherlands3D.UI.Panels
             FloatingElement floatingElement = new FloatingElement();
             WorldText text = new WorldText();
             text.SetText("test");
-            text.SetSnappingSide(WorldText.SnappingSide.Above);
+            text.SetSnappingSide(WorldText.SnappingSide.Left);
             floatingElement.Add(text);
             
             WorldTextObject worldTextObject = new WorldTextObject();
@@ -61,6 +61,7 @@ namespace Netherlands3D.UI.Panels
                 var contentPos = content.worldBound.position;
                 var localPos = panelPos - contentPos;
                 worldTextObject.floatingElement.SetPosition(localPos);
+                
             }
         }
         
