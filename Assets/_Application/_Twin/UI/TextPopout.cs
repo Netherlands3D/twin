@@ -1,9 +1,13 @@
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Rendering;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
+using UnityEngine.UI;
+using System.Collections;
 
 namespace Netherlands3D.Twin.UI
 {
@@ -13,12 +17,22 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private float disappearDistance = 2000f;
         [SerializeField] private float doubleClickThreshold = 0.5f;
         [SerializeField] private RectTransform pointTransform;
+
+        [Header("Image")]
+        [SerializeField] private GameObject imageContainer;
+        [SerializeField] private RawImage imagePreview;
+        [SerializeField] private TMP_Text imageCaptionText;
+        [SerializeField] private int maxImagePreviewDimension = 512;
+
         private float lastClickTime = -0.5f;
         private float originalSelectionColorAlpha;
 
         private RectTransform rectTransform;
         private Camera mainCamera;
         private Coordinate? stuckToWorldPosition = null;
+        private Coroutine imageLoadRoutine;
+        private Texture2D loadedTexture;
+        private Vector2 initialImagePreviewSize;
 
         public UnityEvent<string> OnEndEdit;
         public UnityEvent TextFieldSelected;
@@ -27,20 +41,18 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent TextFieldInputConfirmed;
 
         private float localDistanceToPoint = 20;
-        
+
         public enum SnappingSide { Left, Right, Above }
         private SnappingSide snappingSide = SnappingSide.Above;
-        
+
         public TMP_InputField TextField => textField;
-        
+
         public bool ReadOnly
         {
             get => textField.readOnly;
             set => textField.readOnly = value;
         }
 
-        // Unfortunately we cannot use the textfield.interactable property, since this also changes the selection state, which we don't want.
-        // Instead we will set the selection alpha color to 0 to make it seem like no text is selected.
         public bool SelectableText
         {
             get => originalSelectionColorAlpha != textField.selectionColor.a;
@@ -58,6 +70,11 @@ namespace Netherlands3D.Twin.UI
             rectTransform = GetComponent<RectTransform>();
             gameObject.SetActive(false);
             originalSelectionColorAlpha = textField.selectionColor.a;
+
+            if (imagePreview != null)
+                initialImagePreviewSize = imagePreview.rectTransform.sizeDelta;
+
+            ClearImage();
         }
 
         private void OnEnable()
@@ -66,6 +83,14 @@ namespace Netherlands3D.Twin.UI
             textField.onEndEdit.AddListener(OnEndEdit.Invoke);
             textField.onSelect.AddListener(OnTextFieldSelect);
             textField.onDeselect.AddListener(OnTextFieldDeselect);
+        }
+
+        private void OnDisable()
+        {
+            textField.onSubmit.RemoveListener(OnSubmitText);
+            textField.onEndEdit.RemoveListener(OnEndEdit.Invoke);
+            textField.onSelect.RemoveListener(OnTextFieldSelect);
+            textField.onDeselect.RemoveListener(OnTextFieldDeselect);
         }
 
         public void SetSnappingSide(SnappingSide snap)
@@ -83,7 +108,7 @@ namespace Netherlands3D.Twin.UI
             TextFieldDeselected.Invoke();
         }
 
-        public void OnTextFieldClick(BaseEventData data) //event called through a event trigger in the inspector when the child input field is clicked
+        public void OnTextFieldClick(BaseEventData data)
         {
             float timeSinceLastClick = Time.time - lastClickTime;
 
@@ -95,14 +120,6 @@ namespace Netherlands3D.Twin.UI
             lastClickTime = Time.time;
         }
 
-        private void OnDisable()
-        {
-            textField.onSubmit.RemoveListener(OnSubmitText);
-            textField.onEndEdit.RemoveListener(OnEndEdit.Invoke);
-            textField.onSelect.RemoveListener(OnTextFieldSelect);
-            textField.onDeselect.RemoveListener(OnTextFieldDeselect);
-        }
-
         private void OnSubmitText(string text)
         {
             if (NewLineModifierKeyIsPressed())
@@ -112,13 +129,12 @@ namespace Netherlands3D.Twin.UI
                 var firstHalf = textField.text.Substring(0, caretPosition);
                 var secondHalf = textField.text.Substring(caretPosition);
                 textField.text = firstHalf + "\n" + secondHalf;
-                // Ensure the input field remains focused
                 EventSystem.current.SetSelectedGameObject(textField.gameObject, null);
                 textField.ActivateInputField();
                 textField.caretPosition = caretPosition + 1;
                 return;
             }
-            
+
             TextFieldInputConfirmed.Invoke();
         }
 
@@ -141,9 +157,6 @@ namespace Netherlands3D.Twin.UI
 
         public void MoveTo(Vector3 atScreenPosition)
         {
-            // Canvas renders UI elements with z values between -1000 and +1000
-            // this range is affected by the canvas scale, but the atScreenPosition z is also scaled so no further correction is needed
-
             var scaledZ = atScreenPosition.z / disappearDistance * 1000;
             atScreenPosition.z = scaledZ;
             rectTransform.position = atScreenPosition;
@@ -153,20 +166,14 @@ namespace Netherlands3D.Twin.UI
             switch (snappingSide)
             {
                 case SnappingSide.Left:
-                {
                     rectTransform.pivot = new Vector2(-localDistanceToPoint / rectTransform.rect.width, 0.5f);
                     break;
-                }
                 case SnappingSide.Right:
-                {
                     rectTransform.pivot = new Vector2(1 + localDistanceToPoint / rectTransform.rect.width, 0.5f);
                     break;
-                }
                 case SnappingSide.Above:
-                {
                     rectTransform.pivot = new Vector2(0.5f, -localDistanceToPoint / rectTransform.rect.height);
                     break;
-                }
             }
         }
 
@@ -196,6 +203,113 @@ namespace Netherlands3D.Twin.UI
         public void SetTextWithoutNotify(string newText)
         {
             textField.SetTextWithoutNotify(newText);
+        }
+
+        public void SetImageCaption(string caption)
+        {
+            if (imageCaptionText != null)
+                imageCaptionText.text = caption ?? "";
+        }
+
+        public void SetImageTexture(Texture texture)
+        {
+            if (imageLoadRoutine != null)
+            {
+                StopCoroutine(imageLoadRoutine);
+                imageLoadRoutine = null;
+            }
+
+            loadedTexture = null;
+
+            ApplyImageTexture(texture);
+        }
+
+        private void ApplyImageTexture(Texture texture)
+        {
+            if (imagePreview != null)
+            {
+                imagePreview.texture = texture;
+                TextureThumbnailUtility.FitWidthToTextureAspect(imagePreview.rectTransform, texture);
+            }
+
+            if (imageContainer != null)
+                imageContainer.SetActive(texture != null);
+        }
+
+        public void SetImageFromPath(string path)
+        {
+            if (imageLoadRoutine != null)
+            {
+                StopCoroutine(imageLoadRoutine);
+                imageLoadRoutine = null;
+            }
+
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                ClearImage();
+                return;
+            }
+
+            imageLoadRoutine = StartCoroutine(LoadImage(path));
+        }
+
+        public void ClearImage()
+        {
+            if (imageLoadRoutine != null)
+            {
+                StopCoroutine(imageLoadRoutine);
+                imageLoadRoutine = null;
+            }
+
+            loadedTexture = null;
+
+            if (imagePreview != null)
+            {
+                imagePreview.texture = null;
+                ResetImagePreviewSize();
+            }
+
+            if (imageContainer != null)
+                imageContainer.SetActive(false);
+
+            if (imageCaptionText != null)
+                imageCaptionText.text = "";
+        }
+
+        private IEnumerator LoadImage(string path)
+        {
+            if (TextureThumbnailUtility.TryGetCachedThumbnail(path, out var cachedThumbnail))
+            {
+                ApplyImageTexture(cachedThumbnail);
+                imageLoadRoutine = null;
+                yield break;
+            }
+
+            using var request = UnityWebRequestTexture.GetTexture(path, true);
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning("Failed to load image: " + request.error);
+                ClearImage();
+                yield break;
+            }
+
+            Texture2D downloadedTexture = DownloadHandlerTexture.GetContent(request);
+            loadedTexture = TextureThumbnailUtility.CreateThumbnail(downloadedTexture, maxImagePreviewDimension, "Annotation Popout Thumbnail");
+            if (loadedTexture != downloadedTexture)
+                Destroy(downloadedTexture);
+
+            TextureThumbnailUtility.CacheThumbnail(path, loadedTexture);
+            ApplyImageTexture(loadedTexture);
+            imageLoadRoutine = null;
+        }
+
+        private void ResetImagePreviewSize()
+        {
+            if (imagePreview == null || initialImagePreviewSize == Vector2.zero) return;
+
+            imagePreview.rectTransform.sizeDelta = initialImagePreviewSize;
         }
 
         public static bool NewLineModifierKeyIsPressed()
