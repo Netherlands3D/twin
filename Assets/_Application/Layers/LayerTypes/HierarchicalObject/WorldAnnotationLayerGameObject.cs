@@ -37,8 +37,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnVisualizationInitialize();
             layerTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer);
             CreateTextPopup();
-
-            WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
         }
 
         private void OnBlockerClicked()
@@ -49,13 +47,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void CreateTextPopup()
         {
-            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
+            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World); //todo cleanup
 
             annotation = Instantiate(popoutPrefab, canvas.transform);
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
             annotation.SetSnappingSide(TextPopout.SnappingSide.Above);
             annotation.transform.SetSiblingIndex(1);
-            annotation.ReadOnly = !layerTool.IsOpen;
+            annotation.ReadOnly = false;// !layerTool.IsOpen;
         }
 
         private void OnDestroy()
@@ -99,21 +97,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     annotation.ReadOnly = true;
                     annotation.SelectableText = true;
                     LayerData.DeselectLayer();
-                    WorldInteractionBlocker.ReleaseBlocker(this);
                     break;
 
                 case EditMode.Move:
                     annotation.ReadOnly = true;
                     annotation.SelectableText = false;
                     LayerData.SelectLayer(true);
-                    WorldInteractionBlocker.ReleaseBlocker(this);
                     break;
 
                 case EditMode.TextEdit:
                     annotation.ReadOnly = false;
                     annotation.SelectableText = true;
                     LayerData.SelectLayer(true);
-                    WorldInteractionBlocker.AddBlocker(this);
                     ClearTransformHandles();
                     break;
             }
@@ -191,8 +186,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
             annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
             annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
-
-            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
         }
 
         private void UpdateAnnotationImage(string path)
@@ -214,11 +207,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
             annotation.gameObject.SetActive(isActive);
-        }
-
-        public AnnotationPropertyData GetAnnotationPropertyData()
-        {
-            return LayerData.GetProperty<AnnotationPropertyData>();
         }
 
         public void InitializeFromImportedData(Coordinate coordinate, string text, string imageUrl, string imageCaption)
