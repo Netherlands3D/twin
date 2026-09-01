@@ -15,6 +15,7 @@ namespace Netherlands3D.UI.Components
         private Button North => this.Q<Button>("North");
         private Toggle Perspective => this.Q<Toggle>("Perspective");
         private Button FPV => this.Q<Button>("FPV");
+        private bool isDragging;
         
         public ToolbarNavigation()
         {
@@ -37,25 +38,28 @@ namespace Netherlands3D.UI.Components
 
         private void OnFPVPointerEnter(PointerEnterEvent evt)
         {
-            PointerStyle.ChangeCursor(PointerStyle.Style.GRAB);
+            PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
         }
         
         private void OnFPVPointerLeave(PointerLeaveEvent evt)
         {
-            PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
+            if(!isDragging)
+                PointerStyle.CancelCursorChange(this);
         }
         
         private void OnDragStarted(Vector2 startPosition)
         {
-            PointerStyle.ChangeCursor(PointerStyle.Style.GRABBING);
+            isDragging = true;
+            PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRABBING);
         } 
         
         private void OnDragEnded(Vector2 endPosition)
         {
+            isDragging = false;
             if (worldBound.Contains(endPosition))
-                PointerStyle.ChangeCursor(PointerStyle.Style.GRAB); //pointer is still in the panel
+                PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB); //pointer is still in the panel
             else
-                PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
+                PointerStyle.CancelCursorChange(this);
         }
 
         private void OnAttachToPanelEvent(AttachToPanelEvent _)

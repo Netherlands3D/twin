@@ -123,7 +123,7 @@ namespace Netherlands3D.UI.Components
         {
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, true);
-            PointerStyle.ChangeCursor(PointerStyle.Style.GRAB);
+            PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
         }
 
         private void OnPointerLeave(PointerLeaveEvent evt)
@@ -134,7 +134,7 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
+            PointerStyle.CancelCursorChange(this);
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, false);
         }
@@ -263,7 +263,7 @@ namespace Netherlands3D.UI.Components
         private void OnDragStarted(Vector2 startPosition)
         {
             isDragging = true;
-            PointerStyle.ChangeCursor(PointerStyle.Style.GRABBING);
+            PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRABBING);
             UpdateFrustum();
         }
 
@@ -276,12 +276,10 @@ namespace Netherlands3D.UI.Components
         private void OnDragEnded(Vector2 endPosition)
         {
             isDragging = false;
-
             if (worldBound.Contains(endPosition))
-                PointerStyle.ChangeCursor(PointerStyle.Style.GRAB); //pointer is still in the panel
+                PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB); //pointer is still in the panel
             else
-                PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
-            
+                PointerStyle.CancelCursorChange(this);
             UpdateFrustum();
         }
 
