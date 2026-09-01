@@ -7,6 +7,11 @@ namespace Netherlands3D.UI.Components
     public partial class WorldText : VisualElement
     {
         private EditableNameField nameField;
+        private VisualElement position;
+        
+        public enum SnappingSide { Left, Right, Above }
+        private SnappingSide snappingSide = SnappingSide.Above;
+        
         
         public WorldText()
         {
@@ -14,11 +19,34 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
             
             nameField = this.Q<EditableNameField>();
+            position = this.Q<VisualElement>("Position");
         }
 
         public void SetText(string text)
         {
             nameField.value = text;
+        }
+
+        public void SetSnappingSide(SnappingSide snappingSide)
+        {
+            switch (snappingSide)
+            {
+                case SnappingSide.Left:
+                {
+                    nameField.style.transformOrigin = new TransformOrigin(-0.5f, 0);
+                    break;
+                }
+                case SnappingSide.Right:
+                {
+                    nameField.style.transformOrigin = new TransformOrigin(0.5f, 0);
+                    break;
+                }
+                case SnappingSide.Above:
+                {
+                    nameField.style.transformOrigin = new TransformOrigin(0f, 0.5f);
+                    break;
+                }
+            }
         }
     }
 }

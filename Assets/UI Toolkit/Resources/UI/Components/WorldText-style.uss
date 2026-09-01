@@ -4,3 +4,10 @@
     min-height: var(--spacing-2_5);
     background-color: var(--color-white);
 }
+
+.world-text__position {
+    border-radius: 20px;
+    border-width: 2px;
+    border-color: var(--color-black);
+    background-color: var(--color-red);
+}

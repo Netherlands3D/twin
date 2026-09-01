@@ -18,6 +18,7 @@ namespace Netherlands3D.UI.Panels
             public Coordinate coordinate;
             public WorldText element;
             public FloatingElement floatingElement;
+            public Vector3 elementOffset;
         }
         
 
@@ -36,12 +37,14 @@ namespace Netherlands3D.UI.Panels
             FloatingElement floatingElement = new FloatingElement();
             WorldText text = new WorldText();
             text.SetText("test");
+            text.SetSnappingSide(WorldText.SnappingSide.Above);
             floatingElement.Add(text);
             
             WorldTextObject worldTextObject = new WorldTextObject();
             worldTextObject.floatingElement = floatingElement;
             worldTextObject.element = text;
             worldTextObject.coordinate = new Coordinate(CoordinateSystem.RDNAP, 139607, 478158, 0);
+            
             worldTextObjects.Add(worldTextObject);
             
             return floatingElement;

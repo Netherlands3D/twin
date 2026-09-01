@@ -7,4 +7,5 @@
     class="world-text"
 >
     <nl3d:EditableNameField value="test text" />
+    <ui:VisualElement class="world-text__position" name="Position"/>
 </ui:UXML>
