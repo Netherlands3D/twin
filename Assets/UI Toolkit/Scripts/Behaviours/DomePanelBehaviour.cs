@@ -25,9 +25,10 @@ namespace Netherlands3D.UI.Panels
         {
             base.SpawnFloatingPanelContent(floatingPanel, constructorArgs);
             var rootLayer = constructorArgs[0] as LayerData;
-            MaskingPanel content = new MaskingPanel(rootLayer, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
-            content.SetHeader(headerText);
-            content.SetDescription(description);
+            content = new MaskingPanel(rootLayer, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
+            MaskingPanel maskingPanel = content as MaskingPanel;
+            maskingPanel.SetHeader(headerText);
+            maskingPanel.SetDescription(description);
             return content;
         }
         

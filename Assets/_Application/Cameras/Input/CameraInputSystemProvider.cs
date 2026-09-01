@@ -359,9 +359,12 @@ namespace Netherlands3D.Twin.Cameras.Input
                 pauseHeavyProcess.InvokeStarted(requiresSmoothMovement);
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Camera cam = Camera.main;
+            Camera cam = App.Cameras?.ActiveCamera;
+            if(!cam)
+                return;
 
             Vector3 touchPos1World = cam.ScreenToWorldPoint(new Vector3(previousPrimaryPointerPosition.x, previousPrimaryPointerPosition.y, cam.nearClipPlane + 1));
             Vector3 touchPos2World = cam.ScreenToWorldPoint(new Vector3(previousSecondaryPointerPosition.x, previousSecondaryPointerPosition.y, cam.nearClipPlane + 1));
@@ -370,7 +373,7 @@ namespace Netherlands3D.Twin.Cameras.Input
             Gizmos.DrawSphere(touchPos1World, 0.01f);
             Gizmos.DrawSphere(touchPos2World, 0.01f);
         }
-
+#endif
         /// <summary>
         /// Converts two previous and current touch positions into rotation delta
         /// </summary>

@@ -229,7 +229,8 @@ namespace Netherlands3D.UI.Components
             
             userData = layerData;
             
-            //update the toggle if the propertysection was already active
+            //Virtualisation causes this LayerTreeViewItem to be reused in some cases, so we disable the property toggle in case it was active, and then re-enable it if the propertyPanelBehaviour's active layer matches this element's layer
+            propertyToggle.SetValueWithoutNotify(false);
             CheckPropertyToggle(propertyPanelBehaviour.activeLayer);
 
             SetAppearance(layerData);
@@ -281,7 +282,7 @@ namespace Netherlands3D.UI.Components
         private void SetAppearance(LayerData layerData)
         {
             var validCredentials = layerData.HasValidCredentials;
-            isActiveToggle.SetEnabled(validCredentials);
+            isActiveToggle.SetEnabled(validCredentials); // make the visibility toggle un-interactable
             ItemRoot.EnableInClassList("credentials-needed", !validCredentials);
 
             UpdateNameLabels(layerData, layerData.Name);

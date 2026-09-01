@@ -10,13 +10,4 @@
     border-width: var(--spacing-0_5);
     border-color: var(--color-blue-100);
     border-radius: var(--border-radius-sm);
-
-    display: flex; 
-}
-
-.tooltip.hidden { /* uses utility script */
-    display: none;
-}
-
-.tooltip__label {
 }

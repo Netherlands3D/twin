@@ -125,7 +125,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             foreach (var layer in layers)
             {               
                 bool wasSelected = PolygonWasSelected(layer, frustumPlanes, worldPoint);
-                if (wasSelected && polygonSelectionEnabled)
+                if (wasSelected && polygonSelectionEnabled && layer.ActiveInHierarchy)
                 {
                     layer.SelectLayer(true);
                     return layer; //select only one

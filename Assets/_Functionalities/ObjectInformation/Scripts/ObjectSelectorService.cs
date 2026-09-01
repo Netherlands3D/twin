@@ -172,7 +172,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //dont select any feature if a gizmo handle is interacted with
             //todo make sure these colliders are associated with gizmo colliders
             Vector2 screenPoint = Pointer.current.position.ReadValue();
-            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+            Ray ray = App.Cameras.ActiveCamera.ScreenPointToRay(screenPoint);
             int hitCount = Physics.RaycastNonAlloc(ray, selectedColliderHits, Mathf.Infinity);
             //we have to loop through all potential colliders in case of a gizmo handle on top of another visualisation
             bool hasHit = false;
@@ -184,10 +184,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Collider col = hit.collider;
                     if (col != null)
                     {
-                        HierarchicalObjectLayerGameObject target = col.GetComponent<HierarchicalObjectLayerGameObject>();
-                        if(target != null)
+                        HierarchicalObjectLayerGameObject target = col.GetComponentInParent<HierarchicalObjectLayerGameObject>();
+                        if (target != null)
                             ctxObject = target;
-
                         hasHit = true;
                     }
                 }

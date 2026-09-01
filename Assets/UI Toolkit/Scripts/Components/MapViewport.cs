@@ -106,7 +106,6 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         public void Initialize(MinimapConfig config)
         {
-            //todo: can this function be removed somehow?
             wmtsPanel.Initialize(config, new Vector2RD(BottomLeft.x, BottomLeft.y), new Vector2RD(TopRight.x, TopRight.y), LayerStartIndex);
         }
 
@@ -124,7 +123,7 @@ namespace Netherlands3D.UI.Components
         {
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, true);
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            PointerStyle.ChangeCursor(PointerStyle.Style.GRAB);
         }
 
         private void OnPointerLeave(PointerLeaveEvent evt)
@@ -135,7 +134,7 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
+            PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, false);
         }
@@ -264,7 +263,7 @@ namespace Netherlands3D.UI.Components
         private void OnDragStarted(Vector2 startPosition)
         {
             isDragging = true;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.GRABBING);
+            PointerStyle.ChangeCursor(PointerStyle.Style.GRABBING);
             UpdateFrustum();
         }
 
@@ -277,12 +276,11 @@ namespace Netherlands3D.UI.Components
         private void OnDragEnded(Vector2 endPosition)
         {
             isDragging = false;
-            Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(panel, Pointer.current.position.ReadValue());
 
-            if (worldBound.Contains(panelPos))
-                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER); //pointer is still in the panel
+            if (worldBound.Contains(endPosition))
+                PointerStyle.ChangeCursor(PointerStyle.Style.GRAB); //pointer is still in the panel
             else
-                ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
+                PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
             
             UpdateFrustum();
         }

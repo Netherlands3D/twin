@@ -12,33 +12,10 @@
     margin-right: var(--spacing-2);
 }
 
-.toolbar-navigation__button.toolbar-navigation__fpv {
-    display: none;
-    flex: 0 0 auto;
-    align-items: center;
-
-    min-height: var(--spacing-11);
-    padding: var(--spacing-2);
-    background-color: transparent;
-    border-color: var(--color-white);
-    border-width: 2px;
-    border-radius: var(--spacing-2);
-}
-
-.toolbar-navigation__button.toolbar-navigation__fpv .label {
+.toolbar-navigation__button.toolbar-navigation__fpv { /*by default do not display the fpv button, only when the functionality activates set the display to flex*/
     display: none;
 }
 
 .app--functionality-first-person-viewer .toolbar-navigation__button.toolbar-navigation__fpv {
     display: flex;
-}
-
-/* We need a deep hierarchy level because of the specificity in the button component */
-.toolbar-navigation .toolbar-navigation__button.toolbar-navigation__compass .icon {
-    --icon-tint-color: var(--color-blue-700);
-}
-
-/* We need a deep hierarchy level because of the specificity in the button component */
-.toolbar-navigation .toolbar-navigation__button.toolbar-navigation__compass.toolbar-navigation__compass--north .icon {
-    --icon-tint-color: var(--color-white);
 }

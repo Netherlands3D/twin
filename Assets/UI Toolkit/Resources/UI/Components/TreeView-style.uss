@@ -1,21 +1,6 @@
 @import url("ScrollView-style.uss");
 @import url("ListView-style.uss");
 
-/*.unity-tree-view__item{*/
-/*    border-width: var(--spacing-0_5);*/
-/*    border-radius: var(--spacing-2);*/
-/*}*/
-
-/* .unity-tree-view__item:hover {
-    background-color: var(--color-blue-100);
-} */
-
-/*.unity-tree-view__item:checked {*/
-/*    background-color: var(--color-blue-100);*/
-/*    border-color: var(--color-blue-700);*/
-/*    border-width: var(--spacing-0_5);*/
-/*}*/
-
 .unity-tree-view__item-toggle .unity-foldout__checkmark{
     background-image: var(--icon-chevronright);
 }

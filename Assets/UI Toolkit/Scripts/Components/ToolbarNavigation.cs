@@ -19,7 +19,8 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            FPV.Q<Icon>().AddManipulator(new FirstPersonViewManipulator(0));
+            var fpvIcon = FPV.Q<Icon>();
+            FPV.AddManipulator(new FirstPersonViewManipulator(fpvIcon, 0));
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
             North.RegisterCallback<ClickEvent>(OnNorthClick);
@@ -42,13 +43,13 @@ namespace Netherlands3D.UI.Components
 
         public void UpdateCompass(float yawInDegrees)
         {
-            North.Q<Icon>().style.rotate = new StyleRotate(new Rotate(yawInDegrees));
-            North.EnableInClassList("toolbar-navigation__compass--north", yawInDegrees is > 359.0f or < 1.0f);
+            North.Q<Icon>().style.rotate = new StyleRotate(new Rotate(-yawInDegrees));
         }
 
         private void OnToggleOrthographicView(ChangeEvent<bool> evt)
         {
             ServiceLocator.GetService<CameraService>().ActiveCamera.GetComponent<FreeCamera>()?.EnableOrtographic(evt.newValue);
+            UpdatePerspectiveIcon();
         }
 
         private void UpdatePerspectiveIcon()
