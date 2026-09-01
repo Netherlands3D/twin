@@ -36,8 +36,9 @@ namespace Netherlands3D.UI.Panels
         {
             FloatingElement floatingElement = new FloatingElement();
             WorldText text = new WorldText();
-            text.SetText("test");
+            text.SetText("testing much text \n and there is even more text");
             text.SetSnappingSide(WorldText.SnappingSide.Left);
+            text.SetLabelOffset(50);
             floatingElement.Add(text);
             
             WorldTextObject worldTextObject = new WorldTextObject();
@@ -45,15 +46,20 @@ namespace Netherlands3D.UI.Panels
             worldTextObject.element = text;
             worldTextObject.coordinate = new Coordinate(CoordinateSystem.RDNAP, 139607, 478158, 0);
             
+           
+            
             worldTextObjects.Add(worldTextObject);
             
             return floatingElement;
         }
 
-    
+
+        private GameObject testObject = null;
 
         public override void UpdateBehaviour()
         {
+            
+            
             foreach (WorldTextObject worldTextObject in worldTextObjects)
             {
                 var screenPos =  App.Cameras.ActiveCamera.WorldToScreenPoint(worldTextObject.coordinate.ToUnity());
@@ -61,6 +67,15 @@ namespace Netherlands3D.UI.Panels
                 var contentPos = content.worldBound.position;
                 var localPos = panelPos - contentPos;
                 worldTextObject.floatingElement.SetPosition(localPos);
+
+                if (testObject == null)
+                {
+                    testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                   
+                    testObject.transform.localScale = new Vector3(10f, 10f, 10f);
+                    testObject.GetComponent<MeshRenderer>().material.color = Color.green;
+                }
+                testObject.transform.position = worldTextObject.coordinate.ToUnity();
                 
             }
         }

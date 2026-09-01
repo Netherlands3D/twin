@@ -12,7 +12,8 @@ namespace Netherlands3D.UI.Components
         
         public enum SnappingSide { Left, Right, Above }
         private SnappingSide snappingSide = SnappingSide.Above;
-        
+
+        private float labelOffsetToPosition = 0;
         
         
         public WorldText()
@@ -36,25 +37,36 @@ namespace Netherlands3D.UI.Components
             this.snappingSide = snappingSide;
         }
 
+        public void SetLabelOffset(float offset)
+        {
+            labelOffsetToPosition = offset;
+        }
+
         private void UpdateSnapping(GeometryChangedEvent evt)
         {
+            float pivotX = -(position.resolvedStyle.width * 0.5f);
+            float pivotY = (position.resolvedStyle.height * 0.5f);
             switch (snappingSide)
             {
                 case SnappingSide.Left:
                 {
-                    float offsetX = -(nameField.resolvedStyle.width * 0.5f) - (position.resolvedStyle.width * 0.5f);
-                    float offsetY = (nameField.resolvedStyle.height * 0.5f) + (position.resolvedStyle.height * 0.5f);
+                    float offsetX = -nameField.resolvedStyle.width - pivotX - labelOffsetToPosition;
+                    float offsetY = pivotY - (nameField.resolvedStyle.height * 0.5f);
                     nameField.style.translate = new Translate(offsetX, offsetY, 0);
                     break;
                 }
                 case SnappingSide.Right:
                 {
-                    nameField.style.transformOrigin = new TransformOrigin(0.5f, 0);
+                    float offsetX = - pivotX + labelOffsetToPosition;
+                    float offsetY = pivotY - (nameField.resolvedStyle.height * 0.5f);
+                    nameField.style.translate = new Translate(offsetX, offsetY, 0);
                     break;
                 }
                 case SnappingSide.Above:
                 {
-                    nameField.style.transformOrigin = new TransformOrigin(0f, 0.5f);
+                    float offsetX = -nameField.resolvedStyle.width * 0.5f - pivotX;
+                    float offsetY =  pivotY - labelOffsetToPosition;
+                    nameField.style.translate = new Translate(offsetX, offsetY, 0);
                     break;
                 }
             }
