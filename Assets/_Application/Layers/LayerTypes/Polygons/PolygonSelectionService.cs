@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -13,20 +15,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionService : MonoBehaviour
     {
-        public LayerData ActiveLayer => activeLayer;
+        public LayerData SelectedLayer => selectedLayer;
+
         public bool PolygonSelectionEnabled => polygonSelectionEnabled;
-        
-        private LayerData activeLayer;
+        public bool IsEditingPolygon => polygonCreationService.IsPolygonInputActive;
+
+        private LayerData selectedLayer;
         private List<LayerData> layers = new();
         private PointerToWorldPosition pointerToWorldPosition;
         private PolygonCreationService polygonCreationService;
-        
+
         [SerializeField] private Tool layerTool;
 
         public UnityEvent<bool> OnPolygonSelectionEnabled = new();
-        
+        public UnityEvent OnDeselectActivePolygon = new();
+        public UnityEvent OnSelectActivePolygon = new();
         private bool polygonSelectionEnabled = false;
-        
+
         private void Awake()
         {
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
@@ -35,29 +40,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnEnable()
         {
             polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
-            ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
-            
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
-            
-            layerTool?.onOpen.AddListener(EnablePolygonSelection);
-            layerTool?.onClose.AddListener(DisablePolygonSelection);
         }
 
         private void OnDisable()
         {
-            ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
+            ProjectData.Current.OnDataChanged.RemoveListener(RegisterPolygons);
         }
         
-        private void EnablePolygonSelection()
+        public void EnablePolygonSelection()
         {
             polygonSelectionEnabled = true;
             OnPolygonSelectionEnabled.Invoke(true);
         }
 
-        private void DisablePolygonSelection()
+        public void DisablePolygonSelection()
         {
             polygonSelectionEnabled = false;
             OnPolygonSelectionEnabled.Invoke(false);
+
+            //clear any selected polygon when selection is disabled
+            polygonCreationService.ClearInputs();
+
+            SetSelectedLayer(null);
+            OnDeselectActivePolygon.Invoke();
+        }
+        
+        private void SetSelectedLayer(LayerData layer)
+        {
+            if (selectedLayer == layer) return;
+            
+            selectedLayer = layer;
+            polygonCreationService.UpdateInputByType(layer);
         }
 
         public void RegisterPolygon(LayerData layer)
@@ -103,25 +117,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        private void ProcessClick()
+        public LayerData ProcessPolygonSelection()
         {
-            var camera = Camera.main;
-            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
+            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(App.Cameras.ActiveCamera);
             var worldPoint = pointerToWorldPosition.WorldPoint.ToUnity();
 
             foreach (var layer in layers)
             {               
                 bool wasSelected = PolygonWasSelected(layer, frustumPlanes, worldPoint);
-                if (wasSelected)
+                if (wasSelected && polygonSelectionEnabled && layer.ActiveInHierarchy)
                 {
                     layer.SelectLayer(true);
-                    return; //select only one
+                    return layer; //select only one
                 }
                 else
                 {
                     layer.DeselectLayer(); //deselect if the click wasn't in the polygon and the multiselect modifier keys aren't pressed
                 }
             }
+
+            return null;
         }
         
         private bool PolygonWasSelected(LayerData layer, Plane[] frustumPlanes, Vector3 worldPoint)
@@ -155,17 +170,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private void ProcessPolygonDeselection(LayerData layer)
         {
-            if(layer != activeLayer) //only deselect if the deselected layer is the active layer
+            if(layer != selectedLayer) //only deselect if the deselected layer is the active layer
                 return;
             
             //Do not allow selecting a new polygon if we are still creating one
-            if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create || polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create)
+            if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create ||
+                polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create ||
+                polygonCreationService.GridInput.Mode == PolygonInput.DrawMode.Create || 
+                polygonCreationService.GridInput.Mode == PolygonInput.DrawMode.Edit)
                 return;
 
             polygonCreationService.ClearInputs();
-
-            activeLayer = null;
-            ReselectLayerPolygon(null);
+            SetSelectedLayer(null);
+            OnDeselectActivePolygon.Invoke();
         }
         
         private void ProcessPolygonSelection(LayerData layer)
@@ -175,9 +192,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //we don't reselect immediately in case of a grid, but we already register the active layer
             if (data?.ShapeType == ShapeType.Grid)
             {
-                activeLayer = layer;
-                polygonCreationService.UpdateInputByType(layer);
+                SetSelectedLayer(layer);
                 polygonCreationService.GridInput.SetSelectionVisualEnabled(true);
+                OnSelectActivePolygon.Invoke();
                 return;
             }
 
@@ -185,25 +202,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create || polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create)
                 return;
 
+            
             polygonCreationService.ClearInputs();
-
-            activeLayer = layer;
-            ReselectLayerPolygon(layer);
+            SetSelectedLayer(layer);
+            OnSelectActivePolygon.Invoke();
         }
-        
-        private void ReselectLayerPolygon(LayerData layer)
-        {
-            if (layer == null)
-            {
-                // reselecting nothing, disabling all polygon selections
-                polygonCreationService.PolygonInput.gameObject.SetActive(false);
-                polygonCreationService.LineInput.gameObject.SetActive(false);
-                polygonCreationService.GridInput.gameObject.SetActive(false);
-                return;
-            }
 
-            //Align the input sytem by reselecting using layer polygon
-            polygonCreationService.UpdateInputByType(layer);
+        //TODO we should really consider storing this in a spatial mapping sense
+        private LayerData FindLayerForPolygonSelectionProperty(PolygonSelectionLayerPropertyData polygonPropertyData)
+        {
+            foreach (var layer in layers)
+            {
+                PolygonSelectionLayerPropertyData layerPropertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
+                if(layerPropertyData == polygonPropertyData)
+                    return layer;
+            }
+            return null;
+        }
+
+        public void SetSelectedLayerForPolygonSelectionProperty(PolygonSelectionLayerPropertyData polygonPropertyData)
+        {
+            LayerData data = FindLayerForPolygonSelectionProperty(polygonPropertyData);
+            if (data != null)
+            {
+                ProcessPolygonSelection(data);
+            }
         }
 
         public static bool IsBoundsInView(Bounds bounds, Plane[] frustumPlanes)

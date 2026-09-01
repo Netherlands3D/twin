@@ -28,8 +28,10 @@
 .unity-base-slider__tracker {
   margin: 0;
   padding: 0;
-  background-color: var(--color-blue-100);
-  border-width: 0;
+  background-color: var(--color-white);
+  border-width: 1.5px;
+  border-color: var(--color-blue-700);
+  border-radius: var(--spacing-1);
 }
 
 /* Thumb */
@@ -39,16 +41,17 @@
   left: auto;
   margin: 0;
   padding: 0;
-  background-color: var(--color-blue-300);
-  border-color: var(--color-blue-300);
-  border-width: 2px;
+  background-color: var(--color-blue-700);
+  border-color: var(--color-blue-700);
+  border-width: 1.5px;
+  border-radius: var(--spacing-1);
 }
 
 /* Scroller root (vertical) */
 .unity-scroller.unity-scroller--vertical,
 .unity-scroller.vertical {
-  width: var(--spacing-4);
-  min-width: var(--spacing-4);
+  width: var(--spacing-2);
+  min-width: var(--spacing-2);
   height: auto;
   min-height: auto;
 }
@@ -56,8 +59,8 @@
 /* Scroller root (horizontal) */
 .unity-scroller.unity-scroller--horizontal,
 .unity-scroller.horizontal {
-  height: var(--spacing-4);
-  min-height: var(--spacing-4);
+  height: var(--spacing-2);
+  min-height: var(--spacing-2);
   width: auto;
   min-width: auto;
 }
@@ -66,8 +69,8 @@
 .unity-scroller.unity-scroller--vertical .unity-base-slider__tracker,
 .unity-scroller.vertical .unity-base-slider__tracker,
 .unity-base-slider--vertical .unity-base-slider__tracker {
-  width: var(--spacing-4);
-  min-width: var(--spacing-4);
+  width: var(--spacing-2);
+  min-width: var(--spacing-2);
   height: auto;
   min-height: auto;
 }
@@ -76,8 +79,8 @@
 .unity-scroller.unity-scroller--horizontal .unity-base-slider__tracker,
 .unity-scroller.horizontal .unity-base-slider__tracker,
 .unity-base-slider--horizontal .unity-base-slider__tracker {
-  height: var(--spacing-4);
-  min-height: var(--spacing-4);
+  height: var(--spacing-2);
+  min-height: var(--spacing-2);
   width: auto;
   min-width: auto;
 }
@@ -86,8 +89,8 @@
 .unity-scroller.unity-scroller--vertical .unity-base-slider__dragger,
 .unity-scroller.vertical .unity-base-slider__dragger,
 .unity-base-slider--vertical .unity-base-slider__dragger {
-  width: var(--spacing-4);
-  min-width: var(--spacing-4);
+  width: var(--spacing-2);
+  min-width: var(--spacing-2);
   height: auto;
   min-height: auto;
 }
@@ -96,8 +99,8 @@
 .unity-scroller.unity-scroller--horizontal .unity-base-slider__dragger,
 .unity-scroller.horizontal .unity-base-slider__dragger,
 .unity-base-slider--horizontal .unity-base-slider__dragger {
-  height: var(--spacing-4);
-  min-height: var(--spacing-4);
+  height: var(--spacing-2);
+  min-height: var(--spacing-2);
   width: auto;
   min-width: auto;
 }

@@ -1,0 +1,28 @@
+@import url("SliderBase-style.uss");
+/* TODO: add styling for the vertical direction, class: .unity-base-slider--vertical */
+
+.slider {
+    /* component-specifieke dingen voor single */
+}
+
+.slider .slider__input-field {
+    margin-right: var(--spacing-3);
+}
+
+.slider .unity-base-slider__fill {
+    translate: -2px -2px; /* Override automatic off-center positioning */
+    height: var(--spacing-2);
+    background-color: var(--color-blue-700);
+    border-radius: var(--spacing-1);
+}
+
+.slider .unity-base-slider__tracker {
+    translate: 0 -4px; /* Override automatic off-center positioning */
+}
+
+/* For adding a highlight border around your thumb */
+.slider .unity-base-slider__dragger-border {
+}
+
+.slider .unity-base-slider__dragger {
+}

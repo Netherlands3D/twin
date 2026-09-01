@@ -14,6 +14,8 @@ namespace Netherlands3D.Twin.layers.properties
     [RequireComponent(typeof(LayerGameObject))]
     public class HiddenObject : MonoBehaviour, IVisualizationWithPropertyData
     {
+        [SerializeField]  private Material selectionMaterial;
+        
         public bool debugFeatures = false;
         
         private LayerGameObject visualization;
@@ -33,6 +35,8 @@ namespace Netherlands3D.Twin.layers.properties
         private void SetupFeatures()
         {
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
+            hiddenObjectsPropertyData.SelectionMaterial = selectionMaterial;
+            hiddenObjectsPropertyData.OnHiddenObjectDataStylingRuleRemoved.AddListener(OnHiddenObjectRemoved);
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
@@ -78,6 +82,11 @@ namespace Netherlands3D.Twin.layers.properties
             {
                 Interaction.ApplyColors(kv.Value, visualization.LayerData.Id.ToString());
             }
+        }
+
+        private void OnHiddenObjectRemoved(string id)
+        {
+            Interaction.RemoveLayerColor(visualization.LayerData.Id.ToString(), id);
         }
         
          //a simple debugging method to have x items hidden on startup in the hiddenobjects property panel

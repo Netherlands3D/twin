@@ -1,0 +1,12 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    editor-extension-mode="False" 
+    class="hide-object-listview-item"
+>
+    <nl3d:VisibilityToggle name="VisibilityToggle" toggle-style="IconOnly" icon="Visibility" class="hide-object-listview-item__toggle"/>
+    <nl3d:Icon name="bagicon"/>
+    <ui:Label name="bagidtag" text="BAG ID" class="hide-object-listview-item__title"/>
+    <ui:Label name="bagidtext" text="################" class="hide-object-listview-item__id"/>
+</ui:UXML>

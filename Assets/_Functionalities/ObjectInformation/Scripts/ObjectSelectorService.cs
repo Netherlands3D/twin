@@ -1,22 +1,22 @@
+using System;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
-using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
-using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
-using Netherlands3D.Twin;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -24,35 +24,30 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
+        public HierarchicalObjectLayerGameObject SelectedVisualisation => selectedVisualisation;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
-        public UnityEvent OnSelectDifferentLayer = new();
+        public UnityEvent<LayerData> OnSelectLayer = new();
+        public UnityEvent OnNoLayerSelected = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
+        private PolygonSelectionService polygonSelectionService;
         private List<IMapping> orderedMappings = new();
         private Dictionary<string, IMapping> selectedMappings = new();
+        private HierarchicalObjectLayerGameObject selectedVisualisation;
         private Vector3 lastWorldClickedPosition;
         private PointerToWorldPosition pointerToWorldPosition;
         private float minClickDistance = 10;
         private float minClickTime = 0.5f;
         private float lastTimeClicked = 0;
-        private bool draggedBeforeRelease = false;
-        private bool waitingForRelease = false;
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
-        private CameraInputSystemProvider cameraInputSystemProvider;
-
-        [SerializeField] private Tool[] activeForTools;
         [SerializeField] private Material selectionMaterial;
-        [SerializeField] private RectTransform[] excludedUIForDeselection;
-        
-        [SerializeField] private InputActionAsset inputActionAsset;
-        private InputAction leftClickAction;
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
-
+        private ToolService toolService;
 
         public void BlockBagId(string bagId, bool block)
         {
@@ -79,7 +74,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Awake()
         {
-            cameraInputSystemProvider = Camera.main.GetComponent<CameraInputSystemProvider>();
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
             subObjectSelector = gameObject.AddComponent<SubObjectSelector>();
             featureSelector = gameObject.AddComponent<FeatureSelector>();
@@ -87,29 +81,27 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+
+            InitSelectionConditions();
         }
 
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
-            foreach (Tool tool  in activeForTools) 
-                tool.onClose.AddListener(Deselect);
             
-            var map = inputActionAsset.FindActionMap("Camera", true);
-            leftClickAction = map.FindAction("LeftClick", true);
-
-            leftClickAction.performed += OnLeftClick;
-            leftClickAction.Enable();
+            toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            
+            OnSelectLayer.AddListener(OpenLayerPanel);
+            OnNoLayerSelected.AddListener(CloseLayerPanel);
         }
 
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
-            foreach (Tool tool  in activeForTools) 
-                tool.onClose.RemoveListener(Deselect);
-            
-            leftClickAction.performed -= OnLeftClick;
-            leftClickAction.Disable();
+       
+            OnSelectLayer.RemoveListener(OpenLayerPanel);
+            OnNoLayerSelected.RemoveListener(CloseLayerPanel);
         }
 
         private void OnProjectChanged(ProjectData data)
@@ -121,18 +113,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnAddSelectedLayer(LayerData data)
         {
-            //we need to check this before Isclicked because it checks if its over the ui
-            if (ProjectData.Current.RootLayer.SelectedLayers.Count > 0 && ProjectData.Current.RootLayer.SelectedLayers.Last() != data)
-            {
-                Deselect();
-                OnSelectDifferentLayer.Invoke();
-            }
             lastSelectedLayerData = data;
         }
 
         private void OnRemoveSelectedLayer(LayerData data)
         {
             //we need to check this before Isclicked because it checks if its over the ui
+            //this is to deselect the layer when there is clicked outside of any selectable from this layer
             if(ProjectData.Current.RootLayer.SelectedLayers.Count == 0)
             {
                 if (lastSelectedLayerData != null || lastSelectedMappingLayerData != null)
@@ -143,9 +130,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
             }
         }
-
+      
         private void Start()
         {
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.LeftClickUpAction.performed += OnLeftClickUp;
+            inputService.RightClickUpAction.performed += OnRightClickUp;
+            inputService.LeftClickAction.performed += OnLeftClick;
+            inputService.RightClickAction.performed += OnRightClick;
+            
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
             foreach (ObjectMapping mapping in alreadyActiveMappings)
@@ -154,89 +147,182 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-        public bool IsAnyToolActive()
+        private void OnDestroy()
         {
-            foreach (Tool tool in activeForTools)
-                if (tool.Open)
-                    return true;
-            return false;
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.LeftClickUpAction.performed -= OnLeftClickUp;
+            inputService.RightClickUpAction.performed -= OnRightClickUp;
+            inputService.LeftClickAction.performed -= OnLeftClick;
+            inputService.RightClickAction.performed -= OnRightClick;
         }
-        
-        
-        
-        
-        private void OnLeftClick(InputAction.CallbackContext ctx)
-        {
-            //TODO this should be refactored when UITOOLKIT will be implemented fully
-            //is the click on any other button than the excluded ui elements then deselect
-            if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
-            {
-                if (clickedObject != null)
-                {
-                    Transform t = clickedObject.transform;
-                    foreach (var excluded in excludedUIForDeselection)
-                    {
-                        if (t.IsChildOf(excluded))
-                            return;
-                    }
 
-                    Deselect();
-                    return;
-                }
-            }
-            
-            //TODO this should be refactored when UITOOLKIT will be implemented fully
-            //is the click on any collider in the world that should be selected first then deselect
-            //also if turns out that this logic is needed after, this could be improved on,
-            //because now the object most in front of the raycasted position is not clicked first,
-            //colliders are prioritized first instead of features (runtime handles)
+        private void OpenLayerPanel(LayerData layer)
+        {
+            toolService.GetTool(ToolType.Layer).Open();
+        }
+
+        private void CloseLayerPanel()
+        {
+            toolService.GetTool(ToolType.Layer).Close();
+        }
+
+        private bool IsColliderClicked(out HierarchicalObjectLayerGameObject ctxObject)
+        {
+            ctxObject = null;
+            //dont select any feature if a gizmo handle is interacted with
+            //todo make sure these colliders are associated with gizmo colliders
             Vector2 screenPoint = Pointer.current.position.ReadValue();
-            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+            Ray ray = App.Cameras.ActiveCamera.ScreenPointToRay(screenPoint);
             int hitCount = Physics.RaycastNonAlloc(ray, selectedColliderHits, Mathf.Infinity);
+            //we have to loop through all potential colliders in case of a gizmo handle on top of another visualisation
+            bool hasHit = false;
             if (hitCount > 0)
             {
                 for (int i = 0; i < hitCount; i++)
                 {
-                    //todo discuss if filter for clicknothingplane should be checked and excluded?
                     var hit = selectedColliderHits[i];
                     Collider col = hit.collider;
                     if (col != null)
                     {
-                        Deselect();
-                        return;
+                        HierarchicalObjectLayerGameObject target = col.GetComponentInParent<HierarchicalObjectLayerGameObject>();
+                        if (target != null)
+                            ctxObject = target;
+                        hasHit = true;
                     }
                 }
             }
-            
-            //is the layerpanel or objectinspector tool active?
-            if (IsAnyToolActive())
-            {
-                string previousSelectedBagId = null;
-                bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
-                if (!isModifierPressed)
-                {
-                    previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
-                    Deselect();
-                }
-                //the following method calls need to run in order!
-                string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
-                IMapping mapping = FindObjectMapping();
-                bool mappingVisible = IsMappingVisible(mapping, bagId);
-                
-                //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
-                if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
-                {
-                    lastSelectedMappingLayerData.DeselectLayer();
-                    lastSelectedMappingLayerData = null;
-                }
-                if (mapping is MeshMapping map) 
-                    ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed);   
-                else if (mapping is FeatureMapping feature) 
-                    ProcessFeatureMappingSelection(feature);
-            }
+            return hasHit;
         }
 
-        private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed)
+        private bool TrySelectPolygon()
+        {
+            LayerData selectedPolygon = polygonSelectionService.ProcessPolygonSelection();
+            return selectedPolygon != null;
+        }
+
+        private Vector2 pointerDownPosition;
+        
+        private void OnLeftClick(InputAction.CallbackContext ctx)
+        {
+            pointerDownPosition = Mouse.current.position.ReadValue();
+        }
+
+        private void OnRightClick(InputAction.CallbackContext ctx)
+        {
+            pointerDownPosition = Mouse.current.position.ReadValue();
+        }
+
+        private List<Func<bool>> selectionConditions = new();
+
+        private void InitSelectionConditions()
+        {
+            selectionConditions = new List<Func<bool>>
+            {
+                IsNotOverUI,
+                IsWithinClickDistance
+            };
+        }
+
+        private bool IsNotOverUI()
+        {
+            return !App.UIRoot.IsPointerOverUI();
+        }
+
+        private bool IsWithinClickDistance()
+        {
+            return Vector2.Distance(
+                pointerDownPosition,
+                Mouse.current.position.ReadValue()
+            ) <= minClickDistance;
+        }
+
+        private bool CanProcessSelection()
+        {
+            foreach (var condition in selectionConditions)
+            {
+                if (!condition())
+                    return false;
+            }
+
+            return true;
+        }
+
+        public void AddSelectionPredicate(Func<bool> predicate)
+        {
+            selectionConditions.Add(predicate);
+        }
+
+        public void RemoveSelectionPredicate(Func<bool> predicate)
+        {
+            selectionConditions.Remove(predicate);
+        }
+
+        private void OnLeftClickUp(InputAction.CallbackContext ctx)
+        {
+            if (!CanProcessSelection()) return;
+
+            ProcessSelection(true);
+        }
+
+        private void OnRightClickUp(InputAction.CallbackContext ctx)
+        {
+            if (!CanProcessSelection()) return;
+
+            ProcessSelection(false);
+        }
+
+        public void ProcessSelection(bool primary)
+        {
+            selectedVisualisation = null;
+            HierarchicalObjectLayerGameObject ctxObject;
+            if (IsColliderClicked(out ctxObject))
+            {
+                if (ctxObject != null)
+                {
+                    selectedVisualisation = ctxObject;
+                    if (!ctxObject.LayerData.IsSelected)
+                    {
+                        ctxObject.LayerData.SelectLayer(true);
+                    }
+                    OnSelectLayer.Invoke(ctxObject.LayerData);
+                }
+                Deselect();
+                return;
+            }
+
+            if (TrySelectPolygon() || polygonSelectionService.IsEditingPolygon)
+            {
+                Deselect();
+                return;
+            }
+            
+            string previousSelectedBagId = null;
+            bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
+            if (!isModifierPressed)
+            {
+                previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
+                Deselect();
+            }
+            //the following method calls need to run in order!
+            string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
+            IMapping mapping = FindObjectMapping();
+            bool mappingVisible = IsMappingVisible(mapping, bagId);
+                
+            //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
+            if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
+            {
+                lastSelectedMappingLayerData.DeselectLayer();
+                lastSelectedMappingLayerData = null;
+            }
+            if (mapping is MeshMapping map) 
+                ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed, primary);   
+            else if (mapping is FeatureMapping feature) 
+                ProcessFeatureMappingSelection(feature);
+            else
+                OnNoLayerSelected.Invoke();
+        }
+
+        private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed, bool primary)
         {
             LayerData layerData = map.LayerData;
             if (!mappingVisible)
@@ -247,28 +333,36 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     
             lastSelectedMappingLayerData = layerData;
 
-            if (!selectedMappings.ContainsKey(bagId) && previousBagId != bagId)
+            if (!selectedMappings.ContainsKey(bagId) && (previousBagId != bagId || !primary))
             {
                 SelectBagId(bagId, !isModifierPressed);
                 selectedMappings.Add(bagId, map);
                 SelectSubObjectWithBagId?.Invoke(map, bagId);
             }
-            else
+            else if(!isModifierPressed || primary)
             {
                 DeselectBagId(bagId);
                 selectedMappings.Remove(bagId);
                 SelectSubObjectWithBagId?.Invoke(selectedMappings.Count > 0 ? map : null, bagId);
-                if (selectedMappings.Count == 0)
-                {
-                    lastSelectedMappingLayerData.DeselectLayer();
-                    lastSelectedMappingLayerData = null;
-                }
             }
+
+            OnSelectLayer.Invoke(layerData);
+        }
+
+        public void SelectBagId(string bagId, Coordinate coordinate)
+        {
+            MeshMapping mapping = subObjectSelector.FindSubObjectAtCoordinate(coordinate, bagId);
+            if(mapping == null) return;
+            
+            SelectBagId(bagId, false);
+            if (!selectedMappings.ContainsKey(bagId))
+                selectedMappings.Add(bagId, mapping);
+            SelectSubObjectWithBagId?.Invoke(mapping, bagId);
         }
 
         private void ProcessFeatureMappingSelection(FeatureMapping feature)
         {
-            LayerData layerData = feature.VisualisationParent.LayerData;
+            LayerData layerData = feature.VisualisationLayer.LayerData;
             if(!layerData.IsSelected)
                 layerData.SelectLayer(true);
                     
@@ -290,6 +384,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             selectedMappings.TryAdd(key, feature);
             SelectFeature?.Invoke(feature);
+            OnSelectLayer.Invoke(layerData);
         }
 
         public T GetReplacedMapping<T>(T mapping) where T : IMapping
@@ -339,24 +434,24 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return subObjectSelector.FindSubObjectAtPointerPosition();            
         }
 
-        public void SelectBagId(string bagId, bool deselectPrevious = true)
+        private void SelectBagId(string bagId, bool deselectPrevious = true)
         {
             if(deselectPrevious)
                 subObjectSelector.Deselect();
             subObjectSelector.Select(bagId);
         }
         
-        public void DeselectBagId(string bagId)
+        private void DeselectBagId(string bagId)
         {
             subObjectSelector.Deselect(bagId);
         }
 
-        public void SelectFeatureMapping(FeatureMapping feature)
+        private void SelectFeatureMapping(FeatureMapping feature)
         {
             featureSelector.Select(feature);
         }
 
-        public bool IsMappingVisible(IMapping mapping, string bagId)
+        private bool IsMappingVisible(IMapping mapping, string bagId)
         {
             if (mapping is MeshMapping map)
             {
@@ -371,8 +466,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPointSync.ToUnity()) < minClickDistance;
-            lastWorldClickedPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
+            Vector3 worldPoint = pointerToWorldPosition.GetWorldPointSync();
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, worldPoint) < minClickDistance;
+            lastWorldClickedPosition = worldPoint;
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;
@@ -408,7 +504,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                                 else
                                     continue;
                             }
-                            mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootIndex);
+                            mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootId);
                         }
                     }
                 }
@@ -418,7 +514,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     if (subObjectParent != null)
                     {
                         if (subObjectParent.LayerData.ActiveInHierarchy)
-                            mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootIndex);
+                            mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootId);
                     }
                 }
                 orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();

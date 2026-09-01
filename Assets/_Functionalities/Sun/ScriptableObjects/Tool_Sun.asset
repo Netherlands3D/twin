@@ -14,10 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   code: sun
   title: Zonnestand
-  functionGroups:
-  - {fileID: 11400000, guid: f443a08a9cf0b1640bf676a9b943f0f8, type: 2}
-  - {fileID: 11400000, guid: 273b59c4a8f150a4c9eee47e2423c945, type: 2}
-  - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
+  functionGroups: []
   onAvailabilityChange:
     m_PersistentCalls:
       m_Calls: []
@@ -27,10 +24,14 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls: []
-  onToggleInspector:
+  onSpawnedPrefab:
     m_PersistentCalls:
       m_Calls: []
-  inspectorPrefab: {fileID: 4173332915424425295, guid: 4deecaa09ce904bae825ebe18de06100,
-    type: 3}
+  inspectorPrefab: {fileID: 0}
+  panelType:
+    _assemblyQualifiedName: Netherlands3D.UI.Panels.SunTimePanel, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  panelArgs:
+  - {fileID: 11400000, guid: 7c644965573ceec4d82f71667889e3a4, type: 2}
   functionalityPrefabs: []
   open: 0

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
@@ -14,7 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject
     {
         [SerializeField] private TextPopout popoutPrefab;
-        [SerializeField] private Tool layerTool;
+        private Tool layerTool;
 
         private TextPopout annotation;
         private enum EditMode
@@ -31,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnVisualizationInitialize()
         {
             base.OnVisualizationInitialize();
-
+            layerTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer);
             CreateTextPopup();
            
             WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
@@ -51,7 +52,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
             annotation.SetSnappingSide(TextPopout.SnappingSide.Above);
             annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest           
-            annotation.ReadOnly = !layerTool.Open;       
+            annotation.ReadOnly = !layerTool.IsOpen;       
         }
         
         private void OnDestroy()
@@ -61,7 +62,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnAnnotationSelected()
         {
-            if(!layerTool.Open)
+            if(!layerTool.IsOpen)
                 return;
             
             SetEditMode(EditMode.Move);
@@ -69,9 +70,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnAnnotationDoubleClicked()
         {
-            if (!layerTool.Open)
+            if (!layerTool.IsOpen)
             {
-                layerTool.OpenInspector();
+                layerTool.Open();
                 SetEditMode(EditMode.Move);
             }
             else

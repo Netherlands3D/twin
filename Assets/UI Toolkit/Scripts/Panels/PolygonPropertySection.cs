@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Netherlands3D.UI.Panels
+{
+    [UxmlElement]
+    [PropertySection(typeof(PolygonSelectionLayerPropertyData), PropertySectionCategory.Settings)]
+    public partial class PolygonPropertySection : VisualElement, IVisualizationWithPropertyData
+    {
+        private PolygonSelectionLayerPropertyData polygonPropertyData;
+        
+        private VisualElement linePropertiesElement;
+        private Slider lineWidthSlider;
+        
+        private VisualElement gridPropertiesElement;
+        private Button editGridButton;
+        
+        public PolygonPropertySection()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
+
+            linePropertiesElement = this.Q<VisualElement>("LineProperties");
+            lineWidthSlider = this.Q<Slider>("LineWidthSlider");
+            
+            gridPropertiesElement = this.Q<VisualElement>("GridProperties");
+            editGridButton = this.Q<Button>("EditGridButton");
+            
+            lineWidthSlider.RegisterValueChangedCallback(OnStrokeWidthChanged);
+            editGridButton.RegisterCallback<ClickEvent>(OnEditGridButtonPressed);
+        }
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            polygonPropertyData = properties.Get<PolygonSelectionLayerPropertyData>();
+            
+            lineWidthSlider.SetValueWithoutNotify(polygonPropertyData.LineWidth);
+            if (polygonPropertyData.ShapeType != ShapeType.Line && polygonPropertyData.ShapeType != ShapeType.Grid)
+            {
+                //We don't have any specific information to show, so we delete the panel again
+                parent.Remove(this);
+            }
+            
+            linePropertiesElement.EnableInClassList(UtilityClassConstants.HIDDEN, polygonPropertyData.ShapeType != ShapeType.Line);
+            gridPropertiesElement.EnableInClassList(UtilityClassConstants.HIDDEN, polygonPropertyData.ShapeType != ShapeType.Grid);
+        }
+
+        private void OnStrokeWidthChanged(ChangeEvent<float> evt)
+        {
+            polygonPropertyData.LineWidth = evt.newValue;
+        }
+        
+        private void OnEditGridButtonPressed(ClickEvent evt)
+        {
+            ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Open();
+            ServiceLocator.GetService<PolygonCreationService>().SetGridInputModeToEdit();
+            ServiceLocator.GetService<PolygonCreationService>().SetPreventRemovingPolygon(true);
+            ServiceLocator.GetService<PolygonSelectionService>().SetSelectedLayerForPolygonSelectionProperty(polygonPropertyData);
+        }
+    }
+}

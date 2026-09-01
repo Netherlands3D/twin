@@ -1,0 +1,8 @@
+.floating-panel {
+    width: 380px;
+    height: auto;
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-md);
+    max-height: 600px;
+    padding: var(--spacing-4);
+}

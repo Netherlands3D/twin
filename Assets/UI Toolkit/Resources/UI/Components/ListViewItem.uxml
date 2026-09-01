@@ -3,7 +3,7 @@
   xmlns:ui="UnityEngine.UIElements"
   noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
   editor-extension-mode="False"
-  class="listview-item"
+  class="listview-item unity-collection-view__item"
 >
-  
+   <ui:VisualElement name="ContentContainer" class="listview-item__container"/>
 </ui:UXML>

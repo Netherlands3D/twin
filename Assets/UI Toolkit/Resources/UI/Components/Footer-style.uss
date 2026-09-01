@@ -1,0 +1,44 @@
+.footer {
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 1;
+    margin: 0 var(--spacing-3) 0 0;
+}
+
+.footer Label {
+    color: var(--color-white);
+}
+
+.footer__divider {
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: var(--spacing-0_5);
+    background-color: var(--color-blue-200);
+    border-radius: 1px;
+
+    /* ruimte tussen divider en content */
+    margin-bottom: var(--spacing-1);
+}
+
+.footer__content {
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.footer__app-name {
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin: 0 var(--spacing-12) 0 0;
+    padding: 0;
+}
+
+.footer__attribution {
+    flex-shrink: 0;
+    flex-grow: 1;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+}

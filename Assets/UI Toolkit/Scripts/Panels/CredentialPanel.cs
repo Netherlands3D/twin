@@ -1,0 +1,158 @@
+using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Credentials;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine.Events;
+using UnityEngine.UIElements;
+using Button = Netherlands3D.UI.Components.Button;
+using TextField = Netherlands3D.UI.Components.TextField;
+
+namespace Netherlands3D.UI.Panels
+{
+    [UxmlElement]
+    public partial class CredentialPanel : VisualElement
+    {
+        public UnityEvent OnConfirmCredentials = new();
+        
+        private Button warningButton;
+        private Button WarningButton => warningButton ??= this.Q<Button>("WarningButton");
+        private Button credentialButton;
+        private Button CredentialButton => credentialButton ??= this.Q<Button>("CredentialButton");
+        private Button acceptedButton;
+        private Button AcceptedButton => acceptedButton ??= this.Q<Button>("AcceptedButton");
+
+        private TextField codeField;
+        public TextField CodeField => codeField ??= this.Q<TextField>("CodeField");
+
+        private TextField usernameField;
+        public TextField UserNameField => usernameField ??= this.Q<TextField>("UsernameField");
+
+        private VisualElement warning;
+        private VisualElement code;
+        private VisualElement username;
+        private VisualElement Code => code ??= this.Q<VisualElement>("MessageTitleCode");
+        private VisualElement UserName => username ??= this.Q<VisualElement>("MessageTitleUserName");
+
+        private ContentContainer warningContent;
+        private ContentContainer credentialContent;
+        private ContentContainer acceptedContent;
+
+        private ErrorPanel errorPanel;
+        private ErrorPanel ErrorPanel => errorPanel ??= this.Q<ErrorPanel>();
+
+        private enum ContentState
+        {
+            Warning,
+            Key,
+            UsernameAndPassword,
+            Accepted
+        }
+
+        private readonly Dictionary<int, (ContentState state, string icon)> dropDownValues = new()
+        {
+            { 0, (ContentState.Key, IconImage.KEY_TOKEN_CODE) },
+            { 1, (ContentState.UsernameAndPassword, IconImage.USERNAME_PASSWORD) }
+        };
+
+        public CredentialPanel()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
+
+            warningContent = this.Q<ContentContainer>("WarningContent");
+            credentialContent = this.Q<ContentContainer>("CredentialContent");
+            acceptedContent = this.Q<ContentContainer>("AcceptedContent");
+            
+            InitializeDropdown();
+            SetContentState(ContentState.Warning);
+         
+            WarningButton.clicked += () => { SetContentState(ContentState.Key); };
+            AcceptedButton.clicked += () => { SetContentState(ContentState.Key); };
+            CredentialButton.clicked += OnConfirm;
+            CodeField.RegisterCallback<NavigationSubmitEvent>(evt => OnConfirm(), TrickleDown.TrickleDown);
+            
+            ErrorPanel.Hide();
+        }
+
+        public void StartWithInput()
+        {
+            SetContentState(ContentState.Key);
+        }
+
+        private void OnConfirm()
+        {
+            if (IsInputEmpty())
+            {
+                ErrorPanel.Show();
+                return;
+            }
+            OnConfirmCredentials.Invoke();
+        }
+
+        private void InitializeDropdown()
+        {
+            credentialContent.SetDropdownValues(dropDownValues.Values.Select(x => x.icon).ToList());
+            credentialContent.AddDropDownListener(SetContentState);
+        }
+
+        private void SetContentState(int state)
+        {
+            if (!dropDownValues.TryGetValue(state, out var mapping))
+                return;
+
+            SetContentState(mapping.state);
+        }
+
+        private void SetContentState(ContentState state)
+        {
+            //update the dropdownvalue if the content is set to a valid value
+            int index = -1;
+            foreach (KeyValuePair<int, (ContentState state, string icon)> kv in dropDownValues)
+                if (kv.Value.state == state)
+                    index = kv.Key;
+
+            if (dropDownValues.Keys.Contains(index))
+                credentialContent.SetDropdownValue(index);
+
+            warningContent.EnableInClassList(UtilityClassConstants.HIDDEN, state != ContentState.Warning);
+            credentialContent.EnableInClassList(UtilityClassConstants.HIDDEN, !(state == ContentState.Key || state == ContentState.UsernameAndPassword));
+            acceptedContent.EnableInClassList(UtilityClassConstants.HIDDEN, state != ContentState.Accepted);
+            switch (state)
+            {
+                case ContentState.Key:
+                    Code.Q<Label>().text = "Wachtwoord of code";
+                    UserName.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+                    break;
+                case ContentState.UsernameAndPassword:
+                    Code.Q<Label>().text = "Wachtwoord";
+                    UserName.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+                    break;
+            }
+        }
+
+        public void ResetState() => SetContentState(ContentState.Warning);
+        
+        public void SetAcceptedState() => SetContentState(ContentState.Accepted);
+
+        public bool IsInputEmpty() => string.IsNullOrEmpty(CodeField.value) || string.IsNullOrWhiteSpace(CodeField.value);
+
+        
+        public void Show(bool show, string password = "")
+        {
+            if(show)
+                CodeField.SetValueWithoutNotify(password);
+            EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+        }
+
+        public void ShowError(bool show)
+        {
+            if(show)
+                ErrorPanel.Show();
+            else
+                ErrorPanel.Hide();
+        }
+    }
+}

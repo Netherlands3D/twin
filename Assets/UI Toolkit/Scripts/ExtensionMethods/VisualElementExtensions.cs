@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,6 +21,12 @@ namespace Netherlands3D.UI.ExtensionMethods
             if (!string.IsNullOrEmpty(path)) path += "/";
             
             var styleSheet = Resources.Load<StyleSheet>($"UI/{path}{component.GetType().Name}-style");
+            component.styleSheets.Add(styleSheet);
+        }
+        
+        public static void AddComponentStylesheetByType(this VisualElement component, Type type)
+        {
+            var styleSheet = Resources.Load<StyleSheet>($"UI/Components/{type.Name}-style");
             component.styleSheets.Add(styleSheet);
         }
 
@@ -90,6 +97,15 @@ namespace Netherlands3D.UI.ExtensionMethods
 
             // Trim trailing dash if present
             return sb.ToString().Trim('-');
+        }
+        
+        public static void SetPickingModeRecursive(this VisualElement element, PickingMode mode)
+        {
+            element.pickingMode = mode;
+            foreach (var child in element.Children())
+            {
+                SetPickingModeRecursive(child, mode);
+            }
         }
     }
 }

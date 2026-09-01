@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 AddedSelectedLayer.Invoke(layer);
             }
         }
-
+        
         public void RemoveLayerFromSelection(LayerData layer)
         {
             if (SelectedLayers.Remove(layer))
@@ -79,6 +79,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     ChildrenLayers.Insert(siblingIndex, layer);
                 else
                     ChildrenLayers.Add(layer);
+                
+                UpdateLayerTreeOrder(-1); //recalculate the RootIndices since the hierarchy changed
                 ChildrenChanged.Invoke();
             }
         }
@@ -89,7 +91,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             int count = children.Count();
             for (int i = 0; i < count; i++)
             {
-                children[i].RootIndex = i;
+                children[i].RootId = i-1; //substract 1 so the rootLayer has index -1 instead of 0
             }
         }
 

@@ -1,25 +1,22 @@
 .listview-item {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: var(--spacing-2);
+    background-color: transparent;
+}
+
+.listview-item__container{    
+    flex-direction: row;
+    align-items: center;
+    border-color:  var(--color-blue-200);
 }
 
 .listview-item > * {
-    align-items: stretch;
+    align-items: center;
 }
 
-.listview-item.unity-list-view__item {
-    background-color: transparent;
+.unity-collection-view__item:checked {
+    background-color: var(--color-blue-100);
+    border-color: var(--color-blue-700);
 }
 
-.listview-item.unity-list-view__item:hover {
-    background-color: transparent;
-}
-
-.listview-item.unity-collection-view__item {
-    background-color: transparent;
-}
-
-.listview-item.unity-collection-view__item:hover {
-    background-color: transparent;
+.unity-collection-view__item:hover {
+    background-color: var(--color-blue-200);
 }

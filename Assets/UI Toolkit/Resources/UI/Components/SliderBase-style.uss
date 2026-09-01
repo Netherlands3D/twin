@@ -1,0 +1,106 @@
+@import url("TextField-style.uss");
+
+/* Shared base for both slider components */
+.slider,
+.slider-range {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    min-height: auto;
+}
+
+.slider > .unity-base-field__label,
+.slider-range > .unity-base-field__label {
+    margin-bottom: var(--spacing-3);
+}
+
+.slider.slider-header-no-header > .unity-base-field__label,
+.slider-range.slider-header-no-header > .unity-base-field__label {
+    display: none;
+}
+
+/* Override automatic color change for unity slider label (header) on focus */
+.slider:focus > .unity-base-field__label,
+.slider-range:focus > .unity-base-field__label {
+    color: var(--color-text);
+}
+
+/* Row with NumberFields and sliders */
+.slider__row,
+.slider-range__row {
+    flex-direction: row;
+    min-width: 0;
+}
+
+.slider__row .unity-base-slider__input,
+.slider-range__row .unity-min-max-slider__input {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+/* Override NumberField styling */
+.slider .number-field,
+.slider-range .number-field {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: var(--spacing-16);
+    min-width: var(--spacing-12);
+    max-width: var(--spacing-16);
+}
+
+.slider .number-field .number-field__input,
+.slider-range .number-field .number-field__input {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+.slider .number-field .textfield,
+.slider-range .number-field .textfield {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+.slider .unity-base-slider__drag-container,
+.slider-range .unity-min-max-slider__input {
+    flex-direction: row;
+    height: auto;
+    min-height: var(--spacing-4);
+}
+
+.slider .unity-base-slider__tracker, 
+.slider-range .unity-min-max-slider__tracker {
+    height: var(--spacing-2);
+    background-color: var(--color-white);
+    border-color: var(--color-blue-700);
+    border-width: var(--spacing-0_5);
+    border-radius: var(--spacing-1);
+}
+
+.slider .unity-base-slider__dragger, 
+.slider-range .unity-min-max-slider__min-thumb, 
+.slider-range .unity-min-max-slider__max-thumb {
+    align-self: center;
+    width: var(--spacing-4);
+    height: var(--spacing-4);
+    min-width: var(--spacing-4);
+    min-height: var(--spacing-4);
+    background-color: var(--color-white);
+    background-image: var(--icon-dot); 
+    -unity-background-image-tint-color: var(--color-blue-700);
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border-color: var(--color-blue-700);
+    border-width: var(--spacing-0_5);
+    border-radius: 100%;
+}
+
+.slider .unity-base-field__label,
+.slider-range .unity-base-field__label{
+    -unity-font-definition: var(--nl3d-header-font);
+}

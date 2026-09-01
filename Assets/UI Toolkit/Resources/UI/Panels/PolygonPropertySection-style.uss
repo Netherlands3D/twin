@@ -1,0 +1,3 @@
+.polygon-property-section__button{
+    align-self: flex-start;
+}

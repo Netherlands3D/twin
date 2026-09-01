@@ -48,6 +48,9 @@ MonoBehaviour:
   cameraObjects:
   - {fileID: 0}
   - {fileID: 0}
+  OnSwitchCamera:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6938902015790729898
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,10 +1,11 @@
 using DG.Tweening;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
+using Netherlands3D.UI_Toolkit.Scripts;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -21,7 +22,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private CanvasGroup copyButtonGroup;
         private Coordinate currentCoordinates;
         [SerializeField] private string copySnackbarText;
-        [SerializeField] private UnityEvent<string> onShowCopyText;
 
         private readonly StringBuilder stringBuilder = new StringBuilder(128);
 
@@ -70,7 +70,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void CopyCoordinates()
         {
-            onShowCopyText.Invoke(copySnackbarText);
+            App.Debug.DisplayMessage(copySnackbarText, IconImage.COPY_PASTE);
             WebGLClipboard.Copy(currentCoordinates.ToString());
         }
 

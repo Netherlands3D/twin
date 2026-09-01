@@ -34,7 +34,9 @@ namespace Netherlands3D.Twin.Layers
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation { get => spawnLocation; set => spawnLocation = value; }
-
+        
+        public UnityEvent<string> VisualisationError = new();
+        
         public string Name
         {
             get => LayerData.Name;
@@ -257,6 +259,11 @@ namespace Netherlands3D.Twin.Layers
             Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(targetCoordinate, targetDistance); //sizeMagnitude returns 2x the extents
         }
 
+        public void SendErrorMessage(string errorMessage)
+        {
+            VisualisationError.Invoke(errorMessage);
+        }
+        
         #region Styling
 
         public Symbolizer GetStyling(LayerFeature feature)

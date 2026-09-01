@@ -1,12 +1,19 @@
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
+using static Netherlands3D.UI.Components.Toggle;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
     public partial class Toggle : UnityEngine.UIElements.Toggle
     {
+        public enum ToggleType
+        {
+            Standard,
+            transparent
+        }
+
         public enum ToggleStyle
         {
             Normal,
@@ -28,6 +35,14 @@ namespace Netherlands3D.UI.Components
         private Label labelField;
         private Label Label => labelField ??= this.Q<Label>("Label");
 
+        private ToggleType toggleType = ToggleType.Standard;
+        [UxmlAttribute("toggle-type")]
+        public ToggleType Type
+        {
+            get => toggleType;
+            set { toggleType = value; UpdateClassList(); }
+        }
+
         private ToggleStyle toggleStyle = ToggleStyle.WithIcon;
         [UxmlAttribute("toggle-style")]
         public ToggleStyle ShowIcon
@@ -45,7 +60,7 @@ namespace Netherlands3D.UI.Components
         }
 
         [UxmlAttribute("icon")]
-        public IconImage Image
+        public string Image
         {
             get => Icon.Image;
             set => Icon.Image = value;
@@ -68,6 +83,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateClassList()
         {
+            this.ReplacePrefixedValueInClassList("toggle-type-", toggleType.ToString().ToKebabCase());
             this.ReplacePrefixedValueInClassList("toggle-style-", toggleStyle.ToString().ToKebabCase());
             this.ReplacePrefixedValueInClassList("toggle-icon-position-", toggleIconPosition.ToString().ToKebabCase());
         }

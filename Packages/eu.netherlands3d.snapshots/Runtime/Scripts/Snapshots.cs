@@ -18,11 +18,11 @@
 
 using SFB;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.Events;
@@ -35,9 +35,6 @@ namespace Netherlands3D.Snapshots
         [DllImport("__Internal")]
         private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
 
-        [Tooltip("Optional source camera (Defaults to Camera.main)")]
-        [SerializeField] private Camera sourceCamera;
-
         [SerializeField] private bool useViewSize = true;
         [SerializeField] private int width = 1920;
         [SerializeField] private int height = 1080;
@@ -45,31 +42,8 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private string fileName = "Snapshot";
         [SerializeField] private SnapshotFileType fileType = SnapshotFileType.png;
         [SerializeField] private LayerMask snapshotLayers;
-
+        
         public UnityEvent<string> DownloadSnapshotComplete = new();
-
-        public int Width
-        {
-            get => width;
-            set
-            {
-                useViewSize = false;
-                width = value;
-            }
-        }
-
-        public int Height
-        {
-            get => height;
-            set
-            {
-                useViewSize = false;
-                height = value;
-            }
-        }
-
-        public string FileName { get => fileName; set => fileName = value; }
-        public string TargetPath { get => targetPath; set => targetPath = value; }
 
         public string FileType
         {
@@ -83,29 +57,84 @@ namespace Netherlands3D.Snapshots
             }
         }
 
-        public LayerMask SnapshotLayers { get => snapshotLayers; set => snapshotLayers = value;}
-
-        private void Start()
-        {
-            if (!sourceCamera) sourceCamera = Camera.main;
-        }
-        
-        public void UseViewSize(bool useViewSize) => this.useViewSize = useViewSize;
-
         public void TakeSnapshot()
         {
-            var snapshotWidth = (useViewSize) ? Screen.width : width;
-            var snapshotHeight = (useViewSize) ? Screen.height : height;
+            var snapshotWidth = useViewSize ? Screen.width : width;
+            var snapshotHeight = useViewSize ? Screen.height : height;
 
-            byte[] bytes = Snapshot.ToImageBytes(snapshotWidth, snapshotHeight, sourceCamera, snapshotLayers, fileType);
+            Camera sourceCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
 
-            var path = DetermineSaveLocation();
+            RenderTexture previousTarget = sourceCamera.targetTexture;
+            int previousMask = sourceCamera.cullingMask;
+            RenderTexture previousActive = RenderTexture.active;
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-            DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
-#else
-            File.WriteAllBytes(path, bytes);
-#endif
+            RenderTexture renderTexture = new RenderTexture(
+                snapshotWidth,
+                snapshotHeight,
+                24,
+                RenderTextureFormat.ARGB32);
+
+            renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
+            renderTexture.Create();
+
+            Texture2D texture = null;
+
+            try
+            {
+                sourceCamera.cullingMask = snapshotLayers;
+                sourceCamera.targetTexture = renderTexture;
+
+                sourceCamera.Render();
+
+                RenderTexture.active = renderTexture;
+
+                texture = new Texture2D(
+                    snapshotWidth,
+                    snapshotHeight,
+                    TextureFormat.RGB24,
+                    false);
+
+                texture.ReadPixels(
+                    new Rect(0, 0, snapshotWidth, snapshotHeight),
+                    0,
+                    0);
+
+                // Only needed if you use the Texture2D inside Unity afterwards.
+                // texture.Apply();
+
+                byte[] bytes = fileType switch
+                {
+                    SnapshotFileType.png => texture.EncodeToPNG(),
+                    SnapshotFileType.jpg => texture.EncodeToJPG(),
+                    SnapshotFileType.raw => texture.GetRawTextureData(),
+                    _ => texture.EncodeToPNG()
+                };
+
+                var path = DetermineSaveLocation();
+
+        #if UNITY_WEBGL && !UNITY_EDITOR
+                DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
+        #else
+                File.WriteAllBytes(path, bytes);
+        #endif
+            }
+            finally
+            {
+                sourceCamera.targetTexture = previousTarget;
+                sourceCamera.cullingMask = previousMask;
+                RenderTexture.active = previousActive;
+
+                if (renderTexture != null)
+                {
+                    renderTexture.Release();
+                    Destroy(renderTexture);
+                }
+
+                if (texture != null)
+                {
+                    Destroy(texture);
+                }
+            }
         }
 
         public void OnSnapshotDownloadComplete(string message)
@@ -133,7 +162,5 @@ namespace Netherlands3D.Snapshots
 #endif
             return location;
         }
-
-        public void SetActiveCamera(Camera camera) => sourceCamera = camera;
     }
 }

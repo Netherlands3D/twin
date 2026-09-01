@@ -1,0 +1,24 @@
+.sensor-property-section__title{
+    -unity-font-definition: var(--nl3d-header-font);
+}
+
+.sensor-property-section__row {
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: var(--spacing-2);
+}
+
+.sensor-property-section__row .sensor-property-section__item{
+    
+    margin-right: var(--spacing-2);
+}
+
+.sensor-property-section__item-last {
+    flex-grow: 1;
+}
+
+.sensor-property-section__row.sensor-property-section__item-last{
+    margin-right: 0;
+}
+
+.icon.image-urban-releaf { background-image: url("project://database/Assets/Sprites/UI/Icons/Type=UrbanReleaf,%20Color=white,%20Size=medium.png");  }

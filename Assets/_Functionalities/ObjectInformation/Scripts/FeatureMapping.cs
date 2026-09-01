@@ -19,10 +19,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public object MappingObject => feature;
         public string Id => feature.Id;
         public IGeoJsonVisualisationLayer VisualisationLayer { get { return visualisationLayer; } }
-        public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
+        public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } } //TODO this should be refactored away when https://gemeente-amsterdam.atlassian.net/browse/S3DA-1935 will be done
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
         public Feature Feature { get { return feature; } }
-        public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
+        public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootId; } }
         //todo: Mapping.BoundingBox should be the bbox of all meshes in the feature, this is currently not working correctly.
         public BoundingBox BoundingBox => boundingBox;
         public LayerData LayerData => geoJsonLayerParent.LayerData;
@@ -143,6 +143,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             Coordinate trWgs84 = topRight.Convert(CoordinateSystem.WGS84_LatLon);
             BoundingBox boundingBox = new BoundingBox(blWgs84, trWgs84);
             return boundingBox;
+        }
+        
+        public Coordinate GetCoordinateForFeatureMapping()
+        {
+            if(boundingBox == null)
+                UpdateBoundingBox();
+            return boundingBox.Center;
         }
 
         //these gameobjects can represent selected features or thumbnail meshes

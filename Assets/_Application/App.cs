@@ -10,7 +10,14 @@ namespace Netherlands3D.Twin
     /// <seealso href="https://refactoring.guru/design-patterns/facade" />
     public static class App
     {
-        public static ILayersServiceFacade Layers => ServiceLocator.GetService<Services.Layers>();
+        public static Services.Layers Layers => ServiceLocator.GetService<Services.Layers>();
         public static Cameras.CameraService Cameras => ServiceLocator.GetService<Cameras.CameraService>();
+        public static AppRootBehaviour UIRoot => ServiceLocator.GetService<AppRootBehaviour>();
+        public static SnackbarService Snackbar => ServiceLocator.GetService<SnackbarService>();
+        public static LayerMessageService LayerMessages => ServiceLocator.GetService<LayerMessageService>();
+        public static DebugMessageService Debug => ServiceLocator.GetService<DebugMessageService>();
+        public static DomeService Dome => ServiceLocator.GetService<DomeService>();
+        
+
     }
 }

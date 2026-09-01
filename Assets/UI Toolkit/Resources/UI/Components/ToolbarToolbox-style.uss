@@ -1,0 +1,25 @@
+.toolbar-toolbox {
+    --toolbar-toolbox-spacing: var(--spacing-2);
+    --toolbar-height: var(--spacing-11);
+    --toolbar-max-height: var(--spacing-14);
+    
+    flex: 0 0 auto;
+    min-width: 120px;
+    margin: 0;
+    align-items: center;
+}
+
+.toolbar-toolbox__group {
+    flex-direction: row;
+    height: var(--toolbar-height);
+    min-height: var(--toolbar-height);
+    max-height: var(--toolbar-max-height);
+    margin: 0 var(--spacing-2) 0 var(--spacing-2);
+    background-color: transparent;
+}
+
+.toolbar-toolbox__group .button,
+.toolbar-toolbox__group .toggle {
+    flex: 0 auto;
+    margin-right: var(--toolbar-toolbox-spacing);
+}

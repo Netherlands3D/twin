@@ -1,0 +1,10 @@
+@import url("ScrollView-style.uss");
+@import url("ListView-style.uss");
+
+.unity-tree-view__item-toggle .unity-foldout__checkmark{
+    background-image: var(--icon-chevronright);
+}
+
+.unity-tree-view__item-toggle:checked .unity-foldout__checkmark{
+    background-image: var(--icon-chevrondown);
+}

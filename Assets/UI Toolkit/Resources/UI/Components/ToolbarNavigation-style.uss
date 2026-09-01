@@ -1,0 +1,21 @@
+.toolbar-navigation {
+    flex-direction: row;
+    flex: 0 0 auto;
+    height: var(--spacing-11);
+    margin: var(--spacing-2) 0 0;
+}
+
+.toolbar-navigation__button,
+.toolbar-navigation__button.button,
+.toolbar-navigation__button.toggle {
+    flex: 0 0 auto;
+    margin-right: var(--spacing-2);
+}
+
+.toolbar-navigation__button.toolbar-navigation__fpv { /*by default do not display the fpv button, only when the functionality activates set the display to flex*/
+    display: none;
+}
+
+.app--functionality-first-person-viewer .toolbar-navigation__button.toolbar-navigation__fpv {
+    display: flex;
+}

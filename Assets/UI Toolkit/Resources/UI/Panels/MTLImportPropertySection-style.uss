@@ -1,0 +1,6 @@
+.mtl-property-section__text{
+}
+
+.mtl-property-section__button{
+    align-self: flex-start;
+}

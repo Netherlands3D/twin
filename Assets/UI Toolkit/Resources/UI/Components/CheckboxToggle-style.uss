@@ -1,0 +1,88 @@
+.checkbox-toggle {
+    --checkbox-toggle-bg-color: transparent;
+    --checkbox-toggle-active-color: var(--color-blue-700);
+    --checkbox-toggle-active-contrast-color: var(--color-white);
+    --checkbox-toggle-disabled-color: var(--color-blue-200);
+    --checkbox-toggle-padding: 0px;
+    --checkbox-toggle-margin: 0px;
+
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    align-self: stretch;
+    padding: var(--checkbox-toggle-padding);
+    margin: var(--checkbox-toggle-margin);
+    background-color: var(--checkbox-toggle-bg-color);
+    flex-basis: auto;
+}
+
+.checkbox-toggle .unity-toggle__input {
+    flex-basis: auto;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.checkbox-toggle .unity-toggle__checkmark {
+    width: var(--spacing-5);
+    height: var(--spacing-5);
+    padding: 0px;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: var(--spacing-3);
+    margin-bottom: 0px;
+    background-color: var(--color-white);
+    border-color: var(--color-blue-200);
+    border-width: 1.5px;
+    border-radius: 100%;
+}
+
+.checkbox-toggle > #Label { 
+    flex-grow: 1;
+    flex-shrink: 1;
+    align-items: stretch;
+    justify-content: flex-start;
+    align-self: flex-start;
+    min-width: 0;
+}
+
+.checkbox-toggle.checkbox-position-right {
+    flex-direction: row-reverse;
+}
+
+.checkbox-toggle.checkbox-position-right .unity-toggle__checkmark {
+    margin-left: var(--spacing-3);
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+}
+
+/* Hover/checked/disabled */
+.checkbox-toggle:hover .unity-toggle__checkmark {
+    border-color: var(--checkbox-toggle-active-color);
+}
+
+.checkbox-toggle:checked .unity-toggle__checkmark {
+    background-color: var(--checkbox-toggle-active-color);
+    background-image: var(--icon-check); 
+    background-position: 50% 40%;
+    background-repeat: no-repeat;
+    background-size: 120% 120%;
+    -unity-background-image-tint-color: var(--checkbox-toggle-active-contrast-color);
+    border-color: var(--checkbox-toggle-active-color);
+}
+.checkbox-toggle:checked .unity-label {
+}
+
+.checkbox-toggle:disabled {
+    opacity: 1;
+}
+
+.checkbox-toggle:disabled .unity-toggle__checkmark {
+    border-color: var(--checkbox-toggle-disabled-color);
+}
+
+.checkbox-toggle:disabled > #Label {
+    color: var(--checkbox-toggle-disabled-color);
+}

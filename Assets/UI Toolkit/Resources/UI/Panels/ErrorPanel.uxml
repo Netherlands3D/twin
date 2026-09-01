@@ -1,0 +1,14 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="ErrorPanel" 
+    class="error-panel"
+>
+    <nl3d:ContentContainer class="error-panel__content-container" container-type="NoFoldout" container-style="Normal" show-divider="true" show-help-icon="true">
+        <nl3dP:ErrorPanelContent />
+    </nl3d:ContentContainer>
+</ui:UXML>

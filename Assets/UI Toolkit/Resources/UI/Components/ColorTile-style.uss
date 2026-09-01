@@ -1,0 +1,35 @@
+.color-tile {
+    flex-direction: row;
+    align-items: center;
+}
+
+.color-tile__swatch {
+    position: relative;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    min-width: var(--spacing-6);
+    min-height: var(--spacing-6);
+}
+
+
+.color-tile__fill {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--border-radius-sm);
+}
+
+.color-tile__shadow{
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: -5%;
+    right: -5%;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: var(--border-radius-sm);
+}
+
+.color-tile__swatch, .color-tile__label {
+    margin: 0 0 0 var(--spacing-1);
+}
+

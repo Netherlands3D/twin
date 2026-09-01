@@ -1,0 +1,17 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    class="map-viewport">
+    <nl3dP:WMTSPanel name="MapViewportRoot" class="map-viewport__tile-container" >
+        <nl3d:Icon name="LocationPin" class="map-viewport__pin" picking-mode="Ignore" />
+    </nl3dP:WMTSPanel>
+    <nl3d:CustomQuad name="CameraFrustum"/>
+    <ui:VisualElement class="map-viewport__controls">
+        <nl3d:Button name="ZoomIn" icon="Plus" button-style="IconOnly" class="map-viewport__zoom-button"/>
+        <nl3d:Button name="ZoomOut" icon="Minus" button-style="IconOnly" class="map-viewport__zoom-button"/>
+    </ui:VisualElement>
+</ui:UXML>

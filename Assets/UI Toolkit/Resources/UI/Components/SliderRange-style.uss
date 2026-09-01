@@ -1,0 +1,24 @@
+@import url("SliderBase-style.uss");
+
+.slider-range {
+    /* component-specifieke dingen voor range */
+}
+
+.slider-range .unity-min-max-slider__dragger {
+    justify-content: center;
+    height: var(--spacing-2);
+    background-color: var(--color-blue-700);
+}
+
+.slider-range .unity-min-max-slider__min-thumb {
+} 
+.slider-range .unity-min-max-slider__max-thumb {
+}
+
+.slider-range .min-field {
+    margin-right: var(--spacing-3);
+}
+
+.slider-range .max-field {
+    margin-left: var(--spacing-3);
+}

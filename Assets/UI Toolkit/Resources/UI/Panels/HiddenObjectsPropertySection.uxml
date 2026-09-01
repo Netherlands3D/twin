@@ -1,0 +1,13 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="HiddenObjectsPropertySection" 
+    class="hidden-objects-property-section"
+>
+    <nl3d:ContentContainer leading-icon="VisibilityMixed" text="Verborgen objecten tonen">
+        <nl3d:ListView class="hidden-objects-property-section__list-view" empty-text="Er zijn nog geen verborgen gebouwen."/>
+    </nl3d:ContentContainer>
+</ui:UXML>

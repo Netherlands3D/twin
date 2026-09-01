@@ -1,10 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
 using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.AssetBundles;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.Properties;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -19,40 +28,34 @@ namespace Netherlands3D.Twin.Projects
         [DllImport("__Internal")]
         [UsedImplicitly]
         private static extern void PreventDefaultShortcuts();
+        
+        [DllImport("__Internal")]
+        private static extern void DownloadFromIndexedDB(string filename, string callbackObjectName, string callbackMethodName);
+
+        [DllImport("__Internal")]
+        [UsedImplicitly]
+        private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
 
         [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
         [UsedImplicitly] private CredentialHandler credentialHandler; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
-        [SerializeField] private ProjectDataStore projectDataStore;
+       [SerializeField] private InputActionAsset applicationActionMap;
 
-        public List<ProjectData> undoStack = new();
-        public List<ProjectData> redoStack = new();
-
-        [SerializeField] private InputActionAsset applicationActionMap;
-        [SerializeField] private FileOpen fileOpener;
-
-        public int undoStackSize = 10;
-
-        [Header("Progress events")] [Tooltip("called when the save action is started")]
         public UnityEvent OnSaveStarted;
-
-        [Tooltip("called when the save action completed successfully")]
         public UnityEvent OnSaveCompleted;
-
-        [Tooltip("called when the load action is started")]
         public UnityEvent OnLoadStarted;
-
-        [Tooltip("called when the load action completed successfully")]
         public UnityEvent<ProjectData> OnLoadCompleted;
-
-        [Tooltip("called when the load action failed")]
         public UnityEvent OnLoadFailed;
 
         private static ProjectDataHandler instance;
-        private InputAction openProjectAction;
-        private InputAction saveProjectAction;
-        private InputAction undoAction;
-        private InputAction redoAction;
+        
+        private string DefaultFileName = "NL3D_Project_";
+        private string ProjectFileExtension = "nl3d";
+        private string ProjectJsonFileNameInZip = "project.json";
+
+        private ZipOutputStream zipOutputStream;
+
+        private string lastSavePath;
 
         public static ProjectDataHandler Instance
         {
@@ -68,11 +71,8 @@ namespace Netherlands3D.Twin.Projects
 
         private void Awake()
         {
-            openProjectAction = applicationActionMap.FindAction("Projects/Open");
-            saveProjectAction = applicationActionMap.FindAction("Projects/Save");
-            undoAction = applicationActionMap.FindAction("Projects/Undo");
-            redoAction = applicationActionMap.FindAction("Projects/Redo");
-
+            gameObject.name = gameObject.name + Guid.NewGuid();
+            
             if (ProjectData.Current == null)
             {
                 Debug.LogError("Current ProjectData object reference is not set in ProjectData", this.gameObject);
@@ -81,7 +81,6 @@ namespace Netherlands3D.Twin.Projects
 
             fileImporter = GetComponent<DataTypeChain>();
             credentialHandler = GetComponent<CredentialHandler>();
-            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
 
 #if !UNITY_EDITOR && UNITY_WEBGL
             //Prevent default browser shortcuts for saving and undo/redo
@@ -107,78 +106,46 @@ namespace Netherlands3D.Twin.Projects
 
         private void OnEnable()
         {
-            openProjectAction.Enable();
-            openProjectAction.performed += OnOpenProjectAction;
-
-            saveProjectAction.Enable();
-            saveProjectAction.performed += OnSaveProjectAction;
-
-            undoAction.Enable();
-            undoAction.performed += OnUndoAction;
-
-            redoAction.Enable();
-            redoAction.performed += OnRedoAction;
-
             credentialHandler.OnAuthorizationHandled.AddListener(fileImporter.DetermineAdapter);
+            
+            ToolService tools = ServiceLocator.GetService<ToolService>();
+            tools.GetTool(ToolType.OpenProject).onOpen.AddListener(OpenProject);
+            tools.GetTool(ToolType.SaveProject).onOpen.AddListener(SaveProject);
+            
+            InputService input =  ServiceLocator.GetService<InputService>();
+            input.OpenProjectAction.performed += OpenProject;
+            input.SaveProjectAction.performed += SaveProject;
         }
 
         private void OnDisable()
         {
-            openProjectAction.performed -= OnOpenProjectAction;
-            openProjectAction.Disable();
-
-            saveProjectAction.performed -= OnSaveProjectAction;
-            saveProjectAction.Disable();
-
-            undoAction.performed -= OnUndoAction;
-            undoAction.Disable();
-
-            redoAction.performed -= OnRedoAction;
-            redoAction.Disable();
-
             credentialHandler.OnAuthorizationHandled.RemoveListener(fileImporter.DetermineAdapter);
+            
+            ToolService tools = ServiceLocator.GetService<ToolService>();
+            tools.GetTool(ToolType.OpenProject).onOpen.RemoveListener(OpenProject);
+            tools.GetTool(ToolType.SaveProject).onOpen.RemoveListener(SaveProject);
+            
+            InputService input =  ServiceLocator.GetService<InputService>();
+            input.OpenProjectAction.performed -= OpenProject;
+            input.SaveProjectAction.performed -= SaveProject;
         }
 
-        private void OnProjectDataChanged(ProjectData project)
+        private void OpenProject(InputAction.CallbackContext ctx) => OpenProject();
+        private void SaveProject(InputAction.CallbackContext ctx) => SaveProject();
+
+        private void OpenProject()
         {
-            // Add new undo state
-            if (undoStack.Count == undoStackSize)
-                undoStack.RemoveAt(0);
-
-            // Copy the current projectData to a new project instance for our undo history
-            var newProject = ScriptableObject.CreateInstance<ProjectData>();
-            // newProject.CopyFrom(projectData);
-            undoStack.Add(newProject);
-
-            // Clear the redo stack
-            redoStack.Clear();
-        }
-
-        private void OnOpenProjectAction(InputAction.CallbackContext obj)
-        {
-            fileOpener.OpenFile();
-        }
-
-        private void OnSaveProjectAction(InputAction.CallbackContext obj)
-        {
-            SaveProject();
-        }
-
-        private void OnUndoAction(InputAction.CallbackContext obj)
-        {
-            Undo();
-        }
-
-        private void OnRedoAction(InputAction.CallbackContext obj)
-        {
-            Redo();
+            FileOpen fileOpenerService = ServiceLocator.GetService<FileOpen>();
+            fileOpenerService.OpenFile("nl3d");
+            ToolService tools = ServiceLocator.GetService<ToolService>();
+            tools.GetTool(ToolType.OpenProject).Close();
         }
 
         public void SaveProject()
         {
-            OnSaveStarted.Invoke();
-            projectDataStore.SaveAsFile(this);
-            OnSaveCompleted.Invoke();
+            SaveAsFile();
+            ToolService tools = ServiceLocator.GetService<ToolService>();
+            tools.GetTool(ToolType.SaveProject).Close();
         }
 
         private void LoadDefaultProject()
@@ -186,12 +153,13 @@ namespace Netherlands3D.Twin.Projects
 #if UNITY_WEBGL && !UNITY_EDITOR
             var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + url);
-            credentialHandler.SetUri(url);
+            credentialHandler.Uri = new Uri(url); //url should never be empty and if it is we expect an exception
+
             credentialHandler.ApplyCredentials();
 #else
             var filePath = Path.Combine(Application.persistentDataPath, Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + filePath);
-            projectDataStore.LoadFromFile(filePath);
+            LoadFromFile(filePath);
 #endif
         }
 
@@ -202,7 +170,37 @@ namespace Netherlands3D.Twin.Projects
             if (filePath.ToLower().EndsWith(".nl3d"))
             {
                 Debug.Log("loading nl3d file: " + filePath);
-                var project = projectDataStore.LoadFromFile(filePath);
+                App.Layers.Remove(ProjectData.Current.RootLayer);
+                ProjectData.Current.ClearFunctionalityData();
+            
+                Resources.UnloadUnusedAssets();
+
+                // Open the zip file
+                using FileStream fs = File.OpenRead(filePath);
+
+                //Extract specific project.json from zip using CsharpLib
+                using ZipFile zf = new(fs);
+
+                foreach (ZipEntry zipEntry in zf)
+                {
+                    // TODO: this does not yet support directories
+                    if (!zipEntry.IsFile) continue;
+
+                    using Stream zipStream = zf.GetInputStream(zipEntry);
+                    if (zipEntry.Name == ProjectJsonFileNameInZip)
+                    {
+                        using StreamReader sr = new(zipStream);
+                        string json = sr.ReadToEnd();
+
+                        LoadJSON(json);
+                        continue;
+                    }
+                
+                    string fullZipToPath = Path.Combine(Application.persistentDataPath, zipEntry.Name);
+                    using FileStream streamWriter = File.Create(fullZipToPath);
+                    zipStream.CopyTo(streamWriter);
+                }
+                var project = ProjectData.Current;
                 OnLoadCompleted.Invoke(project);
                 return project;
             }
@@ -211,36 +209,126 @@ namespace Netherlands3D.Twin.Projects
             return null;
         }
 
-        public void Redo()
+        private readonly JsonSerializerSettings serializerSettings = new()
         {
-            // Overwrite current projectData with the one from the redostack copy
-            if (redoStack.Count > 0)
+            TypeNameHandling = TypeNameHandling.Auto,
+            Formatting = Formatting.Indented,
+            SerializationBinder = new DataContractSerializationBinder(new DefaultSerializationBinder())
+        };
+        
+        private void LoadJSON(string json)
+        {
+            try
             {
-                var lastState = redoStack[redoStack.Count - 1];
-                ProjectData.Current.CopyUndoFrom(lastState);
-                redoStack.RemoveAt(redoStack.Count - 1);
+                JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
+            }
+            catch(Exception e)
+            {
+                Debug.LogException(e);
+            }
+
+            ProjectData.Current.RootLayer.ReconstructParentsRecursive();
+
+            ProjectData.Current.RootLayer.UpdateLayerTreeOrder(0);
+            Debug.Log("Loaded project with uuid: " + ProjectData.Current.UUID);
+            ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
+            ProjectData.Current.LoadVisualizations();
+        }
+
+        public void SaveAsFile()
+        {
+            ProjectData.Current.RefreshUUID();
+
+            // Set the timestamp when the data was saved
+            ProjectData.Current.SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
+
+            // Start the zip output stream
+            var lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}";
+            zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
+            zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
+            
+            var projectData = ProjectData.Current;
+            WriteProjectToZip(projectData, zipOutputStream);
+            WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+
+            zipOutputStream.Finish();
+            zipOutputStream.Close();
+            Debug.Log("SAVING PROJECT DATA path " + lastSavePath);
+            SaveFile(lastSavePath);
+        }
+
+        private void WriteProjectAssetsToZipfile(ProjectData projectData, ZipOutputStream zipOutputStream)
+        {
+            var projectAssets = projectData
+                .GetAssets().Where(asset => asset.IsStoredInProject)
+                .ToList();
+            
+            foreach (var layerAsset in projectAssets)
+            {
+                WriteProjectAssetToZipFile(layerAsset, zipOutputStream);
             }
         }
 
-        public void Undo()
+        private void WriteProjectAssetToZipFile(LayerAsset layerAsset, ZipOutputStream zipOutputStream)
         {
-            // Overwrite current projectData with the one from the undostack copy
-            if (undoStack.Count > 0)
-            {
-                var lastState = undoStack[undoStack.Count - 1];
-                ProjectData.Current.CopyUndoFrom(lastState);
-                undoStack.RemoveAt(undoStack.Count - 1);
-            }
+            var relativePath = layerAsset.Uri.LocalPath.TrimStart('\\', '/');
+            var absolutePath = Path.Combine(Application.persistentDataPath, relativePath);
+            
+            var entry = new ZipEntry(relativePath);
+            zipOutputStream.PutNextEntry(entry);
+            byte[] fileBytes = File.ReadAllBytes(absolutePath);
+            zipOutputStream.Write(fileBytes, 0, fileBytes.Length);
         }
 
-        /// <summary>
-        /// Receiver for the ProjectData to notify the ProjectDataHandler that the project has been saved to IndexedDB
-        /// </summary>
+        private void WriteProjectToZip(ProjectData projectData, ZipOutputStream zipOutputStream)
+        {
+            var jsonProject = JsonConvert.SerializeObject(projectData, serializerSettings);
+            var entry = new ZipEntry(ProjectJsonFileNameInZip);
+            zipOutputStream.PutNextEntry(entry);
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
+            zipOutputStream.Write(jsonBytes, 0, jsonBytes.Length);
+        }
+
+        private void SaveFile(string lastSavePath)
+        {
+            // Make sure indexedDB is synced
+#if !UNITY_EDITOR && UNITY_WEBGL
+            this.lastSavePath = lastSavePath; 
+            SyncFilesToIndexedDB(gameObject.name, "ProjectSavedToIndexedDB");
+#elif UNITY_EDITOR
+            //Request using file write dialog of unity editor where to copy the file from lastSavePath path
+            var fileName = Path.GetFileName(lastSavePath);
+            var fileTargetPath = EditorUtility.SaveFilePanel("Save project", Application.persistentDataPath, fileName, ProjectFileExtension);
+            if (fileTargetPath.Length > 0)
+            {
+                File.Copy(lastSavePath, fileTargetPath, true);
+            }
+
+            //Open the folder where the file is saved
+            EditorUtility.RevealInFinder(fileTargetPath);
+#endif
+        }
+
+        public void AppendFileToZip(string fileName)
+        {
+            var persistentDataPath = Application.persistentDataPath + "/" + fileName;
+
+            byte[] buffer = new byte[4096];
+            var randomFileTag = DateTime.Now.ToString("yyyyMMddHHmmss");
+            ZipEntry entry = new ZipEntry(randomFileTag + "_" + fileName);
+            zipOutputStream.PutNextEntry(entry);
+
+            using FileStream fs = File.OpenRead(persistentDataPath);
+            StreamUtils.Copy(fs, zipOutputStream, buffer);
+        }
+        
         public void ProjectSavedToIndexedDB()
         {
-            projectDataStore.ProjectSavedToIndexedDB();
+            var fileName = Path.GetFileName(lastSavePath);
+            DownloadFromIndexedDB($"{fileName}", gameObject.name, "DownloadedProject");
         }
-
+        
         public void DownloadedProject()
         {
             Debug.Log("Downloading project file succeeded");

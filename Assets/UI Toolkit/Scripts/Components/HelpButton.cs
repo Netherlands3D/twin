@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Components
         private Icon Icon => this.Q<Icon>("Icon");
 
         [UxmlAttribute("icon")]
-        public IconImage Image
+        public string Image
         {
             get => Icon.Image;
             set => Icon.Image = value;
@@ -24,11 +24,7 @@ namespace Netherlands3D.UI.Components
         public string HelpUrl
         {
             get => helpUrl;
-            set
-            {
-                helpUrl = value;
-                if (Icon != null) Icon.tooltip = string.IsNullOrEmpty(value) ? null : "Meer informatie";
-            }
+            set => helpUrl = value;
         }
 
         public HelpButton()
