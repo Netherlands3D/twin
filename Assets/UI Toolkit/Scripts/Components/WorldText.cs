@@ -44,28 +44,26 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateSnapping(GeometryChangedEvent evt)
         {
-            float pivotX = -(position.resolvedStyle.width * 0.5f);
-            float pivotY = (position.resolvedStyle.height * 0.5f);
             switch (snappingSide)
             {
                 case SnappingSide.Left:
                 {
-                    float offsetX = -nameField.resolvedStyle.width - pivotX - labelOffsetToPosition;
-                    float offsetY = pivotY - (nameField.resolvedStyle.height * 0.5f);
+                    float offsetX = - nameField.resolvedStyle.width  - labelOffsetToPosition;
+                    float offsetY = - (nameField.resolvedStyle.height * 0.5f);
                     nameField.style.translate = new Translate(offsetX, offsetY, 0);
                     break;
                 }
                 case SnappingSide.Right:
                 {
-                    float offsetX = - pivotX + labelOffsetToPosition;
-                    float offsetY = pivotY - (nameField.resolvedStyle.height * 0.5f);
+                    float offsetX = labelOffsetToPosition;
+                    float offsetY = - (nameField.resolvedStyle.height * 0.5f);
                     nameField.style.translate = new Translate(offsetX, offsetY, 0);
                     break;
                 }
                 case SnappingSide.Above:
                 {
-                    float offsetX = -nameField.resolvedStyle.width * 0.5f - pivotX;
-                    float offsetY =  pivotY - labelOffsetToPosition;
+                    float offsetX = -nameField.resolvedStyle.width * 0.5f;
+                    float offsetY = - nameField.resolvedStyle.height - labelOffsetToPosition ;
                     nameField.style.translate = new Translate(offsetX, offsetY, 0);
                     break;
                 }

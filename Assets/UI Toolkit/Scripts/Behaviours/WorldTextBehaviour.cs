@@ -37,7 +37,7 @@ namespace Netherlands3D.UI.Panels
             FloatingElement floatingElement = new FloatingElement();
             WorldText text = new WorldText();
             text.SetText("testing much text \n and there is even more text");
-            text.SetSnappingSide(WorldText.SnappingSide.Left);
+            text.SetSnappingSide(WorldText.SnappingSide.Above);
             text.SetLabelOffset(50);
             floatingElement.Add(text);
             
