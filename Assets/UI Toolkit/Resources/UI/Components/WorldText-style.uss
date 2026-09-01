@@ -1,4 +1,6 @@
 .world-text
 {
-    
+    min-width: var(--spacing-2_5);
+    min-height: var(--spacing-2_5);
+    background-color: var(--color-white);
 }

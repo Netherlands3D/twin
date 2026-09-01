@@ -15,5 +15,10 @@ namespace Netherlands3D.UI.Components
             
             nameField = this.Q<EditableNameField>();
         }
+
+        public void SetText(string text)
+        {
+            nameField.value = text;
+        }
     }
 }

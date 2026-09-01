@@ -157,7 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d012d4c42b746a49473a2f1d9c8e1a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.RuntimeTooltips
-  tooltipStyleSheet: {fileID: 7433441132597879392, guid: 733a8d3b7d1a4c679ca7caebd41b26e5, type: 3}
+  tooltipStyleSheet: {fileID: 7433441132597879392, guid: 733a8d3b7d1a4c679ca7caebd41b26e5,
+    type: 3}
 --- !u!114 &5715699707642146679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +194,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 193046eec53862a7380ad41ce7521c3f, type: 2}
   floatingButtonBehaviour:
   - {fileID: 11400000, guid: b39f0c433614c7547967510a0332c622, type: 2}
+  - {fileID: 11400000, guid: 6615aa3ea2afbef55acaf5e443b6130d, type: 2}
 --- !u!114 &2679958399476094032
 MonoBehaviour:
   m_ObjectHideFlags: 0
