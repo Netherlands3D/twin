@@ -12,7 +12,8 @@ namespace Netherlands3D
         private VisualElement root;
         private Label tooltipLabel;
 
-        private const float TooltipOffset = 6f;
+        private const float TooltipHorizontalOffset = 6f;
+        private const float TooltipVerticalOffset = 14f;
 
         private VisualElement hoveredTooltipElement;
 
@@ -139,13 +140,22 @@ namespace Netherlands3D
             if (float.IsNaN(tooltipHeight) || tooltipHeight <= 0f)
                 tooltipHeight = 32f;
 
-            float left = Mathf.Clamp(elementMin.x, 0f, Mathf.Max(0f, rootWidth - tooltipWidth));
-            float top = elementMax.y + TooltipOffset;
+            float minLeft = TooltipHorizontalOffset;
+            float maxLeft = Mathf.Max(minLeft, rootWidth - tooltipWidth - TooltipHorizontalOffset);
+            float minTop = TooltipHorizontalOffset + TooltipVerticalOffset;
+            float maxTop = Mathf.Max(minTop, rootHeight - tooltipHeight - TooltipHorizontalOffset);
 
-            if (top + tooltipHeight > rootHeight)
-                top = elementMin.y - tooltipHeight - TooltipOffset;
+            float left = elementMax.x + TooltipHorizontalOffset;
+            if (left + tooltipWidth + TooltipHorizontalOffset > rootWidth)
+                left = elementMin.x - tooltipWidth - TooltipHorizontalOffset;
 
-            top = Mathf.Clamp(top, 0f, Mathf.Max(0f, rootHeight - tooltipHeight));
+            left = Mathf.Clamp(left, minLeft, maxLeft);
+
+            float top = elementMin.y - TooltipVerticalOffset;
+            if (top < minTop)
+                top = elementMax.y;
+
+            top = Mathf.Clamp(top, minTop, maxTop);
 
             tooltipLabel.style.left = left;
             tooltipLabel.style.top = top;

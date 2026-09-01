@@ -25,6 +25,7 @@
     --spacing-20: 80px;
     --spacing-21: 84px;
     --spacing-24: 96px;
+    --spacing-25: 100px;
     --spacing-28: 112px;
     --spacing-32: 128px;
     --spacing-36: 144px;
@@ -72,7 +73,7 @@
     --color-blue-700: rgb(0, 70, 153);
     --color-blue-700-hover: rgba(0, 70, 153, 0.4);
     --color-blue-900: rgb(47, 53, 80);
-    --color-blue-900-alpha: rgba(47, 53, 80, 0.7);
+    --color-blue-900-alpha: rgba(47, 53, 80, 0.8);
     
     /* Specific colors */
     --color-text: var(--color-blue-900);
@@ -82,6 +83,7 @@
     --color-red: rgb(227, 86, 86);
     --color-orange: rgb(227, 172, 86);
     --color-green: rgb(86, 172, 86);
+    --color-tooltip: rgba(47, 53, 80, 0.9);
 
     /* ColorPicker sprites */
     --image-color-wheel: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/ColorWheel.png");
@@ -202,6 +204,6 @@
 
     --inspector-border-radius: var(--spacing-2);
     --inspector-min-width: 320px;
-    --inspector-width: 400px;
+    --inspector-width: 420px;
     --inspector-max-width: 520px;
 }

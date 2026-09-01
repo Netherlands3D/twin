@@ -12,12 +12,17 @@ namespace Netherlands3D.Twin.Services
     {
         private Layers layers;
         private SnackbarService snackbarService;
-        private string activeMessage;
-        private int activeCounter;
+        private string activeAddedMessage;
+        private string activeRemovalMessage;
+        private int activeAddedCounter;
+        private int activeRemovalCounter;
         private DataTypeChain[] chains;
         
         [SerializeField] private StringEvent layerSourceAttributionEvent;
         public UnityEvent<string> OnAttributionReceived;
+
+        private bool messageAddedDirty = false;
+        private bool messageRemovalDirty = false;
         
         private void Awake()
         {
@@ -66,33 +71,34 @@ namespace Netherlands3D.Twin.Services
 
         private void OnHideSnackbar()
         {              
-            activeMessage = string.Empty;
-            activeCounter = 0;
+            activeAddedMessage = string.Empty;
+            activeAddedCounter = 0;
+            activeRemovalMessage = string.Empty;
+            activeRemovalCounter = 0;
         }
 
         private void OnLayerAdded(LayerData layerData)
         {
             if(layerData is RootLayer) return;
             
-            if (activeCounter > 0)
-                activeMessage += $" ,{layerData.Name}";
+            if (activeAddedCounter > 0)
+                activeAddedMessage += $" ,{layerData.Name}";
             else
-                activeMessage += layerData.Name;
-            activeCounter++;
-            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd", IconImage.SHEETS);
+                activeAddedMessage += layerData.Name;
+            activeAddedCounter++;
+            messageAddedDirty = true;
         }
-
-        //todo switch counter when adding -> removing or removing -> adding
+       
         private void OnLayerRemoved(LayerData layerData)
         {
             if(layerData is RootLayer) return;
             
-            if (activeCounter > 0)
-                activeMessage += $" ,{layerData.Name}";
+            if (activeRemovalCounter > 0)
+                activeRemovalMessage += $" ,{layerData.Name}";
             else
-                activeMessage += layerData.Name;
-            activeCounter++;
-            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol verwijderd");
+                activeRemovalMessage += layerData.Name;
+            activeRemovalCounter++;
+            messageRemovalDirty = true;
         }
 
         private void CouldNotFindAdapterMessage(string message)
@@ -126,6 +132,24 @@ namespace Netherlands3D.Twin.Services
         public void DisplayCsvReplacedMessage(string message)
         {
             snackbarService.DisplayMessage(message, IconImage.SHEETS);
+        }
+
+        private void LateUpdate()
+        {
+            if (messageAddedDirty)
+            {
+                messageAddedDirty = false;
+                snackbarService.DisplayMessage(activeAddedMessage + (activeAddedCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd", IconImage.SHEETS);
+                activeAddedMessage = string.Empty;
+                activeAddedCounter = 0;
+            }
+            if (messageRemovalDirty)
+            {
+                messageRemovalDirty = false;
+                snackbarService.DisplayMessage(activeRemovalMessage + (activeRemovalCounter == 1 ? " is" : " zijn") + " succesvol verwijderd");
+                activeRemovalMessage = string.Empty;
+                activeRemovalCounter = 0;
+            }
         }
     }
 }

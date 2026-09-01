@@ -6,6 +6,7 @@ using Netherlands3D.Twin;
 using UnityEngine.Events;
 using Cursor = UnityEngine.Cursor;
 using Netherlands3D.UI_Toolkit.Scripts;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -75,7 +76,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void OnFPVEnter()
         {
             //Only lock mouse when the locking modus is selected.
-            RemoveInputLockConstrain(this); // always start clean
+            inputLocks.Clear(); // always start clean
             ToggleCursor(lockMouseModus);
         }
 
@@ -184,19 +185,23 @@ namespace Netherlands3D.FirstPersonViewer
 
         public bool IsInputfieldSelected()
         {
-            return false; //todo: rewrite this function for UI Toolkit. We have no inputfields in the MVP, so this is currently always false
-            // GameObject selected = EventSystem.current.currentSelectedGameObject;
-            //
-            // if (selected == null)
-            // {
-            //     selectedUI = null;
-            //     return false;
-            // }
-            //
-            // if (selected == selectedUI) return isEditingInputfield;
-            //
-            // selectedUI = selected;
-            // return selected.GetComponent<TMP_InputField>() != null;
+            var focusedElement = App.UIRoot.Root?.focusController?.focusedElement as VisualElement;
+            return IsTextInputField(focusedElement);
+        }
+
+        private static bool IsTextInputField(VisualElement element)
+        {
+            var type = element?.GetType();
+            while (type != null)
+            {
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(TextInputBaseField<>))
+                {
+                    return true;
+                }
+                type = type.BaseType;
+            }
+
+            return false;
         }
 
         public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;

@@ -3,23 +3,23 @@
 .number-field {
     flex-direction: row;
     align-items: stretch;
-    height: var(--spacing-10);
+    height: var(--spacing-8);
     margin: 0;
 }
 
 /* Left label container */
 .number-field__label {
-    min-width: var(--spacing-10);
+    min-width: var(--spacing-8);
     justify-content: center;
     align-items: center;
-    padding: var(--spacing-2);
+    padding: var(--spacing-1);
 
     background-color: var(--color-blue-200);
-    border-width: 2px;
+    border-width: var(--spacing-0_5);
     border-color: var(--color-blue-200);
 
-    border-top-left-radius: var(--spacing-2);
-    border-bottom-left-radius: var(--spacing-2);
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
 }
 
 .number-field__label-text {
@@ -35,24 +35,21 @@
 }
 
 .number-field .textfield .unity-base-text-field__input {
-    padding-left: var(--spacing-4);
-    padding-top: var(--spacing-2);
-    padding-right: var(--spacing-4);
-    padding-bottom: var(--spacing-2);
+    padding: var(--spacing-1) var(--spacing-2);
     border-width: var(--spacing-0_5);
-    border-left-width: 0px;
+    border-left-width: 0;
     border-color: var(--color-blue-200);
     background-color: var(--color-white);
 
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-top-right-radius: var(--spacing-2);
-    border-bottom-right-radius: var(--spacing-2);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
 }
 
 .number-field .textfield.no-label .unity-base-text-field__input {
-    border-top-left-radius: var(--spacing-2);
-    border-bottom-left-radius: var(--spacing-2);
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
     border-left-width: var(--spacing-0_5);
 }
 
@@ -92,14 +89,14 @@
     padding: var(--spacing-1);
     width: var(--spacing-6);
     min-width: var(--spacing-6);
-    border-top-left-radius: var(--spacing-1);
-    border-bottom-left-radius: var(--spacing-1);
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
 }
 
 .number-field.number-field--style-small .textfield .unity-base-text-field__input {
     padding: var(--spacing-1);
-    border-top-right-radius: var(--spacing-1);
-    border-bottom-right-radius: var(--spacing-1);
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
 }
 
 .number-field.number-field--style-small .textfield {

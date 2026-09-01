@@ -11,7 +11,7 @@ namespace Netherlands3D
         private const string stylingClassName = "vignette-edge";
         [SerializeField] private Texture2D cornerSprite;
         [SerializeField] private Texture2D sideSprite;
-        private const float edgeWidth = 80;
+        private const float edgeWidth = 120;
 
         void Start()
         {

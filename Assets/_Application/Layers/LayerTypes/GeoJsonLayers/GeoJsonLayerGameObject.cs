@@ -67,7 +67,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private readonly List<WorldAnnotationLayerGameObject> spawnedAnnotations = new();
         private ICredentialHandler credentialHandler;
-
+        private bool startLoadingDataWhenLayerBecomesActive = false;
+        
         public struct PendingFeature
         {
             public Feature Feature;
@@ -123,7 +124,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             LayerData.HasValidCredentials = true;
-            StartLoadingData(uri, auth);
+            
+            if(LayerData.ActiveInHierarchy)
+            {
+                StartLoadingData(uri, auth);
+            }
+            else
+            {
+                startLoadingDataWhenLayerBecomesActive = true;
+            }
         }
 
         protected void StartLoadingData(Uri uri, StoredAuthorization auth)
@@ -136,6 +145,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             else if (uri.IsRemoteAsset())
             {
                 StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            }
+        }
+
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            base.OnLayerActiveInHierarchyChanged(isActive);
+            if (!LayerData.HasValidCredentials) //in case we activate the layer for the first time, and we have invalid credentials, reset the loading flag and wait for valid credentials
+            {
+                startLoadingDataWhenLayerBecomesActive = false;
+                return; 
+            }
+            
+            if (isActive && startLoadingDataWhenLayerBecomesActive) //in case we activate the layer with valid credentials for the first time, and we are still waiting for a load, parse the data.
+            {
+                var auth = credentialHandler.Authorization;
+                var uri =  auth.SanitizeUrl(credentialHandler.Uri);
+                StartLoadingData(uri, auth);
+                startLoadingDataWhenLayerBecomesActive = false;
             }
         }
 

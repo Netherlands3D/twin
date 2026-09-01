@@ -16,6 +16,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -23,7 +24,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
-
         public HierarchicalObjectLayerGameObject SelectedVisualisation => selectedVisualisation;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
@@ -34,6 +34,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
+        private PolygonSelectionService polygonSelectionService;
         private List<IMapping> orderedMappings = new();
         private Dictionary<string, IMapping> selectedMappings = new();
         private HierarchicalObjectLayerGameObject selectedVisualisation;
@@ -45,11 +46,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
         [SerializeField] private Material selectionMaterial;
-        
-       
-    
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
-
         private ToolService toolService;
 
         public void BlockBagId(string bagId, bool block)
@@ -84,13 +81,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+
+            InitSelectionConditions();
         }
 
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
-            toolService = Services.ServiceLocator.GetService<ToolService>();
+            toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
@@ -172,7 +172,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //dont select any feature if a gizmo handle is interacted with
             //todo make sure these colliders are associated with gizmo colliders
             Vector2 screenPoint = Pointer.current.position.ReadValue();
-            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+            Ray ray = App.Cameras.ActiveCamera.ScreenPointToRay(screenPoint);
             int hitCount = Physics.RaycastNonAlloc(ray, selectedColliderHits, Mathf.Infinity);
             //we have to loop through all potential colliders in case of a gizmo handle on top of another visualisation
             bool hasHit = false;
@@ -184,15 +184,20 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Collider col = hit.collider;
                     if (col != null)
                     {
-                        HierarchicalObjectLayerGameObject target = col.GetComponent<HierarchicalObjectLayerGameObject>();
-                        if(target != null)
+                        HierarchicalObjectLayerGameObject target = col.GetComponentInParent<HierarchicalObjectLayerGameObject>();
+                        if (target != null)
                             ctxObject = target;
-
                         hasHit = true;
                     }
                 }
             }
             return hasHit;
+        }
+
+        private bool TrySelectPolygon()
+        {
+            LayerData selectedPolygon = polygonSelectionService.ProcessPolygonSelection();
+            return selectedPolygon != null;
         }
 
         private Vector2 pointerDownPosition;
@@ -207,24 +212,61 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             pointerDownPosition = Mouse.current.position.ReadValue();
         }
 
+        private List<Func<bool>> selectionConditions = new();
+
+        private void InitSelectionConditions()
+        {
+            selectionConditions = new List<Func<bool>>
+            {
+                IsNotOverUI,
+                IsWithinClickDistance
+            };
+        }
+
+        private bool IsNotOverUI()
+        {
+            return !App.UIRoot.IsPointerOverUI();
+        }
+
+        private bool IsWithinClickDistance()
+        {
+            return Vector2.Distance(
+                pointerDownPosition,
+                Mouse.current.position.ReadValue()
+            ) <= minClickDistance;
+        }
+
+        private bool CanProcessSelection()
+        {
+            foreach (var condition in selectionConditions)
+            {
+                if (!condition())
+                    return false;
+            }
+
+            return true;
+        }
+
+        public void AddSelectionPredicate(Func<bool> predicate)
+        {
+            selectionConditions.Add(predicate);
+        }
+
+        public void RemoveSelectionPredicate(Func<bool> predicate)
+        {
+            selectionConditions.Remove(predicate);
+        }
+
         private void OnLeftClickUp(InputAction.CallbackContext ctx)
         {
-            if (App.UIRoot.IsPointerOverUI())
-                return;
-            
-            if(Vector2.Distance(pointerDownPosition, Mouse.current.position.ReadValue()) > minClickDistance)
-                return;
+            if (!CanProcessSelection()) return;
 
             ProcessSelection(true);
         }
 
         private void OnRightClickUp(InputAction.CallbackContext ctx)
         {
-            if (App.UIRoot.IsPointerOverUI())
-                return;
-            
-            if(Vector2.Distance(pointerDownPosition, Mouse.current.position.ReadValue()) > minClickDistance)
-                return;
+            if (!CanProcessSelection()) return;
 
             ProcessSelection(false);
         }
@@ -244,6 +286,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     }
                     OnSelectLayer.Invoke(ctxObject.LayerData);
                 }
+                Deselect();
+                return;
+            }
+
+            if (TrySelectPolygon() || polygonSelectionService.IsEditingPolygon)
+            {
                 Deselect();
                 return;
             }

@@ -65,7 +65,7 @@ namespace Netherlands3D.UI.Panels
 
             errorPanel.Hide();
             credentialPanel = this.Q<CredentialPanel>();
-            credentialPanel.SetEnabled(false);
+            credentialPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             credentialPanel.OnConfirmCredentials.AddListener(ApplyCredentials);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             

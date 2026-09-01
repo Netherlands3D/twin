@@ -1,10 +1,6 @@
 .color-tile-listview-item {
-    display: flex;
     flex-direction: row;
     align-items: center;
-    /*margin-bottom: var(--spacing-1_25);*/
-    /*margin-top: var(--spacing-1_25);*/
-
     transition-property: background-color;
     transition-duration: 0.1s;
     transition-timing-function: ease-in;

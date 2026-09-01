@@ -1,18 +1,14 @@
-using Netherlands3D.Events;
 using Netherlands3D.Functionalities;
 using Netherlands3D.Functionalities.AreaDownload;
 using Netherlands3D.Services;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
-using UnityEngine.UnityConsent;
 using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
@@ -98,7 +94,7 @@ namespace Netherlands3D.UI.Panels
             if(agreeToggle.value == false)
                 downloadActive = false;
 
-            downloadButton.SetEnabled(downloadActive);
+            downloadButton.SetEnabled(downloadActive); //visible, but greyed out
         }
 
         private void DownloadSelection()
