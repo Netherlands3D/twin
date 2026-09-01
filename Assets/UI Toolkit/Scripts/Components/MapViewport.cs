@@ -123,7 +123,9 @@ namespace Netherlands3D.UI.Components
         {
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, true);
-            PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
+            
+            if(!isDragging)
+                PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
         }
 
         private void OnPointerLeave(PointerLeaveEvent evt)
@@ -134,7 +136,9 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            PointerStyle.CancelCursorChange(this);
+            if(!isDragging)
+                PointerStyle.CancelCursorChange(this);
+            
             if(ResizeOnHover)
                 EnableInClassList(EXPANDED_USS_CLASS, false);
         }
