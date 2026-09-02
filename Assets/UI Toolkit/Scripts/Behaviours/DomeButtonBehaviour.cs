@@ -4,9 +4,7 @@ using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using Button = Netherlands3D.UI.Components.Button;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -15,8 +13,6 @@ namespace Netherlands3D.UI.Panels
     {
         private DomeButton domeButton;
         private ToolService toolService;
-        
-        [SerializeField] private PointerStyle.Style styleOnHover = PointerStyle.Style.GRABBING;
 
         public override void Initialize(VisualElement parent)
         {
@@ -41,30 +37,37 @@ namespace Netherlands3D.UI.Panels
         {
             domeButton.EnableInClassList(UtilityClassConstants.HIDDEN, false);
         }
+        
+        private bool isDragging;
 
         private void OnDragDome(bool drag)
         {
             if (drag)
-                PointerStyle.ChangeCursor(PointerStyle.Style.GRAB);
+            {
+                isDragging = true;
+                PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRABBING);
+            }
             else
-                PointerStyle.ChangeCursor(PointerStyle.Style.POINTER);
+            {
+                isDragging = false;
+                if (App.Dome.Spawner.DomeVisualisation.Hovering)
+                    PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB); //pointer is still in the panel
+                else
+                    PointerStyle.CancelCursorChange(this);
+            }
         }
 
         private void OnHoverDome(bool hover)
         {
             if (hover)
-            {
-                if(!domeButton.Dragging)
-                    PointerStyle.ChangeCursor(PointerStyle.Style.POINTER);
-            }
-            else
-                PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
+                PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
+            else if(!isDragging)
+                PointerStyle.CancelCursorChange(this);
         }
 
         public override VisualElement SpawnFloatingButtonContent()
         {
             domeButton = new DomeButton();
-            domeButton.SetStyleOnHover(styleOnHover);
             return domeButton;
         }
 
@@ -89,7 +92,7 @@ namespace Netherlands3D.UI.Panels
         public override void Dispose()
         {
             base.Dispose();
-            PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
+            PointerStyle.CancelCursorChange(this);
             toolService.GetTool(ToolType.Dome).onOpen.RemoveListener(OnEnableDome);
             toolService.GetTool(ToolType.Dome).onClose.RemoveListener(OnDisableDome);
         }
