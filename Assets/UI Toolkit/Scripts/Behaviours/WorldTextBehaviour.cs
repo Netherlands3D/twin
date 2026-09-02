@@ -18,7 +18,8 @@ namespace Netherlands3D.UI.Panels
             public Coordinate coordinate;
             public WorldText element;
             public FloatingElement floatingElement;
-            public Vector3 elementOffset;
+            public bool enabled;
+            public Color color;
         }
         
 
