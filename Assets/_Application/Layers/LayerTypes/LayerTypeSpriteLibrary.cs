@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.LASImporter;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
@@ -27,7 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
             if (layer.HasProperty<PolygonSelectionLayerPropertyData>()) // special cases for polygon layers that have a defined shape type
             {
-                PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>(); 
+                PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
                 if (propertyData.ShapeType == ShapeType.Line)
                     return IconImage.LINE;
                 else if (propertyData.ShapeType == ShapeType.Grid)
@@ -37,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
             return GetIconImage(layer.PrefabIdentifier);
         }
-        
+
         public static string GetIconImage(string prefabId)
         {
             var template = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
@@ -68,6 +69,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return IconImage.LINE;
                 case GeoJSONPointLayer _:
                     return IconImage.DOT;
+                case LASPointCloudLayer _:
+                    return IconImage.POINT;
                 case PolygonSelectionLayerGameObject _:
                     return IconImage.POLYGON;
                 default:
