@@ -60,7 +60,6 @@ GameObject:
   - component: {fileID: 4429096078737367381}
   - component: {fileID: 6123456789012345678}
   - component: {fileID: 5715699707642146679}
-  - component: {fileID: 6449633652433648055}
   - component: {fileID: 2679958399476094032}
   - component: {fileID: 5188715498986471469}
   - component: {fileID: -2108419079400312055}
@@ -93,6 +92,7 @@ Transform:
   - {fileID: 3977341333048145246}
   - {fileID: 5246216560922750945}
   - {fileID: 4765081458409217524}
+  - {fileID: 3875463072506059519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -173,28 +173,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SettingsWindow: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
   HelpUrl: https://netherlands3d.eu/
---- !u!114 &6449633652433648055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891704482898673965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78da410b8ae506f2689c101c958c6956, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
-    type: 3}
-  panelBehaviours:
-  - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
-  - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
-  - {fileID: 11400000, guid: 101175000a89da4a8beb0a2532e32947, type: 2}
-  - {fileID: 11400000, guid: 193046eec53862a7380ad41ce7521c3f, type: 2}
-  floatingButtonBehaviour:
-  - {fileID: 11400000, guid: b39f0c433614c7547967510a0332c622, type: 2}
-  - {fileID: 11400000, guid: 6615aa3ea2afbef55acaf5e443b6130d, type: 2}
 --- !u!114 &2679958399476094032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -642,6 +620,74 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.MinimapBehaviour
   minimapConfig: {fileID: 11400000, guid: e6d0b533c91ab9249906b9d224cb6b6f, type: 2}
+--- !u!1 &7134865792954086484
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3875463072506059519}
+  - component: {fileID: 2984829942411880383}
+  - component: {fileID: 200906582519753930}
+  m_Layer: 0
+  m_Name: Context
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3875463072506059519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7134865792954086484}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2456.6272, y: 0.00001, z: 178.6005}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2984829942411880383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7134865792954086484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78da410b8ae506f2689c101c958c6956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
+    type: 3}
+  panelBehaviours:
+  - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
+  - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
+  - {fileID: 11400000, guid: 101175000a89da4a8beb0a2532e32947, type: 2}
+  - {fileID: 11400000, guid: 193046eec53862a7380ad41ce7521c3f, type: 2}
+  floatingButtonBehaviour:
+  - {fileID: 11400000, guid: b39f0c433614c7547967510a0332c622, type: 2}
+  - {fileID: 11400000, guid: 6615aa3ea2afbef55acaf5e443b6130d, type: 2}
+--- !u!114 &200906582519753930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7134865792954086484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
+  service: {fileID: 2984829942411880383}
 --- !u!1 &8929667644022415580
 GameObject:
   m_ObjectHideFlags: 0

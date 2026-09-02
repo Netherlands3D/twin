@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin;
 using Netherlands3D.UI.Components;
@@ -12,7 +13,6 @@ namespace Netherlands3D.UI.Panels
     {
         private List<WorldTextObject> worldTextObjects = new();
         
-        
         public struct WorldTextObject
         {
             public Coordinate coordinate;
@@ -21,7 +21,6 @@ namespace Netherlands3D.UI.Panels
             public bool enabled;
             public Color color;
         }
-        
 
         public override void Initialize(VisualElement parent)
         {
@@ -29,38 +28,62 @@ namespace Netherlands3D.UI.Panels
             this.content = parent;
             
             //test
-            this.content.Add(SpawnFloatingButtonContent());
+            //this.content.Add(SpawnFloatingButtonContent());
         }
     
 
         public override VisualElement SpawnFloatingButtonContent()
         {
+            // FloatingElement floatingElement = new FloatingElement();
+            // WorldText text = new WorldText();
+            // text.SetText("testing much text \n and there is even more text");
+            // text.SetSnappingSide(WorldText.SnappingSide.Above);
+            // text.SetLabelOffset(50);
+            // floatingElement.Add(text);
+            //
+            // WorldTextObject worldTextObject = new WorldTextObject();
+            // worldTextObject.floatingElement = floatingElement;
+            // worldTextObject.element = text;
+            // worldTextObject.coordinate = new Coordinate(CoordinateSystem.RDNAP, 139607, 478158, 0);
+            //
+            //
+            //
+            // worldTextObjects.Add(worldTextObject);
+            //
+            // return floatingElement;
+            return new FloatingElement();
+        }
+//new Coordinate(CoordinateSystem.RDNAP, 139607, 478158, 0);
+        public WorldTextObject AddWorldTextObject(string text, Coordinate coord, WorldText.SnappingSide side, float offsetFromPoint)
+        {
             FloatingElement floatingElement = new FloatingElement();
-            WorldText text = new WorldText();
-            text.SetText("testing much text \n and there is even more text");
-            text.SetSnappingSide(WorldText.SnappingSide.Above);
-            text.SetLabelOffset(50);
-            floatingElement.Add(text);
+            content.Add(floatingElement);
+            
+            WorldText worldText = new WorldText();
+            worldText.SetText(text);
+            worldText.SetSnappingSide(side);
+            worldText.SetLabelOffset(offsetFromPoint);
+            floatingElement.Add(worldText);
             
             WorldTextObject worldTextObject = new WorldTextObject();
             worldTextObject.floatingElement = floatingElement;
-            worldTextObject.element = text;
-            worldTextObject.coordinate = new Coordinate(CoordinateSystem.RDNAP, 139607, 478158, 0);
-            
-           
+            worldTextObject.element = worldText;
+            worldTextObject.coordinate = coord;
             
             worldTextObjects.Add(worldTextObject);
-            
-            return floatingElement;
+            return worldTextObject;
         }
 
+        public void RemoveWorldTextObject(WorldTextObject worldTextObject)
+        {
+            content.Remove(worldTextObject.floatingElement);
+            worldTextObjects.Remove(worldTextObject);
+        }
 
         private GameObject testObject = null;
 
         public override void UpdateBehaviour()
         {
-            
-            
             foreach (WorldTextObject worldTextObject in worldTextObjects)
             {
                 var screenPos =  App.Cameras.ActiveCamera.WorldToScreenPoint(worldTextObject.coordinate.ToUnity());

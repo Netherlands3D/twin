@@ -59,10 +59,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             //annotation.ReadOnly = !layerTool.IsOpen;   
             
             //create world text object with WorldTransform.Coordinate as cached coordinate so we dont need to use update
-            
-            
-            
-            
+
+            WorldTextBehaviour behaviour = ServiceLocator.GetService<ContextMenuBehaviour>().GetBehaviour<WorldTextBehaviour>();
+            annotation = behaviour.AddWorldTextObject("testing a new piece of text \n and a little bit more", WorldTransform.Coordinate, WorldText.SnappingSide.Above, 0);
         }
         
         private void OnDestroy()
