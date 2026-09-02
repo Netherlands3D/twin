@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
@@ -91,7 +91,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             toolService = ServiceLocator.GetService<ToolService>();
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            
+
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
         }
@@ -99,7 +99,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
-       
+            
             OnSelectLayer.RemoveListener(OpenLayerPanel);
             OnNoLayerSelected.RemoveListener(CloseLayerPanel);
         }
@@ -130,7 +130,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
             }
         }
-      
+
         private void Start()
         {
             InputService inputService = ServiceLocator.GetService<InputService>();
@@ -160,7 +160,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             toolService.GetTool(ToolType.Layer).Open();
         }
-
+        
         private void CloseLayerPanel()
         {
             toolService.GetTool(ToolType.Layer).Close();
@@ -193,13 +193,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             return hasHit;
         }
-
+        
         private bool TrySelectPolygon()
         {
             LayerData selectedPolygon = polygonSelectionService.ProcessPolygonSelection();
             return selectedPolygon != null;
         }
-
+        
         private Vector2 pointerDownPosition;
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
@@ -208,25 +208,25 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
         private void OnRightClick(InputAction.CallbackContext ctx)
-        {
+            {
             pointerDownPosition = Mouse.current.position.ReadValue();
         }
 
         private List<Func<bool>> selectionConditions = new();
 
         private void InitSelectionConditions()
-        {
+                {
             selectionConditions = new List<Func<bool>>
-            {
+                    {
                 IsNotOverUI,
                 IsWithinClickDistance
             };
-        }
+                    }
 
         private bool IsNotOverUI()
         {
             return !App.UIRoot.IsPointerOverUI();
-        }
+                }
 
         private bool IsWithinClickDistance()
         {
@@ -234,12 +234,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 pointerDownPosition,
                 Mouse.current.position.ReadValue()
             ) <= minClickDistance;
-        }
-
+            }
+            
         private bool CanProcessSelection()
-        {
-            foreach (var condition in selectionConditions)
             {
+            foreach (var condition in selectionConditions)
+                {
                 if (!condition())
                     return false;
             }
@@ -248,7 +248,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
         public void AddSelectionPredicate(Func<bool> predicate)
-        {
+                    {
             selectionConditions.Add(predicate);
         }
 
@@ -286,41 +286,41 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     }
                     OnSelectLayer.Invoke(ctxObject.LayerData);
                 }
-                Deselect();
-                return;
-            }
+                        Deselect();
+                        return;
+                    }
 
             if (TrySelectPolygon() || polygonSelectionService.IsEditingPolygon)
             {
                 Deselect();
                 return;
-            }
+                }
             
-            string previousSelectedBagId = null;
-            bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
-            if (!isModifierPressed)
-            {
-                previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
-                Deselect();
-            }
-            //the following method calls need to run in order!
-            string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
-            IMapping mapping = FindObjectMapping();
-            bool mappingVisible = IsMappingVisible(mapping, bagId);
+                string previousSelectedBagId = null;
+                bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
+                if (!isModifierPressed)
+                {
+                    previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
+                    Deselect();
+                }
+                //the following method calls need to run in order!
+                string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
+                IMapping mapping = FindObjectMapping();
+                bool mappingVisible = IsMappingVisible(mapping, bagId);
                 
-            //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
-            if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
-            {
-                lastSelectedMappingLayerData.DeselectLayer();
-                lastSelectedMappingLayerData = null;
-            }
-            if (mapping is MeshMapping map) 
+                //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
+                if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
+                {
+                    lastSelectedMappingLayerData.DeselectLayer();
+                    lastSelectedMappingLayerData = null;
+                }
+                if (mapping is MeshMapping map) 
                 ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed, primary);   
-            else if (mapping is FeatureMapping feature) 
-                ProcessFeatureMappingSelection(feature);
+                else if (mapping is FeatureMapping feature) 
+                    ProcessFeatureMappingSelection(feature);
             else
                 OnNoLayerSelected.Invoke();
-        }
+            }
 
         private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed, bool primary)
         {
@@ -344,10 +344,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 DeselectBagId(bagId);
                 selectedMappings.Remove(bagId);
                 SelectSubObjectWithBagId?.Invoke(selectedMappings.Count > 0 ? map : null, bagId);
-            }
+                }
 
             OnSelectLayer.Invoke(layerData);
-        }
+            }
 
         public void SelectBagId(string bagId, Coordinate coordinate)
         {
@@ -466,9 +466,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            Vector3 worldPoint = pointerToWorldPosition.GetWorldPointSync();
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, worldPoint) < minClickDistance;
-            lastWorldClickedPosition = worldPoint;
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster()) < minClickDistance;
+            lastWorldClickedPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;
