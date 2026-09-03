@@ -77,7 +77,6 @@ namespace Netherlands3D.UI.Panels
                     testObject.GetComponent<MeshRenderer>().material.color = Color.green;
                 }
                 testObject.transform.position = worldTextObject.coordinate.ToUnity();
-                
             }
         }
         

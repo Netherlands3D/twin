@@ -3,8 +3,28 @@
     position:absolute;
 }
 
-.world-text > .editable-name-field{
+.world-text__container {
+    position: relative;
     background-color: var(--color-white);
+}
+
+.world-text__container .editable-name-field {  
+    position: relative;
+    flex-grow: 1;
+    padding: 0;
+    margin: 0;
+}
+
+.world-text__container .text-field__placeholder {
+    background-color: transparent;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    translate: -50% 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .world-text__position {
@@ -16,4 +36,6 @@
     width: 20px;
     position:absolute;
     translate: -50% -50%;
+    left: 0;
+    top: 0;
 }

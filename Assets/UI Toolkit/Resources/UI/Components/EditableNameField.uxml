@@ -8,5 +8,4 @@
 >
     <ui:Label class="editable-name-field__label text-base" name="Label" text="" />
     <nl3d:TextField class="editable-name-field__input" name="InputField" label="" value="" />
-    <ui:Label name="Placeholder" text="Please enter text" />
 </ui:UXML>

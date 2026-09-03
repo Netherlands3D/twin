@@ -6,6 +6,9 @@
     editor-extension-mode="False"
     class="world-text"
 >
-    <nl3d:EditableNameField value="test text" />
+    <ui:VisualElement name="TextContainer" class="world-text__container">
+        <nl3d:EditableNameField value="test text" />
+        <ui:Label class="text-field__placeholder" name="Placeholder" text="Plaats hier uw tekst maar eens en nog een beetje" picking-mode="Ignore"/>
+    </ui:VisualElement>
     <ui:VisualElement class="world-text__position" name="Position"/>
 </ui:UXML>
