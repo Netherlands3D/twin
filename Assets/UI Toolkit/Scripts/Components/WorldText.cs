@@ -104,7 +104,7 @@ namespace Netherlands3D.UI.Components
         private void UpdateContainerSize()
         {
             bool isEmpty = string.IsNullOrEmpty(currentText);
-            float width = isEmpty ? placeholder.resolvedStyle.width : nameField.TextWidth + 10;
+            float width = isEmpty ? placeholder.resolvedStyle.width : nameField.TextWidth;
             float height = isEmpty ? placeholder.resolvedStyle.height : nameField.resolvedStyle.height;
 
             textContainer.style.width = width;

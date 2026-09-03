@@ -13,6 +13,22 @@
     flex-grow: 1;
     padding: 0;
     margin: 0;
+    overflow: hidden;
+}
+
+.world-text__container .editable-name-field .unity-base-text-field__input {  
+    padding: 0;
+    margin: 0;
+}
+
+.world-text__container .editable-name-field .unity-label {
+    padding: 0;
+    margin: 0;
+}
+
+.world-text__container .editable-name-field .unity-text-element--inner-input-field-component {
+    flex-grow: 0;
+    flex-shrink: 1;
 }
 
 .world-text__container .text-field__placeholder {
@@ -39,3 +55,4 @@
     left: 0;
     top: 0;
 }
+
