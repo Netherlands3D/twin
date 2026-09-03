@@ -95,7 +95,14 @@ namespace Netherlands3D.UI.Components
             var toggle = togglesByKey[key];
             toggleGroup.Remove(toggle);
             var clampedIndex = Mathf.Clamp(newIndex, 0, toggleGroup.childCount);
+            Debug.Log("inserting fodler at: "  + clampedIndex);
             toggleGroup.Insert(clampedIndex, toggle);
+        }
+        
+        public void SetFolderName(FolderPropertyData key, string newName)
+        {
+            var toggle = togglesByKey[key];
+            toggle.LabelText = newName;
         }
 
         public void SetScenarioVisible(FolderPropertyData key, bool isScenario)

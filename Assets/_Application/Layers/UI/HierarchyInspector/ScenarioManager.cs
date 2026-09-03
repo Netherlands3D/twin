@@ -33,6 +33,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             public void OnIsScenarioChanged(bool isScenario) => owner.HandleIsScenarioChanged(FolderProperty, Layer, isScenario);
             public void OnActiveSelfChanged(bool active) => owner.HandleActiveSelfChanged(FolderProperty, Layer, active);
             public void OnHierarchyOrderChanged(int newIndex) => owner.toolbar.SetFolderIndex(FolderProperty, newIndex);
+            public void OnNameChanged(string newName) => owner.toolbar.SetFolderName(FolderProperty, newName);
         }
 
         private void Awake()
@@ -92,6 +93,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
             folderProperty.IsScenarioChanged.AddListener(subscription.OnIsScenarioChanged);
             layer.ActiveSelfChanged.AddListener(subscription.OnActiveSelfChanged);
+            layer.NameChanged.AddListener(subscription.OnNameChanged);
             layer.ParentOrSiblingIndexChanged.AddListener(subscription.OnHierarchyOrderChanged);
 
             var insertIndex = GetInsertIndexForLayer(layer);
@@ -248,7 +250,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 subscription.FolderProperty.IsScenarioChanged.RemoveListener(subscription.OnIsScenarioChanged);
                 subscription.Layer.ActiveSelfChanged.RemoveListener(subscription.OnActiveSelfChanged);
-                subscription.Layer.ParentOrSiblingIndexChanged.AddListener(subscription.OnHierarchyOrderChanged);
+                subscription.Layer.NameChanged.RemoveListener(subscription.OnNameChanged);
+                subscription.Layer.ParentOrSiblingIndexChanged.RemoveListener(subscription.OnHierarchyOrderChanged);
             }
 
             subscriptions.Clear();
