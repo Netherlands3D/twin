@@ -198,43 +198,14 @@ namespace Netherlands3D.UI.Panels
 
         private void OnScenarioButtonClicked(ClickEvent evt)
         {
-            CreateScenarioAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected
-        }
-
-        private void CreateScenarioAndGroupLayers(bool group)
-        {
-            var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList();
-            layersToGroup = layersToGroup.OrderBy(layer => layer.RootId).ToList();
-
-            var newScenario = App.Layers.Add(new ScenarioPreset.Args(GetUniqueScenarioName()));
-
-            var referenceLayer = referenceLayerItem?.LayerData;
-            var siblingIndex = referenceLayer == null ? -1 : referenceLayer.SiblingIndex;
-
-            newScenario.LayerData.SetParent(referenceLayer?.ParentLayer, siblingIndex);
-
-            if (group)
-            {
-                foreach (var selectedLayer in layersToGroup)
-                    selectedLayer.SetParent(newScenario.LayerData);
-            }
-
-            newScenario.LayerData.IsExpanded = true;
-
-            RebuildTree();
-
-            RequestSelection(
-                group ? layersToGroup : new List<LayerData> { newScenario.LayerData });
+            CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1, true); //only group if we have multiple layers selected
         }
 
         private string GetUniqueScenarioName()
         {
             const string defaultName = "Nieuw scenario";
 
-            var existingNames = ProjectData.Current.RootLayer
-                .GetFlatHierarchy()
-                .Select(layer => layer.Name)
-                .ToHashSet();
+            var existingNames = ProjectData.Current.RootLayer.GetFlatHierarchy().Select(layer => layer.Name).ToHashSet(); //todo this is too heavy for what it should do
 
             if (!existingNames.Contains(defaultName))
                 return defaultName;
@@ -249,15 +220,16 @@ namespace Netherlands3D.UI.Panels
 
         private void OnFolderButtonClicked(ClickEvent evt)
         {
-            CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected
+            CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1, false); //only group if we have multiple layers selected
         }
 
-        private void CreateFolderAndGroupLayers(bool group)
+        private void CreateFolderAndGroupLayers(bool group, bool isScenario)
         {
             var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList(); //make a copy with ToList because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
             layersToGroup = layersToGroup.OrderBy(layer => layer.RootId).ToList();
 
-            var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
+            var name = isScenario ? GetUniqueScenarioName() : "Folder";
+            var newGroup = App.Layers.Add(new FolderPreset.Args(name, isScenario));
             var referenceLayer = referenceLayerItem?.LayerData;
             var siblingIndex = referenceLayer == null ? -1 : referenceLayer.SiblingIndex;
 
@@ -276,7 +248,7 @@ namespace Netherlands3D.UI.Panels
             
             RequestSelection(group ? layersToGroup : new List<LayerData>() { newGroup.LayerData });
         }
-        
+
         private List<LayerData> selectionToRestore = new List<LayerData>();
         private void RequestSelection(List<LayerData> selection)
         {
@@ -579,11 +551,9 @@ namespace Netherlands3D.UI.Panels
                 if (hoveredButton == deleteButton)
                     DeleteSelectedLayers();
                 else if (hoveredButton == folderButton)
-                    CreateFolderAndGroupLayers(true); //always group when dragging on the button
+                    CreateFolderAndGroupLayers(true, false); //always group when dragging on the button
                 else if (hoveredButton == scenarioButton)
-                {
-                    CreateScenarioAndGroupLayers(true); //always group when dragging on the button
-                }
+                    CreateFolderAndGroupLayers(true, true); //always group when dragging on the button
             }
             else if (hoveredItem != null)
             {

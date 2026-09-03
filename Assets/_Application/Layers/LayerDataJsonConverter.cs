@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -133,6 +132,7 @@ namespace Netherlands3D
             var layerProps = obj["layerProperties"] as JArray;
             if (layerProps != null)
             {
+                bool isScenario = false;
                 foreach (var prop in layerProps)
                 {
                     var type = prop["$type"]?.ToString();
@@ -175,6 +175,18 @@ namespace Netherlands3D
                             layer.SetProperty(annotationProperty);
                             layer.SetProperty(transformLayerPropertyData);
                         }
+                    }
+
+                    if (type == "https://netherlands3d.eu/schemas/projects/layers/properties/Scenario")
+                    {
+                        if (layer.HasProperty<FolderPropertyData>())
+                            layer.GetProperty<FolderPropertyData>().IsScenario = true;
+                        else
+                            isScenario = true;
+                    }
+                    if (type == "https://netherlands3d.eu/schemas/projects/layers/properties/Folder")
+                    {
+                        layer.SetProperty(new FolderPropertyData(isScenario));
                     }
                 }
             }

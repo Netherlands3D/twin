@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -10,10 +9,11 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(IScenarioConvertiblePropertyData), PropertySectionCategory.Settings)]
+    [PropertySection(typeof(FolderPropertyData), PropertySectionCategory.Settings)]
     public partial class ScenarioPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private readonly CheckboxToggle scenarioToggle;
+        private FolderPropertyData folderPropertyData;
 
         public ScenarioPropertySection()
         {
@@ -26,19 +26,13 @@ namespace Netherlands3D.UI.Panels
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var isScenario = properties.Get<ScenarioPropertyData>() != null;
-            scenarioToggle.SetValueWithoutNotify(isScenario);
+            folderPropertyData = properties.Get<FolderPropertyData>();
+            scenarioToggle.SetValueWithoutNotify(folderPropertyData.IsScenario);
         }
 
         private void OnScenarioToggleChanged(ChangeEvent<bool> evt)
         {
-            var propertyPanelBehaviour = ServiceLocator.GetService<PropertyPanelBehaviour>();
-            var layer = propertyPanelBehaviour.activeLayer;
-
-            if (layer == null)
-                return;
-
-            ScenarioManager.SetScenarioState(layer, evt.newValue);
+            folderPropertyData.IsScenario = evt.newValue;
         }
     }
 }

@@ -22,11 +22,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         public static string GetIconImage(LayerData layer)
         {
-            if (layer.HasProperty<ScenarioPropertyData>())
-                return IconImage.SCENARIO;
-
-            if (layer.HasProperty<FolderPropertyData>())
+            var folderPropertyData = layer.GetProperty<FolderPropertyData>();
+            if (folderPropertyData != null)
+            {
+                if(folderPropertyData.IsScenario)
+                    return IconImage.SCENARIO;
                 return IconImage.FOLDER;
+            }
 
             if (layer.HasProperty<PolygonSelectionLayerPropertyData>()) // special cases for polygon layers that have a defined shape type
             {
