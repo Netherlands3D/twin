@@ -17,6 +17,9 @@ namespace Netherlands3D.Twin.layers.properties
         private LayerGameObject visualization;
         private Dictionary<string, FeaturePropertyData.FeatureData> featureIds = new();
         private ObjectSelectorService selectorService;
+
+        private List<Bounds> _originalBounds;
+        private List<Bounds> _maybeFixedBounds;
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -64,6 +67,23 @@ namespace Netherlands3D.Twin.layers.properties
             }
             propertyData.FeatureIds = featureIds;
         }
+
+        void OnDrawGizmos()
+        {
+            _originalBounds ??= new List<Bounds>();
+            foreach (var bounds in _originalBounds)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireCube(bounds.center, bounds.size);
+            }
+            
+            _maybeFixedBounds ??= new List<Bounds>();
+            foreach (var bounds in _maybeFixedBounds)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawWireCube(bounds.center, bounds.size);
+            }
+        }
         
         private Bounds GetThumbnailBoundingBox(FeatureMapping mapping)
         {
@@ -81,9 +101,20 @@ namespace Netherlands3D.Twin.layers.properties
                     Bounds currentObjectBounds = new Bounds(pv.transform.position, mesh.bounds.size);
 	                bounds.Encapsulate(currentObjectBounds);
                 }
+
+                if (_originalBounds != null)
+                {
+                    _originalBounds.Add(bounds);
+                }
+
+                if (_maybeFixedBounds != null)
+                {
+                    _maybeFixedBounds.Add(polygonLayer.GetFeatureBounds(mapping.Feature));
+                }
+                
 				return bounds;
             }
-            if (mapping.VisualisationLayer is GeoJSONLineLayer)
+            if (mapping.VisualisationLayer is GeoJSONLineLayer lineLayer)
             {
                 Vector3 centroid = Vector3.zero;
                 Vector3[] vertices = mapping.FeatureMeshes[0].vertices;
@@ -95,12 +126,36 @@ namespace Netherlands3D.Twin.layers.properties
                 size.x = Mathf.Clamp(size.x, 50, 100);
                 size.z = Mathf.Clamp(size.z, 50, 100);
                 Bounds currentObjectBounds = new Bounds(mapping.SelectedGameObject.transform.position + centroid, size);
+                
+                if (_originalBounds != null)
+                {
+                    _originalBounds.Add(currentObjectBounds);
+                }
+                
+                if (_maybeFixedBounds != null)
+                {
+                    _maybeFixedBounds.Add(lineLayer.GetFeatureBounds(mapping.Feature));
+                }
+                
                 return currentObjectBounds;
             }
-            if (mapping.VisualisationLayer is GeoJSONPointLayer)
+            if (mapping.VisualisationLayer is GeoJSONPointLayer pointLayer)
             {
                 Bounds currentObjectBounds = new Bounds(mapping.SelectedGameObject.transform.position + mapping.FeatureMeshes[0].vertices[0] - mapping.FeatureMeshes[0].bounds.center, Vector3.one * 50);
+                
+                if (_originalBounds != null)
+                {
+                    _originalBounds.Add(currentObjectBounds);
+                }
+                
+                if (_maybeFixedBounds != null)
+                {
+                    _maybeFixedBounds.Add(pointLayer.GetFeatureBounds(mapping.Feature));
+                }
+                
                 return currentObjectBounds;
+                
+                
             }
 
             return new();
