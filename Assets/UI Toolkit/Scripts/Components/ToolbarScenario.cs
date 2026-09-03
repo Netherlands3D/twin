@@ -41,8 +41,7 @@ namespace Netherlands3D.UI.Components
             };
 
             toggle.AddToClassList(ScenarioToggleClassName);
-
-            var clampedIndex = Mathf.Clamp(index, 0, toggleGroup.childCount);
+            var clampedIndex = Mathf.Clamp(index, 0, togglesByKey.Count);
             toggleGroup.Insert(clampedIndex, toggle);
             togglesByKey.Add(key, toggle);
             ApplyScenarioVisibility(toggle, isScenario);
@@ -54,16 +53,7 @@ namespace Netherlands3D.UI.Components
         {
             var toggle  = evt.target as Toggle;
             var key = toggle.userData as FolderPropertyData;
-
-            // if (activeToggle == toggle)
-            // {
-            //     if(evt.newValue)
-            //         SelectionChanged.Invoke(key); 
-            //     else
-            //         SelectionChanged.Invoke(null);
-            //     return;
-            // }
-        
+            
             activeToggle?.SetValueWithoutNotify(false);
             if(evt.newValue)
             {
@@ -93,9 +83,13 @@ namespace Netherlands3D.UI.Components
         public void SetFolderIndex(FolderPropertyData key, int newIndex)
         {
             var toggle = togglesByKey[key];
+            var currentIndex = toggleGroup.IndexOf(toggle);
+           
+            if (currentIndex == newIndex)
+                return;
+            
             toggleGroup.Remove(toggle);
-            var clampedIndex = Mathf.Clamp(newIndex, 0, toggleGroup.childCount);
-            toggleGroup.Insert(clampedIndex, toggle);
+            toggleGroup.Insert(newIndex, toggle);
         }
         
         public void SetFolderName(FolderPropertyData key, string newName)

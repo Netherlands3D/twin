@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
             public void OnIsScenarioChanged(bool isScenario) => owner.HandleIsScenarioChanged(FolderProperty, Layer, isScenario);
             public void OnActiveSelfChanged(bool active) => owner.HandleActiveSelfChanged(FolderProperty, Layer, active);
-            public void OnHierarchyOrderChanged(int newIndex) => owner.toolbar.SetFolderIndex(FolderProperty, owner.GetInsertIndexForLayer(Layer));
+            public void OnHierarchyOrderChanged(int newIndex) => owner.ReOrderFolder(this); 
             public void OnNameChanged(string newName) => owner.toolbar.SetFolderName(FolderProperty, newName);
         }
 
@@ -119,6 +119,14 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
             toolbar.RemoveFolder(folderProperty);
         }
+
+        private void ReOrderFolder(ScenarioSubscription subscription)
+        {
+            orderedFolders.Remove(subscription.FolderProperty);
+            var newFolderIndex = GetInsertIndexForLayer(subscription.Layer);
+            orderedFolders.Insert(newFolderIndex, subscription.FolderProperty);
+            toolbar.SetFolderIndex(subscription.FolderProperty, newFolderIndex);
+        }
         
         private int GetInsertIndexForLayer(LayerData layer) //todo simplify
         {
@@ -134,7 +142,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 if (otherIndex > layerIndex)
                     return i;
             }
-
+            
             return orderedFolders.Count;
         }
         
