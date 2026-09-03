@@ -1,6 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -8,126 +13,135 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarScenario : VisualElement
     {
-        private const string ScenarioButtonClassName =
-            "toolbar-scenario__button";
+        private const string ScenarioToggleClassName = "toolbar-scenario__toggle";
 
-        private readonly ToggleButtonGroup buttonGroup;
-        private bool isUpdating;
+        private readonly VisualElement toggleGroup;
+        private readonly Dictionary<FolderPropertyData, Toggle> togglesByKey = new();
 
-       /* Raised when the user changes the selected scenario.
-        The index refers to the order supplied through SetScenarios.A null value means that no scenario is selected.*/
-        public event Action<int?> SelectionChanged;
+        private Toggle activeToggle;
+        public UnityEvent<FolderPropertyData> SelectionChanged = new();
 
         public ToolbarScenario()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            buttonGroup =
-                this.Q<ToggleButtonGroup>("ScenarioButtonGroup");
-
-            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            toggleGroup = this.Q<VisualElement>("ScenarioToggleGroup");
 
             SetVisible(false);
         }
 
-        private void OnAttachToPanel(AttachToPanelEvent _)
+        public void InsertFolder(FolderPropertyData key, int index, string label, bool isScenario)
         {
-            buttonGroup.RegisterValueChangedCallback(
-                OnButtonGroupValueChanged
-            );
-        }
-
-        private void OnDetachFromPanel(DetachFromPanelEvent _)
-        {
-            buttonGroup.UnregisterValueChangedCallback(
-                OnButtonGroupValueChanged
-            );
-        }
-
-        /* Rebuilds the dynamic scenario buttons. This method only receives display labels and contains no layer logic.*/
-        public void SetScenarios(IReadOnlyList<string> labels, int? selectedIndex)
-        {
-            isUpdating = true;
-
-            try
+            var toggle = new Toggle
             {
-                buttonGroup.Clear();
+                name = $"ScenarioToggle-{togglesByKey.Count}",
+                LabelText = label,
+                userData = key
+            };
 
-                for (var i = 0; i < labels.Count; i++)
-                {
-                    var button = new Button
-                    {
-                        name = $"ScenarioButton-{i}",
-                        LabelText = labels[i],
-                        ShowIcon = Button.ButtonStyle.Normal
-                    };
-
-                    button.AddToClassList(
-                        ScenarioButtonClassName
-                    );
-
-                    buttonGroup.Add(button);
-                }
-
-                SetSelectionWithoutNotify(selectedIndex);
-                SetVisible(labels.Count > 0);
-            }
-            finally
-            {
-                isUpdating = false;
-            }
+            toggle.AddToClassList(ScenarioToggleClassName);
+            var clampedIndex = Mathf.Clamp(index, 0, togglesByKey.Count);
+            toggleGroup.Insert(clampedIndex, toggle);
+            togglesByKey.Add(key, toggle);
+            ApplyScenarioVisibility(toggle, isScenario);
+            toggle.RegisterValueChangedCallback(OnValueChanged);
+            SetVisible(HasAnyVisibleToggle());
         }
 
-        /*Updates only the checked state without rebuilding the buttons.*/
-        public void SetSelectionWithoutNotify(int? selectedIndex)
+        private void OnValueChanged(ChangeEvent<bool> evt)
         {
-            var state = new ToggleButtonGroupState(
-                0,
-                buttonGroup.childCount
-            );
-
-            if (selectedIndex.HasValue &&
-                selectedIndex.Value >= 0 &&
-                selectedIndex.Value < state.length)
+            var toggle  = evt.target as Toggle;
+            var key = toggle.userData as FolderPropertyData;
+            
+            activeToggle?.SetValueWithoutNotify(false);
+            if(evt.newValue)
             {
-                state[selectedIndex.Value] = true;
+                activeToggle = toggle;
+                SelectionChanged.Invoke(key);
             }
-
-            buttonGroup.SetValueWithoutNotify(state);
+            else
+                SelectionChanged.Invoke(null);
         }
 
-        private void OnButtonGroupValueChanged(
-            ChangeEvent<ToggleButtonGroupState> evt
-        )
+        public void RemoveFolder(FolderPropertyData key)
         {
-            if (isUpdating)
+            if (!togglesByKey.TryGetValue(key, out var toggle))
                 return;
 
-            SelectionChanged?.Invoke(
-                GetSelectedIndex(evt.newValue)
-            );
+            var wasSelected = toggle.value;
+
+            toggleGroup.Remove(toggle);
+            togglesByKey.Remove(key);
+
+            if (wasSelected)
+                SelectionChanged.Invoke(null);
+
+            SetVisible(HasAnyVisibleToggle());
         }
 
-        private static int? GetSelectedIndex(
-            ToggleButtonGroupState state
-        )
+        public void SetFolderIndex(FolderPropertyData key, int newIndex)
         {
-            for (var i = 0; i < state.length; i++)
+            var toggle = togglesByKey[key];
+            var currentIndex = toggleGroup.IndexOf(toggle);
+           
+            if (currentIndex == newIndex)
+                return;
+            
+            toggleGroup.Remove(toggle);
+            toggleGroup.Insert(newIndex, toggle);
+        }
+        
+        public void SetFolderName(FolderPropertyData key, string newName)
+        {
+            var toggle = togglesByKey[key];
+            toggle.LabelText = newName;
+        }
+
+        public void SetScenarioVisible(FolderPropertyData key, bool isScenario)
+        {
+            if (!togglesByKey.TryGetValue(key, out var toggle))
+                return;
+
+            var wasSelected = toggle.value;
+            ApplyScenarioVisibility(toggle, isScenario);
+
+            // A toggle that just stopped being a scenario can't stay selected.
+            if (!isScenario && wasSelected)
             {
-                if (state[i])
-                    return i;
+                SetSelectedFolderWithoutNotify(null);
+                SelectionChanged.Invoke(null);
             }
 
-            return null;
+            SetVisible(HasAnyVisibleToggle());
+        }
+
+        public void SetSelectedFolderWithoutNotify(FolderPropertyData key)
+        {
+            if(activeToggle != null)
+                activeToggle.SetValueWithoutNotify(false);
+            
+            if (key != null && togglesByKey.TryGetValue(key, out var toggle))
+            {
+                toggle.SetValueWithoutNotify(true);
+                activeToggle = toggle;
+            }
+        }
+
+        private static void ApplyScenarioVisibility(Toggle toggle, bool isScenario)
+        {
+            toggle.EnableInClassList(UtilityClassConstants.HIDDEN, !isScenario);
+        }
+        
+
+        private bool HasAnyVisibleToggle()
+        {
+            return togglesByKey.Values.Any(b => !b.ClassListContains(UtilityClassConstants.HIDDEN));
         }
 
         private void SetVisible(bool visible)
         {
-            style.display = visible
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
+            EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
     }
 }

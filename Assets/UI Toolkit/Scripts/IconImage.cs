@@ -76,6 +76,7 @@
         public const string SCALE_V_1 = "ScaleV1";
         public const string SCALE_V_2 = "ScaleV2";
         public const string SCATTER_OBJECT = "ScatterObject";
+        public const string SCENARIO = "Scenario";
         public const string SEARCH = "Search";
         public const string SECTION = "Section";
         public const string SELECTION_BOX = "SelectionBox";

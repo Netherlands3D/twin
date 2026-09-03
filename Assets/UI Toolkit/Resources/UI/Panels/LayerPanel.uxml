@@ -1,6 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" xmlns:nl3dP="Netherlands3D.UI.Panels" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="LayerPanel" class="layer-panel">
     <nl3d:TreeView/>
     <ui:VisualElement class="layer-panel__bottom-button-container">
+        <nl3d:Button name="ScenarioButton" button-style="IconOnly" icon="Scenario" tooltip="Nieuw scenario toevoegen"/>
         <nl3d:Button name="FolderButton" button-style="IconOnly" icon="Folder" tooltip="Voeg folder toe"/>
         <nl3d:Button name="DeleteButton" button-style="IconOnly" icon="Trash" tooltip="Verwijder geselecteerde laag"/>
     </ui:VisualElement>
