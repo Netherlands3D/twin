@@ -1,7 +1,11 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using netDxf.Entities;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,18 +13,9 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
     [CreateAssetMenu(fileName = "WorldTextBehaviour", menuName = "ScriptableObjects/FloatingButtonBehaviours/WorldTextBehaviour", order = 1)]
-    public class WorldTextBehaviour : FloatingButtonBehaviour
+    public class AnnotationBehaviour : FloatingButtonBehaviour
     {
-        private List<WorldTextObject> worldTextObjects = new();
-        
-        public struct WorldTextObject
-        {
-            public Coordinate coordinate;
-            public WorldText element;
-            public FloatingElement floatingElement;
-            public bool enabled;
-            public Color color;
-        }
+        private List<AnnotationTextObject> worldTextObjects = new();
 
         public override void Initialize(VisualElement parent)
         {
@@ -30,31 +25,13 @@ namespace Netherlands3D.UI.Panels
             //test
             //this.content.Add(SpawnFloatingButtonContent());
         }
-    
 
         public override VisualElement SpawnFloatingButtonContent()
         {
-            // FloatingElement floatingElement = new FloatingElement();
-            // WorldText text = new WorldText();
-            // text.SetText("testing much text \n and there is even more text");
-            // text.SetSnappingSide(WorldText.SnappingSide.Above);
-            // text.SetLabelOffset(50);
-            // floatingElement.Add(text);
-            //
-            // WorldTextObject worldTextObject = new WorldTextObject();
-            // worldTextObject.floatingElement = floatingElement;
-            // worldTextObject.element = text;
-            // worldTextObject.coordinate = new Coordinate(CoordinateSystem.RDNAP, 139607, 478158, 0);
-            //
-            //
-            //
-            // worldTextObjects.Add(worldTextObject);
-            //
-            // return floatingElement;
             return new FloatingElement();
         }
 //new Coordinate(CoordinateSystem.RDNAP, 139607, 478158, 0);
-        public WorldTextObject AddWorldTextObject(string text, Coordinate coord, WorldText.SnappingSide side, float offsetFromPoint)
+        public AnnotationTextObject AddWorldTextObject(string text, Coordinate coord, WorldText.SnappingSide side, float offsetFromPoint)
         {
             FloatingElement floatingElement = new FloatingElement();
             content.Add(floatingElement);
@@ -65,26 +42,26 @@ namespace Netherlands3D.UI.Panels
             worldText.SetLabelOffset(offsetFromPoint);
             floatingElement.Add(worldText);
             
-            WorldTextObject worldTextObject = new WorldTextObject();
-            worldTextObject.floatingElement = floatingElement;
-            worldTextObject.element = worldText;
-            worldTextObject.coordinate = coord;
+            AnnotationTextObject annotationTextObject = new AnnotationTextObject();
+            annotationTextObject.floatingElement = floatingElement;
+            annotationTextObject.element = worldText;
+            annotationTextObject.coordinate = coord;
             
-            worldTextObjects.Add(worldTextObject);
-            return worldTextObject;
+            worldTextObjects.Add(annotationTextObject);
+            return annotationTextObject;
         }
 
-        public void RemoveWorldTextObject(WorldTextObject worldTextObject)
+        public void RemoveWorldTextObject(AnnotationTextObject annotationTextObject)
         {
-            content.Remove(worldTextObject.floatingElement);
-            worldTextObjects.Remove(worldTextObject);
+            content.Remove(annotationTextObject.floatingElement);
+            worldTextObjects.Remove(annotationTextObject);
         }
 
         private GameObject testObject = null;
 
         public override void UpdateBehaviour()
         {
-            foreach (WorldTextObject worldTextObject in worldTextObjects)
+            foreach (AnnotationTextObject worldTextObject in worldTextObjects)
             {
                 var screenPos =  App.Cameras.ActiveCamera.WorldToScreenPoint(worldTextObject.coordinate.ToUnity());
                 Vector2 panelPos = App.UIRoot.GetUIPositionFromScreenPosition(screenPos);
@@ -108,5 +85,14 @@ namespace Netherlands3D.UI.Panels
         {
             base.Dispose();
         }
+    }
+    
+    public class AnnotationTextObject
+    {
+        public Coordinate coordinate;
+        public WorldText element;
+        public FloatingElement floatingElement;
+        public bool enabled;
+        public Color color;
     }
 }
