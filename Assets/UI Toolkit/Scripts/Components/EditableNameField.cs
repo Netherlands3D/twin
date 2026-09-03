@@ -11,6 +11,7 @@ namespace Netherlands3D.UI.Components
     {
         private Label label; // we will switch between label and input field
         private TextField inputField;
+        private Label placeholder;
         
         private bool firstClickDone;
         private bool intervalExpired;
@@ -28,6 +29,7 @@ namespace Netherlands3D.UI.Components
                 evt.target = this;
                 label.text = value;
                 inputField.SetValueWithoutNotify(value);
+                UpdatePlaceholder();
                 CalculateOverflow();
                 SendEvent(evt);
             }
@@ -49,6 +51,7 @@ namespace Netherlands3D.UI.Components
         {
             label.text = newValue;
             inputField.SetValueWithoutNotify(newValue);
+            UpdatePlaceholder();
             CalculateOverflow();
         }
         
@@ -64,6 +67,7 @@ namespace Netherlands3D.UI.Components
             
             label.focusable = true;
             inputField = this.Q<TextField>("InputField");
+            placeholder = this.Q<Label>("Placeholder");
 
             label.RegisterCallback<ClickEvent>(OnNameLabelClicked);
             label.RegisterCallback<BlurEvent>(OnLabelBlur);
@@ -72,6 +76,18 @@ namespace Netherlands3D.UI.Components
             inputField.RegisterCallback<NavigationSubmitEvent>(OnNavigationSubmitted, TrickleDown.TrickleDown);
 
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            
+            UpdatePlaceholder();
+        }
+        
+        private void UpdatePlaceholder()
+        {
+            bool empty = string.IsNullOrWhiteSpace(inputField.value);
+
+            placeholder.EnableInClassList(
+                UtilityClassConstants.HIDDEN,
+                !empty
+            );
         }
 
         private void OnLabelBlur(BlurEvent evt)
@@ -85,13 +101,15 @@ namespace Netherlands3D.UI.Components
             intervalExpired = false;
             clickTimer?.Pause();
         }
-
+       
         private void StartEditing()
         {
             label.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
 
-            schedule.Execute(() => { inputField.Focus();}); // we need to wait until the layout engine processes the new Display: flex of the input field before we can select focus the element
+            UpdatePlaceholder();
+
+            schedule.Execute(() => inputField.Focus());
         }
         
         private void StopEditing()
