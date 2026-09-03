@@ -1,13 +1,11 @@
-﻿using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI;
-using Netherlands3D.UI.ExtensionMethods;
+﻿using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class HelpButton : UnityEngine.UIElements.Button
+    public partial class HelpButton : ChangePointerStyleElement
     {
         private Icon Icon => this.Q<Icon>("Icon");
 
@@ -24,23 +22,27 @@ namespace Netherlands3D.UI.Components
         public string HelpUrl
         {
             get => helpUrl;
-            set => helpUrl = value;
+            set
+            {
+                helpUrl = value;
+                StyleOnHover = string.IsNullOrEmpty(helpUrl) ? PointerStyle.Auto : PointerStyle.Pointer;
+            }
         }
 
         public HelpButton()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-
-            if (string.IsNullOrEmpty(helpUrl))
-                helpUrl = "Link naar documentatie";
-
-            // Click navigates to HelpUrl when provided
-            clicked += () =>
-            {
-                if (!string.IsNullOrEmpty(helpUrl))
-                    Application.OpenURL(helpUrl);
-            };
+            
+            RegisterCallback<ClickEvent>(OnClick);
+            
+            StyleOnHover = PointerStyle.Auto;
+        }
+        
+        private void OnClick(ClickEvent evt)
+        {
+            if (!string.IsNullOrEmpty(helpUrl))
+                Application.OpenURL(helpUrl);
         }
     }
 }
