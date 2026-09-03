@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Projects
             if (project.CameraRotation.Length == 3)
             {
                 var cameraRotation = new Vector3((float)project.CameraRotation[0], (float)project.CameraRotation[1], (float)project.CameraRotation[2]);
-                transform.rotation = Quaternion.Euler(cameraRotation);
+                GetComponent<WorldTransform>().SetRotation(Quaternion.Euler(cameraRotation));
             }
         }
 
