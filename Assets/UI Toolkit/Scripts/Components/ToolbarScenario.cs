@@ -13,7 +13,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarScenario : VisualElement
     {
-        private const string ScenarioToggleClassName = "toolbar-scenario__button";
+        private const string ScenarioToggleClassName = "toolbar-scenario__toggle";
 
         private readonly VisualElement toggleGroup;
         private readonly Dictionary<FolderPropertyData, Toggle> togglesByKey = new();

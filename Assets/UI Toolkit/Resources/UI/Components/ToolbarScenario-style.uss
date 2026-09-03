@@ -35,16 +35,17 @@
     border-radius: 1px;
 }
 
-.toolbar-scenario__button-group {
+.toolbar-scenario__toggle-group {
     flex-grow: 0;
     flex-shrink: 1;
     margin: 0;
     min-width: 0;
     max-width: 100%;
     background-color: transparent;
+    flex-direction: row;
 }
 
-.toolbar-scenario__button-group > .unity-base-field__input {
+.toolbar-scenario__toggle-group > .unity-base-field__input {
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
@@ -53,7 +54,7 @@
     align-content: flex-start;
 }
 
-.toolbar-scenario__button-group .toolbar-scenario__button {
+.toolbar-scenario__toggle-group .toolbar-scenario__toggle {
     flex-grow: 0;
     flex-shrink: 1;
     min-width: var(--spacing-11);
@@ -65,7 +66,7 @@
     margin-bottom: var(--spacing-2);
 }
 
-.toolbar-scenario__button-group .toolbar-scenario__button > #Label {
+.toolbar-scenario__toggle-group .toolbar-scenario__toggle > #Label {
     min-width: 0;
     max-height: var(--spacing-10);
     overflow: hidden;
