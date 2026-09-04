@@ -8,6 +8,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
@@ -190,6 +191,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<ColorPropertyData>(properties);
+            properties.Get<ColorPropertyData>().SetDefaultSymbolizerColor(LayerData.Color);
         }
 
         /// <summary>
