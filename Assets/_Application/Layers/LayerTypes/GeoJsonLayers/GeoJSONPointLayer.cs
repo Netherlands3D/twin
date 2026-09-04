@@ -12,8 +12,9 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
+    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
+        public BoundingBox Bounds;
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
         public bool IsPolygon => false;
@@ -24,21 +25,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         private List<List<Coordinate>> visualisationsToRemove = new();
-        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
+        // public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
-        private GeoJsonPointLayerMaterialApplicator applicator;
+        // private GeoJsonPointLayerMaterialApplicator applicator;
+        //
+        // internal GeoJsonPointLayerMaterialApplicator Applicator
+        // {
+        //     get
+        //     {
+        //         if (applicator == null) applicator = new GeoJsonPointLayerMaterialApplicator(this);
+        //
+        //         return applicator;
+        //     }
+        // }
 
-        internal GeoJsonPointLayerMaterialApplicator Applicator
-        {
-            get
-            {
-                if (applicator == null) applicator = new GeoJsonPointLayerMaterialApplicator(this);
-
-                return applicator;
-            }
-        }
-
-        protected override void OnVisualizationReady()
+        protected void Start()
         {
             // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
@@ -115,12 +116,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
@@ -145,11 +146,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
-        public override void ApplyStyling()
+        public void ApplyStyling()
         {
-            MaterialApplicator.Apply(Applicator);
-            // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = Applicator.GetMaterial().color;
+            // MaterialApplicator.Apply(Applicator); 
+            Debug.Log("Applying styling");
         }
 
         public void ApplyStyling(FeaturePointVisualisations newFeatureVisualisation)
@@ -191,12 +191,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
-        public override void DestroyLayerGameObject()
+        private void OnDestroy()
         {
             if (Application.isPlaying && PointRenderer3D?.gameObject)
-                GameObject.Destroy(PointRenderer3D.gameObject);
-
-            base.DestroyLayerGameObject();
+                Destroy(PointRenderer3D.gameObject);
         }
 
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
@@ -219,7 +217,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            InitProperty<ColorPropertyData>(properties); 
+            throw new NotImplementedException();
         }
     }
 }

@@ -12,20 +12,23 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
+    public partial class GeoJSONPolygonLayer : MonoBehaviour, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
-        private GeoJsonPolygonLayerMaterialApplicator applicator;
-        internal GeoJsonPolygonLayerMaterialApplicator Applicator
-        {
-            get
-            {
-                if (applicator == null) applicator = new GeoJsonPolygonLayerMaterialApplicator(this);
-
-                return applicator;
-            }
-        }
+        private GeoJsonLayerGameObject parentLayerVisualization;
         
-        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
+        // private GeoJsonPolygonLayerMaterialApplicator applicator;
+        // internal GeoJsonPolygonLayerMaterialApplicator Applicator
+        // {
+        //     get
+        //     {
+        //         if (applicator == null) applicator = new GeoJsonPolygonLayerMaterialApplicator(this);
+        //
+        //         return applicator;
+        //     }
+        // }
+        
+        // public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
+        public BoundingBox Bounds;
         public bool IsPolygon => true;
         public Transform Transform { get => transform; }
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
@@ -156,7 +159,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return polygonVisualizationMaterialInstance.color;
         }
      
-        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             foreach (var visualization in spawnedVisualisations)
             {
@@ -164,7 +167,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)           
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool isActiveInHierarchy)           
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
@@ -204,18 +207,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             // bounds are calculated in the AppendVisualisations method, and is therefore not explicitly called here
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
-            newFeatureVisualisation.ShowVisualisations(LayerData.ActiveInHierarchy);
+            newFeatureVisualisation.ShowVisualisations(isActiveInHierarchy);
         }
 
-        public override void ApplyStyling()
+        public void ApplyStyling()
         {
-            MaterialApplicator.Apply(Applicator);
+            // MaterialApplicator.Apply(Applicator);
+            Debug.Log("Applying styling");
             foreach (var visualisation in spawnedVisualisations)
             {
                 ApplyStyling(visualisation.Value);
             }
-            // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = Applicator.GetMaterial().color;
         }
 
         public void ApplyStyling(FeaturePolygonVisualisations visualisation)
@@ -227,7 +229,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// Copy the feature attributes onto the layer feature so that the styling system can
         /// use that as input to pick the correct style.
         /// </summary>
-        protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
             // it should be a FeaturePolygonVisualisations, just do a sanity check here
             if (feature.Geometry is not FeaturePolygonVisualisations visualisations) return feature;
@@ -255,7 +257,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return polygonVisualizationMaterialInstance;
         }
 
-        public override void DestroyLayerGameObject()
+        private void OnDestroy()
         {
             // Remove all SpawnedVisualisations
             foreach (var kvp in spawnedVisualisations.Reverse())
@@ -263,7 +265,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 RemoveFeature(kvp.Value);
             }
 
-            base.DestroyLayerGameObject();
+            // base.DestroyLayerGameObject();
         }
 
         /// <summary>
@@ -308,10 +310,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
         }
-
+        
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            InitProperty<ColorPropertyData>(properties); 
+            throw new NotImplementedException();
         }
     }
 }

@@ -13,8 +13,9 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
+    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
+        public BoundingBox Bounds;
         public bool IsPolygon => false;
 
         public Transform Transform => transform;
@@ -25,22 +26,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private List<List<Coordinate>> visualisationsToRemove = new();
         private List<List<Coordinate>> selectionList = new();
 
-        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
+        // public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private LineRenderer3D selectionLineRenderer3D;
         
-        private GeoJsonLineLayerMaterialApplicator applicator;
-
-        internal GeoJsonLineLayerMaterialApplicator Applicator
-        {
-            get
-            {
-                if (applicator == null) applicator = new GeoJsonLineLayerMaterialApplicator(this);
-
-                return applicator;
-            }
-        }
+        // private GeoJsonLineLayerMaterialApplicator applicator;
+        //
+        // internal GeoJsonLineLayerMaterialApplicator Applicator
+        // {
+        //     get
+        //     {
+        //         if (applicator == null) applicator = new GeoJsonLineLayerMaterialApplicator(this);
+        //
+        //         return applicator;
+        //     }
+        // }
 
         public LineRenderer3D LineRenderer3D
         {
@@ -49,14 +50,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             set => lineRenderer3D = value;
         }
 
-        protected override void OnVisualizationReady()
+        protected void Start()
         {
             // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
-            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
+            // var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
+            // stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -128,12 +129,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return LineRenderer3D.LineMaterial.color;
         }
 
-        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)          
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool isSctiveInHierarchy)    
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature)) return;
@@ -160,11 +161,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
-        public override void ApplyStyling()
+        public void ApplyStyling()
         {
-            MaterialApplicator.Apply(Applicator);
-            // The color in the Layer Panel represents the default line color for this layer
-            LayerData.Color = Applicator.GetMaterial().color;
+            // MaterialApplicator.Apply(Applicator);
+            Debug.Log("Applying styling");
         }
 
         public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
@@ -208,14 +208,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
-        public override void DestroyLayerGameObject()
+        private void OnDestroy()
         {
             if (Application.isPlaying)
             {
                 Destroy(LineRenderer3D.gameObject);
             }
-
-            base.DestroyLayerGameObject();
         }
 
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
@@ -239,7 +237,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            InitProperty<ColorPropertyData>(properties); 
+            throw new NotImplementedException();
         }
     }
 }
