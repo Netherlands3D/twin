@@ -4,6 +4,7 @@ using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
@@ -99,10 +100,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionPointRenderer3D.Clear();
         }
 
-        public Color GetRenderColor()
-        {
-            return pointRenderer3D.PointMaterial.color;
-        }
+        // public Color GetRenderColor()
+        // {
+        //     return pointRenderer3D.PointMaterial.color;
+        // }
 
         public PointRenderer3D PointRenderer3D
         {
@@ -121,14 +122,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy)
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, GeoJsonLayerGameObject layerGameObject)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
-            ApplyStyling(newFeatureVisualisation);
+            ApplyStyling(newFeatureVisualisation, layerGameObject);
 
             if (feature.Geometry is MultiPoint multiPoint)
             {
@@ -145,16 +146,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
-
-        public void ApplyStyling()
+        
+        public void ApplyStyling(GeoJsonLayerGameObject layerGameObject)
         {
-            // MaterialApplicator.Apply(Applicator); 
-            Debug.Log("Applying styling");
+            foreach (var kvp in spawnedVisualisations)
+            {
+                ApplyStyling(kvp.Value, layerGameObject);
+            }
         }
-
-        public void ApplyStyling(FeaturePointVisualisations newFeatureVisualisation)
+        
+        public void ApplyStyling(FeaturePointVisualisations featureVisualisation, LayerGameObject layerGameObject)
         {
-            // Currently we don't apply individual styling per feature
+            LayerFeature feature = LayerFeature.Create(layerGameObject, pointRenderer3D); //todo: we can use FeatureLineVisualisations to color per line, but this is currently not supported yet
+
+            var symbolizer = GetSymbolizer(layerGameObject.LayerData, feature);
+            var fillColor = symbolizer.GetFillColor();
+            // Keep the original material color if fill color is not set (null)
+            if (!fillColor.HasValue) return;
+    
+            pointRenderer3D.SetAllColors(fillColor.Value);
+        }
+        
+        public Symbolizer GetSymbolizer(LayerData layerData, LayerFeature feature)
+        {
+            var stylingPropertyDatas = layerData.GetProperties<StylingPropertyData>();
+            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
+
+            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
         }
 
         private Material GetMaterialInstance(Color color)

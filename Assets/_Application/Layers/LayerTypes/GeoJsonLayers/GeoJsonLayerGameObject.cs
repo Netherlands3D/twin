@@ -44,9 +44,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
-        public GeoJSONParser Parser => parser;
+        // public GeoJSONParser Parser => parser;
         
-        [Header("Visualizer settings")]
+        // [Header("Visualizer settings")]
         // [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         // [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         // [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
@@ -58,21 +58,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
         
-        public struct PendingFeature
-        {
-            public Feature Feature;
-            public CoordinateSystem CoordinateSystem;
-
-            public PendingFeature(Feature feature, CoordinateSystem coordinateSystem)
-            {
-                Feature = feature;
-                CoordinateSystem = coordinateSystem;
-            }
-        }
-
-        List<PendingFeature> pendingPolygonFeatures = new();
-        List<PendingFeature> pendingLineFeatures = new();
-        List<PendingFeature> pendingPointFeatures = new();
+        // public struct PendingFeature
+        // {
+        //     public Feature Feature;
+        //     public CoordinateSystem CoordinateSystem;
+        //
+        //     public PendingFeature(Feature feature, CoordinateSystem coordinateSystem)
+        //     {
+        //         Feature = feature;
+        //         CoordinateSystem = coordinateSystem;
+        //     }
+        // }
+        //
+        // List<PendingFeature> pendingPolygonFeatures = new();
+        // List<PendingFeature> pendingLineFeatures = new();
+        // List<PendingFeature> pendingPointFeatures = new();
 
         protected override void OnVisualizationInitialize()
         {
@@ -157,7 +157,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 StartLoadingData(uri, auth);
                 startLoadingDataWhenLayerBecomesActive = false;
             }
-            //todo: call this on the 3 child objects
+            
+            polygonFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
+            lineFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
+            pointFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
         }
 
         protected override void RegisterEventListeners()
@@ -198,13 +201,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             lineFeaturesLayer?.RemoveFeaturesOutOfView();
             pointFeaturesLayer?.RemoveFeaturesOutOfView();
         }
-
-        // private void ProcessFeatureMapping(Feature feature)
-        // {
-        //     CreateFeatureMappingsForFeature(feature, polygonFeaturesLayer);
-        //     CreateFeatureMappingsForFeature(feature, lineFeaturesLayer);
-        //     CreateFeatureMappingsForFeature(feature, pointFeaturesLayer);
-        // }
 
         private void CreateFeatureMappingsForFeature(Feature feature, IGeoJsonVisualisationLayer layer)
         {
@@ -293,22 +289,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 case GeoJSONObjectType.MultiPolygon:
                 case GeoJSONObjectType.Polygon:
-                    AddFeature(feature, crs, polygonFeaturesLayer, pendingPolygonFeatures);
+                    AddFeature(feature, crs, polygonFeaturesLayer);
                     return;
                 case GeoJSONObjectType.MultiLineString:
                 case GeoJSONObjectType.LineString:
-                    AddFeature(feature, crs, lineFeaturesLayer, pendingLineFeatures);
+                    AddFeature(feature, crs, lineFeaturesLayer);
                     return;
                 case GeoJSONObjectType.MultiPoint:
                 case GeoJSONObjectType.Point:
-                    AddFeature(feature, crs, pointFeaturesLayer, pendingPointFeatures);
+                    AddFeature(feature, crs, pointFeaturesLayer);
                     return;
                 default:
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
             }
         }
 
-        private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
+        private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer)
         {
             // if (layer == null)
             // {
@@ -320,7 +316,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             //     return;
             // }
 
-            layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
+            layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, this);
             // ProcessFeatureMapping(feature);
             CreateFeatureMappingsForFeature(feature, layer);
 
@@ -378,6 +374,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 default:
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
             }
+        }
+
+        public override void ApplyStyling()
+        {
+            polygonFeaturesLayer.ApplyStyling(this);
+            lineFeaturesLayer.ApplyStyling(this);
+            pointFeaturesLayer.ApplyStyling(this);
         }
     }
 }

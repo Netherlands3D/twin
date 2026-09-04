@@ -10,11 +10,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         // LayerData LayerData { get; }
         bool IsPolygon { get; }
         Transform Transform { get; }
-        Color GetRenderColor();
+        // Color GetRenderColor();
         List<Mesh> GetMeshData(Feature feature);
         void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color);
         void SetVisualisationDeselected();
-        void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool isActiveInHierarchy);
+        void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, GeoJsonLayerGameObject layerGameObject);
         Bounds GetFeatureBounds(Feature feature);
         float GetSelectionRange();
 
