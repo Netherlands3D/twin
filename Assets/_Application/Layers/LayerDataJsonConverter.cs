@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -24,6 +23,14 @@ namespace Netherlands3D
         private const string legacyPolygonIdentifier = "PolygonSelection";
 
         private const string polygonSelectionVisualizationPrefabID = "0dd48855510674827b667fa4abd5cf60";
+        
+        private static readonly HashSet<string> obsoleteChildPrefabIds = new HashSet<string>
+        {
+            "509ce6cf579d6ed4b946913dff7eaed4", // GeoJsonPolygonLayer
+            "1efd25daf167bd74bafd6eea4aeda576",  // GeoJsonLineLayer
+            "267c8f33152cac142b8e40a7bdc54523" // GeoJsonPointLayer
+        };
+
 
         [Preserve]
         public LayerDataJsonConverter()
@@ -46,6 +53,17 @@ namespace Netherlands3D
             JsonSerializer serializer)
         {
             JObject obj = JObject.Load(reader);
+
+            var children = obj["children"];
+
+            if (children is JArray childrenArray)
+            {
+                for (int i = childrenArray.Count - 1; i >= 0; i--)
+                {
+                    if (obsoleteChildPrefabIds.Contains(childrenArray[i]["prefabId"]?.ToString()))
+                        childrenArray.RemoveAt(i);
+                }
+            }            
 
             LayerData layer = new LayerData(obj["name"]?.Value<string>() ?? "Layer");
             //we always load the projectTemplate, so any project files are derived from the project template with the same RootLayer uuid

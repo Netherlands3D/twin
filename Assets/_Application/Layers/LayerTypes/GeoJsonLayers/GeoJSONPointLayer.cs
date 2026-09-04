@@ -4,6 +4,7 @@ using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
@@ -12,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
+    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonVisualisationLayer
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
@@ -23,22 +24,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
+        
         private List<List<Coordinate>> visualisationsToRemove = new();
-        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
-        private GeoJsonPointLayerMaterialApplicator applicator;
-
-        internal GeoJsonPointLayerMaterialApplicator Applicator
-        {
-            get
-            {
-                if (applicator == null) applicator = new GeoJsonPointLayerMaterialApplicator(this);
-
-                return applicator;
-            }
-        }
-
-        protected override void OnVisualizationReady()
+        protected void Start()
         {
             // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
@@ -100,7 +89,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Color GetRenderColor()
         {
-            return pointRenderer3D.PointMaterial.color;
+            if (!PointRenderer3D.PointMaterial)
+                return Color.white;
+            return PointRenderer3D.PointMaterial.color;
         }
 
         public PointRenderer3D PointRenderer3D
@@ -115,19 +106,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, GeoJsonLayerGameObject layerGameObject)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
-            ApplyStyling(newFeatureVisualisation);
+            ApplyStyling(newFeatureVisualisation, layerGameObject);
 
             if (feature.Geometry is MultiPoint multiPoint)
             {
@@ -144,17 +135,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
-
-        public override void ApplyStyling()
+        
+        public void ApplyStyling(GeoJsonLayerGameObject layerGameObject)
         {
-            MaterialApplicator.Apply(Applicator);
-            // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = Applicator.GetMaterial().color;
+            foreach (var kvp in spawnedVisualisations)
+            {
+                ApplyStyling(kvp.Value, layerGameObject);
+            }
         }
-
-        public void ApplyStyling(FeaturePointVisualisations newFeatureVisualisation)
+        
+        public void ApplyStyling(FeaturePointVisualisations featureVisualisation, LayerGameObject layerGameObject)
         {
-            // Currently we don't apply individual styling per feature
+            LayerFeature feature = LayerFeature.Create(layerGameObject, pointRenderer3D); //todo: we can use FeatureLineVisualisations to color per line, but this is currently not supported yet
+
+            var symbolizer = GetSymbolizer(layerGameObject.LayerData, feature);
+            var color = symbolizer.GetPointColor();
+            // Keep the original material color if fill color is not set (null)
+            if (!color.HasValue) return;
+    
+            pointRenderer3D.SetAllColors(color.Value);
+        }
+        
+        public Symbolizer GetSymbolizer(LayerData layerData, LayerFeature feature)
+        {
+            var stylingPropertyDatas = layerData.GetProperties<StylingPropertyData>();
+            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
+
+            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
         }
 
         private Material GetMaterialInstance(Color color)
@@ -191,12 +198,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
-        public override void DestroyLayerGameObject()
+        private void OnDestroy()
         {
             if (Application.isPlaying && PointRenderer3D?.gameObject)
-                GameObject.Destroy(PointRenderer3D.gameObject);
-
-            base.DestroyLayerGameObject();
+                Destroy(PointRenderer3D.gameObject);
         }
 
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
@@ -215,11 +220,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
-        }
-
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            InitProperty<ColorPropertyData>(properties); 
         }
     }
 }
