@@ -15,7 +15,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer//, IVisualizationWithPropertyData
     {
-        public BoundingBox Bounds;
         public bool IsPolygon => false;
 
         public Transform Transform => transform;

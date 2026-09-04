@@ -23,9 +23,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             get
             {
-                var pointBounds = pointFeaturesLayer?.Bounds;
-                var lineBounds = lineFeaturesLayer?.Bounds;
-                var polygonBounds = polygonFeaturesLayer?.Bounds;
+                var pointBounds = pointFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
+                var lineBounds = lineFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
+                var polygonBounds = polygonFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
 
                 if (pointBounds != null)
                 {
@@ -428,7 +428,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
             colorPropertyData.ColorType = propertyKey;
             colorPropertyData.SetDefaultSymbolizerColor(color);
-            Debug.Log("init: " + propertyKey + ": " + color);
         }
     }
 }
