@@ -13,22 +13,10 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : MonoBehaviour, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
+    public partial class GeoJSONPolygonLayer : MonoBehaviour, IGeoJsonVisualisationLayer
     {
         private GeoJsonLayerGameObject parentLayerVisualization;
         
-        // private GeoJsonPolygonLayerMaterialApplicator applicator;
-        // internal GeoJsonPolygonLayerMaterialApplicator Applicator
-        // {
-        //     get
-        //     {
-        //         if (applicator == null) applicator = new GeoJsonPolygonLayerMaterialApplicator(this);
-        //
-        //         return applicator;
-        //     }
-        // }
-        
-        // public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
         public bool IsPolygon => true;
         public Transform Transform { get => transform; }
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
@@ -39,22 +27,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         internal Material polygonVisualizationMaterialInstance;
         [SerializeField] private Material polygonSelectionVisualizationMaterial;
-
-        // public Material PolygonVisualizationMaterial
-        // {
-        //     get => polygonVisualizationMaterial;
-        //     set
-        //     {
-        //         // This counts as a shared material - as such we create a copy of the material and assign that
-        //         polygonVisualizationMaterial = value;
-        //         if (polygonVisualizationMaterial == null)
-        //         {
-        //             polygonVisualizationMaterialInstance = null;
-        //             return;
-        //         }
-        //         polygonVisualizationMaterialInstance = new Material(value);
-        //     }
-        // }
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -325,11 +297,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
-        }
-        
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            throw new NotImplementedException();
         }
     }
 }

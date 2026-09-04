@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonVisualisationLayer//, IVisualizationWithPropertyData
+    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonVisualisationLayer
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
@@ -26,19 +26,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         
         private List<List<Coordinate>> visualisationsToRemove = new();
-        // public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
-
-        // private GeoJsonPointLayerMaterialApplicator applicator;
-        //
-        // internal GeoJsonPointLayerMaterialApplicator Applicator
-        // {
-        //     get
-        //     {
-        //         if (applicator == null) applicator = new GeoJsonPointLayerMaterialApplicator(this);
-        //
-        //         return applicator;
-        //     }
-        // }
 
         protected void Start()
         {
@@ -234,10 +221,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
         }
-
-        // public void LoadProperties(List<LayerPropertyData> properties)
-        // {
-        //     throw new NotImplementedException();
-        // }
     }
 }

@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer//, IVisualizationWithPropertyData
+    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer
     {
         public bool IsPolygon => false;
 
@@ -24,24 +24,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
         private List<List<Coordinate>> visualisationsToRemove = new();
         private List<List<Coordinate>> selectionList = new();
-
-        // public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
-
+        
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private LineRenderer3D selectionLineRenderer3D;
         
-        // private GeoJsonLineLayerMaterialApplicator applicator;
-        //
-        // internal GeoJsonLineLayerMaterialApplicator Applicator
-        // {
-        //     get
-        //     {
-        //         if (applicator == null) applicator = new GeoJsonLineLayerMaterialApplicator(this);
-        //
-        //         return applicator;
-        //     }
-        // }
-
         public LineRenderer3D LineRenderer3D
         {
             get => lineRenderer3D;
@@ -252,10 +238,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
         }
-        
-        // public void LoadProperties(List<LayerPropertyData> properties)
-        // {
-        //     throw new NotImplementedException();
-        // }
     }
 }

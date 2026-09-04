@@ -45,13 +45,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
-        // public GeoJSONParser Parser => parser;
 
-        // [Header("Visualizer settings")]
-        // [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
-        // [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
-        // [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-
+        [Header("Visualizer settings")]
         [SerializeField] private GeoJSONPolygonLayer polygonFeaturesLayer;
         [SerializeField] private GeoJSONLineLayer lineFeaturesLayer;
         [SerializeField] private GeoJSONPointLayer pointFeaturesLayer;
@@ -63,28 +58,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
 
-        // public struct PendingFeature
-        // {
-        //     public Feature Feature;
-        //     public CoordinateSystem CoordinateSystem;
-        //
-        //     public PendingFeature(Feature feature, CoordinateSystem coordinateSystem)
-        //     {
-        //         Feature = feature;
-        //         CoordinateSystem = coordinateSystem;
-        //     }
-        // }
-        //
-        // List<PendingFeature> pendingPolygonFeatures = new();
-        // List<PendingFeature> pendingLineFeatures = new();
-        // List<PendingFeature> pendingPointFeatures = new();
-
         protected override void OnVisualizationInitialize()
         {
-            // polygonFeaturesLayer = GetComponentInChildren<GeoJSONPolygonLayer>();
-            // lineFeaturesLayer = GetComponentInChildren<GeoJSONLineLayer>();
-            // pointFeaturesLayer = GetComponentInChildren<GeoJSONPointLayer>();
-
             credentialHandler = GetComponent<ICredentialHandler>();
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
             parser.OnParseError.AddListener(VisualisationError.Invoke);
