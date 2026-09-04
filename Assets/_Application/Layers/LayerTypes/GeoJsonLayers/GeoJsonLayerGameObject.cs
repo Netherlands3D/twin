@@ -61,8 +61,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
-            parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
-            parser.OnParseError.AddListener(VisualisationError.Invoke);
         }
 
         protected override void OnVisualizationReady()
@@ -146,7 +144,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
+            parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
+            parser.OnParseError.AddListener(VisualisationError.Invoke);
+            
             credentialHandler?.OnAuthorizationHandled.AddListener(HandleCredentials);
+            
+            polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
+            lineFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
+            polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
         }
 
         protected override void UnregisterEventListeners()
@@ -154,7 +159,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             base.UnregisterEventListeners();
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
             parser.OnParseError.RemoveListener(VisualisationError.Invoke);
+            
             credentialHandler?.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            
+            polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
+            lineFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
+            polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
         }
 
         public void AddFeatureVisualisation(Feature feature)
@@ -201,67 +211,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             objectMapping.UpdateBoundingBox();
             ObjectSelectorService.MappingTree.RootInsert(objectMapping);
         }
-
-        // private void SetVisualization(LayerGameObject layerGameObject)
-        // {
-        //     switch (layerGameObject)
-        //     {
-        //         case GeoJSONPolygonLayer layer:
-        //             polygonFeaturesLayer = layer;
-        //             SetVisualization(polygonFeaturesLayer, pendingPolygonFeatures);
-        //             break;
-        //         case GeoJSONLineLayer layer:
-        //             lineFeaturesLayer = layer;
-        //             SetVisualization(lineFeaturesLayer, pendingLineFeatures);
-        //             break;
-        //         case GeoJSONPointLayer layer:
-        //             pointFeaturesLayer = layer;
-        //             SetVisualization(pointFeaturesLayer, pendingPointFeatures);
-        //             break;
-        //     }
-        // }
-
-        // private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
-        // {
-        //     var stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-        //     var childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-        //
-        //     ConvertOldStylingDataIntoProperty(layer.LayerData.LayerProperties, "default", childStylingPropertyData);
-        //     
-        //     // in case the child property data was set explicitly by the user and this was saved in the project file, we do not want to overwrite this data with the parent styling.
-        //     var childFillSetExplicitly = childStylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue;
-        //     var childStrokeSetExplicitly = childStylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue;
-        //
-        //     var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
-        //     var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
-        //
-        //     //we save the color type here to set it back after copying the parent's stroke/fill colors
-        //     var colorType = childStylingPropertyData.ColorType;
-        //     
-        //     //TODO we have to convert this to an enum in the future
-        //     if (!childStrokeSetExplicitly)
-        //     {
-        //         childStylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
-        //         childStylingPropertyData.SetDefaultSymbolizerColor(strokeColor);
-        //     }
-        //
-        //     if (!childFillSetExplicitly)
-        //     {
-        //         childStylingPropertyData.ColorType = Symbolizer.FillColorProperty;
-        //         childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
-        //     }
-        //     
-        //     childStylingPropertyData.ColorType = colorType; //set the color type back so we don't change which color type is being used
-        //
-        //     layer.FeatureRemoved += OnFeatureRemoved;
-        //
-        //     foreach (var pendingFeature in pendingFeatures)
-        //     {
-        //         VisualizeFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
-        //     }
-        //
-        //     pendingFeatures.Clear();
-        // }
 
         private void VisualizeFeature(Feature feature, CoordinateSystem crs)
         {
@@ -315,26 +264,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // ProcessFeatureMapping(feature);
             CreateFeatureMappingsForFeature(feature, layer);
         }
-
-        // private void CreateLayer(LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
-        // {
-        //     var childrenInLayerData = LayerData.ChildrenLayers.ToArray(); //Make a copy to avoid a collectionWasModifiedError
-        //     var propertiesToAdd = Array.Empty<LayerPropertyData>();
-        //     foreach (var child in childrenInLayerData)
-        //     {
-        //         if (child.PrefabIdentifier == prefab.PrefabIdentifier)
-        //         {
-        //             App.Layers.Remove(child); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
-        //             propertiesToAdd = child.LayerProperties.ToArray();
-        //             break;
-        //         }
-        //     }
-        //
-        //     ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).AddProperties(propertiesToAdd);
-        //     var layer = App.Layers.Add(layerBuilder, callBack);
-        //     layer.LayerData.SetParent(LayerData);
-        // }
-
+        
         protected virtual void OnFeatureRemoved(Feature feature)
         {
             //we have to query first to find the corresponding featuremappings, cant do a remove right away
