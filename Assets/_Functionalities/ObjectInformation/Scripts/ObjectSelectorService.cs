@@ -89,9 +89,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
-            toolService = ServiceLocator.GetService<ToolService>();
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
         }
@@ -133,6 +130,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
       
         private void Start()
         {
+            toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             InputService inputService = ServiceLocator.GetService<InputService>();
             inputService.LeftClickUpAction.performed += OnLeftClickUp;
             inputService.RightClickUpAction.performed += OnRightClickUp;
