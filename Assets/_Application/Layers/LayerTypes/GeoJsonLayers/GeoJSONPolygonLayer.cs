@@ -184,7 +184,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void ApplyStyling(GeoJsonLayerGameObject layerGameObject)
         {
-            // MaterialApplicator.Apply(Applicator);
             foreach (var visualisation in spawnedVisualisations)
             {
                 ApplyStyling(visualisation.Value, layerGameObject);
@@ -252,8 +251,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 RemoveFeature(kvp.Value);
             }
-
-            // base.DestroyLayerGameObject();
         }
 
         /// <summary>

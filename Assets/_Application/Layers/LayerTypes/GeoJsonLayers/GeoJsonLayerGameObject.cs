@@ -250,18 +250,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer)
         {
-            // if (layer == null)
-            // {
-            //     if (pendingFeatures.Count == 0)
-            //         CreateLayer(prefab, callBack);
-            //
-            //     var pendingFeature = new PendingFeature(feature, originalCoordinateSystem);
-            //     pendingFeatures.Add(pendingFeature);
-            //     return;
-            // }
-
             layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, this);
-            // ProcessFeatureMapping(feature);
             CreateFeatureMappingsForFeature(feature, layer);
         }
         
