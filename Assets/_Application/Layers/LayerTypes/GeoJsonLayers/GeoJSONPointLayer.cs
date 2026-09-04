@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
+    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonVisualisationLayer//, IVisualizationWithPropertyData
     {
         public BoundingBox Bounds;
         [SerializeField] private PointRenderer3D pointRenderer3D;
@@ -25,6 +25,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
+        
         private List<List<Coordinate>> visualisationsToRemove = new();
         // public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
@@ -100,10 +101,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionPointRenderer3D.Clear();
         }
 
-        // public Color GetRenderColor()
-        // {
-        //     return pointRenderer3D.PointMaterial.color;
-        // }
+        public Color GetRenderColor()
+        {
+            if (!PointRenderer3D.PointMaterial)
+                return Color.white;
+            return PointRenderer3D.PointMaterial.color;
+        }
 
         public PointRenderer3D PointRenderer3D
         {
@@ -160,11 +163,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LayerFeature feature = LayerFeature.Create(layerGameObject, pointRenderer3D); //todo: we can use FeatureLineVisualisations to color per line, but this is currently not supported yet
 
             var symbolizer = GetSymbolizer(layerGameObject.LayerData, feature);
-            var fillColor = symbolizer.GetFillColor();
+            var color = symbolizer.GetPointColor();
             // Keep the original material color if fill color is not set (null)
-            if (!fillColor.HasValue) return;
+            if (!color.HasValue) return;
     
-            pointRenderer3D.SetAllColors(fillColor.Value);
+            pointRenderer3D.SetAllColors(color.Value);
         }
         
         public Symbolizer GetSymbolizer(LayerData layerData, LayerFeature feature)
@@ -233,9 +236,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return bbox;
         }
 
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            throw new NotImplementedException();
-        }
+        // public void LoadProperties(List<LayerPropertyData> properties)
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 }

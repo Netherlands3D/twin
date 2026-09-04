@@ -32,8 +32,8 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
             var color = LayerColor.Random();
 
             var styling = new Symbolizer();
-            styling.SetFillColor(color);
-            styling.SetStrokeColor(color);
+            // styling.SetFillColor(color);
+            // styling.SetStrokeColor(color);
 
             return builder
                 .OfType(PrefabIdentifier)

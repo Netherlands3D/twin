@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
+    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer//, IVisualizationWithPropertyData
     {
         public BoundingBox Bounds;
         public bool IsPolygon => false;
@@ -124,10 +124,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionLineRenderer3D.Clear();
         }
 
-        // public Color GetRenderColor()
-        // {
-        //     return LineRenderer3D.LineMaterial.color;
-        // }
+        public Color GetRenderColor()
+        {
+            if (!LineRenderer3D.LineMaterial)
+                return Color.white;
+            return LineRenderer3D.LineMaterial.color;
+        }
 
         public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
@@ -174,11 +176,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LayerFeature feature = LayerFeature.Create(layerGameObject, lineRenderer3D); //todo: we can use FeatureLineVisualisations to color per line, but this is currently not supported yet
 
             var symbolizer = GetSymbolizer(layerGameObject.LayerData, feature);
-            var fillColor = symbolizer.GetStrokeColor();
+            var color = symbolizer.GetStrokeColor();
             // Keep the original material color if fill color is not set (null)
-            if (!fillColor.HasValue) return;
+            if (!color.HasValue) return;
 
-            lineRenderer3D.SetAllColors(fillColor.Value);
+            lineRenderer3D.SetAllColors(color.Value);
         }
         
         public Symbolizer GetSymbolizer(LayerData layerData, LayerFeature feature)
@@ -252,9 +254,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return bbox;
         }
         
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            throw new NotImplementedException();
-        }
+        // public void LoadProperties(List<LayerPropertyData> properties)
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 }

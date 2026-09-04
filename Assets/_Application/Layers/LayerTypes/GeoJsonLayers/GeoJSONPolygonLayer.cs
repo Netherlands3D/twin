@@ -153,10 +153,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        // public Color GetRenderColor()
-        // {
-        //     return polygonVisualizationMaterialInstance.color;
-        // }
+        public Color GetRenderColor()
+        {
+            if (!polygonVisualizationMaterialInstance)
+                return Color.white;
+            return polygonVisualizationMaterialInstance.color;
+        }
      
         public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
