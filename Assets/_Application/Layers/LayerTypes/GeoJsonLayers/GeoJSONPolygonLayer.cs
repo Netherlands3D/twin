@@ -220,16 +220,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void ApplyStyling(FeaturePolygonVisualisations visualisation, GeoJsonLayerGameObject layerGameObject)
         {
-            Debug.Log("Applying styling");
-         
             LayerFeature feature = LayerFeature.Create(layerGameObject, visualisation);
 
             var symbolizer = GetSymbolizer(layerGameObject.LayerData, feature);
             var fillColor = symbolizer.GetFillColor();
             // Keep the original material color if fill color is not set (null)
             if (!fillColor.HasValue) return;
-    
-            polygonVisualizationMaterialInstance.color = fillColor.Value;
+
+            var newColor = fillColor.Value;
+            var a = polygonVisualizationMaterial.color.a; //todo: support alpha in the colorpicker
+            newColor.a = a;
+            polygonVisualizationMaterialInstance.color = newColor;
             visualisation.SetMaterial(polygonVisualizationMaterialInstance);
         }
         
