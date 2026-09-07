@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject
     {
         private AnnotationTextObject annotation;
+        private const float offsetPixels = 50; //todo make this from uss instead
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
@@ -27,7 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnVisualizationInitialize();
             //create world text object with WorldTransform.Coordinate as cached coordinate so we dont need to use update
             AnnotationBehaviour behaviour = ServiceLocator.GetService<ContextMenuBehaviour>().GetBehaviour<AnnotationBehaviour>();
-            annotation = behaviour.AddWorldTextObject("testing", WorldTransform.Coordinate, WorldText.SnappingSide.Above, 0);
+            annotation = behaviour.AddWorldTextObject("testing", WorldTransform.Coordinate, WorldText.SnappingSide.Above, offsetPixels);
         }
         
         private void OnDestroy()

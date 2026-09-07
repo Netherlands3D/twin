@@ -19,6 +19,8 @@ namespace Netherlands3D.UI.Panels
         private List<AnnotationTextObject> worldTextObjects = new();
         private InputService inputService;
 
+        [SerializeField] private Material DebugMaterial;
+
         public override void Initialize(VisualElement parent)
         {
             //base.Initialize(parent);
@@ -86,7 +88,8 @@ namespace Netherlands3D.UI.Panels
                     Destroy(testObject.GetComponent<Collider>());
                    
                     testObject.transform.localScale = new Vector3(10f, 10f, 10f);
-                    testObject.GetComponent<MeshRenderer>().material.color = new Color(0.1f, 1f, 0.1f, 0.5f);
+                    MeshRenderer meshRenderer = testObject.GetComponent<MeshRenderer>();
+                    meshRenderer.material = DebugMaterial;
                 }
                 testObject.transform.position = worldTextObject.coordinate.ToUnity();
             }

@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9408f6cda53a7f2ea84b2b2e75575de7, type: 3}
   m_Name: AnnotationBehaviour
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Panels.WorldTextBehaviour
+  DebugMaterial: {fileID: 2100000, guid: 32d66cb461963494c8545032b6d11bd0, type: 2}
