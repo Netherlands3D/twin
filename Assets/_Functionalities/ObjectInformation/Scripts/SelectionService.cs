@@ -143,11 +143,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             inputService.LeftClickAction.performed += OnLeftClick;
             inputService.RightClickAction.performed += OnRightClick;
             
+            //subscribe the contextmenubehaviour input events after, since there is a dependency here
             inputService.RightClickUpAction.performed += contextMenuBehaviour.OnRightClick;
             inputService.LeftClickUpAction.performed += contextMenuBehaviour.OnLeftClick;
             inputService.LongPressAction.performed += contextMenuBehaviour.OnRightClick;
             inputService.TouchAction.performed += contextMenuBehaviour.OnLeftClick;
-            
             
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
