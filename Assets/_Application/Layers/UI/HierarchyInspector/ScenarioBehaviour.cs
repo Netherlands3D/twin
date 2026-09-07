@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
-    public class ScenarioManager : MonoBehaviour
+    public class ScenarioBehaviour : MonoBehaviour
     {
         private readonly Dictionary<FolderPropertyData, ScenarioSubscription> subscriptions = new();
         private readonly List<FolderPropertyData> orderedFolders = new();
@@ -21,9 +21,9 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             public readonly FolderPropertyData FolderProperty;
             public readonly LayerData Layer;
-            private readonly ScenarioManager owner;
+            private readonly ScenarioBehaviour owner;
 
-            public ScenarioSubscription(FolderPropertyData folderProperty, LayerData layer, ScenarioManager owner)
+            public ScenarioSubscription(FolderPropertyData folderProperty, LayerData layer, ScenarioBehaviour owner)
             {
                 FolderProperty = folderProperty;
                 Layer = layer;
