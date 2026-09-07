@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.SelectionTools;
@@ -6,6 +7,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
@@ -45,8 +47,7 @@ namespace Netherlands3D.Twin.layers.properties
             {
                 if (kv.Value is FeatureMapping map)
                 {
-                    Bounds bounds = GetThumbnailBoundingBox(map);
-                    BoundingBox bbox = new  BoundingBox(bounds);
+                    BoundingBox bbox = map.BoundingBox;
                     Dictionary<string, object> properties = map.Feature.Properties as Dictionary<string, object>;
                     FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
                     data.Properties = properties;
@@ -56,46 +57,16 @@ namespace Netherlands3D.Twin.layers.properties
             }
             propertyData.FeatureIds = featureIds;
         }
-        
-        private Bounds GetThumbnailBoundingBox(FeatureMapping mapping)
+
+        private BoundingBox lastUsedBBox;
+        private Bounds lastUsedUnityBounds;
+        private void OnDrawGizmos()
         {
-            if (mapping.VisualisationLayer is GeoJSONPolygonLayer)
-            {
-                GeoJSONPolygonLayer polygonLayer = mapping.VisualisationLayer as GeoJSONPolygonLayer;
-                List<Mesh> meshes = mapping.FeatureMeshes;
-
-                //todo: Mapping.BoundingBox should be the bbox of all meshes in the feature, this is currently not working correctly.
-                var center = mapping.BoundingBox.Center.ToUnity();
-                var bounds = new Bounds(center, Vector3.zero);
-                foreach (var mesh in meshes)
-                {
-	                PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(mesh);
-                    Bounds currentObjectBounds = new Bounds(pv.transform.position, mesh.bounds.size);
-	                bounds.Encapsulate(currentObjectBounds);
-                }
-				return bounds;
-            }
-            if (mapping.VisualisationLayer is GeoJSONLineLayer)
-            {
-                Vector3 centroid = Vector3.zero;
-                Vector3[] vertices = mapping.FeatureMeshes[0].vertices;
-                foreach (Vector3 v in vertices)
-                    centroid += v;
-                centroid /= vertices.Length;
-                Vector3 size = mapping.FeatureMeshes[0].bounds.size;
-                size.y = Mathf.Min(50, size.y);
-                size.x = Mathf.Clamp(size.x, 50, 100);
-                size.z = Mathf.Clamp(size.z, 50, 100);
-                Bounds currentObjectBounds = new Bounds(mapping.SelectedGameObject.transform.position + centroid, size);
-                return currentObjectBounds;
-            }
-            if (mapping.VisualisationLayer is GeoJSONPointLayer)
-            {
-                Bounds currentObjectBounds = new Bounds(mapping.SelectedGameObject.transform.position + mapping.FeatureMeshes[0].vertices[0] - mapping.FeatureMeshes[0].bounds.center, Vector3.one * 50);
-                return currentObjectBounds;
-            }
-
-            return new();
+            lastUsedBBox?.Debug(Color.red);
+            Gizmos.color = Color.aquamarine;
+            Gizmos.DrawCube(lastUsedUnityBounds.center, lastUsedUnityBounds.size);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawCube(lastUsedUnityBounds.center, Vector3.one *10);
         }
 
         private void ClearFeatureMappingsForLayer()
