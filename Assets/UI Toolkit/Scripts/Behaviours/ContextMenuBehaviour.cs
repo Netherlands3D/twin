@@ -15,10 +15,10 @@ namespace Netherlands3D.UI.Panels
         [SerializeField] private FloatingPanelBehaviour[] panelBehaviours;
         [SerializeField] private FloatingButtonBehaviour[] floatingButtonBehaviour;
 
-        private InputAction rightClickAction;
-        private InputAction leftClickAction;
-        private InputAction longPressAction;
-        private InputAction touchAction;
+        // private InputAction rightClickAction;
+        // private InputAction leftClickAction;
+        // private InputAction longPressAction;
+        // private InputAction touchAction;
         private FloatingPanel floatingPanel;
         private VisualElement floatingPanelContent;
         private FloatingPanelBehaviour selectedBehaviour;
@@ -42,24 +42,24 @@ namespace Netherlands3D.UI.Panels
             floatingPanel.OnClose.AddListener(ClearActivePanel);
             floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             
-            var map = inputActionAsset.FindActionMap("Camera", true);
-            rightClickAction = map.FindAction("RightClick", true);
-            leftClickAction = map.FindAction("LeftClick", true);
-            longPressAction = map.FindAction("LongPress", true);
-            touchAction = map.FindAction("Touch", true);
-            
-            rightClickAction.performed += OnRightClick;
-            leftClickAction.performed += OnLeftClick;
-            longPressAction.performed += OnRightClick;
-            touchAction.performed += OnLeftClick;
+            // var map = inputActionAsset.FindActionMap("Camera", true);
+            // rightClickAction = map.FindAction("RightClick", true);
+            // leftClickAction = map.FindAction("LeftClick", true);
+            // longPressAction = map.FindAction("LongPress", true);
+            // touchAction = map.FindAction("Touch", true);
+            //
+            // rightClickAction.performed += OnRightClick;
+            // leftClickAction.performed += OnLeftClick;
+            // longPressAction.performed += OnRightClick;
+            // touchAction.performed += OnLeftClick;
         }
         
         void OnDisable()
         {
-            rightClickAction.performed -= OnRightClick;
-            leftClickAction.performed -= OnLeftClick;
-            longPressAction.performed -= OnRightClick;
-            touchAction.performed -= OnLeftClick;
+            // rightClickAction.performed -= OnRightClick;
+            // leftClickAction.performed -= OnLeftClick;
+            // longPressAction.performed -= OnRightClick;
+            // touchAction.performed -= OnLeftClick;
             
             ClearActivePanel();
             floatingPanel = null;
@@ -92,7 +92,7 @@ namespace Netherlands3D.UI.Panels
             floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
 
-        private void OnRightClick(InputAction.CallbackContext ctx)
+        public void OnRightClick(InputAction.CallbackContext ctx)
         {
             Vector2 panelPos = App.UIRoot.GetPanelClickPosition();
             
@@ -107,7 +107,7 @@ namespace Netherlands3D.UI.Panels
             CheckAndSpawnPanel(panelPos);
         }
         
-        private void OnLeftClick(InputAction.CallbackContext ctx)
+        public void OnLeftClick(InputAction.CallbackContext ctx)
         {
             Vector2 panelPos = App.UIRoot.GetPanelClickPosition();
             if(IsActivePanelClicked(panelPos))

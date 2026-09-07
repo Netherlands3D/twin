@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.layers.properties
     {
         private LayerGameObject visualization;
         private Dictionary<string, FeaturePropertyData.FeatureData> featureIds = new();
-        private ObjectSelectorService selectorService;
+        private SelectionService selectorService;
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void OnEnable()
         {
-            selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            selectorService = ServiceLocator.GetService<SelectionService>();
             selectorService.SelectFeature.AddListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.AddListener(ClearFeatureMappingsForLayer);
         }
@@ -48,7 +48,7 @@ namespace Netherlands3D.Twin.layers.properties
 
             FeaturePropertyData propertyData = visualization.LayerData.GetProperty<FeaturePropertyData>();
             featureIds.Clear();
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)
             {
                 if (kv.Value is FeatureMapping map)
