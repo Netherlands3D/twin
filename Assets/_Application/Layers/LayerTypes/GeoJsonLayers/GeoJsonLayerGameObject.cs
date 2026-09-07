@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
@@ -11,6 +12,7 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -50,16 +52,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
         public GeoJSONParser Parser => parser;
-        
+
         [Header("Visualizer settings")]
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
 
+        [Header("Annotation settings")]
+        [SerializeField] private WorldAnnotationLayerGameObject annotationLayerPrefab;
+
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
-        
+
+        private readonly List<WorldAnnotationLayerGameObject> spawnedAnnotations = new();
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
         
@@ -85,13 +91,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
             parser.OnParseError.AddListener(VisualisationError.Invoke);
         }
-        
+
         protected override void OnVisualizationReady()
         {
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
         }
-        
+
         protected virtual void UpdateURL(Uri storedUri)
         {
             if (storedUri == credentialHandler.Uri && credentialHandler.Authorization != null)
@@ -99,14 +105,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 HandleCredentials(storedUri, credentialHandler.Authorization);
                 return;
             }
-           
-            credentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
+
+            credentialHandler.Uri = storedUri;
             credentialHandler.ApplyCredentials();
         }
 
         protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
-            if (auth.GetType() != typeof(Public)) //if it is public, we don't want the property panel to show up
+            if (auth.GetType() != typeof(Public))
             {
                 InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
             }
@@ -116,7 +122,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 LayerData.HasValidCredentials = false;
                 return;
             }
-            
+
             LayerData.HasValidCredentials = true;
             
             if(LayerData.ActiveInHierarchy)
@@ -180,18 +186,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             VisualizeFeature(feature, originalCoordinateSystem);
         }
 
-        /// <summary>
-        /// Load properties is only used when restoring a layer from a project file.
-        /// After getting the property containing the url, the GeoJSON file is downloaded and parsed.
-        /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<ColorPropertyData>(properties);
         }
 
-        /// <summary>
-        /// Removes features based on the bounds of their visualisations
-        /// </summary>
         public void RemoveFeaturesOutOfView()
         {
             polygonFeaturesLayer?.RemoveFeaturesOutOfView();
@@ -251,18 +250,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
 
             ConvertOldStylingDataIntoProperty(layer.LayerData.LayerProperties, "default", childStylingPropertyData);
-            
-            // in case the child property data was set explicitly by the user and this was saved in the project file, we do not want to overwrite this data with the parent styling.
+
             var childFillSetExplicitly = childStylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue;
             var childStrokeSetExplicitly = childStylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue;
 
             var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
             var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
 
-            //we save the color type here to set it back after copying the parent's stroke/fill colors
             var colorType = childStylingPropertyData.ColorType;
-            
-            //TODO we have to convert this to an enum in the future
+
             if (!childStrokeSetExplicitly)
             {
                 childStylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
@@ -274,8 +270,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 childStylingPropertyData.ColorType = Symbolizer.FillColorProperty;
                 childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
             }
-            
-            childStylingPropertyData.ColorType = colorType; //set the color type back so we don't change which color type is being used
+
+            childStylingPropertyData.ColorType = colorType;
 
             layer.FeatureRemoved += OnFeatureRemoved;
 
@@ -301,11 +297,161 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     return;
                 case GeoJSONObjectType.MultiPoint:
                 case GeoJSONObjectType.Point:
+                    if (IsAnnotationFeature(feature))
+                    {
+                        SpawnAnnotationFeature(feature, crs);
+                        return;
+                    }
+
                     AddFeature(feature, crs, pointFeaturesLayer, pendingPointFeatures, pointLayerPrefab, SetVisualization);
                     return;
                 default:
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
             }
+        }
+
+        private bool IsAnnotationFeature(Feature feature)
+        {
+            if (feature?.Properties == null) return false;
+
+            return HasNonEmptyProperty(feature, "annotationText")
+                   || HasNonEmptyProperty(feature, "thumbnailUrl")
+                   || HasNonEmptyProperty(feature, "thumbnailPath")
+                   || HasNonEmptyProperty(feature, "previewUrl")
+                   || HasNonEmptyProperty(feature, "imageUrl")
+                   || HasNonEmptyProperty(feature, "imagePath")
+                   || HasNonEmptyProperty(feature, "image")
+                   || HasNonEmptyProperty(feature, "imageCaption")
+                   || HasNonEmptyProperty(feature, "caption");
+        }
+
+        private bool HasNonEmptyProperty(Feature feature, string key)
+        {
+            if (feature?.Properties == null) return false;
+            if (!feature.Properties.TryGetValue(key, out var value)) return false;
+            return value != null && !string.IsNullOrWhiteSpace(value.ToString());
+        }
+
+        private string GetStringProperty(Feature feature, params string[] keys)
+        {
+            if (feature?.Properties == null) return "";
+
+            foreach (var key in keys)
+            {
+                if (!feature.Properties.TryGetValue(key, out var value)) continue;
+                if (value == null) continue;
+
+                var str = value.ToString();
+                if (!string.IsNullOrWhiteSpace(str))
+                    return str;
+            }
+
+            return "";
+        }
+
+        private string GetAnnotationName(Feature feature, string fallbackText)
+        {
+            var title = GetStringProperty(feature, "title", "name", "label");
+            if (!string.IsNullOrWhiteSpace(title))
+                return title;
+
+            if (!string.IsNullOrWhiteSpace(fallbackText))
+                return textToName(fallbackText);
+
+            return "GeoJSON Annotation";
+        }
+
+        private string textToName(string text)
+        {
+            return text.Length <= 64 ? text : text[..64];
+        }
+
+        private void SpawnAnnotationFeature(Feature feature, CoordinateSystem coordinateSystem)
+        {
+            if (annotationLayerPrefab == null)
+            {
+                VisualisationError.Invoke("GeoJSON annotations kunnen niet worden ingeladen: annotationLayerPrefab ontbreekt.");
+                return;
+            }
+
+            string text = GetStringProperty(feature, "annotationText", "text", "description", "title");
+            string imageUrl = GetStringProperty(feature, "imageUrl", "imagePath", "image");
+            string imagePreviewUrl = GetStringProperty(feature, "thumbnailUrl", "thumbnailPath", "previewUrl");
+            if (string.IsNullOrWhiteSpace(imagePreviewUrl))
+                imagePreviewUrl = imageUrl;
+
+            string imageCaption = GetStringProperty(feature, "imageCaption", "caption");
+            string annotationName = GetAnnotationName(feature, text);
+
+            switch (feature.Geometry)
+            {
+                case Point point:
+                    SpawnAnnotationAtCoordinate(
+                        ConvertPointToCoordinate(point.Coordinates, coordinateSystem),
+                        annotationName,
+                        text,
+                        imageUrl,
+                        imagePreviewUrl,
+                        imageCaption
+                    );
+                    break;
+
+                case MultiPoint multiPoint:
+                    foreach (var pointCoordinates in multiPoint.Coordinates)
+                    {
+                        SpawnAnnotationAtCoordinate(
+                            ConvertPointToCoordinate(pointCoordinates.Coordinates, coordinateSystem),
+                            annotationName,
+                            text,
+                            imageUrl,
+                            imagePreviewUrl,
+                            imageCaption
+                        );
+                    }
+                    break;
+            }
+        }
+
+        private Coordinate ConvertPointToCoordinate(IPosition point, CoordinateSystem originalCoordinateSystem)
+        {
+            var lat = point.Latitude;
+            var lon = point.Longitude;
+            var alt = point.Altitude;
+
+            Coordinate coord = new Coordinate(originalCoordinateSystem);
+            coord.easting = lon;
+            coord.northing = lat;
+
+            if (alt != null)
+            {
+                coord.height = (double)alt;
+            }
+            else
+            {
+                coord = coord.Convert(CoordinateSystem.RDNAP);
+                coord.height = 0;
+            }
+
+            return coord;
+        }
+
+        private void SpawnAnnotationAtCoordinate(Coordinate coordinate, string annotationName, string text, string imageUrl, string imagePreviewUrl, string imageCaption)
+        {
+            ILayerBuilder layerBuilder = LayerBuilder.Create()
+                .OfType(annotationLayerPrefab.PrefabIdentifier)
+                .NamedAs(annotationName)
+                .AddProperty(new AnnotationPropertyData(text, imageUrl, imagePreviewUrl, imageCaption));
+
+            var layer = App.Layers.Add(layerBuilder, spawnedLayer =>
+            {
+                if (spawnedLayer is WorldAnnotationLayerGameObject annotation)
+                {
+                    annotation.InitializeFromImportedData(coordinate, text, imageUrl, imagePreviewUrl, imageCaption);
+                    spawnedAnnotations.Add(annotation);
+                }
+            });
+
+            layer.LayerData.SetParent(LayerData);
         }
 
         private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures, LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
@@ -326,13 +472,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void CreateLayer(LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
         {
-            var childrenInLayerData = LayerData.ChildrenLayers.ToArray(); //Make a copy to avoid a collectionWasModifiedError
+            var childrenInLayerData = LayerData.ChildrenLayers.ToArray();
             var propertiesToAdd = Array.Empty<LayerPropertyData>();
             foreach (var child in childrenInLayerData)
             {
                 if (child.PrefabIdentifier == prefab.PrefabIdentifier)
                 {
-                    App.Layers.Remove(child); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                    App.Layers.Remove(child);
                     propertiesToAdd = child.LayerProperties.ToArray();
                     break;
                 }
@@ -345,8 +491,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         protected virtual void OnFeatureRemoved(Feature feature)
         {
-            //we have to query first to find the corresponding featuremappings, cant do a remove right away
-            //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
             IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
             BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
             List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<FeatureMapping>(queryBoundingBox);
@@ -354,7 +498,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 if (mapping.Feature == feature)
                 {
-                    //destroy featuremapping object, there should be no references anywhere else to this object!
                     ObjectSelectorService.MappingTree.Remove(mapping);
                 }
             }

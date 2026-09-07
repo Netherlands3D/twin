@@ -1,0 +1,59 @@
+.annotation-information__container {
+    flex-shrink: 0;
+    align-items: center;
+}
+
+.annotation-information-thumbnail__container {
+    flex-shrink: 0;
+    align-self: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    border-radius: var(--spacing-1);
+}
+
+.annotation-information-thumbnail__empty-label {
+    align-self: center;
+    margin-top: var(--spacing-3);
+    padding: 0;
+}
+
+.annotation-information__list-view {
+    margin-top: var(--spacing-3);
+}
+
+.annotation-information__list-view .unity-label {
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+}
+
+.annotation-information-link__row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.annotation-information-link__label {
+    -unity-font-definition: var(--nl3d-default-font-semi-bold);
+    margin: 0;
+    padding: 0;
+}
+
+.annotation-information-link__button {
+    flex-direction: row;
+    align-items: center;
+    border-width: var(--spacing-1);
+    border-radius: var(--spacing-4);
+    border-color: var(--color-blue-200);
+    padding: var(--spacing-2);
+    margin-left: var(--spacing-3);
+}
+
+.annotation-information__list-view .unity-collection-view__item:checked {
+    background-color: transparent;
+}
+
+.annotation-information__list-view .unity-collection-view__item:hover {
+    background-color: transparent;
+}

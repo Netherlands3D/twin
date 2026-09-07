@@ -54,6 +54,8 @@ MonoBehaviour:
     type: 3}
   pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
     type: 3}
+  annotationLayerPrefab: {fileID: 8026439383914201504, guid: 292690ace10994ff5bd502be1f5a5bf2,
+    type: 3}
 --- !u!114 &44681409752656876
 MonoBehaviour:
   m_ObjectHideFlags: 0
