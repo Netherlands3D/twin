@@ -11,19 +11,12 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.layers.properties
 {
-    [RequireComponent(typeof(LayerGameObject))]
-    public class FeatureObject : MonoBehaviour, IVisualizationWithPropertyData
+    public class FeatureObject : MonoBehaviour
     {
-        private LayerGameObject visualization;
+        [SerializeField] private LayerGameObject visualization;
         private Dictionary<string, FeaturePropertyData.FeatureData> featureIds = new();
         private ObjectSelectorService selectorService;
         
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            visualization = GetComponent<LayerGameObject>();
-            visualization.InitProperty<FeaturePropertyData>(properties);
-        }
-
         private void OnEnable()
         {
             selectorService = ServiceLocator.GetService<ObjectSelectorService>();
@@ -39,8 +32,7 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void ProcessFeatureMappingForLayer(FeatureMapping mapping)
         {
-            //TODO this is begging for a refactor, we dont want to check the parent but until https://gemeente-amsterdam.atlassian.net/browse/S3DA-1935 this has to stay
-            if (visualization == null || mapping == null || visualization.LayerData.ParentLayer != mapping.LayerData)
+            if (mapping == null || visualization.LayerData != mapping.LayerData)
             {
                 ClearFeatureMappingsForLayer();
                 return;

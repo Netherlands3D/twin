@@ -189,6 +189,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GeoJsonPolygonLayer
       objectReference: {fileID: 0}
+    - target: {fileID: 3587751854665516911, guid: 509ce6cf579d6ed4b946913dff7eaed4,
+        type: 3}
+      propertyPath: visualization
+      value: 
+      objectReference: {fileID: -2311983791405174025}
     m_RemovedComponents:
     - {fileID: 5447569626426196056, guid: 509ce6cf579d6ed4b946913dff7eaed4, type: 3}
     m_RemovedGameObjects: []
@@ -276,6 +281,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GeoJsonPointLayer
       objectReference: {fileID: 0}
+    - target: {fileID: 7130922166693220745, guid: 267c8f33152cac142b8e40a7bdc54523,
+        type: 3}
+      propertyPath: visualization
+      value: 
+      objectReference: {fileID: -2311983791405174025}
     m_RemovedComponents:
     - {fileID: -2785417149522329819, guid: 267c8f33152cac142b8e40a7bdc54523, type: 3}
     - {fileID: 4062645045739546207, guid: 267c8f33152cac142b8e40a7bdc54523, type: 3}
@@ -376,6 +386,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GeoJsonLineLayer
       objectReference: {fileID: 0}
+    - target: {fileID: 2367914837781495214, guid: 1efd25daf167bd74bafd6eea4aeda576,
+        type: 3}
+      propertyPath: visualization
+      value: 
+      objectReference: {fileID: -2311983791405174025}
     m_RemovedComponents:
     - {fileID: 2184948650164356377, guid: 1efd25daf167bd74bafd6eea4aeda576, type: 3}
     - {fileID: 5447569626426196056, guid: 1efd25daf167bd74bafd6eea4aeda576, type: 3}
