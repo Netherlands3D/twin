@@ -117,7 +117,8 @@ namespace Netherlands3D.UI.Panels
                 Bounds currentObjectBounds = bbox.ToUnityBounds();
                 var height = ServiceLocator.GetService<HeightMap>().GetHeight(bbox.Center);
                 currentObjectBounds.center = new(currentObjectBounds.center.x, height, currentObjectBounds.center.z);
-                currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * 50);
+                if(currentObjectBounds.size.magnitude < 50)
+                    currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * 50);
                 Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
                 thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
                 float aspect = (float)tex.height / tex.width;
