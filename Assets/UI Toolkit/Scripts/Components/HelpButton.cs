@@ -25,7 +25,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 helpUrl = value;
-                StyleOnHover = string.IsNullOrEmpty(helpUrl) ? PointerStyle.Auto : PointerStyle.Pointer;
+                StyleOnHover = string.IsNullOrEmpty(helpUrl) ? PointerStyle.Style.AUTO : PointerStyle.Style.POINTER;
             }
         }
 
@@ -35,8 +35,8 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
             
             RegisterCallback<ClickEvent>(OnClick);
-            
-            StyleOnHover = PointerStyle.Auto;
+
+            StyleOnHover = PointerStyle.Style.AUTO;
         }
         
         private void OnClick(ClickEvent evt)
