@@ -48,6 +48,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         [SerializeField] private Material selectionMaterial;
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
         private ToolService toolService;
+        private ContextMenuBehaviour contextMenuBehaviour;
 
         public void BlockBagId(string bagId, bool block)
         {
@@ -90,6 +91,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
             toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            contextMenuBehaviour = App.UIRoot.GetComponent<ContextMenuBehaviour>();
             
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
@@ -138,6 +141,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             inputService.LeftClickAction.performed += OnLeftClick;
             inputService.RightClickAction.performed += OnRightClick;
             
+            //subscribe the contextmenubehaviour input events after, since there is a dependency here
+            inputService.RightClickUpAction.performed += contextMenuBehaviour.OnRightClick;
+            inputService.LeftClickUpAction.performed += contextMenuBehaviour.OnLeftClick;
+            inputService.LongPressAction.performed += contextMenuBehaviour.OnRightClick;
+            inputService.TouchAction.performed += contextMenuBehaviour.OnLeftClick;
+            
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
@@ -155,6 +164,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             inputService.RightClickUpAction.performed -= OnRightClickUp;
             inputService.LeftClickAction.performed -= OnLeftClick;
             inputService.RightClickAction.performed -= OnRightClick;
+            
+            inputService.RightClickUpAction.performed -= contextMenuBehaviour.OnRightClick;
+            inputService.LeftClickUpAction.performed -= contextMenuBehaviour.OnLeftClick;
+            inputService.LongPressAction.performed -= contextMenuBehaviour.OnRightClick;
+            inputService.TouchAction.performed -= contextMenuBehaviour.OnLeftClick;
         }
 
         private void OpenLayerPanel(LayerData layer)

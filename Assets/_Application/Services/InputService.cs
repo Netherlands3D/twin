@@ -27,7 +27,7 @@ namespace Netherlands3D.Services
         private InputAction polygonModifierAction;
         private InputAction polygonClickAction;
 
-        private InputAction leftClickAction, rightClickAction, leftClickUpAction, rightClickUpAction;
+        private InputAction leftClickAction, rightClickAction, leftClickUpAction, rightClickUpAction, longPressAction, touchAction;
         
         public InputAction PolygonPointerAction => polygonPointerAction ??= polygonSelectionActionMap.FindAction("Point");
         public InputAction PolygonTapAction => polygonTapAction ??= polygonSelectionActionMap.FindAction("Tap");
@@ -44,6 +44,9 @@ namespace Netherlands3D.Services
         public InputAction RightClickAction => rightClickAction ??= cameraInputActionMap.FindAction("RightClick");
         public InputAction LeftClickUpAction => leftClickUpAction ??= cameraInputActionMap.FindAction("LeftClickUp");
         public InputAction RightClickUpAction => rightClickUpAction ??= cameraInputActionMap.FindAction("RightClickUp");
+        
+        public InputAction LongPressAction => longPressAction ??= cameraInputActionMap.FindAction("LongPress");
+        public InputAction TouchAction => touchAction ??= cameraInputActionMap.FindAction("Touch");
 
         void Awake()
         {

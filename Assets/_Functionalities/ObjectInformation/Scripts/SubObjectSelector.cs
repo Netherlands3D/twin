@@ -36,7 +36,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             foreach (var oldKey in keysToReplace)
             {
-                MeshMapping replacedMapping = ServiceLocator.GetService<ObjectSelectorService>().GetReplacedMapping(oldKey);
+                MeshMapping replacedMapping = ServiceLocator.GetService<SelectionService>().GetReplacedMapping(oldKey);
                 if(replacedMapping == null) continue;
                 
                 if (selectedMappings.TryGetValue(oldKey, out var oldList))
@@ -140,7 +140,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 if (meshMapping.ObjectMapping == null)                    
                 {
                     //when tile is replacing lod the objectmapping can be missing
-                    map = ServiceLocator.GetService<ObjectSelectorService>().GetReplacedMapping(meshMapping);
+                    map = ServiceLocator.GetService<SelectionService>().GetReplacedMapping(meshMapping);
                 }
                 if (map == null) return null;
 
@@ -165,7 +165,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             string bagId = null;
             Vector3 groundPosition = pointerToWorldPosition.GetWorldPointSync();
             Coordinate coord = new Coordinate(groundPosition);
-            List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
+            List<IMapping> mappings = SelectionService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)
                 return bagId;
             
@@ -191,7 +191,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         public MeshMapping FindSubObjectAtCoordinate(Coordinate coordinate, string bagId)
         {
-            List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coordinate);
+            List<IMapping> mappings = SelectionService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coordinate);
             foreach (MeshMapping mapping in mappings)
             { 
                 LayerData data = mapping.LayerData;
@@ -213,7 +213,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void HideSelectedMappings()
         {
-            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selector = ServiceLocator.GetService<SelectionService>();
             foreach(KeyValuePair<MeshMapping, List<string>> selectedMapping in selectedMappings.ToList())
             {
                 LayerGameObject layer;

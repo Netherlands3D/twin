@@ -21,7 +21,8 @@ namespace Netherlands3D.Masking
         private Camera mainCamera;
         private float maxCameraDistance = 1500; //todo make this the same constant everywhere?
         private float minCameraDistance = 100;
-        
+
+        public bool Hovering => hovering;
         private bool hovering = false;
         private bool isDragging = false;
         [SerializeField] private float scale = 1.0f;
