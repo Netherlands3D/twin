@@ -21,6 +21,7 @@ namespace Netherlands3D
         Settings,
         Help,
         Dome,
+        DebugStats,
         None
     }
     
