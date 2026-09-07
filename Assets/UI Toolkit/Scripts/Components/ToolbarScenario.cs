@@ -31,7 +31,7 @@ namespace Netherlands3D.UI.Components
             SetVisible(false);
         }
 
-        public void InsertFolder(FolderPropertyData key, int index, string label, bool isScenario)
+        public void InsertToggle(FolderPropertyData key, int index, string label, bool isScenario)
         {
             var toggle = new Toggle
             {

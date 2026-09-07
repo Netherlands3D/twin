@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
             var insertIndex = GetInsertIndexForLayer(layer);
             orderedFolders.Insert(insertIndex, folderProperty);
-            toolbar.InsertFolder(folderProperty, insertIndex, layer.Name, folderProperty.IsScenario);
+            toolbar.InsertToggle(folderProperty, insertIndex, layer.Name, folderProperty.IsScenario);
 
             if (folderProperty.IsScenario && layer.ActiveSelf)
                 HandleScenarioActivated(folderProperty, layer);
