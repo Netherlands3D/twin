@@ -138,7 +138,7 @@ namespace Netherlands3D
                     var type = prop["$type"]?.ToString();
 
                     // Only handle Annotation type for now
-                    if (type == "https://netherlands3d.eu/schemas/projects/layers/properties/Annotation")
+                    if (type == namespaceIdentifier + "properties/Annotation")
                     {
                         var annotationText = prop["annotationText"]?.ToString();
 
@@ -177,14 +177,14 @@ namespace Netherlands3D
                         }
                     }
 
-                    if (type == "https://netherlands3d.eu/schemas/projects/layers/properties/Scenario")
+                    if (type == namespaceIdentifier + "properties/Scenario")
                     {
                         if (layer.HasProperty<FolderPropertyData>())
                             layer.GetProperty<FolderPropertyData>().IsScenario = true;
                         else
                             isScenario = true;
                     }
-                    if (type == "https://netherlands3d.eu/schemas/projects/layers/properties/Folder")
+                    if (type == namespaceIdentifier + "properties/Folder")
                     {
                         layer.SetProperty(new FolderPropertyData(isScenario));
                     }
