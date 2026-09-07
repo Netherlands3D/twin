@@ -8,8 +8,21 @@ namespace Netherlands3D.Twin.Utility
     {
         public Coordinate BottomLeft { get; private set; }
         public Coordinate TopRight { get; private set; }
+        
         public Coordinate Center => (BottomLeft + TopRight) * 0.5f;
-        public Coordinate Size => TopRight - BottomLeft;
+        public Vector3Double UnitySize
+        {
+            get
+            {
+                var bottomLeftConverted = BottomLeft.Convert(CoordinateSystems.connectedCoordinateSystem);
+                var topRightConverted = TopRight.Convert(CoordinateSystems.connectedCoordinateSystem);
+            
+                var minX = topRightConverted.easting - bottomLeftConverted.easting;
+                var minY = topRightConverted.height - bottomLeftConverted.height; //unity uses y as height
+                var minZ = topRightConverted.northing - bottomLeftConverted.northing;
+                return new Vector3Double(minX, minY, minZ);
+            }
+        }
 
         public CoordinateSystem CoordinateSystem => (CoordinateSystem)BottomLeft.CoordinateSystem;
         
@@ -23,7 +36,7 @@ namespace Netherlands3D.Twin.Utility
         {
             if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
             {
-                topRight = topRight.Convert(CoordinateSystem);
+                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
             }
 
             if (bottomLeft.easting > topRight.easting || bottomLeft.northing > topRight.northing)
@@ -112,8 +125,8 @@ namespace Netherlands3D.Twin.Utility
         
         public double GetSizeMagnitude()
         {
-            var size = Size;
-            var d = (size.easting * size.easting) + (size.northing * size.northing) + (size.height * size.height);
+            var size = UnitySize;
+            var d = (size.x * size.x) + (size.z * size.z) + (size.y * size.y);
             return Math.Sqrt(d);
         }
 
@@ -128,8 +141,8 @@ namespace Netherlands3D.Twin.Utility
             if(bounds == null)
                 return;
             
-            Encapsulate(bounds.Center - bounds.Size * 0.5f);
-            Encapsulate(bounds.Center + bounds.Size * 0.5f);
+            Encapsulate(bounds.BottomLeft);
+            Encapsulate(bounds.TopRight);
         }
         
         public void Encapsulate(Coordinate coordinate)
@@ -154,9 +167,8 @@ namespace Netherlands3D.Twin.Utility
 
         public Bounds ToUnityBounds()
         {
-            // size.ToUnity does not create an accurate size, we should consider returning a Vector3Double instead of a Coordinate if we do calculations on coordinates 
-            var size = new Vector3((float)Size.easting, (float)Size.height, (float)Size.northing);
-            return new Bounds(Center.ToUnity(), size);
+            var size = UnitySize;
+            return new Bounds(Center.ToUnity(), size.AsVector3());
         }
 
         private static double Min(double lhs, double rhs)
