@@ -17,10 +17,11 @@ using UnityEngine.InputSystem;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.UI.Panels;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class ObjectSelectorService : MonoBehaviour
+    public class SelectionService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;

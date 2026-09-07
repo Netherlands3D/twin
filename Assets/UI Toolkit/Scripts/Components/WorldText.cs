@@ -34,6 +34,7 @@ namespace Netherlands3D.UI.Components
             nameField = this.Q<EditableNameField>();
             placeholder = this.Q<Label>("Placeholder");
             position = this.Q<VisualElement>("Position");
+            position.pickingMode = PickingMode.Ignore;
             
             RegisterCallback<GeometryChangedEvent>(UpdateSnapping);
             nameField.RegisterCallback<ClickEvent>(OnClick);

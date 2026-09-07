@@ -83,9 +83,10 @@ namespace Netherlands3D.UI.Panels
                 if (testObject == null)
                 {
                     testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    Destroy(testObject.GetComponent<Collider>());
                    
                     testObject.transform.localScale = new Vector3(10f, 10f, 10f);
-                    testObject.GetComponent<MeshRenderer>().material.color = Color.green;
+                    testObject.GetComponent<MeshRenderer>().material.color = new Color(0.1f, 1f, 0.1f, 0.5f);
                 }
                 testObject.transform.position = worldTextObject.coordinate.ToUnity();
             }

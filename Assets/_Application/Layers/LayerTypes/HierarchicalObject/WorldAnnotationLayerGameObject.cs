@@ -3,6 +3,7 @@ using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
@@ -50,6 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.LoadProperties(properties);
             InitProperty<AnnotationPropertyData>(properties, null, "");
+            
         }
 
         protected override void OnVisualizationReady()
@@ -57,13 +59,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
             annotation.element.SetText(annotationPropertyData.AnnotationText);
+           
         }
 
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
             var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-
+            var property = LayerData.GetProperty<TransformLayerPropertyData>();
+            property.OnPositionChanged.AddListener(OnUpdateAnnotationPosition);
+            
             //annotation.OnEndEdit.AddListener(SetPropertyDataText);
            // annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
             //annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
@@ -74,7 +79,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.UnregisterEventListeners();
             var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-
+            var property = LayerData.GetProperty<TransformLayerPropertyData>();
+            property.OnPositionChanged.RemoveListener(OnUpdateAnnotationPosition);
+            
             //annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
             //annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
             //annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
@@ -86,6 +93,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
+        }
+
+        private void OnUpdateAnnotationPosition(Coordinate coordinate)
+        {
+            annotation.coordinate = coordinate;
         }
     }
 }
