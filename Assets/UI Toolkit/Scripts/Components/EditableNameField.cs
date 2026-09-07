@@ -2,6 +2,7 @@ using System.Globalization;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -18,6 +19,8 @@ namespace Netherlands3D.UI.Components
         private bool intervalExpired;
         private IVisualElementScheduledItem clickTimer;
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
+
+        public UnityEvent<bool> OnEditingChanged = new();
         
         [UxmlAttribute("value")]
         public string value
@@ -94,6 +97,8 @@ namespace Netherlands3D.UI.Components
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
 
             schedule.Execute(() => inputField.Focus());
+            
+            OnEditingChanged.Invoke(true);
         }
         
         private void StopEditing()
@@ -103,6 +108,8 @@ namespace Netherlands3D.UI.Components
             
             ResetClickState();
             value = inputField.text;
+            
+            OnEditingChanged.Invoke(false);
         }
         
         private void OnNameLabelClicked(ClickEvent evt)

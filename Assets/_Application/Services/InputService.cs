@@ -70,5 +70,13 @@ namespace Netherlands3D.Services
             OpenProjectAction.Disable();
             SaveProjectAction.Disable();
         }
+
+        public void SetCameraActionsEnabled(bool enable)
+        {
+            if (enable)
+                cameraInputActionMap.Enable();
+            else 
+                cameraInputActionMap.Disable();
+        }
     }
 }

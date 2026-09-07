@@ -8,6 +8,8 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class WorldText : VisualElement
     {
+        public EditableNameField NameField => nameField;
+        
         private VisualElement textContainer;
         private EditableNameField nameField;
         private Label placeholder;
@@ -37,7 +39,7 @@ namespace Netherlands3D.UI.Components
             nameField.RegisterCallback<ClickEvent>(OnClick);
             nameField.RegisterValueChangedCallback(OnNameChanged);
             
-            schedule.Execute(UpdateContainerSize).Every(30);
+            schedule.Execute(UpdateContainerSize).Every(30); //todo easier for testing, improve to only update when needed
         }
         
         private void OnClick(ClickEvent evt)

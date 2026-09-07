@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using netDxf.Entities;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
@@ -16,11 +17,14 @@ namespace Netherlands3D.UI.Panels
     public class AnnotationBehaviour : FloatingButtonBehaviour
     {
         private List<AnnotationTextObject> worldTextObjects = new();
+        private InputService inputService;
 
         public override void Initialize(VisualElement parent)
         {
             //base.Initialize(parent);
             this.content = parent;
+            
+            inputService = ServiceLocator.GetService<InputService>();
             
             //test
             //this.content.Add(SpawnFloatingButtonContent());
@@ -41,6 +45,7 @@ namespace Netherlands3D.UI.Panels
             worldText.SetSnappingSide(side);
             worldText.SetLabelOffset(offsetFromPoint);
             floatingElement.Add(worldText);
+            worldText.NameField.OnEditingChanged.AddListener(OnEditingChangedEvent);
             
             AnnotationTextObject annotationTextObject = new AnnotationTextObject();
             annotationTextObject.floatingElement = floatingElement;
@@ -51,8 +56,14 @@ namespace Netherlands3D.UI.Panels
             return annotationTextObject;
         }
 
+        private void OnEditingChangedEvent(bool isEditing)
+        {
+            inputService.SetCameraActionsEnabled(!isEditing);
+        }
+
         public void RemoveWorldTextObject(AnnotationTextObject annotationTextObject)
         {
+            annotationTextObject.element.NameField.OnEditingChanged.RemoveListener(OnEditingChangedEvent);
             content.Remove(annotationTextObject.floatingElement);
             worldTextObjects.Remove(annotationTextObject);
         }

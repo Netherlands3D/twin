@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnVisualizationInitialize();
             //create world text object with WorldTransform.Coordinate as cached coordinate so we dont need to use update
             AnnotationBehaviour behaviour = ServiceLocator.GetService<ContextMenuBehaviour>().GetBehaviour<AnnotationBehaviour>();
-            annotation = behaviour.AddWorldTextObject("testing a new piece of text \n and a little bit more", WorldTransform.Coordinate, WorldText.SnappingSide.Above, 0);
+            annotation = behaviour.AddWorldTextObject("testing", WorldTransform.Coordinate, WorldText.SnappingSide.Above, 0);
         }
         
         private void OnDestroy()
