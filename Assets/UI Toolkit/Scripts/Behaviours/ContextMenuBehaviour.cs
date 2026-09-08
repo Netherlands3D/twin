@@ -42,25 +42,10 @@ namespace Netherlands3D.UI.Panels
             floatingPanel.OnClose.AddListener(ClearActivePanel);
             floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             
-            // var map = inputActionAsset.FindActionMap("Camera", true);
-            // rightClickAction = map.FindAction("RightClick", true);
-            // leftClickAction = map.FindAction("LeftClick", true);
-            // longPressAction = map.FindAction("LongPress", true);
-            // touchAction = map.FindAction("Touch", true);
-            //
-            // rightClickAction.performed += OnRightClick;
-            // leftClickAction.performed += OnLeftClick;
-            // longPressAction.performed += OnRightClick;
-            // touchAction.performed += OnLeftClick;
         }
         
         void OnDisable()
         {
-            // rightClickAction.performed -= OnRightClick;
-            // leftClickAction.performed -= OnLeftClick;
-            // longPressAction.performed -= OnRightClick;
-            // touchAction.performed -= OnLeftClick;
-            
             ClearActivePanel();
             floatingPanel = null;
         }
