@@ -1,13 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
@@ -56,17 +51,6 @@ namespace Netherlands3D.Twin.layers.properties
                 }
             }
             propertyData.FeatureIds = featureIds;
-        }
-
-        private BoundingBox lastUsedBBox;
-        private Bounds lastUsedUnityBounds;
-        private void OnDrawGizmos()
-        {
-            lastUsedBBox?.Debug(Color.red);
-            Gizmos.color = Color.aquamarine;
-            Gizmos.DrawCube(lastUsedUnityBounds.center, lastUsedUnityBounds.size);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawCube(lastUsedUnityBounds.center, Vector3.one *10);
         }
 
         private void ClearFeatureMappingsForLayer()
