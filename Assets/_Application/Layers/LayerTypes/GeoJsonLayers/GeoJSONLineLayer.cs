@@ -34,15 +34,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
             set => lineRenderer3D = value;
         }
-
-        protected void Start()
+        
+        public Color RenderColor
         {
-            // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
-            // of a material asset when replacing the material - no destroy of the old material must be done because
-            // that is an asset and not an instance
-            lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
+            get
+            {
+                return LineRenderer3D.LineMaterial.color;
+            }
+            set
+            {
+                // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
+                // of a material asset when replacing the material - no destroy of the old material must be done because
+                // that is an asset and not an instance
+                lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
+                
+                //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
+                lineRenderer3D.SetAllColors(value);
+            }
         }
-
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeatureLineVisualisations data = spawnedVisualisations[feature];
@@ -107,13 +116,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionLineRenderer3D.Clear();
         }
 
-        public Color GetRenderColor()
-        {
-            if (!LineRenderer3D.LineMaterial)
-                return Color.white;
-            return LineRenderer3D.LineMaterial.color;
-        }
-
         public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
@@ -125,9 +127,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             if (spawnedVisualisations.ContainsKey(feature)) return;
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
-
-            ApplyStyling(newFeatureVisualisation, layerGameObject);
-
+            
             if (feature.Geometry is MultiLineString multiLineString)
             {
                 var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
@@ -145,35 +145,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
-
-        public void ApplyStyling(GeoJsonLayerGameObject layerGameObject)
-        {
-            foreach (var kvp in spawnedVisualisations)
-            {
-                ApplyStyling(kvp.Value, layerGameObject);
-            }
-        }
         
-        public void ApplyStyling(FeatureLineVisualisations featureVisualisation, LayerGameObject layerGameObject)
-        {
-            LayerFeature feature = LayerFeature.Create(layerGameObject, lineRenderer3D); //todo: we can use FeatureLineVisualisations to color per line, but this is currently not supported yet
-
-            var symbolizer = GetSymbolizer(layerGameObject.LayerData, feature);
-            var color = symbolizer.GetStrokeColor();
-            // Keep the original material color if fill color is not set (null)
-            if (!color.HasValue) return;
-
-            lineRenderer3D.SetAllColors(color.Value);
-        }
-        
-        public Symbolizer GetSymbolizer(LayerData layerData, LayerFeature feature)
-        {
-            var stylingPropertyDatas = layerData.GetProperties<StylingPropertyData>();
-            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
-
-            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
-        }
-
         private Material GetMaterialInstance(Color strokeColor)
         {
             return new Material(lineRenderer3D.LineMaterial)

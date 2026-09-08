@@ -27,12 +27,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         private List<List<Coordinate>> visualisationsToRemove = new();
 
-        protected void Start()
+        public Color RenderColor
         {
-            // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
-            // of a material asset when replacing the material - no destroy of the old material must be done because
-            // that is an asset and not an instance
-            PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
+            get
+            {
+                return PointRenderer3D.PointMaterial.color;
+            }
+            set
+            {
+                // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
+                // of a material asset when replacing the material - no destroy of the old material must be done because
+                // that is an asset and not an instance
+                PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
+                //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
+                PointRenderer3D.SetAllColors(value);
+            }
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -87,13 +96,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionPointRenderer3D.Clear();
         }
 
-        public Color GetRenderColor()
-        {
-            if (!PointRenderer3D.PointMaterial)
-                return Color.white;
-            return PointRenderer3D.PointMaterial.color;
-        }
-
         public PointRenderer3D PointRenderer3D
         {
             get { return pointRenderer3D; }
@@ -118,7 +120,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
-            ApplyStyling(newFeatureVisualisation, layerGameObject);
 
             if (feature.Geometry is MultiPoint multiPoint)
             {
@@ -134,26 +135,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
-        }
-        
-        public void ApplyStyling(GeoJsonLayerGameObject layerGameObject)
-        {
-            foreach (var kvp in spawnedVisualisations)
-            {
-                ApplyStyling(kvp.Value, layerGameObject);
-            }
-        }
-        
-        public void ApplyStyling(FeaturePointVisualisations featureVisualisation, LayerGameObject layerGameObject)
-        {
-            LayerFeature feature = LayerFeature.Create(layerGameObject, pointRenderer3D); //todo: we can use FeatureLineVisualisations to color per line, but this is currently not supported yet
-
-            var symbolizer = GetSymbolizer(layerGameObject.LayerData, feature);
-            var color = symbolizer.GetPointColor();
-            // Keep the original material color if fill color is not set (null)
-            if (!color.HasValue) return;
-    
-            pointRenderer3D.SetAllColors(color.Value);
         }
         
         public Symbolizer GetSymbolizer(LayerData layerData, LayerFeature feature)

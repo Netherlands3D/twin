@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         bool IsPolygon { get; }
         Transform Transform { get; }
-        Color GetRenderColor();
+        Color RenderColor { get; set; }
         List<Mesh> GetMeshData(Feature feature);
         void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color);
         void SetVisualisationDeselected();
