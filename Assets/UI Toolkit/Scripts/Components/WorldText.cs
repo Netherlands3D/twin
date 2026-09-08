@@ -9,6 +9,7 @@ namespace Netherlands3D.UI.Components
     public partial class WorldText : VisualElement
     {
         public EditableNameField NameField => nameField;
+        public string Text => nameField.value;
         
         private VisualElement textContainer;
         private EditableNameField nameField;

@@ -9,6 +9,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -108,5 +109,15 @@ namespace Netherlands3D.UI.Panels
         public FloatingElement floatingElement;
         public bool enabled;
         public Color color;
+
+        public void AddTextEditListener(UnityAction<bool> action)
+        {
+            element.NameField.OnEditingChanged.AddListener(action);
+        }
+
+        public void RemoveTextEditListener(UnityAction<bool> action)
+        {
+            element.NameField.OnEditingChanged.RemoveListener(action);
+        }
     }
 }

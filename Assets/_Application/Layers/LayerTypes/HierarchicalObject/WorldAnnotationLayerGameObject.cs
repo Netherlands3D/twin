@@ -28,14 +28,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnVisualizationInitialize();
             //create world text object with WorldTransform.Coordinate as cached coordinate so we dont need to use update
             AnnotationBehaviour behaviour = ServiceLocator.GetService<ContextMenuBehaviour>().GetBehaviour<AnnotationBehaviour>();
+            
             annotation = behaviour.AddWorldTextObject("testing", WorldTransform.Coordinate, WorldText.SnappingSide.Above, offsetPixels);
+          
         }
         
         private void OnDestroy()
         {
             //remove annotation from worldtexts
             AnnotationBehaviour behaviour = ServiceLocator.GetService<ContextMenuBehaviour>().GetBehaviour<AnnotationBehaviour>();
+           
             behaviour.RemoveWorldTextObject(annotation);
+        }
+
+        private void OnEditChanged(bool isEditing)
+        {
+            if(isEditing)
+                ClearTransformHandles();
+            else
+                SetPropertyDataText(annotation.element.Text);
         }
       
         public override void ApplyStyling()
@@ -59,8 +70,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotation.element.SetText(annotationPropertyData.AnnotationText);
-           
+            SetPropertyDataText(annotationPropertyData.AnnotationText);
+        }
+        
+        private void SetPropertyDataText(string annotationText)
+        {
+            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            annotationPropertyData.AnnotationText = annotationText;
+            annotation.element.SetText(annotationText);
         }
 
         protected override void RegisterEventListeners()
@@ -70,10 +87,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var property = LayerData.GetProperty<TransformLayerPropertyData>();
             property.OnPositionChanged.AddListener(OnUpdateAnnotationPosition);
             
-            //annotation.OnEndEdit.AddListener(SetPropertyDataText);
-           // annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
-            //annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
-            //annotation.TextFieldInputConfirmed.AddListener(OnAnnotationTextConfirmed);
+            annotation.AddTextEditListener(OnEditChanged);
         }
 
         protected override void UnregisterEventListeners()
@@ -83,12 +97,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var property = LayerData.GetProperty<TransformLayerPropertyData>();
             property.OnPositionChanged.RemoveListener(OnUpdateAnnotationPosition);
             
-            //annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
-            //annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
-            //annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
-            //annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
-            
-            //WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
+            annotation.RemoveTextEditListener(OnEditChanged);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
