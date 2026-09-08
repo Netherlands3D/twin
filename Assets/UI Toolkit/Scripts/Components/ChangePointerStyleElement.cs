@@ -8,9 +8,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ChangePointerStyleElement : VisualElement
     {
-        [DllImport("__Internal")]
-        private static extern string SetCSSCursor(string cursorName = "auto");
-        
         private PointerStyle.Style styleOnHover = PointerStyle.Style.POINTER;
         
         [UxmlAttribute("pointer-style-hover")]
