@@ -4,6 +4,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -113,8 +114,14 @@ namespace Netherlands3D.UI.Panels
             thumbnailContainer.schedule.Execute(_ => 
             { 
                 ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
-                //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
                 Bounds currentObjectBounds = bbox.ToUnityBounds();
+                if (bbox.BottomLeft.PointsLength == 2)//convert to 3d with an estimated height if the bbox is 2d.
+                {
+                    var height = ServiceLocator.GetService<HeightMap>().GetHeight(bbox.Center);
+                    currentObjectBounds.center = new(currentObjectBounds.center.x, height, currentObjectBounds.center.z);
+                }
+                if(currentObjectBounds.size.magnitude < 50)
+                    currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * 50);
                 Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
                 thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
                 float aspect = (float)tex.height / tex.width;
