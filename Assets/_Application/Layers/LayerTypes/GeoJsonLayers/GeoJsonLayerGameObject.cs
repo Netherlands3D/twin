@@ -189,7 +189,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<ColorPropertyData>(properties);
-            InitProperty<FeaturePropertyData>(properties);
         }
 
         /// <summary>
@@ -260,7 +259,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer)
         {
-            layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, this);
+            layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
             CreateFeatureMappingsForFeature(feature, layer);
         }
         
@@ -333,7 +332,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void ApplyGeoJsonVisualisationLayerStyling(IGeoJsonVisualisationLayer visualisationLayer, string key)
         {
             var feature = LayerFeatures[visualisationLayer];
-            var symbolizer = GetSymbolizer(feature);
+            var symbolizer = GetStyling(feature);
             var fillColor = symbolizer.GetAndNormalizeColor(key);
             // Keep the original material color if fill color is not set (null)
             if (!fillColor.HasValue) return;
@@ -344,15 +343,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             visualisationLayer.RenderColor = newColor;
         }
-        
-        public Symbolizer GetSymbolizer(LayerFeature feature)
-        {
-            var stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
-            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
-
-            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
-        }
-
 
         private void InitStylingRules(string propertyKey, Color color)
         {

@@ -8,12 +8,19 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.layers.properties
 {
-    public class FeatureObject : MonoBehaviour
+    [RequireComponent(typeof(LayerGameObject))]
+    public class FeatureObject : MonoBehaviour, IVisualizationWithPropertyData
     {
-        [SerializeField] private LayerGameObject visualization;
+        private LayerGameObject visualization;
         private Dictionary<string, FeaturePropertyData.FeatureData> featureIds = new();
         private ObjectSelectorService selectorService;
         
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            visualization = GetComponent<LayerGameObject>();
+            visualization.InitProperty<FeaturePropertyData>(properties);
+        }
+
         private void OnEnable()
         {
             selectorService = ServiceLocator.GetService<ObjectSelectorService>();
