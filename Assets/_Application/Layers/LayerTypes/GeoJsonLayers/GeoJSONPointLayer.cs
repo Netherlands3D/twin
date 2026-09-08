@@ -4,8 +4,6 @@ using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;

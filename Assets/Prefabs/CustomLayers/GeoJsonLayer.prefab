@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 44681409752656876}
   - component: {fileID: 1519155495628252074}
   - component: {fileID: 5138157321984582814}
+  - component: {fileID: 671230662283201997}
   m_Layer: 0
   m_Name: GeoJsonLayer
   m_TagString: Untagged
@@ -126,6 +127,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.floating-origin.Runtime::Netherlands3D.Twin.FloatingOrigin.ChildWorldTransformShifter
+--- !u!114 &671230662283201997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d965efdbd7af0fac9bb44622e1e20db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.FeatureObject
+  visualization: {fileID: -2311983791405174025}
 --- !u!1001 &7142360840870353207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -196,6 +210,7 @@ PrefabInstance:
       objectReference: {fileID: -2311983791405174025}
     m_RemovedComponents:
     - {fileID: 5447569626426196056, guid: 509ce6cf579d6ed4b946913dff7eaed4, type: 3}
+    - {fileID: 3587751854665516911, guid: 509ce6cf579d6ed4b946913dff7eaed4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -289,6 +304,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: -2785417149522329819, guid: 267c8f33152cac142b8e40a7bdc54523, type: 3}
     - {fileID: 4062645045739546207, guid: 267c8f33152cac142b8e40a7bdc54523, type: 3}
+    - {fileID: 7130922166693220745, guid: 267c8f33152cac142b8e40a7bdc54523, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -394,6 +410,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2184948650164356377, guid: 1efd25daf167bd74bafd6eea4aeda576, type: 3}
     - {fileID: 5447569626426196056, guid: 1efd25daf167bd74bafd6eea4aeda576, type: 3}
+    - {fileID: 2367914837781495214, guid: 1efd25daf167bd74bafd6eea4aeda576, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -189,7 +189,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<ColorPropertyData>(properties);
-            InitProperty<FeaturePropertyData>(properties);
         }
 
         /// <summary>
