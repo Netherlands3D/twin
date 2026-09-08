@@ -61,10 +61,6 @@ namespace Netherlands3D.Twin.Services
                     });
             }
 
-#if !DEVELOPMENT_BUILD && !UNITY_EDITOR
-            return;
-#endif
-
             //
             
             var memoryCategory = new DebugStatCategory("Memory");

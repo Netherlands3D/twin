@@ -1,7 +1,7 @@
 using Netherlands3D.Services;
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.Services
 {
     // Should be be called by Functionality_DebugInfo; when Functionality_DebugInfo is enabled,
     // also enable Tool_DebugStats, except in release builds.

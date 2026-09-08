@@ -32,11 +32,6 @@ namespace Netherlands3D.Twin.Services
         public bool IsEnabled { get; private set; }
         public bool HasValues => history.Count > 0;
 
-        public DebugStat()
-        {
-            
-        }
-
         public DebugStat(string displayName, DebugStatCategory category, bool isEnabled = true)
         {
             DisplayName = displayName;
