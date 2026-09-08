@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
@@ -58,10 +59,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
-
+        
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
+            LayerFeatures.Add(polygonFeaturesLayer, LayerFeature.Create(this, polygonFeaturesLayer));
+            LayerFeatures.Add(lineFeaturesLayer, LayerFeature.Create(this, lineFeaturesLayer));
+            LayerFeatures.Add(pointFeaturesLayer, LayerFeature.Create(this, pointFeaturesLayer));
+
+            polygonFeaturesLayer.RenderColor = LayerData.Color;
+            lineFeaturesLayer.RenderColor = LayerData.Color;
+            pointFeaturesLayer.RenderColor = LayerData.Color;
         }
 
         protected override void OnVisualizationReady()
@@ -223,8 +231,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     AddFeature(feature, crs, polygonFeaturesLayer);
                     if (!hasPolygons)
                     {
-                        InitStylingRules(Symbolizer.FillColorProperty, LayerData.Color);
                         hasPolygons = true;
+                        InitStylingRules(Symbolizer.FillColorProperty, LayerData.Color);
                     }
                     return;
                 case GeoJSONObjectType.MultiLineString:
@@ -232,8 +240,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     AddFeature(feature, crs, lineFeaturesLayer);
                     if (!hasLines)
                     {
-                        InitStylingRules(Symbolizer.StrokeColorProperty, LayerData.Color);
                         hasLines = true;
+                        InitStylingRules(Symbolizer.StrokeColorProperty, LayerData.Color);
                     }
                     return;
                 case GeoJSONObjectType.MultiPoint:
@@ -241,8 +249,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     AddFeature(feature, crs, pointFeaturesLayer);
                     if (!hasPoints)
                     {
-                        InitStylingRules(Symbolizer.PointColorProperty, LayerData.Color);
                         hasPoints = true;
+                        InitStylingRules(Symbolizer.PointColorProperty, LayerData.Color);
                     }
                     return;
                 default:
@@ -293,37 +301,66 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            if(!hasPolygons &&  !hasLines &&  !hasPoints)
-                return;
+            // if(!hasPoints && !hasPolygons && !hasLines) // in case we have no data yet, we don't want to apply anything
+            //     return;
             
-            polygonFeaturesLayer.ApplyStyling(this);
-            lineFeaturesLayer.ApplyStyling(this);
-            pointFeaturesLayer.ApplyStyling(this);
+            if(hasPolygons)
+                ApplyGeoJsonVisualisationLayerStyling(polygonFeaturesLayer, Symbolizer.FillColorProperty);
+            if(hasLines)
+                ApplyGeoJsonVisualisationLayerStyling(lineFeaturesLayer, Symbolizer.StrokeColorProperty);
+            if(hasPoints)
+                ApplyGeoJsonVisualisationLayerStyling(pointFeaturesLayer, Symbolizer.PointColorProperty);
             
             var colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
             var colorTypes = colorPropertyData.GetUsedColorTypes();
-            if (colorTypes.Count == 1)
+            if (colorTypes.Count == 1) //if only one color type is used (only points/only lines/only polygons), we will set the layer color to that color.
             {
                 switch (colorTypes[0])
                 {
                     case Symbolizer.FillColorProperty:
-                        LayerData.Color = polygonFeaturesLayer.GetRenderColor();
+                        LayerData.Color = polygonFeaturesLayer.RenderColor;
                         break;
                     case Symbolizer.StrokeColorProperty:
-                        LayerData.Color = lineFeaturesLayer.GetRenderColor();
+                        LayerData.Color = lineFeaturesLayer.RenderColor;
                         break;
                     case Symbolizer.PointColorProperty:
-                        LayerData.Color = pointFeaturesLayer.GetRenderColor();
+                        LayerData.Color = pointFeaturesLayer.RenderColor;
                         break;
                 }
             }
         }
+
+        private void ApplyGeoJsonVisualisationLayerStyling(IGeoJsonVisualisationLayer visualisationLayer, string key)
+        {
+            var feature = LayerFeatures[visualisationLayer];
+            var symbolizer = GetSymbolizer(feature);
+            var fillColor = symbolizer.GetAndNormalizeColor(key);
+            // Keep the original material color if fill color is not set (null)
+            if (!fillColor.HasValue) return;
+
+            var newColor = fillColor.Value;
+            var a = polygonFeaturesLayer.RenderColor.a; //todo: support alpha in the colorpicker
+            newColor.a = a;
+            
+            visualisationLayer.RenderColor = newColor;
+        }
+        
+        public Symbolizer GetSymbolizer(LayerFeature feature)
+        {
+            var stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
+            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
+
+            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
+        }
+
 
         private void InitStylingRules(string propertyKey, Color color)
         {
             var colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
             colorPropertyData.ColorType = propertyKey;
             colorPropertyData.SetDefaultSymbolizerColor(color);
+            
+            ApplyStyling();
         }
     }
 }
