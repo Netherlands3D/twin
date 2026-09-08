@@ -333,7 +333,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void ApplyGeoJsonVisualisationLayerStyling(IGeoJsonVisualisationLayer visualisationLayer, string key)
         {
             var feature = LayerFeatures[visualisationLayer];
-            var symbolizer = GetSymbolizer(feature);
+            var symbolizer = GetStyling(feature);
             var fillColor = symbolizer.GetAndNormalizeColor(key);
             // Keep the original material color if fill color is not set (null)
             if (!fillColor.HasValue) return;
@@ -344,15 +344,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             visualisationLayer.RenderColor = newColor;
         }
-        
-        public Symbolizer GetSymbolizer(LayerFeature feature)
-        {
-            var stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
-            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
-
-            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
-        }
-
 
         private void InitStylingRules(string propertyKey, Color color)
         {
