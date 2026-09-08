@@ -115,8 +115,11 @@ namespace Netherlands3D.UI.Panels
             { 
                 ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
                 Bounds currentObjectBounds = bbox.ToUnityBounds();
-                var height = ServiceLocator.GetService<HeightMap>().GetHeight(bbox.Center);
-                currentObjectBounds.center = new(currentObjectBounds.center.x, height, currentObjectBounds.center.z);
+                if (bbox.BottomLeft.PointsLength == 2)//convert to 3d with an estimated height if the bbox is 2d.
+                {
+                    var height = ServiceLocator.GetService<HeightMap>().GetHeight(bbox.Center);
+                    currentObjectBounds.center = new(currentObjectBounds.center.x, height, currentObjectBounds.center.z);
+                }
                 if(currentObjectBounds.size.magnitude < 50)
                     currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * 50);
                 Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
