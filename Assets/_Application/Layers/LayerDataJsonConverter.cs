@@ -55,6 +55,7 @@ namespace Netherlands3D
 
             Debug.Log("reading layer data: " + layer.Name);
             //Parse as much as default fields as possible
+            
             using (var subReader = obj.CreateReader())
             {
                 serializer.Populate(subReader, layer);
@@ -186,7 +187,8 @@ namespace Netherlands3D
                     }
                     if (type == namespaceIdentifier + "properties/Folder")
                     {
-                        layer.SetProperty(new FolderPropertyData(isScenario));
+                        if(!layer.HasProperty<FolderPropertyData>())
+                            layer.SetProperty(new FolderPropertyData(isScenario));
                     }
                 }
             }
