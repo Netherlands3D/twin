@@ -3,13 +3,18 @@
 	align-items: center;
 	align-self: stretch;
 	width: 100%;
-	height: 32px;
+	height: 42px;
 }
 
 .stats-graph__title {
-	width: 35%;
 	flex-shrink: 0;
+	width: 35%;
+	height: 100%;
 	-unity-text-align: middle-left;
+
+
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .stats-graph__graph {
@@ -17,7 +22,7 @@
 	flex-shrink: 1;
 	min-width: 80px;
 	height: 100%;
-	
+
 	overflow: hidden;
 
 	margin-left: var(--spacing-2);
@@ -30,7 +35,7 @@
 }
 
 .stats-graph__value {
-	width: 25%;
+	width: 20%;
 	flex-shrink: 0;
 	-unity-text-align: middle-right;
 }

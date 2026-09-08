@@ -18,6 +18,7 @@ namespace Netherlands3D.UI.Components
 
         private DebugStat source;
         private bool updatePending;
+        private bool interpolateDisplayedValues = false;
         
         private string title = "Value:";
 
@@ -34,12 +35,9 @@ namespace Netherlands3D.UI.Components
                 titleLabel.text = value;
             }
         }
-        
-        
-        
-        [UxmlAttribute("graph-duration")]
-        public float GraphDuration { get; set; } = 30f;
 
+        [UxmlAttribute("graph-duration")]
+        public float GraphDuration { get; set; } = 60f;
 
         private const double ValueLabelUpdateTime = .25d;
         private const double GraphElementUpdateTime = .1d;
@@ -123,8 +121,16 @@ namespace Netherlands3D.UI.Components
 
             var targetMaximumDisplayedValue = summary.Average + summary.Maximum;
             var interpolation = 1f - Math.Pow(0.5d, GraphElementUpdateTime / 1d);
-            maximumDisplayedValue += (targetMaximumDisplayedValue - maximumDisplayedValue) * interpolation; //lerp
-            
+            if (!interpolateDisplayedValues)
+            {
+                maximumDisplayedValue = targetMaximumDisplayedValue;
+                interpolateDisplayedValues = true;
+            }
+            else
+            {
+                maximumDisplayedValue += (targetMaximumDisplayedValue - maximumDisplayedValue) * interpolation; //lerp
+            }
+
             graphElement.MarkDirtyRepaint();
         }
 
@@ -144,9 +150,9 @@ namespace Netherlands3D.UI.Components
 
             painter.BeginPath();
             painter.MoveTo(GraphValueToGraphPosition(graphTimedValues[0]));
-            for (var i = 0; i < graphTimedValues.Count; i++)
+            foreach (var t in graphTimedValues)
             {
-                painter.LineTo(GraphValueToGraphPosition(graphTimedValues[i]));
+                painter.LineTo(GraphValueToGraphPosition(t));
             }
             painter.Stroke();
             return;
@@ -167,6 +173,7 @@ namespace Netherlands3D.UI.Components
         {
             valueLabel.text = "-";
             updatePending = source != null;
+            interpolateDisplayedValues = false;
         }
         
     }
