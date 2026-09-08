@@ -121,7 +121,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, GeoJsonLayerGameObject layerGameObject)    
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature)) return;
@@ -144,14 +144,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.CalculateBounds();
 
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
-        }
-        
-        private Material GetMaterialInstance(Color strokeColor)
-        {
-            return new Material(lineRenderer3D.LineMaterial)
-            {
-                color = strokeColor
-            };
         }
 
         /// <summary>
@@ -180,14 +172,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
-        }
-
-        private void OnDestroy()
-        {
-            if (Application.isPlaying)
-            {
-                Destroy(LineRenderer3D.gameObject);
-            }
         }
 
         public BoundingBox GetBoundingBoxOfVisibleFeatures()

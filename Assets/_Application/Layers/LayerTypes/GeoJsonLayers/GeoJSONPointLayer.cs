@@ -113,7 +113,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, GeoJsonLayerGameObject layerGameObject)
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
@@ -135,22 +135,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
-        }
-        
-        public Symbolizer GetSymbolizer(LayerData layerData, LayerFeature feature)
-        {
-            var stylingPropertyDatas = layerData.GetProperties<StylingPropertyData>();
-            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
-
-            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
-        }
-
-        private Material GetMaterialInstance(Color color)
-        {
-            return new Material(pointRenderer3D.PointMaterial)
-            {
-                color = color
-            };
         }
 
         /// <summary>
@@ -178,13 +162,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
-
-        private void OnDestroy()
-        {
-            if (Application.isPlaying && PointRenderer3D?.gameObject)
-                Destroy(PointRenderer3D.gameObject);
-        }
-
+        
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
         {
             if (spawnedVisualisations.Count == 0)

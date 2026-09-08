@@ -155,7 +155,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, GeoJsonLayerGameObject layerGameObject)
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
@@ -196,15 +196,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             // bounds are calculated in the AppendVisualisations method, and is therefore not explicitly called here
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
-            newFeatureVisualisation.ShowVisualisations(layerGameObject.LayerData.ActiveInHierarchy);
-        }
-
-        public Symbolizer GetSymbolizer(LayerData layerData, LayerFeature feature)
-        {
-            var stylingPropertyDatas = layerData.GetProperties<StylingPropertyData>();
-            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
-
-            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
+            newFeatureVisualisation.ShowVisualisations(activeInHierarchy);
         }
 
         /// <summary>

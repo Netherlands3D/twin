@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         List<Mesh> GetMeshData(Feature feature);
         void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color);
         void SetVisualisationDeselected();
-        void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, GeoJsonLayerGameObject layerGameObject);
+        void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy);
         Bounds GetFeatureBounds(Feature feature);
         float GetSelectionRange();
 
