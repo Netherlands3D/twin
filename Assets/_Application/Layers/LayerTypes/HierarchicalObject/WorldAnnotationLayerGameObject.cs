@@ -28,7 +28,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnVisualizationInitialize();
             //create world text object with WorldTransform.Coordinate as cached coordinate so we dont need to use update
             AnnotationBehaviour behaviour = ServiceLocator.GetService<ContextMenuBehaviour>().GetBehaviour<AnnotationBehaviour>();
-            
             annotation = behaviour.AddWorldTextObject("testing", WorldTransform.Coordinate, WorldText.SnappingSide.Above, offsetPixels);
           
         }
@@ -63,7 +62,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.LoadProperties(properties);
             InitProperty<AnnotationPropertyData>(properties, null, "");
-            
         }
 
         protected override void OnVisualizationReady()
@@ -83,7 +81,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
-            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
             var property = LayerData.GetProperty<TransformLayerPropertyData>();
             property.OnPositionChanged.AddListener(OnUpdateAnnotationPosition);
             
@@ -93,7 +90,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void UnregisterEventListeners()
         {
             base.UnregisterEventListeners();
-            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
             var property = LayerData.GetProperty<TransformLayerPropertyData>();
             property.OnPositionChanged.RemoveListener(OnUpdateAnnotationPosition);
             

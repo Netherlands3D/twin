@@ -38,7 +38,7 @@ namespace Netherlands3D.UI.Components
             position.pickingMode = PickingMode.Ignore;
             
             RegisterCallback<GeometryChangedEvent>(UpdateSnapping);
-            nameField.RegisterCallback<ClickEvent>(OnClick);
+            //nameField.RegisterCallback<ClickEvent>(OnClick);
             nameField.RegisterValueChangedCallback(OnNameChanged);
             
             schedule.Execute(UpdateContainerSize).Every(30); //todo easier for testing, improve to only update when needed

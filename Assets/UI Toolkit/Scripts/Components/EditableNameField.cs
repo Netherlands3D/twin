@@ -70,8 +70,8 @@ namespace Netherlands3D.UI.Components
             label.focusable = true;
             inputField = this.Q<TextField>("InputField");
 
-            label.RegisterCallback<ClickEvent>(OnNameLabelClicked);
-            label.RegisterCallback<BlurEvent>(OnLabelBlur);
+            RegisterCallback<ClickEvent>(OnNameLabelClicked);
+            RegisterCallback<BlurEvent>(OnLabelBlur);
 
             inputField.RegisterCallback<BlurEvent>(OnNameInputFieldBlur, TrickleDown.TrickleDown);
             inputField.RegisterCallback<NavigationSubmitEvent>(OnNavigationSubmitted, TrickleDown.TrickleDown);
