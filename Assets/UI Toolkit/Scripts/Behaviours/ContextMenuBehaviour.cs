@@ -14,11 +14,6 @@ namespace Netherlands3D.UI.Panels
         [SerializeField] private InputActionAsset inputActionAsset;
         [SerializeField] private FloatingPanelBehaviour[] panelBehaviours;
         [SerializeField] private FloatingButtonBehaviour[] floatingButtonBehaviour;
-
-        // private InputAction rightClickAction;
-        // private InputAction leftClickAction;
-        // private InputAction longPressAction;
-        // private InputAction touchAction;
         private FloatingPanel floatingPanel;
         private VisualElement floatingPanelContent;
         private FloatingPanelBehaviour selectedBehaviour;
