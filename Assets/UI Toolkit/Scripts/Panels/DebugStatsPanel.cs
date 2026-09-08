@@ -35,51 +35,12 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            
+
             statsContainer = this.Q<VisualElement>("StatsContainer");
-            
+
             CreateStatsGraphs();
-            
-            /*
-            frameDurationGraph = this.Q<StatsGraph>("FrameDuration");
-            randomNumberGraph = this.Q<StatsGraph>("RandomNumber");
-            
-            totalUsedMemoryGraph = this.Q<StatsGraph>("TotalUsedMemory");
-            totalReservedMemoryGraph = this.Q<StatsGraph>("TotalReservedMemory");
-            gcUsedMemoryGraph = this.Q<StatsGraph>("GCUsedMemory");
-            gcReservedMemoryGraph = this.Q<StatsGraph>("GCReservedMemory");
-            
-            loadedCartesianTileCount = this.Q<StatsGraph>("LoadedCartesianTileCount");
-            pendingCartesianTileChangeCount = this.Q<StatsGraph>("PendingCartesianTileChangeCount");
-            activeCartesianTileChangeCount = this.Q<StatsGraph>("ActiveCartesianTileChangeCount");           
-            
-            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);*/
-        }
-        
-        /*
-        private void OnAttachToPanel(AttachToPanelEvent _)
-        {
-            debugStatsService = ServiceLocator.GetService<DebugStatsService>();
-            
-            frameDurationGraph.Bind(debugStatsService.FrameDuration);
-            randomNumberGraph.Bind(debugStatsService.RandomNumber);
-            
-            totalUsedMemoryGraph.Bind(debugStatsService.TotalUsedMemory);
-            totalReservedMemoryGraph.Bind(debugStatsService.TotalReservedMemory);
-            gcUsedMemoryGraph.Bind(debugStatsService.GCUsedMemory);
-            gcReservedMemoryGraph.Bind(debugStatsService.GCReservedMemory);
-            
-            loadedCartesianTileCount.Bind(debugStatsService.LoadedCartesianTileCount);
-            pendingCartesianTileChangeCount.Bind(debugStatsService.PendingCartesianTileChangeCount);
-            activeCartesianTileChangeCount.Bind(debugStatsService.ActiveCartesianTileChangeCount);
         }
 
-        private void OnDetachFromPanel(DetachFromPanelEvent _)
-        {
-            debugStatsService = null;
-        }*/
-        
         private void CreateStatsGraphs()
         {
             var service =

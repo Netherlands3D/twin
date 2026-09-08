@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -35,7 +35,12 @@ namespace Netherlands3D.UI.Components
                         tools.CloseAllToolsWithPanel();
                     }
                 });
-            
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+        }
+
+        private void OnAttachToPanel(AttachToPanelEvent evt)
+        {
+            UpdateState();
         }
 
         private void EnsureService()
@@ -45,20 +50,30 @@ namespace Netherlands3D.UI.Components
                 tools = Services.ServiceLocator.GetService<ToolService>();
                 tools.AnyToolClosed.AddListener(UpdateState);
                 tools.AnyToolOpened.AddListener(UpdateState);
+                tools.AnyToolAvailabilityChanged.AddListener(UpdateState);
             }
         }
-        
-        public void UpdateState()
+
+        private void UpdateState(bool _)
         {
+            UpdateState();
+        }
+        
+        private void UpdateState()
+        {
+            EnsureService();
+            
             if(tools == null) return;
     
             foreach (var entry in buttons)
             {
                 var tool = tools.GetTool(entry.ToolType);
-                if (tool != null && tool.IsOpen)
-                    entry.Button.AddToClassList("active");
-                else
-                    entry.Button.RemoveFromClassList("active");
+
+                var isHidden = tool != null && !tool.Available;
+                var isOpen = tool != null && tool.Available && tool.IsOpen;
+
+                entry.Button.EnableInClassList(UtilityClassConstants.HIDDEN, isHidden);
+                entry.Button.EnableInClassList("active", isOpen);
             }
         }
     }

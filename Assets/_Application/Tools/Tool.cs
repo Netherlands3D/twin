@@ -49,8 +49,7 @@ namespace Netherlands3D.Twin.Tools
         
         // Configuration setting, this way you can preconfigure the state of the tool
         [SerializeField] private bool open = false;
-
-        private bool available = false;
+        [SerializeField] private bool available = true;
 
         public bool IsOpen
         {
@@ -61,7 +60,7 @@ namespace Netherlands3D.Twin.Tools
         public bool Available
         {
             get => available;
-            set => available = value;
+            private set => available = value;
         }
         
       
@@ -73,6 +72,8 @@ namespace Netherlands3D.Twin.Tools
         /// <param name="available">Set to true to show the tool button</param>
         public void SetAvailability(bool available)
         {
+            if (available == Available) return;
+            
             Available = available;
             onAvailabilityChange.Invoke(available);
         }

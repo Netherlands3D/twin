@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Services.Netherlands3D;
+using Netherlands3D.Twin.Tools;
 using UnityEngine;
 using UnityEngine.Profiling;
 
@@ -37,9 +38,12 @@ namespace Netherlands3D.Twin.Services
         
 
         private TileHandler TileHandler => ServiceLocator.GetService<TileHandler>();
+
+        [SerializeField] private Tool debugStatsTool;
         
         void Awake()
         {
+
             var frameDurationCategory = new DebugStatCategory("Frame duration");
             
             AddStat("Frame duration (ms)", frameDurationCategory, 0, 
@@ -56,6 +60,10 @@ namespace Netherlands3D.Twin.Services
                         return returnValue;
                     });
             }
+
+#if !DEVELOPMENT_BUILD && !UNITY_EDITOR
+            return;
+#endif
 
             //
             
@@ -94,6 +102,9 @@ namespace Netherlands3D.Twin.Services
 
         void Update()
         {
+            if (!debugStatsTool.Available)
+                return;
+            
             var deltaTime = Time.deltaTime;
             foreach (var sampler in samplers)
             {

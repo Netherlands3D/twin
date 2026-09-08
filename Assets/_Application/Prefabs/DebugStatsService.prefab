@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6433995118285799769}
   - component: {fileID: 8140363074139191324}
   - component: {fileID: 438356819735141714}
-  - component: {fileID: 5255978653070667560}
   m_Layer: 0
   m_Name: DebugStatsService
   m_TagString: Untagged
@@ -41,11 +40,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7487208400858550911}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d20f33e7ae57d0489c5d772d50986e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.DebugStatsService
+  debugStatsTool: {fileID: 11400000, guid: 62e0b287f9c0f1841a01be1d3a0a37b2, type: 2}
 --- !u!114 &438356819735141714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,49 +59,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
   service: {fileID: 8140363074139191324}
---- !u!114 &5255978653070667560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7487208400858550911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin.functionalities::Netherlands3D.Twin.Functionalities.FunctionalityListener
-  functionalities:
-  - {fileID: 11400000, guid: 77c433a944001411a9376d15fb427d17, type: 2}
-  OnEnableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8140363074139191324}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Services.DebugStatsService,
-          eu.netherlands3d.twin
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  OnDisableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8140363074139191324}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Services.DebugStatsService,
-          eu.netherlands3d.twin
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
