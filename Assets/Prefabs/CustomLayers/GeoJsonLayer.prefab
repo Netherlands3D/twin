@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 8363319932289052987}
   - component: {fileID: -2311983791405174025}
   - component: {fileID: 44681409752656876}
+  - component: {fileID: 1519155495628252074}
+  - component: {fileID: 5138157321984582814}
+  - component: {fileID: 671230662283201997}
   m_Layer: 0
   m_Name: GeoJsonLayer
   m_TagString: Untagged
@@ -30,7 +33,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7339978464758806496}
+  - {fileID: 8118052479271315826}
+  - {fileID: 7021337832595013684}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-2311983791405174025
@@ -48,12 +54,12 @@ MonoBehaviour:
   prefabIdentifier: e46381d2665c69245b2475c986f6d0c4
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  polygonLayerPrefab: {fileID: 5640076176564817079, guid: 509ce6cf579d6ed4b946913dff7eaed4,
-    type: 3}
-  lineLayerPrefab: {fileID: -8140904490283006168, guid: 1efd25daf167bd74bafd6eea4aeda576,
-    type: 3}
-  pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
-    type: 3}
+  VisualisationError:
+    m_PersistentCalls:
+      m_Calls: []
+  polygonFeaturesLayer: {fileID: 3268294129124562304}
+  lineFeaturesLayer: {fileID: 8750136846370291853}
+  pointFeaturesLayer: {fileID: 6163917346495886776}
 --- !u!114 &44681409752656876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,4 +72,306 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+--- !u!114 &1519155495628252074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldTransformShifter: {fileID: 0}
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6468276581298804285}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Rendering.PointRenderer3D, eu.netherlands3d.twin
+        m_MethodName: RecalculateMatrices
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3084951980264027222}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Rendering.LineRenderer3D, eu.netherlands3d.twin
+        m_MethodName: RecalculateMatrices
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5138157321984582814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.floating-origin.Runtime::Netherlands3D.Twin.FloatingOrigin.ChildWorldTransformShifter
+--- !u!114 &671230662283201997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d965efdbd7af0fac9bb44622e1e20db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.FeatureObject
+--- !u!1 &7603689817929975093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7339978464758806496}
+  - component: {fileID: 3268294129124562304}
+  m_Layer: 12
+  m_Name: GeoJsonPolygonLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7339978464758806496
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7603689817929975093}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.18519, y: 0, z: -12.96296}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8363319932289052987}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3268294129124562304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7603689817929975093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656fd46141ba0417797cd8268008cccc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonVisualizationMaterial: {fileID: 2100000, guid: c8a5ac8f61e049f428ed0069b973e2be,
+    type: 2}
+  polygonSelectionVisualizationMaterial: {fileID: 2100000, guid: fe53a2acfe89d1ac6aee05a8edaa27ed,
+    type: 2}
+--- !u!1 &7865995876758057697
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7021337832595013684}
+  - component: {fileID: 6163917346495886776}
+  - component: {fileID: 6468276581298804285}
+  - component: {fileID: 6331333308255525274}
+  m_Layer: 12
+  m_Name: GeoJsonPointLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7021337832595013684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7865995876758057697}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.18519, y: 0, z: -12.96296}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8363319932289052987}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6163917346495886776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7865995876758057697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b28f725f4c154ce8828d58c83e4bc9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointRenderer3D: {fileID: 6468276581298804285}
+  selectionPointRenderer3D: {fileID: 6331333308255525274}
+--- !u!114 &6468276581298804285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7865995876758057697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68015d05aa36d494c94bfdecd9805ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  materialTemplate: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  flattenY: 0
+  offsetY: 0
+  pointMeshScale: 5
+  isProjected: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &6331333308255525274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7865995876758057697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68015d05aa36d494c94bfdecd9805ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  materialTemplate: {fileID: 2100000, guid: c8a5ac8f61e049f428ed0069b973e2be, type: 2}
+  flattenY: 0
+  offsetY: 0
+  pointMeshScale: 5
+  isProjected: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!1 &9002820638124907431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8118052479271315826}
+  - component: {fileID: 8750136846370291853}
+  - component: {fileID: 3084951980264027222}
+  - component: {fileID: 7874224065591645447}
+  m_Layer: 12
+  m_Name: GeoJsonLineLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8118052479271315826
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9002820638124907431}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.18519, y: 0, z: -12.96296}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8363319932289052987}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8750136846370291853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9002820638124907431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6036aa494c6f411492a338f5796ab53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineRenderer3D: {fileID: 3084951980264027222}
+  selectionLineRenderer3D: {fileID: 7874224065591645447}
+--- !u!114 &3084951980264027222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9002820638124907431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ab6ad69b9eb134b90d56b3161fba5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  materialTemplate: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  flattenY: 0
+  offsetY: 1.87
+  pointMeshScale: 1
+  isProjected: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
+    type: 3}
+  drawJoints: 1
+  lineDiameter: 1
+--- !u!114 &7874224065591645447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9002820638124907431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ab6ad69b9eb134b90d56b3161fba5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  materialTemplate: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e, type: 2}
+  flattenY: 0
+  offsetY: 1.87
+  pointMeshScale: 1
+  isProjected: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
+    type: 3}
+  drawJoints: 1
+  lineDiameter: 1

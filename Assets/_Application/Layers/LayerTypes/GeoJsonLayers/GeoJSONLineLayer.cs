@@ -4,8 +4,6 @@ using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -13,7 +11,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
+    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer
     {
         public bool IsPolygon => false;
 
@@ -24,41 +22,34 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
         private List<List<Coordinate>> visualisationsToRemove = new();
         private List<List<Coordinate>> selectionList = new();
-
-        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
-
+        
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private LineRenderer3D selectionLineRenderer3D;
         
-        private GeoJsonLineLayerMaterialApplicator applicator;
-
-        internal GeoJsonLineLayerMaterialApplicator Applicator
-        {
-            get
-            {
-                if (applicator == null) applicator = new GeoJsonLineLayerMaterialApplicator(this);
-
-                return applicator;
-            }
-        }
-
         public LineRenderer3D LineRenderer3D
         {
             get => lineRenderer3D;
             //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
             set => lineRenderer3D = value;
         }
-
-        protected override void OnVisualizationReady()
+        
+        public Color RenderColor
         {
-            // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
-            // of a material asset when replacing the material - no destroy of the old material must be done because
-            // that is an asset and not an instance
-            lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
-            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
+            get
+            {
+                return LineRenderer3D.LineMaterial.color;
+            }
+            set
+            {
+                // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
+                // of a material asset when replacing the material - no destroy of the old material must be done because
+                // that is an asset and not an instance
+                lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
+                
+                //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
+                lineRenderer3D.SetAllColors(value);
+            }
         }
-
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeatureLineVisualisations data = spawnedVisualisations[feature];
@@ -123,25 +114,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionLineRenderer3D.Clear();
         }
 
-        public Color GetRenderColor()
-        {
-            return LineRenderer3D.LineMaterial.color;
-        }
-
-        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)          
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature)) return;
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
-
-            ApplyStyling(newFeatureVisualisation);
-
+            
             if (feature.Geometry is MultiLineString multiLineString)
             {
                 var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
@@ -158,26 +142,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.CalculateBounds();
 
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
-        }
-
-        public override void ApplyStyling()
-        {
-            MaterialApplicator.Apply(Applicator);
-            // The color in the Layer Panel represents the default line color for this layer
-            LayerData.Color = Applicator.GetMaterial().color;
-        }
-
-        public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
-        {
-            // Currently we don't apply individual styling per feature
-        }
-
-        private Material GetMaterialInstance(Color strokeColor)
-        {
-            return new Material(lineRenderer3D.LineMaterial)
-            {
-                color = strokeColor
-            };
         }
 
         /// <summary>
@@ -208,16 +172,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
-        public override void DestroyLayerGameObject()
-        {
-            if (Application.isPlaying)
-            {
-                Destroy(LineRenderer3D.gameObject);
-            }
-
-            base.DestroyLayerGameObject();
-        }
-
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
         {
             if (spawnedVisualisations.Count == 0)
@@ -235,11 +189,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
-        }
-        
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            InitProperty<ColorPropertyData>(properties); 
         }
     }
 }
