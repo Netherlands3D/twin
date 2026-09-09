@@ -99,6 +99,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
+            annotation.SetVisible(isActive);
         }
 
         private void OnUpdateAnnotationPosition(Coordinate coordinate)

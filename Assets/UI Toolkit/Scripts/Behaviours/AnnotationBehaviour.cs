@@ -7,6 +7,7 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.Events;
@@ -107,8 +108,9 @@ namespace Netherlands3D.UI.Panels
         public Coordinate coordinate;
         public WorldText element;
         public FloatingElement floatingElement;
-        public bool enabled;
+        public bool Visible => visible; //  !element.ClassListContains(UtilityClassConstants.HIDDEN); 
         public Color color;
+        private bool visible;
 
         public void AddTextEditListener(UnityAction<bool> action)
         {
@@ -118,6 +120,12 @@ namespace Netherlands3D.UI.Panels
         public void RemoveTextEditListener(UnityAction<bool> action)
         {
             element.NameField.OnEditingChanged.RemoveListener(action);
+        }
+
+        public void SetVisible(bool visible)
+        {
+            this.visible = visible;
+            element.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
     }
 }
