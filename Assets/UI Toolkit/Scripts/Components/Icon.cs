@@ -7,9 +7,9 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Icon : VisualElement
     {
-        private IconImage image = IconImage.Map;
+        private string image = IconImage.MAP;
         [UxmlAttribute("image")]
-        public IconImage Image { get => image; set { image = value; UpdateClassList(); } }
+        public string Image { get => image; set { image = value; UpdateClassList(); } }
 
         private ThemeColor color = ThemeColor.Blue900;
         [UxmlAttribute("color")]
@@ -25,7 +25,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateClassList()
         {
-            this.ReplacePrefixedValueInClassList("image-", image.ToString().ToKebabCase());
+            this.ReplacePrefixedValueInClassList("image-", image.ToKebabCase());
             this.ReplacePrefixedValueInClassList("tint-", color.ToString().ToKebabCase());
         }
     }

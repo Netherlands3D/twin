@@ -1,6 +1,10 @@
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Events;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Services
 {
@@ -8,11 +12,18 @@ namespace Netherlands3D.Twin.Services
     {
         private Layers layers;
         private SnackbarService snackbarService;
-        private string activeMessage;
-        private int activeCounter;
+        private string activeAddedMessage;
+        private string activeRemovalMessage;
+        private int activeAddedCounter;
+        private int activeRemovalCounter;
         private DataTypeChain[] chains;
         
+        [SerializeField] private StringEvent layerSourceAttributionEvent;
+        public UnityEvent<string> OnAttributionReceived;
 
+        private bool messageAddedDirty = false;
+        private bool messageRemovalDirty = false;
+        
         private void Awake()
         {
             layers = App.Layers;
@@ -24,7 +35,9 @@ namespace Netherlands3D.Twin.Services
         {
             snackbarService.OnHideMessage.AddListener(OnHideSnackbar);
             layers.LayerAdded.AddListener(OnLayerAdded);
+            layers.LayerRemoved.AddListener(OnLayerRemoved);
             layers.VisualizationCreated.AddListener(OnVisualizationCreated); // when the visualisation is created, we want to listen to potential error messages (eg. parse errors) to display
+            layerSourceAttributionEvent.AddListenerStarted(OnAttributionReceived.Invoke);
 
             foreach (var chain in chains)
             {
@@ -38,7 +51,10 @@ namespace Netherlands3D.Twin.Services
         {
             snackbarService.OnHideMessage.RemoveListener(OnHideSnackbar);
             layers.LayerAdded.RemoveListener(OnLayerAdded);
+            layers.LayerRemoved.RemoveListener(OnLayerRemoved);
             layers.VisualizationCreated.RemoveListener(OnVisualizationCreated);
+            layerSourceAttributionEvent.RemoveListenerStarted(OnAttributionReceived.Invoke);
+            
             foreach (var chain in chains)
             {
                 chain.CouldNotFindAdapter.RemoveListener(CouldNotFindAdapterMessage);
@@ -49,23 +65,40 @@ namespace Netherlands3D.Twin.Services
 
         private void OnVisualizationCreated(LayerGameObject visualization)
         {
-            visualization.VisualisationError.AddListener(VisualizationErrorMessage);
+            //visualisationerror is automatically cleared when the visualisation is destroyed
+            visualization?.VisualisationError.AddListener(VisualizationErrorMessage);
         }
 
         private void OnHideSnackbar()
         {              
-            activeMessage = string.Empty;
-            activeCounter = 0;
+            activeAddedMessage = string.Empty;
+            activeAddedCounter = 0;
+            activeRemovalMessage = string.Empty;
+            activeRemovalCounter = 0;
         }
 
         private void OnLayerAdded(LayerData layerData)
         {
-            if (activeCounter > 0)
-                activeMessage += $" ,{layerData.Name}";
+            if(layerData is RootLayer) return;
+            
+            if (activeAddedCounter > 0)
+                activeAddedMessage += $" ,{layerData.Name}";
             else
-                activeMessage += layerData.Name;
-            activeCounter++;
-            snackbarService.DisplayMessage(activeMessage + (activeCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd");
+                activeAddedMessage += layerData.Name;
+            activeAddedCounter++;
+            messageAddedDirty = true;
+        }
+       
+        private void OnLayerRemoved(LayerData layerData)
+        {
+            if(layerData is RootLayer) return;
+            
+            if (activeRemovalCounter > 0)
+                activeRemovalMessage += $" ,{layerData.Name}";
+            else
+                activeRemovalMessage += layerData.Name;
+            activeRemovalCounter++;
+            messageRemovalDirty = true;
         }
 
         private void CouldNotFindAdapterMessage(string message)
@@ -86,6 +119,37 @@ namespace Netherlands3D.Twin.Services
         private void VisualizationErrorMessage(string message)
         {
             snackbarService.DisplayError(message);
+        }
+
+        // TODO: Replace this specific method with a generic layer message flow.
+        // Now only used in Tile3DLayerGameObject.cs
+        public void UnsupportedExtensionsMessage(string message)
+        {
+            snackbarService.DisplayError(message);
+        }
+
+        // TODO: Replace this specific CSV message with a generic layer replacement message flow.
+        public void DisplayCsvReplacedMessage(string message)
+        {
+            snackbarService.DisplayMessage(message, IconImage.SHEETS);
+        }
+
+        private void LateUpdate()
+        {
+            if (messageAddedDirty)
+            {
+                messageAddedDirty = false;
+                snackbarService.DisplayMessage(activeAddedMessage + (activeAddedCounter == 1 ? " is" : " zijn") + " succesvol toegevoegd", IconImage.SHEETS);
+                activeAddedMessage = string.Empty;
+                activeAddedCounter = 0;
+            }
+            if (messageRemovalDirty)
+            {
+                messageRemovalDirty = false;
+                snackbarService.DisplayMessage(activeRemovalMessage + (activeRemovalCounter == 1 ? " is" : " zijn") + " succesvol verwijderd");
+                activeRemovalMessage = string.Empty;
+                activeRemovalCounter = 0;
+            }
         }
     }
 }

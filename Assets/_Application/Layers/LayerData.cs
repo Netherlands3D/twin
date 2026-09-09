@@ -49,6 +49,7 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
+        [DataMember] public bool IsExpanded { get; set; } = false; //is the UI expanded? we want to reload the same tree state between saving/loading projects, so it is stored in the projectData
         
         [JsonIgnore]
         public string Name
@@ -57,7 +58,7 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 name = value;
-                NameChanged.Invoke(this, value);
+                NameChanged.Invoke(value);
             }
         }
 
@@ -163,7 +164,7 @@ namespace Netherlands3D.Twin.Layers
         }
         public UnityEvent OnPrefabIdChanged = new();        
 
-        [JsonIgnore] public readonly UnityEvent<LayerData, string> NameChanged = new();
+        [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> ActiveSelfChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();

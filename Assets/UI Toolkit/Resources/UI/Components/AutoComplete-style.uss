@@ -1,11 +1,11 @@
 ﻿@import url("TextField-style.uss");
 
 .auto-complete {
-    --auto-complete-height: var(--spacing-10);
+    --auto-complete-height: var(--spacing-8);
     --auto-complete-list-height: 200px;
-    --auto-complete-padding-x: var(--spacing-3);
-    --auto-complete-padding-y: var(--spacing-2);
-    --auto-complete-border-radius: var(--border-radius-lg);
+    --auto-complete-padding-x: var(--spacing-2);
+    --auto-complete-padding-y: 0;
+    --auto-complete-border-radius: var(--border-radius-md);
     --auto-complete-border-width: var(--spacing-0_5);
     --auto-complete-border-color: var(--color-blue-200);
     
@@ -28,12 +28,13 @@
 }
 
 .auto-complete .textfield .unity-base-text-field__input {
-    background-color: var(--color-white);
     padding: 0;
+    background-color: transparent;
+    border-width: 0;
 }
 
 .auto-complete .textfield .unity-base-text-field__input:hover {
-    background-color: var(--color-white);
+    background-color: transparent;
 }
 
 .auto-complete__results {

@@ -1,0 +1,568 @@
+using System;
+using GeoJSON.Net.Feature;
+using Netherlands3D.Coordinates;
+using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Twin.Utility;
+using System.Collections.Generic;
+using System.Linq;
+using GG.Extensions;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.UI;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.UI.Panels;
+
+namespace Netherlands3D.Functionalities.ObjectInformation
+{
+    public class SelectionService : MonoBehaviour
+    {
+        public SubObjectSelector SubObjectSelector => subObjectSelector;
+        public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
+        public HierarchicalObjectLayerGameObject SelectedVisualisation => selectedVisualisation;
+
+        public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
+        public UnityEvent<FeatureMapping> SelectFeature;
+        public UnityEvent OnDeselect = new();
+        public UnityEvent<LayerData> OnSelectLayer = new();
+        public UnityEvent OnNoLayerSelected = new();
+        public UnityEvent OnSelectionProcessed = new();
+
+        private FeatureSelector featureSelector;
+        private SubObjectSelector subObjectSelector;
+        private PolygonSelectionService polygonSelectionService;
+        private List<IMapping> orderedMappings = new();
+        private Dictionary<string, IMapping> selectedMappings = new();
+        private HierarchicalObjectLayerGameObject selectedVisualisation;
+        private Vector3 lastWorldClickedPosition;
+        private PointerToWorldPosition pointerToWorldPosition;
+        private float minClickDistance = 10;
+        private float minClickTime = 0.5f;
+        private float lastTimeClicked = 0;
+        private int currentSelectedMappingIndex = -1;
+        private bool filterDuplicateFeatures = true;
+        [SerializeField] private Material selectionMaterial;
+        private RaycastHit[] selectedColliderHits = new RaycastHit[4];
+        private ToolService toolService;
+        private ContextMenuBehaviour contextMenuBehaviour;
+
+        public void BlockBagId(string bagId, bool block)
+        {
+            subObjectSelector.BlockBagId(bagId, block);
+        }
+
+        public static MappingTree MappingTree
+        {
+            get
+            {
+                if (mappingTreeInstance == null)
+                {
+                    BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
+                    MappingTree tree = new MappingTree(bbox, 4, 12);                    
+                    mappingTreeInstance = tree;
+                }
+                return mappingTreeInstance;
+            }
+        }
+        public bool debugMappingTree = false;
+        private static MappingTree mappingTreeInstance;
+        private LayerData lastSelectedMappingLayerData = null;
+        private LayerData lastSelectedLayerData = null;
+
+        private void Awake()
+        {
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
+            subObjectSelector = gameObject.AddComponent<SubObjectSelector>();
+            featureSelector = gameObject.AddComponent<FeatureSelector>();
+            featureSelector.SetMappingTree(MappingTree);
+            
+            Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
+            Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+
+            InitSelectionConditions();
+        }
+
+        private void OnEnable()
+        {
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
+            
+            toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            contextMenuBehaviour = App.UIRoot.GetComponent<ContextMenuBehaviour>();
+            
+            OnSelectLayer.AddListener(OpenLayerPanel);
+            OnNoLayerSelected.AddListener(CloseLayerPanel);
+        }
+
+        private void OnDisable()
+        {
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
+       
+            OnSelectLayer.RemoveListener(OpenLayerPanel);
+            OnNoLayerSelected.RemoveListener(CloseLayerPanel);
+        }
+
+        private void OnProjectChanged(ProjectData data)
+        {
+            //ClearMappingTree(); //TODO the quadtree featuremappings should be cleared when loading a new project for efficiency. for now its not working properly for some reason
+            ProjectData.Current.RootLayer.AddedSelectedLayer.AddListener(OnAddSelectedLayer);
+            ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnRemoveSelectedLayer);
+        }
+
+        private void OnAddSelectedLayer(LayerData data)
+        {
+            lastSelectedLayerData = data;
+        }
+
+        private void OnRemoveSelectedLayer(LayerData data)
+        {
+            //we need to check this before Isclicked because it checks if its over the ui
+            //this is to deselect the layer when there is clicked outside of any selectable from this layer
+            if(ProjectData.Current.RootLayer.SelectedLayers.Count == 0)
+            {
+                if (lastSelectedLayerData != null || lastSelectedMappingLayerData != null)
+                {
+                    Deselect();
+                    lastSelectedLayerData = null;
+                    lastSelectedMappingLayerData = null;
+                }
+            }
+        }
+      
+        private void Start()
+        {
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.LeftClickUpAction.performed += OnLeftClickUp;
+            inputService.RightClickUpAction.performed += OnRightClickUp;
+            inputService.LeftClickAction.performed += OnLeftClick;
+            inputService.RightClickAction.performed += OnRightClick;
+            
+            //subscribe the contextmenubehaviour input events after, since there is a dependency here
+            inputService.RightClickUpAction.performed += contextMenuBehaviour.OnRightClick;
+            inputService.LeftClickUpAction.performed += contextMenuBehaviour.OnLeftClick;
+            inputService.LongPressAction.performed += contextMenuBehaviour.OnRightClick;
+            inputService.TouchAction.performed += contextMenuBehaviour.OnLeftClick;
+            
+            //objectselector could be enabled later on, so it would be missing the already instantiated mappings
+            ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
+            foreach (ObjectMapping mapping in alreadyActiveMappings)
+            {
+                OnAddObjectMapping(mapping);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.LeftClickUpAction.performed -= OnLeftClickUp;
+            inputService.RightClickUpAction.performed -= OnRightClickUp;
+            inputService.LeftClickAction.performed -= OnLeftClick;
+            inputService.RightClickAction.performed -= OnRightClick;
+            
+            inputService.RightClickUpAction.performed -= contextMenuBehaviour.OnRightClick;
+            inputService.LeftClickUpAction.performed -= contextMenuBehaviour.OnLeftClick;
+            inputService.LongPressAction.performed -= contextMenuBehaviour.OnRightClick;
+            inputService.TouchAction.performed -= contextMenuBehaviour.OnLeftClick;
+        }
+
+        private void OpenLayerPanel(LayerData layer)
+        {
+            toolService.GetTool(ToolType.Layer).Open();
+        }
+
+        private void CloseLayerPanel()
+        {
+            toolService.GetTool(ToolType.Layer).Close();
+        }
+
+        private bool IsColliderClicked(out HierarchicalObjectLayerGameObject ctxObject)
+        {
+            ctxObject = null;
+            //dont select any feature if a gizmo handle is interacted with
+            //todo make sure these colliders are associated with gizmo colliders
+            Vector2 screenPoint = Pointer.current.position.ReadValue();
+            Ray ray = App.Cameras.ActiveCamera.ScreenPointToRay(screenPoint);
+            int hitCount = Physics.RaycastNonAlloc(ray, selectedColliderHits, Mathf.Infinity);
+            //we have to loop through all potential colliders in case of a gizmo handle on top of another visualisation
+            bool hasHit = false;
+            if (hitCount > 0)
+            {
+                for (int i = 0; i < hitCount; i++)
+                {
+                    var hit = selectedColliderHits[i];
+                    Collider col = hit.collider;
+                    if (col != null)
+                    {
+                        HierarchicalObjectLayerGameObject target = col.GetComponentInParent<HierarchicalObjectLayerGameObject>();
+                        if (target != null)
+                            ctxObject = target;
+                        hasHit = true;
+                    }
+                }
+            }
+            return hasHit;
+        }
+
+        private bool TrySelectPolygon()
+        {
+            LayerData selectedPolygon = polygonSelectionService.ProcessPolygonSelection();
+            return selectedPolygon != null;
+        }
+
+        private Vector2 pointerDownPosition;
+        
+        private void OnLeftClick(InputAction.CallbackContext ctx)
+        {
+            pointerDownPosition = Mouse.current.position.ReadValue();
+        }
+
+        private void OnRightClick(InputAction.CallbackContext ctx)
+        {
+            pointerDownPosition = Mouse.current.position.ReadValue();
+        }
+
+        private List<Func<bool>> selectionConditions = new();
+
+        private void InitSelectionConditions()
+        {
+            selectionConditions = new List<Func<bool>>
+            {
+                IsNotOverUI,
+                IsWithinClickDistance
+            };
+        }
+
+        private bool IsNotOverUI()
+        {
+            return !App.UIRoot.IsPointerOverUI();
+        }
+
+        private bool IsWithinClickDistance()
+        {
+            return Vector2.Distance(
+                pointerDownPosition,
+                Mouse.current.position.ReadValue()
+            ) <= minClickDistance;
+        }
+
+        private bool CanProcessSelection()
+        {
+            foreach (var condition in selectionConditions)
+            {
+                if (!condition())
+                    return false;
+            }
+
+            return true;
+        }
+
+        public void AddSelectionPredicate(Func<bool> predicate)
+        {
+            selectionConditions.Add(predicate);
+        }
+
+        public void RemoveSelectionPredicate(Func<bool> predicate)
+        {
+            selectionConditions.Remove(predicate);
+        }
+
+        private void OnLeftClickUp(InputAction.CallbackContext ctx)
+        {
+            if (!CanProcessSelection()) return;
+
+            ProcessSelection(true);
+        }
+
+        private void OnRightClickUp(InputAction.CallbackContext ctx)
+        {
+            if (!CanProcessSelection()) return;
+
+            ProcessSelection(false);
+        }
+
+        public void ProcessSelection(bool primary)
+        {
+            selectedVisualisation = null;
+            HierarchicalObjectLayerGameObject ctxObject;
+            if (IsColliderClicked(out ctxObject))
+            {
+                if (ctxObject != null)
+                {
+                    selectedVisualisation = ctxObject;
+                    if (!ctxObject.LayerData.IsSelected)
+                    {
+                        ctxObject.LayerData.SelectLayer(true);
+                    }
+                    OnSelectLayer.Invoke(ctxObject.LayerData);
+                }
+                Deselect();
+                return;
+            }
+
+            if (TrySelectPolygon() || polygonSelectionService.IsEditingPolygon)
+            {
+                Deselect();
+                return;
+            }
+            
+            string previousSelectedBagId = null;
+            bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
+            if (!isModifierPressed)
+            {
+                previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
+                Deselect();
+            }
+            //the following method calls need to run in order!
+            string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
+            IMapping mapping = FindObjectMapping();
+            bool mappingVisible = IsMappingVisible(mapping, bagId);
+                
+            //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
+            if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
+            {
+                lastSelectedMappingLayerData.DeselectLayer();
+                lastSelectedMappingLayerData = null;
+            }
+            if (mapping is MeshMapping map) 
+                ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed, primary);   
+            else if (mapping is FeatureMapping feature) 
+                ProcessFeatureMappingSelection(feature);
+            else
+                OnNoLayerSelected.Invoke();
+        }
+
+        private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed, bool primary)
+        {
+            LayerData layerData = map.LayerData;
+            if (!mappingVisible)
+                return;
+
+            if(!layerData.IsSelected)
+                layerData.SelectLayer(true);
+                    
+            lastSelectedMappingLayerData = layerData;
+
+            if (!selectedMappings.ContainsKey(bagId) && (previousBagId != bagId || !primary))
+            {
+                SelectBagId(bagId, !isModifierPressed);
+                selectedMappings.Add(bagId, map);
+                SelectSubObjectWithBagId?.Invoke(map, bagId);
+            }
+            else if(!isModifierPressed || primary)
+            {
+                DeselectBagId(bagId);
+                selectedMappings.Remove(bagId);
+                SelectSubObjectWithBagId?.Invoke(selectedMappings.Count > 0 ? map : null, bagId);
+            }
+
+            OnSelectLayer.Invoke(layerData);
+        }
+
+        public void SelectBagId(string bagId, Coordinate coordinate)
+        {
+            MeshMapping mapping = subObjectSelector.FindSubObjectAtCoordinate(coordinate, bagId);
+            if(mapping == null) return;
+            
+            SelectBagId(bagId, false);
+            if (!selectedMappings.ContainsKey(bagId))
+                selectedMappings.Add(bagId, mapping);
+            SelectSubObjectWithBagId?.Invoke(mapping, bagId);
+        }
+
+        private void ProcessFeatureMappingSelection(FeatureMapping feature)
+        {
+            LayerData layerData = feature.VisualisationLayer.LayerData;
+            if(!layerData.IsSelected)
+                layerData.SelectLayer(true);
+                    
+            lastSelectedMappingLayerData = layerData;
+            SelectFeatureMapping(feature);
+
+            string key = feature.Id;
+            //when feature has no id, then get the newly created submesh name
+            if (feature.Id == null) 
+            {
+                List<Transform> children = feature.VisualisationLayer.Transform.GetChildren();
+                if (children.Count == 0)
+                {
+                    key = "invalid mapping";
+                    Debug.LogError(key);
+                }
+                else
+                    key = children[children.Count - 1].gameObject.name;
+            }
+            selectedMappings.TryAdd(key, feature);
+            SelectFeature?.Invoke(feature);
+            OnSelectLayer.Invoke(layerData);
+        }
+
+        public T GetReplacedMapping<T>(T mapping) where T : IMapping
+        {
+            List<IMapping> mappings = MappingTree.QueryMappingsContainingNode<T>(mapping.BoundingBox.Center);
+            if (mappings.Count == 0)
+                return default;
+
+            foreach (IMapping map in mappings)
+            {
+                if (map.MappingObject == null || map.Id != mapping.Id || map.LayerData.Id != mapping.LayerData.Id) continue;
+
+                return (T)map;
+            }
+            return default;
+        }
+
+        private void OnAddObjectMapping(ObjectMapping mapping)
+        {
+            MeshMapping objectMapping = new MeshMapping(mapping.name);
+            objectMapping.SetMeshObject(mapping);
+            objectMapping.UpdateBoundingBox();
+            objectMapping.SetSelectionMaterial(selectionMaterial);
+            MappingTree.RootInsert(objectMapping);
+            
+            subObjectSelector.UpdateReplacedSelectedMappings();
+        }
+
+        private void OnRemoveObjectMapping(ObjectMapping mapping)
+        {
+            //the getcomponent is unfortunate, if its performanc heavy maybe use cellcaching
+            BoundingBox queryBoundingBox = new BoundingBox(mapping.GetComponent<MeshRenderer>().bounds);
+            queryBoundingBox.Convert(CoordinateSystem.WGS84_LatLon);
+            List<IMapping> mappings = MappingTree.Query<MeshMapping>(queryBoundingBox);
+            foreach (MeshMapping map in mappings)
+            {
+                if (map.ObjectMapping == mapping)
+                {
+                    //destroy featuremapping object, there should be no references anywhere else to this object!
+                    MappingTree.Remove(map);
+                }
+            }
+        }
+
+        public string FindBagId()
+        {            
+            return subObjectSelector.FindSubObjectAtPointerPosition();            
+        }
+
+        private void SelectBagId(string bagId, bool deselectPrevious = true)
+        {
+            if(deselectPrevious)
+                subObjectSelector.Deselect();
+            subObjectSelector.Select(bagId);
+        }
+        
+        private void DeselectBagId(string bagId)
+        {
+            subObjectSelector.Deselect(bagId);
+        }
+
+        private void SelectFeatureMapping(FeatureMapping feature)
+        {
+            featureSelector.Select(feature);
+        }
+
+        private bool IsMappingVisible(IMapping mapping, string bagId)
+        {
+            if (mapping is MeshMapping map)
+            {
+                return subObjectSelector.IsMappingVisible(map, bagId);
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Finds a Mapping in the world by the current optical raycaster worldposition
+        /// </summary>
+        /// <returns></returns>
+        public IMapping FindObjectMapping()
+        {
+            Vector3 worldPoint = pointerToWorldPosition.GetWorldPointSync();
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, worldPoint) < minClickDistance;
+            lastWorldClickedPosition = worldPoint;
+
+            bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
+            lastTimeClicked = Time.time;
+
+            if (!clickedSamePosition || refreshSelection)
+            {
+                //when a geojson point is located on top of a feature in an objectmapping,
+                //we need to find the blocked objectmapping and find the hitpoint to find the geojson feature position beneath it
+                if (subObjectSelector.Object != null)
+                    featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
+                //the blocking objectmapping should be cleared when trying to select the next feature
+                else
+                    featureSelector.SetBlockingObjectMapping(null, Vector3.zero);
+
+                //no features are imported yet if mappingTreeInstance is null
+                if (mappingTreeInstance != null)
+                    featureSelector.FindFeatureAtPointerPosition();
+
+                orderedMappings.Clear();
+                Dictionary<IMapping, int> mappings = new Dictionary<IMapping, int>();
+                //lets order all mappings by layerorder (rootindex) from layerdata
+                if (featureSelector.HasFeatureMapping)
+                {
+                    List<Feature> filterDuplicates = new List<Feature>();
+                    foreach (FeatureMapping feature in featureSelector.FeatureMappings)
+                    {
+                        if (feature.VisualisationParent.LayerData.ActiveInHierarchy)
+                        {
+                            if (filterDuplicateFeatures)
+                            {
+                                if (!filterDuplicates.Contains(feature.Feature))
+                                    filterDuplicates.Add(feature.Feature);
+                                else
+                                    continue;
+                            }
+                            mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootId);
+                        }
+                    }
+                }
+                if (subObjectSelector.HasObjectMapping)
+                {
+                    LayerGameObject subObjectParent = subObjectSelector.Object.ObjectMapping.transform.GetComponentInParent<LayerGameObject>();
+                    if (subObjectParent != null)
+                    {
+                        if (subObjectParent.LayerData.ActiveInHierarchy)
+                            mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootId);
+                    }
+                }
+                orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
+                currentSelectedMappingIndex = 0;
+            }
+            else
+            {
+                //clicking at same position so lets toggle through the list
+                currentSelectedMappingIndex++;
+                if (currentSelectedMappingIndex >= orderedMappings.Count)
+                    currentSelectedMappingIndex = 0;
+            }
+
+            if (orderedMappings.Count == 0) return null;
+
+            IMapping selection = orderedMappings[currentSelectedMappingIndex];
+            return selection;
+        }
+
+        public void Deselect()
+        {
+            selectedMappings.Clear();
+            subObjectSelector.Deselect();
+            featureSelector.Deselect();
+            OnDeselect.Invoke();
+        }
+
+#if UNITY_EDITOR
+        public void OnDrawGizmos()
+        {
+            if (debugMappingTree)
+                MappingTree.DebugTree();
+        }
+#endif
+    }
+}

@@ -61,7 +61,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private GeoJSONPointLayer pointFeaturesLayer;
         
         private ICredentialHandler credentialHandler;
-
+        private bool startLoadingDataWhenLayerBecomesActive = false;
+        
         public struct PendingFeature
         {
             public Feature Feature;
@@ -117,7 +118,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
             
             LayerData.HasValidCredentials = true;
-            StartLoadingData(uri, auth);
+            
+            if(LayerData.ActiveInHierarchy)
+            {
+                StartLoadingData(uri, auth);
+            }
+            else
+            {
+                startLoadingDataWhenLayerBecomesActive = true;
+            }
         }
 
         protected void StartLoadingData(Uri uri, StoredAuthorization auth)
@@ -130,6 +139,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             else if (uri.IsRemoteAsset())
             {
                 StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            }
+        }
+
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            base.OnLayerActiveInHierarchyChanged(isActive);
+            if (!LayerData.HasValidCredentials) //in case we activate the layer for the first time, and we have invalid credentials, reset the loading flag and wait for valid credentials
+            {
+                startLoadingDataWhenLayerBecomesActive = false;
+                return; 
+            }
+            
+            if (isActive && startLoadingDataWhenLayerBecomesActive) //in case we activate the layer with valid credentials for the first time, and we are still waiting for a load, parse the data.
+            {
+                var auth = credentialHandler.Authorization;
+                var uri =  auth.SanitizeUrl(credentialHandler.Uri);
+                StartLoadingData(uri, auth);
+                startLoadingDataWhenLayerBecomesActive = false;
             }
         }
 
@@ -196,7 +223,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             objectMapping.SetVisualisationLayer(layer);
             objectMapping.SetGeoJsonLayerParent(this);
             objectMapping.UpdateBoundingBox();
-            ObjectSelectorService.MappingTree.RootInsert(objectMapping);
+            SelectionService.MappingTree.RootInsert(objectMapping);
         }
 
         private void SetVisualization(LayerGameObject layerGameObject)
@@ -322,13 +349,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
             IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
             BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
-            List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<FeatureMapping>(queryBoundingBox);
+            List<IMapping> mappings = SelectionService.MappingTree.Query<FeatureMapping>(queryBoundingBox);
             foreach (FeatureMapping mapping in mappings)
             {
                 if (mapping.Feature == feature)
                 {
                     //destroy featuremapping object, there should be no references anywhere else to this object!
-                    ObjectSelectorService.MappingTree.Remove(mapping);
+                    SelectionService.MappingTree.Remove(mapping);
                 }
             }
         }

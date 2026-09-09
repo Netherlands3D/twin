@@ -26,7 +26,6 @@
 }
 
 .inspector-polygon-grid__body-tip-text{
-    white-space: pre-wrap;
 }
 
 .inspector-polygon-grid__number-fields-row{
@@ -52,4 +51,9 @@
     border-width: 0;
     padding: 0;
     min-height: auto;
+}
+
+/*todo: this is a quick fix for the release, we should check if this can have a more robust solution*/
+.inspector-polygon-grid__item.number-field.number-field--style-small{
+    width: var(--spacing-25);
 }

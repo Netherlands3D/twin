@@ -32,12 +32,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnVisualizationInitialize()
         {
             base.OnVisualizationInitialize();
-
+            layerTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer);
             CreateTextPopup();
            
             WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
-
-            layerTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer);
         }
 
         private void OnBlockerClicked()

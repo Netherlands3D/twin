@@ -25,7 +25,7 @@ namespace Netherlands3D.UI.Panels
         private TreeView treeView;
         private ScrollView scrollView;
         private const float scrollSpeed = 300f; // px/s
-
+        
         private LayerData rootLayer;
         private LayerDragGhost dragGhost;
         private float dropMargin = 0.25f; //top 25% and bottom 25% are for reordering, 25%-75% is for reparenting
@@ -37,6 +37,7 @@ namespace Netherlands3D.UI.Panels
         private LayerTreeViewItem referenceLayerItem;
         private Button hoveredButton;
 
+        private Button scenarioButton;
         private Button folderButton;
         private Button deleteButton;
         
@@ -61,7 +62,6 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
 
             treeView = this.Q<TreeView>();
-            treeView.autoExpand = true;
 
             treeView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             treeView.selectionType = SelectionType.Multiple;
@@ -72,7 +72,6 @@ namespace Netherlands3D.UI.Panels
             treeView.unbindItem = UnbindItem;
 
             treeView.selectionChanged += OnSelectionChanged;
-            treeView.RegisterCallback<BlurEvent>(OnBlur);
 
             scrollView = treeView.Q<ScrollView>();
 
@@ -80,6 +79,9 @@ namespace Netherlands3D.UI.Panels
             PopulateLayerPanel(ProjectData.Current.RootLayer);
 
             //bottom buttons
+            scenarioButton = this.Q<Button>("ScenarioButton");
+            scenarioButton.RegisterCallback<ClickEvent>(OnScenarioButtonClicked);
+
             folderButton = this.Q<Button>("FolderButton");
             folderButton.RegisterCallback<ClickEvent>(OnFolderButtonClicked);
 
@@ -91,6 +93,7 @@ namespace Netherlands3D.UI.Panels
             
             App.Layers.LayerAdded.AddListener(OnLayerHierarchyChanged);
             App.Layers.LayerRemoved.AddListener(OnLayerHierarchyChanged);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             
             schedule.Execute(() =>
@@ -115,6 +118,12 @@ namespace Netherlands3D.UI.Panels
             }).Every(0); // 0ms = runs every frame
         }
 
+        private void OnProjectChanged(ProjectData newProject)
+        {
+            rootLayer = newProject.RootLayer;
+            OnRequestRebuild();
+        }
+
         private void OnLayerHierarchyChanged(LayerData changedLayer)
         {
             OnRequestRebuild();
@@ -124,19 +133,21 @@ namespace Netherlands3D.UI.Panels
         {
             App.Layers.LayerAdded.RemoveListener(OnLayerHierarchyChanged);
             App.Layers.LayerRemoved.RemoveListener(OnLayerHierarchyChanged);
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
         }
 
-        private void OnBlur(BlurEvent evt)
+        public override void OnInspectorClick(InspectorPanel inspector)
         {
             var pos = Pointer.current.position.ReadValue();
             var panelPos = RuntimePanelUtils.ScreenToPanel(
-                treeView.panel,
+                inspector.panel,
                 new Vector2(pos.x, Screen.height - pos.y)
             );
 
-            var inPanel = treeView.worldBound.Contains(panelPos) && scrollView.contentContainer.worldBound.Contains(panelPos);
-            var overButton = deleteButton.worldBound.Contains(panelPos) || folderButton.worldBound.Contains(panelPos);
-            if (!inPanel && !overButton)
+            var inInspectorPanel = inspector.worldBound.Contains(panelPos);
+            var inTreeViewLayerContainer = scrollView.contentContainer.worldBound.Contains(panelPos);
+            var overButton = deleteButton.worldBound.Contains(panelPos) || folderButton.worldBound.Contains(panelPos) || scenarioButton.worldBound.Contains(panelPos);
+            if (inInspectorPanel && !inTreeViewLayerContainer && !overButton)
             {
                 treeView.ClearSelection();
                 referenceLayerItem = null;
@@ -146,7 +157,7 @@ namespace Netherlands3D.UI.Panels
         private void OnSelectionChanged(IEnumerable<object> selectedObjects)
         {
             var layerDatas = selectedObjects.Cast<LayerData>().ToList(); //Make a copy to ensure we have a collection that is not modified due to deselecting
-
+            
             ProjectData.Current.RootLayer.DeselectAllLayers();
 
             foreach (LayerData data in layerDatas)
@@ -156,17 +167,69 @@ namespace Netherlands3D.UI.Panels
             }
         }
 
-        private void OnFolderButtonClicked(ClickEvent evt)
+        private void ToggleVisibilityOfSelection(int clickedRootIndex, bool active)
         {
-            CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1); //only group if we have multiple layers selected
+            var selectedTreeIndices = treeView.selectedIndices.ToList();
+
+            //convert the treeIndex to the rootIndex. The tree index ignores collapsed items, and only counts visible treeViewItems,
+            //the rootIndex is the stable index of the item in the tree (including collapsed items)
+            var toggledSelectedLayer = false;
+            for (var i = 0; i < selectedTreeIndices.Count; i++)
+            {
+                var treeIndex = selectedTreeIndices[i];
+                var rootIndex = treeView.GetIdForIndex(treeIndex);
+                if (rootIndex == clickedRootIndex)
+                {
+                    toggledSelectedLayer = true;
+                    break;
+                }
+            }
+
+            if (!toggledSelectedLayer) //we toggled a different layer than the selected layers, don't toggle the selected layers
+                return;
+
+            foreach (var index in selectedTreeIndices) //make a copy of the indices, because they might change
+            {
+                var layerData = treeView.GetItemDataForIndex<LayerData>(index);
+                layerData.ActiveSelf = active;
+            }
+            doRefresh = true;
         }
 
-        private void CreateFolderAndGroupLayers(bool group)
+        private void OnScenarioButtonClicked(ClickEvent evt)
+        {
+            CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1, true); //only group if we have multiple layers selected
+        }
+
+        private string GetUniqueScenarioName()
+        {
+            const string defaultName = "Nieuw scenario";
+
+            var existingNames = ProjectData.Current.RootLayer.GetFlatHierarchy().Select(layer => layer.Name).ToHashSet(); //todo this is too heavy for what it should do
+
+            if (!existingNames.Contains(defaultName))
+                return defaultName;
+
+            var suffix = 2;
+
+            while (existingNames.Contains($"{defaultName} {suffix}"))
+                suffix++;
+
+            return $"{defaultName} {suffix}";
+        }
+
+        private void OnFolderButtonClicked(ClickEvent evt)
+        {
+            CreateFolderAndGroupLayers(treeView.selectedIndices.Count() > 1, false); //only group if we have multiple layers selected
+        }
+
+        private void CreateFolderAndGroupLayers(bool group, bool isScenario)
         {
             var layersToGroup = treeView.selectedItems.Cast<LayerData>().ToList(); //make a copy with ToList because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
-            layersToGroup.OrderBy(l => l.RootId);
+            layersToGroup = layersToGroup.OrderBy(layer => layer.RootId).ToList();
 
-            var newGroup = App.Layers.Add(new FolderPreset.Args("Folder"));
+            var name = isScenario ? GetUniqueScenarioName() : "Folder";
+            var newGroup = App.Layers.Add(new FolderPreset.Args(name, isScenario));
             var referenceLayer = referenceLayerItem?.LayerData;
             var siblingIndex = referenceLayer == null ? -1 : referenceLayer.SiblingIndex;
 
@@ -180,22 +243,10 @@ namespace Netherlands3D.UI.Panels
                 }
             }
 
+            newGroup.LayerData.IsExpanded = true;
             RebuildTree();
-
-            ExpandToItem(newGroup.LayerData);
-
+            
             RequestSelection(group ? layersToGroup : new List<LayerData>() { newGroup.LayerData });
-        }
-
-        private void ExpandToItem(LayerData layerData)
-        {
-            // Walk up the hierarchy and collect all ancestors
-            var ancestors = layerData.GetAncestors();
-
-            foreach (var ancestor in ancestors)
-            {
-                treeView.ExpandItem(ancestor.RootId);
-            }
         }
 
         private List<LayerData> selectionToRestore = new List<LayerData>();
@@ -213,7 +264,7 @@ namespace Netherlands3D.UI.Panels
             {
                 indicesToSelect.Add(layer.RootId);
             }
-
+            
             treeView.SetSelection(indicesToSelect);
         }
 
@@ -258,7 +309,22 @@ namespace Netherlands3D.UI.Panels
             this.rootLayer = rootLayer;
             var tree = LayerTreeViewUtility.ToTreeViewItems(rootLayer, treeView);
             treeView.SetRootItems(tree);
+            ReExpandTree(rootLayer);
+            
             treeView.RefreshItems();
+        }
+
+        private void ReExpandTree(LayerData layer)
+        {
+            foreach (var child in layer.ChildrenLayers)
+            {
+                if (child.IsExpanded)
+                {
+                    treeView.ExpandItem(child.RootId, false, false);
+                    ReExpandTree(child);
+                }
+            }
+            OnRequestRefresh();
         }
 
         private VisualElement MakeItem()
@@ -270,7 +336,10 @@ namespace Netherlands3D.UI.Panels
             layerRowElement.Dragging.AddListener(OnDraggingLayerItem);
             layerRowElement.DragEnded.AddListener(OnDraggingLayerItemEnded);
             layerRowElement.RegisterCallback<ClickEvent>(SetReferenceLayer);
-            return layerRowElement;
+
+           
+            
+            return new ListViewItem(layerRowElement);
         }
 
         private void SetReferenceLayer(ClickEvent evt)
@@ -280,29 +349,38 @@ namespace Netherlands3D.UI.Panels
 
         private void BindItem(VisualElement item, int index)
         {
-            if (item is not LayerTreeViewItem layerRowElement) return;
+
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<LayerTreeViewItem>() is not LayerTreeViewItem layerRowElement) return;
+          
 
             var layerData = treeView.GetItemDataForIndex<LayerData>(index);
             layerRowElement.Initialize(layerData);
             layerRowElement.SelectLayerItem.AddListener(SelectItemWithoutNotify);
             layerRowElement.DeselectLayerItem.AddListener(DeselectWithoutNotify);
+            layerRowElement.VisibilityToggleChanged.AddListener(ToggleVisibilityOfSelection);
 
             if (layerData.IsSelected)
             {
                 SelectItemWithoutNotify(layerRowElement);
             }
         }
-
+        
         private void UnbindItem(VisualElement item, int index)
         {
-            if (item is not LayerTreeViewItem layerRowElement) return;
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<LayerTreeViewItem>() is not LayerTreeViewItem layerRowElement) return;
 
             layerRowElement.RemoveLayerDataListeners(layerRowElement.LayerData);
+            layerRowElement.SelectLayerItem.RemoveListener(SelectItemWithoutNotify);
+            layerRowElement.DeselectLayerItem.RemoveListener(DeselectWithoutNotify);
+            layerRowElement.VisibilityToggleChanged.RemoveListener(ToggleVisibilityOfSelection);
+
         }
         
         private void DeselectWithoutNotify(LayerTreeViewItem item)
         {
-            var index = treeView.GetIndexFromElement(item);
+            var index = treeView.GetIndexFromElement(item.GetFirstAncestorOfType<ListViewItem>());
             if (treeView.selectedIndices.Contains(index))
             {
                 var newSelection = treeView.selectedIndices.ToList();
@@ -313,7 +391,7 @@ namespace Netherlands3D.UI.Panels
 
         private void SelectItemWithoutNotify(LayerTreeViewItem item)
         {
-            var index = treeView.GetIndexFromElement(item);
+            var index = treeView.GetIndexFromElement(item.GetFirstAncestorOfType<ListViewItem>());
             var newIndices = treeView.selectedIndices.ToList();
             newIndices.Add(index);
             treeView.SetSelectionWithoutNotify(newIndices);
@@ -473,7 +551,9 @@ namespace Netherlands3D.UI.Panels
                 if (hoveredButton == deleteButton)
                     DeleteSelectedLayers();
                 else if (hoveredButton == folderButton)
-                    CreateFolderAndGroupLayers(true); //always group when dragging on the button
+                    CreateFolderAndGroupLayers(true, false); //always group when dragging on the button
+                else if (hoveredButton == scenarioButton)
+                    CreateFolderAndGroupLayers(true, true); //always group when dragging on the button
             }
             else if (hoveredItem != null)
             {
@@ -527,6 +607,7 @@ namespace Netherlands3D.UI.Panels
                 selectedLayer.SetParent(newParent, newSiblingIndex);
             }
 
+            newParent.IsExpanded = true;
             RequestSelection(selection);
         }
     }

@@ -243,9 +243,9 @@ namespace Netherlands3D.Coordinates
         static bool XYisValid(double x, double y)
         {
             bool inRange = false;
-            if (x > -7000 && x < 300000)
+            if (x > 646.36 && x < 306671.01)
             {
-                if (y > 289000 && y < 629000)
+                if (y > 284347.25 && y < 637111.02)
                 {
                     inRange = true;
                 }

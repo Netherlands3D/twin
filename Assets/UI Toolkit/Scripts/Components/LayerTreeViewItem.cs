@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
@@ -41,15 +40,16 @@ namespace Netherlands3D.UI.Components
         private VisualElement itemRoot;
         public VisualElement ItemRoot => itemRoot;
         public VisibilityState VisibilityState => isActiveToggle.Image;
-        public IconImage LayerTypeIcon => layerTypeIcon.Image;
+        public string LayerTypeIcon => layerTypeIcon.Image;
 
         private VisualElement indent;
-        private VisualElement foldout;
+        private UnityEngine.UIElements.Toggle foldout;
         public float IndentWidth => indent.resolvedStyle.width;
         public Rect FoldoutWorldBound => foldout.worldBound;
         
         public UnityEvent<LayerTreeViewItem> SelectLayerItem = new();
         public UnityEvent<LayerTreeViewItem> DeselectLayerItem = new();
+        public UnityEvent<int, bool> VisibilityToggleChanged = new();
 
         public LayerTreeViewItem()
         {
@@ -132,16 +132,22 @@ namespace Netherlands3D.UI.Components
                 propertyPanelBehaviour.PropertySectionOpened.AddListener(CheckPropertyToggle);
                 propertyPanelBehaviour.PropertySectionClosed.AddListener(UncheckPropertyToggle);
             }
-
             if (!layoutReordered)
                 UpdateLayout();
+
+            foldout.RegisterValueChangedCallback(OnFoldoutToggleChanged);
+        }
+
+        private void OnFoldoutToggleChanged(ChangeEvent<bool> evt)
+        {
+            LayerData.IsExpanded = evt.newValue;
         }
 
         private void UpdateLayout()
         {
             itemRoot = GetTreeViewItemRoot();
             indent = ItemRoot.Q("unity-tree-view__item-indent");
-            foldout = ItemRoot.Q(className: "unity-tree-view__item-toggle");
+            foldout = ItemRoot.Q<UnityEngine.UIElements.Toggle>(className: "unity-tree-view__item-toggle");
                 
             if (itemRoot == null) return;
             itemRoot.AddComponentStylesheetByType(GetType());
@@ -162,6 +168,7 @@ namespace Netherlands3D.UI.Components
         {
             propertyPanelBehaviour.PropertySectionClosed.RemoveListener(UncheckPropertyToggle);
             propertyPanelBehaviour.PropertySectionOpened.RemoveListener(CheckPropertyToggle);
+            foldout.UnregisterValueChangedCallback(OnFoldoutToggleChanged);
         }
 
         private VisualElement GetTreeViewItemRoot()
@@ -177,7 +184,13 @@ namespace Netherlands3D.UI.Components
 
         private void OnIsActiveToggleChanged(ChangeEvent<bool> evt)
         {
-            LayerData.ActiveSelf = evt.newValue;
+            //if the layer that is being toggled is selected, we want to toggle all the selected layers (through the LayerPanel that has access to all selected layers), if this layer is not selected, we only want to toggle this layer's visiblity
+            if(LayerData.IsSelected)
+                VisibilityToggleChanged.Invoke(LayerData.RootId, evt.newValue); //invoke an event to allow toggling of multi-selected items
+            else
+                LayerData.ActiveSelf = evt.newValue;
+            
+            evt.StopPropagation(); //avoid the layer from deselecting
         }
 
         private void UncheckPropertyToggle(LayerData layerData)
@@ -215,6 +228,10 @@ namespace Netherlands3D.UI.Components
                 RemoveLayerDataListeners(previous);
             
             userData = layerData;
+            
+            //Virtualisation causes this LayerTreeViewItem to be reused in some cases, so we disable the property toggle in case it was active, and then re-enable it if the propertyPanelBehaviour's active layer matches this element's layer
+            propertyToggle.SetValueWithoutNotify(false);
+            CheckPropertyToggle(propertyPanelBehaviour.activeLayer);
 
             SetAppearance(layerData);
 
@@ -265,10 +282,10 @@ namespace Netherlands3D.UI.Components
         private void SetAppearance(LayerData layerData)
         {
             var validCredentials = layerData.HasValidCredentials;
-            isActiveToggle.SetEnabled(validCredentials);
+            isActiveToggle.SetEnabled(validCredentials); // make the visibility toggle un-interactable
             ItemRoot.EnableInClassList("credentials-needed", !validCredentials);
 
-            UpdateNameLabels(layerData, layerData.Name);
+            UpdateNameLabels(layerData.Name);
             UpdateEnabledToggle(layerData.ActiveInHierarchy);
             UpdateColorBar(validCredentials ? layerData.Color : null); //clear the colorbar style to ensure the warning color is not overridden when the credentials are invalid
             UpdateLayerTypeIcon();
@@ -277,6 +294,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnPropertiesChanged(LayerPropertyData propertyData)
         {
+            UpdateLayerTypeIcon();
             LoadProperties(LayerData.LayerProperties);
         }
 
@@ -346,7 +364,7 @@ namespace Netherlands3D.UI.Components
             layerTypeIcon.Image = LayerTypeSpriteLibrary.GetIconImage(LayerData); //todo test if the icon updates when setting prefab (scatter)
         }
 
-        private void UpdateNameLabels(LayerData layerData, string newName)
+        private void UpdateNameLabels(string newName)
         {
             nameInputField.SetValueWithoutNotify(newName);
         }

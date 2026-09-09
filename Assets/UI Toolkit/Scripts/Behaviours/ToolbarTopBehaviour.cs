@@ -11,8 +11,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
     public class ToolbarTopBehaviour : MonoBehaviour
     {
         private Tool domeTool;
-        [SerializeField] private TriggerEvent snapshotEvent;
-
         private ToolbarToolbox toolbarToolbox;
 
         private void OnEnable()
@@ -48,7 +46,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnScreenshotClicked()
         {
-            snapshotEvent.InvokeStarted();
+            ServiceLocator.GetService<Snapshots.Snapshots>().TakeSnapshot();
         }
     }
 }

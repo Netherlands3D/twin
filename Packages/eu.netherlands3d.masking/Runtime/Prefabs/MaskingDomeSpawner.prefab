@@ -61,6 +61,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -82,9 +87,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &4787914634238784781
 SphereCollider:
@@ -185,7 +192,7 @@ MonoBehaviour:
   onHoveringChange:
     m_PersistentCalls:
       m_Calls: []
-  scaleHandle: {fileID: 3782864059254180730}
+  scaleAnchor: {fileID: 8088167683218375159}
 --- !u!1 &3513759955359075223
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,8 +381,10 @@ MonoBehaviour:
   sphericalMaskFeatureKeyword: _SPHERICAL_MASKING
   sphericalMaskPositionName: _SphericalMaskPosition
   sphericalMaskRadiusName: _SphericalMaskRadius
+  sphericalMaskBitIndexName: _SphericalMaskBitIndex
   resetMaskOnDisable: 1
   domeVisualisation: {fileID: 2490938990270525891}
+  tempCanvas: {fileID: 0}
 --- !u!1 &7825413630840843181
 GameObject:
   m_ObjectHideFlags: 0

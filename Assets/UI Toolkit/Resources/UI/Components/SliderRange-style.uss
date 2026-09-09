@@ -5,31 +5,14 @@
 }
 
 .slider-range .unity-min-max-slider__dragger {
-    translate: 0 -4px; /* Override automatic off-center positioning */
     justify-content: center;
     height: var(--spacing-2);
     background-color: var(--color-blue-700);
 }
 
 .slider-range .unity-min-max-slider__min-thumb {
-    translate: 4px 0; /* Override automatic off-center positioning */
 } 
-
 .slider-range .unity-min-max-slider__max-thumb {
-    translate: -4px 0; /* Override automatic off-center positioning */
-} 
-
-.slider-range__row {
-    flex-direction: row;
-    align-items: center;
-    min-width: 0;
-}
-
-/* Ensure the slider part takes remaining space */
-.slider-range__row .unity-min-max-slider__input {
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-width: 0;
 }
 
 .slider-range .min-field {

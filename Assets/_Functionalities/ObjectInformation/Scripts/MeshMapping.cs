@@ -2,6 +2,7 @@
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
@@ -102,7 +103,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public Coordinate GetCoordinateForObjectMappingItem(ObjectMapping objectMapping, ObjectMappingItem mapping)
         {
             MeshFilter mFilter = objectMapping.gameObject.GetComponent<MeshFilter>();
-            Vector3[] vertices = mFilter.sharedMesh.vertices;
             Vector3 centr = Vector3.zero;
             for (int i = mapping.firstVertex; i < mapping.firstVertex + mapping.verticesLength; i++)
                 centr += vertices[i];
@@ -251,12 +251,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
         public bool IsPositionHit(Vector3 worldPosition, Vector3[] vertices, int[] triangles, Transform meshTransform)
-        {            
-            Vector3 localPosition = meshTransform.InverseTransformPoint(worldPosition);            
-            Vector3 dir = worldPosition - Camera.main.transform.position;
+        {
+            var cam = App.Cameras.ActiveCamera;
+            Vector3 dir = worldPosition - cam.transform.position;
 
             //shoot towards optical point
-            Ray camRay = new Ray(Camera.main.transform.position, dir); 
+            Ray camRay = new Ray(cam.transform.position, dir); 
 
             //get valid traingle index
             int firstTriangleIndex = -1;

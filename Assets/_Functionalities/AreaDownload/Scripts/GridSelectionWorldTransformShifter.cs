@@ -8,11 +8,11 @@ namespace Netherlands3D.Functionalities.AreaDownload
 {
     public class GridSelectionWorldTransformShifter : WorldTransformShifter
     {
-        private SelectionTools.AreaSelection areaSelection;
+        private SelectionTools.GridInput _gridInput;
 
         private void Awake()
         {
-            areaSelection = GetComponent<SelectionTools.AreaSelection>();
+            _gridInput = GetComponent<SelectionTools.GridInput>();
         }
         
         private void Start()
@@ -27,14 +27,14 @@ namespace Netherlands3D.Functionalities.AreaDownload
 
         private Vector3 CalculateOffset(double easting, double northing)
         {
-            var offsetX = easting % areaSelection.GridSize;
-            var offsetY = northing % areaSelection.GridSize;
+            var offsetX = easting % _gridInput.GridSize;
+            var offsetY = northing % _gridInput.GridSize;
             return new Vector3((float)-offsetX, 0, (float)-offsetY);
         }
 
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
-            areaSelection.SetSelectionVisualEnabled(false);
+            _gridInput.SetSelectionVisualEnabled(false);
         }
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
@@ -44,7 +44,7 @@ namespace Netherlands3D.Functionalities.AreaDownload
 
         private void UpdateGridOffset()
         {
-            areaSelection.GridOffset = CalculateOffset(Origin.current.Coordinate.easting, Origin.current.Coordinate.northing);
+            _gridInput.GridOffset = CalculateOffset(Origin.current.Coordinate.easting, Origin.current.Coordinate.northing);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Netherlands3D.UI.Components
             set => ParseSpeedSteps(value ?? string.Empty);
         }
 
-        private float[] speedSteps = { 0.5f, 1f, 2f, 3f };
+        private float[] speedSteps = { 0.5f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f, 11f, 12f, 13f, 14f, 15f, 16f, 17f, 18f, 19f, 20f, 21f, 22f, 23f, 24f, 25f, 26f, 27f, 28f, 29f, 30f };
 
         public event Action<float> SpeedChanged;
         public event Action<bool> PlayToggled;

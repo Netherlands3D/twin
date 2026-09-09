@@ -50,12 +50,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bafcfbd446e9c41acd7452b6146804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: 445da62e811e3254c927570f340ea56d,
-    type: 3}
   lineColor: {r: 1, g: 0, b: 0, a: 1}
   closedLoopLineColor: {r: 1, g: 0, b: 0, a: 1}
   lineWidthMultiplier: 10
-  maxSelectionDistanceFromCamera: 10000
   snapToStart: 1
   requireClosedPolygon: 1
   closeLoopAtStartPoint: 1
@@ -76,16 +73,12 @@ MonoBehaviour:
   mode: 0
   polygonLineRenderer: {fileID: 4058972552526488190}
   previewLineRenderer: {fileID: 0}
-  currentWorldCoordinate: {x: 0, y: 0, z: 0}
   positions: []
   pointerRepresentation: {fileID: 0}
   showPointerInEditMode: 0
   showPointerInCreateMode: 1
   showPointerInCreateAndEditMode: 1
   handleTemplate: {fileID: 0}
-  blockCameraDrag:
-    m_PersistentCalls:
-      m_Calls: []
   createdNewPolygonArea:
     m_PersistentCalls:
       m_Calls: []
@@ -95,37 +88,12 @@ MonoBehaviour:
   previewLineHasChanged:
     m_PersistentCalls:
       m_Calls: []
-  blockCameraDragging:
+  OnHandleCreated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   whenDrawingArea:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Functionalities.AreaDownload.AreaSelection,
-          eu.netherlands3d.twin
-        m_MethodName: SetDuringSelectionAreaBounds
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   whenAreaIsSelected:
     m_PersistentCalls:
       m_Calls:
@@ -133,19 +101,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Netherlands3D.SelectionTools.BoundsToRDBoundingBox,
           eu.netherlands3d.selection-tools.Runtime
         m_MethodName: ConvertToRD
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Functionalities.AreaDownload.AreaSelection,
-          eu.netherlands3d.twin
-        m_MethodName: SetSelectionAreaBounds
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -210,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!120 &4058972552526488190
 LineRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -229,6 +184,8 @@ LineRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -250,9 +207,11 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
@@ -311,7 +270,6 @@ LineRenderer:
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_MaskInteraction: 0
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
@@ -376,6 +334,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -397,9 +357,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4919248220237845915
 GameObject:
@@ -462,6 +424,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -483,7 +447,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}

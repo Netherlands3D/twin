@@ -1,0 +1,39 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
+    editor-extension-mode="False"  
+    class="default-hud"
+>
+    <ui:VisualElement picking-mode="Ignore" class="default-hud__main-section">
+        <ui:VisualElement picking-mode="Ignore" name="LeftSection" class="default-hud__left-section">
+            <nl3d:HamburgerMenu/>
+            <ui:VisualElement picking-mode="Ignore" class="default-hud__inspector-zone">
+                <nl3d:ToolbarMain picking-mode="Ignore"/>
+                <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
+                <nl3dP:LegendPanel />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="TopSection" class="default-hud__top-section" picking-mode="Ignore">
+            <nl3d:ToolbarToolbox picking-mode="Ignore" />
+            <nl3d:ToolbarScenario />
+        </ui:VisualElement>
+        <ui:VisualElement name="PropertiesZone" class="default-hud__properties-zone">
+            <nl3dP:SecondaryPropertiesPanel name="SecondaryPropertiesPanel" class="default-hud__properties-zone-column"/>
+            <nl3dP:PropertiesPanel name="PropertiesPanel" class="default-hud__properties-zone-column"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
+        <ui:VisualElement name="BottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
+            <nl3d:DebugInfo/>
+            <nl3d:Footer/>
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomTools" picking-mode="Ignore" class="default-hud__bottom-tools">
+            <nl3d:ToolbarNavigation />
+            <ui:VisualElement name="CameraSlider"/>
+        </ui:VisualElement>
+        <nl3d:MapViewport bottom-left="0, 300000" top-right="280000, 620000" layer-start-index="3" resize-on-hover="true" class="map-viewport--fixed-size"/>
+    </ui:VisualElement>
+</ui:UXML>

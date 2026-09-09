@@ -4,7 +4,9 @@
     "references": [
         "eu.netherlands3d.snapshots.Runtime",
         "eu.netherlands3d.filebrowser.Runtime",
-        "eu.netherlands3d.sun.Runtime"
+        "eu.netherlands3d.sun.Runtime",
+        "eu.netherlands3d.twin.services",
+        "eu.netherlands3d.twin.cameras"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

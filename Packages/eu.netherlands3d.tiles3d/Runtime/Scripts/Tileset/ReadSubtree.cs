@@ -105,6 +105,7 @@ namespace Netherlands3D.Tiles3D
         private void AddChild(Tile parentTile, int localIndex, int LevelStartIndex, int childNumber)
         {
             Tile childTile = new Tile();
+            Debug.Log("tile created");
             childTile.parent = parentTile;
             childTile.tileSet = parentTile.tileSet;
             childTile.tileTransform = parentTile.tileTransform;

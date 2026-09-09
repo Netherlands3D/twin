@@ -1,5 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
+using Netherlands3D.Masking;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -25,15 +25,16 @@ namespace Netherlands3D.UI.Panels
         {
             base.SpawnFloatingPanelContent(floatingPanel, constructorArgs);
             var rootLayer = constructorArgs[0] as LayerData;
-            MaskingPanel content = new MaskingPanel(rootLayer, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
-            content.SetHeader(headerText);
-            content.SetDescription(description);
+            content = new MaskingPanel(rootLayer, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
+            MaskingPanel maskingPanel = content as MaskingPanel;
+            maskingPanel.SetHeader(headerText);
+            maskingPanel.SetDescription(description);
             return content;
         }
         
         public override bool ShouldBeActive()
         {
-            return domeTool.IsOpen;
+            return domeTool.IsOpen && ServiceLocator.GetService<DomeService>().IsPointerOnDome;
         }
     }
 }

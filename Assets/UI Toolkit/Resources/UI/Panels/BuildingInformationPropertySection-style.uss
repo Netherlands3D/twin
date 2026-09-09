@@ -1,5 +1,4 @@
 .building-information__divider{
-    display: flex;
     flex-grow: 1;
     height: var(--spacing-0_5);
     min-height: var(--spacing-0_5);    
@@ -40,4 +39,18 @@
 
 .building-information-thumbnail__container{
     flex-shrink: 0;
+}
+
+.building-information-address__list-view .unity-label{  
+    margin: 0 0 0 0;
+    padding: 0;
+
+}
+
+.building-information-address__list-view .unity-collection-view__item:checked {
+    background-color: transparent;
+}
+
+.building-information-address__list-view .unity-collection-view__item:hover {
+    background-color: transparent;
 }

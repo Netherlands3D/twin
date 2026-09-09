@@ -48,8 +48,10 @@ namespace Netherlands3D.UI.Behaviours
         private void Start()
         {
             PolygonSelectionService polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            PolygonCreationService polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             inspectorPanel.OnShow += polygonSelectionService.EnablePolygonSelection;
             inspectorPanel.OnHide += polygonSelectionService.DisablePolygonSelection;
+            inspectorPanel.OnHide += polygonCreationService.SetGridInputModeToSelectedWithoutNotify;
         }
 
         private void OnEnable()
@@ -59,7 +61,6 @@ namespace Netherlands3D.UI.Behaviours
                 toolWithPanel.onOpen.AddListener(toolListeners[toolWithPanel]);
                 toolWithPanel.onClose.AddListener(Close);
             }
-            toolService.GetTool(ToolType.Settings).onOpen.AddListener(((IWindow)SettingsWindow).Open);
             toolService.GetTool(ToolType.Help).onOpen.AddListener(OpenHelp);
             inspectorPanel.InspectorHeaderCloseButton.clicked += CloseActiveTool;
             toolService.AnyToolOpened.AddListener(OnAnyToolOpened);
@@ -72,7 +73,6 @@ namespace Netherlands3D.UI.Behaviours
                 toolWithPanel.onOpen.RemoveListener(toolListeners[toolWithPanel]);
                 toolWithPanel.onClose.RemoveListener(Close);
             }
-            toolService.GetTool(ToolType.Settings).onOpen.RemoveListener(((IWindow)SettingsWindow).Open);
             toolService.GetTool(ToolType.Help).onOpen.RemoveListener(OpenHelp);
             inspectorPanel.InspectorHeaderCloseButton.clicked -= CloseActiveTool;
             toolService.AnyToolOpened.RemoveListener(OnAnyToolOpened);
@@ -85,15 +85,16 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnToolWithPanelOpen(Tool toolWithPanel)
         {
-            activeToolWithPanel?.Close();
-            activePanel?.OnHide.RemoveListener(Close);
+            if (activeToolWithPanel != null)
+            {
+                activeToolWithPanel.Close();    
+            }
             activeToolWithPanel = toolWithPanel;
             
             Open();
             
             activePanel = CreatePanel(toolWithPanel.PanelType, toolWithPanel.PanelArgs);
             inspectorPanel.HeaderText = activePanel.Title;
-            activePanel.OnHide.AddListener(Close);
         }
 
         public void Open()
@@ -124,6 +125,10 @@ namespace Netherlands3D.UI.Behaviours
             return panel;
         }
 
-        private void OpenHelp() => Application.OpenURL(HelpUrl);
+        private void OpenHelp()
+        {
+            Application.OpenURL(HelpUrl);
+            toolService.GetTool(ToolType.Help).Close(); // close the tool so it can be opened again when the user wants to click on the help button again
+        }
     }
 }

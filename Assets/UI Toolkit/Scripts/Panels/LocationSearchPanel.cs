@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.AddressSearch;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Minimap;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
@@ -23,6 +25,8 @@ namespace Netherlands3D.UI.Panels
         private NumberField CoordinateXField => coordinateXField ??= this.Q<NumberField>("CoordinateXField");
         private NumberField coordinateYField;
         private NumberField CoordinateYField => coordinateYField ??= this.Q<NumberField>("CoordinateYField");
+        private MapViewport minimap;
+        private MapViewport Minimap => minimap ??= this.Q<MapViewport>();
 
         private List<SuggestionResult> currentSuggestions = new();
 
@@ -51,6 +55,11 @@ namespace Netherlands3D.UI.Panels
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+
+        public LocationSearchPanel(MinimapConfig config) : this()
+        {
+            Minimap.Initialize(config);
         }
 
         /// <summary>Populate the results list. Starts in an unselected state.</summary>
@@ -87,6 +96,11 @@ namespace Netherlands3D.UI.Panels
             CoordinateYField.EnableInClassList("invalid", !valid);
         }
 
+        public void SetMinimapLocation(Coordinate coordinate)
+        {
+            Minimap.SetLocation(coordinate);
+        }
+        
         private void OnAttachToPanel(AttachToPanelEvent _)
         {
             AddressSearch.QueryChanged += OnAddressSearchQueryChanged;

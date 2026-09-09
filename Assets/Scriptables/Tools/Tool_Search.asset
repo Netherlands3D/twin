@@ -25,9 +25,6 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls: []
-  onToggleInspector:
-    m_PersistentCalls:
-      m_Calls: []
   onSpawnedPrefab:
     m_PersistentCalls:
       m_Calls: []
@@ -35,5 +32,7 @@ MonoBehaviour:
   panelType:
     _assemblyQualifiedName: Netherlands3D.UI.Panels.LocationSearchPanel, eu.netherlands3d.twin,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  panelArgs:
+  - {fileID: 11400000, guid: e6d0b533c91ab9249906b9d224cb6b6f, type: 2}
   functionalityPrefabs: []
   open: 0

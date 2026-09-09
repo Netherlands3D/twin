@@ -1,17 +1,12 @@
 ﻿.sun-time-panel {
     --sun-time-label-width: var(--spacing-20);
-    --sun-time-label-spacing: var(--spacing-3);
+    --sun-time-label-spacing: var(--spacing-1);
+    --sun-shadow-cell-margin: 3px;
     
-    display: flex;
     flex-direction: column;
     opacity: 1;
     transition-property: opacity;
     transition-duration: 0.3s;
-}
-
-.sun-time-panel.hidden {
-    display: none;
-    opacity: 0;
 }
 
 .sun-time-panel__sun-dial {
@@ -23,7 +18,6 @@
     width: var(--sun-time-label-width);
     margin-right: var(--sun-time-label-spacing);
     flex-shrink: 0;
-    white-space: normal;
     -unity-text-align: middle-left;
 }
 
@@ -48,3 +42,42 @@
     flex-shrink: 1;
     -unity-text-align: middle-left;
 }
+
+.sun-shadow-panel__images { 
+    flex-direction: column;   
+    margin-bottom: var(--spacing-3);   
+}
+
+.sun-shadow-panel__image-row{
+    flex-direction: row;
+    flex-wrap: no-wrap;
+    align-items: flex-start;
+    margin-bottom: var(--sun-shadow-cell-margin);
+}
+
+.sun-shadow-panel__image-cell {    
+    margin: var(--sun-shadow-cell-margin);
+}
+
+.sun-shadow-panel__title{
+    -unity-font-definition: var(--nl3d-default-font-semi-bold);
+}
+
+.sun-shadow-panel__text{
+    white-space: normal;
+}
+
+.sun-shadow-panel__bullet-row{
+    flex-direction: row;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.sun-shadow-panel__button{
+    align-self: flex-start;
+}
+
+.sun-time-panel__time-field{
+    flex-grow: 1;
+}
+

@@ -8,11 +8,9 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Panels
 {
     public abstract class BaseInspectorContentPanel : VisualElement
     {
-        public UnityEvent OnShow = new();
-        public UnityEvent OnHide = new();
-
         public abstract string Title { get; }
-        public void Show() => OnShow?.Invoke();
-        public void Hide() => OnHide?.Invoke();
+        public virtual void OnInspectorClick(InspectorPanel inspector)
+        {
+        }
     }
 }

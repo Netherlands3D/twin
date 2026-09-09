@@ -80,7 +80,7 @@ namespace Netherlands3D.Legend
                 if (LayerNameLegendUrlDictionary.TryGetValue(kv.Key, out var entry))
                     entry.SetImageUrl(kv.Value); // layer already registered with active state, just set the url
                 else
-                    LayerNameLegendUrlDictionary.Add(kv.Key, new LegendEntry(kv.Key, kv.Value, true)); // layer not yet known, add with default active state
+                    LayerNameLegendUrlDictionary.Add(kv.Key, new LegendEntry(kv.Key, kv.Value, false)); // layer not yet known, add with default inactive state
             }
         }
     }

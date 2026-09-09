@@ -30,8 +30,6 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            // OnShow += () => SetEnabled(true);
-            // OnHide += () => SetEnabled(false);
             RetryButton.clicked += Hide;
         }
         

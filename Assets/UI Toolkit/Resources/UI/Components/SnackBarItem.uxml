@@ -1,0 +1,16 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="snackbar-item"
+>
+    <ui:VisualElement class="snackbar-item__content"> 
+        <nl3d:Icon class="snackbar-item__icon"/>
+        <ui:Label name="Titel" text="Empty statement" class="snackbar-item__title text-header"/>    
+        <nl3d:HelpButton class="snackbar-item__help"/>
+        <nl3d:CloseButton/>
+    </ui:VisualElement>  
+    <ui:Label name="Text" text="Empty statement" class="snackbar-item__details"/>
+</ui:UXML>

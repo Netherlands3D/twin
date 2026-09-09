@@ -372,13 +372,6 @@ MonoBehaviour:
   maxSelectionDistanceFromCamera: 10000
   OnBlockCameraDragging: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220,
     type: 2}
-  OnGridCreate: {fileID: 11400000, guid: 2725eb416725304468190dd92c09fdc3, type: 2}
-  OnGridEdit: {fileID: 11400000, guid: 6d8cfdb4bf975bef1baa308dd907ba40, type: 2}
-  OnGridSelect: {fileID: 11400000, guid: 1f0d8a518b80c13b6bd1c0a1e46b32a6, type: 2}
-  OnLineCreate: {fileID: 11400000, guid: 44b770b681b65f34d9a14c6bfd441176, type: 2}
-  OnLineEdit: {fileID: 11400000, guid: 2f1892377ee87bbc5b34af841a97ebba, type: 2}
-  OnPolygonCreate: {fileID: 11400000, guid: dd074cc6e46cd6e4e88d82ad7e59adba, type: 2}
-  OnPolygonEdit: {fileID: 11400000, guid: 1b16cbed8b04c10cfb3cee04c2190b3e, type: 2}
 --- !u!114 &-7824704156598368423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,7 +442,6 @@ GameObject:
   - component: {fileID: 5035265957184785311}
   - component: {fileID: 5035265957184785308}
   - component: {fileID: 2971444630074657358}
-  - component: {fileID: 2247364823442731689}
   m_Layer: 0
   m_Name: PolygonSelection_Polygon
   m_TagString: Untagged
@@ -674,19 +666,6 @@ MonoBehaviour:
   OnHandleCreated:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2247364823442731689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5035265957184785282}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDefaultActivatedService: 0
 --- !u!1 &6169829145916154088
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,7 +1051,6 @@ GameObject:
   - component: {fileID: 1272771895099388988}
   - component: {fileID: 5614695549320686730}
   - component: {fileID: 6819746166564945398}
-  - component: {fileID: 4442034151604228432}
   m_Layer: 0
   m_Name: PolygonSelection_Line
   m_TagString: Untagged
@@ -1297,19 +1275,6 @@ MonoBehaviour:
   OnHandleCreated:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4442034151604228432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7239524049806933421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDefaultActivatedService: 0
 --- !u!1 &7298217538574612641
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -20,7 +21,6 @@ namespace Netherlands3D.UI.Panels
         public UnityEvent OnClose = new();
         
         private ListView listView;
-        private ListView ListView => listView ??= this.Q<ListView>();
         
         private Button button;
         private Button Button => button ??= this.Q<Button>("HideButton");
@@ -37,15 +37,17 @@ namespace Netherlands3D.UI.Panels
         
         public HideObjectPanel(Dictionary<string, IMapping> data) :  this()
         {
-            ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            ListView.selectionType = SelectionType.None;
-            
-            ListView.makeItem = MakeListViewItem;
-            ListView.bindItem = BindListViewItem;
-           
-            PopulateBagIds(data.Keys.ToList());
+            listView = this.Q<ListView>();
 
+            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            listView.selectionType = SelectionType.None;
+
+            listView.makeItem = MakeListViewItem;
+            listView.bindItem = BindListViewItem;
+            
             mappings = data;
+           
+            UpdateContent();
 
             Button.clicked += OnClose.Invoke;
             
@@ -57,34 +59,36 @@ namespace Netherlands3D.UI.Panels
             Button.clicked -= OnClose.Invoke;
         }
 
-        public void PopulateBagIds(List<string> mappings)
+        public void UpdateContent()
         {
-            ListView.itemsSource = mappings;
-            ListView.RefreshItems();
+            listView.itemsSource = mappings.Keys.ToList();
+            listView.RefreshItems();
         }
         
         private VisualElement MakeListViewItem()
         {
-            HideObjectListViewItem listViewItem = new HideObjectListViewItem();
-            listViewItem.ShowToggle(false);
-            listViewItem.RegisterCallback<PointerDownEvent>(_ =>
+            HideObjectListViewItem item = new HideObjectListViewItem();
+            item.ShowToggle(false);
+            item.RegisterCallback<PointerDownEvent>(_ =>
             {
                 //move to coord
-                string id = listViewItem.ID;
+                string id = item.ID;
                 if (mappings[id] is not MeshMapping map) return;
               
                 Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, map.ObjectMapping.items[id]);
-                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
+                App.Cameras.ActiveCamera.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
             });
+            var listViewItem = new ListViewItem(item);
             return listViewItem;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not HideObjectListViewItem listViewItem) return;
-            
-            string mapping = ListView.itemsSource[index] as string;
-            listViewItem.ID = mapping;
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<HideObjectListViewItem>() is not HideObjectListViewItem element) return;
+
+            string mapping = listView.itemsSource[index] as string;
+            element.ID = mapping;
         }
     }
 }

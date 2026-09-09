@@ -1,10 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using KindMen.Uxios;
 using KindMen.Uxios.ExpectedTypesOfResponse;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.Wms;
 using UnityEngine;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
@@ -23,8 +28,8 @@ namespace Netherlands3D.Legend
 
         // One container per GetCapabilities URL.
         private static readonly Dictionary<string, LegendUrlContainer> containers = new();
-        private readonly HashSet<string> pendingGetCapabilitiesRequests = new();
-
+        private readonly Dictionary<string, Task> pendingGetCapabilityRequests = new();
+        
         private Coroutine activeImageDownloadCoroutine;
 
         private void Awake()
@@ -50,7 +55,7 @@ namespace Netherlands3D.Legend
         /// and, if this is the first time we see that URL, kicks off a background
         /// credentials request to start phase 2.
         /// </summary>
-        public void RegisterLayer(string wmsUrl, bool isActive)
+        private void RegisterLayerInContainer(string wmsUrl, bool isActive)
         {
             if (string.IsNullOrEmpty(wmsUrl))
             {
@@ -68,6 +73,38 @@ namespace Netherlands3D.Legend
 
             containers[getCapabilitiesUrl].RegisterLayer(layerName, isActive);
             if (log) Debug.Log($"[WMSLegend] Registered layer '{layerName}' (active={isActive}) under {getCapabilitiesUrl}");
+        }
+
+        // In order to be able to show a legend image need to do the following:
+        // 1. download the GetCapabilities
+        // 2. get the legend urls from the GetCapabilities
+        // 3. register the layer to use this url and whether or not it is active (we don't display legend images of inactive layers)
+        public async void RegisterLayer(Uri url, StoredAuthorization auth, bool isActive)
+        {
+            var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(url.ToString(), ServiceType.Wms);
+            
+            //in case we already have the container, either from the ImportAdapter as an optimization, or because this legend was requested before and we still kept the container
+            if (containers.ContainsKey(getCapabilitiesUrl))
+            {
+                RegisterLayerInContainer(url.ToString(), isActive);
+                return;
+            }
+
+            //this layer belongs to the same wms getCapabilities as a layer that has already requested to download the getCapabilities. Wait for this to complete and use the resulting container
+            if (pendingGetCapabilityRequests.TryGetValue(getCapabilitiesUrl, out var pending))
+            {
+                await pending;
+                RegisterLayerInContainer(url.ToString(), isActive);
+                return;
+            }
+
+            //the container does not exist and is not requested yet. download the getCapabilities to make a container with the legend image urls.
+            var task = DownloadAndPopulate(getCapabilitiesUrl, auth);
+            pendingGetCapabilityRequests[getCapabilitiesUrl] = task;
+            await task;
+            pendingGetCapabilityRequests.Remove(getCapabilitiesUrl);
+
+            RegisterLayerInContainer(url.ToString(), isActive);
         }
 
         /// <summary>
@@ -174,7 +211,7 @@ namespace Netherlands3D.Legend
             if (log) Debug.Log($"[WMSLegend] Legend shown for {getCapabilitiesUrl}");
 
             // If credentials haven't come back yet, the DownloadImageUrls completion will trigger DownloadMissingImages for us.
-            if (pendingGetCapabilitiesRequests.Contains(getCapabilitiesUrl))
+            if (pendingGetCapabilityRequests.ContainsKey(getCapabilitiesUrl))
             {
                 if (log) Debug.Log($"[WMSLegend] Waiting for capability URLs before downloading images: {getCapabilitiesUrl}");
                 return;
@@ -250,6 +287,65 @@ namespace Netherlands3D.Legend
                 Debug.LogWarning($"[WMSLegend] Failed to download image for '{entry.LayerName}': {ex.Message}"));
 
             return promise;
+        }
+        
+        private async Task DownloadAndPopulate(string getCapabilitiesUrl, StoredAuthorization auth)
+        {
+            //Download the GetCapabilities so we can create a container with the legend urls
+            var result = await DownloadGetCapabilitiesToLocalCache(new Uri(getCapabilitiesUrl), auth, CancellationToken.None);
+            var bodyContents = File.ReadAllText(result.LocalFilePath);
+
+            var uri = new Uri(getCapabilitiesUrl);
+            if (OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(uri, bodyContents, ServiceType.Wms))
+            {
+                var request = new WmsGetCapabilities(uri, bodyContents);
+                BoundingBoxCache.AddBoundingBoxContainer(request);
+                SetLegendUrls(getCapabilitiesUrl, request.GetLegendUrls());
+            }
+        }
+        
+        private Task<LocalFile> DownloadGetCapabilitiesToLocalCache(Uri url, StoredAuthorization auth, CancellationToken token)
+        {
+            var tcs = new TaskCompletionSource<LocalFile>();
+        
+            var localFile = new LocalFile
+            {
+                SourceUrl = url.ToString(),
+                LocalFilePath = ""
+            };
+        
+            var config = Config.Default();
+            config = auth.AddToConfig(config);
+            config.CancelToken = token;
+            var promise = Uxios.DefaultInstance.Get<FileInfo>(url, config);
+        
+            // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
+            promise.Then(response =>
+            {
+                if (token.IsCancellationRequested)
+                {
+                    tcs.TrySetCanceled(token);
+                    return;
+                }
+                
+                var info = response.Data as FileInfo;
+                localFile.LocalFilePath = info.FullName;
+                tcs.TrySetResult(localFile);
+            });
+            promise.Catch(error =>
+            {
+                if (token.IsCancellationRequested)
+                {
+                    tcs.TrySetCanceled(token);
+                    return;
+                }
+                localFile.LocalFilePath = "";
+                Debug.LogError("Download failed: " + error.Message);
+        
+                tcs.TrySetException(error);
+            });
+        
+            return tcs.Task;
         }
     }
 }

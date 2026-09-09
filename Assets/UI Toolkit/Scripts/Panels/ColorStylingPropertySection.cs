@@ -67,19 +67,21 @@ namespace Netherlands3D.UI.Panels
                 var color = GetColorFromPropertyData();
                 ColorPicker.SetColorInputComponentsWithoutNotify(color);
             });
-            return item;
+            var listViewItem = new ListViewItem(item);
+            return listViewItem;
         }
 
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not ColorTileListViewItem listViewItem) return;
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
 
             string propertyName = swatchesListView.itemsSource[index] as string;
-            item.userData = propertyName;
-            listViewItem.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
+            tile.userData = propertyName;
+            tile.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
             var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
-            listViewItem.Tile.Color = color;
+            tile.Tile.Color = color;
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
@@ -114,10 +116,11 @@ namespace Netherlands3D.UI.Panels
 
             foreach (var index in swatchesListView.selectedIndices)
             {
-                var element = swatchesListView.GetRootElementForIndex(index) as ColorTileListViewItem;
-                if (element != null)
+                var element = swatchesListView.GetRootElementForIndex(index) as ListViewItem;
+                ColorTileListViewItem tile = element.Q<ColorTileListViewItem>();
+                if (tile != null)
                 {
-                    element.Tile.Color = color;
+                    tile.Tile.Color = color;
                 }
             }
         }

@@ -31,6 +31,7 @@ MonoBehaviour:
   panelType:
     _assemblyQualifiedName: Netherlands3D.UI.Panels.SunTimePanel, eu.netherlands3d.twin,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  panelArgs: []
+  panelArgs:
+  - {fileID: 11400000, guid: 7c644965573ceec4d82f71667889e3a4, type: 2}
   functionalityPrefabs: []
   open: 0

@@ -1,5 +1,4 @@
 .mtl-property-section__text{
-    white-space: pre-wrap;
 }
 
 .mtl-property-section__button{

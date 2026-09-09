@@ -51,10 +51,10 @@ namespace Netherlands3D.UI.Panels
             Accepted
         }
 
-        private readonly Dictionary<int, (ContentState state, IconImage icon)> dropDownValues = new()
+        private readonly Dictionary<int, (ContentState state, string icon)> dropDownValues = new()
         {
-            { 0, (ContentState.Key, IconImage.KeyTokenCode) },
-            { 1, (ContentState.UsernameAndPassword, IconImage.UsernamePassword) }
+            { 0, (ContentState.Key, IconImage.KEY_TOKEN_CODE) },
+            { 1, (ContentState.UsernameAndPassword, IconImage.USERNAME_PASSWORD) }
         };
 
         public CredentialPanel()
@@ -110,25 +110,25 @@ namespace Netherlands3D.UI.Panels
         {
             //update the dropdownvalue if the content is set to a valid value
             int index = -1;
-            foreach (KeyValuePair<int, (ContentState state, IconImage icon)> kv in dropDownValues)
+            foreach (KeyValuePair<int, (ContentState state, string icon)> kv in dropDownValues)
                 if (kv.Value.state == state)
                     index = kv.Key;
 
             if (dropDownValues.Keys.Contains(index))
                 credentialContent.SetDropdownValue(index);
 
-            warningContent.SetEnabled(state == ContentState.Warning);
-            credentialContent.SetEnabled(state == ContentState.Key || state == ContentState.UsernameAndPassword);
-            acceptedContent.SetEnabled(state == ContentState.Accepted);
+            warningContent.EnableInClassList(UtilityClassConstants.HIDDEN, state != ContentState.Warning);
+            credentialContent.EnableInClassList(UtilityClassConstants.HIDDEN, !(state == ContentState.Key || state == ContentState.UsernameAndPassword));
+            acceptedContent.EnableInClassList(UtilityClassConstants.HIDDEN, state != ContentState.Accepted);
             switch (state)
             {
                 case ContentState.Key:
                     Code.Q<Label>().text = "Wachtwoord of code";
-                    UserName.SetEnabled(false);
+                    UserName.EnableInClassList(UtilityClassConstants.HIDDEN, true);
                     break;
                 case ContentState.UsernameAndPassword:
                     Code.Q<Label>().text = "Wachtwoord";
-                    UserName.SetEnabled(true);
+                    UserName.EnableInClassList(UtilityClassConstants.HIDDEN, false);
                     break;
             }
         }
@@ -145,7 +145,6 @@ namespace Netherlands3D.UI.Panels
             if(show)
                 CodeField.SetValueWithoutNotify(password);
             EnableInClassList(UtilityClassConstants.HIDDEN, !show);
-            SetEnabled(show); //todo why is still needed?
         }
 
         public void ShowError(bool show)

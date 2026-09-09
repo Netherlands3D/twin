@@ -2,6 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ui="UnityEngine.UIElements"
     xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     editor-extension-mode="False"
     name="LocationSearchPanel"
@@ -15,5 +16,6 @@
             <nl3d:NumberField name="CoordinateYField" class="location-search-panel__coordinate-field location-search-panel__coordinate-field-y" label-text="Y" decimal-count="0" placeholder-text="Y" />
         </ui:VisualElement>
     </ui:VisualElement>
+    <nl3d:MapViewport bottom-left="0, 300000" top-right="280000, 620000" layer-start-index="3" move-to-clicked-location="false" class="location-search-panel__minimap"/>
 </ui:UXML>
 

@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Components
         private VisibilityToggle visibilityToggle;
         private VisibilityToggle VisibilityToggle => visibilityToggle ??= this.Q<VisibilityToggle>("VisibilityToggle");
        
-        public IconImage Image
+        public string Image
         {
             get => Icon.Image;
             set => Icon.Image = value;
@@ -43,7 +43,7 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            Image = IconImage.Object;
+            Image = IconImage.OBJECT;
             
             VisibilityToggle.RegisterValueChangedCallback(OnToggleValueChanged);
             RegisterCallback<DetachFromPanelEvent>(evt =>

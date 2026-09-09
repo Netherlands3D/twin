@@ -58,12 +58,14 @@ GameObject:
   - component: {fileID: 4399201792515060189}
   - component: {fileID: 9214300892430282656}
   - component: {fileID: 4429096078737367381}
+  - component: {fileID: 6123456789012345678}
   - component: {fileID: 5715699707642146679}
-  - component: {fileID: 873264101414426239}
   - component: {fileID: 6449633652433648055}
   - component: {fileID: 2679958399476094032}
   - component: {fileID: 5188715498986471469}
+  - component: {fileID: -2108419079400312055}
   - component: {fileID: 4297113770841784289}
+  - component: {fileID: -184948826278789416}
   m_Layer: 5
   m_Name: UI v2
   m_TagString: Untagged
@@ -89,6 +91,8 @@ Transform:
   - {fileID: 223785074132285952}
   - {fileID: 1955165290551131509}
   - {fileID: 3977341333048145246}
+  - {fileID: 5246216560922750945}
+  - {fileID: 4765081458409217524}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4399201792515060189
@@ -141,6 +145,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae66475537d5e34db8747625d0e0c1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.AppRootBehaviour
+--- !u!114 &6123456789012345678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d012d4c42b746a49473a2f1d9c8e1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.RuntimeTooltips
+  tooltipStyleSheet: {fileID: 7433441132597879392, guid: 733a8d3b7d1a4c679ca7caebd41b26e5, type: 3}
 --- !u!114 &5715699707642146679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,52 +172,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SettingsWindow: {fileID: 11400000, guid: 049e538b7dc9ec64789200c6804d8dbf, type: 2}
   HelpUrl: https://netherlands3d.eu/
---- !u!114 &873264101414426239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891704482898673965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3adb988a4a3c4e4ea91fac29b0a7601, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.FooterBehaviour
-  ShowAttributionEvent: {fileID: 11400000, guid: ed0a4e76488b45c46a5bf90e6d680af3,
-    type: 2}
-  OnCameraPositionChangedEvent: {fileID: 11400000, guid: d4a74b03cccc58345974ac5fcbc59d0c,
-    type: 2}
-  OnOrientToNorth:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Cameras.Compass, eu.netherlands3d.twin
-        m_MethodName: SwitchToNorth
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnToggleOrthographicView:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: f355096a1bcfa0c4e9e47f58709c684e, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &6449633652433648055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +189,10 @@ MonoBehaviour:
   panelBehaviours:
   - {fileID: 11400000, guid: a785d606235ec3d67b2852afc9336cca, type: 2}
   - {fileID: 11400000, guid: ac72dfc3e4c4b4322b7977827452eb9a, type: 2}
+  - {fileID: 11400000, guid: 101175000a89da4a8beb0a2532e32947, type: 2}
+  - {fileID: 11400000, guid: 193046eec53862a7380ad41ce7521c3f, type: 2}
+  floatingButtonBehaviour:
+  - {fileID: 11400000, guid: b39f0c433614c7547967510a0332c622, type: 2}
 --- !u!114 &2679958399476094032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +218,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Credentials.CredentialHandler
+--- !u!114 &-2108419079400312055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5f1ba2b42d8a3d4a8328274bdaa6a05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.DebugInfoBehaviour
+  fpsUpdateInterval: 0.25
+  memoryUpdateInterval: 0.5
 --- !u!114 &4297113770841784289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +246,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: eu.netherlands3d.twin.functionalities::Netherlands3D.Twin.Functionalities.FunctionalityListener
   functionalities:
   - {fileID: 11400000, guid: 73566e5fce73b5440b33ed107ed5be94, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4429096078737367381}
+        m_TargetAssemblyTypeName: Netherlands3D.AppRootBehaviour, eu.netherlands3d.twin
+        m_MethodName: EnableFunctionality
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4429096078737367381}
+        m_TargetAssemblyTypeName: Netherlands3D.AppRootBehaviour, eu.netherlands3d.twin
+        m_MethodName: DisableFunctionality
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &-184948826278789416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.functionalities::Netherlands3D.Twin.Functionalities.FunctionalityListener
+  functionalities:
+  - {fileID: 11400000, guid: 77c433a944001411a9376d15fb427d17, type: 2}
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls:
@@ -479,7 +512,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e1a852118643daa48b5b3f2eaa0c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI_Toolkit.Scripts.Behaviours.ToolbarTopBehaviour
-  snapshotEvent: {fileID: 11400000, guid: b1c270f3fc728cc4ea719d048fa6ea7f, type: 2}
 --- !u!1 &6344507626500150337
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,3 +595,92 @@ MonoBehaviour:
   onCoordinateFound:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &6995355528665921473
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5246216560922750945}
+  - component: {fileID: 7075919274551728367}
+  m_Layer: 0
+  m_Name: Minimap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5246216560922750945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6995355528665921473}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7075919274551728367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6995355528665921473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95e389d92a184d70b3cf48659a24ba9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.MinimapBehaviour
+  minimapConfig: {fileID: 11400000, guid: e6d0b533c91ab9249906b9d224cb6b6f, type: 2}
+--- !u!1 &8929667644022415580
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4765081458409217524}
+  - component: {fileID: 8036814369229748236}
+  m_Layer: 0
+  m_Name: Scenario's
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4765081458409217524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929667644022415580}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2411277882059223068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8036814369229748236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929667644022415580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31145f616687fe94aa6b20d5e03b7023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.Layers.UI.HierarchyInspector.ScenarioManager

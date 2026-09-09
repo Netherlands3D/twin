@@ -8,6 +8,6 @@
     class="hidden-objects-property-section"
 >
     <nl3d:ContentContainer leading-icon="VisibilityMixed" text="Verborgen objecten tonen">
-        <nl3d:ListView class="hidden-objects-property-section__list-view"/>
+        <nl3d:ListView class="hidden-objects-property-section__list-view" empty-text="Er zijn nog geen verborgen gebouwen."/>
     </nl3d:ContentContainer>
 </ui:UXML>

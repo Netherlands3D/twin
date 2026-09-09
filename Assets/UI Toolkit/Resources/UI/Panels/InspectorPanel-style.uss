@@ -1,15 +1,16 @@
 .inspector {
     --inspector-bg-color: var(--color-white);
     --inspector-border-radius: var(--spacing-2);
-    --inspector-width: 400px;
     --inspector-section-spacing: var(--spacing-3);
     --inspector-section-header-margin-top: var(--spacing-2);
     --inspector-section-header-spacing: var(--spacing-1);
    
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-shrink: 0;
     flex-grow: 0;
-    align-self: stretch;
+    align-self: flex-start;
+    min-height: 65%;
+    max-height: 65%;
     min-width: var(--inspector-min-width);
     width: var(--inspector-width);
     max-width: var(--inspector-max-width);
@@ -57,6 +58,11 @@
     padding: 0px;
 }
 
+/* todo discuss if this is preferable, all contentcontainers in the inspector panel will have spacing between them with this */
+.inspector .inspector-content .contentcontainer{
+    margin-bottom: var(--spacing-2);
+}
+
 .inspector__section {
     flex-direction: row;
     align-items: center;
@@ -67,8 +73,4 @@
     -unity-font-style: bold;
     margin-top: var(--inspector-section-header-margin-top);
     margin-bottom: var(--inspector-section-header-spacing);
-}
-
-.inspector.active {
-    display: flex;
 }

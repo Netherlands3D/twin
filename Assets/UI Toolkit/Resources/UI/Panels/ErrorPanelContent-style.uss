@@ -16,7 +16,6 @@
     -unity-text-align: middle-left;
     margin-left: var(--spacing-2);
     padding: 0;
-    white-space: normal;
 }
 
 .error-panel__message {
@@ -33,5 +32,4 @@
     -unity-text-align: middle-left;
     margin: 0;
     padding: 0;
-    white-space: normal;
 }

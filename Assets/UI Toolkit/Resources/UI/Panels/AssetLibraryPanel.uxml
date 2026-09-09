@@ -8,6 +8,7 @@
     class="asset-library-panel"
 >
     <nl3d:Breadcrumb />
+    <ui:VisualElement name="Divider" class="panel-divider" />
     <nl3d:ListView name="ItemListView"/>
     <ui:VisualElement class="asset-library-panel__footer">
         <nl3d:Button LabelText="Toevoegen" button-style="Normal" class="asset-library-panel_import" name="ImportButton" />

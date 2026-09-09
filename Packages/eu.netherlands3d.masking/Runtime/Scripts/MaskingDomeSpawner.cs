@@ -1,4 +1,3 @@
-using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
@@ -10,7 +9,6 @@ namespace Netherlands3D.Masking
         [Header("Placement actions")]
         [SerializeField] private InputActionReference clickPlacementAction;
         [SerializeField] private float maxCameraTravelToPlacement = 20.0f; 
-        [SerializeField] private DisappearDome disappearEffect;
         [SerializeField] private float margin;
 
         [Header("Global shader settings")]
@@ -18,66 +16,79 @@ namespace Netherlands3D.Masking
         [SerializeField] private string sphericalMaskPositionName = "_SphericalMaskPosition";
         [SerializeField] private string sphericalMaskRadiusName = "_SphericalMaskRadius";
         [SerializeField] private string sphericalMaskBitIndexName = "_SphericalMaskBitIndex";
+    
         [SerializeField] private bool resetMaskOnDisable = true;
         private int positionPropertyID;
         private int radiusPropertyID;
         private int bitIndexPropertyID;
+        private int maskingBitIndex = 22;
+        
+        public VisualDome DomeVisualisation => domeVisualisation;
         
         [SerializeField] private VisualDome domeVisualisation;
+        
+        public bool IsPointerOnDome => isPointerOnDome;
+        private bool isPointerOnDome;
 
         private Camera mainCamera;
         private Vector3 cameraLookatPosition = Vector3.zero;
 
         private bool waitForInitialPlacement = false;
 
-        private void Start() {
-            mainCamera = Camera.main;
-            
+        private void Awake() {
             GetPropertyIDs();
             ApplyGlobalShaderVariables();
-            
-            //setting the bitIndex only needs to happen once, so it is done outside of the ApplyGlobalShaderVariables function.
-            bitIndexPropertyID = Shader.PropertyToID(sphericalMaskBitIndexName);
-            Shader.SetGlobalInt(bitIndexPropertyID, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
         }
 
-        private void OnEnable() {
+        public void SetMaskingBitIndex(int bitIndex)
+        {
+            maskingBitIndex = bitIndex;
+            //setting the bitIndex only needs to happen once, so it is done outside of the ApplyGlobalShaderVariables function.
+            bitIndexPropertyID = Shader.PropertyToID(sphericalMaskBitIndexName);
+            Shader.SetGlobalInt(bitIndexPropertyID, bitIndex);
+        }
+
+        public void SetDomeEnabled()
+        {
+            mainCamera = Camera.main;
+            domeVisualisation.gameObject.SetActive(true);
+            
             Shader.EnableKeyword(sphericalMaskFeatureKeyword);
 
             clickPlacementAction.action.Enable();
             clickPlacementAction.action.started += StartTap;
             clickPlacementAction.action.performed += EndTap;
 
-            StickToPointer();
-        }
-
-        private void OnDisable()
-        {
-            Shader.DisableKeyword(sphericalMaskFeatureKeyword);
-
-            // Unsubscribe and disable the click action when the script is disabled
-            clickPlacementAction.action.performed -= StartTap;
-            clickPlacementAction.action.Disable();
-
-            if(resetMaskOnDisable)
-            {
-                ResetGlobalShaderVariables();
-            }
-        }
-
-        /// <summary>
-        /// Initial start will make dome follow pointer untill first click
-        /// </summary>
-        private void StickToPointer()
-        {
+            domeVisualisation.MoveToScreenPoint();
             domeVisualisation.AnimateIn();
             waitForInitialPlacement = true;
+            
+            domeVisualisation.onHoveringChange.AddListener(OnPointerOnDome);
         }
-
-        public void SpawnDisappearAnimation()
+        
+        public void SetDomeDisabled()
         {
-            var newDisappearEffect = Instantiate(disappearEffect.gameObject,this.transform.parent);
-            newDisappearEffect.GetComponent<DisappearDome>().DisappearFrom(domeVisualisation.transform.position, domeVisualisation.transform.localScale);
+            domeVisualisation.AnimateOut(() =>
+            {
+                domeVisualisation.gameObject.SetActive(false);
+                Shader.DisableKeyword(sphericalMaskFeatureKeyword);
+            
+                clickPlacementAction.action.performed -= StartTap;
+                clickPlacementAction.action.Disable();
+
+                if(resetMaskOnDisable)
+                {
+                    ResetGlobalShaderVariables();
+                }
+            
+                domeVisualisation.onHoveringChange.RemoveListener(OnPointerOnDome);
+            });
+        }
+        
+
+        private void OnPointerOnDome(bool onDome)
+        {
+            isPointerOnDome = onDome;
         }
 
         private void StartTap(InputAction.CallbackContext context)
@@ -107,25 +118,23 @@ namespace Netherlands3D.Masking
 
         private void PlaceDome()
         {
-            if(!EventSystem.current.IsPointerOverGameObject()){
-                Vector2 pointerPosition = Pointer.current.position.ReadValue();
+            if(!EventSystem.current.IsPointerOverGameObject())
+            {
+                if (!waitForInitialPlacement)
+                    domeVisualisation.AnimateOut();
 
-                if(!waitForInitialPlacement)
-                    SpawnDisappearAnimation();
-
-                domeVisualisation.MoveToScreenPoint(pointerPosition);
+                domeVisualisation.MoveToScreenPoint();
                 domeVisualisation.AnimateIn();
             }
 
             waitForInitialPlacement = false;
-            domeVisualisation.AllowInteraction = true;
         }      
 
         void Update()
         {
             if(waitForInitialPlacement)
             {
-                domeVisualisation.MoveToScreenPoint(Pointer.current.position.ReadValue());
+                domeVisualisation.MoveToScreenPoint();
             }
 
             if (domeVisualisation.transform.hasChanged)

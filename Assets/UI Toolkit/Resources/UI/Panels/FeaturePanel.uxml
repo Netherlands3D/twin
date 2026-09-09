@@ -1,0 +1,14 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="FeaturePanel" 
+    class="feature-panel"
+>
+    <nl3d:Header icon="Polygon" text="Feature aanpassing"/>
+    <ui:VisualElement name="Content" class="feature-panel__body">
+        <nl3d:Button name="Convert" button-style="WithIcon" icon="Polygon" LabelText="Er wordt een nieuwe polygoonlaag aangemaakt "/>
+    </ui:VisualElement>
+</ui:UXML>

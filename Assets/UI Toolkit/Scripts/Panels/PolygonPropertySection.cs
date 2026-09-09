@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -48,8 +50,8 @@ namespace Netherlands3D.UI.Panels
                 parent.Remove(this);
             }
             
-            linePropertiesElement.SetEnabled(polygonPropertyData.ShapeType == ShapeType.Line);
-            gridPropertiesElement.SetEnabled(polygonPropertyData.ShapeType == ShapeType.Grid);
+            linePropertiesElement.EnableInClassList(UtilityClassConstants.HIDDEN, polygonPropertyData.ShapeType != ShapeType.Line);
+            gridPropertiesElement.EnableInClassList(UtilityClassConstants.HIDDEN, polygonPropertyData.ShapeType != ShapeType.Grid);
         }
 
         private void OnStrokeWidthChanged(ChangeEvent<float> evt)
@@ -59,8 +61,10 @@ namespace Netherlands3D.UI.Panels
         
         private void OnEditGridButtonPressed(ClickEvent evt)
         {
-            Debug.Log("edit grid button pressed");
-            throw new NotImplementedException();
+            ServiceLocator.GetService<ToolService>().GetTool(ToolType.PolygonGrid).Open();
+            ServiceLocator.GetService<PolygonCreationService>().SetGridInputModeToEdit();
+            ServiceLocator.GetService<PolygonCreationService>().SetPreventRemovingPolygon(true);
+            ServiceLocator.GetService<PolygonSelectionService>().SetSelectedLayerForPolygonSelectionProperty(polygonPropertyData);
         }
     }
 }

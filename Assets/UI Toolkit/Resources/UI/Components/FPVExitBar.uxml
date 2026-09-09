@@ -1,0 +1,10 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="fpv-exit-bar"
+>
+        <nl3d:Slider label="First person modus verlaten" high-value="1" class="fpv-exit-bar__slider" />
+</ui:UXML>

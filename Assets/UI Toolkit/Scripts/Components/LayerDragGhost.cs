@@ -52,13 +52,13 @@ namespace Netherlands3D.UI.Components
         {
             var validCredentials = ui.LayerData.HasValidCredentials;
 
-            layerVisibilityImage.Image = validCredentials ? (IconImage)ui.VisibilityState : IconImage.Warning;
+            layerVisibilityImage.Image = validCredentials ? VisibilityToggle.GetIconImage(ui.VisibilityState) : IconImage.WARNING;
             UpdateColorBar(validCredentials ? ui.LayerData.Color : null);
             var hasChildren = ui.LayerData.ChildrenLayers.Count > 0;
             var indentWidth = ui.IndentWidth;
 
             if (!hasChildren)
-                foldoutImage.Image = IconImage.None;
+                foldoutImage.Image = IconImage.NONE;
 
             spacer.style.width = indentWidth;
             layerTypeImage.Image = ui.LayerTypeIcon;

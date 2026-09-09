@@ -7,4 +7,5 @@
   class="dropdown">
   
   <nl3d:Icon image="Key" color="Blue900"/>
+  <ui:Label/>
 </ui:UXML>

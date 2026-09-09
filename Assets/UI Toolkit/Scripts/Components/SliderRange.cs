@@ -7,10 +7,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class SliderRange : UnityEngine.UIElements.MinMaxSlider
     {
-        private VisualElement rangeRow;
-        private FloatField minField;
-        private FloatField maxField;
-
         public enum HeaderType
         {
             Normal,
@@ -26,16 +22,15 @@ namespace Netherlands3D.UI.Components
             set { headerType = value; UpdateClassList(); }
         }
 
-        public SliderRange()
+        private VisualElement rangeRow;
+
+        public SliderRange() : base(0f, 10f, 0f, 10f)
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
             if (string.IsNullOrEmpty(label))
                 label = "Label";
-
-            lowLimit = 0f;
-            highLimit = 10f;
 
             RegisterCallback<AttachToPanelEvent>(_ => BuildRangeRow());
             // Update fields when thumbs move (MinMaxSlider value is Vector2)
@@ -49,18 +44,22 @@ namespace Netherlands3D.UI.Components
 
             var input = this.Q<VisualElement>(className: "unity-min-max-slider__input");
             if (input == null)
+            {
+                Debug.LogError(
+                    $"{nameof(SliderRange)} could not find Unity's internal min-max slider input."
+                );
                 return;
+            }
 
             // Create a row container for Minfield - MinMaxSlider - MaxField
             rangeRow = new VisualElement { name = "RangeRow" };
             rangeRow.AddToClassList("slider-range__row");
 
             // Create min/max fields (no label, just value)
-            minField = new FloatField { name = "MinField", label = string.Empty };
-            maxField = new FloatField { name = "MaxField", label = string.Empty };
+            minField = CreateRangeField("MinField", "min-field");
+            maxField = CreateRangeField("MaxField", "max-field");
 
-            ApplyTextFieldClasses(minField);
-            ApplyTextFieldClasses(maxField);
+            RegisterFieldCallbacks();
 
             this.Add(rangeRow);
 
@@ -71,7 +70,118 @@ namespace Netherlands3D.UI.Components
             rangeRow.Add(input);
             rangeRow.Add(maxField);
 
+            ApplyInputFieldVisibility();
             UpdateFieldsFromThumbs();
+        }
+
+        private bool showNumberInputField = true;
+
+        [UxmlAttribute("show-number-field")]
+        public bool ShowNumberInputField
+        {
+            get => showNumberInputField;
+            set
+            {
+                showNumberInputField = value;
+                ApplyInputFieldVisibility();
+            }
+        }
+
+        private NumberField minField;
+        private NumberField maxField;
+
+        private NumberField CreateRangeField(string name, string className)
+        {
+            var field = new NumberField
+            {
+                name = name,
+                LabelVisible = false,
+                DecimalCount = decimalCount,
+                Style = NumberFieldStyle.Small,
+                ScrollStep = EffectiveScrollStep
+            };
+
+            field.AddToClassList(className);
+            return field;
+        }
+
+        private void RegisterFieldCallbacks()
+        {
+            minField.InputField.RegisterCallback<BlurEvent>(_ => ApplyFieldValues());
+            minField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => ApplyFieldValues(), TrickleDown.TrickleDown);
+
+            maxField.InputField.RegisterCallback<BlurEvent>(_ => ApplyFieldValues());
+            maxField.InputField.RegisterCallback<NavigationSubmitEvent>(_ => ApplyFieldValues(), TrickleDown.TrickleDown);
+        }
+
+        private void ApplyInputFieldVisibility()
+        {
+            minField?.EnableInClassList("hidden", !showNumberInputField);
+            maxField?.EnableInClassList("hidden", !showNumberInputField);
+        }
+
+        private void ApplyFieldValues()
+        {
+            var newMin = Mathf.Clamp((float)minField.GetValueAsDouble(), lowLimit, maxValue);
+            var newMax = Mathf.Clamp((float)maxField.GetValueAsDouble(), newMin, highLimit);
+
+            value = new Vector2(newMin, newMax);
+            UpdateFieldsFromThumbs();
+        }
+
+        private int decimalCount = 2;
+
+        [UxmlAttribute("decimal-count")]
+        public int DecimalCount
+        {
+            get => decimalCount;
+            set
+            {
+                decimalCount = value;
+                ApplyDecimalCount();
+            }
+        }
+
+        private void ApplyDecimalCount()
+        {
+            if (minField == null || maxField == null)
+                return;
+
+            minField.DecimalCount = decimalCount;
+            maxField.DecimalCount = decimalCount;
+            UpdateFieldsFromThumbs();
+        }
+
+        private const float DefaultStepDivision = 100f;
+        private const float MinimumScrollStep = 0.01f;
+
+        private float scrollStep = 0f;
+
+        [UxmlAttribute("scroll-step")]
+        public float ScrollStep
+        {
+            get => scrollStep;
+            set
+            {
+                scrollStep = Mathf.Max(0f, value);
+                ApplyScrollStep();
+            }
+        }
+
+        private float EffectiveScrollStep =>
+            scrollStep > 0f
+                ? scrollStep
+                : Mathf.Max((highLimit - lowLimit) / DefaultStepDivision, MinimumScrollStep);
+
+        private void ApplyScrollStep()
+        {
+            var effectiveScrollStep = EffectiveScrollStep;
+
+            if (minField != null)
+                minField.ScrollStep = effectiveScrollStep;
+
+            if (maxField != null)
+                maxField.ScrollStep = effectiveScrollStep;
         }
 
         // Wire minField/maxField to minValue/maxValue.
@@ -82,20 +192,6 @@ namespace Netherlands3D.UI.Components
 
             minField.SetValueWithoutNotify(minValue);
             maxField.SetValueWithoutNotify(maxValue);
-
-            // TODO: Limit displayed decimals to 2 for MinField/MaxField.
-        }
-
-        private void ApplyTextFieldClasses(BaseField<float> field)
-        {
-            var baseTextField = field.Q<VisualElement>(className: "unity-base-text-field");
-            baseTextField?.AddToClassList("textfield");
-
-            var innerText = field.Q<TextElement>(className: "unity-text-element--inner-input-field-component");
-            innerText?.AddToClassList("text-base");
-
-            minField.AddToClassList("min-field");
-            maxField.AddToClassList("max-field");
         }
 
         private void UpdateClassList()

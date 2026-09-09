@@ -14,20 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerPrefab: {fileID: -2311983791405174025, guid: e46381d2665c69245b2475c986f6d0c4,
     type: 3}
-  displayErrorMessageEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   visualizationMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2,
     type: 2}

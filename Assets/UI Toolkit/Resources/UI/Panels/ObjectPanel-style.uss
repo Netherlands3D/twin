@@ -1,0 +1,17 @@
+.object-panel {
+    flex-direction: column;
+}
+
+.object-panel > * {
+    margin-bottom: var(--spacing-3);
+}
+
+
+.object-panel__body {
+    flex-grow: 1;   
+    margin-bottom: 0;
+}
+
+.object-panel__body > * {
+    margin-bottom: var(--spacing-3);    
+}

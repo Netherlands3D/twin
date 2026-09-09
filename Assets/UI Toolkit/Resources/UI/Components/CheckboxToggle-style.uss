@@ -45,7 +45,6 @@
     justify-content: flex-start;
     align-self: flex-start;
     min-width: 0;
-    white-space: normal; 
 }
 
 .checkbox-toggle.checkbox-position-right {

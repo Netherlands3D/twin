@@ -78,7 +78,7 @@ MonoBehaviour:
   hasMetaData: 0
   removeFromID: 
   DefaultMaterialList:
-  - {fileID: 2100000, guid: d46c5122997e7644088116a42496be75, type: 2}
+  - {fileID: 2100000, guid: 69c760f861d1f4aa1859f55886519f39, type: 2}
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
   createMeshcollider: 0

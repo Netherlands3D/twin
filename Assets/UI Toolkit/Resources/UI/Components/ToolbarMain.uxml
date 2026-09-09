@@ -1,18 +1,11 @@
-<ui:UXML 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:ui="UnityEngine.UIElements" 
-    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
-    xmlns:nl3d="Netherlands3D.UI.Components"
-    editor-extension-mode="False"  
-    class="toolbar-main"
->
-    <ui:VisualElement name="Divider" class="divider" />
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="toolbar-main">
+    <ui:VisualElement name="Divider" class="divider"/>
     <ui:VisualElement class="toolbar-main__group">
-        <nl3d:ToolButton name="Layer" icon="Sheets" tooltype="Layer" />
-        <nl3d:ToolButton name="Library" icon="Library" tooltype="AssetLibrary"/>
-        <nl3d:ToolButton name="Add" icon="Plus" tooltype="AssetImport"/>
-        <nl3d:ToolButton name="Search" icon="Search" tooltype="Search"/>
-        <nl3d:ToolButton name="SunPosition" icon="Sun" tooltype="SunPosition"/>
-        <nl3d:ToolButton name="DownloadTile" icon="DownloadTile" tooltype="DownloadTile"/>
+        <nl3d:ToolButton name="Layer" icon="Sheets" tooltype="Layer" tooltip="Lagenpaneel"/>
+        <nl3d:ToolButton name="Library" icon="Library" tooltype="AssetLibrary" tooltip="Bibliotheek"/>
+        <nl3d:ToolButton name="Add" icon="Plus" tooltype="AssetImport" tooltip="Voeg toe"/>
+        <nl3d:ToolButton name="Search" icon="Search" tooltype="Search" tooltip="Zoek een locatie"/>
+        <nl3d:ToolButton name="SunPosition" icon="Sun" tooltype="SunPosition" tooltip="Zonnestand"/>
+        <nl3d:ToolButton name="DownloadTile" icon="DownloadTile" tooltype="DownloadTile" tooltip="Download 3D tegels"/>
     </ui:VisualElement>
 </ui:UXML>

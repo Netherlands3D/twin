@@ -33,10 +33,9 @@
     margin-left: var(--spacing-2);
 }
 
-.dropdown .unity-text-element {
-    display: none;
+.dropdown .unity-label{
+    -unity-text-align: middle-center;
 }
-
 
 .unity-base-dropdown__item{
     background-color: white;
@@ -63,11 +62,18 @@
     border-bottom-right-radius: var(--spacing-4);
 }
 
-
+.unity-base-popup-field__text {
+    margin: 0;
+    display: none;
+}
 
 
 .unity-base-dropdown__item:hover {    
     background-color: var(--color-blue-700);
+}
+
+.unity-base-dropdown__item:hover .unity-label{    
+    color: var(--color-white);
 }
 
 .unity-base-dropdown__item:hover .icon{

@@ -11,7 +11,6 @@ using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
-using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -24,6 +23,8 @@ namespace Netherlands3D.UI.Panels
         public LayerData activeLayer;
         public UnityEvent<LayerData> PropertySectionOpened;
         public UnityEvent<LayerData> PropertySectionClosed;
+
+        private bool refreshRequested = false;
         
         private void Start()
         {
@@ -34,14 +35,18 @@ namespace Netherlands3D.UI.Panels
 
             ClearActivePanel();
             
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             selectorService.OnSelectLayer.AddListener(SpawnPanel);
-            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel); //todo ui-toolkit: When the layer panel is converted to UI toolkit, we need to test that this event is not called when clicking the Layer properties button, as this would interfere with opening the properties panel.
+            selectorService.OnNoLayerSelected.AddListener(ClearActivePanel);
+            
+            //whenever we close the layerpanel also close any propertysection
+            ToolService toolService = ServiceLocator.GetService<ToolService>();
+            toolService.GetTool(ToolType.Layer).onClose.AddListener(ClearActivePanel);
         }
 
         private void OnDestroy()
         {
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             selectorService.OnSelectLayer.RemoveListener(SpawnPanel);
             selectorService.OnNoLayerSelected.RemoveListener(ClearActivePanel);
         }
@@ -55,7 +60,21 @@ namespace Netherlands3D.UI.Panels
             activeLayer = null;
         }
 
-       public void SpawnPanel(LayerData layer)
+        public void RefreshPropertiesPanelAtEndOfFrame() //we do this only once per frame, since multiple objects can request a refresh in the same frame.
+        {
+            refreshRequested = true;
+        }
+        
+        private void Update()
+        {
+            if (refreshRequested)
+            {
+                SpawnPanel(activeLayer);
+                refreshRequested = false;
+            }
+        }
+
+        public void SpawnPanel(LayerData layer)
         {
             ClearActivePanel();
             propertiesPanel.SetVisible(true);

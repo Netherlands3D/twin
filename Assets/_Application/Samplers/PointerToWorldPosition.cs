@@ -10,7 +10,6 @@ namespace Netherlands3D.Twin.Samplers
     public class PointerToWorldPosition : MonoBehaviour
     {       
         public Coordinate WorldPoint => worldPoint;
-        public Coordinate WorldPointSync => worldPointSync;
         public Vector3 WorldPointHeightMap => worldPointHeightMap;
         public bool debugHeightmapPosition = false;
         
@@ -51,7 +50,7 @@ namespace Netherlands3D.Twin.Samplers
             opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, activeCamera);
             worldPointHeightMap = GetWorldPoint(screenPoint, activeCamera);
 
-            worldPointSync = new Coordinate(opticalRaycaster.GetWorldPointAtCameraScreenPoint(activeCamera, screenPoint));
+           
 
             if(debugHeightmapPosition)
             {
@@ -84,6 +83,12 @@ namespace Netherlands3D.Twin.Samplers
             });
         }
 
+        public Vector3 GetWorldPointSync()
+        {
+            var screenPoint = Pointer.current.position.ReadValue();
+            return opticalRaycaster.GetWorldPointAtCameraScreenPoint(App.Cameras.ActiveCamera, screenPoint);
+        }
+        
         public Vector3 GetWorldPoint()
         {
             var screenPoint = Pointer.current.position.ReadValue();

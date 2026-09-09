@@ -4,7 +4,7 @@
     xmlns:nl3d="Netherlands3D.UI.Components"
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
     editor-extension-mode="False"
-    class="radio-group"
+    class="radio-group text-base"
 >
     <ui:RadioButtonGroup name="RadioButtonGroup" class="radio-group__items" />
 </ui:UXML>
