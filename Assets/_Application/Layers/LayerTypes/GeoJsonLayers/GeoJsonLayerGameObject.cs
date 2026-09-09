@@ -300,9 +300,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            // if(!hasPoints && !hasPolygons && !hasLines) // in case we have no data yet, we don't want to apply anything
-            //     return;
-            
             if(hasPolygons)
                 ApplyGeoJsonVisualisationLayerStyling(polygonFeaturesLayer, Symbolizer.FillColorProperty);
             if(hasLines)
