@@ -330,7 +330,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var feature = LayerFeatures[visualisationLayer];
             var symbolizer = GetStyling(feature);
-            var fillColor = symbolizer.GetAndNormalizeColor(key);
+            var fillColor = symbolizer.GetColor(key);
             // Keep the original material color if fill color is not set (null)
             if (!fillColor.HasValue) return;
 

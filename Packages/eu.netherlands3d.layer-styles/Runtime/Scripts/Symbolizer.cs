@@ -193,7 +193,7 @@ namespace Netherlands3D.LayerStyles
             SetProperty(propertyName, $"#{ColorUtility.ToHtmlStringRGBA(color)}");
         }
 
-        public Color? GetAndNormalizeColor(string propertyName)
+        private Color? GetAndNormalizeColor(string propertyName)
         {
             if (GetProperty(propertyName) is not string property) return null;
 
