@@ -10,7 +10,8 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class EditableNameField : VisualElement, INotifyValueChanged<string>
     {
-        public float TextWidth => IsEditing ? GetInputFieldTextWidth() : textWidth;
+        public float TextWidth => IsEditing ? GetInputFieldTextSize().x : textWidth;
+        public float TextHeight => IsEditing ? GetInputFieldTextSize().y : textHeight;
         
         private Label label; // we will switch between label and input field
         private TextField inputField;
@@ -44,6 +45,7 @@ namespace Netherlands3D.UI.Components
 
         private IVisualElementScheduledItem tickerSchedule;
 
+        private float textHeight;
         private float textWidth;
         private float availableWidth;
         private float ScrollSpeed = 60f;
@@ -152,29 +154,31 @@ namespace Netherlands3D.UI.Components
             if (label == null)
                 return;
 
-            textWidth = label.MeasureTextSize(
+            var measuredSize = label.MeasureTextSize(
                 label.text,
                 float.PositiveInfinity,
                 MeasureMode.Undefined,
-                label.resolvedStyle.height,
-                MeasureMode.Exactly
-            ).x;
+                float.PositiveInfinity,
+                MeasureMode.Undefined
+            );
+
+            textWidth = measuredSize.x;
+            textHeight = measuredSize.y;
 
 
             availableWidth = resolvedStyle.width;
             ResetTicker();
         }
 
-        private float GetInputFieldTextWidth()
+        private Vector2 GetInputFieldTextSize()
         {
-            float width = inputField.MeasureTextSize(
+            return inputField.MeasureTextSize(
                 inputField.text,
                 float.PositiveInfinity,
                 MeasureMode.Undefined,
-                inputField.resolvedStyle.height,
-                MeasureMode.Exactly
-            ).x;
-            return width;
+                float.PositiveInfinity,
+                MeasureMode.Undefined
+            );
         }
         
         private void OnLabelHoverEnter(PointerEnterEvent evt)

@@ -39,10 +39,10 @@ namespace Netherlands3D.UI.Components
             position.pickingMode = PickingMode.Ignore;
             background = this.Q<VisualElement>("Background");
             
+            RegisterCallback<GeometryChangedEvent>(evt => UpdateContainerSize());
             RegisterCallback<GeometryChangedEvent>(UpdateSnapping);
             nameField.RegisterValueChangedCallback(OnNameChanged);
-            
-            schedule.Execute(UpdateContainerSize).Every(30); //todo easier for testing, improve to only update when needed
+            nameField.RegisterValueChangedCallback(evt => UpdateContainerSize());
         }
 
         private void OnNameChanged(ChangeEvent<string> evt)
@@ -105,7 +105,7 @@ namespace Netherlands3D.UI.Components
         {
             bool isEmpty = string.IsNullOrEmpty(currentText);
             float width = isEmpty ? placeholder.resolvedStyle.width : nameField.TextWidth;
-            float height = isEmpty ? placeholder.resolvedStyle.height : nameField.resolvedStyle.height;
+            float height = isEmpty ? placeholder.resolvedStyle.height : nameField.TextHeight;
 
             textContainer.style.width = width;
             textContainer.style.height = height;
