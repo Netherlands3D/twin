@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -56,6 +55,7 @@ namespace Netherlands3D
 
             Debug.Log("reading layer data: " + layer.Name);
             //Parse as much as default fields as possible
+            
             using (var subReader = obj.CreateReader())
             {
                 serializer.Populate(subReader, layer);
@@ -133,12 +133,13 @@ namespace Netherlands3D
             var layerProps = obj["layerProperties"] as JArray;
             if (layerProps != null)
             {
+                bool isScenario = false;
                 foreach (var prop in layerProps)
                 {
                     var type = prop["$type"]?.ToString();
 
                     // Only handle Annotation type for now
-                    if (type == "https://netherlands3d.eu/schemas/projects/layers/properties/Annotation")
+                    if (type == namespaceIdentifier + "properties/Annotation")
                     {
                         var annotationText = prop["annotationText"]?.ToString();
 
@@ -175,6 +176,19 @@ namespace Netherlands3D
                             layer.SetProperty(annotationProperty);
                             layer.SetProperty(transformLayerPropertyData);
                         }
+                    }
+
+                    if (type == namespaceIdentifier + "properties/Scenario")
+                    {
+                        if (layer.HasProperty<FolderPropertyData>())
+                            layer.GetProperty<FolderPropertyData>().IsScenario = true;
+                        else
+                            isScenario = true;
+                    }
+                    if (type == namespaceIdentifier + "properties/Folder")
+                    {
+                        if(!layer.HasProperty<FolderPropertyData>())
+                            layer.SetProperty(new FolderPropertyData(isScenario));
                     }
                 }
             }
