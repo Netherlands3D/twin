@@ -35,7 +35,7 @@ namespace Netherlands3D.UI.Panels
 
             ClearActivePanel();
             
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             selectorService.OnSelectLayer.AddListener(SpawnPanel);
             selectorService.OnNoLayerSelected.AddListener(ClearActivePanel);
             
@@ -46,7 +46,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDestroy()
         {
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             selectorService.OnSelectLayer.RemoveListener(SpawnPanel);
             selectorService.OnNoLayerSelected.RemoveListener(ClearActivePanel);
         }
