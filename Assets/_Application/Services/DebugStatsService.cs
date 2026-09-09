@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Services.Netherlands3D;
-using Netherlands3D.Twin.Tools;
+using Unity.Profiling;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
+using Tool = Netherlands3D.Twin.Tools.Tool;
 
 namespace Netherlands3D.Twin.Services
 {
@@ -19,11 +21,27 @@ namespace Netherlands3D.Twin.Services
             public Func<double> ReadValue { get; }
             public float ElapsedTime { get; set; }
 
+            private ProfilerRecorder profilerRecorder;
+
             public StatSampler(DebugStat stat, float interval, Func<double> readValue)
             {
                 Stat = stat;
                 Interval = interval;
                 ReadValue = readValue;
+            }
+
+            public StatSampler(DebugStat stat, float interval, ProfilerRecorder profilerRecorder,
+                Func<double, double> profilerRecorderReadValue)
+            {
+                Stat = stat;
+                Interval = interval;
+                this.profilerRecorder = profilerRecorder;
+                ReadValue = () =>
+                {
+                    if (!profilerRecorder.IsRunning) profilerRecorder.Start();
+                    var readValue = profilerRecorderReadValue.Invoke(profilerRecorder.LastValueAsDouble);
+                    return readValue;
+                };
             }
             
         }
@@ -40,6 +58,9 @@ namespace Netherlands3D.Twin.Services
         private TileHandler TileHandler => ServiceLocator.GetService<TileHandler>();
 
         [SerializeField] private Tool debugStatsTool;
+        
+        
+        [MenuItem("Netherlands3D/Clear GC")]
         
         void Awake()
         {
@@ -81,6 +102,8 @@ namespace Netherlands3D.Twin.Services
             
             AddStat("GC Reserved Memory (MB)", memoryCategory, .25f,
                 () => Profiler.GetMonoHeapSizeLong() * BytesToMegabytes);
+            
+            AddStat("GC Allocated (bytes)", memoryCategory, 0, ProfilerCategory.Memory, "GC Allocated In Frame", (x) => x);
             
             //
             
@@ -130,6 +153,17 @@ namespace Netherlands3D.Twin.Services
             
             stats.Add(stat);
             samplers.Add(new StatSampler(stat, interval, readValue));
+        }
+
+        //See: https://docs.unity3d.com/6000.2/Documentation/Manual/profiler-counters-reference.html
+        private void AddStat(string displayName, DebugStatCategory category, float interval, ProfilerCategory profilerRecorderCategory,
+            string profilerRecorderStatName, Func<double, double> profilerRecorderReadValue)
+        {
+            
+            var stat = new DebugStat(displayName, category);
+            stats.Add(stat);
+            var profilerRecorder = new ProfilerRecorder(profilerRecorderCategory, profilerRecorderStatName);
+            samplers.Add(new StatSampler(stat, interval, profilerRecorder, profilerRecorderReadValue));
         }
         
         private void Sample(StatSampler sampler) 
