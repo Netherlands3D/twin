@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using netDxf.Entities;
@@ -105,11 +106,15 @@ namespace Netherlands3D.UI.Panels
         public WorldText element;
         public FloatingElement floatingElement;
         public bool Visible => visible; //  !element.ClassListContains(UtilityClassConstants.HIDDEN); 
-        public Color color;
+
         private bool visible;
 
         public AnnotationTextObject(string text, FloatingElement floatingElement, WorldText.SnappingSide side, float offsetPixels)
         {
+            this.floatingElement = floatingElement;
+            if(floatingElement == null)
+                throw new Exception("FloatingElement is missing");
+            
             element = new WorldText();
             element.SetText(text);
             element.SetSnappingSide(side);
@@ -131,6 +136,11 @@ namespace Netherlands3D.UI.Panels
         {
             this.visible = visible;
             element.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+        }
+
+        public void SetColor(Color color)
+        {
+            element.SetColor(color);
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Symbolizer styling = GetStyling(feature);
             var fillColor = styling.GetFillColor();
             if (fillColor.HasValue)
-                annotation.color = fillColor.Value;
+                annotation.SetColor(fillColor.Value);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)

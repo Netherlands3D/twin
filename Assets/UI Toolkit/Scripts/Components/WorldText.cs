@@ -114,5 +114,10 @@ namespace Netherlands3D.UI.Components
             textContainer.style.width = width;
             textContainer.style.height = height;
         }
+        
+        public void SetColor(Color color)
+        {
+            textContainer.style.backgroundColor = color;
+        }
     }
 }
