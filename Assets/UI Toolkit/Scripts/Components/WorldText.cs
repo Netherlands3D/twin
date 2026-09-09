@@ -15,6 +15,7 @@ namespace Netherlands3D.UI.Components
         private EditableNameField nameField;
         private Label placeholder;
         private Icon position;
+        private VisualElement background;
         
         public enum SnappingSide { Left, Right, Above }
         private SnappingSide snappingSide = SnappingSide.Above;
@@ -36,6 +37,7 @@ namespace Netherlands3D.UI.Components
             placeholder = this.Q<Label>("Placeholder");
             position = this.Q<Icon>("Position");
             position.pickingMode = PickingMode.Ignore;
+            background = this.Q<VisualElement>("Background");
             
             RegisterCallback<GeometryChangedEvent>(UpdateSnapping);
             nameField.RegisterValueChangedCallback(OnNameChanged);
@@ -113,6 +115,7 @@ namespace Netherlands3D.UI.Components
         {
             textContainer.style.backgroundColor = color;
             position.style.unityBackgroundImageTintColor = color;
+            background.style.backgroundColor = color;
         }
     }
 }

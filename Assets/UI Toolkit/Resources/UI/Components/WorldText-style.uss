@@ -1,6 +1,8 @@
 .world-text
 {
     position:absolute;
+    --text-border: -10px;
+    
 }
 
 .world-text__container {
@@ -33,6 +35,7 @@
 
 .world-text__container .text-field__placeholder {
     background-color: transparent;
+    -unity-font-style: italic;
     position: absolute;
     left: 50%;
     bottom: 0;
@@ -41,6 +44,18 @@
     flex-shrink: 0;
     padding: 0;
     margin: 0;
+}
+
+.world-text__container-background{
+    position: absolute;
+    background-color: var(--color-white);/*default white until set by styling*/
+    left: var(--text-border);
+    right: var(--text-border);
+    top: var(--text-border);
+    bottom: var(--text-border);
+    border-radius: var(--spacing-4);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-200); /*same color as containtcontainerborders?*/
 }
 
 .world-text__position {       

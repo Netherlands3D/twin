@@ -7,8 +7,10 @@
     class="world-text"
 >
     <ui:VisualElement name="TextContainer" class="world-text__container">
+        <ui:VisualElement name="Background" class="world-text__container-background"/>
         <nl3d:EditableNameField value="test text" />
-        <ui:Label class="text-field__placeholder" name="Placeholder" text="Plaats hier uw tekst maar eens en nog een beetje" picking-mode="Ignore"/>
+        <ui:Label class="text-field__placeholder" name="Placeholder" text="Plaats hier uw tekst" picking-mode="Ignore"/>
+        
     </ui:VisualElement>
     <nl3d:Icon class="world-text__position" name="Position" image="Point" />
 </ui:UXML>
