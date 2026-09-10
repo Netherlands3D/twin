@@ -91,10 +91,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
-            toolService = ServiceLocator.GetService<ToolService>();
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            contextMenuBehaviour = App.UIRoot.GetComponent<ContextMenuBehaviour>();
-            
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
         }
@@ -148,7 +144,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             inputService.LongPressAction.performed += contextMenuBehaviour.OnRightClick;
             inputService.TouchAction.performed += contextMenuBehaviour.OnLeftClick;
             
+            toolService = ServiceLocator.GetService<ToolService>();
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            contextMenuBehaviour = ServiceLocator.GetService<ContextMenuBehaviour>();
             
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
