@@ -1,0 +1,10 @@
+<ui:UXML 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    editor-extension-mode="False"
+    class="pin-toggle"
+>
+
+    <nl3d:Icon name="Icon" image="Pinned" color="White" picking-mode="Ignore" />
+
+</ui:UXML>
