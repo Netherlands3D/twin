@@ -27,6 +27,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
         <ui:VisualElement name="BottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
+            <nl3d:TimelineSlider/>
             <nl3d:DebugInfo/>
             <nl3d:Footer/>
         </ui:VisualElement>

@@ -14,6 +14,7 @@ namespace Netherlands3D.UI.Components
         }
 
         private HeaderType headerType = HeaderType.Normal;
+        private NumberField inputField;
 
         [UxmlAttribute("header-type")]
         public HeaderType Header
@@ -85,7 +86,6 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        private NumberField inputField;
         
         public override void SetValueWithoutNotify(float newValue)
         {
