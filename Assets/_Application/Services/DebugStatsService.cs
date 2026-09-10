@@ -4,7 +4,6 @@ using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Services.Netherlands3D;
 using Unity.Profiling;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
 using Tool = Netherlands3D.Twin.Tools.Tool;
@@ -59,8 +58,6 @@ namespace Netherlands3D.Twin.Services
 
         [SerializeField] private Tool debugStatsTool;
         
-        
-        [MenuItem("Netherlands3D/Clear GC")]
         
         void Awake()
         {

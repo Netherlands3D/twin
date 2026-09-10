@@ -154,11 +154,168 @@ namespace Netherlands3D.CartesianTiles
             offset += sizeof(int);
             return value;
         }
-        
-        //private static void CopyBytes(byte[] source, ref int offset, int size)
+
+        private static int binaryMeshUnsafePicker = 0;
 
         public static Mesh ReadBinaryMeshUnSafe(byte[] fileBytes, out int[] submeshMaterialIndices)
         {
+ 
+            var martijnMesh = ReadBinaryMeshUnSafeMartijn(fileBytes, out var martijnSubmeshMaterialIndices);
+            var wytzeMesh = ReadBinaryMeshUnSafeWytze(fileBytes, out var wytzeSubmeshMaterialIndices);
+
+            submeshMaterialIndices = wytzeSubmeshMaterialIndices;
+            return wytzeMesh;
+        }
+        
+        //----
+        
+        public static Mesh ReadBinaryMeshUnSafeMartijn(byte[] fileBytes, out int[] submeshMaterialIndices)
+        {
+            // todo: array reuse through BufferedStream bs;?
+            
+            Profiler.BeginSample("ReadBinaryMeshUnSafe (Martijn)");
+
+            using (var stream = new MemoryStream(fileBytes))
+            {
+
+                using (BinaryReader reader = new BinaryReader(stream))
+                {
+
+                    Profiler.BeginSample("Read index data");
+
+                    var version = reader.ReadInt32();
+                    var vertexCount = reader.ReadInt32();
+                    var normalsCount = reader.ReadInt32();
+                    var uvsCount = reader.ReadInt32();
+                    var indicesCount = reader.ReadInt32();
+                    var submeshCount = reader.ReadInt32();
+
+                    Profiler.EndSample();
+
+                    Profiler.BeginSample("Create mesh");
+
+                    var mesh = new Mesh();
+
+                    Profiler.EndSample();
+
+                    Profiler.BeginSample("Create vertices");
+
+                    //byte[] b = new byte[Marshal.SizeOf<Vector3>() * vertexCount];
+                    byte[] b = reader.ReadBytes(Marshal.SizeOf<Vector3>() * vertexCount);
+                    Vector3[] vertices = new Vector3[vertexCount];
+                    FromByteArray<Vector3>(b, vertices);
+                    mesh.vertices = vertices;
+
+                    Profiler.EndSample();
+
+                    Profiler.BeginSample("Create normals");
+
+                    // Normals should be same size as vertices - right?
+                    if (vertexCount != normalsCount)
+                    {
+                        // Otherwise resize:
+                        vertices = new Vector3[normalsCount];
+                    }
+
+                    // Normals:
+                    b = reader.ReadBytes(Marshal.SizeOf<Vector3>() * normalsCount);
+                    FromByteArray<Vector3>(b, vertices);
+                    mesh.normals = vertices;
+
+                    Profiler.EndSample();
+
+                    Profiler.BeginSample("Create UVs");
+
+                    // UVS - if present.
+                    if (uvsCount > 0)
+                    {
+                        Vector2[] uvs = new Vector2[uvsCount];
+                        b = reader.ReadBytes(Marshal.SizeOf<Vector2>() * uvsCount);
+                        FromByteArray<Vector2>(b, uvs);
+                        mesh.uv = uvs;
+                    }
+
+                    Profiler.EndSample();
+
+                    Profiler.BeginSample("Create indices");
+
+                    // Indices:
+                    int[] indices = new int[indicesCount];
+                    b = reader.ReadBytes(sizeof(int) * indicesCount);
+                    FromByteArray<int>(b, indices);
+
+                    mesh.SetIndexBufferParams(indicesCount, UnityEngine.Rendering.IndexFormat.UInt32);
+                    mesh.SetIndexBufferData(indices, 0, 0, indicesCount,
+                        UnityEngine.Rendering.MeshUpdateFlags.DontNotifyMeshUsers |
+                        UnityEngine.Rendering.MeshUpdateFlags.DontRecalculateBounds |
+                        UnityEngine.Rendering.MeshUpdateFlags.DontResetBoneBounds |
+                        UnityEngine.Rendering.MeshUpdateFlags.DontValidateIndices);
+
+                    Profiler.EndSample();
+
+                    Profiler.BeginSample("Create submeshes");
+
+                    mesh.subMeshCount = submeshCount;
+
+                    // Read submesh info:
+                    SubMeshInfo[] subMeshInfos = new SubMeshInfo[submeshCount];
+                    b = reader.ReadBytes(Marshal.SizeOf<SubMeshInfo>() * submeshCount);
+                    FromByteArray<SubMeshInfo>(b, subMeshInfos);
+
+                    int[] materialIndices = new int[submeshCount];
+
+                    for (int i = 0; i < submeshCount; i++)
+                    {
+                        materialIndices[i] = subMeshInfos[i].subMeshID;
+
+                        var subMeshDescriptor = new UnityEngine.Rendering.SubMeshDescriptor()
+                        {
+                            baseVertex = 0,
+                            firstVertex = subMeshInfos[i].submeshFirstVertex,
+                            vertexCount = subMeshInfos[i].submeshVertexCount,
+
+                            indexStart = subMeshInfos[i].subMeshFirstIndex,
+                            indexCount = subMeshInfos[i].subMeshIndexCount,
+                        };
+
+                        mesh.SetSubMesh(i, subMeshDescriptor);
+                    }
+
+                    submeshMaterialIndices = materialIndices;
+
+                    Profiler.EndSample();
+
+                    return mesh;
+                }
+            }
+        }
+        
+        public static void FromByteArray<T>(byte[] source, T[] destination) where T : struct
+        {
+            //  T[] destination = new T[source.Length / Marshal.SizeOf(typeof(T))];
+            GCHandle handle = GCHandle.Alloc(destination, GCHandleType.Pinned);
+            try
+            {
+                IntPtr pointer = handle.AddrOfPinnedObject();
+                Marshal.Copy(source, 0, pointer, source.Length);
+                // return destination;
+            }
+            finally
+            {
+                if (handle.IsAllocated)
+                    handle.Free();
+            }
+        }
+        
+        //-----
+        
+        //private static void CopyBytes(byte[] source, ref int offset, int size)
+
+        public static Mesh ReadBinaryMeshUnSafeWytze(byte[] fileBytes, out int[] submeshMaterialIndices)
+        {
+            
+            Profiler.BeginSample("ReadBinaryMeshUnSafe (Wytze)");
+            
             // todo: array reuse through BufferedStream bs;?
 
             //using (var stream = new MemoryStream(fileBytes))
@@ -166,6 +323,9 @@ namespace Netherlands3D.CartesianTiles
 
                 //using (BinaryReader reader = new BinaryReader(stream))
                 {
+                    
+                    Profiler.BeginSample("Read index data");
+                    
                     var offset = 0;
                     
                     var version = 0;
@@ -182,11 +342,23 @@ namespace Netherlands3D.CartesianTiles
                     FromByteArray(fileBytes, ref offset, ref indicesCount);
                     FromByteArray(fileBytes, ref offset, ref submeshCount);
 
+                    Profiler.EndSample();
+                    
+                    Profiler.BeginSample("Create mesh");
+
                     var mesh = new Mesh();
+                    
+                    Profiler.EndSample();
+                    
+                    Profiler.BeginSample("Create vertices");
                     
                     Vector3[] vertices = new Vector3[vertexCount];
                     FromByteArray(fileBytes, ref offset, vertices);
                     mesh.vertices = vertices;
+                    
+                    Profiler.EndSample();
+                    
+                    Profiler.BeginSample("Create normals");
 
                     // Normals should be same size as vertices - right?
                     if (vertexCount != normalsCount)
@@ -198,6 +370,10 @@ namespace Netherlands3D.CartesianTiles
                     // Normals:
                     FromByteArray<Vector3>(fileBytes, ref offset, vertices);
                     mesh.normals = vertices;
+                    
+                    Profiler.EndSample();
+                    
+                    Profiler.BeginSample("Create UVs");
 
                     // UVS - if present.
                     if (uvsCount > 0)
@@ -206,6 +382,10 @@ namespace Netherlands3D.CartesianTiles
                         FromByteArray<Vector2>(fileBytes, ref offset, uvs);
                         mesh.uv = uvs;
                     }
+                    
+                    Profiler.EndSample();
+                    
+                    Profiler.BeginSample("Create indices");
 
                     // Indices:
                     int[] indices = new int[indicesCount];
@@ -213,6 +393,11 @@ namespace Netherlands3D.CartesianTiles
 
                     mesh.SetIndexBufferParams(indicesCount, UnityEngine.Rendering.IndexFormat.UInt32);
                     mesh.SetIndexBufferData(indices, 0, 0, indicesCount, UnityEngine.Rendering.MeshUpdateFlags.DontNotifyMeshUsers | UnityEngine.Rendering.MeshUpdateFlags.DontRecalculateBounds | UnityEngine.Rendering.MeshUpdateFlags.DontResetBoneBounds | UnityEngine.Rendering.MeshUpdateFlags.DontValidateIndices);
+                    
+                    Profiler.EndSample();
+                    
+                    Profiler.BeginSample("Create submeshes");
+                    
                     mesh.subMeshCount = submeshCount;
 
                     // Read submesh info:
@@ -239,10 +424,15 @@ namespace Netherlands3D.CartesianTiles
                     }
 
                     submeshMaterialIndices = materialIndices;
+                    
+                    Profiler.EndSample();
+                    
+                    Profiler.EndSample();
 
                     return mesh;
                 }
             }
+
 
         }
 
