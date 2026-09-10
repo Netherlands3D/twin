@@ -293,15 +293,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             HierarchicalObjectLayerGameObject ctxObject;
             if (IsColliderClicked(out ctxObject))
             {
-                if (ctxObject != null)
-                {
-                    selectedVisualisation = ctxObject;
-                    if (!ctxObject.LayerData.IsSelected)
-                    {
-                        ctxObject.LayerData.SelectLayer(true);
-                    }
-                    OnSelectLayer.Invoke(ctxObject.LayerData);
-                }
+                SelectVisualisation(ctxObject);
                 Deselect();
                 return;
             }
@@ -365,6 +357,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             OnSelectLayer.Invoke(layerData);
         }
 
+        public void SelectVisualisation(HierarchicalObjectLayerGameObject ctxObject)
+        {
+            if (ctxObject != null)
+            {
+                selectedVisualisation = ctxObject;
+                //if (!ctxObject.LayerData.IsSelected)
+                {
+                    ctxObject.LayerData.SelectLayer(true);
+                }
+                OnSelectLayer.Invoke(ctxObject.LayerData);
+            }
+        }
+        
         public void SelectBagId(string bagId, Coordinate coordinate)
         {
             MeshMapping mapping = subObjectSelector.FindSubObjectAtCoordinate(coordinate, bagId);

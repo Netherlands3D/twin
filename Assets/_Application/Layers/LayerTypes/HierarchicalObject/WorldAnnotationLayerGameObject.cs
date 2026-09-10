@@ -1,17 +1,15 @@
 using System.Collections.Generic;
-using GG.Extensions;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Tools;
-using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
@@ -77,6 +75,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotationPropertyData.AnnotationText = annotationText;
             annotation.element.SetText(annotationText);
         }
+        
+        private void OnClickAnnotation(ClickEvent e)
+        {
+            ServiceLocator.GetService<SelectionService>().SelectVisualisation(this);
+        }
 
         protected override void RegisterEventListeners()
         {
@@ -85,6 +88,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             property.OnPositionChanged.AddListener(OnUpdateAnnotationPosition);
             
             annotation.AddTextEditListener(OnEditChanged);
+            annotation.element.RegisterCallback<ClickEvent>(OnClickAnnotation);
         }
 
         protected override void UnregisterEventListeners()
@@ -94,6 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             property.OnPositionChanged.RemoveListener(OnUpdateAnnotationPosition);
             
             annotation.RemoveTextEditListener(OnEditChanged);
+            annotation.element.UnregisterCallback<ClickEvent>(OnClickAnnotation);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)

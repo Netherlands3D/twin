@@ -1,6 +1,7 @@
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -101,8 +102,10 @@ namespace Netherlands3D.UI.Components
             textContainer.style.translate = new Translate(offsetX, offsetY, 0);
         }
         
+        //todo do this within styling
         private void UpdateContainerSize()
         {
+            //get either the placeholder width when no text is present or the input field completed text or the being edited text width
             bool isEmpty = string.IsNullOrEmpty(currentText);
             float width = isEmpty ? placeholder.resolvedStyle.width : nameField.TextWidth;
             float height = isEmpty ? placeholder.resolvedStyle.height : nameField.TextHeight;
