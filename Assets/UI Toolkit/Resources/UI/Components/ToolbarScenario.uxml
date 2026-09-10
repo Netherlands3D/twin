@@ -8,6 +8,6 @@
 >
     <ui:Label name="ScenarioLabel" text="Scenario's" class="toolbar-scenario__label text-header" />
     <ui:VisualElement name="Divider" class="divider" />
-    <ui:ToggleButtonGroup name="ScenarioButtonGroup" class="toolbar-scenario__button-group" allow-empty-selection="true" is-multiple-selection="false">
-    </ui:ToggleButtonGroup>
+    <ui:VisualElement name="ScenarioToggleGroup" class="toolbar-scenario__toggle-group">
+    </ui:VisualElement>
 </ui:UXML>

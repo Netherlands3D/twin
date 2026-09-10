@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -5,11 +7,24 @@ namespace Netherlands3D
 {
     public static class PointerStyle
     {
+        public class StyleRequest
+        {
+            public StyleRequest(object requestingObject, Style cursorStyle)
+            {
+                this.requestingObject = requestingObject;
+                this.cursorStyle = cursorStyle;
+            }
+
+            public object requestingObject;
+            public Style cursorStyle;
+        }
+
         [DllImport("__Internal")]
         private static extern string SetCSSCursor(string cursorName = "auto");
+        private static List<object> activeStyleRequestObjects = new();
+        private static Dictionary<object, Style> requestedStyles = new();
 
-        
-       public enum Style
+        public enum Style
         {
             AUTO,
             DEFAULT,
@@ -46,12 +61,48 @@ namespace Netherlands3D
             NESW_RESIZE,
             NWSE_RESIZE
         }
-    
 
-        public static void ChangeCursor(Style type)
+
+        public static void RequestCursorChange(object requestingObject, Style style)
+        {
+            var requestExists = activeStyleRequestObjects.Contains(requestingObject);
+            if(requestExists)
+            {
+                requestedStyles[requestingObject] = style;
+            }
+            else
+            {
+                activeStyleRequestObjects.Add(requestingObject);
+                requestedStyles.Add(requestingObject, style);
+            }
+
+            UpdateCursor();
+        }
+
+        public static void CancelCursorChange(object unlockingObject)
+        {
+            activeStyleRequestObjects.Remove(unlockingObject);
+            requestedStyles.Remove(unlockingObject);
+
+            UpdateCursor();
+        }
+
+        private static void UpdateCursor()
+        {
+            if(activeStyleRequestObjects.Count == 0)
+            {
+                ChangeCursor(Style.AUTO);
+                return;
+            }
+            
+            var activeRequest = activeStyleRequestObjects[0];
+            var style = requestedStyles[activeRequest];
+            ChangeCursor(style);
+        }
+
+        private static void ChangeCursor(Style type)
         {
             var cursorString = "";
-
             switch (type)
             {
                 case Style.AUTO:
@@ -160,6 +211,8 @@ namespace Netherlands3D
 
 #if !UNITY_EDITOR && UNITY_WEBGL
             SetCSSCursor(cursorString);
+#else
+            Debug.Log("change cursor to " + cursorString);
 #endif
         }
     }

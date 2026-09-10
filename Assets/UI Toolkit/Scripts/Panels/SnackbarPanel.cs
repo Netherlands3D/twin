@@ -38,6 +38,7 @@ namespace Netherlands3D.UI.Panels
         public void RemoveItem(SnackBarItem item)
         {
             item.Closed -= RemoveItem;
+            item.IsClosed = true;
             scrollView.Remove(item);
 
             if (scrollView.childCount == 0)
