@@ -89,8 +89,6 @@ namespace Netherlands3D.UI.Panels
                 return;
             
             ClearActivePanel();
-            if(App.UIRoot.IsPointerOverUI())
-                return;
             
             //todo we should probably wait one frame here to have all systems updated
             CheckAndSpawnPanel(panelPos);

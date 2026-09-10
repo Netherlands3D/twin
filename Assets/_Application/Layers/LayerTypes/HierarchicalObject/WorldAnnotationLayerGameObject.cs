@@ -13,8 +13,13 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject
+    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject, IVisualizationWithWorldUI
     {
+        public VisualElement GetVisualElement()
+        {
+            return annotation.element;
+        }
+        
         private AnnotationTextObject annotation;
         private const float offsetPixels = 50; //todo make this from uss instead
         
