@@ -154,7 +154,7 @@
     --icon-pinned: url("project://database/Assets/Sprites/UI/Icons/Type=Pinned,%20Color=white,%20Size=medium.png");
     --icon-play: url("project://database/Assets/Sprites/UI/Icons/Type=Play,%20Color=white,%20Size=medium.png");
     --icon-plus: url("project://database/Assets/Sprites/UI/Icons/Type=Plus,%20Color=white,%20Size=medium.png");
-    --icon-point: url("project://database/Assets/Sprites/UI/Icons/Type=Point,%20Color=white,%20Size=medium.png");
+    --icon-point: url("project://database/Assets/Sprites/UI/Icons/Type=Point,%20Color=white,%20Size=large.png");
     --icon-polygon: url("project://database/Assets/Sprites/UI/Icons/Type=Polygon,%20Color=white,%20Size=medium.png");
     --icon-presentationchart: url("project://database/Assets/Sprites/UI/Icons/Type=PresentationChartBar,%20Color=white,%20Size=medium.png");
     --icon-raster: url("project://database/Assets/Sprites/UI/Icons/Type=Raster,%20Color=white,%20Size=medium.png");

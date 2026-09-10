@@ -1,7 +1,9 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -9,13 +11,35 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class EditableNameField : VisualElement, INotifyValueChanged<string>
     {
+        private Vector2 inputTextSize;
+
+        public float TextWidth => IsEditing ? inputTextSize.x : textWidth;
+        public float TextHeight => IsEditing ? inputTextSize.y : textHeight;
+
+        public bool ScrollingTextEnabled
+        {
+            get
+            {
+                return scrollingTextEnabled;
+            }
+            set
+            {
+                scrollingTextEnabled = value;
+            }
+        }
+
+        public TextField InputField => inputField;
+
         private Label label; // we will switch between label and input field
         private TextField inputField;
-        
+        private bool scrollingTextEnabled = true;
         private bool firstClickDone;
         private bool intervalExpired;
+      
         private IVisualElementScheduledItem clickTimer;
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
+
+        public UnityEvent<bool> OnEditingChanged = new();
         
         [UxmlAttribute("value")]
         public string value
@@ -26,7 +50,7 @@ namespace Netherlands3D.UI.Components
                 if (label.text == value) return;
                 using var evt = ChangeEvent<string>.GetPooled(label.text, value);
                 evt.target = this;
-                label.text = value;
+                label.text = value.Replace("\\n", "\n");;
                 inputField.SetValueWithoutNotify(value);
                 CalculateOverflow();
                 SendEvent(evt);
@@ -39,11 +63,13 @@ namespace Netherlands3D.UI.Components
 
         private IVisualElementScheduledItem tickerSchedule;
 
+        private float textHeight;
         private float textWidth;
         private float availableWidth;
         private float ScrollSpeed = 60f;
         private float scrollPosition;
         private bool isOverflowing;
+        private Vector2 minTextSize;
         
         public void SetValueWithoutNotify(string newValue)
         {
@@ -65,12 +91,12 @@ namespace Netherlands3D.UI.Components
             label.focusable = true;
             inputField = this.Q<TextField>("InputField");
 
-            label.RegisterCallback<ClickEvent>(OnNameLabelClicked);
-            label.RegisterCallback<BlurEvent>(OnLabelBlur);
+            RegisterCallback<ClickEvent>(OnNameLabelClicked);
+            RegisterCallback<BlurEvent>(OnLabelBlur);
 
             inputField.RegisterCallback<BlurEvent>(OnNameInputFieldBlur, TrickleDown.TrickleDown);
             inputField.RegisterCallback<NavigationSubmitEvent>(OnNavigationSubmitted, TrickleDown.TrickleDown);
-
+            inputField.RegisterValueChangedCallback(OnInputValueChanged);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
 
@@ -85,13 +111,15 @@ namespace Netherlands3D.UI.Components
             intervalExpired = false;
             clickTimer?.Pause();
         }
-
+       
         private void StartEditing()
         {
             label.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
 
-            schedule.Execute(() => { inputField.Focus();}); // we need to wait until the layout engine processes the new Display: flex of the input field before we can select focus the element
+            schedule.Execute(() => inputField.Focus());
+            
+            OnEditingChanged.Invoke(true);
         }
         
         private void StopEditing()
@@ -101,6 +129,19 @@ namespace Netherlands3D.UI.Components
             
             ResetClickState();
             value = inputField.text;
+            
+            OnEditingChanged.Invoke(false);
+        }
+        
+        private void OnInputValueChanged(ChangeEvent<string> evt)
+        {
+            inputTextSize = inputField.MeasureTextSize(
+                evt.newValue + "\u200B",
+                float.PositiveInfinity,
+                MeasureMode.Undefined,
+                float.PositiveInfinity,
+                MeasureMode.Undefined
+            );
         }
         
         private void OnNameLabelClicked(ClickEvent evt)
@@ -140,16 +181,19 @@ namespace Netherlands3D.UI.Components
         
         private void CalculateOverflow()
         {
-            if (label == null)
-                return;
 
-            textWidth = label.MeasureTextSize(
-                label.text,
+            string text = label.text;
+            
+            var measuredSize = label.MeasureTextSize(
+                text,
                 float.PositiveInfinity,
                 MeasureMode.Undefined,
-                label.resolvedStyle.height,
-                MeasureMode.Exactly
-            ).x;
+                float.PositiveInfinity,
+                MeasureMode.Undefined
+            );
+
+            textWidth = measuredSize.x;
+            textHeight = measuredSize.y;
 
 
             availableWidth = resolvedStyle.width;
@@ -158,7 +202,7 @@ namespace Netherlands3D.UI.Components
         
         private void OnLabelHoverEnter(PointerEnterEvent evt)
         {
-            if(textWidth < availableWidth) return;
+            if(textWidth < availableWidth || !scrollingTextEnabled) return;
             
             StartTicker();
         }

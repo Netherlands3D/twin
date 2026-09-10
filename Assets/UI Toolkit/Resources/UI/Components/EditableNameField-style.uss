@@ -7,6 +7,7 @@
 .editable-name-field__label{
     margin-top: 0;
     margin-bottom: 0;
+    flex-grow: 1;
 }
 
 .editable-name-field__input.textfield{
@@ -22,3 +23,5 @@
 .unity-base-field__input{
     margin: 0;
 }
+
+

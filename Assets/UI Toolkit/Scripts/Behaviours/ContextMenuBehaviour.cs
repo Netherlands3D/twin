@@ -3,6 +3,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -18,6 +19,16 @@ namespace Netherlands3D.UI.Panels
         private VisualElement floatingPanelContent;
         private FloatingPanelBehaviour selectedBehaviour;
         private VisualElement floatingElementsContent;
+        
+        public VisualElement FloatingElementsContent => floatingElementsContent;
+        
+        public T GetBehaviour<T>() where T : FloatingButtonBehaviour
+        {
+            foreach(var behaviour in floatingButtonBehaviour)
+                if(behaviour is T)
+                    return behaviour as T;
+            return null;
+        }
 
         private void Start()
         {
@@ -80,8 +91,6 @@ namespace Netherlands3D.UI.Panels
                 return;
             
             ClearActivePanel();
-            if(App.UIRoot.IsPointerOverUI())
-                return;
             
             //todo we should probably wait one frame here to have all systems updated
             CheckAndSpawnPanel(panelPos);
@@ -119,6 +128,16 @@ namespace Netherlands3D.UI.Panels
                 floatingPanel.BringToFront();
                 break;
             }
+        }
+
+        public void AddToFloatingElementsContent(FloatingElement floatingElement)
+        {
+            floatingElementsContent.Add(floatingElement);
+        }
+
+        public void RemoveFromFloatingElementsContent(FloatingElement floatingElement)
+        {
+            floatingElementsContent.Remove(floatingElement);
         }
     }
 }

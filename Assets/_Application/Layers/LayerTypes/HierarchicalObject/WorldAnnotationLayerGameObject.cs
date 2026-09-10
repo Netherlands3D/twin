@@ -1,30 +1,40 @@
+using System;
 using System.Collections.Generic;
-using GG.Extensions;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Tools;
-using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject
+    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject, IVisualizationWithWorldUI
     {
-        [SerializeField] private TextPopout popoutPrefab;
-        private Tool layerTool;
-
-        private TextPopout annotation;
-        private enum EditMode
+        [SerializeField] private bool debug = false;
+        [SerializeField] private Material debugMaterial;
+        
+        private SelectionService selectionService;
+        private InputService inputService;
+        private ContextMenuBehaviour contextMenuBehaviour;
+        private GameObject testObject = null;
+        public WorldText element;
+        public FloatingElement floatingElement;
+        
+        public VisualElement GetVisualElement()
         {
-            Disabled, // Neither move the annotation, nor edit the text
-            Move, // Move the annotation in the world, but don't edit the text
-            TextEdit // Edit the text of the annotation, do not move the annotation
+            return element;
         }
-        private EditMode mode = EditMode.Disabled;
+        
+        //private AnnotationTextObject annotation;
+        private const float offsetPixels = 50; //todo make this from uss instead
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
@@ -32,167 +42,126 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnVisualizationInitialize()
         {
             base.OnVisualizationInitialize();
-            layerTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer);
-            CreateTextPopup();
+            inputService = ServiceLocator.GetService<InputService>();
+            selectionService = ServiceLocator.GetService<SelectionService>();
+            contextMenuBehaviour  = ServiceLocator.GetService<ContextMenuBehaviour>();
+            InitializeWorldUI();
+        }
+
+        private void InitializeWorldUI()
+        {
+            FloatingElement floatingElement = new FloatingElement();
+            contextMenuBehaviour.AddToFloatingElementsContent(floatingElement);
            
-            WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
-        }
-
-        private void OnBlockerClicked()
-        {
-            if(mode == EditMode.TextEdit)
-                SetEditMode(EditMode.Move);
-        }
-
-        private void CreateTextPopup()
-        {
-            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
-
-            annotation = Instantiate(popoutPrefab, canvas.transform);
-            annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
-            annotation.SetSnappingSide(TextPopout.SnappingSide.Above);
-            annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest           
-            annotation.ReadOnly = !layerTool.IsOpen;       
-        }
-        
-        private void OnDestroy()
-        {
-            Destroy(annotation.gameObject);
-        }
-
-        private void OnAnnotationSelected()
-        {
-            if(!layerTool.IsOpen)
-                return;
+            this.floatingElement = floatingElement;
+            if(floatingElement == null)
+                throw new Exception("FloatingElement is missing");
             
-            SetEditMode(EditMode.Move);
+            element = new WorldText();
+            element.SetText("");
+            element.SetSnappingSide(WorldText.SnappingSide.Above);
+            element.SetLabelOffset(offsetPixels);
+            floatingElement.Add(element);
         }
 
-        private void OnAnnotationDoubleClicked()
+        private void OnEditChanged(bool isEditing)
         {
-            if (!layerTool.IsOpen)
-            {
-                layerTool.Open();
-                SetEditMode(EditMode.Move);
-            }
+            if(isEditing)
+                ClearTransformHandles();
             else
-            {
-                SetEditMode(EditMode.TextEdit);
-            }
-        }
-        
-        private void OnAnnotationTextConfirmed()
-        {
-            SetEditMode(EditMode.Move);
-        }
-
-        private void SetEditMode(EditMode newMode)
-        {
-            mode = newMode;
-            switch (mode)
-            {
-                case EditMode.Disabled:
-                    annotation.ReadOnly = true;
-                    annotation.SelectableText = true;
-                    LayerData.DeselectLayer();
-                    WorldInteractionBlocker.ReleaseBlocker(this);
-                    break;    
-                case EditMode.Move:
-                    annotation.ReadOnly = true;
-                    annotation.SelectableText = false;
-                    LayerData.SelectLayer(true);
-                    WorldInteractionBlocker.ReleaseBlocker(this);
-                    break;
-                case EditMode.TextEdit:
-                    annotation.ReadOnly = false;
-                    annotation.SelectableText = true;
-                    LayerData.SelectLayer(true);
-                    WorldInteractionBlocker.AddBlocker(this);
-                    ClearTransformHandles();
-                    break;
-            }
-        }
-        
-        private void SetPropertyDataText(string annotationText)
-        {
-            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.AnnotationText = annotationText;
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-            annotation.StickTo(WorldTransform.Coordinate);
+                SetPropertyDataText(element.Text);
+            
+            inputService.SetCameraActionsEnabled(!isEditing);
         }
         
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-            List<LayerFeature> features = CreateFeaturesByType<Image>(annotation.gameObject);
-            foreach (var feature in features)
-            {
-                if (feature.Geometry is not Image image) continue;
-
-                Symbolizer styling = GetStyling(feature);
-                var fillColor = styling.GetFillColor();
-
-                // Keep the original material color if fill color is not set (null)
-                if (!fillColor.HasValue) continue;
-
-                image.color = fillColor.Value;
-            }
+            LayerFeature feature = CreateFeature(element);
+            Symbolizer styling = GetStyling(feature);
+            var fillColor = styling.GetFillColor();
+            if (fillColor.HasValue)
+                element.SetColor(fillColor.Value);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
             InitProperty<AnnotationPropertyData>(properties, null, "");
-            
         }
 
         protected override void OnVisualizationReady()
         {
             base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
-            UpdateAnnotation(annotationPropertyData.AnnotationText);
+            SetPropertyDataText(annotationPropertyData.AnnotationText);
+        }
+        
+        private void SetPropertyDataText(string annotationText)
+        {
+            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            annotationPropertyData.AnnotationText = annotationText;
+            element.SetText(annotationText);
+        }
+        
+        private void OnClickAnnotation(PointerDownEvent e)
+        {
+            selectionService.SelectVisualisation(this);
         }
 
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
-            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
-
-            annotation.OnEndEdit.AddListener(SetPropertyDataText);
-            annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
-            annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
-            annotation.TextFieldInputConfirmed.AddListener(OnAnnotationTextConfirmed);
+            element.NameField.OnEditingChanged.AddListener(OnEditChanged);
+            element.RegisterCallback<PointerDownEvent>(OnClickAnnotation);
         }
 
         protected override void UnregisterEventListeners()
         {
             base.UnregisterEventListeners();
-            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
-
-            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
-            annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
-            annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
-            annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
-            
-            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
-        }
-
-        private void UpdateAnnotation(string newText)
-        {
-            annotation.SetTextWithoutNotify(newText);
+            element.NameField.OnEditingChanged.RemoveListener(OnEditChanged);
+            element.UnregisterCallback<PointerDownEvent>(OnClickAnnotation);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
-            annotation.gameObject.SetActive(isActive);
+            SetVisible(isActive);
+        }
+        
+        public void SetVisible(bool visible)
+        {
+            element.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            var screenPos =  App.Cameras.ActiveCamera.WorldToScreenPoint(WorldTransform.Coordinate.ToUnity());
+            Vector2 panelPos = App.UIRoot.GetUIPositionFromScreenPosition(screenPos);
+            var contentPos = contextMenuBehaviour.FloatingElementsContent.worldBound.position;
+            var localPos = panelPos - contentPos;
+            floatingElement.SetPosition(localPos);
+            
+            if(debug)
+            {
+                if (testObject == null)
+                {
+                    testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    Destroy(testObject.GetComponent<Collider>());
+
+                    testObject.transform.localScale = new Vector3(10f, 10f, 10f);
+                    MeshRenderer meshRenderer = testObject.GetComponent<MeshRenderer>();
+                    meshRenderer.material = debugMaterial;
+                }
+                testObject.transform.position = WorldTransform.Coordinate.ToUnity();
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            contextMenuBehaviour.RemoveFromFloatingElementsContent(floatingElement);
+            floatingElement = null;
         }
     }
 }
