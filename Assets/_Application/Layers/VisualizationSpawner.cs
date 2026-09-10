@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -15,6 +17,7 @@ namespace Netherlands3D.Twin.Layers
     public class VisualizationSpawner : ILayerSpawner
     {
         private readonly PrefabLibrary prefabLibrary;
+        private PointerToWorldPosition pointerToWorldPosition;
 
         public VisualizationSpawner(PrefabLibrary prefabLibrary)
         {
@@ -78,33 +81,30 @@ namespace Netherlands3D.Twin.Layers
                 // if there is no optical raycaster - we fallback to the ObjectPlacementUtility's SpawnPoint
                 return await SpawnObjectAtSpawnPoint(prefab);
             }
-
-            var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0); //todo: replace with utility function
-
+            
             // Wrap the callback in a Task so that we can stay async
             var tcs = new TaskCompletionSource<LayerGameObject>();
 
-            opticalRaycaster.GetWorldPointAsync(centerOfViewport, async (position, isHit) =>
+            var ray = App.Cameras.ActiveCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+            var isHit = opticalRaycaster.Raycast(ray.origin, ray.direction, out var position);
+            try
             {
-                try
+                LayerGameObject result;
+                if (isHit)
                 {
-                    LayerGameObject result;
-                    if (isHit)
-                    {
-                        result = await SpawnObjectAt(prefab, position, prefab.transform.rotation);
-                    }
-                    else
-                    {
-                        result = await SpawnObjectAtSpawnPoint(prefab);
-                    }
-                    tcs.SetResult(result);
+                    result = await SpawnObjectAt(prefab, position, prefab.transform.rotation);
                 }
-                catch (Exception ex)
+                else
                 {
-                    tcs.SetException(ex);
+                    result = await SpawnObjectAtSpawnPoint(prefab);
                 }
-            });
-
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+            
             return await tcs.Task;
         }
 
@@ -127,8 +127,10 @@ namespace Netherlands3D.Twin.Layers
 
         private async Task<LayerGameObject> SpawnObjectAtSpawnPoint(
             LayerGameObject prefab
-        ) {
-            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
+        )
+        {
+            pointerToWorldPosition ??= ServiceLocator.GetService<PointerToWorldPosition>();
+            var spawnPoint = pointerToWorldPosition.GetWorldPointCenterViewUsingHeightMap();
 
             return await SpawnObjectAt(prefab, spawnPoint, Quaternion.identity);
         }
