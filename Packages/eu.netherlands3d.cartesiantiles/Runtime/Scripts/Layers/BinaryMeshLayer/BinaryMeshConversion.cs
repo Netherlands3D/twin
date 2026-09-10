@@ -1,4 +1,5 @@
 using System;
+using System.Buffers.Binary;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -147,31 +148,44 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
-
-
+        private static int ReadInt32(byte[] source, ref int offset)
+        {
+            var value = BinaryPrimitives.ReadInt32LittleEndian(source.AsSpan(offset, sizeof(int)));
+            offset += sizeof(int);
+            return value;
+        }
+        
+        //private static void CopyBytes(byte[] source, ref int offset, int size)
 
         public static Mesh ReadBinaryMeshUnSafe(byte[] fileBytes, out int[] submeshMaterialIndices)
         {
             // todo: array reuse through BufferedStream bs;?
 
-            using (var stream = new MemoryStream(fileBytes))
+            //using (var stream = new MemoryStream(fileBytes))
             {
 
-                using (BinaryReader reader = new BinaryReader(stream))
+                //using (BinaryReader reader = new BinaryReader(stream))
                 {
-                    var version = reader.ReadInt32();
-                    var vertexCount = reader.ReadInt32();
-                    var normalsCount = reader.ReadInt32();
-                    var uvsCount = reader.ReadInt32();
-                    var indicesCount = reader.ReadInt32();
-                    var submeshCount = reader.ReadInt32();
+                    var offset = 0;
+                    
+                    var version = 0;
+                    var vertexCount = 0;
+                    var normalsCount = 0;
+                    var uvsCount = 0;
+                    var indicesCount = 0;
+                    var submeshCount = 0;
+                    
+                    FromByteArray(fileBytes, ref offset, ref version);
+                    FromByteArray(fileBytes, ref offset, ref vertexCount);
+                    FromByteArray(fileBytes, ref offset, ref normalsCount);
+                    FromByteArray(fileBytes, ref offset, ref uvsCount);
+                    FromByteArray(fileBytes, ref offset, ref indicesCount);
+                    FromByteArray(fileBytes, ref offset, ref submeshCount);
 
                     var mesh = new Mesh();
-
-                    //byte[] b = new byte[Marshal.SizeOf<Vector3>() * vertexCount];
-                    byte[] b = reader.ReadBytes(Marshal.SizeOf<Vector3>() * vertexCount);
+                    
                     Vector3[] vertices = new Vector3[vertexCount];
-                    FromByteArray<Vector3>(b, vertices);
+                    FromByteArray(fileBytes, ref offset, vertices);
                     mesh.vertices = vertices;
 
                     // Normals should be same size as vertices - right?
@@ -182,23 +196,20 @@ namespace Netherlands3D.CartesianTiles
                     }
 
                     // Normals:
-                    b = reader.ReadBytes(Marshal.SizeOf<Vector3>() * normalsCount);
-                    FromByteArray<Vector3>(b, vertices);
+                    FromByteArray<Vector3>(fileBytes, ref offset, vertices);
                     mesh.normals = vertices;
 
                     // UVS - if present.
                     if (uvsCount > 0)
                     {
                         Vector2[] uvs = new Vector2[uvsCount];
-                        b = reader.ReadBytes(Marshal.SizeOf<Vector2>() * uvsCount);
-                        FromByteArray<Vector2>(b, uvs);
+                        FromByteArray<Vector2>(fileBytes, ref offset, uvs);
                         mesh.uv = uvs;
                     }
 
                     // Indices:
                     int[] indices = new int[indicesCount];
-                    b = reader.ReadBytes(sizeof(int) * indicesCount);
-                    FromByteArray<int>(b, indices);
+                    FromByteArray<int>(fileBytes, ref offset, indices);
 
                     mesh.SetIndexBufferParams(indicesCount, UnityEngine.Rendering.IndexFormat.UInt32);
                     mesh.SetIndexBufferData(indices, 0, 0, indicesCount, UnityEngine.Rendering.MeshUpdateFlags.DontNotifyMeshUsers | UnityEngine.Rendering.MeshUpdateFlags.DontRecalculateBounds | UnityEngine.Rendering.MeshUpdateFlags.DontResetBoneBounds | UnityEngine.Rendering.MeshUpdateFlags.DontValidateIndices);
@@ -206,11 +217,10 @@ namespace Netherlands3D.CartesianTiles
 
                     // Read submesh info:
                     SubMeshInfo[] subMeshInfos = new SubMeshInfo[submeshCount];
-                    b = reader.ReadBytes(Marshal.SizeOf<SubMeshInfo>() * submeshCount);
-                    FromByteArray<SubMeshInfo>(b, subMeshInfos);
+                    FromByteArray<SubMeshInfo>(fileBytes, ref offset, subMeshInfos);
 
                     int[] materialIndices = new int[submeshCount];
-
+                    
                     for (int i = 0; i < submeshCount; i++)
                     {
                         materialIndices[i] = subMeshInfos[i].subMeshID;
@@ -236,24 +246,34 @@ namespace Netherlands3D.CartesianTiles
 
         }
 
+        
 
-        public static void FromByteArray<T>(byte[] source, T[] destination) where T : struct
+        public static void FromByteArray<T>(byte[] source, ref int offset, ref T destination) where T : unmanaged
         {
-            //  T[] destination = new T[source.Length / Marshal.SizeOf(typeof(T))];
-            GCHandle handle = GCHandle.Alloc(destination, GCHandleType.Pinned);
-            try
-            {
-                IntPtr pointer = handle.AddrOfPinnedObject();
-                Marshal.Copy(source, 0, pointer, source.Length);
-                // return destination;
-            }
-            finally
-            {
-                if (handle.IsAllocated)
-                    handle.Free();
-            }
+            var destinationSpan = MemoryMarshal.CreateSpan(ref destination, 1);
+            FromByteArray(source, ref offset, destinationSpan);
         }
 
+        public static void FromByteArray<T>(byte[] source, ref int offset, T[] destination) where T : unmanaged
+        {
+            var destinationSpan = new Span<T>(destination);
+            FromByteArray(source, ref offset, destinationSpan);
+        }
+
+        private static void FromByteArray<T>(byte[] source, ref int offset, Span<T> destination) where T : unmanaged
+        {
+            var destinationBytes = MemoryMarshal.AsBytes(destination);
+            var length = destinationBytes.Length;
+            
+            var sourceBytes = new ReadOnlySpan<byte>(source, offset, length);
+            
+            sourceBytes.CopyTo(destinationBytes);
+            
+            offset += length;
+        }
+
+        /*
+         //this is the OG
         public static void FromByteArray<T>(byte[] source, T[] destination, int sourceLength) where T : struct
         {
             //  T[] destination = new T[source.Length / Marshal.SizeOf(typeof(T))];
@@ -270,7 +290,7 @@ namespace Netherlands3D.CartesianTiles
                     handle.Free();
             }
         }
-
+        */
 
     }
 }
