@@ -23,6 +23,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private readonly UIExitDirection direction;
         private readonly List<VisualElement> hoverAreas;
         private readonly bool releaseHorizontalSpace;
+        private bool horizontalSpaceReleased;
         private readonly VisualElement hoverExclusion;
 
         private bool presentationEnabled;
@@ -48,6 +49,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             section.RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             section.RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             section.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            section.RegisterCallback<TransitionEndEvent>(OnTransitionEnd);
             root.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
 
             if (section.panel != null)
@@ -93,6 +95,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         public void Show()
         {
             IsHidden = false;
+            horizontalSpaceReleased = false;
             section.RemoveFromClassList(HiddenClassName);
             ApplyPosition();
         }
@@ -123,6 +126,18 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
+            ApplyPosition();
+        }
+
+        private void OnTransitionEnd(TransitionEndEvent evt)
+        {
+            if (disposed || evt.target != section || !releaseHorizontalSpace || !IsHidden || horizontalSpaceReleased)
+                return;
+
+            if (!evt.stylePropertyNames.Contains("translate"))
+                return;
+
+            horizontalSpaceReleased = true;
             ApplyPosition();
         }
 
@@ -260,7 +275,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 var width = section.layout.width;
 
                 if (!float.IsNaN(width) && width > 0f)
-                    section.style.marginRight = IsHidden ? -width : 0f;
+                    section.style.marginRight = IsHidden && horizontalSpaceReleased ? -width : 0f;
             }
 
             if (!IsHidden)
@@ -312,6 +327,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             section.UnregisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             section.UnregisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             section.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            section.UnregisterCallback<TransitionEndEvent>(OnTransitionEnd);
             root.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
 
             section.RemoveFromClassList(PresentationClassName);

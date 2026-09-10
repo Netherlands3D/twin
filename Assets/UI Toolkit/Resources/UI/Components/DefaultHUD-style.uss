@@ -124,7 +124,7 @@
 
 .default-hud__navigation-section.presentation-section--hidden {
     transition-duration: 0.40s, 0.15s;
-    transition-delay: 0s, 0.40s;
+    transition-delay: 0s, 0s;
 }
 
 .default-hud__minimap-column {
