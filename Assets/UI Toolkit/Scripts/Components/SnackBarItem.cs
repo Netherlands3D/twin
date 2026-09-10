@@ -20,6 +20,7 @@ namespace Netherlands3D.UI.Components
         
         public event System.Action<SnackBarItem> Closed;
         private CloseButton closeButton;
+        public bool IsClosed { get; set; }
 
         private Icon Icon => icon ??= this.Q<Icon>();
         private Label TitleLabel => titleLabel ??= this.Q<Label>("Titel");

@@ -293,7 +293,7 @@ namespace Netherlands3D.UI.Components
             isActiveToggle.SetEnabled(validCredentials); // make the visibility toggle un-interactable
             ItemRoot.EnableInClassList("credentials-needed", !validCredentials);
 
-            UpdateNameLabels(layerData, layerData.Name);
+            UpdateNameLabels(layerData.Name);
             UpdateEnabledToggle(layerData.ActiveInHierarchy);
             UpdateColorBar(validCredentials ? layerData.Color : null); //clear the colorbar style to ensure the warning color is not overridden when the credentials are invalid
             UpdateLayerTypeIcon();
@@ -302,6 +302,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnPropertiesChanged(LayerPropertyData propertyData)
         {
+            UpdateLayerTypeIcon();
             LoadProperties(LayerData.LayerProperties);
         }
 
@@ -371,7 +372,7 @@ namespace Netherlands3D.UI.Components
             layerTypeIcon.Image = LayerTypeSpriteLibrary.GetIconImage(LayerData); //todo test if the icon updates when setting prefab (scatter)
         }
 
-        private void UpdateNameLabels(LayerData layerData, string newName)
+        private void UpdateNameLabels(string newName)
         {
             nameInputField.SetValueWithoutNotify(newName);
         }
