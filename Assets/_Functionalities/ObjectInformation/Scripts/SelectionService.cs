@@ -132,7 +132,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
       
         private void Start()
         {
+            toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            contextMenuBehaviour = ServiceLocator.GetService<ContextMenuBehaviour>();
             InputService inputService = ServiceLocator.GetService<InputService>();
+            
             inputService.LeftClickUpAction.performed += OnLeftClickUp;
             inputService.RightClickUpAction.performed += OnRightClickUp;
             inputService.LeftClickAction.performed += OnLeftClick;
@@ -143,10 +147,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             inputService.LeftClickUpAction.performed += contextMenuBehaviour.OnLeftClick;
             inputService.LongPressAction.performed += contextMenuBehaviour.OnRightClick;
             inputService.TouchAction.performed += contextMenuBehaviour.OnLeftClick;
-            
-            toolService = ServiceLocator.GetService<ToolService>();
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            contextMenuBehaviour = ServiceLocator.GetService<ContextMenuBehaviour>();
             
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
