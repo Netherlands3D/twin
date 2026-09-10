@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     Id: debug-info
-    IsEnabled: 0
+    IsEnabled: 1
   Title: Debug Info
   Caption: 
   Header: Debug informatie weergeven
@@ -27,7 +27,35 @@ MonoBehaviour:
   configuration: {fileID: 0}
   OnEnable:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -2524223538597819755, guid: d4d80ea825646b4408d3ebdb5265dbc8,
+          type: 3}
+        m_TargetAssemblyTypeName: Netherlands3D.DebugStatsToolAvailabilityChanger,
+          eu.netherlands3d.twin
+        m_MethodName: ChangeDebugStatsToolAvailability
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   OnDisable:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -2524223538597819755, guid: d4d80ea825646b4408d3ebdb5265dbc8,
+          type: 3}
+        m_TargetAssemblyTypeName: Netherlands3D.DebugStatsToolAvailabilityChanger,
+          eu.netherlands3d.twin
+        m_MethodName: ChangeDebugStatsToolAvailability
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

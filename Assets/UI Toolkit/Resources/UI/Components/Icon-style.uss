@@ -42,6 +42,7 @@
 .icon.image-back { background-image: var(--icon-back); }
 .icon.image-backward { background-image: var(--icon-backward); }
 .icon.image-backward-blocked { background-image: var(--icon-backwardblocked); }
+.icon.image-bug { background-image: var(--icon-bug); }
 .icon.image-burger-menu { background-image: var(--icon-burgermenu); }
 .icon.image-camera { background-image: var(--icon-camera); }
 .icon.image-check { background-image: var(--icon-check); }

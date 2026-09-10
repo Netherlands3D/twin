@@ -96,6 +96,7 @@
     --icon-back: url("project://database/Assets/Sprites/UI/Icons/Type=Back,%20Color=white,%20Size=medium.png");
     --icon-backward: url("project://database/Assets/Sprites/UI/Icons/Type=Backward,%20Color=white,%20Size=medium.png");
     --icon-backwardblocked: url("project://database/Assets/Sprites/UI/Icons/Type=BackwardBlocked,%20Color=white,%20Size=medium.png");
+    --icon-bug: url("project://database/Assets/Sprites/UI/Icons/Type=Bug,%20Color=white,%20Size=medium.png");
     --icon-burgermenu: url("project://database/Assets/Sprites/UI/Icons/Type=BurgerMenu,%20Color=white,%20Size=medium.png");
     --icon-camera: url("project://database/Assets/Sprites/UI/Icons/Type=Camera,%20Color=white,%20Size=medium.png");
     --icon-check: url("project://database/Assets/Sprites/UI/Icons/Type=Check,%20Color=white,%20Size=medium.png");
@@ -194,7 +195,6 @@
     --icon-visibilitymixed: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Mixed.png");
     --icon-visibleininvisible: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visible%20in%20Invisible.png");
     --icon-colorfeatures: url("project://database/Assets/Sprites/UI/Icons/Type=ColorFeatures,%20Color=white,%20Size=large.png");
-
     /* Font */
     --unity-font: "Inter";
     --nl3d-default-font: url("project://database/Assets/Fonts/Inter-Regular.ttf?fileID=12800000&guid=37ff50315a0d57a48a81f6f17f30a981&type=3#Inter-Regular");
