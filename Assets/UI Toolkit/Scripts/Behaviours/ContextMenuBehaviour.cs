@@ -20,6 +20,8 @@ namespace Netherlands3D.UI.Panels
         private FloatingPanelBehaviour selectedBehaviour;
         private VisualElement floatingElementsContent;
         
+        public VisualElement FloatingElementsContent => floatingElementsContent;
+        
         public T GetBehaviour<T>() where T : FloatingButtonBehaviour
         {
             foreach(var behaviour in floatingButtonBehaviour)
@@ -126,6 +128,16 @@ namespace Netherlands3D.UI.Panels
                 floatingPanel.BringToFront();
                 break;
             }
+        }
+
+        public void AddToFloatingElementsContent(FloatingElement floatingElement)
+        {
+            floatingElementsContent.Add(floatingElement);
+        }
+
+        public void RemoveFromFloatingElementsContent(FloatingElement floatingElement)
+        {
+            floatingElementsContent.Remove(floatingElement);
         }
     }
 }

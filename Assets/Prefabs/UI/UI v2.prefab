@@ -674,7 +674,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 193046eec53862a7380ad41ce7521c3f, type: 2}
   floatingButtonBehaviour:
   - {fileID: 11400000, guid: b39f0c433614c7547967510a0332c622, type: 2}
-  - {fileID: 11400000, guid: 6615aa3ea2afbef55acaf5e443b6130d, type: 2}
 --- !u!114 &200906582519753930
 MonoBehaviour:
   m_ObjectHideFlags: 0

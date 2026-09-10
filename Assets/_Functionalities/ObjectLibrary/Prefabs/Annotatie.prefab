@@ -98,6 +98,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scaleUnitCharacter: '%'
+  debug: 0
+  debugMaterial: {fileID: 2100000, guid: 32d66cb461963494c8545032b6d11bd0, type: 2}
 --- !u!114 &5901895080740193470
 MonoBehaviour:
   m_ObjectHideFlags: 0
