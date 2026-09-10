@@ -81,7 +81,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.element.SetText(annotationText);
         }
         
-        private void OnClickAnnotation(ClickEvent e)
+        private void OnClickAnnotation(PointerDownEvent e)
         {
             ServiceLocator.GetService<SelectionService>().SelectVisualisation(this);
         }
@@ -93,7 +93,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             property.OnPositionChanged.AddListener(OnUpdateAnnotationPosition);
             
             annotation.AddTextEditListener(OnEditChanged);
-            annotation.element.RegisterCallback<ClickEvent>(OnClickAnnotation);
+            annotation.element.RegisterCallback<PointerDownEvent>(OnClickAnnotation);
         }
 
         protected override void UnregisterEventListeners()
@@ -103,7 +103,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             property.OnPositionChanged.RemoveListener(OnUpdateAnnotationPosition);
             
             annotation.RemoveTextEditListener(OnEditChanged);
-            annotation.element.UnregisterCallback<ClickEvent>(OnClickAnnotation);
+            annotation.element.UnregisterCallback<PointerDownEvent>(OnClickAnnotation);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)

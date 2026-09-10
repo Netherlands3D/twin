@@ -166,7 +166,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnNameInputFieldBlur(BlurEvent evt)
         {
-            //StopEditing();
+            StopEditing();
         }
 
         private void OnNavigationSubmitted(NavigationSubmitEvent evt)
