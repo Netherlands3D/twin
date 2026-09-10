@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
@@ -10,8 +11,10 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class EditableNameField : VisualElement, INotifyValueChanged<string>
     {
-        public float TextWidth => IsEditing ? GetInputFieldTextSize().x : textWidth;
-        public float TextHeight => IsEditing ? GetInputFieldTextSize().y : textHeight;
+        private Vector2 inputTextSize;
+
+        public float TextWidth => IsEditing ? inputTextSize.x : textWidth;
+        public float TextHeight => IsEditing ? inputTextSize.y : textHeight;
 
         public bool ScrollingTextEnabled
         {
@@ -24,9 +27,9 @@ namespace Netherlands3D.UI.Components
                 scrollingTextEnabled = value;
             }
         }
-        
+
         public TextField InputField => inputField;
-        
+
         private Label label; // we will switch between label and input field
         private TextField inputField;
         private bool scrollingTextEnabled = true;
@@ -66,6 +69,7 @@ namespace Netherlands3D.UI.Components
         private float ScrollSpeed = 60f;
         private float scrollPosition;
         private bool isOverflowing;
+        private Vector2 minTextSize;
         
         public void SetValueWithoutNotify(string newValue)
         {
@@ -92,7 +96,7 @@ namespace Netherlands3D.UI.Components
 
             inputField.RegisterCallback<BlurEvent>(OnNameInputFieldBlur, TrickleDown.TrickleDown);
             inputField.RegisterCallback<NavigationSubmitEvent>(OnNavigationSubmitted, TrickleDown.TrickleDown);
-
+            inputField.RegisterValueChangedCallback(OnInputValueChanged);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
 
@@ -127,6 +131,17 @@ namespace Netherlands3D.UI.Components
             value = inputField.text;
             
             OnEditingChanged.Invoke(false);
+        }
+        
+        private void OnInputValueChanged(ChangeEvent<string> evt)
+        {
+            inputTextSize = inputField.MeasureTextSize(
+                evt.newValue + "\u200B",
+                float.PositiveInfinity,
+                MeasureMode.Undefined,
+                float.PositiveInfinity,
+                MeasureMode.Undefined
+            );
         }
         
         private void OnNameLabelClicked(ClickEvent evt)
@@ -183,17 +198,6 @@ namespace Netherlands3D.UI.Components
 
             availableWidth = resolvedStyle.width;
             ResetTicker();
-        }
-
-        private Vector2 GetInputFieldTextSize()
-        {
-            return inputField.MeasureTextSize(
-                inputField.text,
-                float.PositiveInfinity,
-                MeasureMode.Undefined,
-                float.PositiveInfinity,
-                MeasureMode.Undefined
-            );
         }
         
         private void OnLabelHoverEnter(PointerEnterEvent evt)

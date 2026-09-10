@@ -47,6 +47,8 @@ namespace Netherlands3D.UI.Components
             
             nameField.ScrollingTextEnabled = false;
             nameField.InputField.multiline = true;
+
+            //schedule.Execute(UpdateContainerSize).Every(30);
         }
 
         private void OnNameChanged(ChangeEvent<string> evt)
@@ -105,16 +107,18 @@ namespace Netherlands3D.UI.Components
             textContainer.style.translate = new Translate(offsetX, offsetY, 0);
         }
         
-        //todo do this within styling
         private void UpdateContainerSize()
         {
-            //get either the placeholder width when no text is present or the input field completed text or the being edited text width
-            bool isEmpty = string.IsNullOrEmpty(currentText);
-            float width = isEmpty ? placeholder.resolvedStyle.width : nameField.TextWidth;
-            float height = isEmpty ? placeholder.resolvedStyle.height : nameField.TextHeight;
+            schedule.Execute(() =>
+            {
+                //get either the placeholder width when no text is present or the input field completed text or the being edited text width
+                bool isEmpty = string.IsNullOrEmpty(currentText);
+                float width = isEmpty ? placeholder.resolvedStyle.width : nameField.TextWidth;
+                float height = isEmpty ? placeholder.resolvedStyle.height : nameField.TextHeight;
 
-            textContainer.style.width = width;
-            textContainer.style.height = height;
+                textContainer.style.width = width;
+                textContainer.style.height = height;
+            });
         }
         
         public void SetColor(Color color)
