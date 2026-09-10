@@ -43,7 +43,6 @@ namespace Netherlands3D
         private void OnTimeChanged(DateTime currentTime)
         {
             var currentState = GetBuildState(currentTime);
-            Debug.Log(currentState);
             SetVisibility(currentState == BuildState.Building || currentState == BuildState.Normal || currentState == BuildState.Demolishing);
             
             switch (currentState)
