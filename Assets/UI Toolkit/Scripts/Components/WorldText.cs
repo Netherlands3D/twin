@@ -46,7 +46,7 @@ namespace Netherlands3D.UI.Components
             nameField.RegisterValueChangedCallback(evt => UpdateContainerSize());
             
             nameField.ScrollingTextEnabled = false;
-            nameField.InputField.multiline = true;
+            //nameField.InputField.multiline = true;
 
             //schedule.Execute(UpdateContainerSize).Every(30);
         }

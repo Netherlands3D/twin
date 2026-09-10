@@ -50,7 +50,7 @@ namespace Netherlands3D.UI.Components
                 if (label.text == value) return;
                 using var evt = ChangeEvent<string>.GetPooled(label.text, value);
                 evt.target = this;
-                label.text = value;
+                label.text = value.Replace("\\n", "\n");;
                 inputField.SetValueWithoutNotify(value);
                 CalculateOverflow();
                 SendEvent(evt);
@@ -166,7 +166,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnNameInputFieldBlur(BlurEvent evt)
         {
-            StopEditing();
+            //StopEditing();
         }
 
         private void OnNavigationSubmitted(NavigationSubmitEvent evt)

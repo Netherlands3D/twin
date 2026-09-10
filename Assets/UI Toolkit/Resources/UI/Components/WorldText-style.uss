@@ -16,21 +16,25 @@
     padding: 0;
     margin: 0;
     overflow: hidden;
+    white-space: pre-wrap;
 }
 
 .world-text__container .editable-name-field .unity-base-text-field__input {  
     padding: 0;
     margin: 0;
+    white-space: pre-wrap;
 }
 
 .world-text__container .editable-name-field .unity-label {
     padding: 0;
     margin: 0;
+    white-space: pre-wrap;
 }
 
 .world-text__container .editable-name-field .unity-text-element--inner-input-field-component {
     flex-grow: 0;
     flex-shrink: 1;
+    white-space: pre-wrap;
 }
 
 .world-text__container .text-field__placeholder {
@@ -44,6 +48,7 @@
     flex-shrink: 0;
     padding: 0;
     margin: 0;
+    white-space: pre-wrap;
 }
 
 .world-text__container-background{
