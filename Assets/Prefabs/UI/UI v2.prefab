@@ -66,6 +66,7 @@ GameObject:
   - component: {fileID: -2108419079400312055}
   - component: {fileID: 4297113770841784289}
   - component: {fileID: -184948826278789416}
+  - component: {fileID: 2540329924118142087}
   m_Layer: 5
   m_Name: UI v2
   m_TagString: Untagged
@@ -157,7 +158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d012d4c42b746a49473a2f1d9c8e1a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.RuntimeTooltips
-  tooltipStyleSheet: {fileID: 7433441132597879392, guid: 733a8d3b7d1a4c679ca7caebd41b26e5, type: 3}
+  tooltipStyleSheet: {fileID: 7433441132597879392, guid: 733a8d3b7d1a4c679ca7caebd41b26e5,
+    type: 3}
 --- !u!114 &5715699707642146679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,6 +292,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: eu.netherlands3d.twin.functionalities::Netherlands3D.Twin.Functionalities.FunctionalityListener
   functionalities:
   - {fileID: 11400000, guid: 77c433a944001411a9376d15fb427d17, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4429096078737367381}
+        m_TargetAssemblyTypeName: Netherlands3D.AppRootBehaviour, eu.netherlands3d.twin
+        m_MethodName: EnableFunctionality
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4429096078737367381}
+        m_TargetAssemblyTypeName: Netherlands3D.AppRootBehaviour, eu.netherlands3d.twin
+        m_MethodName: DisableFunctionality
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2540329924118142087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin.functionalities::Netherlands3D.Twin.Functionalities.FunctionalityListener
+  functionalities:
+  - {fileID: 11400000, guid: 701372591ba40ef4e9b09a5b5ad8f7d5, type: 2}
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls:
