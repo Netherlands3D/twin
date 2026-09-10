@@ -44,6 +44,9 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<GeometryChangedEvent>(UpdateSnapping);
             nameField.RegisterValueChangedCallback(OnNameChanged);
             nameField.RegisterValueChangedCallback(evt => UpdateContainerSize());
+            
+            nameField.ScrollingTextEnabled = false;
+            nameField.InputField.multiline = true;
         }
 
         private void OnNameChanged(ChangeEvent<string> evt)

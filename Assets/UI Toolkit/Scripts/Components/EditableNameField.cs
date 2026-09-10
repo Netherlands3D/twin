@@ -12,12 +12,27 @@ namespace Netherlands3D.UI.Components
     {
         public float TextWidth => IsEditing ? GetInputFieldTextSize().x : textWidth;
         public float TextHeight => IsEditing ? GetInputFieldTextSize().y : textHeight;
+
+        public bool ScrollingTextEnabled
+        {
+            get
+            {
+                return scrollingTextEnabled;
+            }
+            set
+            {
+                scrollingTextEnabled = value;
+            }
+        }
+        
+        public TextField InputField => inputField;
         
         private Label label; // we will switch between label and input field
         private TextField inputField;
-        
+        private bool scrollingTextEnabled = true;
         private bool firstClickDone;
         private bool intervalExpired;
+      
         private IVisualElementScheduledItem clickTimer;
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
 
@@ -151,11 +166,11 @@ namespace Netherlands3D.UI.Components
         
         private void CalculateOverflow()
         {
-            if (label == null)
-                return;
 
+            string text = label.text;
+            
             var measuredSize = label.MeasureTextSize(
-                label.text,
+                text,
                 float.PositiveInfinity,
                 MeasureMode.Undefined,
                 float.PositiveInfinity,
@@ -183,7 +198,7 @@ namespace Netherlands3D.UI.Components
         
         private void OnLabelHoverEnter(PointerEnterEvent evt)
         {
-            if(textWidth < availableWidth) return;
+            if(textWidth < availableWidth || !scrollingTextEnabled) return;
             
             StartTicker();
         }
