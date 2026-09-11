@@ -51,7 +51,6 @@ namespace Netherlands3D.UI.Components
             {
                 var result = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
                 minDateTime = result;
-                // slider.lowValue = DateTimeToSliderValue(minDateTime);
             }
         }
 
@@ -66,7 +65,6 @@ namespace Netherlands3D.UI.Components
             {
                 var result = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
                 maxDateTime = result;
-                // slider.highValue = DateTimeToSliderValue(maxDateTime);
             }
         }
 
