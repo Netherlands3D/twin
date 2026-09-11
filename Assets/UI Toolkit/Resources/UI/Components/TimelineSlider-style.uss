@@ -19,3 +19,8 @@
 .timeline-slider__slider{
     flex-grow: 1;
 }
+
+.timeline-slider__number-field.number-field{
+    max-width: var(--spacing-28);
+    width: var(--spacing-28);
+}

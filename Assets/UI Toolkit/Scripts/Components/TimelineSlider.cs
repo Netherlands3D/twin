@@ -82,10 +82,8 @@ namespace Netherlands3D.UI.Components
             minField = this.Q<NumberField>("MinField");
             maxField = this.Q<NumberField>("MaxField");
 
-            SetInitialDate(); //todo: this is currently called before the service exists.
-            // InitBoundsFields();
-
-            RegisterCallback<AttachToPanelEvent>(ApplyTextFieldClassToInput);
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+            
             slider.RegisterValueChangedCallback(OnSliderChanged);
             var dragManipulator = new DragManipulator(4);
             scrubber.AddManipulator(dragManipulator);
@@ -125,6 +123,17 @@ namespace Netherlands3D.UI.Components
 
         private void InitBoundsFields()
         {
+            var range = maxDateTime - minDateTime;
+            if (range.Days > 1)
+            {
+                minField.ValueFormat = NumberFieldFormat.Date;
+                maxField.ValueFormat = NumberFieldFormat.Date;
+            }
+            else
+            {
+                minField.ValueFormat = NumberFieldFormat.Time;
+                maxField.ValueFormat = NumberFieldFormat.Time;
+            }
             minField.SetValueWithoutNotify(minDateTime);
             maxField.SetValueWithoutNotify(maxDateTime);
             
@@ -182,8 +191,10 @@ namespace Netherlands3D.UI.Components
         }
 
 
-        private void ApplyTextFieldClassToInput(AttachToPanelEvent evt)
+        private void OnAttachToPanel(AttachToPanelEvent evt)
         {
+            SetInitialDate();
+            InitBoundsFields();
         }
     }
 }

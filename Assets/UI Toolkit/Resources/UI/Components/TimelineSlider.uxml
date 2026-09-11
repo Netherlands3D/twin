@@ -6,9 +6,9 @@
             <ui:Label name="CurrentTimeLabel"/>
         </ui:VisualElement>
         <ui:VisualElement class="timeline-slider__slider-row">
-            <nl3d:NumberField name="MinField"/>
+            <nl3d:NumberField name="MinField" class="timeline-slider__number-field"/>
             <nl3d:Slider name="Timeline" header-type="NoHeader" show-number-field="false" class="timeline-slider__slider" low-value="1" high-value="9999"/>
-            <nl3d:NumberField name="MaxField"/>
+            <nl3d:NumberField name="MaxField" class="timeline-slider__number-field"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
