@@ -59,6 +59,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
+
+        public List<Feature> GeoJsonFeatures { get; private set; } = new();
         
         protected override void OnVisualizationInitialize()
         {
@@ -259,6 +261,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer)
         {
+            GeoJsonFeatures.Add(feature);
             layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
             CreateFeatureMappingsForFeature(feature, layer);
         }

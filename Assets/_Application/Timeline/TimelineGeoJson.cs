@@ -16,17 +16,17 @@ namespace Netherlands3D
     [RequireComponent(typeof(LayerGameObject))]
     public class TimelineGeoJson : MonoBehaviour
     {
-        GeoJSONLineLayer lines;
+        GeoJsonLayerGameObject visualization;
         private TimelineLayerPropertyData timelineLayerPropertyData;
         ColorPropertyData stylingPropertyData;
 
         void Start()
         {
-            lines = GetComponent<GeoJSONLineLayer>();
-            lines.InitProperty<TimelineLayerPropertyData>(lines.LayerData.LayerProperties);
-            timelineLayerPropertyData = lines.LayerData.GetProperty<TimelineLayerPropertyData>();
+            visualization = GetComponent<GeoJsonLayerGameObject>();
+            visualization.InitProperty<TimelineLayerPropertyData>(visualization.LayerData.LayerProperties);
+            timelineLayerPropertyData = visualization.LayerData.GetProperty<TimelineLayerPropertyData>();
 
-            stylingPropertyData = lines.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            stylingPropertyData = visualization.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
 
             if (stylingPropertyData == null) return;
 
@@ -37,20 +37,19 @@ namespace Netherlands3D
         {
             // var currentState = GetBuildState(currentTime);
             // SetVisibility(currentState == BuildState.Normal);
-            
-            var stylingPropertyData = lines.LayerData.ParentLayer.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+
+            var stylingPropertyData = visualization.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
             var color = GetColorForFeature(currentTime);
-            Debug.Log(color);
             stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
             stylingPropertyData.SetDefaultSymbolizerColor(color);
-            
-            lines.LineRenderer3D.SetAllColors(color);
+
+            // visualization.LineRenderer3D.SetAllColors(color);
         }
 
-        private void SetVisibility(bool visible)
-        {
-            lines.LineRenderer3D.enabled = visible;
-        }
+        // private void SetVisibility(bool visible)
+        // {
+        //     visualization.LineRenderer3D.enabled = visible;
+        // }
 
         private BuildState GetBuildState(DateTime currentTime)
         {
@@ -70,31 +69,32 @@ namespace Netherlands3D
         private Color GetColorForFeature(DateTime currentTime)
         {
             var color = Color.white;
-            foreach (var feature in lines.SpawnedVisualisations.Keys)
+            foreach (var feature in visualization.GeoJsonFeatures)
             {
                 Debug.Log(feature.Properties["hour"]);
                 if (DateTime.TryParse(feature.Properties["timestamp"].ToString(), out var dateTime))
                 {
-                    if(float.TryParse(feature.Properties["count"].ToString(), out var count))
+                    if (float.TryParse(feature.Properties["count"].ToString(), out var count))
                     {
                         Debug.Log("current feature time: " + dateTime.ToString("yy-MM-dd HH:mm") + "\tcount: " + count);
-                        if (currentTime > dateTime)
+                        if (currentTime > dateTime && currentTime < dateTime.AddHours(1d))
                         {
                             return GetColorForCount(count);
                         }
                     }
                 }
             }
+
             return color;
         }
 
         private Color GetColorForCount(float count)
         {
-            if(count < 2.5f)
+            if (count < 10f)
                 return Color.red;
-            if (count < 5f)
+            if (count < 20f)
                 return Color.orange;
-            if(count < 7.5f)
+            if (count < 30f)
                 return Color.yellow;
             return Color.green;
         }
