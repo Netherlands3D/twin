@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
@@ -17,11 +17,10 @@ using UnityEngine.InputSystem;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
-using Netherlands3D.UI.Panels;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class SelectionService : MonoBehaviour
+    public class ObjectSelectorService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
@@ -32,7 +31,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent OnDeselect = new();
         public UnityEvent<LayerData> OnSelectLayer = new();
         public UnityEvent OnNoLayerSelected = new();
-        public UnityEvent OnSelectionProcessed = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -50,7 +48,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         [SerializeField] private Material selectionMaterial;
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
         private ToolService toolService;
-        private ContextMenuBehaviour contextMenuBehaviour;
 
         public void BlockBagId(string bagId, bool block)
         {
@@ -91,10 +88,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
-            
-            toolService = ServiceLocator.GetService<ToolService>();
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            contextMenuBehaviour = App.UIRoot.GetComponent<ContextMenuBehaviour>();
             
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
@@ -137,17 +130,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
       
         private void Start()
         {
+            toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             InputService inputService = ServiceLocator.GetService<InputService>();
             inputService.LeftClickUpAction.performed += OnLeftClickUp;
             inputService.RightClickUpAction.performed += OnRightClickUp;
             inputService.LeftClickAction.performed += OnLeftClick;
             inputService.RightClickAction.performed += OnRightClick;
-            
-            //subscribe the contextmenubehaviour input events after, since there is a dependency here
-            inputService.RightClickUpAction.performed += contextMenuBehaviour.OnRightClick;
-            inputService.LeftClickUpAction.performed += contextMenuBehaviour.OnLeftClick;
-            inputService.LongPressAction.performed += contextMenuBehaviour.OnRightClick;
-            inputService.TouchAction.performed += contextMenuBehaviour.OnLeftClick;
             
             //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
@@ -164,11 +153,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             inputService.RightClickUpAction.performed -= OnRightClickUp;
             inputService.LeftClickAction.performed -= OnLeftClick;
             inputService.RightClickAction.performed -= OnRightClick;
-            
-            inputService.RightClickUpAction.performed -= contextMenuBehaviour.OnRightClick;
-            inputService.LeftClickUpAction.performed -= contextMenuBehaviour.OnLeftClick;
-            inputService.LongPressAction.performed -= contextMenuBehaviour.OnRightClick;
-            inputService.TouchAction.performed -= contextMenuBehaviour.OnLeftClick;
         }
 
         private void OpenLayerPanel(LayerData layer)
@@ -377,7 +361,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void ProcessFeatureMappingSelection(FeatureMapping feature)
         {
-            LayerData layerData = feature.VisualisationLayer.LayerData;
+            LayerData layerData = feature.VisualisationParent.LayerData;
             if(!layerData.IsSelected)
                 layerData.SelectLayer(true);
                     
@@ -481,8 +465,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster()) < minClickDistance;
-            lastWorldClickedPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
+            Vector3 worldPoint = pointerToWorldPosition.GetWorldPointSync();
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, worldPoint) < minClickDistance;
+            lastWorldClickedPosition = worldPoint;
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;
