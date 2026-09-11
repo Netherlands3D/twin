@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
+        public Dictionary<Feature, FeatureLineVisualisations> SpawnedVisualisations => spawnedVisualisations;
         private List<List<Coordinate>> visualisationsToRemove = new();
         private List<List<Coordinate>> selectionList = new();
 
