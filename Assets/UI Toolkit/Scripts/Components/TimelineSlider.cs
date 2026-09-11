@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,6 +12,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class TimelineSlider : VisualElement
     {
+        private SunTime sunTime;
         private float maxDragDistance = 100f;
         private float maxScrubSpeed = 1f;
 
@@ -92,7 +94,15 @@ namespace Netherlands3D.UI.Components
             dragManipulator.DragEnded.AddListener(OnScrubberDragEnd);
 
             if (Application.isPlaying)
+            {
+                ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
                 schedule.Execute(UpdateSlider).Every(0);
+            }
+        }
+
+        private void OnProjectDataChanged(ProjectData projectData)
+        {
+            SetInitialDate();
         }
 
         private void OnScrubberDragStart(Vector2 startPosition)
@@ -118,10 +128,11 @@ namespace Netherlands3D.UI.Components
         private void OnScrubberDragEnd(Vector2 endPosition)
         {
             currentDragOffset = 0f;
+            scrubber.style.translate = new Translate(Mathf.Clamp(currentDragOffset, -MaxDragDistance, MaxDragDistance), 0);
             isDragging = false;
         }
 
-        private void InitBoundsFields()
+        private void InitRangeFields()
         {
             var range = maxDateTime - minDateTime;
             if (range.Days > 1)
@@ -170,31 +181,36 @@ namespace Netherlands3D.UI.Components
             return minDateTime.AddSeconds(value * totalSeconds);
         }
 
-        // private float DateTimeToSliderValue(DateTime dateTime)
-        // {
-        //     var totalSeconds = (maxDateTime - minDateTime).TotalSeconds;
-        //     return (float)((dateTime - minDateTime).TotalSeconds / totalSeconds);
-        // }
+        private float DateTimeToSliderValue(DateTime dateTime)
+        {
+            var totalSeconds = (maxDateTime - minDateTime).TotalSeconds;
+            return (float)((dateTime - minDateTime).TotalSeconds / totalSeconds);
+        }
 
         private void SetDate(DateTime dateTime)
         {
-            ServiceLocator.GetService<SunTime>().SetDate(dateTime.Day, dateTime.Month, dateTime.Year);
+            sunTime.SetDate(dateTime.Day, dateTime.Month, dateTime.Year);
+            sunTime.SetTime(dateTime.Hour, dateTime.Minute, dateTime.Second);
             currentTimeLabel.text = dateTime.ToString("MM/dd/yyyy HH:mm");
         }
 
-
         void SetInitialDate()
         {
-            var dateTime = ServiceLocator.GetService<SunTime>()?.Time;
-            if (dateTime.HasValue)
-                SetDate(dateTime.Value);
+            var dateTime = sunTime.Time;
+            SetDate(dateTime);
+            var sliderValue = DateTimeToSliderValue(dateTime);
+            slider.SetValueWithoutNotify(sliderValue);
         }
 
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            SetInitialDate();
-            InitBoundsFields();
+            if(Application.isPlaying)
+            {
+                sunTime = ServiceLocator.GetService<SunTime>();
+                SetInitialDate();
+            }
+            InitRangeFields();
         }
     }
 }
