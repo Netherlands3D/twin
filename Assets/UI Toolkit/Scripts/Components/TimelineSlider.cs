@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
 using Netherlands3D.UI.ExtensionMethods;
@@ -11,8 +12,8 @@ namespace Netherlands3D.UI.Components
     public partial class TimelineSlider : VisualElement
     {
         private float maxDragDistance = 100f;
-        private float maxScrubSpeed = 2f;
-        
+        private float maxScrubSpeed = 1f;
+
         private Slider slider;
         private VisualElement scrubber;
         private Label currentTimeLabel;
@@ -22,36 +23,68 @@ namespace Netherlands3D.UI.Components
         private bool isDragging;
         private float dragStartX;
         private float currentDragOffset;
-        // private IVisualElementScheduledItem scrubTicker;
-        
+
         [UxmlAttribute("max-drag-distance")]
         public float MaxDragDistance
         {
             get => maxDragDistance;
             set => maxDragDistance = value;
         }
-        
+
         [UxmlAttribute("max-scrub-speed")]
         public float MaxScrubSpeed
         {
             get => maxScrubSpeed;
             set => maxScrubSpeed = value;
         }
-        
+
+        private DateTime minDateTime;
+        public DateTime MinDateTime => minDateTime;
+
+        [UxmlAttribute("min-datetime")]
+        public string MinDateTimeString
+        {
+            get => minDateTime.ToString();
+            set
+            {
+                var result = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+                minDateTime = result;
+                // slider.lowValue = DateTimeToSliderValue(minDateTime);
+            }
+        }
+
+        private DateTime maxDateTime;
+        public DateTime MaxDateTime => maxDateTime;
+
+        [UxmlAttribute("max-datetime")]
+        public string MaxDateTimeString
+        {
+            get => maxDateTime.ToString();
+            set
+            {
+                var result = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+                maxDateTime = result;
+                // slider.highValue = DateTimeToSliderValue(maxDateTime);
+            }
+        }
+
         public TimelineSlider()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            
+
             slider = this.Q<Slider>("Timeline");
+            slider.lowValue = 0;
+            slider.highValue = 1;
             scrubber = this.Q<VisualElement>("Scrubber");
             currentTimeLabel = scrubber.Q<Label>("CurrentTimeLabel");
-            // minField = this.Q<NumberField>("MinField");
-            // maxField = this.Q<NumberField>("MaxField");
-             
-            SetInitialDate();
+
+            minField = this.Q<NumberField>("MinField");
+            maxField = this.Q<NumberField>("MaxField");
+
+            SetInitialDate(); //todo: this is currently called before the service exists.
             // InitBoundsFields();
-            
+
             RegisterCallback<AttachToPanelEvent>(ApplyTextFieldClassToInput);
             slider.RegisterValueChangedCallback(OnSliderChanged);
             var dragManipulator = new DragManipulator(4);
@@ -59,8 +92,8 @@ namespace Netherlands3D.UI.Components
             dragManipulator.DragStarted.AddListener(OnScrubberDragStart);
             dragManipulator.Dragging.AddListener(OnScrubberDrag);
             dragManipulator.DragEnded.AddListener(OnScrubberDragEnd);
-            
-            if(Application.isPlaying)
+
+            if (Application.isPlaying)
                 schedule.Execute(UpdateSlider).Every(0);
         }
 
@@ -75,31 +108,33 @@ namespace Netherlands3D.UI.Components
             currentDragOffset += delta.x;
             scrubber.style.translate = new Translate(Mathf.Clamp(currentDragOffset, -MaxDragDistance, MaxDragDistance), 0);
         }
-        
+
         private void UpdateSlider()
         {
             var normalized = Mathf.Clamp(currentDragOffset / MaxDragDistance, -1f, 1f);
             var eased = Mathf.Sign(normalized) * normalized * normalized;
-            var speed = eased * MaxScrubSpeed;
-            var newValue = Mathf.Clamp(slider.value + speed * Time.deltaTime, slider.lowValue, slider.highValue);
-            slider.value = newValue;
+            var speed = eased / MaxScrubSpeed;
+            slider.value = Mathf.Clamp01(slider.value +speed*Time.deltaTime);
         }
-        
+
         private void OnScrubberDragEnd(Vector2 endPosition)
         {
             currentDragOffset = 0f;
             isDragging = false;
         }
-        
+
         private void InitBoundsFields()
         {
-            minField.SetValueWithoutNotify(slider.lowValue);
-            maxField.SetValueWithoutNotify(slider.highValue);
+            minField.SetValueWithoutNotify(minDateTime);
+            maxField.SetValueWithoutNotify(maxDateTime);
+            
+            minField.SetEnabled(false);
+            maxField.SetEnabled(false);
 
             // minField.RegisterValueChangedCallback(OnMinFieldChanged);
             // maxField.RegisterValueChangedCallback(OnMaxFieldChanged);
         }
-        
+
         private void OnMinFieldChanged(ChangeEvent<float> evt)
         {
             var newValue = Mathf.Min(evt.newValue, slider.highValue);
@@ -113,48 +148,42 @@ namespace Netherlands3D.UI.Components
             slider.highValue = newMax;
             maxField.SetValueWithoutNotify(newMax);
         }
-        
+
         private void OnSliderChanged(ChangeEvent<float> evt)
         {
-            int year = Mathf.FloorToInt(evt.newValue);
-            float fraction = evt.newValue - year;
-            int totalDays = DateTime.IsLeapYear(year) ? 366 : 365;
-            int dayOfYear = Mathf.Clamp(Mathf.FloorToInt(fraction * totalDays), 0, totalDays - 1);
+            SetDate(SliderValueToDateTime(evt.newValue));
+        }
+        
 
-            DateTime date = new DateTime(year, 1, 1).AddDays(dayOfYear);
-
-            SetDate(date);
+        private DateTime SliderValueToDateTime(float value)
+        {
+            var totalSeconds = (maxDateTime - minDateTime).TotalSeconds;
+            return minDateTime.AddSeconds(value * totalSeconds);
         }
 
+        // private float DateTimeToSliderValue(DateTime dateTime)
+        // {
+        //     var totalSeconds = (maxDateTime - minDateTime).TotalSeconds;
+        //     return (float)((dateTime - minDateTime).TotalSeconds / totalSeconds);
+        // }
 
         private void SetDate(DateTime dateTime)
         {
-            ServiceLocator.GetService<SunTime>().SetDate(dateTime.Day, dateTime.Month,  dateTime.Year);
-            currentTimeLabel.text = dateTime.ToString("MM/dd/yyyy");
+            ServiceLocator.GetService<SunTime>().SetDate(dateTime.Day, dateTime.Month, dateTime.Year);
+            currentTimeLabel.text = dateTime.ToString("MM/dd/yyyy HH:mm");
         }
 
-        
+
         void SetInitialDate()
         {
             var dateTime = ServiceLocator.GetService<SunTime>()?.Time;
-            if(dateTime.HasValue)
+            if (dateTime.HasValue)
                 SetDate(dateTime.Value);
         }
 
-        
+
         private void ApplyTextFieldClassToInput(AttachToPanelEvent evt)
         {
-            // var inputText = this.Q<TextElement>(className: "unity-text-element--inner-input-field-component");
-            // if (inputText == null)
-            //     return;
-            //
-            // inputText.AddToClassList("text-base");
-            //
-            // var input = this.Q<VisualElement>(className: "unity-base-text-field");
-            // if (input == null)
-            //     return;
-            //
-            // input.AddToClassList("textfield");
         }
     }
 }

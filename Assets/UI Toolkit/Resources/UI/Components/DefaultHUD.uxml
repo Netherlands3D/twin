@@ -27,7 +27,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
         <ui:VisualElement name="BottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
-            <nl3d:TimelineSlider/>
+            <nl3d:TimelineSlider min-datetime="2026-09-10T00:00:00.0000000" max-datetime="2026-09-11T00:00:00.0000000"/>
             <nl3d:DebugInfo/>
             <nl3d:Footer/>
         </ui:VisualElement>
