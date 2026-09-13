@@ -49,6 +49,7 @@ namespace Netherlands3D
         public static event Action<TimelineGeoJson> ActiveTimelineChanged;
 
         public event Action<TimelineGeoJson> TimelineStateChanged;
+        public event Action<TimelineGeoJson> TimelineTimeChanged;
 
         public bool HasTimelineData { get; private set; }
         public bool HasTrafficData { get; private set; }
@@ -57,6 +58,7 @@ namespace Netherlands3D
         public IReadOnlyList<string> AvailableDayTypes => availableDayTypes;
         public string SelectedVehicleType { get; private set; }
         public string SelectedDayType { get; private set; }
+        public DateTime CurrentTime => currentTime;
         public int CurrentHour => currentTime.Hour;
         public int VisibleRouteCount { get; private set; }
         public string LayerName => visualization?.LayerData?.Name ?? "Verkeersdata";
@@ -354,11 +356,15 @@ namespace Netherlands3D
 
         private void OnTimeChanged(DateTime selectedTime)
         {
+            var trafficHourChanged = currentTime.Hour != selectedTime.Hour;
             currentTime = selectedTime;
 
             if (HasTrafficData)
             {
-                ApplyTrafficSlice();
+                if (trafficHourChanged)
+                    ApplyTrafficSlice();
+                else
+                    TimelineTimeChanged?.Invoke(this);
                 return;
             }
 

@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class TimelineSlider : VisualElement
     {
-        private const long PlaybackIntervalMilliseconds = 2000;
+        private const float PlaybackSecondsPerSecond = 1800f;
         private static readonly float[] LegendStops = { 0f, 0.25f, 0.5f, 0.75f, 1f };
 
         private readonly List<string> vehicleKeys = new();
@@ -39,13 +39,13 @@ namespace Netherlands3D.UI.Components
         private Label titleLabel;
         private Label layerLabel;
         private Label currentTimeLabel;
+        private Label playbackStatusLabel;
         private Label routeCountLabel;
         private Label legendScaleLabel;
         private Label loadingLabel;
         private Button previousHourButton;
         private Button playbackButton;
         private Button nextHourButton;
-        private IVisualElementScheduledItem playbackSchedule;
 
         private bool isAttached;
         private bool isUpdatingUi;
@@ -90,6 +90,7 @@ namespace Netherlands3D.UI.Components
             titleLabel = this.Q<Label>("TitleLabel");
             layerLabel = this.Q<Label>("LayerLabel");
             currentTimeLabel = this.Q<Label>("CurrentTimeLabel");
+            playbackStatusLabel = this.Q<Label>("PlaybackStatusLabel");
             routeCountLabel = this.Q<Label>("RouteCountLabel");
             legendScaleLabel = this.Q<Label>("LegendScaleLabel");
             loadingLabel = this.Q<Label>("LoadingLabel");
@@ -112,7 +113,8 @@ namespace Netherlands3D.UI.Components
             // Returning cleanly keeps the entire HUD from failing to clone; Unity recreates it after the UXML import.
             if (expandedView == null || collapsedView == null || trafficControls == null || trafficLegend == null
                 || trafficTicks == null || vehicleDropdown == null || dayTypeDropdown == null || slider == null
-                || titleLabel == null || layerLabel == null || currentTimeLabel == null || routeCountLabel == null
+                || titleLabel == null || layerLabel == null || currentTimeLabel == null || playbackStatusLabel == null
+                || routeCountLabel == null
                 || legendScaleLabel == null || loadingLabel == null || previousHourButton == null
                 || playbackButton == null || nextHourButton == null || closeButton == null || openButton == null
                 || legendColors.Any(element => element == null) || legendLabels.Any(element => element == null))
@@ -168,12 +170,18 @@ namespace Netherlands3D.UI.Components
                 StopPlayback();
 
             if (activeTimeline != null)
+            {
                 activeTimeline.TimelineStateChanged -= OnTimelineStateChanged;
+                activeTimeline.TimelineTimeChanged -= OnTimelineTimeChanged;
+            }
 
             activeTimeline = timeline;
 
             if (activeTimeline != null)
+            {
                 activeTimeline.TimelineStateChanged += OnTimelineStateChanged;
+                activeTimeline.TimelineTimeChanged += OnTimelineTimeChanged;
+            }
 
             Refresh();
         }
@@ -181,6 +189,12 @@ namespace Netherlands3D.UI.Components
         private void OnTimelineStateChanged(TimelineGeoJson _)
         {
             Refresh();
+        }
+
+        private void OnTimelineTimeChanged(TimelineGeoJson timeline)
+        {
+            if (timeline == activeTimeline && timeline.HasTrafficData)
+                UpdateTrafficTimeReadout();
         }
 
         private void Collapse()
@@ -225,21 +239,26 @@ namespace Netherlands3D.UI.Components
             if (isTraffic)
             {
                 if (isPlaying && activeTimeline.CurrentHour >= 23)
+                {
                     StopPlayback();
+                    var endTime = activeTimeline.CurrentTime.Date.AddHours(23);
+                    if (activeTimeline.CurrentTime > endTime)
+                        SetTrafficTime(endTime);
+                }
 
                 PopulateTrafficDropdowns();
                 slider.lowValue = 0f;
                 slider.highValue = 23f;
-                slider.SetValueWithoutNotify(activeTimeline.CurrentHour);
-                currentTimeLabel.text = $"{activeTimeline.CurrentHour:00}:00 – {activeTimeline.CurrentHour:00}:59";
+                UpdateTrafficTimeReadout();
                 routeCountLabel.text = activeTimeline.ParsingComplete
                     ? activeTimeline.VisibleRouteCount.ToString(CultureInfo.InvariantCulture)
                     : "–";
                 UpdateLegend();
 
-                previousHourButton.SetEnabled(activeTimeline.CurrentHour > 0);
+                previousHourButton.SetEnabled(GetTrafficSliderValue(activeTimeline.CurrentTime) > 0f);
                 nextHourButton.SetEnabled(activeTimeline.CurrentHour < 23);
-                playbackButton.SetEnabled(activeTimeline.ParsingComplete && (isPlaying || activeTimeline.CurrentHour < 23));
+                playbackButton.SetEnabled(activeTimeline.ParsingComplete
+                                          && (isPlaying || GetTrafficSliderValue(activeTimeline.CurrentTime) < 23f));
             }
             else
             {
@@ -329,9 +348,7 @@ namespace Netherlands3D.UI.Components
 
             if (activeTimeline.HasTrafficData)
             {
-                var hour = Mathf.Clamp(Mathf.RoundToInt(evt.newValue), 0, 23);
-                slider.SetValueWithoutNotify(hour);
-                sunTime.SetTime(hour, 0, 0);
+                SetTrafficTime(evt.newValue);
                 return;
             }
 
@@ -375,35 +392,19 @@ namespace Netherlands3D.UI.Components
                 return;
 
             isPlaying = true;
+            sunTime.SetTimeSpeed(PlaybackSecondsPerSecond);
+            sunTime.ToggleAnimation(true);
             UpdatePlaybackButton();
-
-            playbackSchedule?.Pause();
-            playbackSchedule = schedule.Execute(AdvancePlayback)
-                .StartingIn(PlaybackIntervalMilliseconds)
-                .Every(PlaybackIntervalMilliseconds);
         }
 
         private void StopPlayback()
         {
-            playbackSchedule?.Pause();
-            playbackSchedule = null;
-
             if (!isPlaying)
                 return;
 
             isPlaying = false;
+            sunTime?.ToggleAnimation(false);
             UpdatePlaybackButton();
-        }
-
-        private void AdvancePlayback()
-        {
-            if (!isPlaying || activeTimeline == null || userCollapsed || activeTimeline.CurrentHour >= 23)
-            {
-                StopPlayback();
-                return;
-            }
-
-            StepTime(1);
         }
 
         private void UpdatePlaybackButton()
@@ -416,6 +417,34 @@ namespace Netherlands3D.UI.Components
                 ? "Pauzeren"
                 : "Afspelen · 1 uur per 2 seconden";
             playbackButton.EnableInClassList("timeline-slider__play-button--active", isPlaying);
+        }
+
+        private void UpdateTrafficTimeReadout()
+        {
+            if (activeTimeline == null)
+                return;
+
+            var selectedTime = activeTimeline.CurrentTime;
+            slider.SetValueWithoutNotify(GetTrafficSliderValue(selectedTime));
+            currentTimeLabel.text = selectedTime.ToString("HH:mm");
+            playbackStatusLabel.text =
+                $"Data: {selectedTime.Hour:00}:00 – {selectedTime.Hour:00}:59 · 1 uur per 2 sec";
+        }
+
+        private void SetTrafficTime(float timelineHour)
+        {
+            var totalSeconds = Mathf.RoundToInt(Mathf.Clamp(timelineHour, 0f, 23f) * 3600f);
+            SetTrafficTime(activeTimeline.CurrentTime.Date.AddSeconds(totalSeconds));
+        }
+
+        private void SetTrafficTime(DateTime time)
+        {
+            sunTime.SetTime(time);
+        }
+
+        private static float GetTrafficSliderValue(DateTime time)
+        {
+            return time.Hour + time.Minute / 60f + time.Second / 3600f;
         }
 
         private void EnsureLegacyDateRange()
