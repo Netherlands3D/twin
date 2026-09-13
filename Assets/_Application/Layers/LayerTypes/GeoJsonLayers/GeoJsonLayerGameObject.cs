@@ -460,6 +460,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             lineFeaturesLayer.SetFeatureStyles(colors, widthMultipliers);
         }
+
+        /// <summary>
+        /// Applies contextual per-feature styling without replacing the parsed or visible feature collection.
+        /// </summary>
+        public void SetLineFeatureStyles(
+            IReadOnlyDictionary<Feature, Color> colors,
+            IReadOnlyDictionary<Feature, float> widthMultipliers)
+        {
+            lineFeaturesLayer.SetFeatureStyles(colors, widthMultipliers);
+        }
+
+        public void SetPointFeatureStyles(IReadOnlyDictionary<Feature, Color> colors)
+        {
+            pointFeaturesLayer.SetFeatureStyles(colors);
+        }
+
+        public bool TryGetFeatureCenter(Feature feature, out Vector3 center)
+        {
+            center = default;
+            if (feature?.Geometry == null)
+                return false;
+
+            try
+            {
+                center = GetVisualisationLayerForFeature(feature).GetFeatureBounds(feature).center;
+                return true;
+            }
+            catch (KeyNotFoundException)
+            {
+                return false;
+            }
+        }
         
         protected virtual void OnFeatureRemoved(Feature feature)
         {

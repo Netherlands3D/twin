@@ -22,6 +22,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
+        private readonly List<Feature> visualisationOrder = new();
+        private readonly Dictionary<Feature, Color> featureColors = new();
         
         private List<List<Coordinate>> visualisationsToRemove = new();
 
@@ -133,6 +135,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
+            visualisationOrder.Add(feature);
+        }
+
+        /// <summary>
+        /// Applies one color per GeoJSON point feature while preserving the renderer's insertion order.
+        /// </summary>
+        public void SetFeatureStyles(IReadOnlyDictionary<Feature, Color> colors)
+        {
+            var requestedColors = colors?.ToDictionary(pair => pair.Key, pair => pair.Value);
+            featureColors.Clear();
+
+            var collectionColors = new List<Color>();
+            foreach (var feature in visualisationOrder)
+            {
+                if (!spawnedVisualisations.TryGetValue(feature, out var visualisation))
+                    continue;
+
+                var color = requestedColors != null && requestedColors.TryGetValue(feature, out var requestedColor)
+                    ? requestedColor
+                    : RenderColor;
+                featureColors[feature] = color;
+
+                for (var i = 0; i < visualisation.Data.Count; i++)
+                    collectionColors.Add(color);
+            }
+
+            pointRenderer3D.SetCollectionColors(collectionColors);
         }
 
         /// <summary>
@@ -153,12 +182,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 RemoveFeature(kvp.Value);
             }
             PointRenderer3D.RemovePointCollections(visualisationsToRemove);
+            SetFeatureStyles(featureColors);
         }
 
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
+            visualisationOrder.Remove(featureVisualisation.feature);
+            featureColors.Remove(featureVisualisation.feature);
         }
         
         public BoundingBox GetBoundingBoxOfVisibleFeatures()

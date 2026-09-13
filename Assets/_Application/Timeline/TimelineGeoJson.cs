@@ -53,6 +53,8 @@ namespace Netherlands3D
 
         public bool HasTimelineData { get; private set; }
         public bool HasTrafficData { get; private set; }
+        public bool HasPresentationData => presentation?.HasData == true;
+        public bool HasContextualData => HasTimelineData || HasPresentationData;
         public bool ParsingComplete { get; private set; }
         public IReadOnlyList<string> AvailableVehicleTypes => availableVehicleTypes;
         public IReadOnlyList<string> AvailableDayTypes => availableDayTypes;
@@ -63,6 +65,16 @@ namespace Netherlands3D
         public int RenderedTrafficHour { get; private set; } = -1;
         public int VisibleRouteCount { get; private set; }
         public string LayerName => visualization?.LayerData?.Name ?? "Verkeersdata";
+        public GeoJsonPresentationKind PresentationKind => presentation?.Kind ?? GeoJsonPresentationKind.None;
+        public IReadOnlyList<string> PresentationMetricNames => presentation?.MetricNames ?? Array.Empty<string>();
+        public string SelectedPresentationMetric => presentation?.SelectedMetricName ?? string.Empty;
+        public string PresentationTitle => presentation?.Title ?? string.Empty;
+        public string PresentationContext => presentation?.ContextLabel ?? string.Empty;
+        public int PresentationFeatureCount => presentation?.FeatureCount ?? 0;
+        public string PresentationFeatureCaption => presentation?.FeatureCaption ?? string.Empty;
+        public string PresentationLegendTitle => presentation?.LegendTitle ?? string.Empty;
+        public string PresentationLegendScale => presentation?.LegendScaleLabel ?? string.Empty;
+        public string PresentationLegendExplanation => presentation?.LegendExplanation ?? string.Empty;
 
         private readonly List<Feature> trafficFeatures = new();
         private readonly HashSet<Feature> indexedTrafficFeatures = new(new FeatureReferenceComparer());
@@ -74,6 +86,7 @@ namespace Netherlands3D
         private readonly List<string> availableDayTypes = new();
 
         private GeoJsonLayerGameObject visualization;
+        private GeoJsonPresentation presentation;
         private ColorPropertyData stylingPropertyData;
         private SunTime sunTime;
         private DateTime currentTime = DateTime.Today;
@@ -98,6 +111,8 @@ namespace Netherlands3D
                 return;
             }
 
+            presentation = new GeoJsonPresentation(visualization);
+
             previousVisualisationFilter = visualization.FeatureVisualisationFilter;
             combinedVisualisationFilter = feature =>
                 (previousVisualisationFilter?.Invoke(feature) ?? true) && !IsTrafficFeature(feature);
@@ -118,6 +133,7 @@ namespace Netherlands3D
 
             visualization.LayerData.LayerSelected.AddListener(OnLayerSelected);
             visualization.LayerData.LayerDeselected.AddListener(OnLayerDeselected);
+            visualization.LayerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
 
             sunTime = ServiceLocator.GetService<SunTime>();
             if (sunTime != null)
@@ -133,7 +149,7 @@ namespace Netherlands3D
             if (visualization.Parser.HasCompleted)
                 FinalizeTrafficIndex();
 
-            if (visualization.LayerData.IsSelected && HasTimelineData)
+            if (visualization.LayerData.IsSelected && HasContextualData)
                 SetActiveTimeline(this);
         }
 
@@ -152,6 +168,7 @@ namespace Netherlands3D
             {
                 visualization.LayerData.LayerSelected.RemoveListener(OnLayerSelected);
                 visualization.LayerData.LayerDeselected.RemoveListener(OnLayerDeselected);
+                visualization.LayerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
             }
 
             sunTime?.timeOfDayChanged.RemoveListener(OnTimeChanged);
@@ -176,6 +193,30 @@ namespace Netherlands3D
 
             SelectedDayType = dayType;
             ApplyTrafficSlice();
+        }
+
+        public void SelectPresentationMetric(int index)
+        {
+            if (!HasPresentationData)
+                return;
+
+            presentation.SelectMetric(index);
+            TimelineStateChanged?.Invoke(this);
+        }
+
+        public float GetPresentationLegendValue(float normalized)
+        {
+            return presentation?.GetLegendValue(normalized) ?? 0f;
+        }
+
+        public Color GetPresentationLegendColor(float normalized)
+        {
+            return presentation?.GetLegendColor(normalized) ?? Color.gray;
+        }
+
+        internal IReadOnlyList<GeoJsonWorldLabel> GetPresentationWorldLabels()
+        {
+            return presentation?.GetWorldLabels() ?? Array.Empty<GeoJsonWorldLabel>();
         }
 
         public float GetScaleMaximumForSelectedVehicle()
@@ -238,14 +279,13 @@ namespace Netherlands3D
 
         private void OnFeatureAdded(Feature feature)
         {
-            var previouslyHadTimelineData = HasTimelineData;
-            var previouslyHadTrafficData = HasTrafficData;
+            var previouslyHadContextualData = HasContextualData;
             IndexFeature(feature);
 
-            if (visualization.HasLayerData && visualization.LayerData.IsSelected && HasTimelineData)
+            if (visualization.HasLayerData && visualization.LayerData.IsSelected && HasContextualData)
                 SetActiveTimeline(this);
 
-            if (previouslyHadTimelineData != HasTimelineData || previouslyHadTrafficData != HasTrafficData)
+            if (previouslyHadContextualData != HasContextualData || HasPresentationData)
                 TimelineStateChanged?.Invoke(this);
         }
 
@@ -253,6 +293,8 @@ namespace Netherlands3D
         {
             if (feature?.Properties == null)
                 return;
+
+            presentation.IndexFeature(feature);
 
             var isTrafficFeature = IsTrafficFeature(feature);
             if (isTrafficFeature
@@ -288,6 +330,7 @@ namespace Netherlands3D
         private void FinalizeTrafficIndex()
         {
             ParsingComplete = true;
+            presentation.FinalizeIndex();
 
             availableVehicleTypes.Clear();
             availableVehicleTypes.AddRange(OrderKnownValues(vehicleTypes, VehicleOrder));
@@ -319,6 +362,9 @@ namespace Netherlands3D
                 ApplyTrafficSlice();
             else
                 TimelineStateChanged?.Invoke(this);
+
+            if (visualization.LayerData.IsSelected && HasContextualData)
+                SetActiveTimeline(this);
         }
 
         private static IEnumerable<string> OrderKnownValues(IEnumerable<string> values, IReadOnlyList<string> preferredOrder)
@@ -336,13 +382,25 @@ namespace Netherlands3D
 
         private void OnLayerSelected(LayerData _)
         {
-            if (HasTimelineData)
+            if (HasContextualData)
                 SetActiveTimeline(this);
         }
 
         private void OnLayerDeselected(LayerData _)
         {
             if (ActiveTimeline == this)
+                SetActiveTimeline(null);
+        }
+
+        private void OnLayerActiveInHierarchyChanged(bool active)
+        {
+            if (active && visualization.LayerData.IsSelected && HasContextualData)
+            {
+                SetActiveTimeline(this);
+                return;
+            }
+
+            if (!active && ActiveTimeline == this)
                 SetActiveTimeline(null);
         }
 

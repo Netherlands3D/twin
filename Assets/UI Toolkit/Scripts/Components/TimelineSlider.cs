@@ -25,6 +25,7 @@ namespace Netherlands3D.UI.Components
         private readonly List<string> dayTypeKeys = new();
         private readonly VisualElement[] legendColors = new VisualElement[5];
         private readonly Label[] legendLabels = new Label[5];
+        private readonly List<WorldLabelElement> worldLabelElements = new();
 
         private SunTime sunTime;
         private TimelineGeoJson activeTimeline;
@@ -33,24 +34,38 @@ namespace Netherlands3D.UI.Components
         private VisualElement trafficControls;
         private VisualElement trafficLegend;
         private VisualElement trafficTicks;
+        private VisualElement presentationControls;
+        private VisualElement timeControls;
+        private VisualElement worldLabelOverlay;
         private DropDown vehicleDropdown;
         private DropDown dayTypeDropdown;
+        private DropDown metricDropdown;
         private Slider slider;
+        private Icon headerIcon;
         private Label titleLabel;
         private Label layerLabel;
         private Label currentTimeLabel;
         private Label playbackStatusLabel;
         private Label routeCountLabel;
         private Label legendScaleLabel;
+        private Label legendTitleLabel;
+        private Label legendExplanationLabel;
         private Label loadingLabel;
+        private Label presentationContextLabel;
+        private Label featureCountLabel;
+        private Label featureCaptionLabel;
         private Button previousHourButton;
         private Button playbackButton;
         private Button nextHourButton;
+        private Button openButton;
+        private CheckboxToggle worldLabelsToggle;
+        private IVisualElementScheduledItem worldLabelUpdate;
 
         private bool isAttached;
         private bool isUpdatingUi;
         private bool userCollapsed;
         private bool isPlaying;
+        private bool showWorldLabels;
 
         private DateTime minDateTime;
         public DateTime MinDateTime => minDateTime;
@@ -82,24 +97,34 @@ namespace Netherlands3D.UI.Components
             trafficControls = this.Q<VisualElement>("TrafficControls");
             trafficLegend = this.Q<VisualElement>("TrafficLegend");
             trafficTicks = this.Q<VisualElement>("TrafficTicks");
+            presentationControls = this.Q<VisualElement>("DataPresentationControls");
+            timeControls = this.Q<VisualElement>("TimeControls");
 
             vehicleDropdown = this.Q<DropDown>("VehicleDropdown");
             dayTypeDropdown = this.Q<DropDown>("DayTypeDropdown");
+            metricDropdown = this.Q<DropDown>("MetricDropdown");
             slider = this.Q<Slider>("Timeline");
 
+            headerIcon = this.Q<Icon>("HeaderIcon");
             titleLabel = this.Q<Label>("TitleLabel");
             layerLabel = this.Q<Label>("LayerLabel");
             currentTimeLabel = this.Q<Label>("CurrentTimeLabel");
             playbackStatusLabel = this.Q<Label>("PlaybackStatusLabel");
             routeCountLabel = this.Q<Label>("RouteCountLabel");
             legendScaleLabel = this.Q<Label>("LegendScaleLabel");
+            legendTitleLabel = this.Q<Label>("LegendTitleLabel");
+            legendExplanationLabel = this.Q<Label>("LegendExplanation");
             loadingLabel = this.Q<Label>("LoadingLabel");
+            presentationContextLabel = this.Q<Label>("PresentationContextLabel");
+            featureCountLabel = this.Q<Label>("FeatureCountLabel");
+            featureCaptionLabel = this.Q<Label>("FeatureCaptionLabel");
 
             previousHourButton = this.Q<Button>("PreviousHourButton");
             playbackButton = this.Q<Button>("PlaybackButton");
             nextHourButton = this.Q<Button>("NextHourButton");
+            worldLabelsToggle = this.Q<CheckboxToggle>("WorldLabelsToggle");
             var closeButton = this.Q<Button>("CloseButton");
-            var openButton = this.Q<Button>("OpenButton");
+            openButton = this.Q<Button>("OpenButton");
 
             for (var i = 0; i < LegendStops.Length; i++)
             {
@@ -112,10 +137,13 @@ namespace Netherlands3D.UI.Components
             // During a Unity hot reload the C# type can be constructed one import tick before its UXML dependency.
             // Returning cleanly keeps the entire HUD from failing to clone; Unity recreates it after the UXML import.
             if (expandedView == null || collapsedView == null || trafficControls == null || trafficLegend == null
-                || trafficTicks == null || vehicleDropdown == null || dayTypeDropdown == null || slider == null
-                || titleLabel == null || layerLabel == null || currentTimeLabel == null || playbackStatusLabel == null
-                || routeCountLabel == null
-                || legendScaleLabel == null || loadingLabel == null || previousHourButton == null
+                || trafficTicks == null || presentationControls == null || timeControls == null
+                || vehicleDropdown == null || dayTypeDropdown == null || metricDropdown == null || slider == null
+                || headerIcon == null || titleLabel == null || layerLabel == null || currentTimeLabel == null
+                || playbackStatusLabel == null || routeCountLabel == null || legendScaleLabel == null
+                || legendTitleLabel == null || legendExplanationLabel == null || loadingLabel == null
+                || presentationContextLabel == null || featureCountLabel == null || featureCaptionLabel == null
+                || previousHourButton == null || worldLabelsToggle == null
                 || playbackButton == null || nextHourButton == null || closeButton == null || openButton == null
                 || legendColors.Any(element => element == null) || legendLabels.Any(element => element == null))
             {
@@ -126,6 +154,8 @@ namespace Netherlands3D.UI.Components
             slider.RegisterValueChangedCallback(OnSliderChanged);
             vehicleDropdown.DropDownValueChanged.AddListener(OnVehicleChanged);
             dayTypeDropdown.DropDownValueChanged.AddListener(OnDayTypeChanged);
+            metricDropdown.DropDownValueChanged.AddListener(OnMetricChanged);
+            worldLabelsToggle.RegisterValueChangedCallback(OnWorldLabelsChanged);
             previousHourButton.clicked += () => StepTime(-1);
             playbackButton.clicked += TogglePlayback;
             nextHourButton.clicked += () => StepTime(1);
@@ -143,6 +173,7 @@ namespace Netherlands3D.UI.Components
 
             isAttached = true;
             sunTime = ServiceLocator.GetService<SunTime>();
+            CreateWorldLabelOverlay();
             TimelineGeoJson.ActiveTimelineChanged += OnActiveTimelineChanged;
             OnActiveTimelineChanged(TimelineGeoJson.ActiveTimeline);
         }
@@ -156,11 +187,18 @@ namespace Netherlands3D.UI.Components
             StopPlayback();
             TimelineGeoJson.ActiveTimelineChanged -= OnActiveTimelineChanged;
             SetActiveTimeline(null);
+            worldLabelUpdate?.Pause();
+            worldLabelUpdate = null;
+            worldLabelOverlay?.RemoveFromHierarchy();
+            worldLabelOverlay = null;
+            worldLabelElements.Clear();
         }
 
         private void OnActiveTimelineChanged(TimelineGeoJson timeline)
         {
             userCollapsed = false;
+            showWorldLabels = false;
+            worldLabelsToggle?.SetValueWithoutNotify(false);
             SetActiveTimeline(timeline);
         }
 
@@ -212,29 +250,53 @@ namespace Netherlands3D.UI.Components
 
         private void ApplyVisibility()
         {
-            var isAvailable = activeTimeline != null && activeTimeline.HasTimelineData;
+            var isAvailable = activeTimeline != null && activeTimeline.HasContextualData;
             EnableInClassList(UtilityClassConstants.HIDDEN, !isAvailable);
             expandedView.EnableInClassList(UtilityClassConstants.HIDDEN, !isAvailable || userCollapsed);
             collapsedView.EnableInClassList(UtilityClassConstants.HIDDEN, !isAvailable || !userCollapsed);
+            ApplyWorldLabelVisibility();
         }
 
         private void Refresh()
         {
             ApplyVisibility();
-            if (activeTimeline == null || !activeTimeline.HasTimelineData)
+            if (activeTimeline == null || !activeTimeline.HasContextualData)
+            {
+                RebuildWorldLabels();
                 return;
+            }
 
             isUpdatingUi = true;
             var isTraffic = activeTimeline.HasTrafficData;
+            var isPresentation = activeTimeline.HasPresentationData && !isTraffic;
 
-            titleLabel.text = isTraffic ? "Verkeersintensiteit" : "Tijdlijn";
+            titleLabel.text = isPresentation
+                ? activeTimeline.PresentationTitle
+                : isTraffic ? "Verkeersintensiteit" : "Tijdlijn";
             layerLabel.text = activeTimeline.LayerName;
+            headerIcon.Image = isPresentation ? "PresentationChart" : "Clock";
+            openButton.Image = isPresentation ? "PresentationChart" : "Clock";
+            openButton.LabelText = isPresentation ? "Dataweergave tonen" : "Tijdlijn tonen";
             trafficControls.EnableInClassList(UtilityClassConstants.HIDDEN, !isTraffic);
-            trafficLegend.EnableInClassList(UtilityClassConstants.HIDDEN, !isTraffic);
+            presentationControls.EnableInClassList(UtilityClassConstants.HIDDEN, !isPresentation);
+            timeControls.EnableInClassList(UtilityClassConstants.HIDDEN, isPresentation);
+            slider.EnableInClassList(UtilityClassConstants.HIDDEN, isPresentation);
+            trafficLegend.EnableInClassList(UtilityClassConstants.HIDDEN, !isTraffic && !isPresentation);
             trafficTicks.EnableInClassList(UtilityClassConstants.HIDDEN, !isTraffic);
+            loadingLabel.text = isPresentation ? "GeoJSON-weergave wordt voorbereid…" : "Verkeersgegevens worden verwerkt…";
             loadingLabel.EnableInClassList(
                 UtilityClassConstants.HIDDEN,
-                !isTraffic || activeTimeline.ParsingComplete);
+                activeTimeline.ParsingComplete);
+
+            if (isPresentation)
+            {
+                StopPlayback();
+                PopulatePresentationControls();
+                UpdatePresentationLegend();
+                RebuildWorldLabels();
+                isUpdatingUi = false;
+                return;
+            }
 
             if (isTraffic)
             {
@@ -254,6 +316,7 @@ namespace Netherlands3D.UI.Components
                     ? activeTimeline.VisibleRouteCount.ToString(CultureInfo.InvariantCulture)
                     : "–";
                 UpdateLegend();
+                RebuildWorldLabels();
 
                 previousHourButton.SetEnabled(GetTrafficSliderValue(activeTimeline.CurrentTime) > 0f);
                 nextHourButton.SetEnabled(activeTimeline.CurrentHour < 23);
@@ -275,6 +338,21 @@ namespace Netherlands3D.UI.Components
             }
 
             isUpdatingUi = false;
+        }
+
+        private void PopulatePresentationControls()
+        {
+            metricDropdown.choices = activeTimeline.PresentationMetricNames.ToList();
+            var metricIndex = Math.Max(0, metricDropdown.choices.FindIndex(value =>
+                string.Equals(value, activeTimeline.SelectedPresentationMetric, StringComparison.OrdinalIgnoreCase)));
+            if (metricDropdown.choices.Count > 0)
+                metricDropdown.SetValue(metricIndex);
+
+            presentationContextLabel.text = activeTimeline.PresentationContext;
+            featureCountLabel.text = activeTimeline.ParsingComplete
+                ? activeTimeline.PresentationFeatureCount.ToString(CultureInfo.InvariantCulture)
+                : "–";
+            featureCaptionLabel.text = activeTimeline.PresentationFeatureCaption;
         }
 
         private void PopulateTrafficDropdowns()
@@ -304,6 +382,8 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLegend()
         {
+            legendTitleLabel.text = "Relatieve verkeersintensiteit";
+            legendExplanationLabel.text = "Kleur en lijndikte tonen de intensiteit; selecteer een route voor de exacte waarde.";
             var maximum = activeTimeline.GetScaleMaximumForSelectedVehicle();
             legendScaleLabel.text = maximum > 0f
                 ? $"voertuigen/uur · schaal tot P95 ({FormatCount(maximum)})"
@@ -311,10 +391,29 @@ namespace Netherlands3D.UI.Components
 
             for (var i = 0; i < LegendStops.Length; i++)
             {
+                legendColors[i].style.backgroundColor = TimelineGeoJson.GetTrafficColor(LegendStops[i]);
                 var count = activeTimeline.GetCountAtNormalizedIntensity(LegendStops[i]);
                 legendLabels[i].text = i == LegendStops.Length - 1
                     ? $"≥ {FormatCount(count)}"
                     : FormatCount(count);
+            }
+        }
+
+        private void UpdatePresentationLegend()
+        {
+            legendTitleLabel.text = activeTimeline.PresentationLegendTitle;
+            legendScaleLabel.text = activeTimeline.PresentationLegendScale;
+            legendExplanationLabel.text = activeTimeline.PresentationLegendExplanation;
+
+            for (var i = 0; i < LegendStops.Length; i++)
+            {
+                legendColors[i].style.backgroundColor = activeTimeline.GetPresentationLegendColor(LegendStops[i]);
+                var value = activeTimeline.GetPresentationLegendValue(LegendStops[i]);
+                var formatted = activeTimeline.PresentationKind is GeoJsonPresentationKind.RoadIntervention
+                    or GeoJsonPresentationKind.RouteReference
+                    ? FormatCount(value)
+                    : value.ToString("0.0", CultureInfo.InvariantCulture);
+                legendLabels[i].text = i == LegendStops.Length - 1 ? $"≥ {formatted}" : formatted;
             }
         }
 
@@ -339,6 +438,21 @@ namespace Netherlands3D.UI.Components
                 return;
 
             activeTimeline.SelectDayType(dayTypeKeys[index]);
+        }
+
+        private void OnMetricChanged(int index)
+        {
+            if (isUpdatingUi || activeTimeline == null || !activeTimeline.HasPresentationData)
+                return;
+
+            activeTimeline.SelectPresentationMetric(index);
+        }
+
+        private void OnWorldLabelsChanged(ChangeEvent<bool> evt)
+        {
+            showWorldLabels = evt.newValue;
+            RebuildWorldLabels();
+            ApplyWorldLabelVisibility();
         }
 
         private void OnSliderChanged(ChangeEvent<float> evt)
@@ -450,6 +564,89 @@ namespace Netherlands3D.UI.Components
             return time.Hour + time.Minute / 60f + time.Second / 3600f;
         }
 
+        private void CreateWorldLabelOverlay()
+        {
+            if (panel?.visualTree == null || worldLabelOverlay != null)
+                return;
+
+            worldLabelOverlay = new VisualElement
+            {
+                name = "GeoJsonWorldLabelOverlay",
+                pickingMode = PickingMode.Ignore
+            };
+            worldLabelOverlay.AddToClassList("geojson-world-label-overlay");
+            var stylesheet = Resources.Load<StyleSheet>("UI/Components/TimelineSlider-style");
+            if (stylesheet != null)
+                worldLabelOverlay.styleSheets.Add(stylesheet);
+            panel.visualTree.Add(worldLabelOverlay);
+
+            worldLabelUpdate = schedule.Execute(UpdateWorldLabelPositions).Every(100);
+            ApplyWorldLabelVisibility();
+        }
+
+        private void RebuildWorldLabels()
+        {
+            worldLabelElements.Clear();
+            worldLabelOverlay?.Clear();
+            if (!showWorldLabels || worldLabelOverlay == null || activeTimeline == null
+                || !activeTimeline.HasPresentationData || !activeTimeline.ParsingComplete)
+                return;
+
+            foreach (var data in activeTimeline.GetPresentationWorldLabels())
+            {
+                var label = new Label(data.Text)
+                {
+                    tooltip = data.Tooltip,
+                    pickingMode = PickingMode.Position
+                };
+                label.AddToClassList("geojson-world-label");
+                label.style.backgroundColor = data.Color;
+                label.style.color = data.TextColor;
+                label.style.width = 42f;
+                worldLabelOverlay.Add(label);
+                worldLabelElements.Add(new WorldLabelElement(label, data));
+            }
+
+            UpdateWorldLabelPositions();
+        }
+
+        private void ApplyWorldLabelVisibility()
+        {
+            if (worldLabelOverlay == null)
+                return;
+
+            var visible = showWorldLabels && activeTimeline?.HasPresentationData == true;
+            worldLabelOverlay.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void UpdateWorldLabelPositions()
+        {
+            if (worldLabelOverlay == null || worldLabelOverlay.resolvedStyle.display == DisplayStyle.None
+                || panel == null || Camera.main == null)
+                return;
+
+            var rootBounds = panel.visualTree.worldBound;
+            foreach (var item in worldLabelElements)
+            {
+                var screenPosition = Camera.main.WorldToScreenPoint(item.Data.WorldPosition);
+                if (screenPosition.z <= 0f)
+                {
+                    item.Label.style.display = DisplayStyle.None;
+                    continue;
+                }
+
+                screenPosition.y = Screen.height - screenPosition.y;
+                var panelPosition = RuntimePanelUtils.ScreenToPanel(panel, screenPosition);
+                var onScreen = rootBounds.Contains(panelPosition);
+                item.Label.style.display = onScreen ? DisplayStyle.Flex : DisplayStyle.None;
+                if (!onScreen)
+                    continue;
+
+                item.Label.style.left = panelPosition.x - 21f;
+                item.Label.style.top = panelPosition.y - 12f;
+            }
+        }
+
         private void EnsureLegacyDateRange()
         {
             if (minDateTime == default)
@@ -478,6 +675,18 @@ namespace Netherlands3D.UI.Components
             sunTime.SetDate(dateTime.Day, dateTime.Month, dateTime.Year);
             sunTime.SetTime(dateTime.Hour, dateTime.Minute, dateTime.Second);
             currentTimeLabel.text = dateTime.ToString("dd/MM/yyyy HH:mm");
+        }
+
+        private sealed class WorldLabelElement
+        {
+            public Label Label { get; }
+            public GeoJsonWorldLabel Data { get; }
+
+            public WorldLabelElement(Label label, GeoJsonWorldLabel data)
+            {
+                Label = label;
+                Data = data;
+            }
         }
     }
 }

@@ -7,6 +7,37 @@ namespace Netherlands3D.Twin.Rendering
     {
         public override Material[] Materials => new Material[] { PointMaterial };
 
+        /// <summary>
+        /// Applies one color per position collection. GeoJSON point features normally contribute one collection,
+        /// while MultiPoints can keep all of their points on the same feature color.
+        /// </summary>
+        public void SetCollectionColors(IReadOnlyList<Color> colors)
+        {
+            UpdateColorBuffers();
+
+            foreach (var batch in pointBatchColors)
+                System.Array.Fill(batch.Colors, PointMaterial.color);
+
+            var pointIndex = 0;
+            for (var collectionIndex = 0; collectionIndex < positionCollections.Count; collectionIndex++)
+            {
+                var collection = positionCollections[collectionIndex];
+                var color = collectionIndex < colors.Count ? colors[collectionIndex] : PointMaterial.color;
+
+                for (var point = 0; point < collection.Count; point++)
+                {
+                    var batchIndex = pointIndex / 1023;
+                    var matrixIndex = pointIndex % 1023;
+                    if (batchIndex < pointBatchColors.Count)
+                        pointBatchColors[batchIndex].Colors[matrixIndex] = color;
+                    pointIndex++;
+                }
+            }
+
+            foreach (var batch in pointBatchColors)
+                batch.MaterialPropertyBlock.SetVectorArray("_SegmentColors", batch.Colors);
+        }
+
         protected override void GenerateTransformMatrixCache(int collectionStartIndex = -1)
         {
             var batchCount = (pointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
