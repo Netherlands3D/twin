@@ -5,6 +5,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Rendering
 {
@@ -37,7 +38,9 @@ namespace Netherlands3D.Twin.Rendering
     public abstract class BatchedMeshInstanceRenderer : MonoBehaviour
     {
         [Tooltip("The mesh to use for the points/joints")] 
+        [FormerlySerializedAs("mesh")]
         [SerializeField] private Mesh pointMesh;
+        [FormerlySerializedAs("material")]
         [SerializeField] protected Material materialTemplate; 
 
         [Tooltip("Force all point Y positions to 0")] 
@@ -46,6 +49,7 @@ namespace Netherlands3D.Twin.Rendering
         [Tooltip("Offset the Y position of the points")] 
         [SerializeField] protected float offsetY = 0.0f;
         
+        [FormerlySerializedAs("meshScale")]
         [SerializeField] protected float pointMeshScale = 5f;
         [SerializeField] protected bool isProjected = true;
         
