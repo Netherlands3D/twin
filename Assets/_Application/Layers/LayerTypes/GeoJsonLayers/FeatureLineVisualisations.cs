@@ -49,16 +49,29 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 // Create combined rounded bounds of all lines
                 tiledBounds = new Bounds();
                 trueBounds = new Bounds();
+                var hasCoordinate = false;
                 foreach (var line in lines)
                 {
                     foreach (var coordinate in line)
                     {
-                        tiledBounds.Encapsulate(coordinate.ToUnity());
+                        var unityPosition = coordinate.ToUnity();
+                        if (!hasCoordinate)
+                        {
+                            tiledBounds = new Bounds(unityPosition, Vector3.zero);
+                            hasCoordinate = true;
+                        }
+                        else
+                        {
+                            tiledBounds.Encapsulate(unityPosition);
+                        }
                     }
                 }
-                trueBounds.size = tiledBounds.size;
+
+                if (!hasCoordinate)
+                    return;
+
+                trueBounds = tiledBounds;
                 trueBounds.Expand(boundsPadding);
-                trueBounds.center = tiledBounds.center;
 
                 // Expand bounds to ceiling to steps
                 tiledBounds.size = new Vector3(
