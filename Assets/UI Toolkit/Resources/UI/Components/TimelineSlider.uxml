@@ -38,7 +38,11 @@
 
         <ui:VisualElement class="timeline-slider__time-row">
             <nl3d:Button name="PreviousHourButton" icon="Backward" button-style="IconOnly" tooltip="Een uur terug" class="timeline-slider__step-button" />
-            <ui:Label name="CurrentTimeLabel" text="00:00 – 00:59" class="timeline-slider__current-time text-header" />
+            <nl3d:Button name="PlaybackButton" icon="Play" button-style="IconOnly" tooltip="Afspelen · 1 uur per 2 seconden" class="timeline-slider__step-button timeline-slider__play-button" />
+            <ui:VisualElement class="timeline-slider__time-readout">
+                <ui:Label name="CurrentTimeLabel" text="00:00 – 00:59" class="timeline-slider__current-time text-header" />
+                <ui:Label text="1 uur per 2 seconden" class="timeline-slider__playback-rate" />
+            </ui:VisualElement>
             <nl3d:Button name="NextHourButton" icon="Forward" button-style="IconOnly" tooltip="Een uur vooruit" class="timeline-slider__step-button" />
         </ui:VisualElement>
 

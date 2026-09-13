@@ -145,7 +145,20 @@
     color: var(--color-blue-900);
     font-size: var(--font-size-xl);
     -unity-text-align: middle-center;
+    margin: 0;
+}
+
+.timeline-slider__time-readout {
+    min-width: 196px;
+    align-items: center;
     margin: 0 var(--spacing-3);
+}
+
+.timeline-slider__playback-rate {
+    color: var(--color-blue-300);
+    font-size: var(--font-size-xs);
+    -unity-text-align: middle-center;
+    margin: var(--spacing-0_5) 0 0 0;
 }
 
 .timeline-slider__step-button.button {
@@ -154,6 +167,19 @@
     height: var(--spacing-9);
     min-height: var(--spacing-9);
     padding: var(--spacing-1);
+}
+
+.timeline-slider__play-button.button {
+    margin-left: var(--spacing-1);
+}
+
+.timeline-slider__play-button--active.button {
+    background-color: var(--color-blue-700);
+    border-color: var(--color-blue-700);
+}
+
+.timeline-slider__play-button--active.button > .icon {
+    -unity-background-image-tint-color: var(--color-white);
 }
 
 .timeline-slider__slider {

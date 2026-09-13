@@ -18,6 +18,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class TimelineSlider : VisualElement
     {
+        private const long PlaybackIntervalMilliseconds = 2000;
         private static readonly float[] LegendStops = { 0f, 0.25f, 0.5f, 0.75f, 1f };
 
         private readonly List<string> vehicleKeys = new();
@@ -42,11 +43,14 @@ namespace Netherlands3D.UI.Components
         private Label legendScaleLabel;
         private Label loadingLabel;
         private Button previousHourButton;
+        private Button playbackButton;
         private Button nextHourButton;
+        private IVisualElementScheduledItem playbackSchedule;
 
         private bool isAttached;
         private bool isUpdatingUi;
         private bool userCollapsed;
+        private bool isPlaying;
 
         private DateTime minDateTime;
         public DateTime MinDateTime => minDateTime;
@@ -91,6 +95,7 @@ namespace Netherlands3D.UI.Components
             loadingLabel = this.Q<Label>("LoadingLabel");
 
             previousHourButton = this.Q<Button>("PreviousHourButton");
+            playbackButton = this.Q<Button>("PlaybackButton");
             nextHourButton = this.Q<Button>("NextHourButton");
             var closeButton = this.Q<Button>("CloseButton");
             var openButton = this.Q<Button>("OpenButton");
@@ -109,7 +114,7 @@ namespace Netherlands3D.UI.Components
                 || trafficTicks == null || vehicleDropdown == null || dayTypeDropdown == null || slider == null
                 || titleLabel == null || layerLabel == null || currentTimeLabel == null || routeCountLabel == null
                 || legendScaleLabel == null || loadingLabel == null || previousHourButton == null
-                || nextHourButton == null || closeButton == null || openButton == null
+                || playbackButton == null || nextHourButton == null || closeButton == null || openButton == null
                 || legendColors.Any(element => element == null) || legendLabels.Any(element => element == null))
             {
                 Debug.LogWarning("TimelineSlider UXML is not available yet; waiting for Unity to finish importing it.");
@@ -120,6 +125,7 @@ namespace Netherlands3D.UI.Components
             vehicleDropdown.DropDownValueChanged.AddListener(OnVehicleChanged);
             dayTypeDropdown.DropDownValueChanged.AddListener(OnDayTypeChanged);
             previousHourButton.clicked += () => StepTime(-1);
+            playbackButton.clicked += TogglePlayback;
             nextHourButton.clicked += () => StepTime(1);
             closeButton.clicked += Collapse;
             openButton.clicked += Expand;
@@ -145,6 +151,7 @@ namespace Netherlands3D.UI.Components
                 return;
 
             isAttached = false;
+            StopPlayback();
             TimelineGeoJson.ActiveTimelineChanged -= OnActiveTimelineChanged;
             SetActiveTimeline(null);
         }
@@ -157,6 +164,9 @@ namespace Netherlands3D.UI.Components
 
         private void SetActiveTimeline(TimelineGeoJson timeline)
         {
+            if (activeTimeline != timeline)
+                StopPlayback();
+
             if (activeTimeline != null)
                 activeTimeline.TimelineStateChanged -= OnTimelineStateChanged;
 
@@ -175,6 +185,7 @@ namespace Netherlands3D.UI.Components
 
         private void Collapse()
         {
+            StopPlayback();
             userCollapsed = true;
             ApplyVisibility();
         }
@@ -213,6 +224,9 @@ namespace Netherlands3D.UI.Components
 
             if (isTraffic)
             {
+                if (isPlaying && activeTimeline.CurrentHour >= 23)
+                    StopPlayback();
+
                 PopulateTrafficDropdowns();
                 slider.lowValue = 0f;
                 slider.highValue = 23f;
@@ -225,9 +239,11 @@ namespace Netherlands3D.UI.Components
 
                 previousHourButton.SetEnabled(activeTimeline.CurrentHour > 0);
                 nextHourButton.SetEnabled(activeTimeline.CurrentHour < 23);
+                playbackButton.SetEnabled(activeTimeline.ParsingComplete && (isPlaying || activeTimeline.CurrentHour < 23));
             }
             else
             {
+                StopPlayback();
                 EnsureLegacyDateRange();
                 slider.lowValue = 0f;
                 slider.highValue = 1f;
@@ -236,6 +252,7 @@ namespace Netherlands3D.UI.Components
                 currentTimeLabel.text = selectedTime.ToString("dd/MM/yyyy HH:mm");
                 previousHourButton.SetEnabled(selectedTime > minDateTime);
                 nextHourButton.SetEnabled(selectedTime < maxDateTime);
+                playbackButton.SetEnabled(false);
             }
 
             isUpdatingUi = false;
@@ -338,6 +355,67 @@ namespace Netherlands3D.UI.Components
             selectedTime = selectedTime > maxDateTime ? maxDateTime : selectedTime;
             SetLegacyDate(selectedTime);
             slider.SetValueWithoutNotify(DateTimeToSliderValue(selectedTime));
+        }
+
+        private void TogglePlayback()
+        {
+            if (isPlaying)
+            {
+                StopPlayback();
+                return;
+            }
+
+            StartPlayback();
+        }
+
+        private void StartPlayback()
+        {
+            if (!isAttached || userCollapsed || activeTimeline == null || !activeTimeline.HasTrafficData
+                || !activeTimeline.ParsingComplete || activeTimeline.CurrentHour >= 23)
+                return;
+
+            isPlaying = true;
+            UpdatePlaybackButton();
+
+            playbackSchedule?.Pause();
+            playbackSchedule = schedule.Execute(AdvancePlayback)
+                .StartingIn(PlaybackIntervalMilliseconds)
+                .Every(PlaybackIntervalMilliseconds);
+        }
+
+        private void StopPlayback()
+        {
+            playbackSchedule?.Pause();
+            playbackSchedule = null;
+
+            if (!isPlaying)
+                return;
+
+            isPlaying = false;
+            UpdatePlaybackButton();
+        }
+
+        private void AdvancePlayback()
+        {
+            if (!isPlaying || activeTimeline == null || userCollapsed || activeTimeline.CurrentHour >= 23)
+            {
+                StopPlayback();
+                return;
+            }
+
+            StepTime(1);
+        }
+
+        private void UpdatePlaybackButton()
+        {
+            if (playbackButton == null)
+                return;
+
+            playbackButton.Image = isPlaying ? "Pause" : "Play";
+            playbackButton.tooltip = isPlaying
+                ? "Pauzeren"
+                : "Afspelen · 1 uur per 2 seconden";
+            playbackButton.EnableInClassList("timeline-slider__play-button--active", isPlaying);
         }
 
         private void EnsureLegacyDateRange()
