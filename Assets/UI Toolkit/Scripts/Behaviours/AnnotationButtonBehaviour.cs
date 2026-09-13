@@ -37,7 +37,7 @@ namespace Netherlands3D.UI.Panels
         public override void Dispose()
         {
             base.Dispose();
-            PointerStyle.ChangeCursor(PointerStyle.Style.AUTO);
+            PointerStyle.CancelCursorChange(this);
           
         }
     }

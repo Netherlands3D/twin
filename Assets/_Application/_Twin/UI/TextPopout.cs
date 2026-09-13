@@ -1,3 +1,4 @@
+using System.Collections;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Rendering;
 using TMPro;
@@ -7,7 +8,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace Netherlands3D.Twin.UI
 {
@@ -250,6 +250,18 @@ namespace Netherlands3D.Twin.UI
                 return;
             }
 
+            if (TextureThumbnailUtility.TryGetCachedThumbnail(path, out var cachedThumbnail))
+            {
+                ApplyImageTexture(cachedThumbnail);
+                return;
+            }
+
+            if (TextureThumbnailUtility.IsDataUri(path))
+            {
+                LoadImageFromDataUri(path);
+                return;
+            }
+
             imageLoadRoutine = StartCoroutine(LoadImage(path));
         }
 
@@ -278,13 +290,6 @@ namespace Netherlands3D.Twin.UI
 
         private IEnumerator LoadImage(string path)
         {
-            if (TextureThumbnailUtility.TryGetCachedThumbnail(path, out var cachedThumbnail))
-            {
-                ApplyImageTexture(cachedThumbnail);
-                imageLoadRoutine = null;
-                yield break;
-            }
-
             using var request = UnityWebRequestTexture.GetTexture(path, true);
             yield return request.SendWebRequest();
 
@@ -295,14 +300,37 @@ namespace Netherlands3D.Twin.UI
                 yield break;
             }
 
-            Texture2D downloadedTexture = DownloadHandlerTexture.GetContent(request);
-            loadedTexture = TextureThumbnailUtility.CreateThumbnail(downloadedTexture, maxImagePreviewDimension, "Annotation Popout Thumbnail");
-            if (loadedTexture != downloadedTexture)
-                Destroy(downloadedTexture);
-
-            TextureThumbnailUtility.CacheThumbnail(path, loadedTexture);
-            ApplyImageTexture(loadedTexture);
+            CacheAndApplyImage(path, DownloadHandlerTexture.GetContent(request));
             imageLoadRoutine = null;
+        }
+
+        private void LoadImageFromDataUri(string dataUri)
+        {
+            if (!TextureThumbnailUtility.TryCreateThumbnailFromDataUri(
+                    dataUri,
+                    maxImagePreviewDimension,
+                    "Annotation Popout Thumbnail",
+                    out var thumbnail,
+                    out var error))
+            {
+                Debug.LogWarning("Failed to load embedded image: " + error);
+                ClearImage();
+                return;
+            }
+
+            loadedTexture = thumbnail;
+            TextureThumbnailUtility.CacheThumbnail(dataUri, loadedTexture);
+            ApplyImageTexture(loadedTexture);
+        }
+
+        private void CacheAndApplyImage(string cacheKey, Texture2D sourceTexture)
+        {
+            loadedTexture = TextureThumbnailUtility.CreateThumbnail(sourceTexture, maxImagePreviewDimension, "Annotation Popout Thumbnail");
+            if (loadedTexture != sourceTexture)
+                Destroy(sourceTexture);
+
+            TextureThumbnailUtility.CacheThumbnail(cacheKey, loadedTexture);
+            ApplyImageTexture(loadedTexture);
         }
 
         private void ResetImagePreviewSize()

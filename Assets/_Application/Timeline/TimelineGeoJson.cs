@@ -108,12 +108,12 @@ namespace Netherlands3D
         private Color GetColorForCount(float count)
         {
             if (count < 10f)
-                return Color.red;
+                return Color.green;
             if (count < 20f)
-                return Color.orange;
-            if (count < 30f)
                 return Color.yellow;
-            return Color.green;
+            if (count < 30f)
+                return Color.orange;
+            return Color.red;
         }
     }
 }

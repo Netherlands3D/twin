@@ -211,6 +211,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private bool TrySelectPolygon()
         {
+            if (polygonSelectionService == null)
+                return false;
+
             LayerData selectedPolygon = polygonSelectionService.ProcessPolygonSelection();
             return selectedPolygon != null;
         }
@@ -305,7 +308,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 return;
             }
 
-            if (TrySelectPolygon() || polygonSelectionService.IsEditingPolygon)
+            if (TrySelectPolygon() || polygonSelectionService?.IsEditingPolygon == true)
             {
                 Deselect();
                 return;

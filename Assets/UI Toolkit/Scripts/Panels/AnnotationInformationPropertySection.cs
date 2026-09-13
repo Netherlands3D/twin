@@ -180,7 +180,31 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
+            if (TextureThumbnailUtility.IsDataUri(imagePath))
+            {
+                LoadEmbeddedThumbnail(imagePath);
+                return;
+            }
+
             LoadThumbnail(imagePath);
+        }
+
+        private void LoadEmbeddedThumbnail(string imagePath)
+        {
+            if (!TextureThumbnailUtility.TryCreateThumbnailFromDataUri(
+                    imagePath,
+                    MaxThumbnailDimension,
+                    "Annotation Inspector Thumbnail",
+                    out var thumbnail,
+                    out var error))
+            {
+                Debug.LogWarning("Failed to load embedded annotation inspector image: " + error);
+                ClearThumbnail();
+                return;
+            }
+
+            TextureThumbnailUtility.CacheThumbnail(imagePath, thumbnail);
+            ApplyThumbnail(thumbnail);
         }
 
         private void LoadThumbnail(string imagePath)
