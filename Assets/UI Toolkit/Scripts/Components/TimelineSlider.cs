@@ -60,6 +60,7 @@ namespace Netherlands3D.UI.Components
         private Button nextHourButton;
         private Button openButton;
         private CheckboxToggle worldLabelsToggle;
+        private CheckboxToggle trafficWorldLabelsToggle;
         private IVisualElementScheduledItem worldLabelUpdate;
         private bool rebuildingWorldLabels;
 
@@ -67,7 +68,6 @@ namespace Netherlands3D.UI.Components
         private bool isUpdatingUi;
         private bool userCollapsed;
         private bool isPlaying;
-        private bool showWorldLabels;
 
         private DateTime minDateTime;
         public DateTime MinDateTime => minDateTime;
@@ -125,6 +125,7 @@ namespace Netherlands3D.UI.Components
             playbackButton = this.Q<Button>("PlaybackButton");
             nextHourButton = this.Q<Button>("NextHourButton");
             worldLabelsToggle = this.Q<CheckboxToggle>("WorldLabelsToggle");
+            trafficWorldLabelsToggle = this.Q<CheckboxToggle>("TrafficWorldLabelsToggle");
             var closeButton = this.Q<Button>("CloseButton");
             openButton = this.Q<Button>("OpenButton");
 
@@ -145,7 +146,7 @@ namespace Netherlands3D.UI.Components
                 || playbackStatusLabel == null || routeCountLabel == null || legendScaleLabel == null
                 || legendTitleLabel == null || legendExplanationLabel == null || loadingLabel == null
                 || presentationContextLabel == null || featureCountLabel == null || featureCaptionLabel == null
-                || previousHourButton == null || worldLabelsToggle == null
+                || previousHourButton == null || worldLabelsToggle == null || trafficWorldLabelsToggle == null
                 || playbackButton == null || nextHourButton == null || closeButton == null || openButton == null
                 || legendColors.Any(element => element == null) || legendLabels.Any(element => element == null))
             {
@@ -158,6 +159,7 @@ namespace Netherlands3D.UI.Components
             dayTypeDropdown.DropDownValueChanged.AddListener(OnDayTypeChanged);
             metricDropdown.DropDownValueChanged.AddListener(OnMetricChanged);
             worldLabelsToggle.RegisterValueChangedCallback(OnWorldLabelsChanged);
+            trafficWorldLabelsToggle.RegisterValueChangedCallback(OnWorldLabelsChanged);
             previousHourButton.clicked += () => StepTime(-1);
             playbackButton.clicked += TogglePlayback;
             nextHourButton.clicked += () => StepTime(1);
@@ -178,6 +180,7 @@ namespace Netherlands3D.UI.Components
             CreateWorldLabelOverlay();
             worldLabelUpdate = schedule.Execute(UpdateWorldLabelPositions).Every(100);
             TimelineGeoJson.ActiveTimelineChanged += OnActiveTimelineChanged;
+            TimelineGeoJson.WorldLabelStateChanged += OnWorldLabelStateChanged;
             OnActiveTimelineChanged(TimelineGeoJson.ActiveTimeline);
         }
 
@@ -189,6 +192,7 @@ namespace Netherlands3D.UI.Components
             isAttached = false;
             StopPlayback();
             TimelineGeoJson.ActiveTimelineChanged -= OnActiveTimelineChanged;
+            TimelineGeoJson.WorldLabelStateChanged -= OnWorldLabelStateChanged;
             SetActiveTimeline(null);
             worldLabelUpdate?.Pause();
             worldLabelUpdate = null;
@@ -200,9 +204,21 @@ namespace Netherlands3D.UI.Components
         private void OnActiveTimelineChanged(TimelineGeoJson timeline)
         {
             userCollapsed = false;
-            showWorldLabels = false;
-            worldLabelsToggle?.SetValueWithoutNotify(false);
+            SetWorldLabelToggleValues(timeline?.WorldLabelsEnabled == true);
             SetActiveTimeline(timeline);
+        }
+
+        private void OnWorldLabelStateChanged()
+        {
+            SetWorldLabelToggleValues(activeTimeline?.WorldLabelsEnabled == true);
+            RebuildWorldLabels();
+            ApplyWorldLabelVisibility();
+        }
+
+        private void SetWorldLabelToggleValues(bool enabled)
+        {
+            worldLabelsToggle?.SetValueWithoutNotify(enabled);
+            trafficWorldLabelsToggle?.SetValueWithoutNotify(enabled);
         }
 
         private void SetActiveTimeline(TimelineGeoJson timeline)
@@ -453,9 +469,10 @@ namespace Netherlands3D.UI.Components
 
         private void OnWorldLabelsChanged(ChangeEvent<bool> evt)
         {
-            showWorldLabels = evt.newValue;
-            RebuildWorldLabels();
-            ApplyWorldLabelVisibility();
+            if (activeTimeline == null)
+                return;
+
+            activeTimeline.SetWorldLabelsEnabled(evt.newValue);
         }
 
         private void OnSliderChanged(ChangeEvent<float> evt)
@@ -601,23 +618,25 @@ namespace Netherlands3D.UI.Components
             {
                 worldLabelElements.Clear();
                 worldLabelOverlay?.Clear();
-                if (!showWorldLabels || worldLabelOverlay == null || activeTimeline == null
-                    || !activeTimeline.HasPresentationData || !activeTimeline.ParsingComplete)
+                if (worldLabelOverlay == null)
                     return;
 
-                foreach (var data in activeTimeline.GetPresentationWorldLabels())
+                foreach (var timeline in TimelineGeoJson.VisibleWorldLabelSources)
                 {
-                    var label = new Label(data.Text)
+                    foreach (var data in timeline.GetWorldLabels())
                     {
-                        tooltip = data.Tooltip,
-                        pickingMode = PickingMode.Position
-                    };
-                    label.AddToClassList("geojson-world-label");
-                    label.style.backgroundColor = data.Color;
-                    label.style.color = data.TextColor;
-                    label.style.width = 42f;
-                    worldLabelOverlay.Add(label);
-                    worldLabelElements.Add(new WorldLabelElement(label, data));
+                        var label = new Label(data.Text)
+                        {
+                            tooltip = data.Tooltip,
+                            pickingMode = PickingMode.Position
+                        };
+                        label.AddToClassList("geojson-world-label");
+                        label.style.backgroundColor = data.Color;
+                        label.style.color = data.TextColor;
+                        label.style.width = 42f;
+                        worldLabelOverlay.Add(label);
+                        worldLabelElements.Add(new WorldLabelElement(label, data));
+                    }
                 }
             }
             finally
@@ -631,7 +650,7 @@ namespace Netherlands3D.UI.Components
             if (worldLabelOverlay == null)
                 return;
 
-            var visible = showWorldLabels && activeTimeline?.HasPresentationData == true;
+            var visible = TimelineGeoJson.HasVisibleWorldLabelSources;
             worldLabelOverlay.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
@@ -646,7 +665,7 @@ namespace Netherlands3D.UI.Components
             if (worldLabelOverlay == null || worldLabelOverlay.resolvedStyle.display == DisplayStyle.None)
                 return;
 
-            if (showWorldLabels && worldLabelElements.Count == 0 && activeTimeline?.ParsingComplete == true)
+            if (worldLabelElements.Count == 0 && TimelineGeoJson.HasVisibleWorldLabelSources)
                 RebuildWorldLabels();
 
             var activeCamera = App.Cameras?.ActiveCamera;

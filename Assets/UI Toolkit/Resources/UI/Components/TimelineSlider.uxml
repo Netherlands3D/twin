@@ -33,6 +33,7 @@
             <ui:VisualElement class="timeline-slider__summary">
                 <ui:Label name="RouteCountLabel" class="timeline-slider__route-count text-header" />
                 <ui:Label text="zichtbare routes" class="timeline-slider__route-caption" />
+                <nl3d:CheckboxToggle name="TrafficWorldLabelsToggle" LabelText="Waarden op kaart" class="timeline-slider__world-label-toggle" />
             </ui:VisualElement>
         </ui:VisualElement>
 

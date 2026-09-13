@@ -47,6 +47,13 @@ namespace Netherlands3D
 
         public static TimelineGeoJson ActiveTimeline { get; private set; }
         public static event Action<TimelineGeoJson> ActiveTimelineChanged;
+        public static event Action WorldLabelStateChanged;
+
+        private static readonly HashSet<TimelineGeoJson> Instances = new();
+        internal static IEnumerable<TimelineGeoJson> VisibleWorldLabelSources =>
+            Instances.Where(timeline => timeline != null && timeline.ShouldShowWorldLabels);
+        internal static bool HasVisibleWorldLabelSources =>
+            Instances.Any(timeline => timeline != null && timeline.ShouldShowWorldLabels);
 
         public event Action<TimelineGeoJson> TimelineStateChanged;
         public event Action<TimelineGeoJson> TimelineTimeChanged;
@@ -54,8 +61,10 @@ namespace Netherlands3D
         public bool HasTimelineData { get; private set; }
         public bool HasTrafficData { get; private set; }
         public bool HasPresentationData => presentation?.HasData == true;
+        public bool SupportsWorldLabels => HasTrafficData || HasPresentationData;
         public bool HasContextualData => HasTimelineData || HasPresentationData;
         public bool ParsingComplete { get; private set; }
+        public bool WorldLabelsEnabled { get; private set; }
         public IReadOnlyList<string> AvailableVehicleTypes => availableVehicleTypes;
         public IReadOnlyList<string> AvailableDayTypes => availableDayTypes;
         public string SelectedVehicleType { get; private set; }
@@ -77,6 +86,7 @@ namespace Netherlands3D
         public string PresentationLegendExplanation => presentation?.LegendExplanation ?? string.Empty;
 
         private readonly List<Feature> trafficFeatures = new();
+        private readonly List<Feature> visibleTrafficFeatures = new();
         private readonly HashSet<Feature> indexedTrafficFeatures = new(new FeatureReferenceComparer());
         private readonly HashSet<string> vehicleTypes = new(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> dayTypes = new(StringComparer.OrdinalIgnoreCase);
@@ -92,12 +102,21 @@ namespace Netherlands3D
         private DateTime currentTime = DateTime.Today;
         private Func<Feature, bool> previousVisualisationFilter;
         private Func<Feature, bool> combinedVisualisationFilter;
+        private bool ShouldShowWorldLabels =>
+            WorldLabelsEnabled
+            && ParsingComplete
+            && SupportsWorldLabels
+            && visualization != null
+            && visualization.HasLayerData
+            && visualization.LayerData.ActiveInHierarchy;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStaticState()
         {
             ActiveTimeline = null;
             ActiveTimelineChanged = null;
+            WorldLabelStateChanged = null;
+            Instances.Clear();
         }
 
         private void Awake()
@@ -112,6 +131,7 @@ namespace Netherlands3D
             }
 
             presentation = new GeoJsonPresentation(visualization);
+            Instances.Add(this);
 
             previousVisualisationFilter = visualization.FeatureVisualisationFilter;
             combinedVisualisationFilter = feature =>
@@ -155,6 +175,10 @@ namespace Netherlands3D
 
         private void OnDestroy()
         {
+            var wasRegistered = Instances.Remove(this);
+            if (wasRegistered)
+                WorldLabelStateChanged?.Invoke();
+
             if (visualization == null)
                 return;
 
@@ -204,6 +228,15 @@ namespace Netherlands3D
             TimelineStateChanged?.Invoke(this);
         }
 
+        public void SetWorldLabelsEnabled(bool enabled)
+        {
+            if (WorldLabelsEnabled == enabled || enabled && !SupportsWorldLabels)
+                return;
+
+            WorldLabelsEnabled = enabled;
+            WorldLabelStateChanged?.Invoke();
+        }
+
         public float GetPresentationLegendValue(float normalized)
         {
             return presentation?.GetLegendValue(normalized) ?? 0f;
@@ -214,9 +247,48 @@ namespace Netherlands3D
             return presentation?.GetLegendColor(normalized) ?? Color.gray;
         }
 
-        internal IReadOnlyList<GeoJsonWorldLabel> GetPresentationWorldLabels()
+        internal IReadOnlyList<GeoJsonWorldLabel> GetWorldLabels()
         {
+            if (HasTrafficData)
+                return GetTrafficWorldLabels();
+
             return presentation?.GetWorldLabels() ?? Array.Empty<GeoJsonWorldLabel>();
+        }
+
+        private IReadOnlyList<GeoJsonWorldLabel> GetTrafficWorldLabels()
+        {
+            var labels = new List<GeoJsonWorldLabel>();
+            foreach (var feature in visibleTrafficFeatures)
+            {
+                if (!TryGetFloat(feature, "count", out var count)
+                    || !visualization.TryGetFeatureCenter(feature, out var position))
+                    continue;
+
+                TryGetString(feature, "street", out var street);
+                TryGetString(feature, "direction", out var direction);
+                TryGetString(feature, "location_name", out var locationName);
+                var routeName = !string.IsNullOrWhiteSpace(street) ? street : locationName;
+                if (!string.IsNullOrWhiteSpace(direction))
+                    routeName = $"{routeName} → {direction}";
+
+                var normalized = NormalizeCount(SelectedVehicleType, count);
+                var text = FormatCompactTrafficValue(count);
+                labels.Add(new GeoJsonWorldLabel(
+                    position,
+                    text,
+                    $"{routeName} · {GetVehicleDisplayName(SelectedVehicleType)}, "
+                    + $"{GetDayTypeDisplayName(SelectedDayType)} {RenderedTrafficHour:00}:00: {count:0.#} voertuigen/uur",
+                    GetTrafficColor(normalized)));
+            }
+
+            return labels;
+        }
+
+        private static string FormatCompactTrafficValue(float value)
+        {
+            return value >= 1000f
+                ? $"{value / 1000f:0.#}k"
+                : value.ToString(value >= 100f ? "0" : "0.#", CultureInfo.InvariantCulture);
         }
 
         public float GetScaleMaximumForSelectedVehicle()
@@ -363,6 +435,8 @@ namespace Netherlands3D
             else
                 TimelineStateChanged?.Invoke(this);
 
+            WorldLabelStateChanged?.Invoke();
+
             if (visualization.LayerData.IsSelected && HasContextualData)
                 SetActiveTimeline(this);
         }
@@ -394,6 +468,8 @@ namespace Netherlands3D
 
         private void OnLayerActiveInHierarchyChanged(bool active)
         {
+            WorldLabelStateChanged?.Invoke();
+
             if (active && visualization.LayerData.IsSelected && HasContextualData)
             {
                 SetActiveTimeline(this);
@@ -440,7 +516,7 @@ namespace Netherlands3D
                 return;
             }
 
-            var visibleFeatures = new List<Feature>();
+            visibleTrafficFeatures.Clear();
             var featureColors = new Dictionary<Feature, Color>();
             var featureWidths = new Dictionary<Feature, float>();
 
@@ -456,15 +532,16 @@ namespace Netherlands3D
                     continue;
 
                 var intensity = NormalizeCount(vehicleType, count);
-                visibleFeatures.Add(feature);
+                visibleTrafficFeatures.Add(feature);
                 featureColors[feature] = GetTrafficColor(intensity);
                 featureWidths[feature] = Mathf.Lerp(0.85f, 2f, Mathf.Pow(intensity, 0.7f));
             }
 
-            VisibleRouteCount = visibleFeatures.Count;
-            visualization.SetVisibleTimelineLineFeatures(visibleFeatures, featureColors, featureWidths);
+            VisibleRouteCount = visibleTrafficFeatures.Count;
+            visualization.SetVisibleTimelineLineFeatures(visibleTrafficFeatures, featureColors, featureWidths);
             RenderedTrafficHour = currentTime.Hour;
             TimelineStateChanged?.Invoke(this);
+            WorldLabelStateChanged?.Invoke();
         }
 
         private float NormalizeCount(string vehicleType, float count)
