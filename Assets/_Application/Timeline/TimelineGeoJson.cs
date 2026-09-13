@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
@@ -8,7 +9,6 @@ using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
-using Unity.Profiling.Editor;
 using UnityEngine;
 
 namespace Netherlands3D
@@ -16,9 +16,10 @@ namespace Netherlands3D
     [RequireComponent(typeof(LayerGameObject))]
     public class TimelineGeoJson : MonoBehaviour
     {
-        GeoJsonLayerGameObject visualization;
+        private GeoJsonLayerGameObject visualization;
         private TimelineLayerPropertyData timelineLayerPropertyData;
-        ColorPropertyData stylingPropertyData;
+        private ColorPropertyData stylingPropertyData;
+        private SunTime sunTime;
 
         void Start()
         {
@@ -30,7 +31,13 @@ namespace Netherlands3D
 
             if (stylingPropertyData == null) return;
 
-            ServiceLocator.GetService<SunTime>().timeOfDayChanged.AddListener(OnTimeChanged);
+            sunTime = ServiceLocator.GetService<SunTime>();
+            sunTime?.timeOfDayChanged.AddListener(OnTimeChanged);
+        }
+
+        private void OnDestroy()
+        {
+            sunTime?.timeOfDayChanged.RemoveListener(OnTimeChanged);
         }
 
         private void OnTimeChanged(DateTime currentTime)
@@ -38,8 +45,10 @@ namespace Netherlands3D
             // var currentState = GetBuildState(currentTime);
             // SetVisibility(currentState == BuildState.Normal);
 
-            var stylingPropertyData = visualization.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            var color = GetColorForFeature(currentTime);
+            stylingPropertyData = visualization.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            if (stylingPropertyData == null || !TryGetColorForFeature(currentTime, out Color color))
+                return;
+
             stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
             stylingPropertyData.SetDefaultSymbolizerColor(color);
 
@@ -66,26 +75,34 @@ namespace Netherlands3D
             return state;
         }
 
-        private Color GetColorForFeature(DateTime currentTime)
+        private bool TryGetColorForFeature(DateTime currentTime, out Color color)
         {
-            var color = Color.white;
+            color = default;
             foreach (var feature in visualization.GeoJsonFeatures)
             {
-                Debug.Log(feature.Properties["hour"]);
-                if (DateTime.TryParse(feature.Properties["timestamp"].ToString(), out var dateTime))
-                {
-                    if (float.TryParse(feature.Properties["count"].ToString(), out var count))
-                    {
-                        Debug.Log("current feature time: " + dateTime.ToString("yy-MM-dd HH:mm") + "\tcount: " + count);
-                        if (currentTime > dateTime && currentTime < dateTime.AddHours(1d))
-                        {
-                            return GetColorForCount(count);
-                        }
-                    }
-                }
+                if (feature?.Properties == null
+                    || !feature.Properties.TryGetValue("timestamp", out object timestampValue)
+                    || !feature.Properties.TryGetValue("count", out object countValue)
+                    || timestampValue == null
+                    || countValue == null)
+                    continue;
+
+                if (!DateTime.TryParse(timestampValue.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime dateTime))
+                    continue;
+
+                string countText = countValue.ToString();
+                if (!float.TryParse(countText, NumberStyles.Float, CultureInfo.InvariantCulture, out float count)
+                    && !float.TryParse(countText, out count))
+                    continue;
+
+                if (currentTime < dateTime || currentTime >= dateTime.AddHours(1d))
+                    continue;
+
+                color = GetColorForCount(count);
+                return true;
             }
 
-            return color;
+            return false;
         }
 
         private Color GetColorForCount(float count)

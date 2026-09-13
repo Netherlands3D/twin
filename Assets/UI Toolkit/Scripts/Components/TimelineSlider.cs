@@ -94,7 +94,7 @@ namespace Netherlands3D.UI.Components
             if (Application.isPlaying)
             {
                 ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
-                schedule.Execute(UpdateSlider).Every(0);
+                schedule.Execute(UpdateSlider).Every(16);
             }
         }
 
@@ -117,6 +117,8 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateSlider()
         {
+            if (!isDragging) return;
+
             var normalized = Mathf.Clamp(currentDragOffset / MaxDragDistance, -1f, 1f);
             var eased = Mathf.Sign(normalized) * normalized * normalized;
             var speed = eased / MaxScrubSpeed;
