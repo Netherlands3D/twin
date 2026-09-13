@@ -1,6 +1,7 @@
 using Netherlands3D.UI.ExtensionMethods;
 using System.Collections.Generic;
 using Netherlands3D.UI_Toolkit.Scripts;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Netherlands3D.UI_Toolkit;
@@ -17,6 +18,7 @@ namespace Netherlands3D.UI.Components
 
         private VisualElement rootSettings;
         private VisualElement popup;
+        private float popupNaturalHeight;
         
         private List<string> valueIcons;
 
@@ -69,6 +71,8 @@ namespace Netherlands3D.UI.Components
                     if (popupArea != null)
                     {
                         popup = rootSettings.Query<VisualElement>(className: "unity-base-dropdown__container-outer");
+                        popupNaturalHeight = 0f;
+                        popup.UnregisterCallback<GeometryChangedEvent>(SetPopupPosition);
                         popup.RegisterCallback<GeometryChangedEvent>(SetPopupPosition);
                         popup.AddComponentStylesheetByType(GetType());
                         
@@ -129,12 +133,40 @@ namespace Netherlands3D.UI.Components
 
         private void SetPopupPosition(GeometryChangedEvent evt)
         {
+            if (popup == null || rootSettings == null)
+                return;
+
+            const float viewportMargin = 8f;
             float width = contentContainer.resolvedStyle.width;
+            var rootBounds = rootSettings.worldBound;
+            var anchorBounds = contentContainer.worldBound;
+            var availableBelow = Mathf.Max(0f, rootBounds.yMax - anchorBounds.yMax - viewportMargin);
+            var availableAbove = Mathf.Max(0f, anchorBounds.yMin - rootBounds.yMin - viewportMargin);
+
+            if (evt.newRect.height > popupNaturalHeight)
+                popupNaturalHeight = evt.newRect.height;
+
+            var openAbove = popupNaturalHeight > availableBelow && availableAbove > availableBelow;
+            var availableHeight = openAbove ? availableAbove : availableBelow;
+            var popupHeight = Mathf.Min(popupNaturalHeight, availableHeight);
+
             popup.style.width = width;
-            float left = contentContainer.worldBound.x;
-            float top = contentContainer.worldBound.yMax;
+            popup.style.maxHeight = availableHeight;
+
+            var left = anchorBounds.xMin - rootBounds.xMin;
+            left = Mathf.Clamp(left, viewportMargin, Mathf.Max(viewportMargin, rootBounds.width - width - viewportMargin));
+
+            var top = openAbove
+                ? anchorBounds.yMin - rootBounds.yMin - popupHeight
+                : anchorBounds.yMax - rootBounds.yMin;
             float border = contentContainer.resolvedStyle.borderBottomWidth;
-            popup.style.top = top - border;
+            top += openAbove ? border : -border;
+            top = Mathf.Clamp(
+                top,
+                viewportMargin,
+                Mathf.Max(viewportMargin, rootBounds.height - popupHeight - viewportMargin));
+
+            popup.style.top = top;
             popup.style.left = left;
         }
 
