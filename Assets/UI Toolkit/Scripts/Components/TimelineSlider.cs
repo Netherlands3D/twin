@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
+using Netherlands3D.Twin;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
 using UnityEngine;
@@ -60,6 +61,7 @@ namespace Netherlands3D.UI.Components
         private Button openButton;
         private CheckboxToggle worldLabelsToggle;
         private IVisualElementScheduledItem worldLabelUpdate;
+        private bool rebuildingWorldLabels;
 
         private bool isAttached;
         private bool isUpdatingUi;
@@ -174,6 +176,7 @@ namespace Netherlands3D.UI.Components
             isAttached = true;
             sunTime = ServiceLocator.GetService<SunTime>();
             CreateWorldLabelOverlay();
+            worldLabelUpdate = schedule.Execute(UpdateWorldLabelPositions).Every(100);
             TimelineGeoJson.ActiveTimelineChanged += OnActiveTimelineChanged;
             OnActiveTimelineChanged(TimelineGeoJson.ActiveTimeline);
         }
@@ -566,7 +569,11 @@ namespace Netherlands3D.UI.Components
 
         private void CreateWorldLabelOverlay()
         {
-            if (panel?.visualTree == null || worldLabelOverlay != null)
+            if (worldLabelOverlay != null)
+                return;
+
+            var uiRoot = App.UIRoot?.Root;
+            if (uiRoot == null)
                 return;
 
             worldLabelOverlay = new VisualElement
@@ -578,36 +585,45 @@ namespace Netherlands3D.UI.Components
             var stylesheet = Resources.Load<StyleSheet>("UI/Components/TimelineSlider-style");
             if (stylesheet != null)
                 worldLabelOverlay.styleSheets.Add(stylesheet);
-            panel.visualTree.Add(worldLabelOverlay);
+            uiRoot.Add(worldLabelOverlay);
+            worldLabelOverlay.BringToFront();
 
-            worldLabelUpdate = schedule.Execute(UpdateWorldLabelPositions).Every(100);
             ApplyWorldLabelVisibility();
         }
 
         private void RebuildWorldLabels()
         {
-            worldLabelElements.Clear();
-            worldLabelOverlay?.Clear();
-            if (!showWorldLabels || worldLabelOverlay == null || activeTimeline == null
-                || !activeTimeline.HasPresentationData || !activeTimeline.ParsingComplete)
+            if (rebuildingWorldLabels)
                 return;
 
-            foreach (var data in activeTimeline.GetPresentationWorldLabels())
+            rebuildingWorldLabels = true;
+            try
             {
-                var label = new Label(data.Text)
-                {
-                    tooltip = data.Tooltip,
-                    pickingMode = PickingMode.Position
-                };
-                label.AddToClassList("geojson-world-label");
-                label.style.backgroundColor = data.Color;
-                label.style.color = data.TextColor;
-                label.style.width = 42f;
-                worldLabelOverlay.Add(label);
-                worldLabelElements.Add(new WorldLabelElement(label, data));
-            }
+                worldLabelElements.Clear();
+                worldLabelOverlay?.Clear();
+                if (!showWorldLabels || worldLabelOverlay == null || activeTimeline == null
+                    || !activeTimeline.HasPresentationData || !activeTimeline.ParsingComplete)
+                    return;
 
-            UpdateWorldLabelPositions();
+                foreach (var data in activeTimeline.GetPresentationWorldLabels())
+                {
+                    var label = new Label(data.Text)
+                    {
+                        tooltip = data.Tooltip,
+                        pickingMode = PickingMode.Position
+                    };
+                    label.AddToClassList("geojson-world-label");
+                    label.style.backgroundColor = data.Color;
+                    label.style.color = data.TextColor;
+                    label.style.width = 42f;
+                    worldLabelOverlay.Add(label);
+                    worldLabelElements.Add(new WorldLabelElement(label, data));
+                }
+            }
+            finally
+            {
+                rebuildingWorldLabels = false;
+            }
         }
 
         private void ApplyWorldLabelVisibility()
@@ -621,29 +637,43 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateWorldLabelPositions()
         {
-            if (worldLabelOverlay == null || worldLabelOverlay.resolvedStyle.display == DisplayStyle.None
-                || panel == null || Camera.main == null)
+            if (worldLabelOverlay == null)
+            {
+                CreateWorldLabelOverlay();
+                ApplyWorldLabelVisibility();
+            }
+
+            if (worldLabelOverlay == null || worldLabelOverlay.resolvedStyle.display == DisplayStyle.None)
                 return;
 
-            var rootBounds = panel.visualTree.worldBound;
+            if (showWorldLabels && worldLabelElements.Count == 0 && activeTimeline?.ParsingComplete == true)
+                RebuildWorldLabels();
+
+            var activeCamera = App.Cameras?.ActiveCamera;
+            var uiRoot = App.UIRoot;
+            if (activeCamera == null || uiRoot?.Root == null)
+                return;
+
+            var rootBounds = uiRoot.Root.worldBound;
+            var overlayOffset = worldLabelOverlay.worldBound.position;
             foreach (var item in worldLabelElements)
             {
-                var screenPosition = Camera.main.WorldToScreenPoint(item.Data.WorldPosition);
+                var screenPosition = activeCamera.WorldToScreenPoint(item.Data.WorldPosition);
                 if (screenPosition.z <= 0f)
                 {
                     item.Label.style.display = DisplayStyle.None;
                     continue;
                 }
 
-                screenPosition.y = Screen.height - screenPosition.y;
-                var panelPosition = RuntimePanelUtils.ScreenToPanel(panel, screenPosition);
+                var panelPosition = uiRoot.GetUIPositionFromScreenPosition(screenPosition);
                 var onScreen = rootBounds.Contains(panelPosition);
                 item.Label.style.display = onScreen ? DisplayStyle.Flex : DisplayStyle.None;
                 if (!onScreen)
                     continue;
 
-                item.Label.style.left = panelPosition.x - 21f;
-                item.Label.style.top = panelPosition.y - 12f;
+                var localPosition = panelPosition - overlayOffset;
+                item.Label.style.left = localPosition.x - 21f;
+                item.Label.style.top = localPosition.y - 12f;
             }
         }
 
