@@ -21,6 +21,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
         public Dictionary<Feature, FeatureLineVisualisations> SpawnedVisualisations => spawnedVisualisations;
+        private readonly List<Feature> visualisationOrder = new();
+        private readonly Dictionary<Feature, Color> featureColors = new();
+        private readonly Dictionary<Feature, float> featureWidthMultipliers = new();
         private List<List<Coordinate>> visualisationsToRemove = new();
         private List<List<Coordinate>> selectionList = new();
         
@@ -84,7 +87,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public float GetSelectionRange()
         {
-            return lineRenderer3D.LineDiameter;
+            return lineRenderer3D.MaximumRenderedDiameter;
         }
 
         //because the transfrom will always be at the V3zero position we dont want to offset with the localoffset
@@ -143,6 +146,66 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.CalculateBounds();
 
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
+            visualisationOrder.Add(feature);
+        }
+
+        /// <summary>
+        /// Clears only the currently visualized features. The parent GeoJSON layer can keep the parsed source
+        /// features and repopulate this renderer with a filtered time slice.
+        /// </summary>
+        public void ClearVisualizedFeatures()
+        {
+            foreach (var feature in visualisationOrder.ToList())
+                FeatureRemoved?.Invoke(feature);
+
+            spawnedVisualisations.Clear();
+            visualisationOrder.Clear();
+            featureColors.Clear();
+            featureWidthMultipliers.Clear();
+            lineRenderer3D.Clear();
+            SetVisualisationDeselected();
+        }
+
+        /// <summary>
+        /// Applies per-feature color and width styling while preserving the renderer's feature insertion order.
+        /// MultiLineStrings repeat the feature style for each of their line collections.
+        /// </summary>
+        public void SetFeatureStyles(
+            IReadOnlyDictionary<Feature, Color> colors,
+            IReadOnlyDictionary<Feature, float> widthMultipliers)
+        {
+            var requestedColors = colors?.ToDictionary(pair => pair.Key, pair => pair.Value);
+            var requestedWidths = widthMultipliers?.ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            featureColors.Clear();
+            featureWidthMultipliers.Clear();
+
+            var collectionColors = new List<Color>();
+            var collectionWidths = new List<float>();
+            foreach (var feature in visualisationOrder)
+            {
+                if (!spawnedVisualisations.TryGetValue(feature, out var visualisation))
+                    continue;
+
+                var color = requestedColors != null && requestedColors.TryGetValue(feature, out var requestedColor)
+                    ? requestedColor
+                    : RenderColor;
+                var width = requestedWidths != null && requestedWidths.TryGetValue(feature, out var requestedWidth)
+                    ? requestedWidth
+                    : 1f;
+
+                featureColors[feature] = color;
+                featureWidthMultipliers[feature] = width;
+
+                for (var i = 0; i < visualisation.Data.Count; i++)
+                {
+                    collectionColors.Add(color);
+                    collectionWidths.Add(width);
+                }
+            }
+
+            lineRenderer3D.SetCollectionWidthMultipliers(collectionWidths);
+            lineRenderer3D.SetCollectionColors(collectionColors);
         }
 
         /// <summary>
@@ -165,12 +228,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             lineRenderer3D.RemovePointCollections(visualisationsToRemove);
+            SetFeatureStyles(featureColors, featureWidthMultipliers);
         }
 
         private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
+            visualisationOrder.Remove(featureVisualisation.feature);
+            featureColors.Remove(featureVisualisation.feature);
+            featureWidthMultipliers.Remove(featureVisualisation.feature);
         }
 
         public BoundingBox GetBoundingBoxOfVisibleFeatures()

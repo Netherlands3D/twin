@@ -322,7 +322,7 @@ namespace Netherlands3D.Twin.Rendering
         /// <summary>
         /// Remove a collection of points using list reference
         /// </summary>
-        public void RemovePointCollection(List<Coordinate> points)
+        public virtual void RemovePointCollection(List<Coordinate> points)
         {
             if (!IsValid(points))
                 return;

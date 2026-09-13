@@ -67,6 +67,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private readonly List<WorldAnnotationLayerGameObject> spawnedAnnotations = new();
 
+        /// <summary>
+        /// Optional hook for components that index source features but only render a filtered subset, such as the
+        /// traffic timeline. Returning false keeps the feature in GeoJsonFeatures without creating render data.
+        /// </summary>
+        public Func<Feature, bool> FeatureVisualisationFilter { get; set; }
+        public event Action<Feature> FeatureAdded;
+
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
 
@@ -419,8 +426,39 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer)
         {
             GeoJsonFeatures.Add(feature);
+            FeatureAdded?.Invoke(feature);
+
+            if (FeatureVisualisationFilter != null && !FeatureVisualisationFilter(feature))
+                return;
+
             layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
             CreateFeatureMappingsForFeature(feature, layer);
+        }
+
+        /// <summary>
+        /// Replaces the visible line features without discarding the parsed GeoJSON source collection.
+        /// This is used by time-series layers to render only the active time slice.
+        /// </summary>
+        public void SetVisibleTimelineLineFeatures(
+            IReadOnlyList<Feature> features,
+            IReadOnlyDictionary<Feature, Color> colors,
+            IReadOnlyDictionary<Feature, float> widthMultipliers)
+        {
+            lineFeaturesLayer.ClearVisualizedFeatures();
+
+            foreach (var feature in features)
+            {
+                if (feature?.Geometry == null
+                    || feature.Geometry.Type != GeoJSONObjectType.LineString
+                    && feature.Geometry.Type != GeoJSONObjectType.MultiLineString)
+                    continue;
+
+                var coordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
+                lineFeaturesLayer.AddAndVisualizeFeature(feature, coordinateSystem, LayerData.ActiveInHierarchy);
+                CreateFeatureMappingsForFeature(feature, lineFeaturesLayer);
+            }
+
+            lineFeaturesLayer.SetFeatureStyles(colors, widthMultipliers);
         }
         
         protected virtual void OnFeatureRemoved(Feature feature)

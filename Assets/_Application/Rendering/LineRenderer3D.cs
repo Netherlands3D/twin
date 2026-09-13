@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -18,6 +20,7 @@ namespace Netherlands3D.Twin.Rendering
         
         private List<List<Matrix4x4>> lineTransformMatrixCache = new List<List<Matrix4x4>>();
         private List<BatchColor> lineBatchColors = new();
+        private readonly List<float> collectionWidthMultipliers = new();
         
         private int selectedLineIndex = -1;
 
@@ -117,6 +120,90 @@ namespace Netherlands3D.Twin.Rendering
             base.Clear();
             lineTransformMatrixCache = new List<List<Matrix4x4>>();
             lineBatchColors.Clear();
+            collectionWidthMultipliers.Clear();
+        }
+
+        /// <summary>
+        /// Applies one color per position collection. A collection represents one rendered line.
+        /// Existing users that only call SetAllColors keep the previous behaviour.
+        /// </summary>
+        public void SetCollectionColors(IReadOnlyList<Color> colors)
+        {
+            UpdateColorBuffers();
+
+            foreach (var batch in lineBatchColors)
+                Array.Fill(batch.Colors, LineMaterial.color);
+            foreach (var batch in pointBatchColors)
+                Array.Fill(batch.Colors, PointMaterial.color);
+
+            var pointIndex = 0;
+            var segmentIndex = 0;
+            for (var collectionIndex = 0; collectionIndex < positionCollections.Count; collectionIndex++)
+            {
+                var collection = positionCollections[collectionIndex];
+                var color = collectionIndex < colors.Count ? colors[collectionIndex] : LineMaterial.color;
+
+                for (var point = 0; point < collection.Count; point++)
+                    SetColorAt(pointBatchColors, pointIndex++, color);
+
+                for (var segment = 0; segment < collection.Count - 1; segment++)
+                    SetColorAt(lineBatchColors, segmentIndex++, color);
+            }
+
+            UploadColors(lineBatchColors);
+            if (DrawJoints)
+                UploadColors(pointBatchColors);
+        }
+
+        /// <summary>
+        /// Applies a diameter multiplier per position collection without changing the layer's base diameter.
+        /// </summary>
+        public void SetCollectionWidthMultipliers(IReadOnlyList<float> multipliers)
+        {
+            collectionWidthMultipliers.Clear();
+            for (var i = 0; i < positionCollections.Count; i++)
+            {
+                var multiplier = i < multipliers.Count ? multipliers[i] : 1f;
+                collectionWidthMultipliers.Add(Mathf.Max(0.1f, multiplier));
+            }
+
+            GenerateTransformMatrixCache();
+        }
+
+        public float MaximumRenderedDiameter
+        {
+            get
+            {
+                var maximumMultiplier = collectionWidthMultipliers.Count == 0
+                    ? 1f
+                    : collectionWidthMultipliers.Max();
+                return LineDiameter * maximumMultiplier;
+            }
+        }
+
+        public override void RemovePointCollection(List<Coordinate> points)
+        {
+            var index = positionCollections.IndexOf(points);
+            if (index >= 0 && index < collectionWidthMultipliers.Count)
+                collectionWidthMultipliers.RemoveAt(index);
+
+            base.RemovePointCollection(points);
+        }
+
+        private static void SetColorAt(IReadOnlyList<BatchColor> batches, int flattenedIndex, Color color)
+        {
+            var batchIndex = flattenedIndex / 1023;
+            var matrixIndex = flattenedIndex % 1023;
+            if (batchIndex >= batches.Count)
+                return;
+
+            batches[batchIndex].Colors[matrixIndex] = color;
+        }
+
+        private static void UploadColors(IEnumerable<BatchColor> batches)
+        {
+            foreach (var batch in batches)
+                batch.MaterialPropertyBlock.SetVectorArray("_SegmentColors", batch.Colors);
         }
 
         protected override void GenerateTransformMatrixCache(int collectionStartIndex = -1)
@@ -147,6 +234,7 @@ namespace Netherlands3D.Twin.Rendering
             for (var i = collectionStartIndex; i < positionCollections.Count; i++)
             {
                 var line = positionCollections[i];
+                var diameter = LineDiameter * GetCollectionWidthMultiplier(i);
                 for (int j = 0; j < line.Count - 1; j++)
                 {
                     var currentPoint = line[j].ToUnity();
@@ -174,14 +262,14 @@ namespace Netherlands3D.Twin.Rendering
                     // Calculate the rotation based on the direction vector
                     var rotation = Quaternion.LookRotation(direction);
                     // Calculate the scale based on the distance
-                    var scale = new Vector3(LineDiameter, LineDiameter, distance);
+                    var scale = new Vector3(diameter, diameter, distance);
 
                     // Create a transform matrix for each line point
                     Matrix4x4 transformMatrix = Matrix4x4.TRS(currentPoint, rotation, scale);
                     AppendMatrixToBatches(lineTransformMatrixCache, ref lineIndices.batchIndex, ref lineIndices.matrixIndex, transformMatrix);
 
                     // Create the joint using a sphere aligned with the cylinder (with matching faces for smooth transition between the two)
-                    var jointScale = new Vector3(LineDiameter, LineDiameter, LineDiameter);
+                    var jointScale = new Vector3(diameter, diameter, diameter);
                     Matrix4x4 jointTransformMatrix = Matrix4x4.TRS(currentPoint, rotation, jointScale);
                     AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
 
@@ -193,6 +281,13 @@ namespace Netherlands3D.Twin.Rendering
                     }
                 }
             }
+        }
+
+        private float GetCollectionWidthMultiplier(int collectionIndex)
+        {
+            return collectionIndex < collectionWidthMultipliers.Count
+                ? collectionWidthMultipliers[collectionIndex]
+                : 1f;
         }
         
         protected override bool IsValid(List<Coordinate> line)

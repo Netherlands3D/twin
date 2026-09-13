@@ -23,6 +23,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [Space, Header("Parse events")] public UnityEvent<Feature> OnFeatureParsed = new();
         public UnityEvent<string> OnParseError = new();
+        public UnityEvent OnParseCompleted = new();
+
+        public bool HasCompleted { get; private set; }
 
         public GeoJSONParser(float maxParsePerFrameDuration)
         {
@@ -31,6 +34,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public IEnumerator ParseJSONString(string jsonText)
         {
+            HasCompleted = false;
             // Get the downloaded text
             // string jsonText = uwr.downloadHandler.text;
             StringReader reader = new StringReader(jsonText);
@@ -52,6 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public IEnumerator ParseGeoJSONLocal(string path)
         {
+            HasCompleted = false;
             var reader = new StreamReader(path);
             var jsonReader = new JsonTextReader(reader);
 
@@ -70,6 +75,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public IEnumerator ParseGeoJSONStreamRemote(Uri uri, StoredAuthorization auth)
         {
+            HasCompleted = false;
             string jsonString = string.Empty;
 
             var config = new Config();
@@ -105,6 +111,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var frameCount = Time.frameCount - startFrame;
             if (frameCount == 0)
                 yield return null; // if entire file was parsed in a single frame, we need to wait a frame to initialize UI to be able to set the color.
+
+            HasCompleted = true;
+            OnParseCompleted.Invoke();
         }
 
         private void OnSerializerError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
