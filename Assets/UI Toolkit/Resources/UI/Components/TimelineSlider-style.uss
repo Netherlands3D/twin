@@ -1,5 +1,5 @@
 @import url("SliderBase-style.uss");
-@import url("Slider.uss");
+@import url("Slider-style.uss");
 
 .timeline-slider__container{
     padding: 0 600px 0 600px;
