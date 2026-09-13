@@ -12,6 +12,7 @@ namespace Netherlands3D.LayerStyles
         //Constants for property keys
         public const string FillColorProperty = "fill-color";
         public const string StrokeColorProperty = "stroke-color";
+        public const string PointColorProperty = "point-color";
         public const string VisibilityProperty = "visibility";
         public const string MaskLayerMaskProperty = "mask-layer-mask";
         
@@ -36,33 +37,42 @@ namespace Netherlands3D.LayerStyles
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
         public void SetFillColor(Color color) => SetAndNormalizeColor(FillColorProperty, color);
-
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
         public Color? GetFillColor() => GetAndNormalizeColor(FillColorProperty);
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
+        /// <remarks>
+        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
+        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
+        /// the term Stroke Color instead of Mapbox' Line Color.
+        /// </remarks>
+        public void SetStrokeColor(Color color) => SetAndNormalizeColor(StrokeColorProperty, color);
 
-        public void ClearFillColor() => ClearProperty(FillColorProperty);
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
+        /// <remarks>
+        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
+        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
+        /// the term Stroke Color instead of Mapbox' Line Color.
+        /// </remarks>
+        public Color? GetStrokeColor() => GetAndNormalizeColor(StrokeColorProperty);
+        public void SetPointColor(Color color) => SetAndNormalizeColor(PointColorProperty, color);
+
+        public Color? GetPointColor() => GetAndNormalizeColor(PointColorProperty);
         
         public List<string> GetUsedColorProperties()
         {
-            List<string> usedColorProperties = new List<string>(2);
+            List<string> usedColorProperties = new List<string>(3);
             if(GetProperty(FillColorProperty) != null)
                 usedColorProperties.Add(FillColorProperty);
             if(GetProperty(StrokeColorProperty) != null)
                 usedColorProperties.Add(StrokeColorProperty);
+            if(GetProperty(PointColorProperty) != null)
+                usedColorProperties.Add(PointColorProperty);
             return usedColorProperties;
         }
         
         public Color? GetColor(string property)
         {
-            switch (property)
-            {
-                case FillColorProperty:
-                    return GetFillColor();
-                case StrokeColorProperty:
-                    return GetStrokeColor();
-                default:
-                    throw new ArgumentException($"Unknown color property '{property}'", nameof(property));
-            }
+            return GetAndNormalizeColor(property);
         }
 
         public void SetColor(string property, Color? color)
@@ -94,25 +104,7 @@ namespace Netherlands3D.LayerStyles
         }
 
         public void ClearMaskLayerMask() => ClearProperty(MaskLayerMaskProperty);
-
-        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
-        /// <remarks>
-        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
-        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
-        /// the term Stroke Color instead of Mapbox' Line Color.
-        /// </remarks>
-        public void SetStrokeColor(Color color) => SetAndNormalizeColor(StrokeColorProperty, color);
-
-        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
-        /// <remarks>
-        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
-        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
-        /// the term Stroke Color instead of Mapbox' Line Color.
-        /// </remarks>
-        public Color? GetStrokeColor() => GetAndNormalizeColor(StrokeColorProperty);
-
-        public void ClearStrokeColor() => ClearProperty(StrokeColorProperty);
-
+        
         public void SetVisibility(bool visible) => SetProperty(VisibilityProperty, visible ? VisibilityVisible : VisibilityNone);
 
         public bool? GetVisibility()

@@ -19,7 +19,8 @@ namespace Netherlands3D.UI.Components
     public enum NumberFieldFormat
     {
         Double,
-        Time
+        Time,
+        Date
     }
 
     [UxmlElement]
@@ -219,13 +220,19 @@ namespace Netherlands3D.UI.Components
         {
             InputField.SetValueWithoutNotify(FormatValue(newValue));
         }
-        
+
         public void SetValueWithoutNotify(DateTime dateTime)
         {
-            var totalMinutes = dateTime.Hour * 60 + dateTime.Minute;
-            SetValueWithoutNotify((double)totalMinutes);
+            if (valueFormat == NumberFieldFormat.Time)
+            {
+                InputField.SetValueWithoutNotify(dateTime.ToString("HH:mm"));
+            }
+            else if(valueFormat == NumberFieldFormat.Date)
+            {
+                InputField.SetValueWithoutNotify(dateTime.ToString("MM/dd/yyyy HH:mm:ss"));
+            }
         }
-        
+
         private string FormatValue(double value)
         {
             string formatted = string.Empty;

@@ -68,12 +68,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return IconImage.SCATTER_OBJECT;
                 case CartesianTileSubObjectColorLayerGameObject _:
                     return IconImage.CSV;
-                case GeoJSONPolygonLayer _:
-                    return IconImage.POLYGON;
-                case GeoJSONLineLayer _:
-                    return IconImage.LINE;
-                case GeoJSONPointLayer _:
-                    return IconImage.DOT;
                 case LASPointCloudLayer _:
                     return IconImage.POINT;
                 case PolygonSelectionLayerGameObject _:

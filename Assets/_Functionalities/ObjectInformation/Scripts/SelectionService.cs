@@ -377,7 +377,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void ProcessFeatureMappingSelection(FeatureMapping feature)
         {
-            LayerData layerData = feature.VisualisationLayer.LayerData;
+            LayerData layerData = feature.LayerData;
             if(!layerData.IsSelected)
                 layerData.SelectLayer(true);
                     

@@ -1,0 +1,26 @@
+@import url("SliderBase-style.uss");
+@import url("Slider.uss");
+
+.timeline-slider__container{
+    padding: 0 600px 0 600px;
+}
+
+.timeline-slider__scrubber{
+    translate: 0px 0;
+    align-self: center;
+    background-color: var(--color-white);
+}
+
+.timeline-slider__slider-row{
+    align-content: stretch;
+    flex-direction: row;
+}
+
+.timeline-slider__slider{
+    flex-grow: 1;
+}
+
+.timeline-slider__number-field.number-field{
+    max-width: var(--spacing-28);
+    width: var(--spacing-28);
+}
