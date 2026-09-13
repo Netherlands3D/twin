@@ -425,10 +425,13 @@ namespace Netherlands3D.UI.Components
                 return;
 
             var selectedTime = activeTimeline.CurrentTime;
+            var renderedHour = activeTimeline.RenderedTrafficHour >= 0
+                ? activeTimeline.RenderedTrafficHour
+                : selectedTime.Hour;
             slider.SetValueWithoutNotify(GetTrafficSliderValue(selectedTime));
             currentTimeLabel.text = selectedTime.ToString("HH:mm");
             playbackStatusLabel.text =
-                $"Data: {selectedTime.Hour:00}:00 – {selectedTime.Hour:00}:59 · 1 uur per 2 sec";
+                $"Data: {renderedHour:00}:00 – {renderedHour:00}:59 · 1 uur per 2 sec";
         }
 
         private void SetTrafficTime(float timelineHour)

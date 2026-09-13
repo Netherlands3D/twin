@@ -60,6 +60,7 @@ namespace Netherlands3D
         public string SelectedDayType { get; private set; }
         public DateTime CurrentTime => currentTime;
         public int CurrentHour => currentTime.Hour;
+        public int RenderedTrafficHour { get; private set; } = -1;
         public int VisibleRouteCount { get; private set; }
         public string LayerName => visualization?.LayerData?.Name ?? "Verkeersdata";
 
@@ -356,15 +357,16 @@ namespace Netherlands3D
 
         private void OnTimeChanged(DateTime selectedTime)
         {
-            var trafficHourChanged = currentTime.Hour != selectedTime.Hour;
             currentTime = selectedTime;
 
             if (HasTrafficData)
             {
-                if (trafficHourChanged)
+                TimelineTimeChanged?.Invoke(this);
+
+                // Compare against the slice that is actually on screen. Comparing consecutive clock values can
+                // miss a refresh when another listener or an initialization step has already advanced the clock.
+                if (ParsingComplete && RenderedTrafficHour != currentTime.Hour)
                     ApplyTrafficSlice();
-                else
-                    TimelineTimeChanged?.Invoke(this);
                 return;
             }
 
@@ -403,6 +405,7 @@ namespace Netherlands3D
 
             VisibleRouteCount = visibleFeatures.Count;
             visualization.SetVisibleTimelineLineFeatures(visibleFeatures, featureColors, featureWidths);
+            RenderedTrafficHour = currentTime.Hour;
             TimelineStateChanged?.Invoke(this);
         }
 
