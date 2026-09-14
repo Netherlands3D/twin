@@ -99,6 +99,15 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
             return stylingRule.Symbolizer.GetFillColor();
         }
+
+        public Color? GetColorByStylingRuleKey(string stylingRuleKey)
+        {
+            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
+            {
+                return null;
+            }
+            return stylingRule.Symbolizer.GetFillColor();
+        }
         
         public void RemoveColorForMaterialIndex(int index)
         {
@@ -129,7 +138,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 return index;
             }
             return -1;
-        }     
+        }
         
         [JsonConstructor]
         public CartesianTileLayerFeatureColorPropertyData()
@@ -139,24 +148,25 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public override List<string> GetUsedColorTypes()
         {
-            var colors = new List<string>();
+            var keys = new List<string>();
             
             foreach(KeyValuePair<string, StylingRule> kv in StylingRules)
             {
                 if(kv.Key.Contains(ColoringIdentifier))
                 {
-                    int index = GetMaterialIndexFromStyleRuleKey(kv.Key);                    
-                    Color? color = GetColorByMaterialIndex(index);
-                    //we need to expect a value here or else the stylingrule is not properly initialized
-                    if (color.HasValue)
-                    {
-                        colors.Add(ColorUtility.ToHtmlStringRGB(color.Value));
-                    }
-                    else
-                        Debug.LogError("stylingrule not initialized because the colorvalue is missing");
+                    // int index = GetMaterialIndexFromStyleRuleKey(kv.Key);                    
+                    // Color? color = GetColorByMaterialIndex(index);
+                    // //we need to expect a value here or else the stylingrule is not properly initialized
+                    // if (color.HasValue)
+                    // {
+                    //     colors.Add(ColorUtility.ToHtmlStringRGB(color.Value));
+                    // }
+                    // else
+                    //     Debug.LogError("stylingrule not initialized because the colorvalue is missing");
+                    keys.Add(kv.Key);
                 }
             }
-            return colors;
+            return keys;
         }
     }
 }

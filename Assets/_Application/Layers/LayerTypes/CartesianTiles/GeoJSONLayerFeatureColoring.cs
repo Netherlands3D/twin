@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GeoJSON.Net;
+using GeoJSON.Net.Feature;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
@@ -42,18 +43,53 @@ namespace Netherlands3D.Twin.layers.properties
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
             featureColorPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
+            visualization.OnFeatureAdd.AddListener(UpdateStyling);
+            visualization.OnFeatureRemove.AddListener(UpdateStyling);
             
             layers.Clear();
             layers.Add(visualization.PolygonLayer);
             layers.Add(visualization.LineLayer);
             layers.Add(visualization.PointLayer);
            
-            foreach(var layer in layers)
+            // foreach(var layer in layers)
+            // {
+            //     var layerFeature = visualization.CreateFeature(layer.RenderMaterial);
+            //     visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            //     var color = featureColorPropertyData.GetColor(layerFeature);
+            //     featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white));
+            // }
+        }
+
+        private void UpdateStyling(Feature feature)
+        {
+            IGeoJsonVisualisationLayer layer = null;
+            for (int i = 0; i < layers.Count; i++)
             {
-                var layerFeature = visualization.CreateFeature(layer.RenderMaterial);
+                if (layers[i].SupportsGeometryType(feature.Geometry.Type))
+                {
+                    layer = layers[i];
+                    break;
+                }
+            }
+
+            var layerFeature = visualization.GetLayerFeatureByGeometry(layer.RenderMaterial);
+            if (layerFeature == null)
+            {
+                layerFeature = visualization.CreateFeature(layer.RenderMaterial);
                 visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-                var color = featureColorPropertyData.GetColor(layerFeature);
-                featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white));
+            }
+            if (int.TryParse(layerFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
+            {
+                CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+                if (layer.FeatureCount > 0)
+                {
+                    var color = featureColorPropertyData.GetColor(layerFeature);
+                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white));
+                }
+                else
+                {
+                    featureColorPropertyData.RemoveColorForMaterialIndex(materialIndex);
+                }
             }
         }
         
@@ -130,6 +166,8 @@ namespace Netherlands3D.Twin.layers.properties
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
             featureColorPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
+            visualization.OnFeatureAdd.RemoveListener(UpdateStyling);
+            visualization.OnFeatureRemove.RemoveListener(UpdateStyling);
         }
     }
 }
