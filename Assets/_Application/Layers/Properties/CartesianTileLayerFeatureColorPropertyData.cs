@@ -28,8 +28,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (layerFeature.Geometry is not Material mat) return;
             
             int.TryParse(layerFeature.Attributes[MaterialIndexKey], out int materialIndexIdentifier);
+            layerFeature.Attributes.TryGetValue(MaterialNameIdentifier, out string materialName);
 
-            SetColorByMaterialIndex(materialIndexIdentifier, mat.name, color);
+            SetColorByMaterialIndex(materialIndexIdentifier, materialName, color);
         }
         
         public void SetColorByMaterialIndex(int index, string name, Color color)
@@ -97,6 +98,12 @@ namespace Netherlands3D.Twin.Layers.Properties
                 return null;
             }
             return stylingRule.Symbolizer.GetFillColor();
+        }
+        
+        public void RemoveColorForMaterialIndex(int index)
+        {
+            var stylingRuleKey = ColorizationStyleRuleKey(index);
+            RemoveStylingRule(stylingRuleKey);
         }
         
         private string ColorizationStyleRuleKey(int materialIndexIdentifier)

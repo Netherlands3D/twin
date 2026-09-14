@@ -71,7 +71,6 @@ namespace Netherlands3D.UI.Panels
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
-            //return item;
         }
         
         private void BindListViewItem(VisualElement item, int index)
@@ -82,6 +81,8 @@ namespace Netherlands3D.UI.Panels
            
             string color = swatchesListView.itemsSource[index] as string;
             tile.Tile.ColorHex = color;
+            
+            //do a mapping of available styling rules
             
             string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
             //layer names usually will look like Twin_Something, lets use only the second part of the split on _

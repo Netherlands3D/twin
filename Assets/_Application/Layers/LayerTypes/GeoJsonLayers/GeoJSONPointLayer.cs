@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -15,7 +16,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
-        public bool IsPolygon => false;
+
+        public bool SupportsGeometryType(GeoJSONObjectType geometryType)
+        {
+            return  geometryType == GeoJSONObjectType.MultiPoint || geometryType == GeoJSONObjectType.Point;
+        }
+
+        public int FeatureCount => spawnedVisualisations.Count;
 
         public Transform Transform => transform;
 
@@ -39,6 +46,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
                 //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
                 PointRenderer3D.SetAllColors(value);
+            }
+        }
+
+        public Material RenderMaterial
+        {
+            get
+            {
+                return PointRenderer3D.PointMaterial;
             }
         }
 
