@@ -9,6 +9,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.FirstPersonViewer.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.TileStreaming;
 using UnityEngine;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI_Toolkit.Scripts;
@@ -70,6 +71,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return IconImage.DOT;
                 case PolygonSelectionLayerGameObject _:
                     return IconImage.POLYGON;
+                case TileStreamerLayerGameObject _:
+                    return IconImage.TILE;
                 default:
                     Debug.LogError($"layer type of {template.GetType()} is not specified");
                     return IconImage.HELP;
