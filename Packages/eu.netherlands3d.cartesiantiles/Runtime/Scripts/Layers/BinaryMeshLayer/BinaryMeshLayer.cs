@@ -115,15 +115,22 @@ namespace Netherlands3D.CartesianTiles
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
             var tile = tiles[tileKey];
             int index = tile.unityLOD;
-            string url = Datasets[index].path;
-            if (Datasets[index].path.StartsWith("https://") || Datasets[index].path.StartsWith("file://"))
+            var dataset = Datasets[index];
+            string url = dataset.url;
+            string fallbackUrl = string.Empty;
+            bool canFallbackFromBrotli = false;
+            if (dataset.path.StartsWith("https://") || dataset.path.StartsWith("file://"))
             {
-                //On WebGL we request brotli encoded files instead. We might want to base this on browser support.
+                // On WebGL we try Brotli encoded files first, but some tile servers do not host them or serve
+                // them with incompatible content encoding headers. Keep the original URL as a fallback.
 #if !UNITY_EDITOR && UNITY_WEBGL
-		        if(brotliCompressedExtention.Length>0 && !Datasets[index].path.EndsWith(brotliCompressedExtention))
-    				Datasets[index].path += brotliCompressedExtention;
+                if (brotliCompressedExtention.Length > 0 && !dataset.path.EndsWith(brotliCompressedExtention))
+                {
+                    fallbackUrl = dataset.url.ReplaceXY(tileChange.X, tileChange.Y);
+                    url = dataset.path + brotliCompressedExtention + dataset.pathQuery;
+                    canFallbackFromBrotli = true;
+                }
 #endif
-                url = Datasets[index].url;
             }
             url = url.ReplaceXY(tileChange.X, tileChange.Y);
 
@@ -138,6 +145,22 @@ namespace Netherlands3D.CartesianTiles
             if (!tiles.ContainsKey(tileKey)) yield break;
 
             tile.runningWebRequest = null;
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+            if (webRequest.result != UnityWebRequest.Result.Success && canFallbackFromBrotli)
+            {
+                webRequest.Dispose();
+
+                webRequest = UnityWebRequest.Get(fallbackUrl);
+                tile.runningWebRequest = webRequest;
+                yield return webRequest.SendWebRequest();
+
+                if (!tiles.ContainsKey(tileKey)) yield break;
+
+                tile.runningWebRequest = null;
+                url = fallbackUrl;
+            }
+#endif
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {

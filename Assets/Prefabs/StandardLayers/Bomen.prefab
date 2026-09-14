@@ -80,7 +80,7 @@ MonoBehaviour:
   DefaultMaterialList:
   - {fileID: 2100000, guid: d46c5122997e7644088116a42496be75, type: 2}
   tileShadowCastingMode: 1
-  brotliCompressedExtention: .br
+  brotliCompressedExtention: 
   createMeshcollider: 0
 --- !u!114 &3732835547605356908
 MonoBehaviour:
