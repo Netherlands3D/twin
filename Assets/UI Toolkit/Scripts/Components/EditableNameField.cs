@@ -71,8 +71,7 @@ namespace Netherlands3D.UI.Components
             inputField.RegisterCallback<BlurEvent>(OnNameInputFieldBlur, TrickleDown.TrickleDown);
             inputField.RegisterCallback<NavigationSubmitEvent>(OnNavigationSubmitted, TrickleDown.TrickleDown);
 
-            // inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true); //todo: find out why this doesn't work but the inline style does
-            inputField.style.display = DisplayStyle.None;
+            inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
 
         private void OnLabelBlur(BlurEvent evt)
@@ -90,17 +89,15 @@ namespace Netherlands3D.UI.Components
         private void StartEditing()
         {
             label.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            // inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false); //todo: find out why this doesn't work but the inline style does
-            inputField.style.display = DisplayStyle.Flex;
+            inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
 
-            inputField.Focus();
+            schedule.Execute(() => { inputField.Focus();}); // we need to wait until the layout engine processes the new Display: flex of the input field before we can select focus the element
         }
         
         private void StopEditing()
         {
             label.EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            // inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true); //todo: find out why this doesn't work but the inline style does
-            inputField.style.display = DisplayStyle.None;
+            inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             
             ResetClickState();
             value = inputField.text;

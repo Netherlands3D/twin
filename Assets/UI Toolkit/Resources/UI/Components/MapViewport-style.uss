@@ -19,10 +19,10 @@
 .map-viewport--fixed-size{
     aspect-ratio: 1.6;
     /* grenzen: voorkomt te klein/te groot */
-    min-width: 410px;
-    max-width: 410px; /* TODO: test on different screensizes if this is to big */
-    min-height: 256px;
-    max-height: 256px; /* TODO: test on different screensizes if this is to big */
+    min-width: var(--inspector-width);
+    max-width: var(--inspector-width); /* TODO: test on different screensizes if this is to big */
+    min-height: 260px;
+    max-height: 260px; /* TODO: test on different screensizes if this is to big */
 }
 
 .map-viewport__pin

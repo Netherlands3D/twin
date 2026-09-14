@@ -1,9 +1,20 @@
-.scatter-property-section:disabled,
-.scatter-property-section__scatter-settings:disabled,
-.scatter-property-section__scatter-control:disabled{
-    display: none;
+.scatter-property-section__error-panel {
+    flex-direction: row;
+    margin-top: var(--spacing-1);
 }
 
-.scatter-property-section__scatter-control:disabled.visible-when-disabled{
-    display: flex;
+.scatter-property-section__error-message-divider{
+    -unity-text-align: upper-center;
+}
+
+.scatter-property-section__error-message-text.scatter-property-section__error-message-divider{
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
+}
+
+.scatter-property-section__error-message-text {
+    color: var(--color-warning);
+    margin-left: 0;
+    padding: 0;
+    flex-shrink: 1;
 }

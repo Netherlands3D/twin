@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -12,15 +13,16 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
     {
         public float RotorDiameter
         {
-            get => propertyData.RotorDiameter;
-            set => propertyData.RotorDiameter = value;
+            get => windmillPropertyData.RotorDiameter;
+            set => windmillPropertyData.RotorDiameter = value;
         }
-        private WindmillPropertyData propertyData;
+        private WindmillPropertyData windmillPropertyData;
+        private TransformLayerPropertyData transformPropertyData;
 
         public float AxisHeight
         {
-            get => propertyData.AxisHeight;
-            set => propertyData.AxisHeight = value;
+            get => windmillPropertyData.AxisHeight;
+            set => windmillPropertyData.AxisHeight = value;
         }
 
         [Header("Settings")] [SerializeField] private float rotationSpeed = 10f;
@@ -46,28 +48,42 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private void Start()
         {
-            UpdateAxisHeight(propertyData.AxisHeight);
-            UpdateRotorDiameter(propertyData.RotorDiameter);
+            UpdateAxisHeight(windmillPropertyData.AxisHeight);
+            UpdateRotorDiameter(windmillPropertyData.RotorDiameter);
         }
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             var lgo = GetComponent<LayerGameObject>();
             lgo.InitProperty<WindmillPropertyData>(properties, null, defaultHeight, defaultDiameter);
-            propertyData = lgo.LayerData.GetProperty<WindmillPropertyData>();
+            windmillPropertyData = lgo.LayerData.GetProperty<WindmillPropertyData>();
+
+            //in case we cannot transform the object, we also should not be able to edit the Windmill property data, so we need to match the IsEditable state of the WindmillPropertyData to the TransformPropertyData
+            transformPropertyData = lgo.LayerData.GetProperty<TransformLayerPropertyData>();
+            windmillPropertyData.IsEditable = transformPropertyData.IsEditable;
+            
             AddListeners();
+        }
+
+        private void MatchEditableState(bool transformIsEditable)
+        {
+            windmillPropertyData.IsEditable = transformIsEditable;
         }
 
         private void AddListeners()
         {
-            propertyData.OnAxisHeightChanged.AddListener(UpdateAxisHeight);
-            propertyData.OnRotorDiameterChanged.AddListener(UpdateRotorDiameter);
+            windmillPropertyData.OnAxisHeightChanged.AddListener(UpdateAxisHeight);
+            windmillPropertyData.OnRotorDiameterChanged.AddListener(UpdateRotorDiameter);
+            transformPropertyData.IsEditableChanged.AddListener(MatchEditableState);
+            
         }
 
         private void RemoveListeners()
         {
-            propertyData.OnAxisHeightChanged.RemoveListener(UpdateAxisHeight);
-            propertyData.OnRotorDiameterChanged.RemoveListener(UpdateRotorDiameter);
+            windmillPropertyData.OnAxisHeightChanged.RemoveListener(UpdateAxisHeight);
+            windmillPropertyData.OnRotorDiameterChanged.RemoveListener(UpdateRotorDiameter);
+            transformPropertyData.IsEditableChanged.RemoveListener(MatchEditableState);
+            
         }
 
         private void UpdateAxisHeight(float height)

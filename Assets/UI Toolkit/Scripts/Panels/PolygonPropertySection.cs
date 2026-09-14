@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -49,8 +50,8 @@ namespace Netherlands3D.UI.Panels
                 parent.Remove(this);
             }
             
-            linePropertiesElement.SetEnabled(polygonPropertyData.ShapeType == ShapeType.Line);
-            gridPropertiesElement.SetEnabled(polygonPropertyData.ShapeType == ShapeType.Grid);
+            linePropertiesElement.EnableInClassList(UtilityClassConstants.HIDDEN, polygonPropertyData.ShapeType != ShapeType.Line);
+            gridPropertiesElement.EnableInClassList(UtilityClassConstants.HIDDEN, polygonPropertyData.ShapeType != ShapeType.Grid);
         }
 
         private void OnStrokeWidthChanged(ChangeEvent<float> evt)

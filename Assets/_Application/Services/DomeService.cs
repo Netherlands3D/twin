@@ -14,10 +14,14 @@ namespace Netherlands3D
         
         private MaskingDomeSpawner spawner;
 
-        private void Start()
+        private void Awake()
         {
             spawner = GetComponent<MaskingDomeSpawner>();
-            spawner.SetMaskingBitIndex(MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
+        }
+
+        private void Start()
+        {
+            Spawner.SetMaskingBitIndex(MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
             DisableDome();
         }
 
@@ -37,7 +41,7 @@ namespace Netherlands3D
 
         private void EnableDome()
         {
-            spawner.SetDomeEnabled();
+            Spawner.SetDomeEnabled();
         }
 
         private void DisableDome()

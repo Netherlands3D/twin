@@ -1,12 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -95,6 +91,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 showDivider = value;
+                EnsureDividerPosition();
                 SetDividerVisibility();
             }
         }
@@ -189,6 +186,13 @@ namespace Netherlands3D.UI.Components
             }
         }
 
+        [UxmlAttribute("help-tooltip")]
+        public string HelpTooltip
+        {
+            get => helpButton.tooltip;
+            set => helpButton.tooltip = value;
+        }
+
         public ContentContainer()
         {
             this.CloneComponentTree("Components");
@@ -273,25 +277,27 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void EnsureDividerPosition()
         {
-            if (headerDivider == null)
-            {
-                headerDivider = new VisualElement { name = "Divider" };
-                headerDivider.AddToClassList("divider");
-                headerDivider.AddToClassList("divider-header");
-            }
+            if (headerDivider != null)
+                return;
+
+            headerDivider = new VisualElement { name = "Divider" };
+            headerDivider.AddToClassList("divider");
+            headerDivider.AddToClassList("divider-header");
             if (headerDivider.parent != contentContainer)
             {
                 contentContainer.Insert(0, headerDivider);
             }
+
+            headerDivider.EnableInClassList(UtilityClassConstants.HIDDEN, !showDivider);
         }
 
-        /// <summary>
-        /// Divider visibility is controlled only by showDivider.
-        /// Foldout collapse/expand already hides/shows the entire content container.
-        /// </summary>
+        // /// <summary>
+        // /// Divider visibility is controlled only by showDivider.
+        // /// Foldout collapse/expand already hides/shows the entire content container.
+        // /// </summary>
         private void SetDividerVisibility()
         {
-            EnableInClassList("divider-active", showDivider);
+            headerDivider.EnableInClassList(UtilityClassConstants.HIDDEN, !showDivider);
         }
 
         private void UpdateIcons()

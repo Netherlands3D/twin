@@ -1,18 +1,1 @@
 @import url("IconButton-style.uss");
-
-.helpbutton {
-}
-
-.helpbutton > #Icon {
-}
-
-.helpbutton > .unity-label {
-}
-
-.helpbutton:hover > #Icon {
-}
-
-.helpbutton:active > #Icon {
-}
-
-

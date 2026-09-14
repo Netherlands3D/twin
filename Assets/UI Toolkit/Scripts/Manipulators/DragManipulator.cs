@@ -4,6 +4,8 @@ using UnityEngine.UIElements;
 
 public class DragManipulator : PointerManipulator
 {
+    private readonly TrickleDown trickleDown;
+    
     private Vector3 start;
     private bool isTracking;
     private bool isDragging;
@@ -18,9 +20,10 @@ public class DragManipulator : PointerManipulator
     
     private Vector2 previousPosition;
     
-    public DragManipulator(float deadzone)
+    public DragManipulator(float deadzone, TrickleDown trickleDown = TrickleDown.NoTrickleDown)
     {
         this.movementDeadzone = deadzone;
+        this.trickleDown = trickleDown;
         pointerId = -1;
         activators.Add(new ManipulatorActivationFilter { button = dragMouseButton });
         isTracking = false;
@@ -28,18 +31,18 @@ public class DragManipulator : PointerManipulator
 
     protected override void RegisterCallbacksOnTarget()
     {
-        target.RegisterCallback<PointerDownEvent>(OnPointerDown);
-        target.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-        target.RegisterCallback<PointerUpEvent>(OnPointerUp);
-        target.RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
+        target.RegisterCallback<PointerDownEvent>(OnPointerDown, trickleDown);
+        target.RegisterCallback<PointerMoveEvent>(OnPointerMove, trickleDown);
+        target.RegisterCallback<PointerUpEvent>(OnPointerUp, trickleDown);
+        target.RegisterCallback<PointerLeaveEvent>(OnPointerLeave, trickleDown);
     }
 
     protected override void UnregisterCallbacksFromTarget()
     {
-        target.UnregisterCallback<PointerDownEvent>(OnPointerDown);
-        target.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
-        target.UnregisterCallback<PointerUpEvent>(OnPointerUp);
-        target.UnregisterCallback<PointerLeaveEvent>(OnPointerLeave);
+        target.UnregisterCallback<PointerDownEvent>(OnPointerDown, trickleDown);
+        target.UnregisterCallback<PointerMoveEvent>(OnPointerMove, trickleDown);
+        target.UnregisterCallback<PointerUpEvent>(OnPointerUp, trickleDown);
+        target.UnregisterCallback<PointerLeaveEvent>(OnPointerLeave, trickleDown);
     }
 
     private void OnPointerDown(PointerDownEvent e)

@@ -56,3 +56,8 @@
 .inspector-download-grid__button.button{
     margin-left: var(--spacing-3);
 }
+
+/*todo: this is a quick fix for the release, we should check if this can have a more robust solution*/
+.inspector-download-grid__item.number-field.number-field--style-small{
+    width: var(--spacing-25);
+}

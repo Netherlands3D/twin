@@ -40,15 +40,16 @@
     -unity-background-image-tint-color: var(--color-white);
 }
 
-/*todo the -3px shifts the right edge towards the button edge, find out why */ 
+/*todo the -2px shifts the right edge towards the button edge, find out why */ 
 .hamburger-menu .unity-foldout__content {
-    right: -3px;
+    right: -2px;
+    margin-left: 0; /* overriding the hamburger menu spacing between icon and buttons when folded out!*/
 }
 
 .hamburger-menu .unity-toggle__input > .unity-label {
     display: none;
     color: var(--color-white);
-    margin-left: var(--spacing-8);
+    margin-left: var(--spacing-2);
 }
 
 .hamburger-menu:hover {
@@ -72,5 +73,16 @@
 
 .hamburger-menu__group .button:hover {
     border-color: var(--color-blue-700);
+}
+
+.hamburger-menu__group > .divider {
+    width: var(--spacing-0_5);
+    min-width: var(--spacing-0_5);
+    height: var(--spacing-6);
+    min-height: var(--spacing-6);
+    background-color: var(--color-white);
+    border-radius: 1px;
+    align-self: center;
+    margin-right: var(--spacing-2);
 }
 

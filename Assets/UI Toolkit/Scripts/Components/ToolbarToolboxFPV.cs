@@ -35,7 +35,6 @@ namespace Netherlands3D.UI.Components
         {
             FirstPersonViewer.FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
             fpv.ExitViewer(true);
-            App.UIRoot.DisableFPVUI();
         }
         
         private void SnapToGround()

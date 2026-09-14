@@ -59,8 +59,9 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
             worldTransform = GetComponent<WorldTransform>();
-
+    
             Input.SetExitCallback(ExitViewer);
+            MovementSwitcher.enabled = false;
         }
 
         private void Start()
@@ -124,6 +125,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             Input.OnFPVEnter();
             MovementSwitcher.ApplyViewer();
+            MovementSwitcher.enabled = true;
         }
 
         private void OnDestroy()
@@ -161,7 +163,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * (FirstPersonCamera.CameraHeightOffset + 0.05f), Vector3.down, groundCallback, snappingCullingMask);
+            var isHit = raycaster.Raycast(transform.position + Vector3.up * (FirstPersonCamera.CameraHeightOffset + 0.05f), Vector3.down, out var hitPosition, snappingCullingMask);
+            groundCallback(hitPosition, isHit);
         }
 
         private void UpdateGroundPosition(Vector3 point, bool hit)
@@ -235,27 +238,26 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void ResetToGround()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * 100, Vector3.down, (point, hit) =>
+            if (raycaster.Raycast(transform.position + Vector3.up * 100, Vector3.down, out var point, snappingCullingMask))
             {
-                if (hit)
-                {
-                    SetVelocity(Vector2.zero);
-                    yPositionTarget = point.y;
-                    transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GetGroundHeightOffset(), transform.position.z);
+                SetVelocity(Vector2.zero);
+                yPositionTarget = point.y;
+                transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GetGroundHeightOffset(), transform.position.z);
 
-                    OnResetToGround.Invoke();
-                }
-            }, snappingCullingMask);
+                OnResetToGround.Invoke();
+            }
         }
 
         public void ExitViewer(bool exitOriginalPosition)
         {
+            MovementSwitcher.enabled = false;
             SetMovementVisual(null);
             OnViewerExited.Invoke(exitOriginalPosition);
 
             Input.ViewerExited();
 
             App.Cameras.SwitchToPreviousCamera();
+            App.UIRoot.DisableFPVUI();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;

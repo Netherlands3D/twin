@@ -117,18 +117,18 @@ namespace Netherlands3D.UI.Panels
             if (dropDownValues.Keys.Contains(index))
                 credentialContent.SetDropdownValue(index);
 
-            warningContent.SetEnabled(state == ContentState.Warning);
-            credentialContent.SetEnabled(state == ContentState.Key || state == ContentState.UsernameAndPassword);
-            acceptedContent.SetEnabled(state == ContentState.Accepted);
+            warningContent.EnableInClassList(UtilityClassConstants.HIDDEN, state != ContentState.Warning);
+            credentialContent.EnableInClassList(UtilityClassConstants.HIDDEN, !(state == ContentState.Key || state == ContentState.UsernameAndPassword));
+            acceptedContent.EnableInClassList(UtilityClassConstants.HIDDEN, state != ContentState.Accepted);
             switch (state)
             {
                 case ContentState.Key:
                     Code.Q<Label>().text = "Wachtwoord of code";
-                    UserName.SetEnabled(false);
+                    UserName.EnableInClassList(UtilityClassConstants.HIDDEN, true);
                     break;
                 case ContentState.UsernameAndPassword:
                     Code.Q<Label>().text = "Wachtwoord";
-                    UserName.SetEnabled(true);
+                    UserName.EnableInClassList(UtilityClassConstants.HIDDEN, false);
                     break;
             }
         }
@@ -145,7 +145,6 @@ namespace Netherlands3D.UI.Panels
             if(show)
                 CodeField.SetValueWithoutNotify(password);
             EnableInClassList(UtilityClassConstants.HIDDEN, !show);
-            SetEnabled(show); //todo why is still needed?
         }
 
         public void ShowError(bool show)

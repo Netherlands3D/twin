@@ -1,10 +1,10 @@
 .textfield {
     --textfield-input-bg: var(--color-blue-100);
-    --textfield-input-bg-hover: var(--color-blue-200);
-    --textfield-input-border-color: transparent;
+    --textfield-input-bg-hover: var(--color-blue-100);
+    --textfield-input-border-color: var(--color-blue-200);
     --textfield-input-border-width: var(--spacing-0_5);
-    --textfield-input-radius: var(--spacing-1);
-    --textfield-input-padding-x: var(--spacing-1);
+    --textfield-input-radius: var(--border-radius-md);
+    --textfield-input-padding-x: var(--spacing-2);
     --textfield-input-padding-y: var(--spacing-1);
     --textfield-icon-size: var(--spacing-6);
     --textfield-icon-gap: var(--spacing-2);
@@ -23,7 +23,7 @@
     flex-shrink: 1;
     min-width: 0;
 }
-.textfield.textfield-style-WithLabel > .unity-label {
+.textfield.textfield-style-with-label > .unity-label {
     display: flex;
 }
 

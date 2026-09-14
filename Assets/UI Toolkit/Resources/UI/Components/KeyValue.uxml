@@ -7,5 +7,6 @@
 >
     <ui:Label name="Key" text="key" class="key-value__key"/>
     <ui:Label name="Value" text="value" class="key-value__value"/>
+    <nl3d:Hyperlink name="ValueLink"/>
     <ui:VisualElement name="Divider" class="key-value__divider" />
 </ui:UXML>

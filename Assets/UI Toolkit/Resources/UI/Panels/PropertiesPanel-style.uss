@@ -1,9 +1,9 @@
 .properties-panel {
     --properties-bg-color: var(--color-white);
     --properties-border-radius: var(--spacing-2);
-    --properties-width: 400px;
-    --properties-min-width: 320px;
-    --properties-max-width: 520px;
+    --properties-width: var(--inspector-width);
+    --properties-min-width: var(--inspector-min-width);
+    --properties-max-width: var(--inspector-max-width);
 
     min-width: var(--properties-min-width);
     width: var(--properties-width);

@@ -59,8 +59,16 @@ namespace Netherlands3D.UI.Panels
             
             UpdateStartDateField(propertyData.StartDate);
             UpdateEndDateField(propertyData.EndDate);
+            
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
-        
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            propertyData.OnStartDateChanged.RemoveListener(UpdateStartDateField);
+            propertyData.OnEndDateChanged.RemoveListener(UpdateEndDateField);
+        }
+
         private void UpdateStartDateField(DateTime startDate)
         {
             SetDate(startDateField, startDate);

@@ -1,5 +1,4 @@
 .building-information__divider{
-    display: flex;
     flex-grow: 1;
     height: var(--spacing-0_5);
     min-height: var(--spacing-0_5);    

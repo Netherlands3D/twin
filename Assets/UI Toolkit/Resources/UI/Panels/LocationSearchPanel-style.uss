@@ -1,16 +1,11 @@
 .location-search-panel {
     --field-spacing: var(--spacing-3);
     
-    display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     flex-shrink: 1;
     flex-grow: 1;
     padding: var(--spacing-3);
-}
-
-.location-search-panel.hidden {
-    display: none;
 }
 
 .location-search-panel .auto-complete {

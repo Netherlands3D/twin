@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin
 
         private void OnTransformChildrenChanged() {
             //Force 'blocker' objects to UI layer
-            var blocker = canvas.transform.Find("Blocker");
+            var blocker = canvas?.transform.Find("Blocker");
             if(blocker)
             {
                 Debug.Log("Moved 'Blocker' to canvas layer: " + canvas.gameObject.layer, blocker);

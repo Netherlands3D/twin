@@ -1,5 +1,4 @@
 .import-asset-panel {
-    display: flex;
     transition-property: opacity;
     transition-duration: 0.3s;
     opacity: 1;
