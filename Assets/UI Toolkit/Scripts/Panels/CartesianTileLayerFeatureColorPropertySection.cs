@@ -34,7 +34,6 @@ namespace Netherlands3D.UI.Panels
             swatchesListView.makeItem = MakeListViewItem;
             swatchesListView.bindItem = BindListViewItem;
             
-            
             //when clicked outside the listview, deselect the current selection
             swatchesListView.RegisterCallback<BlurEvent>(evt =>
             {

@@ -19,7 +19,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy);
         Bounds GetFeatureBounds(Feature feature);
         float GetSelectionRange();
-
         delegate void GeoJsonHandler(Feature feature);
         event GeoJsonHandler FeatureRemoved;
     }

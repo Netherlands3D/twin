@@ -154,15 +154,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 if(kv.Key.Contains(ColoringIdentifier))
                 {
-                    // int index = GetMaterialIndexFromStyleRuleKey(kv.Key);                    
-                    // Color? color = GetColorByMaterialIndex(index);
-                    // //we need to expect a value here or else the stylingrule is not properly initialized
-                    // if (color.HasValue)
-                    // {
-                    //     colors.Add(ColorUtility.ToHtmlStringRGB(color.Value));
-                    // }
-                    // else
-                    //     Debug.LogError("stylingrule not initialized because the colorvalue is missing");
                     keys.Add(kv.Key);
                 }
             }

@@ -81,10 +81,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             if (feature.Geometry is not Material mat) return feature;
 
-            feature.Attributes.Add(
-                CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey,
-                binaryMeshLayer.DefaultMaterialList.IndexOf(mat).ToString()
-            );
+            feature.Attributes.Add(CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey, binaryMeshLayer.DefaultMaterialList.IndexOf(mat).ToString());
             feature.Attributes.Add(CartesianTileLayerFeatureColorPropertyData.MaterialNameIdentifier, mat.name);
             
             return feature;

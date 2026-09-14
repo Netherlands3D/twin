@@ -27,15 +27,7 @@ namespace Netherlands3D.Twin.layers.properties
             
             SetupFeatures();
         }
-
-        /// <summary>
-        /// Cartesian Tiles have 'virtual' features, each type of terrain (grass, cycling path, etc) can be styled
-        /// independently and thus is a feature. At the moment, the most concrete list of criteria for which features
-        /// exist is the list of materials per terrain type.
-        ///
-        /// As such we create a LayerFeature per material with the material name and index as attribute, this allows
-        /// for the styling system to apply styles per material - and thus: per feature type. 
-        /// </summary>
+       
         private void SetupFeatures()
         {
             CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
@@ -50,14 +42,6 @@ namespace Netherlands3D.Twin.layers.properties
             layers.Add(visualization.PolygonLayer);
             layers.Add(visualization.LineLayer);
             layers.Add(visualization.PointLayer);
-           
-            // foreach(var layer in layers)
-            // {
-            //     var layerFeature = visualization.CreateFeature(layer.RenderMaterial);
-            //     visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-            //     var color = featureColorPropertyData.GetColor(layerFeature);
-            //     featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white));
-            // }
         }
 
         private void UpdateStyling(Feature feature)
@@ -113,15 +97,6 @@ namespace Netherlands3D.Twin.layers.properties
                 }
             }
         }
-
-        private IGeoJsonVisualisationLayer GetRenderLayer(Material material)
-        {
-            for(int i = 0; i < layers.Count; i++)
-                if(layers[i].RenderMaterial == material)
-                    return layers[i];
-            
-            return null;
-        }
         
         private int GetRenderLayerIndex(Material material)
         {
@@ -137,11 +112,11 @@ namespace Netherlands3D.Twin.layers.properties
             for(int i = 0; i < layers.Count; i++)
                 if(layers[i].RenderMaterial == material)
                 {
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.Point))
+                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.Point) || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiPoint))
                         return "punten";
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.LineString))
+                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.LineString)  || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiLineString))
                         return "lijnen";
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.Polygon))
+                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.Polygon) ||  layers[i].SupportsGeometryType(GeoJSONObjectType.MultiPolygon))
                         return "polygonen";
                 }
             
