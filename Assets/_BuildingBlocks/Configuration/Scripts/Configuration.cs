@@ -288,6 +288,11 @@ namespace Netherlands3D.Twin.Configuration
 
         private void LoadFunctionalitiesFromProject(ProjectData changedData)
         {
+            var presentationFunctionality = Functionalities.FirstOrDefault(functionality => functionality.Id == "presentation-mode");
+
+            if (presentationFunctionality != null && !changedData.functionalities.Any(functionality => functionality.Id == "presentation-mode"))
+                presentationFunctionality.IsEnabled = false;
+
             foreach (var savedData in changedData.functionalities)
             {
                 var savedId = savedData.Id;

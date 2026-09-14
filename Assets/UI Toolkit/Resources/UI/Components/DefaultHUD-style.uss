@@ -60,6 +60,7 @@
 .default-hud__bottom-section {
     flex-direction: row;
     align-items: flex-end;
+    flex-shrink: 0;
 }
 
 .default-hud__bottom-info {
@@ -72,4 +73,100 @@
 
 .default-hud__bottom-tools {
     flex-shrink: 0;
+}
+
+.default-hud__top-section > .toolbar-toolbox,
+.default-hud__top-section > .toolbar-scenario {
+    translate: 0 0;
+    transition-property: translate;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in-out;
+}
+
+.default-hud__left-header {
+    flex-direction: row;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.presentation-section {
+    translate: 0 0;
+    transition-property: translate;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in-out;
+}
+
+.presentation-section__pin {
+    display: none;
+}
+
+.presentation-section--active .presentation-section__pin {
+    display: flex;
+}
+
+.default-hud__inspector-zone > .toolbar-main {
+    align-self: flex-start;
+}
+
+.default-hud__navigation-section {
+    position: relative;
+    flex-direction: row;
+    align-items: flex-end;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-right: 0;
+
+    transition-property: translate, margin-right;
+    transition-duration: 0.25s, 0.15s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0.15s, 0s;
+}
+
+.default-hud__navigation-section.presentation-section--hidden {
+    transition-duration: 0.40s, 0.15s;
+    transition-delay: 0s, 0s;
+}
+
+.default-hud__minimap-column {
+    flex-direction: column;
+    align-items: flex-end;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.default-hud__minimap-column > .map-viewport {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.app--presenting .presentation-section--active .presentation-section__pin,
+.app--presenting .toolbar-toolbox--presentation .toolbar-toolbox__presentation-pin {
+    display: none;
+}
+
+.default-hud__presentation-controls {
+    display: none;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-items: flex-start;
+    margin-right: var(--spacing-2);
+}
+
+.app--functionality-presentation-mode .default-hud__presentation-controls {
+    display: flex;
+}
+
+.app--functionality-presentation-mode .default-hud__presentation-controls > .presentation-section__pin {
+    display: flex;
+}
+
+.app--presenting .default-hud__presentation-controls > .presentation-section__pin {
+    display: none;
+}
+
+.default-hud__presentation-button.toggle {
+    flex: 0 0 auto;
+    height: var(--spacing-11);
+    margin: 0;
 }
