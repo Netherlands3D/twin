@@ -22,9 +22,6 @@ namespace Netherlands3D.Twin.layers.properties
             visualization = GetComponent<GeoJsonLayerGameObject>();
             visualization.InitProperty<CartesianTileLayerFeatureColorPropertyData>(properties);
             
-            //BC - todo discuss
-            //visualization.ConvertOldStylingDataIntoProperty(properties, CartesianTileLayerFeatureColorPropertyData.ColoringIdentifier, visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>());
-            
             SetupFeatures();
         }
        

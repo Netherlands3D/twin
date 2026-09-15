@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
@@ -9,8 +8,6 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
@@ -20,7 +17,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [RequireComponent(typeof(ICredentialHandler))]
-    public class GeoJsonLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
+    public class GeoJsonLayerGameObject : LayerGameObject
     {
         public override BoundingBox Bounds
         {
@@ -71,9 +68,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
-            // polygonFeaturesLayer.RenderColor = LayerData.Color;
-            // lineFeaturesLayer.RenderColor = LayerData.Color;
-            // pointFeaturesLayer.RenderColor = LayerData.Color;
         }
 
         protected override void OnVisualizationReady()
@@ -188,15 +182,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         /// <summary>
-        /// Load properties is only used when restoring a layer from a project file.
-        /// After getting the property containing the url, the GeoJSON file is downloaded and parsed.
-        /// </summary>
-        public virtual void LoadProperties(List<LayerPropertyData> properties)
-        {
-            // InitProperty<ColorPropertyData>(properties);
-        }
-
-        /// <summary>
         /// Removes features based on the bounds of their visualisations
         /// </summary>
         public void RemoveFeaturesOutOfView()
@@ -233,29 +218,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 case GeoJSONObjectType.MultiPolygon:
                 case GeoJSONObjectType.Polygon:
                     AddFeature(feature, crs, polygonFeaturesLayer);
-                    if (!hasPolygons)
-                    {
-                        hasPolygons = true;
-                        //InitStylingRules(Symbolizer.FillColorProperty, LayerData.Color);
-                    }
+                    hasPolygons = true;
                     return;
                 case GeoJSONObjectType.MultiLineString:
                 case GeoJSONObjectType.LineString:
                     AddFeature(feature, crs, lineFeaturesLayer);
-                    if (!hasLines)
-                    {
-                        hasLines = true;
-                        //InitStylingRules(Symbolizer.StrokeColorProperty, LayerData.Color);
-                    }
+                    hasLines = true;
                     return;
                 case GeoJSONObjectType.MultiPoint:
                 case GeoJSONObjectType.Point:
                     AddFeature(feature, crs, pointFeaturesLayer);
-                    if (!hasPoints)
-                    {
-                        hasPoints = true;
-                        //InitStylingRules(Symbolizer.PointColorProperty, LayerData.Color);
-                    }
+                    hasPoints = true;
                     return;
                 default:
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
@@ -303,57 +276,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
             }
         }
-
-        // public override void ApplyStyling()
-        // {
-        //     if(hasPolygons)
-        //         ApplyGeoJsonVisualisationLayerStyling(polygonFeaturesLayer, Symbolizer.FillColorProperty);
-        //     if(hasLines)
-        //         ApplyGeoJsonVisualisationLayerStyling(lineFeaturesLayer, Symbolizer.StrokeColorProperty);
-        //     if(hasPoints)
-        //         ApplyGeoJsonVisualisationLayerStyling(pointFeaturesLayer, Symbolizer.PointColorProperty);
-        //     
-        //     var colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
-        //     var colorTypes = colorPropertyData.GetUsedColorTypes();
-        //     if (colorTypes.Count == 1) //if only one color type is used (only points/only lines/only polygons), we will set the layer color to that color.
-        //     {
-        //         switch (colorTypes[0])
-        //         {
-        //             case Symbolizer.FillColorProperty:
-        //                 LayerData.Color = polygonFeaturesLayer.RenderColor;
-        //                 break;
-        //             case Symbolizer.StrokeColorProperty:
-        //                 LayerData.Color = lineFeaturesLayer.RenderColor;
-        //                 break;
-        //             case Symbolizer.PointColorProperty:
-        //                 LayerData.Color = pointFeaturesLayer.RenderColor;
-        //                 break;
-        //         }
-        //     }
-        // }
-
-        // private void ApplyGeoJsonVisualisationLayerStyling(IGeoJsonVisualisationLayer visualisationLayer, string key)
-        // {
-        //     var feature = LayerFeatures[visualisationLayer];
-        //     var symbolizer = GetStyling(feature);
-        //     var fillColor = symbolizer.GetColor(key);
-        //     // Keep the original material color if fill color is not set (null)
-        //     if (!fillColor.HasValue) return;
-        //
-        //     var newColor = fillColor.Value;
-        //     var a = polygonFeaturesLayer.RenderColor.a; //todo: support alpha in the colorpicker
-        //     newColor.a = a;
-        //     
-        //     visualisationLayer.RenderColor = newColor;
-        // }
-        //
-        // private void InitStylingRules(string propertyKey, Color color)
-        // {
-        //     var colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
-        //     colorPropertyData.ColorType = propertyKey;
-        //     colorPropertyData.SetDefaultSymbolizerColor(color);
-        //     
-        //     ApplyStyling();
-        // }
     }
 }
