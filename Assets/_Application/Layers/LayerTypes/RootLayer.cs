@@ -44,16 +44,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             }
         }
 
-        public override void Dispose()
-        {
-            foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
-            {
-                child.Dispose();
-            }
-            
-            LayerDestroyed.Invoke();
-        }
-
         public void ReconstructParentsRecursive()
         {
             foreach (var layer in ChildrenLayers)
@@ -103,6 +93,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
             list.Remove(this); //remove rootLayer
             return list;
+        }
+
+        internal override void RemoveFromParent()
+        {
+            //Rootlayer has no parent.
+            return;
         }
 
         private void AddLayersRecursive(LayerData layer, List<LayerData> list)

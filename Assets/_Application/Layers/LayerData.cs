@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Layers
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Layer")]
     [DataContractAliases(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Names = new[] { "Folder", "Prefab", "PolygonSelection" })]
     [JsonConverter(typeof(LayerDataJsonConverter))]
-    public class LayerData : IEquatable<LayerData>, IDisposable
+    public class LayerData : IEquatable<LayerData>
     {
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
         public Guid Id => UUID;
@@ -312,18 +312,33 @@ namespace Netherlands3D.Twin.Layers
             return false;
         }
 
-        public virtual void Dispose()
+        internal virtual void RemoveFromParent()
         {
-            DeselectLayer();
-
-            foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
+            var oldParent = parent;
+            if (!oldParent.children.Remove(this))
             {
-                child.Dispose();
+                return;
             }
 
-            ParentLayer.ChildrenLayers.Remove(this);
+            parent = null;
+            oldParent.ChildrenChanged.Invoke();
+            Root.UpdateLayerTreeOrder(-1);
+        }
+
+        //Only call from Layers.cs
+        public virtual void Destroy()
+        {
+            DeselectLayer();
+            
+            RemoveFromParent();
+            
+            if (IsDisposed)
+            {
+                return;
+            }
+
             IsDisposed = true;
-            parent.ChildrenChanged.Invoke(); //call event on old parent
+
             ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
             LayerDestroyed.Invoke();
         }
