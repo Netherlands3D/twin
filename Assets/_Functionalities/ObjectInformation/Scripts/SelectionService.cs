@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
@@ -485,9 +485,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            Vector3 worldPoint = pointerToWorldPosition.GetWorldPointSync();
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, worldPoint) < minClickDistance;
-            lastWorldClickedPosition = worldPoint;
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster()) < minClickDistance;
+            lastWorldClickedPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;
