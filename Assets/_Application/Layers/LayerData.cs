@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 name = value;
-                NameChanged.Invoke(this, value);
+                NameChanged.Invoke(value);
             }
         }
 
@@ -164,7 +164,7 @@ namespace Netherlands3D.Twin.Layers
         }
         public UnityEvent OnPrefabIdChanged = new();        
 
-        [JsonIgnore] public readonly UnityEvent<LayerData, string> NameChanged = new();
+        [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> ActiveSelfChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();

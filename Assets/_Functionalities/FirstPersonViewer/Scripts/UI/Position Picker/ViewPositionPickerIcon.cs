@@ -1,6 +1,8 @@
 using DG.Tweening;
 using GG.Extensions;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,12 +22,18 @@ namespace Netherlands3D.FirstPersonViewer
         private OpticalRaycaster raycaster;
         [SerializeField] private LayerMask snappingCullingMask = 0;
         private float distanceMultiplier = 0.015f;
+        private CameraService cameraService;
+
+        void Awake()
+        {
+            cameraService = App.Cameras;
+        }
 
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
-            float cameraDistance = Mathf.Abs(1 - Camera.main.transform.position.y) * distanceMultiplier;
+            float cameraDistance = Mathf.Abs(1 - cameraService.ActiveCamera.transform.position.y) * distanceMultiplier;
             
             locationSphere = Instantiate(locationSpherePrefab);
             locationSphere.transform.localScale = Vector3.one * cameraDistance;
@@ -47,15 +55,14 @@ namespace Netherlands3D.FirstPersonViewer
 
             arrow.transform.localPosition = arrowPosition;
 
-            raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
+            var ray = cameraService.ActiveCamera.ScreenPointToRay(screenPoint);
+            var hit = raycaster.Raycast(ray.origin, ray.direction, out var point, snappingCullingMask);
+            if (hit)
             {
-                if (hit)
-                {
-                    //When the async call returns: If the object is destroyed. We don't need a position update.
-                    if (locationSphere == null) return;
-                    locationSphere.transform.position = point;
-                }
-            }, snappingCullingMask);
+                //When the async call returns: If the object is destroyed. We don't need a position update.
+                if (locationSphere == null) return;
+                locationSphere.transform.position = point;
+            }
         }
     }
 }

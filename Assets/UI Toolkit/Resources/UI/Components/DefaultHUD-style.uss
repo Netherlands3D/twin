@@ -59,9 +59,7 @@
 
 .default-hud__bottom-section {
     flex-direction: row;
-    flex-shrink: 0;
     align-items: flex-end;
-    max-height: var(--spacing-11);
 }
 
 .default-hud__bottom-info {
