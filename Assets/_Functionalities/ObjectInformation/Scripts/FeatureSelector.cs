@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Netherlands3D.SubObjects;
@@ -96,7 +96,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void FindFeatureAtPointerPosition()
         {            
-            Vector3 groundPosition = pointerToWorldPosition.GetWorldPointSync();
+            Vector3 groundPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
             FindFeatureByPosition(groundPosition);            
         }
 

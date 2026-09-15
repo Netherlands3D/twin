@@ -14,16 +14,16 @@ namespace Netherlands3D.UI.Panels
         //todo improve flow for specific imapping type?
         public override bool ShouldBeActive()
         {
-            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
+            SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+            Dictionary<string, IMapping> selectedMappings = selectionService.SelectedMappings;
             
             return selectedMappings.Values.Any(m => m is MeshMapping);
         }
 
         public override object GetData()
         {
-             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-             Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
+             SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+             Dictionary<string, IMapping> selectedMappings = selectionService.SelectedMappings;
             return selectedMappings;
         }
 
@@ -31,8 +31,8 @@ namespace Netherlands3D.UI.Panels
         {
             base.SpawnFloatingPanelContent(floatingPanel);
             content = new HideObjectPanel(constructorArgs[0] as Dictionary<string, IMapping>);
-            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            objectSelectorService.SelectSubObjectWithBagId.AddListener(OnUpdateMappings);
+            SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+            selectionService.SelectSubObjectWithBagId.AddListener(OnUpdateMappings);
             HideObjectPanel panel = content as HideObjectPanel;
             panel.OnClose.AddListener(CloseFloatingPanel);
             return content;
@@ -47,9 +47,9 @@ namespace Netherlands3D.UI.Panels
         private void CloseFloatingPanel()
         {
             floatingPanel.OnClose.Invoke();
-            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            objectSelectorService.SubObjectSelector.HideSelectedMappings();
-            objectSelectorService.Deselect();
+            SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+            selectionService.SubObjectSelector.HideSelectedMappings();
+            selectionService.Deselect();
         }
 
         public override void Dispose()
@@ -59,8 +59,8 @@ namespace Netherlands3D.UI.Panels
             
             base.Dispose();
             
-            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            objectSelectorService.SelectSubObjectWithBagId.RemoveListener(OnUpdateMappings); //todo: if the panel is destroyed outside of this script, the OnUpdateMappings would give a NullReferenceException
+            SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+            selectionService.SelectSubObjectWithBagId.RemoveListener(OnUpdateMappings); //todo: if the panel is destroyed outside of this script, the OnUpdateMappings would give a NullReferenceException
         }
     }
 }

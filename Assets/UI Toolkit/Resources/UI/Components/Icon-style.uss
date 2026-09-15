@@ -111,6 +111,7 @@
 .icon.image-scale-v-1 { background-image: var(--icon-scalev1); }
 .icon.image-scale-v-2 { background-image: var(--icon-scalev2); }
 .icon.image-scatter-object { background-image: var(--icon-scatterobject); }
+.icon.image-scenario { background-image: var(--icon-scenario); }
 .icon.image-search { background-image: var(--icon-search); }
 .icon.image-section { background-image: var(--icon-section); }
 .icon.image-selection-box { background-image: var(--icon-selectionbox); }

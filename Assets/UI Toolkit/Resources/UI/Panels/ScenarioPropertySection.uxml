@@ -1,0 +1,19 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    name="ScenarioPropertySection"
+    class="scenario-property-section"
+>
+    <nl3d:ContentContainer leading-icon="Scenario" text="Scenario instellingen">
+        <nl3d:CheckboxToggle name="ScenarioToggle" LabelText="Deze map gebruiken als scenario"/>
+
+        <ui:VisualElement class="scenario-property-section__explanation">
+            <ui:Label class="text-base" text="Een scenario is een map waarvan de lagen samen kunnen worden getoond. In de scenariobalk kan steeds één scenario actief zijn; alleen de lagen binnen dat scenario worden weergegeven. Schakel deze optie uit om er weer een gewone map van te maken."/>
+
+            <ui:Label class="text-base scenario-property-section__tip" enable-rich-text="true" text="&lt;b&gt;Tip:&lt;/b&gt; je kunt een gewone map ook omzetten door de naam te beginnen met ‘Scenario:’. Het voorvoegsel wordt daarna automatisch verwijderd."/>
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
+</ui:UXML>

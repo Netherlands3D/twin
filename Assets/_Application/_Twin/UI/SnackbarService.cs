@@ -68,7 +68,8 @@ namespace Netherlands3D.Twin.Services
             OnShowMessage.Invoke();
 
             yield return GetWaitForSeconds(duration);
-
+            if (item.IsClosed) yield break;
+            
             snackbarPanel.RemoveItem(item);
             OnHideMessage.Invoke();
         }

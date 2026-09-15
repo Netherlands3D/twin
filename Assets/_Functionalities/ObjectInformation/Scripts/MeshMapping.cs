@@ -103,7 +103,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public Coordinate GetCoordinateForObjectMappingItem(ObjectMapping objectMapping, ObjectMappingItem mapping)
         {
             MeshFilter mFilter = objectMapping.gameObject.GetComponent<MeshFilter>();
-            Vector3[] vertices = mFilter.sharedMesh.vertices;
             Vector3 centr = Vector3.zero;
             for (int i = mapping.firstVertex; i < mapping.firstVertex + mapping.verticesLength; i++)
                 centr += vertices[i];
