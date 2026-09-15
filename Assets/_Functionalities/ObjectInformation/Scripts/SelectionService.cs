@@ -25,21 +25,20 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
-        public HierarchicalObjectLayerGameObject SelectedVisualisation => selectedVisualisation;
+        public LayerGameObject SelectedVisualisation => selectedVisualisation;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
         public UnityEvent<LayerData> OnSelectLayer = new();
         public UnityEvent OnNoLayerSelected = new();
-        public UnityEvent OnSelectionProcessed = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
         private PolygonSelectionService polygonSelectionService;
         private List<IMapping> orderedMappings = new();
         private Dictionary<string, IMapping> selectedMappings = new();
-        private HierarchicalObjectLayerGameObject selectedVisualisation;
+        private LayerGameObject selectedVisualisation;
         private Vector3 lastWorldClickedPosition;
         private PointerToWorldPosition pointerToWorldPosition;
         private float minClickDistance = 10;
@@ -92,10 +91,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
-            toolService = ServiceLocator.GetService<ToolService>();
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            contextMenuBehaviour = App.UIRoot.GetComponent<ContextMenuBehaviour>();
-            
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
         }
@@ -137,7 +132,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
       
         private void Start()
         {
+            toolService = ServiceLocator.GetService<ToolService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+            contextMenuBehaviour = ServiceLocator.GetService<ContextMenuBehaviour>();
             InputService inputService = ServiceLocator.GetService<InputService>();
+            
             inputService.LeftClickUpAction.performed += OnLeftClickUp;
             inputService.RightClickUpAction.performed += OnRightClickUp;
             inputService.LeftClickAction.performed += OnLeftClick;
@@ -292,15 +291,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             HierarchicalObjectLayerGameObject ctxObject;
             if (IsColliderClicked(out ctxObject))
             {
-                if (ctxObject != null)
-                {
-                    selectedVisualisation = ctxObject;
-                    if (!ctxObject.LayerData.IsSelected)
-                    {
-                        ctxObject.LayerData.SelectLayer(true);
-                    }
-                    OnSelectLayer.Invoke(ctxObject.LayerData);
-                }
+                SelectVisualisation(ctxObject);
                 Deselect();
                 return;
             }
@@ -364,6 +355,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             OnSelectLayer.Invoke(layerData);
         }
 
+        public void SelectVisualisation(LayerGameObject ctxObject)
+        {
+            if (ctxObject != null)
+            {
+                selectedVisualisation = ctxObject;
+                ctxObject.LayerData.SelectLayer(true);
+                OnSelectLayer.Invoke(ctxObject.LayerData);
+            }
+        }
+        
         public void SelectBagId(string bagId, Coordinate coordinate)
         {
             MeshMapping mapping = subObjectSelector.FindSubObjectAtCoordinate(coordinate, bagId);

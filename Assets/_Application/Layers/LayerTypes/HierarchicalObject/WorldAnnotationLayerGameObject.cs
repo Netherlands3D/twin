@@ -1,30 +1,35 @@
+using System;
 using System.Collections.Generic;
-using GG.Extensions;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Tools;
-using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject
+    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject, IVisualizationWithWorldUI
     {
-        [SerializeField] private TextPopout popoutPrefab;
-        private Tool layerTool;
+        private SelectionService selectionService;
+        private InputService inputService;
+        private ContextMenuBehaviour contextMenuBehaviour;
+        private CameraService cameraService;
+        private AppRootBehaviour appRootBehaviour;
+        private WorldText worldTextElement; 
+        private FloatingElement floatingElement;
 
-        private TextPopout annotation;
-        private enum EditMode
-        {
-            Disabled, // Neither move the annotation, nor edit the text
-            Move, // Move the annotation in the world, but don't edit the text
-            TextEdit // Edit the text of the annotation, do not move the annotation
-        }
-        private EditMode mode = EditMode.Disabled;
+        public VisualElement VisualElement => worldTextElement;
+        
+        private const float offsetPixels = 50; //todo make this from uss instead
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
@@ -32,167 +37,109 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnVisualizationInitialize()
         {
             base.OnVisualizationInitialize();
-            layerTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.Layer);
-            CreateTextPopup();
-           
-            WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
+            inputService = ServiceLocator.GetService<InputService>();
+            selectionService = ServiceLocator.GetService<SelectionService>();
+            contextMenuBehaviour  = ServiceLocator.GetService<ContextMenuBehaviour>();
+            cameraService = App.Cameras;
+            appRootBehaviour = App.UIRoot;
+            InitializeWorldUI();
         }
 
-        private void OnBlockerClicked()
+        private void InitializeWorldUI()
         {
-            if(mode == EditMode.TextEdit)
-                SetEditMode(EditMode.Move);
+            floatingElement = new FloatingElement();
+            contextMenuBehaviour.AddToFloatingElementsContent(floatingElement);
+            worldTextElement = new WorldText("");
+            worldTextElement.SetSnappingSide(WorldText.SnappingSide.Above);
+            worldTextElement.SetLabelOffset(offsetPixels);
+            floatingElement.Add(worldTextElement);
         }
 
-        private void CreateTextPopup()
+        private void OnEditChanged(bool isEditing)
         {
-            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
-
-            annotation = Instantiate(popoutPrefab, canvas.transform);
-            annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
-            annotation.SetSnappingSide(TextPopout.SnappingSide.Above);
-            annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest           
-            annotation.ReadOnly = !layerTool.IsOpen;       
-        }
-        
-        private void OnDestroy()
-        {
-            Destroy(annotation.gameObject);
-        }
-
-        private void OnAnnotationSelected()
-        {
-            if(!layerTool.IsOpen)
-                return;
-            
-            SetEditMode(EditMode.Move);
-        }
-
-        private void OnAnnotationDoubleClicked()
-        {
-            if (!layerTool.IsOpen)
-            {
-                layerTool.Open();
-                SetEditMode(EditMode.Move);
-            }
+            if(isEditing)
+                ClearTransformHandles();
             else
             {
-                SetEditMode(EditMode.TextEdit);
+                AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+                annotationPropertyData.AnnotationText = worldTextElement.Text;
             }
-        }
-        
-        private void OnAnnotationTextConfirmed()
-        {
-            SetEditMode(EditMode.Move);
-        }
-
-        private void SetEditMode(EditMode newMode)
-        {
-            mode = newMode;
-            switch (mode)
-            {
-                case EditMode.Disabled:
-                    annotation.ReadOnly = true;
-                    annotation.SelectableText = true;
-                    LayerData.DeselectLayer();
-                    WorldInteractionBlocker.ReleaseBlocker(this);
-                    break;    
-                case EditMode.Move:
-                    annotation.ReadOnly = true;
-                    annotation.SelectableText = false;
-                    LayerData.SelectLayer(true);
-                    WorldInteractionBlocker.ReleaseBlocker(this);
-                    break;
-                case EditMode.TextEdit:
-                    annotation.ReadOnly = false;
-                    annotation.SelectableText = true;
-                    LayerData.SelectLayer(true);
-                    WorldInteractionBlocker.AddBlocker(this);
-                    ClearTransformHandles();
-                    break;
-            }
-        }
-        
-        private void SetPropertyDataText(string annotationText)
-        {
-            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.AnnotationText = annotationText;
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-            annotation.StickTo(WorldTransform.Coordinate);
+            
+            inputService.SetCameraActionsEnabled(!isEditing);
         }
         
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-            List<LayerFeature> features = CreateFeaturesByType<Image>(annotation.gameObject);
-            foreach (var feature in features)
-            {
-                if (feature.Geometry is not Image image) continue;
-
-                Symbolizer styling = GetStyling(feature);
-                var fillColor = styling.GetFillColor();
-
-                // Keep the original material color if fill color is not set (null)
-                if (!fillColor.HasValue) continue;
-
-                image.color = fillColor.Value;
-            }
+            LayerFeature feature = CreateFeature(worldTextElement);
+            Symbolizer styling = GetStyling(feature);
+            var fillColor = styling.GetFillColor();
+            if (fillColor.HasValue)
+                worldTextElement.SetColor(fillColor.Value);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
             InitProperty<AnnotationPropertyData>(properties, null, "");
-            
         }
 
         protected override void OnVisualizationReady()
         {
             base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
-            UpdateAnnotation(annotationPropertyData.AnnotationText);
+            worldTextElement.SetText(annotationPropertyData.AnnotationText);
+        }
+        
+        private void OnClickAnnotation(PointerDownEvent e)
+        {
+            selectionService.SelectVisualisation(this);
         }
 
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
+            worldTextElement.NameField.OnEditingChanged.AddListener(OnEditChanged);
+            worldTextElement.RegisterCallback<PointerDownEvent>(OnClickAnnotation);
+            
             var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
-
-            annotation.OnEndEdit.AddListener(SetPropertyDataText);
-            annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
-            annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
-            annotation.TextFieldInputConfirmed.AddListener(OnAnnotationTextConfirmed);
+            annotationPropertyData.OnAnnotationTextChanged.AddListener(worldTextElement.SetText);
         }
 
         protected override void UnregisterEventListeners()
         {
             base.UnregisterEventListeners();
-            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
-
-            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
-            annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
-            annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
-            annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
+            worldTextElement.NameField.OnEditingChanged.RemoveListener(OnEditChanged);
+            worldTextElement.UnregisterCallback<PointerDownEvent>(OnClickAnnotation);
             
-            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
-        }
-
-        private void UpdateAnnotation(string newText)
-        {
-            annotation.SetTextWithoutNotify(newText);
+            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(worldTextElement.SetText);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
-            annotation.gameObject.SetActive(isActive);
+            SetVisible(isActive);
+        }
+        
+        public void SetVisible(bool visible)
+        {
+            worldTextElement.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(WorldTransform.Coordinate.ToUnity());
+            Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
+            var localPos = contextMenuBehaviour.FloatingElementsContent.WorldToLocal(panelPos);
+            floatingElement.SetPosition(localPos);
+        }
+        
+        private void OnDestroy()
+        {
+            contextMenuBehaviour.RemoveFromFloatingElementsContent(floatingElement);
+            floatingElement = null;
         }
     }
 }
