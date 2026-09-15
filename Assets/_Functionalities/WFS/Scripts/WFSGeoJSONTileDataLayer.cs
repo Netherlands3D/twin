@@ -233,8 +233,8 @@ namespace Netherlands3D.Functionalities.Wfs
 
                 if (parsedThisPage == 0) // stop if no features
                     break;
-                else
-                    Debug.Log((startIndex + parsedThisPage) + " parsed features for " + url); 
+                // else
+                //     Debug.Log((startIndex + parsedThisPage) + " parsed features for " + url); 
 
                 startIndex += parsedThisPage;
             }

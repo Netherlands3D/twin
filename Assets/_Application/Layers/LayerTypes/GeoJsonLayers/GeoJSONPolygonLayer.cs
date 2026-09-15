@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [SerializeField] private Material polygonVisualizationMaterial;
 
-        internal Material polygonVisualizationMaterialInstance;
+        private Material polygonVisualizationMaterialInstance;
         [SerializeField] private Material polygonSelectionVisualizationMaterial;
 
         public Color RenderColor

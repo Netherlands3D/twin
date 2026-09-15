@@ -42,6 +42,10 @@ namespace Netherlands3D.Twin.layers.properties
             layers.Add(visualization.PolygonLayer);
             layers.Add(visualization.LineLayer);
             layers.Add(visualization.PointLayer);
+            
+            visualization.PolygonLayer.RenderColor = visualization.LayerData.Color;
+            visualization.LineLayer.RenderColor = visualization.LayerData.Color;
+            visualization.PointLayer.RenderColor = visualization.LayerData.Color;
         }
 
         private void UpdateStyling(Feature feature)
@@ -67,8 +71,9 @@ namespace Netherlands3D.Twin.layers.properties
                 CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
                 if (layer.FeatureCount > 0)
                 {
-                    var color = featureColorPropertyData.GetColor(layerFeature);
-                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white));
+                    string colorProperty = GetColorPropertyTypeForLayer(layer);
+                    var color = featureColorPropertyData.GetColor(layerFeature, colorProperty);
+                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(visualization.LayerData.Color), colorProperty);
                 }
                 else
                 {
@@ -114,13 +119,25 @@ namespace Netherlands3D.Twin.layers.properties
                 {
                     if (layers[i].SupportsGeometryType(GeoJSONObjectType.Point) || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiPoint))
                         return "punten";
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.LineString)  || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiLineString))
+                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.LineString) || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiLineString))
                         return "lijnen";
                     if (layers[i].SupportsGeometryType(GeoJSONObjectType.Polygon) ||  layers[i].SupportsGeometryType(GeoJSONObjectType.MultiPolygon))
                         return "polygonen";
                 }
             
             return null;
+        }
+
+        public string GetColorPropertyTypeForLayer(IGeoJsonVisualisationLayer layer)
+        {
+            if (layer.SupportsGeometryType(GeoJSONObjectType.Point) || layer.SupportsGeometryType(GeoJSONObjectType.MultiPoint))
+                return Symbolizer.FillColorProperty;
+            if (layer.SupportsGeometryType(GeoJSONObjectType.LineString) || layer.SupportsGeometryType(GeoJSONObjectType.MultiLineString))
+                return Symbolizer.StrokeColorProperty;
+            if (layer.SupportsGeometryType(GeoJSONObjectType.Polygon) ||  layer.SupportsGeometryType(GeoJSONObjectType.MultiPolygon))
+                return Symbolizer.FillColorProperty;
+            
+            return Symbolizer.FillColorProperty;
         }
         
         protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
