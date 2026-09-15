@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Services
 
         public void ChangeDebugStatsToolAvailability(bool available)
         {
-#if TRUE || !DEVELOPMENT_BUILD && !UNITY_EDITOR
+#if !DEVELOPMENT_BUILD && !UNITY_EDITOR
             if (!HasDebugStatsUrlParameter())
                 return;
 #endif
@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Services
         }
         
         
-#if TRUE || !DEVELOPMENT_BUILD && !UNITY_EDITOR
+#if !DEVELOPMENT_BUILD && !UNITY_EDITOR
         private static bool HasDebugStatsUrlParameter()
         {
             if (!Uri.TryCreate(Application.absoluteURL, UriKind.Absolute, out var url))
