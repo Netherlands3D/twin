@@ -46,6 +46,19 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         [JsonIgnore] public readonly UnityEvent OnStylingChanged = new();
         [JsonIgnore] public readonly UnityEvent<string> ColorTypeChanged = new();
+        
+        [JsonIgnore] protected string colorType = Symbolizer.FillColorProperty; //default
+
+        [JsonIgnore]
+        public string ColorType
+        {
+            get => colorType;
+            set
+            {
+                colorType = value;
+                ColorTypeChanged.Invoke(value);
+            }
+        }
 
         public StylingPropertyData()
         {   

@@ -4,7 +4,6 @@
     flex-grow: 0;
     align-items: flex-end;
     justify-content: flex-end;
-    height: var(--spacing-6);
     margin: 0 var(--spacing-3) var(--spacing-1) 0;
 }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
@@ -70,17 +71,17 @@ namespace Netherlands3D.UI.Panels
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
-            //return item;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
-            //if (item.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
            
             string stylingRuleKey = swatchesListView.itemsSource[index] as string;
-            Color? color = stylingPropertyData.GetColorByStylingRuleKey(stylingRuleKey);
+            //todo getting the probable coloring type for a stylingrule like this should be fixed in the future by chosing the option in the ui since this is not available yet, we need to do a guess based on available coloring propertytypes in the styling rule
+            string colorProperty = stylingPropertyData.GetColorPropertyTypeForStylingRule(stylingRuleKey);
+            Color? color = stylingPropertyData.GetColorByStylingRuleKey(stylingRuleKey, colorProperty);
             if (color.HasValue)
             {
                 tile.Tile.ColorHex = ColorUtility.ToHtmlStringRGB(color.Value);
@@ -130,7 +131,7 @@ namespace Netherlands3D.UI.Panels
                 data.color = color;
                 colorData.Add(data);
             }
-            stylingPropertyData.SetColorsByMaterialIndices(colorData);
+            stylingPropertyData.SetColorsByMaterialIndices(colorData, Symbolizer.FillColorProperty);
         }
     }
 }

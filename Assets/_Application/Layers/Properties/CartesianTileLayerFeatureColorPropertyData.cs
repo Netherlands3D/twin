@@ -23,17 +23,17 @@ namespace Netherlands3D.Twin.Layers.Properties
             public Color color;
         }
         
-        public void SetColor(LayerFeature layerFeature, Color color)
+        public void SetColor(LayerFeature layerFeature, Color color, string colorPropertyType)
         {
             if (layerFeature.Geometry is not Material mat) return;
             
             int.TryParse(layerFeature.Attributes[MaterialIndexKey], out int materialIndexIdentifier);
             layerFeature.Attributes.TryGetValue(MaterialNameIdentifier, out string materialName);
 
-            SetColorByMaterialIndex(materialIndexIdentifier, materialName, color);
+            SetColorByMaterialIndex(materialIndexIdentifier, materialName, color, colorPropertyType);
         }
         
-        public void SetColorByMaterialIndex(int index, string name, Color color)
+        public void SetColorByMaterialIndex(int index, string name, Color color, string colorPropertyType)
         {
             var stylingRuleName = name;
             var stylingRuleKey = ColorizationStyleRuleKey(index);
@@ -46,13 +46,11 @@ namespace Netherlands3D.Twin.Layers.Properties
                     index.ToString()
                 )
             );
-            stylingRule.Symbolizer.SetFillColor(color);
-
+            SetColorByColorPropertyType(color, stylingRule, colorPropertyType);
             SetStylingRule(stylingRuleKey, stylingRule);
         }
-
         
-        public void SetColorsByMaterialIndices(List<ColorData> colors)
+        public void SetColorsByMaterialIndices(List<ColorData> colors, string colorPropertyType)
         {
             stylingRuleKeys.Clear();
             foreach (var colorData in colors)
@@ -68,13 +66,14 @@ namespace Netherlands3D.Twin.Layers.Properties
                         colorData.index.ToString()
                     )
                 );
-                stylingRule.Symbolizer.SetFillColor(colorData.color);
+                //todo whenever the ui changes we should be able to choose which color property type here to use
+                SetColorByColorPropertyType(colorData.color, stylingRule, colorPropertyType);
                 stylingRuleKeys.Add(stylingRuleKey, stylingRule);
             }
             SetStylingRules(stylingRuleKeys);
         }
         
-        public Color? GetColor(LayerFeature layerFeature)
+        public Color? GetColor(LayerFeature layerFeature, string colorPropertyType)
         {
             if (layerFeature.Geometry is not Material mat) return null;
 
@@ -87,26 +86,16 @@ namespace Netherlands3D.Twin.Layers.Properties
                 else
                     return null;
             }
-            return stylingRule.Symbolizer.GetFillColor();
+            return GetColorByColorPropertyType(stylingRule, colorPropertyType);
         }
         
-        public Color? GetColorByMaterialIndex(int index)
-        {
-            var stylingRuleKey = ColorizationStyleRuleKey(index);
-            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
-            {
-                return null;
-            }
-            return stylingRule.Symbolizer.GetFillColor();
-        }
-
-        public Color? GetColorByStylingRuleKey(string stylingRuleKey)
+        public Color? GetColorByStylingRuleKey(string stylingRuleKey, string colorPropertyType)
         {
             if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
             {
                 return null;
             }
-            return stylingRule.Symbolizer.GetFillColor();
+            return GetColorByColorPropertyType(stylingRule, colorPropertyType);
         }
         
         public void RemoveColorForMaterialIndex(int index)
@@ -158,6 +147,51 @@ namespace Netherlands3D.Twin.Layers.Properties
                 }
             }
             return keys;
+        }
+
+        public string GetColorPropertyTypeForStylingRule(string stylingRuleKey)
+        {
+            if (StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
+            {
+                Color? color = stylingRule.Symbolizer.GetStrokeColor();
+                if(color.HasValue)
+                    return Symbolizer.StrokeColorProperty;
+                
+                color = stylingRule.Symbolizer.GetFillColor();
+                if(color.HasValue)
+                    return Symbolizer.FillColorProperty;
+         
+            }
+            return null;
+        }
+        
+        private void SetColorByColorPropertyType(Color color, StylingRule stylingRule, string colorPropertyType)
+        {
+            switch (colorPropertyType)
+            {
+                case Symbolizer.FillColorProperty:
+                    stylingRule.Symbolizer.SetFillColor(color);
+                    break;
+                case Symbolizer.StrokeColorProperty:
+                    stylingRule.Symbolizer.SetStrokeColor(color);
+                    break;
+                default:
+                    stylingRule.Symbolizer.SetFillColor(color);
+                    break;
+            }
+        }
+
+        private Color? GetColorByColorPropertyType(StylingRule stylingRule, string colorPropertyType)
+        {
+            switch (colorPropertyType)
+            {
+                case Symbolizer.FillColorProperty:
+                    return stylingRule.Symbolizer.GetFillColor();
+                case Symbolizer.StrokeColorProperty:
+                    return stylingRule.Symbolizer.GetStrokeColor();
+                default:
+                    return stylingRule.Symbolizer.GetFillColor();
+            }
         }
     }
 }

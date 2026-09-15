@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.ObjectInformation
 
         public void SetBuildingIdsToHide(List<string> ids)
         {
-            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selector = ServiceLocator.GetService<SelectionService>();
             foreach (string id in buildingColors.Keys)
                 selector.BlockBagId(id, false);
             buildingColors.Clear();

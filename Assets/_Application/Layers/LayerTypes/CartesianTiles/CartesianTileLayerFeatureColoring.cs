@@ -51,8 +51,8 @@ namespace Netherlands3D.Twin.layers.properties
 
                 var layerFeature = visualization.CreateFeature(material);
                 visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-                var color = featureColorPropertyData.GetColor(layerFeature);
-                featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white));
+                var color = featureColorPropertyData.GetColor(layerFeature, Symbolizer.FillColorProperty);
+                featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white), Symbolizer.FillColorProperty);
             }
         }
         

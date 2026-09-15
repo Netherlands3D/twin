@@ -148,12 +148,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             public void SnapFromPosition(Vector3 position)
             {
-                Raycaster.GetWorldPointFromDirectionAsync(
+                var isHit = Raycaster.Raycast(
                     position,
                     Vector3.down,
-                    OnRaycastDown,
+                    out var hitPosition,
                     cullingMask
                 );
+                OnRaycastDown(hitPosition, isHit);
             }
 
             private void OnRaycastDown(Vector3 worldPos, bool hit)
@@ -165,12 +166,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 }
                 else
                 {
-                    Raycaster.GetWorldPointFromDirectionAsync(
+                    var isHit = Raycaster.Raycast(
                         PreviousPosition,
                         Vector3.up,
-                        OnRaycastUp,
+                        out var hitPosition,
                         cullingMask
                     );
+                    OnRaycastUp(hitPosition, isHit);
                 }
             }
 

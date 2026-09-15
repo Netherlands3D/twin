@@ -14,12 +14,12 @@ namespace Netherlands3D.UI.Panels
         
         public override bool ShouldBeActive()
         {
-            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            if (objectSelectorService.SelectedVisualisation != null)
+            SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+            if (selectionService.SelectedVisualisation != null)
             {
-                target = objectSelectorService.SelectedVisualisation.LayerData;
+                target = selectionService.SelectedVisualisation.LayerData;
             }
-            return  objectSelectorService.SelectedVisualisation != null;
+            return  selectionService.SelectedVisualisation != null;
         }
 
         public override object GetData()
