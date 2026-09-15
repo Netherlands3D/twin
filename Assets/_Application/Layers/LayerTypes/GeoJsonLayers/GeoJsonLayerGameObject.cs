@@ -57,11 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         [SerializeField] private GeoJSONPolygonLayer polygonFeaturesLayer;
         [SerializeField] private GeoJSONLineLayer lineFeaturesLayer;
         [SerializeField] private GeoJSONPointLayer pointFeaturesLayer;
-
-        private bool hasPolygons;
-        private bool hasLines;
-        private bool hasPoints;
-
+        
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
         
@@ -218,17 +214,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 case GeoJSONObjectType.MultiPolygon:
                 case GeoJSONObjectType.Polygon:
                     AddFeature(feature, crs, polygonFeaturesLayer);
-                    hasPolygons = true;
                     return;
                 case GeoJSONObjectType.MultiLineString:
                 case GeoJSONObjectType.LineString:
                     AddFeature(feature, crs, lineFeaturesLayer);
-                    hasLines = true;
                     return;
                 case GeoJSONObjectType.MultiPoint:
                 case GeoJSONObjectType.Point:
                     AddFeature(feature, crs, pointFeaturesLayer);
-                    hasPoints = true;
                     return;
                 default:
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
