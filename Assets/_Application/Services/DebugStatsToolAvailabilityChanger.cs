@@ -11,25 +11,25 @@ namespace Netherlands3D.Twin.Services
 
         public void ChangeDebugStatsToolAvailability(bool available)
         {
-            var debugStatsTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.DebugStats);
-            
 #if !DEVELOPMENT_BUILD && !UNITY_EDITOR
-            // Don't show debugStats in a release build for the users.
-            // A developer can still turn it on when really persistent.
-            if (available)
-            {
-                available = false;
-                availableCounter++;
-                if (availableCounter >= 10)
-                {
-                    available = true;
-                    availableCounter = 0;
-                }
-            }
+            if (!HasDebugStatsUrlParameter())
+                return;
 #endif
-            debugStatsTool.SetAvailability(available);
             
+            var debugStatsTool = ServiceLocator.GetService<ToolService>().GetTool(ToolType.DebugStats);
+            debugStatsTool.SetAvailability(available);
         }
+        
+        
+#if !DEVELOPMENT_BUILD && !UNITY_EDITOR
+        private static bool HasDebugStatsUrlParameter()
+        {
+            if (!Uri.TryCreate(Application.absoluteURL, UriKind.Absolute, out var url))
+                return false;
+
+            return QueryString.Decode(url.Query).ContainsKey("debugstats");
+        }
+#endif
         
     }
 }
