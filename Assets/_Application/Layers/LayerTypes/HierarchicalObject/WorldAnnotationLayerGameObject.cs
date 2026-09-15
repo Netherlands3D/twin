@@ -4,6 +4,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
@@ -18,22 +19,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject, IVisualizationWithWorldUI
     {
-        [SerializeField] private bool debug = false;
-        [SerializeField] private Material debugMaterial;
-        
         private SelectionService selectionService;
         private InputService inputService;
         private ContextMenuBehaviour contextMenuBehaviour;
-        private GameObject testObject = null;
-        public WorldText element;
-        public FloatingElement floatingElement;
+        private CameraService cameraService;
+        private AppRootBehaviour appRootBehaviour;
+        private WorldText worldTextElement; 
+        private FloatingElement floatingElement;
+
+        public VisualElement VisualElement => worldTextElement;
         
-        public VisualElement GetVisualElement()
-        {
-            return element;
-        }
-        
-        //private AnnotationTextObject annotation;
         private const float offsetPixels = 50; //todo make this from uss instead
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
@@ -45,23 +40,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             inputService = ServiceLocator.GetService<InputService>();
             selectionService = ServiceLocator.GetService<SelectionService>();
             contextMenuBehaviour  = ServiceLocator.GetService<ContextMenuBehaviour>();
+            cameraService = App.Cameras;
+            appRootBehaviour = App.UIRoot;
             InitializeWorldUI();
         }
 
         private void InitializeWorldUI()
         {
-            FloatingElement floatingElement = new FloatingElement();
+            floatingElement = new FloatingElement();
             contextMenuBehaviour.AddToFloatingElementsContent(floatingElement);
-           
-            this.floatingElement = floatingElement;
-            if(floatingElement == null)
-                throw new Exception("FloatingElement is missing");
-            
-            element = new WorldText();
-            element.SetText("");
-            element.SetSnappingSide(WorldText.SnappingSide.Above);
-            element.SetLabelOffset(offsetPixels);
-            floatingElement.Add(element);
+            worldTextElement = new WorldText("");
+            worldTextElement.SetSnappingSide(WorldText.SnappingSide.Above);
+            worldTextElement.SetLabelOffset(offsetPixels);
+            floatingElement.Add(worldTextElement);
         }
 
         private void OnEditChanged(bool isEditing)
@@ -69,7 +60,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if(isEditing)
                 ClearTransformHandles();
             else
-                SetPropertyDataText(element.Text);
+            {
+                AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+                annotationPropertyData.AnnotationText = worldTextElement.Text;
+            }
             
             inputService.SetCameraActionsEnabled(!isEditing);
         }
@@ -77,11 +71,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-            LayerFeature feature = CreateFeature(element);
+            LayerFeature feature = CreateFeature(worldTextElement);
             Symbolizer styling = GetStyling(feature);
             var fillColor = styling.GetFillColor();
             if (fillColor.HasValue)
-                element.SetColor(fillColor.Value);
+                worldTextElement.SetColor(fillColor.Value);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
@@ -94,14 +88,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            SetPropertyDataText(annotationPropertyData.AnnotationText);
-        }
-        
-        private void SetPropertyDataText(string annotationText)
-        {
-            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.AnnotationText = annotationText;
-            element.SetText(annotationText);
+            worldTextElement.SetText(annotationPropertyData.AnnotationText);
         }
         
         private void OnClickAnnotation(PointerDownEvent e)
@@ -112,15 +99,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
-            element.NameField.OnEditingChanged.AddListener(OnEditChanged);
-            element.RegisterCallback<PointerDownEvent>(OnClickAnnotation);
+            worldTextElement.NameField.OnEditingChanged.AddListener(OnEditChanged);
+            worldTextElement.RegisterCallback<PointerDownEvent>(OnClickAnnotation);
+            
+            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            annotationPropertyData.OnAnnotationTextChanged.AddListener(worldTextElement.SetText);
         }
 
         protected override void UnregisterEventListeners()
         {
             base.UnregisterEventListeners();
-            element.NameField.OnEditingChanged.RemoveListener(OnEditChanged);
-            element.UnregisterCallback<PointerDownEvent>(OnClickAnnotation);
+            worldTextElement.NameField.OnEditingChanged.RemoveListener(OnEditChanged);
+            worldTextElement.UnregisterCallback<PointerDownEvent>(OnClickAnnotation);
+            
+            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(worldTextElement.SetText);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -131,31 +124,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         public void SetVisible(bool visible)
         {
-            element.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+            worldTextElement.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
 
         protected override void Update()
         {
             base.Update();
-            var screenPos =  App.Cameras.ActiveCamera.WorldToScreenPoint(WorldTransform.Coordinate.ToUnity());
-            Vector2 panelPos = App.UIRoot.GetUIPositionFromScreenPosition(screenPos);
+            var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(WorldTransform.Coordinate.ToUnity());
+            Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
             var contentPos = contextMenuBehaviour.FloatingElementsContent.worldBound.position;
             var localPos = panelPos - contentPos;
             floatingElement.SetPosition(localPos);
-            
-            if(debug)
-            {
-                if (testObject == null)
-                {
-                    testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    Destroy(testObject.GetComponent<Collider>());
-
-                    testObject.transform.localScale = new Vector3(10f, 10f, 10f);
-                    MeshRenderer meshRenderer = testObject.GetComponent<MeshRenderer>();
-                    meshRenderer.material = debugMaterial;
-                }
-                testObject.transform.position = WorldTransform.Coordinate.ToUnity();
-            }
         }
         
         private void OnDestroy()

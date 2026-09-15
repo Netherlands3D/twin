@@ -5,6 +5,6 @@ namespace Netherlands3D.Twin.Layers
 {
     public interface IVisualizationWithWorldUI
     {
-        public VisualElement GetVisualElement();
+        public VisualElement VisualElement { get; }
     }
 }

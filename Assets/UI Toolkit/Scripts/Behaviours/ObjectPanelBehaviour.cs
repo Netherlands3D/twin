@@ -21,7 +21,7 @@ namespace Netherlands3D.UI.Panels
                 target = selectionService.SelectedVisualisation.LayerData;
                 if (selectionService.SelectedVisualisation is IVisualizationWithWorldUI worldUI && App.UIRoot.IsPointerOverUI(out VisualElement element))
                 {
-                    VisualElement parent = worldUI.GetVisualElement();
+                    VisualElement parent = worldUI.VisualElement;
                     if (parent == element || parent.Contains(element))
                     {
                         return true;

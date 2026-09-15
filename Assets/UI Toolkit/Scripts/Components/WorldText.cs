@@ -27,7 +27,7 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
         private bool waitingForClick = false;
         private string currentText;
-        
+
         public WorldText()
         {
             this.CloneComponentTree("Components");
@@ -46,9 +46,11 @@ namespace Netherlands3D.UI.Components
             nameField.RegisterValueChangedCallback(evt => UpdateContainerSize());
             
             nameField.ScrollingTextEnabled = false;
-            //nameField.InputField.multiline = true;
-
-            //schedule.Execute(UpdateContainerSize).Every(30);
+        }
+        
+        public WorldText(string text) : this()
+        {
+            SetText(text);
         }
 
         private void OnNameChanged(ChangeEvent<string> evt)
