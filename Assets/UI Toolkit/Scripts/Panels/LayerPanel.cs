@@ -91,8 +91,8 @@ namespace Netherlands3D.UI.Panels
             dragGhost = this.Q<LayerDragGhost>();
             dragGhost.SetVisible(false);
             
-            App.Layers.LayerAdded.AddListener(OnLayerHierarchyChanged);
-            App.Layers.LayerRemoved.AddListener(OnLayerHierarchyChanged);
+            App.Layers.LayerAdded.AddListener(OnLayerAdded);
+            App.Layers.LayerRemoved.AddListener(OnLayerRemoved);
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             
@@ -124,15 +124,25 @@ namespace Netherlands3D.UI.Panels
             OnRequestRebuild();
         }
 
-        private void OnLayerHierarchyChanged(LayerData changedLayer)
+        private void OnLayerAdded(LayerData _)
+        {
+            OnHierarchyChanged();
+        }
+        
+        private void OnLayerRemoved(LayerData _, bool __)
+        {
+            OnHierarchyChanged();
+        }
+
+        private void OnHierarchyChanged()
         {
             OnRequestRebuild();
         }
         
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            App.Layers.LayerAdded.RemoveListener(OnLayerHierarchyChanged);
-            App.Layers.LayerRemoved.RemoveListener(OnLayerHierarchyChanged);
+            App.Layers.LayerAdded.RemoveListener(OnLayerAdded);
+            App.Layers.LayerRemoved.RemoveListener(OnLayerRemoved);
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
         }
 

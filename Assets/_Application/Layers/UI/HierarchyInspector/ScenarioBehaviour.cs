@@ -72,7 +72,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             RegisterFolder(folderProperty, layer);
         }
         
-        private void OnLayerRemoved(LayerData layer)
+        private void OnLayerRemoved(LayerData layer, bool _)
         {
             var folderProperty = layer.GetProperty<FolderPropertyData>();
             if (folderProperty == null)

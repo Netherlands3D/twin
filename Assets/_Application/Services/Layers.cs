@@ -17,7 +17,21 @@ namespace Netherlands3D.Twin.Services
         private VisualizationSpawner spawner;
         
         public UnityEvent<LayerData> LayerAdded { get; } = new();
-        public UnityEvent<LayerData> LayerRemoved { get; } = new();
+        
+        // <summary>
+        /// Invoked when a layer is removed.
+        /// </summary>
+        /// <remarks>
+        /// Arguments:
+        /// <list type="bullet">
+        /// <item><see cref="LayerData"/>: the removed layer.</item>
+        /// <item>
+        /// <see cref="bool"/> (<c>isRemovalRoot</c>): <c>true</c> when this is the
+        /// top-level layer being removed; <c>false</c> for recursively removed descendants.
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public UnityEvent<LayerData, bool> LayerRemoved { get; } = new();
         public UnityEvent<LayerGameObject> VisualizationCreated = new();
 
         private void Awake()
@@ -107,8 +121,18 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public void Remove(LayerData layerData)
         {
-            layerData.Dispose();
-            LayerRemoved.Invoke(layerData);
+            RemoveRecursive(layerData, true);
+        }
+
+        private void RemoveRecursive(LayerData layerData, bool isUpperParent)
+        {
+            for (var i = layerData.ChildrenLayers.Count - 1; i >= 0; i--)
+            {
+                RemoveRecursive(layerData.ChildrenLayers[i], false);
+            }
+            
+            layerData.Destroy();
+            LayerRemoved.Invoke(layerData, isUpperParent);
         }
 
         public Layer VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
