@@ -34,7 +34,6 @@ namespace Netherlands3D.UI.Panels
             swatchesListView.makeItem = MakeListViewItem;
             swatchesListView.bindItem = BindListViewItem;
             
-            
             //when clicked outside the listview, deselect the current selection
             swatchesListView.RegisterCallback<BlurEvent>(evt =>
             {
@@ -80,10 +79,13 @@ namespace Netherlands3D.UI.Panels
             if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
             //if (item.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
            
-            string color = swatchesListView.itemsSource[index] as string;
-            tile.Tile.ColorHex = color;
-            
-            string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
+            string stylingRuleKey = swatchesListView.itemsSource[index] as string;
+            Color? color = stylingPropertyData.GetColorByStylingRuleKey(stylingRuleKey);
+            if (color.HasValue)
+            {
+                tile.Tile.ColorHex = ColorUtility.ToHtmlStringRGB(color.Value);
+            }
+            string layerName = stylingPropertyData.GetStylingRuleName(stylingRuleKey);
             //layer names usually will look like Twin_Something, lets use only the second part of the split on _
             string name = layerName.Contains('_') ? layerName.Split('_')[1] : layerName;
             tile.Tile.LabelText = name;
@@ -120,9 +122,10 @@ namespace Netherlands3D.UI.Panels
             //since we apply styling to multiple stylingrules we have to use the notify == false and invoke styling changed afterwards
             foreach (int i in swatchesListView.selectedIndices)
             {
-                string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(i);
+                string stylingRuleKey = swatchesListView.itemsSource[i] as string;
+                string layerName = stylingPropertyData.GetStylingRuleName(stylingRuleKey);
                 CartesianTileLayerFeatureColorPropertyData.ColorData data = new();
-                data.index = i;
+                data.index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(stylingRuleKey);
                 data.name = layerName;
                 data.color = color;
                 colorData.Add(data);

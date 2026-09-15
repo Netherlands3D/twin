@@ -12,7 +12,7 @@ namespace Netherlands3D.LayerStyles
         //Constants for property keys
         public const string FillColorProperty = "fill-color";
         public const string StrokeColorProperty = "stroke-color";
-        public const string PointColorProperty = "point-color";
+        
         public const string VisibilityProperty = "visibility";
         public const string MaskLayerMaskProperty = "mask-layer-mask";
         
@@ -54,19 +54,14 @@ namespace Netherlands3D.LayerStyles
         /// the term Stroke Color instead of Mapbox' Line Color.
         /// </remarks>
         public Color? GetStrokeColor() => GetAndNormalizeColor(StrokeColorProperty);
-        public void SetPointColor(Color color) => SetAndNormalizeColor(PointColorProperty, color);
-
-        public Color? GetPointColor() => GetAndNormalizeColor(PointColorProperty);
         
         public List<string> GetUsedColorProperties()
         {
-            List<string> usedColorProperties = new List<string>(3);
+            List<string> usedColorProperties = new List<string>(2);
             if(GetProperty(FillColorProperty) != null)
                 usedColorProperties.Add(FillColorProperty);
             if(GetProperty(StrokeColorProperty) != null)
                 usedColorProperties.Add(StrokeColorProperty);
-            if(GetProperty(PointColorProperty) != null)
-                usedColorProperties.Add(PointColorProperty);
             return usedColorProperties;
         }
         
@@ -193,7 +188,7 @@ namespace Netherlands3D.LayerStyles
             SetProperty(propertyName, $"#{ColorUtility.ToHtmlStringRGBA(color)}");
         }
 
-        public Color? GetAndNormalizeColor(string propertyName)
+        private Color? GetAndNormalizeColor(string propertyName)
         {
             if (GetProperty(propertyName) is not string property) return null;
 

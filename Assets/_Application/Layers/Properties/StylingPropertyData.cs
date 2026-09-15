@@ -14,8 +14,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public static readonly Dictionary<string, string> DisplayPropertyNames = new()
         {
             { Symbolizer.FillColorProperty, "Vulkleur" },
-            { Symbolizer.StrokeColorProperty,  "Lijnkleur" },
-            { Symbolizer.PointColorProperty, "Puntkleur"}
+            { Symbolizer.StrokeColorProperty,  "Lijnkleur" }
         };
 
         [DataMember] private string styleName = NameOfDefaultStyle;

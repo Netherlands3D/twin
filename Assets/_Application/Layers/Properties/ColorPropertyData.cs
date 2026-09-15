@@ -44,6 +44,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public override List<string> GetUsedColorTypes()
         {
+            //todo this should be a list of stylingrules where only the keys are gotten but filtered by the coloring key
             var list = DefaultSymbolizer.GetUsedColorProperties(); 
             
             if (!list.Contains(ColorType))
