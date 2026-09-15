@@ -132,8 +132,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.Update();
             var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(WorldTransform.Coordinate.ToUnity());
             Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
-            var contentPos = contextMenuBehaviour.FloatingElementsContent.worldBound.position;
-            var localPos = panelPos - contentPos;
+            var localPos = contextMenuBehaviour.FloatingElementsContent.WorldToLocal(panelPos);
             floatingElement.SetPosition(localPos);
         }
         

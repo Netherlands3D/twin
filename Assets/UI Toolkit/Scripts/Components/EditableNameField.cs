@@ -16,6 +16,7 @@ namespace Netherlands3D.UI.Components
         public float TextWidth => IsEditing ? inputTextSize.x : textWidth;
         public float TextHeight => IsEditing ? inputTextSize.y : textHeight;
 
+        [UxmlAttribute("scrolling-text")]
         public bool ScrollingTextEnabled
         {
             get
@@ -117,7 +118,7 @@ namespace Netherlands3D.UI.Components
             label.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
 
-            schedule.Execute(() => inputField.Focus());
+            schedule.Execute(() => inputField.Focus());// we need to wait until the layout engine processes the new Display: flex of the input field before we can select focus the element
             
             OnEditingChanged.Invoke(true);
         }

@@ -25,7 +25,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
-        public HierarchicalObjectLayerGameObject SelectedVisualisation => selectedVisualisation;
+        public LayerGameObject SelectedVisualisation => selectedVisualisation;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
@@ -38,7 +38,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private PolygonSelectionService polygonSelectionService;
         private List<IMapping> orderedMappings = new();
         private Dictionary<string, IMapping> selectedMappings = new();
-        private HierarchicalObjectLayerGameObject selectedVisualisation;
+        private LayerGameObject selectedVisualisation;
         private Vector3 lastWorldClickedPosition;
         private PointerToWorldPosition pointerToWorldPosition;
         private float minClickDistance = 10;
@@ -355,15 +355,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             OnSelectLayer.Invoke(layerData);
         }
 
-        public void SelectVisualisation(HierarchicalObjectLayerGameObject ctxObject)
+        public void SelectVisualisation(LayerGameObject ctxObject)
         {
             if (ctxObject != null)
             {
                 selectedVisualisation = ctxObject;
-                //if (!ctxObject.LayerData.IsSelected)
-                {
-                    ctxObject.LayerData.SelectLayer(true);
-                }
+                ctxObject.LayerData.SelectLayer(true);
                 OnSelectLayer.Invoke(ctxObject.LayerData);
             }
         }

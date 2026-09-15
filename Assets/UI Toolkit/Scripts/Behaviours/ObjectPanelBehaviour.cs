@@ -16,22 +16,22 @@ namespace Netherlands3D.UI.Panels
         public override bool ShouldBeActive()
         {
             SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
-            if (selectionService.SelectedVisualisation != null)
+            if (App.UIRoot.IsPointerOverUI(out VisualElement element))
             {
-                target = selectionService.SelectedVisualisation.LayerData;
-                if (selectionService.SelectedVisualisation is IVisualizationWithWorldUI worldUI && App.UIRoot.IsPointerOverUI(out VisualElement element))
+                if (selectionService.SelectedVisualisation != null)
                 {
-                    VisualElement parent = worldUI.VisualElement;
-                    if (parent == element || parent.Contains(element))
+                    target = selectionService.SelectedVisualisation.LayerData;
+                    if (selectionService.SelectedVisualisation is IVisualizationWithWorldUI worldUI && element != null)
                     {
-                        return true;
+                        VisualElement parent = worldUI.VisualElement;
+                        if (parent == element || parent.Contains(element))
+                        {
+                            return true;
+                        }
                     }
                 }
+                if (element != null) return false;
             }
-
-            if (App.UIRoot.IsPointerOverUI())
-                return false;
-            
             return  selectionService.SelectedVisualisation != null;
         }
 

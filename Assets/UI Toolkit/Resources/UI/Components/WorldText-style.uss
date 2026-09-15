@@ -13,8 +13,6 @@
 .world-text__container .editable-name-field {  
     position: relative;
     flex-grow: 1;
-    padding: 0;
-    margin: 0;
     overflow: hidden;
     white-space: pre-wrap;
 }

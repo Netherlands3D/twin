@@ -1,7 +1,6 @@
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -20,12 +19,7 @@ namespace Netherlands3D.UI.Components
         
         public enum SnappingSide { Left, Right, Above }
         private SnappingSide snappingSide = SnappingSide.Above;
-
         private float labelOffsetToPosition = 0;
-        
-        private IVisualElementScheduledItem clickTimer;
-        [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
-        private bool waitingForClick = false;
         private string currentText;
 
         public WorldText()
@@ -40,10 +34,8 @@ namespace Netherlands3D.UI.Components
             position.pickingMode = PickingMode.Ignore;
             background = this.Q<VisualElement>("Background");
             
-            RegisterCallback<GeometryChangedEvent>(evt => UpdateContainerSize());
-            RegisterCallback<GeometryChangedEvent>(UpdateSnapping);
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             nameField.RegisterValueChangedCallback(OnNameChanged);
-            nameField.RegisterValueChangedCallback(evt => UpdateContainerSize());
             
             nameField.ScrollingTextEnabled = false;
         }
@@ -53,10 +45,17 @@ namespace Netherlands3D.UI.Components
             SetText(text);
         }
 
+        private void OnGeometryChanged(GeometryChangedEvent evt)
+        {
+            UpdateContainerSize();
+            UpdateSnapping();
+        }
+
         private void OnNameChanged(ChangeEvent<string> evt)
         {
             currentText = evt.newValue;
             UpdatePlaceholder();
+            UpdateContainerSize();
         }
 
         private void UpdatePlaceholder()
@@ -81,7 +80,7 @@ namespace Netherlands3D.UI.Components
             labelOffsetToPosition = offset;
         }
 
-        private void UpdateSnapping(GeometryChangedEvent evt)
+        private void UpdateSnapping()
         {
             float offsetX = 0;
             float offsetY = 0;
