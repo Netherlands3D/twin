@@ -129,7 +129,10 @@ namespace Netherlands3D.Coordinates
                 float myFloat = BitConverter.ToSingle(bytes, 56 + (dataNumber * 4));
                 value += myFloat;
             }
-
+            
+            if (value > Math.Pow(10, 20))
+                value = 0;
+            
             return value;
         }
 
