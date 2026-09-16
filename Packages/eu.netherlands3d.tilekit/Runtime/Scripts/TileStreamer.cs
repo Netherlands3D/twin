@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Tilekit.BinaryMesh;
+using UnityEditor.Graphs;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.Networking;
 
 namespace Netherlands3D.Tilekit
@@ -66,69 +69,119 @@ namespace Netherlands3D.Tilekit
             }
         }
 
+        private static readonly Vector2 TopLeftScreenPoint = new Vector2(0, 1);
+        private static readonly Vector2 TopRightScreenPoint = new Vector2(1, 1);
+        private static readonly Vector2 BottomRightScreenPoint = new Vector2(1, 0);
+        private static readonly Vector2 BottomLeftScreenPoint = new Vector2(0, 0);
+
+        private readonly List<Vector3> visibleGroundPolygon = new(4);
+        private readonly List<Vector2Int> visibleTiles = new(64);
+        
         private void GetVisibleTiles()
         {
-            var wPosA = GetCameraHitPointPosition(activeCamera, new Vector2(0, 0));
-            var wPosB = GetCameraHitPointPosition(activeCamera, new Vector2(0, 1));
-            var wPosC = GetCameraHitPointPosition(activeCamera, new Vector2(1, 1));
-            var wPosD = GetCameraHitPointPosition(activeCamera, new Vector2(1, 0));
-
-            var coordA = new Coordinate(wPosA).Convert(CoordinateSystem.RD);
-            var coordB = new Coordinate(wPosB).Convert(CoordinateSystem.RD);
-            var coordC = new Coordinate(wPosC).Convert(CoordinateSystem.RD);
-            var coordD = new Coordinate(wPosD).Convert(CoordinateSystem.RD);
-
-            var viewCorners = new Coordinate[]{ coordA, coordB, coordC, coordD };
+            //TileMath.GetVisibleGroundPolygonNonAlloc_1(activeCamera, 10000f, visibleGroundPolygon);
+            //v//ar flattenedGroundPolygon = visibleGroundPolygon.Select(e => new Vector3(e.x, 0, e.z)).ToList();
+            //DrawShape(visibleGroundPolygon, Color.green);
+            //DrawShape(flattenedGroundPolygon, Color.red);
+            TileMath.GetVisibleGroundPolygonNonAlloc_2(activeCamera, 5000f, visibleGroundPolygon);
+            DrawShape(visibleGroundPolygon, Color.green);
+            DrawShapeFlat(visibleGroundPolygon, Color.green);
+            DrawShape(visibleGroundPolygon, Color.blue);
             
-            Debug.DrawLine(coordA.ToUnity(), coordB.ToUnity());
-            Debug.DrawLine(coordB.ToUnity(), coordC.ToUnity());
-            Debug.DrawLine(coordC.ToUnity(), coordD.ToUnity());
-            Debug.DrawLine(coordD.ToUnity(), coordA.ToUnity());
-
-            var minEasting = double.PositiveInfinity;
-            var minNorthing = double.PositiveInfinity;
-            var maxEasting = double.NegativeInfinity;
-            var maxNorthing = double.NegativeInfinity;
-
-            for (var i = 0; i < viewCorners.Length; i++)
+            var boundsList = TileMath.GetVisibleTiles(activeCamera, 5000f, 8000);
+            for (int i = 0; i < boundsList.Count; i++)
             {
-                var rd = viewCorners[i].Convert(CoordinateSystem.RD);
-
-                minEasting = Math.Min(minEasting, rd.easting);
-                minNorthing = Math.Min(minNorthing, rd.northing);
-                maxEasting = Math.Max(maxEasting, rd.easting);
-                maxNorthing = Math.Max(maxNorthing, rd.northing);
+                MakeBoundsSmaller(activeCamera, boundsList, boundsList[i]);
             }
-
-            var tileRects = new List<RectInt>();
-
-            var rects = new List<RectInt>();
+            foreach (var bounds in boundsList)
+            {
+                DrawBounds(bounds, Color.red);
+            }
             
-            /*
-            for (var x = (int)(minEasting / 1000) * 1000; x < maxEasting; x += 1000)
-            {
-                for (var y = (int)(minNorthing / 1000) * 1000; y < maxNorthing; y += 1000)
-                {
-                    rects.Add(new RectInt(x, y, 1000, 1000));
-                    
-                    //How much screenspace?
-                    
-                }
-            }*/
+        }
 
-            foreach (var rect in rects)
+        private static void MakeBoundsSmaller(Camera camera, List<Bounds> boundsList, Bounds bounds)
+        {
+            var screenSize = TileMath.GetBoundsScreenSize(camera, bounds);
+            if (screenSize.width > .25f)
             {
-                var a = new Coordinate(CoordinateSystem.RD, rect.xMin, rect.yMin);
-                var b = new Coordinate(CoordinateSystem.RD, rect.xMin, rect.yMax);
-                var c = new Coordinate(CoordinateSystem.RD, rect.xMax, rect.yMax);
-                var d = new Coordinate(CoordinateSystem.RD, rect.xMax, rect.yMin);
-                
-                Debug.DrawLine(a.ToUnity(), b.ToUnity(), Color.yellow);
-                Debug.DrawLine(b.ToUnity(), c.ToUnity(), Color.yellow);
-                Debug.DrawLine(c.ToUnity(), d.ToUnity(), Color.yellow);
-                Debug.DrawLine(d.ToUnity(), a.ToUnity(), Color.yellow);
+                //boundsList.Remove(bounds);
+                var smallerSize = new Vector3(bounds.size.x / 2, bounds.size.y, bounds.size.z / 2f);
+                boundsList.Add(new Bounds(bounds.center - new Vector3(-bounds.extents.x, 0, -bounds.extents.z), bounds.size / 2f));
+                boundsList.Add(new Bounds(bounds.center - new Vector3(-bounds.extents.x, 0, +bounds.extents.z), bounds.size / 2f));   
+                boundsList.Add(new Bounds(bounds.center - new Vector3(+bounds.extents.x, 0, +bounds.extents.z), bounds.size / 2f));   
+                boundsList.Add(new Bounds(bounds.center - new Vector3(+bounds.extents.x, 0, -bounds.extents.z), bounds.size / 2f));   
             }
+        }
 
+        private static void DrawBounds(Bounds bounds, Color color)
+        {
+            Vector3 min = bounds.min;
+            Vector3 max = bounds.max;
+            
+            var bottomPoints = new List<Vector3>()
+            {
+                new Vector3(bounds.min.x, bounds.min.y, bounds.min.z),
+                new Vector3(bounds.min.x, bounds.max.y, bounds.min.z),
+                new Vector3(bounds.max.x, bounds.max.y, bounds.min.z),
+                new Vector3(bounds.max.x, bounds.min.y, bounds.min.z),
+            };
+            DrawShape(bottomPoints, color);
+            var topPoints = new List<Vector3>()
+            {
+                new Vector3(bounds.min.x, bounds.min.y, bounds.max.z),
+                new Vector3(bounds.min.x, bounds.max.y, bounds.max.z),
+                new Vector3(bounds.max.x, bounds.max.y, bounds.max.z),
+                new Vector3(bounds.max.x, bounds.min.y, bounds.max.z),
+            };
+            DrawShape(topPoints, color);
+            
+            DrawShape(new List<Vector3>() {new Vector3(bounds.min.x, bounds.min.y, bounds.min.z), new Vector3(bounds.min.x, bounds.min.y, bounds.max.z)}, color);
+            DrawShape(new List<Vector3>() {new Vector3(bounds.min.x, bounds.max.y, bounds.min.z), new Vector3(bounds.min.x, bounds.max.y, bounds.max.z)}, color);
+            DrawShape(new List<Vector3>() {new Vector3(bounds.max.x, bounds.max.y, bounds.min.z), new Vector3(bounds.max.x, bounds.max.y, bounds.max.z)}, color);
+            DrawShape(new List<Vector3>() {new Vector3(bounds.max.x, bounds.min.y, bounds.min.z), new Vector3(bounds.max.x, bounds.min.y, bounds.max.z)}, color);
+            
+        }
+
+        private static void DrawShape(List<Vector3> points, Color color)
+        {
+            for (var i = 0; i < points.Count; i++)
+            {
+                Debug.DrawLine(
+                    points[i],
+                    points[(i + 1) % points.Count],
+                    color);
+            }
+        }
+        
+        private static void DrawShapeFlat(List<Vector3> points, Color color)
+        {
+            for (var i = 0; i < points.Count; i++)
+            {
+                var pointA = points[i];
+                pointA.y = 0;
+                var pointB = points[(i + 1) % points.Count];
+                pointB.y = 0;
+                Debug.DrawLine(
+                    pointA,
+                    pointB,
+                    color);
+                Debug.DrawRay(points[0], Vector3.up * 100000);
+            }
+        }
+
+        private Vector3 GetCameraRayTerrainIntersectionPoint(Camera camera, Vector2 screenPosition, float terrainHeight, float maxViewingDistance)
+        {
+            //not correct when exceeding maxViewDistance. need intersections with near and far camera plane. Good enough for the experiment now.
+            var ray = camera.ViewportPointToRay(screenPosition);
+            var groundPlane = new Plane(Vector3.up, Vector3.one * terrainHeight);
+            var rayPoint = ray.GetPoint(groundPlane.Raycast(ray, out var distance) ? Mathf.Min(distance, maxViewingDistance) : maxViewingDistance);
+            return new Vector3(rayPoint.x, terrainHeight, rayPoint.z);
+        }
+
+        private Vector2 GetTerrainPoint(Vector3 worldPoint)
+        {
+            return new Vector2(worldPoint.x, worldPoint.z);
         }
         
         
