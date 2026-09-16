@@ -130,6 +130,7 @@ namespace Netherlands3D.Coordinates
                 value += myFloat;
             }
             
+            // Some valid RD coordinates (such as in the North Sea) do not have an associated correction factor in the data, causing the value to be extremely large. In this case we just return a correction of 0
             if (value > Math.Pow(10, 20))
                 value = 0;
             
