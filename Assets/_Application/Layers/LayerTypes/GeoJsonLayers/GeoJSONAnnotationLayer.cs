@@ -6,6 +6,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using Newtonsoft.Json.Linq;
@@ -30,12 +31,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, Annotation> spawnedVisualisations = new();
-        
-        private List<List<Coordinate>> visualisationsToRemove = new();
 
         [SerializeField] private Material annotationMaterial;
 
         private Annotation annotation;
+
         public class Annotation
         {
             public string Title { get; set; }
@@ -45,8 +45,36 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             public Coordinate Coordinate { get; set; }
             public Bounds trueBounds { get; set; }
             public Bounds tiledBounds { get; set; }
+
+            public Feature Feature { get; set; }
+            public CoordinateSystem CoordinateSystem { get; set; }
+
+            public void CalculateBounds(Coordinate coord, Coordinate coord2)
+            {
+                Point point = Feature.Geometry as Point;
+                var convertedPoint =
+                    GeometryVisualizationFactory.ConvertToCoordinate(CoordinateSystem, point.Coordinates);
+                Coordinate = convertedPoint;
+
+                trueBounds = new Bounds(convertedPoint.ToUnity(), Vector3.zero);
+                trueBounds.Expand(Vector3.one * 5);
+                Bounds tiledBounds = new Bounds(trueBounds.center, trueBounds.size);
+                // Expand bounds to ceiling to steps
+                float BoundsRoundingCeiling = 1000;
+                tiledBounds.size = new Vector3(
+                    Mathf.Ceil(tiledBounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Ceil(tiledBounds.size.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Ceil(tiledBounds.size.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
+                );
+                tiledBounds.center = new Vector3(
+                    Mathf.Round(tiledBounds.center.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Round(tiledBounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Round(tiledBounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
+                );
+                this.tiledBounds = tiledBounds;
+            }
         }
-        
+
 
         public Color RenderColor
         {
@@ -106,37 +134,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             if (spawnedVisualisations.ContainsKey(feature))
                 return;
 
-            Annotation annotation = null;
+            GeoJSONAnnotationLayer.Annotation annotation = null;
             if (feature.Properties.TryGetValue("annotation", out var value) &&
                 value is JObject obj)
             {
-                annotation = obj.ToObject<Annotation>();
+                annotation = obj.ToObject<GeoJSONAnnotationLayer.Annotation>();
+                Origin.current.onPostShift.AddListener(annotation.CalculateBounds);
             }
 
-            Point point = feature.Geometry as Point;
-            var convertedPoint = GeometryVisualizationFactory.ConvertToCoordinate(originalCoordinateSystem, point.Coordinates);
-            annotation.Coordinate = convertedPoint;
-           
-            Bounds trueBounds = new Bounds(convertedPoint.ToUnity(), Vector3.zero);
-            trueBounds.Expand(Vector3.one * GetSelectionRange());
-            annotation.trueBounds = trueBounds;
-            Bounds tiledBounds = new Bounds(annotation.trueBounds.center, annotation.trueBounds.size);
-            // Expand bounds to ceiling to steps
-            float BoundsRoundingCeiling = 1000;
-            tiledBounds.size = new Vector3(
-                Mathf.Ceil(tiledBounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                Mathf.Ceil(tiledBounds.size.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                Mathf.Ceil(tiledBounds.size.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
-            );
-            tiledBounds.center = new Vector3(
-                Mathf.Round(tiledBounds.center.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                Mathf.Round(tiledBounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                Mathf.Round(tiledBounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
-            );
-            annotation.tiledBounds = tiledBounds;
+            
             spawnedVisualisations.Add(feature, annotation);
+            
+            testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            testObject.transform.localScale = Vector3.one * GetSelectionRange();
+            testObject.transform.position = annotation.trueBounds.center;
         }
 
+        private GameObject testObject = null;
         /// <summary>
         /// Checks the Bounds of the visualisations and checks them against the camera frustum
         /// to remove visualisations that are out of view
@@ -144,22 +158,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void RemoveFeaturesOutOfView()
         {
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            
-            visualisationsToRemove.Clear();
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
-            
-                visualisationsToRemove.AddRange(kvp.Value.Data);
-                RemoveFeature(kvp.Value);
+                
+                Origin.current.onPostShift.RemoveListener(kvp.Value.CalculateBounds);
+                RemoveFeature(kvp.Key);
             }
         }
 
-        private void RemoveFeature(GeoJSONPointLayer.FeaturePointVisualisations featureVisualisation)
+        private void RemoveFeature(Feature feature)
         {
-            FeatureRemoved?.Invoke(featureVisualisation.feature);
-            spawnedVisualisations.Remove(featureVisualisation.feature);
+            FeatureRemoved?.Invoke(feature);
+            spawnedVisualisations.Remove(feature);
         }
         
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
