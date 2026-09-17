@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -13,8 +14,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer
     {
-        public bool IsPolygon => false;
+        public bool SupportsGeometryType(GeoJSONObjectType geometryType)
+        {
+            return  geometryType == GeoJSONObjectType.MultiLineString || geometryType == GeoJSONObjectType.LineString;
+        }
 
+        public int FeatureCount => spawnedVisualisations.Count;
         public Transform Transform => transform;
 
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
@@ -51,6 +56,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 lineRenderer3D.SetAllColors(value);
             }
         }
+        
+        public Material RenderMaterial
+        {
+            get
+            {
+                return lineRenderer3D.LineMaterial;
+            }
+        }
+
+        
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeatureLineVisualisations data = spawnedVisualisations[feature];

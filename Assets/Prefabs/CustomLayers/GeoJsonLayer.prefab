@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1519155495628252074}
   - component: {fileID: 5138157321984582814}
   - component: {fileID: 671230662283201997}
-  - component: {fileID: 5061779677744848899}
+  - component: {fileID: 4657730554946101942}
   m_Layer: 0
   m_Name: GeoJsonLayer
   m_TagString: Untagged
@@ -56,6 +56,12 @@ MonoBehaviour:
   thumbnail: {fileID: 0}
   spawnLocation: 0
   VisualisationError:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFeatureAdd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFeatureRemove:
     m_PersistentCalls:
       m_Calls: []
   polygonFeaturesLayer: {fileID: 3268294129124562304}
@@ -140,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d965efdbd7af0fac9bb44622e1e20db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.FeatureObject
---- !u!114 &5061779677744848899
+--- !u!114 &4657730554946101942
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,9 +155,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2418701555395206593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04ad68ed044194a338481238345c66bf, type: 3}
+  m_Script: {fileID: 11500000, guid: bd721d3851be683a69c52dc6f81c88e6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.TimelineGeoJson
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.GeoJSONLayerFeatureColoring
 --- !u!1 &7603689817929975093
 GameObject:
   m_ObjectHideFlags: 0

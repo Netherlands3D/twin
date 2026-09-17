@@ -14,8 +14,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public static readonly Dictionary<string, string> DisplayPropertyNames = new()
         {
             { Symbolizer.FillColorProperty, "Vulkleur" },
-            { Symbolizer.StrokeColorProperty,  "Lijnkleur" },
-            { Symbolizer.PointColorProperty, "Puntkleur"}
+            { Symbolizer.StrokeColorProperty,  "Lijnkleur" }
         };
 
         [DataMember] private string styleName = NameOfDefaultStyle;
@@ -47,6 +46,19 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         [JsonIgnore] public readonly UnityEvent OnStylingChanged = new();
         [JsonIgnore] public readonly UnityEvent<string> ColorTypeChanged = new();
+        
+        [JsonIgnore] protected string colorType = Symbolizer.FillColorProperty; //default
+
+        [JsonIgnore]
+        public string ColorType
+        {
+            get => colorType;
+            set
+            {
+                colorType = value;
+                ColorTypeChanged.Invoke(value);
+            }
+        }
 
         public StylingPropertyData()
         {   
