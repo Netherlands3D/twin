@@ -23,24 +23,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             get
             {
-                var pointBounds = pointFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
-                var lineBounds = lineFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
-                var polygonBounds = polygonFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
-
-                if (pointBounds != null)
+                BoundingBox box = null;
+                foreach (var layer in visualisationLayers)
                 {
-                    pointBounds.Encapsulate(lineBounds);
-                    pointBounds.Encapsulate(polygonBounds);
-                    return pointBounds;
+                    if (box == null)
+                        box = layer.GetBoundingBoxOfVisibleFeatures();
+                    else
+                        box.Encapsulate(layer.GetBoundingBoxOfVisibleFeatures());
                 }
-
-                if (lineBounds != null)
-                {
-                    lineBounds.Encapsulate(polygonBounds);
-                    return lineBounds;
-                }
-
-                return polygonBounds;
+                return box;
             }
         }
 
@@ -49,15 +40,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
         
-        // public GeoJSONPointLayer PointLayer => pointFeaturesLayer;
-        // public GeoJSONLineLayer  LineLayer => lineFeaturesLayer;
-        // public GeoJSONPolygonLayer PolygonLayer => polygonFeaturesLayer;
+        public IGeoJsonVisualisationLayer[] VisualisationLayers => visualisationLayers;
 
         private IGeoJsonVisualisationLayer[] visualisationLayers;
-        // [Header("Visualizer settings")]
-        // [SerializeField] private GeoJSONPolygonLayer polygonFeaturesLayer;
-        // [SerializeField] private GeoJSONLineLayer lineFeaturesLayer;
-        // [SerializeField] private GeoJSONPointLayer pointFeaturesLayer;
         
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
@@ -215,23 +200,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void VisualizeFeature(Feature feature, CoordinateSystem crs)
         {
-            switch (feature.Geometry.Type)
+            IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
+            if (layer == null)
             {
-                case GeoJSONObjectType.MultiPolygon:
-                case GeoJSONObjectType.Polygon:
-                    AddFeature(feature, crs, polygonFeaturesLayer);
-                    return;
-                case GeoJSONObjectType.MultiLineString:
-                case GeoJSONObjectType.LineString:
-                    AddFeature(feature, crs, lineFeaturesLayer);
-                    return;
-                case GeoJSONObjectType.MultiPoint:
-                case GeoJSONObjectType.Point:
-                    AddFeature(feature, crs, pointFeaturesLayer);
-                    return;
-                default:
-                    throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
+                Debug.LogError("No existing geojsonvisualisationlayer for feature: " + feature.Id);
+                return;
             }
+            
+            AddFeature(feature, crs, layer);
         }
 
         private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer)
@@ -260,20 +236,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public IGeoJsonVisualisationLayer GetVisualisationLayerForFeature(Feature feature)
         {
-            switch (feature.Geometry.Type)
+            foreach (var layer in  visualisationLayers)
             {
-                case GeoJSONObjectType.MultiPolygon:
-                case GeoJSONObjectType.Polygon:
-                    return polygonFeaturesLayer;
-                case GeoJSONObjectType.MultiLineString:
-                case GeoJSONObjectType.LineString:
-                    return lineFeaturesLayer;
-                case GeoJSONObjectType.MultiPoint:
-                case GeoJSONObjectType.Point:
-                    return pointFeaturesLayer;
-                default:
-                    throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
+                if(layer.SupportsGeometryType(feature))
+                    return layer;
             }
+            return null;
         }
     }
 }
