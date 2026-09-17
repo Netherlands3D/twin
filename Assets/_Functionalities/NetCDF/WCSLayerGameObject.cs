@@ -17,6 +17,8 @@ using Netherlands3D.Legend;
 
 namespace Netherlands3D.Functionalities.Wcs
 {
+    //test WCS: https://api.dataplatform.knmi.nl/wms/adaguc-server?dataset=msg_cpp_products&service=WCS&request=getcapabilities
+    
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
