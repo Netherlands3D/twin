@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -40,14 +41,16 @@ namespace Netherlands3D.UI.Components
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
+            if(App.Tools == null) return;
+            
             UpdateState();
         }
 
         private void EnsureService()
         {
-            if (tools == null)
+            if (tools == null) 
             {
-                tools = Services.ServiceLocator.GetService<ToolService>();
+                tools = App.Tools;
                 tools.AnyToolClosed.AddListener(UpdateState);
                 tools.AnyToolOpened.AddListener(UpdateState);
                 tools.AnyToolAvailabilityChanged.AddListener(UpdateState);
