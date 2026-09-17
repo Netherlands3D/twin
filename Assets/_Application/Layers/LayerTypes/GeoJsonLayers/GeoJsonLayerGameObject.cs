@@ -49,14 +49,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
         
-        public GeoJSONPointLayer PointLayer => pointFeaturesLayer;
-        public GeoJSONLineLayer  LineLayer => lineFeaturesLayer;
-        public GeoJSONPolygonLayer PolygonLayer => polygonFeaturesLayer;
+        // public GeoJSONPointLayer PointLayer => pointFeaturesLayer;
+        // public GeoJSONLineLayer  LineLayer => lineFeaturesLayer;
+        // public GeoJSONPolygonLayer PolygonLayer => polygonFeaturesLayer;
 
-        [Header("Visualizer settings")]
-        [SerializeField] private GeoJSONPolygonLayer polygonFeaturesLayer;
-        [SerializeField] private GeoJSONLineLayer lineFeaturesLayer;
-        [SerializeField] private GeoJSONPointLayer pointFeaturesLayer;
+        private IGeoJsonVisualisationLayer[] visualisationLayers;
+        // [Header("Visualizer settings")]
+        // [SerializeField] private GeoJSONPolygonLayer polygonFeaturesLayer;
+        // [SerializeField] private GeoJSONLineLayer lineFeaturesLayer;
+        // [SerializeField] private GeoJSONPointLayer pointFeaturesLayer;
         
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
@@ -64,6 +65,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
+            visualisationLayers = GetComponentsInChildren<IGeoJsonVisualisationLayer>();
         }
 
         protected override void OnVisualizationReady()
@@ -139,9 +141,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 startLoadingDataWhenLayerBecomesActive = false;
             }
 
-            polygonFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
-            lineFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
-            pointFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
+            foreach (var layer in visualisationLayers)
+            {
+                layer.OnLayerActiveInHierarchyChanged(isActive);
+            }
         }
 
         protected override void RegisterEventListeners()
@@ -151,10 +154,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             parser.OnParseError.AddListener(VisualisationError.Invoke);
             
             credentialHandler?.OnAuthorizationHandled.AddListener(HandleCredentials);
-            
-            polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
-            lineFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
-            polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
+
+            foreach (var layer in visualisationLayers)
+            {
+                layer.FeatureRemoved += OnFeatureRemoved;
+            }
         }
 
         protected override void UnregisterEventListeners()
@@ -165,9 +169,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             credentialHandler?.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             
-            polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
-            lineFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
-            polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
+            foreach (var layer in visualisationLayers)
+            {
+                layer.FeatureRemoved -= OnFeatureRemoved;
+            }
         }
 
         public void AddFeatureVisualisation(Feature feature)
@@ -182,9 +187,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public void RemoveFeaturesOutOfView()
         {
-            polygonFeaturesLayer?.RemoveFeaturesOutOfView();
-            lineFeaturesLayer?.RemoveFeaturesOutOfView();
-            pointFeaturesLayer?.RemoveFeaturesOutOfView();
+            foreach (var layer in visualisationLayers)
+            {
+                layer.RemoveFeaturesOutOfView();
+            }
         }
 
         private void CreateFeatureMappingsForFeature(Feature feature, IGeoJsonVisualisationLayer layer)

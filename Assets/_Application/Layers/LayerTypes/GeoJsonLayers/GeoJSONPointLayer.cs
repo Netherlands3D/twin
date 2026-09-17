@@ -8,6 +8,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -126,6 +127,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
+        private IVisualizer[] pointVisualizer;
+
+
+        public class AnnotationPointVisualizer : IVisualizer
+        {
+            public bool Supports(Feature feature)
+            {
+                return feature.Properties.ContainsKey("imageUrl");
+            }
+            PunctualLightData
+        }
+
         public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
@@ -134,6 +147,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
 
+            foreach (var visualizer in visualizers)
+            {
+                if (visualizer.Supports(feature.Geometry))
+                    visualizer.Visuzlize(feature.Geometry);
+            }
+            
             if (feature.Geometry is MultiPoint multiPoint)
             {
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualisation(multiPoint, originalCoordinateSystem, PointRenderer3D);
