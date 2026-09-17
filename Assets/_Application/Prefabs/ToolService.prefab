@@ -70,6 +70,8 @@ MonoBehaviour:
     tool: {fileID: 11400000, guid: acca90e7b95d77b4a920e49b8d44552e, type: 2}
   - type: 11
     tool: {fileID: 11400000, guid: e184b14b2cc24f14e895ecc328e689e2, type: 2}
+  - type: 12
+    tool: {fileID: 11400000, guid: 62e0b287f9c0f1841a01be1d3a0a37b2, type: 2}
   AnyToolOpened:
     m_PersistentCalls:
       m_Calls: []
