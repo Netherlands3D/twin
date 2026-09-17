@@ -1,0 +1,41 @@
+.stats-graph {
+	flex-direction: row;
+	align-items: center;
+	align-self: stretch;
+	width: 100%;
+	height: 42px;
+}
+
+.stats-graph__title {
+	flex-shrink: 0;
+	width: 35%;
+	height: 100%;
+	-unity-text-align: middle-left;
+
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.stats-graph__graph {
+	flex-grow: 1;
+	flex-shrink: 1;
+	min-width: 80px;
+	height: 100%;
+
+	overflow: hidden;
+
+	margin-left: var(--spacing-2);
+	margin-right: var(--spacing-2);
+
+	background-color: var(--color-blue-100);
+	border-width: 1px;
+	border-color: var(--color-blue-100);
+	border-radius: var(--spacing-1);
+}
+
+.stats-graph__value {
+	width: 20%;
+	flex-shrink: 0;
+	-unity-text-align: middle-right;
+}

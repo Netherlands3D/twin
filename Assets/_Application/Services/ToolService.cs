@@ -21,6 +21,7 @@ namespace Netherlands3D
         Settings,
         Help,
         Dome,
+        DebugStats,
         None
     }
     
@@ -51,6 +52,7 @@ namespace Netherlands3D
         
         public UnityEvent AnyToolOpened;
         public UnityEvent AnyToolClosed;
+        public UnityEvent<bool> AnyToolAvailabilityChanged;
         
 #if UNITY_EDITOR
         private Dictionary<Tool, bool> initialStates = new Dictionary<Tool, bool>();
@@ -82,6 +84,7 @@ namespace Netherlands3D
             {
                 tool.tool.onOpen.AddListener(AnyToolOpened.Invoke);
                 tool.tool.onClose.AddListener(AnyToolClosed.Invoke); 
+                tool.tool.onAvailabilityChange.AddListener(AnyToolAvailabilityChanged.Invoke);
             }
         }
 
@@ -91,6 +94,7 @@ namespace Netherlands3D
             {
                 tool.tool.onOpen.RemoveListener(AnyToolOpened.Invoke);
                 tool.tool.onClose.RemoveListener(AnyToolClosed.Invoke); 
+                tool.tool.onAvailabilityChange.RemoveListener(AnyToolAvailabilityChanged.Invoke);
             }
         }
 
