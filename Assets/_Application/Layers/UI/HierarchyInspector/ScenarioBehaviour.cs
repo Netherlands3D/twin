@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
             public void OnIsScenarioChanged(bool isScenario) => owner.HandleIsScenarioChanged(FolderProperty, Layer, isScenario);
             public void OnActiveSelfChanged(bool active) => owner.HandleActiveSelfChanged(FolderProperty, Layer, active);
-            public void OnHierarchyOrderChanged(int newIndex) => owner.ReOrderFolder(this); 
+            public void OnHierarchyOrderChanged() => owner.ReOrderFolder(this); 
             public void OnNameChanged(string newName) => owner.toolbar.SetFolderName(FolderProperty, newName);
         }
 

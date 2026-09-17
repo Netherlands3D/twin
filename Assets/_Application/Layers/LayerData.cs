@@ -177,7 +177,7 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
-        [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
+        [JsonIgnore] public readonly UnityEvent ParentOrSiblingIndexChanged = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertySet = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
        
@@ -286,7 +286,7 @@ namespace Netherlands3D.Twin.Layers
             if (parentChanged || siblingIndex != oldSiblingIndex)
             {
                 LayerActiveInHierarchyChanged.Invoke(ActiveInHierarchy);
-                ParentOrSiblingIndexChanged.Invoke(siblingIndex);
+                ParentOrSiblingIndexChanged.Invoke();
             }
 
             if (parentChanged)
@@ -322,7 +322,7 @@ namespace Netherlands3D.Twin.Layers
 
             parent = null;
             oldParent.ChildrenChanged.Invoke();
-            Root.UpdateLayerTreeOrder(-1);
+            Root.UpdateLayerTreeOrder();
         }
 
         //Only call from Layers.cs

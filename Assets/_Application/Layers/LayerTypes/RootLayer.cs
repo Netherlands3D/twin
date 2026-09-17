@@ -70,12 +70,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 else
                     ChildrenLayers.Add(layer);
                 
-                UpdateLayerTreeOrder(-1); //recalculate the RootIndices since the hierarchy changed
+                UpdateLayerTreeOrder(); //recalculate the RootIndices since the hierarchy changed
                 ChildrenChanged.Invoke();
             }
         }
 
-        public void UpdateLayerTreeOrder(int index)
+        public void UpdateLayerTreeOrder()
         {
             List<LayerData> children = GetLayerDataTree();
             int count = children.Count();
