@@ -124,7 +124,7 @@ namespace Netherlands3D.Twin.Services
             RemoveRecursive(layerData, true);
         }
 
-        private void RemoveRecursive(LayerData layerData, bool isUpperParent)
+        private void RemoveRecursive(LayerData layerData, bool isRemovalRoot)
         {
             for (var i = layerData.ChildrenLayers.Count - 1; i >= 0; i--)
             {
@@ -132,7 +132,7 @@ namespace Netherlands3D.Twin.Services
             }
             
             layerData.Destroy();
-            LayerRemoved.Invoke(layerData, isUpperParent);
+            LayerRemoved.Invoke(layerData, isRemovalRoot);
         }
 
         public Layer VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
