@@ -49,7 +49,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         [SerializeField] private Material selectionMaterial;
         private RaycastHit[] selectedColliderHits = new RaycastHit[4];
         private ToolService toolService;
-        private ContextMenuBehaviour contextMenuBehaviour;
+        private WorldUIService contextMenuBehaviour;
 
         public void BlockBagId(string bagId, bool block)
         {
@@ -134,7 +134,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             toolService = ServiceLocator.GetService<ToolService>();
             polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            contextMenuBehaviour = ServiceLocator.GetService<ContextMenuBehaviour>();
+            contextMenuBehaviour = ServiceLocator.GetService<WorldUIService>();
             InputService inputService = ServiceLocator.GetService<InputService>();
             
             inputService.LeftClickUpAction.performed += OnLeftClickUp;
