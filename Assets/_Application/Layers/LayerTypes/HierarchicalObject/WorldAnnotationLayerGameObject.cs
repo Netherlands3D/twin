@@ -21,15 +21,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     {
         private SelectionService selectionService;
         private InputService inputService;
-        private ContextMenuBehaviour contextMenuBehaviour;
+        private WorldUIService contextMenuBehaviour;
         private CameraService cameraService;
         private AppRootBehaviour appRootBehaviour;
         private WorldText worldTextElement; 
         private FloatingElement floatingElement;
 
         public VisualElement VisualElement => worldTextElement;
-        
-        private const float offsetPixels = 50; //todo make this from uss instead
+
+        private const float MaxPixelDistanceOffset = 100;
+        private const float worldSpaceOffset = 10;
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
@@ -39,7 +40,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnVisualizationInitialize();
             inputService = ServiceLocator.GetService<InputService>();
             selectionService = ServiceLocator.GetService<SelectionService>();
-            contextMenuBehaviour  = ServiceLocator.GetService<ContextMenuBehaviour>();
+            contextMenuBehaviour  = ServiceLocator.GetService<WorldUIService>();
             cameraService = App.Cameras;
             appRootBehaviour = App.UIRoot;
             InitializeWorldUI();
@@ -51,7 +52,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             contextMenuBehaviour.AddToFloatingElementsContent(floatingElement);
             worldTextElement = new WorldText("");
             worldTextElement.SetSnappingSide(WorldText.SnappingSide.Above);
-            worldTextElement.SetLabelOffset(offsetPixels);
             floatingElement.Add(worldTextElement);
         }
 
@@ -130,10 +130,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Update()
         {
             base.Update();
-            var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(WorldTransform.Coordinate.ToUnity());
+            Vector3 worldPos = WorldTransform.Coordinate.ToUnity();
+            var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(worldPos);
             Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
             var localPos = contextMenuBehaviour.FloatingElementsContent.WorldToLocal(panelPos);
             floatingElement.SetPosition(localPos);
+
+            var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(worldPos + Vector3.right * worldSpaceOffset);
+            float dist = Mathf.Abs(offsetScreenPos.x - screenPos.x);
+            float t = Mathf.InverseLerp(1500f, 0f, cameraService.ActiveCamera.transform.position.y);
+            float pixelOffset = Mathf.Min(dist * t, MaxPixelDistanceOffset);
+            worldTextElement.SetLabelOffset(pixelOffset);
         }
         
         private void OnDestroy()
