@@ -8,6 +8,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
@@ -19,7 +20,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public string StylingColorProperty => Symbolizer.FillColorProperty;
         public bool SupportsGeometryType(Feature feature)
         {
-            return  feature is ImageAnnotation;
+            if (feature.Properties.TryGetValue("annotation", out var value) &&
+                value is JObject obj)
+            {
+                annotation = obj.ToObject<Annotation>();
+                return annotation != null;
+            }
+
+            return false;
         }
 
         public int FeatureCount => spawnedVisualisations.Count;
@@ -34,9 +42,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [SerializeField] private Material annotationMaterial;
 
-        public struct ImageAnnotation
+        private Annotation annotation;
+        public class Annotation
         {
-            //private WorldText worldText;
+            public string Title { get; set; }
+            public string AnnotationText { get; set; }
+            public string ImageUrl { get; set; }
+            public string ImageCaption { get; set; }
         }
         
 
