@@ -7,6 +7,7 @@
         public const string BACK = "Back";
         public const string BACKWARD = "Backward";
         public const string BACKWARD_BLOCKED = "BackwardBlocked";
+        public const string BUG = "Bug";
         public const string BURGER_MENU = "BurgerMenu";
         public const string CAMERA = "Camera";
         public const string CHECK = "Check";
