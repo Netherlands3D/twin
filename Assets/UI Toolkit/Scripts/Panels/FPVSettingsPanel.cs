@@ -39,8 +39,8 @@ namespace Netherlands3D.UI.Panels
         
         private void RegisterFPVPanelListeners()
         {
-            fpvFunctionality?.OnEnable.AddListener(SetFPVSectionActive);
-            fpvFunctionality?.OnDisable.AddListener(SetFPVSectionInactive);
+            fpvFunctionality?.OnEnableFunctionality.AddListener(SetFPVSectionActive);
+            fpvFunctionality?.OnDisableFunctionality.AddListener(SetFPVSectionInactive);
             
             var isLocked = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.GetMouseLockModus();
             mouseLockToggle.SetValueWithoutNotify(isLocked);
@@ -53,8 +53,8 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            fpvFunctionality?.OnEnable.RemoveListener(SetFPVSectionActive);
-            fpvFunctionality?.OnDisable.RemoveListener(SetFPVSectionInactive);
+            fpvFunctionality?.OnEnableFunctionality.RemoveListener(SetFPVSectionActive);
+            fpvFunctionality?.OnDisableFunctionality.RemoveListener(SetFPVSectionInactive);
 
             mouseLockToggle.UnregisterValueChangedCallback(OnMouseLockModeChanged);
             mouseSensitivitySlider.UnregisterValueChangedCallback(OnSensitivityChanged);
