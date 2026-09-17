@@ -1,0 +1,51 @@
+.las-render-property-section__controls {
+    gap: 12px;
+}
+
+.las-render-property-section__control {
+    margin-bottom: 4px;
+}
+
+.las-render-property-section__tight-slider {
+    margin-bottom: 0;
+}
+
+.las-render-property-section__tight-slider > .unity-base-field__label {
+    margin-bottom: var(--spacing-1);
+}
+
+.las-render-property-section__tight-slider .slider__row {
+    align-items: center;
+}
+
+.las-render-property-section__tight-slider .number-field {
+    width: var(--spacing-14);
+    min-width: var(--spacing-12);
+    max-width: var(--spacing-14);
+}
+
+.las-render-property-section__tight-slider .unity-base-slider__drag-container {
+    min-height: var(--spacing-3);
+}
+
+.las-render-property-section__tight-slider .unity-base-slider__tracker,
+.las-render-property-section__tight-slider .unity-base-slider__fill {
+    height: var(--spacing-1);
+}
+
+.las-render-property-section__tight-slider .unity-base-slider__dragger {
+    width: var(--spacing-3);
+    height: var(--spacing-3);
+    min-width: var(--spacing-3);
+    min-height: var(--spacing-3);
+}
+
+.las-render-property-section__point-budget .number-field {
+    width: var(--spacing-24);
+    min-width: var(--spacing-20);
+    max-width: var(--spacing-24);
+}
+
+.las-render-property-section__point-budget {
+    flex-grow: 1;
+}
