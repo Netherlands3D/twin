@@ -20,14 +20,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public string StylingColorProperty => Symbolizer.FillColorProperty;
         public bool SupportsGeometryType(Feature feature)
         {
-            if (feature.Properties.TryGetValue("annotation", out var value) &&
-                value is JObject obj)
-            {
-                annotation = obj.ToObject<Annotation>();
-                return annotation != null;
-            }
-
-            return false;
+            return feature.Properties.ContainsKey("annotation");
         }
 
         public int FeatureCount => spawnedVisualisations.Count;
@@ -36,7 +29,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
-        private Dictionary<Feature, GeoJSONPointLayer.FeaturePointVisualisations> spawnedVisualisations = new();
+        private Dictionary<Feature, Annotation> spawnedVisualisations = new();
         
         private List<List<Coordinate>> visualisationsToRemove = new();
 
@@ -49,6 +42,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             public string AnnotationText { get; set; }
             public string ImageUrl { get; set; }
             public string ImageCaption { get; set; }
+            public Coordinate Coordinate { get; set; }
+            public Bounds trueBounds { get; set; }
+            public Bounds tiledBounds { get; set; }
         }
         
 
@@ -110,22 +106,35 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             if (spawnedVisualisations.ContainsKey(feature))
                 return;
 
-            // var newFeatureVisualisation = new GeoJSONPointLayer.FeaturePointVisualisations { feature = feature };
-            //
-            // if (feature.Geometry is MultiPoint multiPoint)
-            // {
-            //     var newPointCollection = GeometryVisualizationFactory.CreatePointVisualisation(multiPoint, originalCoordinateSystem, PointRenderer3D);
-            //     newFeatureVisualisation.Data.Add(newPointCollection);
-            // }
-            // else if (feature.Geometry is Point point)
-            // {
-            //     var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
-            //     newFeatureVisualisation.Data.Add(newPointCollection);
-            // }
+            Annotation annotation = null;
+            if (feature.Properties.TryGetValue("annotation", out var value) &&
+                value is JObject obj)
+            {
+                annotation = obj.ToObject<Annotation>();
+            }
 
-            // newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
-            // newFeatureVisualisation.CalculateBounds();
-            // spawnedVisualisations.Add(feature, newFeatureVisualisation);
+            Point point = feature.Geometry as Point;
+            var convertedPoint = GeometryVisualizationFactory.ConvertToCoordinate(originalCoordinateSystem, point.Coordinates);
+            annotation.Coordinate = convertedPoint;
+           
+            Bounds trueBounds = new Bounds(convertedPoint.ToUnity(), Vector3.zero);
+            trueBounds.Expand(Vector3.one * GetSelectionRange());
+            annotation.trueBounds = trueBounds;
+            Bounds tiledBounds = new Bounds(annotation.trueBounds.center, annotation.trueBounds.size);
+            // Expand bounds to ceiling to steps
+            float BoundsRoundingCeiling = 1000;
+            tiledBounds.size = new Vector3(
+                Mathf.Ceil(tiledBounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                Mathf.Ceil(tiledBounds.size.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                Mathf.Ceil(tiledBounds.size.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
+            );
+            tiledBounds.center = new Vector3(
+                Mathf.Round(tiledBounds.center.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                Mathf.Round(tiledBounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                Mathf.Round(tiledBounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
+            );
+            annotation.tiledBounds = tiledBounds;
+            spawnedVisualisations.Add(feature, annotation);
         }
 
         /// <summary>
@@ -134,18 +143,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public void RemoveFeaturesOutOfView()
         {
-            // var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            //
-            // visualisationsToRemove.Clear();
-            // foreach (var kvp in spawnedVisualisations.Reverse())
-            // {
-            //     var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
-            //     if (inCameraFrustum) continue;
-            //
-            //     visualisationsToRemove.AddRange(kvp.Value.Data);
-            //     RemoveFeature(kvp.Value);
-            // }
-            // PointRenderer3D.RemovePointCollections(visualisationsToRemove);
+            var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+            
+            visualisationsToRemove.Clear();
+            foreach (var kvp in spawnedVisualisations.Reverse())
+            {
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
+                if (inCameraFrustum) continue;
+            
+                visualisationsToRemove.AddRange(kvp.Value.Data);
+                RemoveFeature(kvp.Value);
+            }
         }
 
         private void RemoveFeature(GeoJSONPointLayer.FeaturePointVisualisations featureVisualisation)
