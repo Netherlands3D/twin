@@ -14,9 +14,6 @@ namespace Netherlands3D.Twin.Functionalities
 
         [NonSerialized]
         private FunctionalityData currentData;
-        
-        [NonSerialized]
-        private FunctionalityData configuredDefaults;
 
         public FunctionalityData Data
         {
@@ -33,18 +30,7 @@ namespace Netherlands3D.Twin.Functionalities
 
         public FunctionalityData CreateDefaultData()
         {
-            var defaults = configuredDefaults ?? defaultData;
-            return defaults.CreateCopy();
-        }
-
-        public void CaptureCurrentDataAsDefaults()
-        {
-            configuredDefaults = Data.CreateCopy();
-        }
-
-        public void ResetDataToDefaults()
-        {
-            Data = CreateDefaultData();
+            return defaultData.CreateCopy();
         }
 
         [Tooltip("Functionality button title")]
@@ -121,7 +107,6 @@ namespace Netherlands3D.Twin.Functionalities
 
             if (!Application.isPlaying)
             {
-                configuredDefaults = null;
                 currentData = null;
             }
         }
@@ -139,8 +124,7 @@ namespace Netherlands3D.Twin.Functionalities
                 Id = previousData?.Id,
                 IsEnabled = previousData?.IsEnabled ?? false
             };
-
-            configuredDefaults = null;
+            
             currentData = null;
         }
     }

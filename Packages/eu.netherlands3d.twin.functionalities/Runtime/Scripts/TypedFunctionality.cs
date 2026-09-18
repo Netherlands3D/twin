@@ -26,11 +26,6 @@
             set => base.Data = value;
         }
 
-        public new TData CreateDefaultData()
-        {
-            return (TData)base.CreateDefaultData();
-        }
-
         protected override void OnEnable()
         {
             base.OnEnable();
