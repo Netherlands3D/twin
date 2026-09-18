@@ -23,15 +23,6 @@ namespace Netherlands3D.Twin.Functionalities
             get => currentData ??= CreateDefaultData();
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
-                
-                if (!string.Equals(value.Id, Id, StringComparison.Ordinal))
-                {
-                    throw new ArgumentException(
-                        $"Cannot assign functionality data '{value.Id}' to functionality '{Id}'.",
-                        nameof(value));
-                }
-
                 var oldEnabled = Data.IsEnabled;
                 currentData = value;
 
