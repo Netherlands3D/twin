@@ -28,7 +28,12 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
-        public FunctionalityData CreateDefaultData()
+        public void ResetDataToDefaults()
+        {
+            Data = CreateDefaultData();
+        }
+
+        private FunctionalityData CreateDefaultData()
         {
             return defaultData.CreateCopy();
         }
