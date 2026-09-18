@@ -96,14 +96,6 @@
     transition-timing-function: ease-in-out;
 }
 
-.presentation-section__pin {
-    display: none;
-}
-
-.presentation-section--active .presentation-section__pin {
-    display: flex;
-}
-
 .default-hud__inspector-zone > .toolbar-main {
     align-self: flex-start;
 }
@@ -139,13 +131,8 @@
     flex-shrink: 0;
 }
 
-.app--presenting .presentation-section--active .presentation-section__pin,
-.app--presenting .toolbar-toolbox--presentation .toolbar-toolbox__presentation-pin {
-    display: none;
-}
-
 .default-hud__presentation-controls {
-    display: none;
+    display: flex;
     flex-direction: column;
     flex-grow: 0;
     flex-shrink: 0;
@@ -153,20 +140,18 @@
     margin-right: var(--spacing-2);
 }
 
-.app--functionality-presentation-mode .default-hud__presentation-controls {
-    display: flex;
-}
-
-.app--functionality-presentation-mode .default-hud__presentation-controls > .presentation-section__pin {
-    display: flex;
-}
-
-.app--presenting .default-hud__presentation-controls > .presentation-section__pin {
-    display: none;
-}
-
 .default-hud__presentation-button.toggle {
     flex: 0 0 auto;
     height: var(--spacing-11);
     margin: 0;
+}
+
+.presentation-section__pin,
+.toolbar-toolbox__presentation-pin {
+    display: none;
+}
+
+.app--functionality-presentation-mode .presentation-section__pin,
+.app--functionality-presentation-mode .toolbar-toolbox__presentation-pin {
+    display: flex;
 }

@@ -29,10 +29,6 @@
     align-self: flex-start;
 }
 
-.toolbar-toolbox--presentation .toolbar-toolbox__presentation-pin {
-    display: flex;
-}
-
 .toolbar-toolbox--presentation .toolbar-toolbox__group > #Screenshot {
     margin-right: 0;
 }
