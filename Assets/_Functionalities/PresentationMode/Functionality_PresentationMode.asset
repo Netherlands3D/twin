@@ -9,20 +9,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
+  m_Script: {fileID: 11500000, guid: a903cb4c365f3c247a983856059c13d4, type: 3}
   m_Name: Functionality_PresentationMode
-  m_EditorClassIdentifier: eu.netherlands3d.twin.functionalities::Netherlands3D.Twin.Functionalities.Functionality
-  data:
-    Id: presentation-mode
-    IsEnabled: 0
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.PresentationModus.PresentationModeFunctionality
+  defaultData:
+    rid: 6103832554270622057
   Title: Presentatiemodus
-  Caption: 
+  Caption: BETA
   Header: 
-  Description: UI-secties vastzetten en verbergen voor presentaties.
+  Description: 'Presentatiemodus
+
+
+    <i>Let op; deze functionaliteit is nog in
+    ontwikkeling.</i>
+
+
+    <color=blue><u><link=https://www.ogc.org/standard/3dtiles/>Meer
+    informatie over OGC standaard ''3D Tiles''</link></u></color>'
   configuration: {fileID: 0}
-  OnEnable:
+  OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []
-  OnDisable:
+  OnDisableFunctionality:
     m_PersistentCalls:
       m_Calls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 6103832554270622057
+      type: {class: PresentationModeFunctionalityData, ns: Netherlands3D.Twin.PresentationModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        Id: presentation-mode
+        IsEnabled: 0
+        PresentationLeftPinned: 0
+        PresentationToolboxPinned: 0
+        PresentationNavigationPinned: 0
