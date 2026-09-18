@@ -50,11 +50,8 @@ namespace Netherlands3D.Twin.Projects
         public bool UseCurrentTime = false;
         [SerializeField, JsonProperty] public List<FunctionalityData> functionalities = new();
         [SerializeField, JsonProperty] private RootLayer rootLayer;
-        [SerializeField, JsonProperty] public bool PresentationLeftPinned = true;
-        [SerializeField, JsonProperty] public bool PresentationToolboxPinned = true;
-        [SerializeField, JsonProperty] public bool PresentationNavigationPinned = true;
         [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
-
+        
         [JsonIgnore]
         public RootLayer RootLayer
         {
@@ -86,7 +83,6 @@ namespace Netherlands3D.Twin.Projects
             current = initialProjectTemplate;
             current.RootLayer = new RootLayer("RootLayer");
             current.functionalities = new();
-            current.ResetPresentationPins();
         }
 
         public void LoadVisualizations()
@@ -98,13 +94,6 @@ namespace Netherlands3D.Twin.Projects
                 
                 App.Layers.VisualizeData(layer);
             }
-        }
-
-        public void ResetPresentationPins()
-        {
-            PresentationLeftPinned = true;
-            PresentationToolboxPinned = true;
-            PresentationNavigationPinned = true;
         }
 
         /// <summary>
