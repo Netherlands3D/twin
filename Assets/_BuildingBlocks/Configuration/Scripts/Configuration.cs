@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -292,6 +292,10 @@ namespace Netherlands3D.Twin.Configuration
 
             if (presentationFunctionality != null && !changedData.functionalities.Any(functionality => functionality.Id == "presentation-mode"))
                 presentationFunctionality.IsEnabled = false;
+            foreach (var functionality in Functionalities)
+            {
+                functionality.ResetDataToDefaults();
+            }
 
             foreach (var savedData in changedData.functionalities)
             {
