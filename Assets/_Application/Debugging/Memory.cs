@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Profiling;
+
 namespace Netherlands3D.Twin.Debugging
 {
 	public class Memory : MonoBehaviour
@@ -36,7 +38,11 @@ namespace Netherlands3D.Twin.Debugging
 		/// </summary>
 		private void DrawMemoryUsageInHeap()
 		{
-			memoryOutputText.text = $"Heap size: {SystemInfo.systemMemorySize}MB GC: {ConvertBytesToMegabytes(System.GC.GetTotalMemory(false)):F2}MB";
+#if ENABLE_PROFILER
+			memoryOutputText.text = $"Heap size: {ConvertBytesToMegabytes(Profiler.GetMonoUsedSizeLong()):F2}MB / {Profiler.GetMonoHeapSizeLong():F2}MB | GC: {ConvertBytesToMegabytes(System.GC.GetTotalMemory(false)):F2}MB";
+#else
+			memoryOutputText.text = $"Heap size: {SystemInfo.systemMemorySize:F2}MB | GC: {ConvertBytesToMegabytes(System.GC.GetTotalMemory(false)):F2}MB";
+#endif
 		}
 
 		/// <summary>
@@ -46,7 +52,7 @@ namespace Netherlands3D.Twin.Debugging
 		/// <returns></returns>
 		private double ConvertBytesToMegabytes(long bytes)
 		{
-			return (bytes / 1024f) / 1024f;
+			return bytes / 1048576d;
 		}
 	}
 }
