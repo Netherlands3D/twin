@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Threading.Tasks;
+using KindMen.Uxios;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.Web;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
@@ -20,8 +23,7 @@ namespace Netherlands3D.UI.Components
         private Icon position;
         private VisualElement background;
         
-        private const int MaxImageWidth = 400;
-        private const int MaxImageHeight = 400;
+        private const int MaxImageDimension = 512;
         private VisualElement image;
         
         public enum SnappingSide { Left, Right, Above }
@@ -48,21 +50,6 @@ namespace Netherlands3D.UI.Components
             nameField.RegisterValueChangedCallback(OnNameChanged);
             
             nameField.ScrollingTextEnabled = false;
-            
-            var texture = new Texture2D(240, 240, TextureFormat.RGBA32, false);
-            texture.filterMode = FilterMode.Bilinear;
-            texture.wrapMode = TextureWrapMode.Clamp;
-
-            var pixels = new Color[240 * 240];
-
-            for (int i = 0; i < pixels.Length; i++)
-            {
-                pixels[i] = Color.white;
-            }
-
-            texture.SetPixels(pixels);
-            texture.Apply();
-            SetAnnotationImage(texture);
         }
         
         public WorldAnnotation(string text) : this()
@@ -104,20 +91,16 @@ namespace Netherlands3D.UI.Components
 
         public async Task SetImage(string url)
         {
-            var imageUrl = AddImageSizeParameters(
-                url,
-                MaxImageWidth,
-                MaxImageHeight);
-            
+            var imageUrl = AddImageSizeParameters(url);
             var texture = await DownloadTextureAsync(imageUrl);
 
             if (texture == null)
                 return;
 
-            if (texture.width > MaxImageWidth || texture.height > MaxImageHeight)
+            if (texture.width > MaxImageDimension || texture.height > MaxImageDimension)
             {
                 Debug.LogError($"image has too large resolution: {texture.width}x{texture.height}");
-                //return;
+                return;
             }
 
             image.style.width = texture.width;
@@ -126,15 +109,36 @@ namespace Netherlands3D.UI.Components
 
             UpdateSnapping();
         }
-        
-        private static string AddImageSizeParameters(
-            string url,
-            int maxWidth,
-            int maxHeight)
-        {
-            var separator = url.Contains('?') ? '&' : '?';
 
-            return $"{url}{separator}w={maxWidth}&h={maxHeight}";
+        private string AddImageSizeParameters(string url)
+        {
+            var uri = new Uri(url);
+            var queryParameters = QueryString.Decode(uri.Query);
+            var uriBuilder = new UriBuilder(uri);
+
+            if (int.TryParse(queryParameters.Single("w"), out var sourceWidth) &&
+                int.TryParse(queryParameters.Single("h"), out var sourceHeight))
+            {
+                int largestSide = Mathf.Max(sourceWidth, sourceHeight);
+
+                if (largestSide > MaxImageDimension)
+                {
+                    float scale = MaxImageDimension / (float)largestSide;
+
+                    int width = Mathf.Max(1, Mathf.RoundToInt(sourceWidth * scale));
+                    int height = Mathf.Max(1, Mathf.RoundToInt(sourceHeight * scale));
+
+                    uriBuilder.SetQueryParameter("w", width.ToString());
+                    uriBuilder.SetQueryParameter("h", height.ToString());
+                }
+            }
+            string format = queryParameters.Single("format")?.ToLowerInvariant();
+            if (format is not "png" and not "jpg")
+            {
+                format = "jpg";
+            }
+            uriBuilder.SetQueryParameter("format", format);
+            return uriBuilder.Uri.ToString();
         }
 
         private async Task<Texture2D> DownloadTextureAsync(string url)
