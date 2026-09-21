@@ -20,6 +20,8 @@ namespace Netherlands3D.UI.Components
         private Icon position;
         private VisualElement background;
         
+        private const int MaxImageWidth = 400;
+        private const int MaxImageHeight = 400;
         private VisualElement image;
         
         public enum SnappingSide { Left, Right, Above }
@@ -102,16 +104,37 @@ namespace Netherlands3D.UI.Components
 
         public async Task SetImage(string url)
         {
-            var texture = await DownloadTextureAsync(url);
+            var imageUrl = AddImageSizeParameters(
+                url,
+                MaxImageWidth,
+                MaxImageHeight);
+            
+            var texture = await DownloadTextureAsync(imageUrl);
 
             if (texture == null)
                 return;
+
+            if (texture.width > MaxImageWidth || texture.height > MaxImageHeight)
+            {
+                Debug.LogError($"image has too large resolution: {texture.width}x{texture.height}");
+                //return;
+            }
 
             image.style.width = texture.width;
             image.style.height = texture.height;
             image.style.backgroundImage = new StyleBackground(texture);
 
             UpdateSnapping();
+        }
+        
+        private static string AddImageSizeParameters(
+            string url,
+            int maxWidth,
+            int maxHeight)
+        {
+            var separator = url.Contains('?') ? '&' : '?';
+
+            return $"{url}{separator}w={maxWidth}&h={maxHeight}";
         }
 
         private async Task<Texture2D> DownloadTextureAsync(string url)
