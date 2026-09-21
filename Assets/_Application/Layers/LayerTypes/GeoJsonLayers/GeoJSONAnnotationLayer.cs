@@ -146,6 +146,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Remove(feature);
         }
         
+        void OnDestroy()
+        {
+            foreach (var kvp in spawnedVisualisations.Reverse())
+            {
+                kvp.Value.Dispose();
+            }
+        }
+        
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
         {
             if (spawnedVisualisations.Count == 0)
@@ -218,7 +226,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 worldTextElement.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
                 worldTextElement.SetReadOnly(true);
                 worldTextElement.SetImage(annotation.ImageUrl);
-                if (HexColorUtility.ParseHexColor(annotation.Color, out var parsedColor))
+                if (!string.IsNullOrEmpty(annotation.Color) && HexColorUtility.ParseHexColor(annotation.Color, out var parsedColor))
                     worldTextElement.SetColor(parsedColor);
                 
                 floatingElement.Add(worldTextElement);
