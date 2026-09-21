@@ -205,7 +205,14 @@
     translate: 0 0;
     transition-property: translate;
     transition-duration: 0.25s;
+    transition-delay: 0s;
     transition-timing-function: ease-in-out;
+}
+
+.default-hud__left-section.presentation-section--hidden,
+.default-hud__top-section.presentation-section--hidden,
+.default-hud__bottom-section.presentation-section--hidden {
+    transition-delay: 0.5s;
 }
 
 .default-hud__left-section.presentation-section--hidden {

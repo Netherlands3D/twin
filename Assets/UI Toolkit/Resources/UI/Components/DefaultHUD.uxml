@@ -51,8 +51,8 @@
     </ui:VisualElement>
     <ui:VisualElement name="PresentationRevealZones" picking-mode="Ignore" class="presentation-reveal-zones">
         <ui:VisualElement name="LeftRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--left-section presentation-reveal-zone--active" />
-        <ui:VisualElement name="TopRevealZone" picking-mode="Position" class="presentation-reveal-zone" />
-        <ui:VisualElement name="BottomRevealZone" picking-mode="Position" class="presentation-reveal-zone" />
+        <ui:VisualElement name="TopRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--top-section presentation-reveal-zone--active" />
+        <ui:VisualElement name="BottomRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--bottom-section presentation-reveal-zone--active" />
     </ui:VisualElement>
         
 
