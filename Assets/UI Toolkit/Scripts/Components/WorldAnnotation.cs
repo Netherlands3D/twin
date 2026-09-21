@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class WorldText : VisualElement
+    public partial class WorldAnnotation : VisualElement
     {
         public EditableNameField NameField => nameField;
         public string Text => nameField.value;
@@ -17,6 +17,8 @@ namespace Netherlands3D.UI.Components
         private Icon position;
         private VisualElement background;
         
+        private VisualElement image;
+        
         public enum SnappingSide { Left, Right, Above }
         private SnappingSide snappingSide = SnappingSide.Above;
         private float labelOffsetToPosition = 0;
@@ -24,7 +26,7 @@ namespace Netherlands3D.UI.Components
         private bool isReadOnly = false;
         
 
-        public WorldText()
+        public WorldAnnotation()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
@@ -35,14 +37,30 @@ namespace Netherlands3D.UI.Components
             position = this.Q<Icon>("Position");
             position.pickingMode = PickingMode.Ignore;
             background = this.Q<VisualElement>("Background");
+            image =  this.Q<VisualElement>("Image");
             
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             nameField.RegisterValueChangedCallback(OnNameChanged);
             
             nameField.ScrollingTextEnabled = false;
+            
+            var texture = new Texture2D(240, 240, TextureFormat.RGBA32, false);
+            texture.filterMode = FilterMode.Bilinear;
+            texture.wrapMode = TextureWrapMode.Clamp;
+
+            var pixels = new Color[240 * 240];
+
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                pixels[i] = Color.white;
+            }
+
+            texture.SetPixels(pixels);
+            texture.Apply();
+            SetAnnotationImage(texture);
         }
         
-        public WorldText(string text) : this()
+        public WorldAnnotation(string text) : this()
         {
             SetText(text);
         }
@@ -77,6 +95,11 @@ namespace Netherlands3D.UI.Components
             currentText = text;
             nameField.value = text;
             UpdatePlaceholder();
+        }
+
+        public void SetImage(string url)
+        {
+            
         }
 
         public void SetSnappingSide(SnappingSide snappingSide)
@@ -115,6 +138,27 @@ namespace Netherlands3D.UI.Components
                 }
             }
             textContainer.style.translate = new Translate(offsetX, offsetY, 0);
+
+            float backgroundBorderHeight = background.resolvedStyle.height - textContainer.resolvedStyle.height;
+            image.style.translate = new Translate(
+                -image.resolvedStyle.width * 0.5f,
+                -image.resolvedStyle.height - labelOffsetToPosition - backgroundBorderHeight - textContainer.resolvedStyle.height * 0.5f,
+                0
+            );
+        }
+        
+        public void SetAnnotationImage(Texture2D texture)
+        {
+            if (texture == null)
+                return;
+
+            int width = texture.width;
+            image.style.width = width;
+
+            var aspectRatio = (float)width / texture.height;
+            image.style.height = width / aspectRatio;
+
+            image.style.backgroundImage = new StyleBackground(texture);
         }
         
         private void UpdateContainerSize()
@@ -136,6 +180,7 @@ namespace Netherlands3D.UI.Components
             textContainer.style.backgroundColor = color;
             position.style.unityBackgroundImageTintColor = color;
             background.style.backgroundColor = color;
+            image.style.backgroundColor = color;
         }
     }
 }

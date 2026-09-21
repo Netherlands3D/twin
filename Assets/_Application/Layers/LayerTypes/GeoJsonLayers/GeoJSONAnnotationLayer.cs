@@ -190,7 +190,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             private CameraService cameraService;
             private WorldUIService worldUIService;
             private AppRootBehaviour appRootBehaviour;
-            private WorldText worldTextElement; 
+            private WorldAnnotation worldTextElement; 
             private FloatingElement floatingElement;
             private const float MaxPixelDistanceOffset = 100;
             private const float worldSpaceOffset = 10;
@@ -212,8 +212,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 floatingElement = new FloatingElement();
                 worldUIService.AddToFloatingElementsContent(floatingElement);
-                worldTextElement = new WorldText(annotation.Title);
-                worldTextElement.SetSnappingSide(WorldText.SnappingSide.Above);
+                worldTextElement = new WorldAnnotation(annotation.Title);
+                worldTextElement.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
                 worldTextElement.SetReadOnly(true);
                 floatingElement.Add(worldTextElement);
 

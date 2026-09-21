@@ -24,10 +24,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private WorldUIService worldUIService;
         private CameraService cameraService;
         private AppRootBehaviour appRootBehaviour;
-        private WorldText worldTextElement; 
+        private WorldAnnotation worldAnnotation; 
         private FloatingElement floatingElement;
 
-        public VisualElement VisualElement => worldTextElement;
+        public VisualElement VisualElement => worldAnnotation;
 
         private const float MaxPixelDistanceOffset = 100;
         private const float worldSpaceOffset = 10;
@@ -50,9 +50,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             floatingElement = new FloatingElement();
             worldUIService.AddToFloatingElementsContent(floatingElement);
-            worldTextElement = new WorldText("");
-            worldTextElement.SetSnappingSide(WorldText.SnappingSide.Above);
-            floatingElement.Add(worldTextElement);
+            worldAnnotation = new WorldAnnotation("");
+            worldAnnotation.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
+            floatingElement.Add(worldAnnotation);
         }
 
         private void OnEditChanged(bool isEditing)
@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             else
             {
                 AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-                annotationPropertyData.AnnotationText = worldTextElement.Text;
+                annotationPropertyData.AnnotationText = worldAnnotation.Text;
             }
             
             inputService.SetCameraActionsEnabled(!isEditing);
@@ -71,11 +71,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-            LayerFeature feature = CreateFeature(worldTextElement);
+            LayerFeature feature = CreateFeature(worldAnnotation);
             Symbolizer styling = GetStyling(feature);
             var fillColor = styling.GetFillColor();
             if (fillColor.HasValue)
-                worldTextElement.SetColor(fillColor.Value);
+                worldAnnotation.SetColor(fillColor.Value);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
@@ -88,7 +88,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            worldTextElement.SetText(annotationPropertyData.AnnotationText);
+            worldAnnotation.SetText(annotationPropertyData.AnnotationText);
         }
         
         private void OnClickAnnotation(PointerDownEvent e)
@@ -99,21 +99,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
-            worldTextElement.NameField.OnEditingChanged.AddListener(OnEditChanged);
-            worldTextElement.RegisterCallback<PointerDownEvent>(OnClickAnnotation);
+            worldAnnotation.NameField.OnEditingChanged.AddListener(OnEditChanged);
+            worldAnnotation.RegisterCallback<PointerDownEvent>(OnClickAnnotation);
             
             var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.OnAnnotationTextChanged.AddListener(worldTextElement.SetText);
+            annotationPropertyData.OnAnnotationTextChanged.AddListener(worldAnnotation.SetText);
         }
 
         protected override void UnregisterEventListeners()
         {
             base.UnregisterEventListeners();
-            worldTextElement.NameField.OnEditingChanged.RemoveListener(OnEditChanged);
-            worldTextElement.UnregisterCallback<PointerDownEvent>(OnClickAnnotation);
+            worldAnnotation.NameField.OnEditingChanged.RemoveListener(OnEditChanged);
+            worldAnnotation.UnregisterCallback<PointerDownEvent>(OnClickAnnotation);
             
             var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(worldTextElement.SetText);
+            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(worldAnnotation.SetText);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -124,7 +124,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         public void SetVisible(bool visible)
         {
-            worldTextElement.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+            worldAnnotation.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
         }
 
         protected override void Update()
@@ -140,7 +140,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             float dist = Mathf.Abs(offsetScreenPos.x - screenPos.x);
             float t = Mathf.InverseLerp(1500f, 0f, cameraService.ActiveCamera.transform.position.y);
             float pixelOffset = Mathf.Min(dist * t, MaxPixelDistanceOffset);
-            worldTextElement.SetLabelOffset(pixelOffset);
+            worldAnnotation.SetLabelOffset(pixelOffset);
         }
         
         private void OnDestroy()
