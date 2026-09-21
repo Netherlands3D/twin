@@ -49,21 +49,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
                 // of a material asset when replacing the material - no destroy of the old material must be done because
                 // that is an asset and not an instance
-                lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
-                
+                LineRenderer3D.LineMaterial = new Material(LineRenderer3D.LineMaterial);
+                var newColor = new Color(value.r, value.g, value.b, LineRenderer3D.LineMaterial.color.a); //todo: we don't support alpha yet in the color picker
                 //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
-                lineRenderer3D.SetAllColors(value);
+                LineRenderer3D.SetAllColors(newColor);
             }
         }
         
-        public Material RenderMaterial
-        {
-            get
-            {
-                return lineRenderer3D.LineMaterial;
-            }
-        }
-
+        public Material RenderMaterial => LineRenderer3D.LineMaterial;
         
         public List<Mesh> GetMeshData(Feature feature)
         {
