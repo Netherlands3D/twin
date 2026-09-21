@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.Rendering;
 
 namespace Netherlands3D.Tilekit
 {
@@ -11,18 +9,18 @@ namespace Netherlands3D.Tilekit
         private static readonly Vector3[] farFrustumCorners = new Vector3[4];
         private static readonly List<Vector3> visibleGroundPolygon = new(6);
         
-        private static Vector2 topLeft = new Vector2(0, 1);
-        private static Vector2 topRight = new Vector2(1, 1);
-        private static Vector2 bottomRight = new Vector2(1, 0);
-        private static Vector2 bottomLeft = new Vector2(0, 0);
+        private static Vector2 topLeftViewportPoint = new Vector2(0, 1);
+        private static Vector2 topRightViewportPoint = new Vector2(1, 1);
+        private static Vector2 bottomRightViewportPoint = new Vector2(1, 0);
+        private static Vector2 bottomLeftViewportPoint = new Vector2(0, 0);
 
         public static void GetVisibleGroundPolygonNonAlloc_1(Camera camera, float maximumViewDistance, List<Vector3> result)
         {
             result.Clear();
-            result.Add(GetCornerPoint_1(camera, topLeft, maximumViewDistance));
-            result.Add(GetCornerPoint_1(camera, topRight, maximumViewDistance));
-            result.Add(GetCornerPoint_1(camera, bottomRight, maximumViewDistance));
-            result.Add(GetCornerPoint_1(camera, bottomLeft, maximumViewDistance));
+            result.Add(GetCornerPoint_1(camera, topLeftViewportPoint, maximumViewDistance));
+            result.Add(GetCornerPoint_1(camera, topRightViewportPoint, maximumViewDistance));
+            result.Add(GetCornerPoint_1(camera, bottomRightViewportPoint, maximumViewDistance));
+            result.Add(GetCornerPoint_1(camera, bottomLeftViewportPoint, maximumViewDistance));
         }
 
         public static Vector3 GetCornerPoint_1(Camera camera, Vector2 screenPosition, float maximumViewDistance)
@@ -54,27 +52,32 @@ namespace Netherlands3D.Tilekit
         public static bool GetVisibleGroundPolygonNonAlloc_2(Camera camera, float maximumViewDistance, List<Vector3> result)
         {
             result.Clear();
-            result.Add(GetCornerPoint_2(camera, topLeft, maximumViewDistance));
-            result.Add(GetCornerPoint_2(camera, topRight, maximumViewDistance));
-            result.Add(GetCornerPoint_2(camera, bottomRight, maximumViewDistance));
-            result.Add(GetCornerPoint_2(camera, bottomLeft, maximumViewDistance));
+            result.Add(GetCornerPoint_2(camera, topLeftViewportPoint, maximumViewDistance));
+            result.Add(GetCornerPoint_2(camera, topRightViewportPoint, maximumViewDistance));
+            result.Add(GetCornerPoint_2(camera, bottomRightViewportPoint, maximumViewDistance));
+            result.Add(GetCornerPoint_2(camera, bottomLeftViewportPoint, maximumViewDistance));
             return true;
         }
         
         private static readonly Plane[] frustumPlanes = new Plane[6];
 
-        public static void GetVisibleTilesNonAlloc(Camera camera, float maximumViewDistance, int tileSize, List<Tile> result)
+        public static void GetDesiredTilesNonAlloc(Camera camera, float maximumViewDistance, 
+            int rootTileSize, int minimumTileSize, float splitThreshold, float mergeThreshold,
+            HashSet<Tile> previouslySplitTiles, HashSet<Tile> newlySplitTiles,
+            List<Tile> result)
         {
+        
             result.Clear();
+            newlySplitTiles.Clear();
 
             GeometryUtility.CalculateFrustumPlanes(camera, frustumPlanes);
 
             var cameraPosition = camera.transform.position;
 
-            var minimumTileX = Mathf.FloorToInt((cameraPosition.x - maximumViewDistance) / tileSize);
-            var maximumTileX = Mathf.FloorToInt((cameraPosition.x + maximumViewDistance) / tileSize);
-            var minimumTileY = Mathf.FloorToInt((cameraPosition.z - maximumViewDistance) / tileSize);
-            var maximumTileY = Mathf.FloorToInt((cameraPosition.z + maximumViewDistance) / tileSize);
+            var minimumTileX = Mathf.FloorToInt((cameraPosition.x - maximumViewDistance) / rootTileSize);
+            var maximumTileX = Mathf.FloorToInt((cameraPosition.x + maximumViewDistance) / rootTileSize);
+            var minimumTileY = Mathf.FloorToInt((cameraPosition.z - maximumViewDistance) / rootTileSize);
+            var maximumTileY = Mathf.FloorToInt((cameraPosition.z + maximumViewDistance) / rootTileSize);
             
             var maximumViewDistanceSquared = maximumViewDistance * maximumViewDistance;
 
@@ -82,8 +85,8 @@ namespace Netherlands3D.Tilekit
             {
                 for (var tileX = minimumTileX; tileX <= maximumTileX; tileX++)
                 {
-                    var tileCoordinate = new Vector2Int(tileX, tileY);
-                    var tile = new Tile(tileCoordinate, tileSize);
+                    var tileCoordinate = new Vector2Int(tileX * rootTileSize, tileY * rootTileSize);
+                    var tile = new Tile(tileCoordinate, rootTileSize);
                     var tileBounds = GetBounds(tile);
                     
                     var nearestX = Mathf.Clamp(cameraPosition.x, tileBounds.min.x, tileBounds.max.x);
@@ -102,9 +105,138 @@ namespace Netherlands3D.Tilekit
                         continue;
                     }
 
-                    result.Add(tile);
+                    AddDesiredTile(camera, tile, minimumTileSize, splitThreshold, mergeThreshold, previouslySplitTiles, newlySplitTiles, result);
                 }
             }
+        }
+        
+        private static void AddDesiredTile(
+            Camera camera, Tile tile, int minimumTileSize, float splitThreshold, float mergeThreshold, HashSet<Tile> previouslySplitTiles,
+            HashSet<Tile> newlySplitTiles,
+            List<Tile> result) {
+            
+            if (!ShouldSplit(
+                    camera,
+                    tile,
+                    minimumTileSize,
+                    splitThreshold,
+                    mergeThreshold,
+                    previouslySplitTiles))
+            {
+                result.Add(tile);
+                return;
+            }
+            
+            newlySplitTiles.Add(tile);
+            
+            GetChildren(
+                tile,
+                out var bottomLeft,
+                out var bottomRight,
+                out var topLeft,
+                out var topRight
+            );
+            
+            AddDesiredTile(
+                camera, bottomLeft, minimumTileSize,
+                splitThreshold, mergeThreshold,
+                previouslySplitTiles, newlySplitTiles, result);
+
+            AddDesiredTile(
+                camera, bottomRight, minimumTileSize,
+                splitThreshold, mergeThreshold,
+                previouslySplitTiles, newlySplitTiles, result);
+
+            AddDesiredTile(
+                camera, topLeft, minimumTileSize,
+                splitThreshold, mergeThreshold,
+                previouslySplitTiles, newlySplitTiles, result);
+
+            AddDesiredTile(
+                camera, topRight, minimumTileSize,
+                splitThreshold, mergeThreshold,
+                previouslySplitTiles, newlySplitTiles, result);
+            
+        }
+        
+        private static bool ShouldSplit(
+            Camera camera,
+            Tile tile,
+            int minimumTileSize,
+            float splitThreshold,
+            float mergeThreshold,
+            HashSet<Tile> previouslySplitTiles)
+        {
+            if (tile.Size > minimumTileSize)
+                return true;
+            
+            if (tile.Size <= minimumTileSize)
+                return false;
+
+            var bounds = GetBounds(tile);
+
+            // An off-screen child remains at its current coarse size.
+            if (!GeometryUtility.TestPlanesAABB(
+                    frustumPlanes,
+                    bounds))
+            {
+                return false;
+            }
+
+            var viewportRect =
+                GetBoundsViewportRect(camera, bounds);
+
+            var widthInPixels =
+                viewportRect.width * camera.pixelWidth;
+
+            var heightInPixels =
+                viewportRect.height * camera.pixelHeight;
+
+            var screenSizeInPixels = Mathf.Max(
+                widthInPixels,
+                heightInPixels
+            );
+
+            var wasPreviouslySplit =
+                previouslySplitTiles.Contains(tile);
+
+            var threshold = wasPreviouslySplit
+                ? mergeThreshold
+                : splitThreshold;
+
+            return screenSizeInPixels > splitThreshold;
+        }
+        
+        public static void GetChildren(
+            Tile parent,
+            out Tile bottomLeft,
+            out Tile bottomRight,
+            out Tile topLeft,
+            out Tile topRight)
+        {
+            var childSize = parent.Size / 2;
+            var x = parent.Coordinate.x;
+            var y = parent.Coordinate.y;
+
+            bottomLeft = new Tile(
+                new Vector2Int(x, y),
+                childSize
+            );
+
+            bottomRight = new Tile(
+                new Vector2Int(x + childSize, y),
+                childSize
+            );
+
+            topLeft = new Tile(
+                new Vector2Int(x, y + childSize),
+                childSize
+            );
+
+            topRight = new Tile(
+                new Vector2Int(x + childSize, y + childSize),
+                childSize
+            );
         }
         
         public static Bounds GetBounds(Tile tile)
@@ -115,7 +247,7 @@ namespace Netherlands3D.Tilekit
             );
         }
 
-        public static Rect GetBoundsScreenSize(Camera camera, Bounds bounds)
+        public static Rect GetBoundsViewportRect(Camera camera, Bounds bounds)
         {
             var screenMin = camera.WorldToViewportPoint(bounds.min);
             var screenMax = camera.WorldToViewportPoint(bounds.max);

@@ -23,6 +23,18 @@ namespace Netherlands3D.Tilekit
         private Vector2Int? focusedTile;
 
         private int[] tileSizes = new int[]{4000, 2000, 1000, 500, 250, 125};
+        
+        private float maximumViewDistance = 10_000f;
+        private int rootTileSize = 8_000;
+        private int minimumTileSize = 500;
+
+        private float splitThreshold = 500f;
+        private float mergeThreshold = 400f;
+
+        private readonly List<Tile> desiredTiles = new(256);
+
+        private HashSet<Tile> currentSplitTiles = new(256);
+        private HashSet<Tile> nextSplitTiles = new(256);
 
         public void StartStreaming()
         {
@@ -88,9 +100,25 @@ namespace Netherlands3D.Tilekit
             //DrawShapeFlat(visibleGroundPolygon, Color.green);
             DrawShape(visibleGroundPolygon, Color.blue);
 
-            TileMath.GetVisibleTilesNonAlloc(activeCamera, 10000f, 8000, visibleTiles);
+            TileMath.GetDesiredTilesNonAlloc(
+                activeCamera,
+                maximumViewDistance,
+                rootTileSize,
+                minimumTileSize,
+                splitThreshold,
+                mergeThreshold,
+                currentSplitTiles,
+                nextSplitTiles,
+                desiredTiles
+            );
+            
+            // nextSplitTiles now represents the current calculation.
+            // Swap the buffers so it becomes the previous state next time.
+            var oldCurrentSplitTiles = currentSplitTiles;
+            currentSplitTiles = nextSplitTiles;
+            nextSplitTiles = oldCurrentSplitTiles;
 
-            foreach (var visibleTile in visibleTiles)
+            foreach (var visibleTile in desiredTiles)
             {
                 DrawTile(visibleTile, Color.red);
             }
