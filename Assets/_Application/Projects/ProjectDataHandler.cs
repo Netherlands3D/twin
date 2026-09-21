@@ -220,6 +220,8 @@ namespace Netherlands3D.Twin.Projects
         {
             try
             {
+                ProjectData.Current.ResetPresentationPins();
+                ProjectData.Current.functionalities.RemoveAll(functionality => functionality.Id == "presentation-mode");
                 JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
             }
             catch(Exception e)
