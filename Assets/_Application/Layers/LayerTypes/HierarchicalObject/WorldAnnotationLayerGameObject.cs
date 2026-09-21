@@ -136,7 +136,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var localPos = worldUIService.FloatingElementsContent.WorldToLocal(panelPos);
             floatingElement.SetPosition(localPos);
 
-            var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(worldPos + Vector3.right * worldSpaceOffset);
+            var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(worldPos + cameraService.ActiveCamera.transform.right * worldSpaceOffset);
             float dist = Mathf.Abs(offsetScreenPos.x - screenPos.x);
             float t = Mathf.InverseLerp(1500f, 0f, cameraService.ActiveCamera.transform.position.y);
             float pixelOffset = Mathf.Min(dist * t, MaxPixelDistanceOffset);

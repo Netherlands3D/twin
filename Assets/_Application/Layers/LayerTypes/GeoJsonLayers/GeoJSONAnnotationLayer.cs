@@ -12,6 +12,7 @@ using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using Newtonsoft.Json.Linq;
@@ -169,6 +170,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             public string AnnotationText { get; set; }
             public string ImageUrl { get; set; }
             public string ImageCaption { get; set; }
+            public string Color { get; set; }
         }
         
         public class AnnotationVisualisation : IFeatureVisualisation<List<Coordinate>>
@@ -176,7 +178,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             private Annotation annotation;
             public Feature Feature { get; set; }
             
-            private GameObject testObject = null;
+            //private GameObject testObject = null;
             public List<List<Coordinate>> Data => pointCollection;
 
             private List<List<Coordinate>> pointCollection = new();
@@ -199,7 +201,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             public AnnotationVisualisation(Annotation annotation)
             {
                 this.annotation = annotation;
-                testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                //testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 worldUIService  = ServiceLocator.GetService<WorldUIService>();
                 cameraService = App.Cameras;
                 appRootBehaviour = App.UIRoot;
@@ -216,6 +218,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 worldTextElement.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
                 worldTextElement.SetReadOnly(true);
                 worldTextElement.SetImage(annotation.ImageUrl);
+                if (HexColorUtility.ParseHexColor(annotation.Color, out var parsedColor))
+                    worldTextElement.SetColor(parsedColor);
+                
                 floatingElement.Add(worldTextElement);
 
                 SetVisible(true);
@@ -254,7 +259,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     Mathf.Round(tiledBounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
                     Mathf.Round(tiledBounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
                 );
-                testObject.transform.position = trueBounds.center;
+                //testObject.transform.position = trueBounds.center;
             }
 
             private void OnOriginShifted(Coordinate from, Coordinate to)
@@ -266,7 +271,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 boundsPadding = padding; 
                 
-                testObject.transform.localScale = boundsPadding;
+                //testObject.transform.localScale = boundsPadding;
             }
             
             public void SetVisible(bool visible)
@@ -285,7 +290,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var localPos = worldUIService.FloatingElementsContent.WorldToLocal(panelPos);
                 floatingElement.SetPosition(localPos);
 
-                var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(trueBounds.center + Vector3.right * worldSpaceOffset);
+                var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(trueBounds.center + cameraService.ActiveCamera.transform.right * worldSpaceOffset);
                 float dist = Mathf.Abs(offsetScreenPos.x - screenPos.x);
                 float t = Mathf.InverseLerp(1500f, 0f, cameraService.ActiveCamera.transform.position.y);
                 float pixelOffset = Mathf.Min(dist * t, MaxPixelDistanceOffset);
