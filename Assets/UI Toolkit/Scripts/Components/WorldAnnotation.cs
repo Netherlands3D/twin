@@ -1,6 +1,9 @@
+using System.Collections;
+using System.Threading.Tasks;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -97,9 +100,35 @@ namespace Netherlands3D.UI.Components
             UpdatePlaceholder();
         }
 
-        public void SetImage(string url)
+        public async Task SetImage(string url)
         {
-            
+            var texture = await DownloadTextureAsync(url);
+
+            if (texture == null)
+                return;
+
+            image.style.width = texture.width;
+            image.style.height = texture.height;
+            image.style.backgroundImage = new StyleBackground(texture);
+
+            UpdateSnapping();
+        }
+
+        private async Task<Texture2D> DownloadTextureAsync(string url)
+        {
+            using var request = UnityWebRequestTexture.GetTexture(url);
+            var operation = request.SendWebRequest();
+            var tcs = new TaskCompletionSource<bool>();
+            operation.completed += _ => tcs.TrySetResult(true);
+            await tcs.Task;
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Failed to download image: {request.error}");
+                return null;
+            }
+
+            return DownloadHandlerTexture.GetContent(request);
         }
 
         public void SetSnappingSide(SnappingSide snappingSide)

@@ -215,6 +215,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 worldTextElement = new WorldAnnotation(annotation.Title);
                 worldTextElement.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
                 worldTextElement.SetReadOnly(true);
+                worldTextElement.SetImage(annotation.ImageUrl);
                 floatingElement.Add(worldTextElement);
 
                 SetVisible(true);
