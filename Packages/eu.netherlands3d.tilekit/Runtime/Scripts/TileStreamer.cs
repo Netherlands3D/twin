@@ -75,8 +75,8 @@ namespace Netherlands3D.Tilekit
         private static readonly Vector2 BottomLeftScreenPoint = new Vector2(0, 0);
 
         private readonly List<Vector3> visibleGroundPolygon = new(4);
-        private readonly List<Vector2Int> visibleTiles = new(64);
-        
+        private readonly List<Tile> visibleTiles = new(64);
+
         private void GetVisibleTiles()
         {
             //TileMath.GetVisibleGroundPolygonNonAlloc_1(activeCamera, 10000f, visibleGroundPolygon);
@@ -84,34 +84,23 @@ namespace Netherlands3D.Tilekit
             //DrawShape(visibleGroundPolygon, Color.green);
             //DrawShape(flattenedGroundPolygon, Color.red);
             TileMath.GetVisibleGroundPolygonNonAlloc_2(activeCamera, 5000f, visibleGroundPolygon);
-            DrawShape(visibleGroundPolygon, Color.green);
-            DrawShapeFlat(visibleGroundPolygon, Color.green);
+            //DrawShape(visibleGroundPolygon, Color.green);
+            //DrawShapeFlat(visibleGroundPolygon, Color.green);
             DrawShape(visibleGroundPolygon, Color.blue);
-            
-            var boundsList = TileMath.GetVisibleTiles(activeCamera, 5000f, 8000);
-            for (int i = 0; i < boundsList.Count; i++)
+
+            TileMath.GetVisibleTilesNonAlloc(activeCamera, 10000f, 8000, visibleTiles);
+
+            foreach (var visibleTile in visibleTiles)
             {
-                MakeBoundsSmaller(activeCamera, boundsList, boundsList[i]);
+                DrawTile(visibleTile, Color.red);
             }
-            foreach (var bounds in boundsList)
-            {
-                DrawBounds(bounds, Color.red);
-            }
-            
+
         }
 
-        private static void MakeBoundsSmaller(Camera camera, List<Bounds> boundsList, Bounds bounds)
+        private static void DrawTile(Tile tile, Color color)
         {
-            var screenSize = TileMath.GetBoundsScreenSize(camera, bounds);
-            if (screenSize.width > .25f)
-            {
-                //boundsList.Remove(bounds);
-                var smallerSize = new Vector3(bounds.size.x / 2, bounds.size.y, bounds.size.z / 2f);
-                boundsList.Add(new Bounds(bounds.center - new Vector3(-bounds.extents.x, 0, -bounds.extents.z), bounds.size / 2f));
-                boundsList.Add(new Bounds(bounds.center - new Vector3(-bounds.extents.x, 0, +bounds.extents.z), bounds.size / 2f));   
-                boundsList.Add(new Bounds(bounds.center - new Vector3(+bounds.extents.x, 0, +bounds.extents.z), bounds.size / 2f));   
-                boundsList.Add(new Bounds(bounds.center - new Vector3(+bounds.extents.x, 0, -bounds.extents.z), bounds.size / 2f));   
-            }
+            var bounds = TileMath.GetBounds(tile);
+            DrawBounds(bounds, color);
         }
 
         private static void DrawBounds(Bounds bounds, Color color)

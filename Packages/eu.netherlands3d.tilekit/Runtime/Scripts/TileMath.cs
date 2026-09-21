@@ -63,89 +63,56 @@ namespace Netherlands3D.Tilekit
         
         private static readonly Plane[] frustumPlanes = new Plane[6];
 
-        public static List<Bounds> GetVisibleTiles(
-            Camera camera,
-            float maximumViewDistance,
-            float tileSize)
+        public static void GetVisibleTilesNonAlloc(Camera camera, float maximumViewDistance, int tileSize, List<Tile> result)
         {
-
-            var result = new List<Bounds>();
+            result.Clear();
 
             GeometryUtility.CalculateFrustumPlanes(camera, frustumPlanes);
 
             var cameraPosition = camera.transform.position;
 
-            var minimumTileX = Mathf.FloorToInt(
-                (cameraPosition.x - maximumViewDistance) / tileSize
-            );
-
-            var maximumTileX = Mathf.FloorToInt(
-                (cameraPosition.x + maximumViewDistance) / tileSize
-            );
-
-            var minimumTileY = Mathf.FloorToInt(
-                (cameraPosition.z - maximumViewDistance) / tileSize
-            );
-
-            var maximumTileY = Mathf.FloorToInt(
-                (cameraPosition.z + maximumViewDistance) / tileSize
-            );
+            var minimumTileX = Mathf.FloorToInt((cameraPosition.x - maximumViewDistance) / tileSize);
+            var maximumTileX = Mathf.FloorToInt((cameraPosition.x + maximumViewDistance) / tileSize);
+            var minimumTileY = Mathf.FloorToInt((cameraPosition.z - maximumViewDistance) / tileSize);
+            var maximumTileY = Mathf.FloorToInt((cameraPosition.z + maximumViewDistance) / tileSize);
+            
+            var maximumViewDistanceSquared = maximumViewDistance * maximumViewDistance;
 
             for (var tileY = minimumTileY; tileY <= maximumTileY; tileY++)
             {
                 for (var tileX = minimumTileX; tileX <= maximumTileX; tileX++)
                 {
-                    var tileMinimumX = tileX * tileSize;
-                    var tileMinimumZ = tileY * tileSize;
-
-                    // Reject tiles completely outside the horizontal load radius.
-                    var nearestX = Mathf.Clamp(
-                        cameraPosition.x,
-                        tileMinimumX,
-                        tileMinimumX + tileSize
-                    );
-
-                    var nearestZ = Mathf.Clamp(
-                        cameraPosition.z,
-                        tileMinimumZ,
-                        tileMinimumZ + tileSize
-                    );
+                    var tileCoordinate = new Vector2Int(tileX, tileY);
+                    var tile = new Tile(tileCoordinate, tileSize);
+                    var tileBounds = GetBounds(tile);
+                    
+                    var nearestX = Mathf.Clamp(cameraPosition.x, tileBounds.min.x, tileBounds.max.x);
+                    var nearestZ = Mathf.Clamp(cameraPosition.z, tileBounds.min.z, tileBounds.max.z);
 
                     var deltaX = cameraPosition.x - nearestX;
                     var deltaZ = cameraPosition.z - nearestZ;
 
-                    if (deltaX * deltaX + deltaZ * deltaZ >
-                        maximumViewDistance * maximumViewDistance)
+                    if (deltaX * deltaX + deltaZ * deltaZ > maximumViewDistanceSquared)
+                    {
+                        continue;
+                    }
+                    
+                    if (!GeometryUtility.TestPlanesAABB(frustumPlanes, tileBounds))
                     {
                         continue;
                     }
 
-                    var tileBounds = new Bounds(
-                        new Vector3(
-                            tileMinimumX + tileSize * 0.5f,
-                            0f,
-                            tileMinimumZ + tileSize * 0.5f
-                        ),
-                        new Vector3(
-                            tileSize,
-                            200f,
-                            tileSize
-                        )
-                    );
-
-                    if (!GeometryUtility.TestPlanesAABB(
-                            frustumPlanes,
-                            tileBounds))
-                    {
-                        continue;
-                    }
-
-                    result.Add(tileBounds);
+                    result.Add(tile);
                 }
-
-                
             }
-            return result;
+        }
+        
+        public static Bounds GetBounds(Tile tile)
+        {
+            return new Bounds(
+                new Vector3(tile.Coordinate.x + tile.Size * 0.5f, 0f, tile.Coordinate.y + tile.Size * 0.5f),
+                new Vector3(tile.Size, 200f, tile.Size)
+            );
         }
 
         public static Rect GetBoundsScreenSize(Camera camera, Bounds bounds)
