@@ -5,10 +5,9 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.UI.Components;
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.Timeline
 {
     public enum BuildState
     {
