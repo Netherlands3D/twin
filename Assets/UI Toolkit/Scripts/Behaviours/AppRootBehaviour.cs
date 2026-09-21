@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.PresentationModus.UIHider;
-using Netherlands3D.UI.Components;
 
 namespace Netherlands3D
 {
@@ -20,7 +19,6 @@ namespace Netherlands3D
 
         private UIHider presentationUIHider;
 
-        private bool hasStarted;
 
         //the excuted order of this script should be executed very early to ensure the presence of the approot. 
         private void Awake()
@@ -32,52 +30,6 @@ namespace Netherlands3D
         private void Start()
         {
             DisableFPVUI();
-
-            hasStarted = true;
-            InitializePresentationSections();
-        }
-
-        private void OnEnable()
-        {
-            if (hasStarted)
-                InitializePresentationSections();
-        }
-
-        private void InitializePresentationSections()
-        {
-            if (presentationUIHider != null)
-                return;
-
-            var defaultHUD = appRoot.Q<DefaultHUD>();
-            var uiHider = ServiceLocator.GetService<UIHider>();
-
-            InitializePresentationControls(defaultHUD, uiHider);
-
-            var leftSection = defaultHUD.Q<VisualElement>("LeftSection");
-            var navigationSection = defaultHUD.Q<VisualElement>("NavigationSection");
-            var presentationControls = defaultHUD.Q<VisualElement>("PresentationControls");
-            var toolbox = defaultHUD.Q<ToolbarToolbox>();
-            var scenario = defaultHUD.Q<ToolbarScenario>();
-        }
-
-        private void InitializePresentationControls(DefaultHUD defaultHUD, UIHider uiHider)
-        {
-            presentationUIHider = uiHider;
-
-            presentationUIHider.PresentationChanged += UpdatePresentationControls;
-
-            UpdatePresentationControls();
-        }
-
-        private void OnPresentationChanged(ChangeEvent<bool> evt)
-        {
-            presentationUIHider.SetPresenting(evt.newValue);
-            UpdatePresentationControls();
-        }
-
-        private void UpdatePresentationControls()
-        {
-            appRoot.EnableInClassList("app--presenting", presentationUIHider.IsPresenting);
         }
         
         //todo: in the future we might want to create a list of huds we can switch between, so we avoid multiple true/false permutations, but for now we only have 2, so this is not needed yet
@@ -101,9 +53,6 @@ namespace Netherlands3D
         public void EnableFunctionality(Functionality functionality)
         {
             appRoot.AddToClassList("app--functionality-" + functionality.Id);
-
-            if (functionality.Id == UIHider.FunctionalityId)
-                ServiceLocator.GetService<UIHider>().SetPresentationEnabled(true);
         }
 
         /// <summary>
@@ -113,9 +62,6 @@ namespace Netherlands3D
         public void DisableFunctionality(Functionality functionality)
         {
             appRoot.RemoveFromClassList("app--functionality-" + functionality.Id);
-
-            if (functionality.Id == UIHider.FunctionalityId)
-                ServiceLocator.GetService<UIHider>().SetPresentationEnabled(false);
         }
 
         public Vector2 GetPanelClickPosition()
