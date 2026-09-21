@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Timeline
 {
-    [RequireComponent(typeof(LayerGameObject))]
+    [RequireComponent(typeof(GeoJsonLayerGameObject))]
     public class TimelineGeoJson : MonoBehaviour
     {
         GeoJsonLayerGameObject visualization;
@@ -38,22 +38,14 @@ namespace Netherlands3D.Timeline
 
         private void OnFeatureAdded(Feature feature)
         {
-            var timestampsString = feature.Properties["timestamps"].ToString();
-            var timeline = new TimestampCollection(timestampsString);
-            timelines.Add(feature, timeline);
+            if (feature.Properties.TryGetValue("timestamps", out var timestampObject))
+            {
+                var timeline = new TimestampCollection(timestampObject.ToString());
+                timelines.Add(feature, timeline);
+            }
+            //todo: use the imported data
         }
 
-        // private void ParseFeatureTimestamps()
-        // {
-        //     foreach (var feature in visualization.GeoJsonFeatures)
-        //     {
-        //         var timestampsString = feature.Properties["timestamps"].ToString();
-        //         var timeline = new TimestampCollection(timestampsString);
-        //         timelines.Add(feature, timeline);
-        //     }
-        //
-        //     Debug.Log(timelines.Count);
-        // }
 
         // private void OnTimeChanged(DateTime currentTime)
         // {

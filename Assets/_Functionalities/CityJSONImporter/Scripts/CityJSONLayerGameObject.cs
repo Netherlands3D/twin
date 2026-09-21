@@ -1,18 +1,30 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.CityJSON;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
+    [RequireComponent(typeof(CityJSON))]
     public class CityJSONLayerGameObject : HierarchicalObjectLayerGameObject
     {
         public UnityEvent<CityObjectVisualizer> OnFeatureAdded;
         CoordinateSystem heightReferenceCoordinateSystem = CoordinateSystem.ETRS89_ECEF;
+
+        private CityJSON cityJson;
+        public CityJSON CityJson => cityJson;
+
+        protected override void OnVisualizationInitialize()
+        {
+            base.OnVisualizationInitialize();
+            cityJson = GetComponent<CityJSON>();
+        }
 
         protected override void RegisterEventListeners()
         {
