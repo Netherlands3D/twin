@@ -6,11 +6,17 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.Panels;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -89,7 +95,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 value is JObject obj)
             {
                 Annotation annotation = obj.ToObject<Annotation>();
-                AnnotationVisualisation visualisation = new AnnotationVisualisation { Feature = feature, Annotation = annotation };
+                AnnotationVisualisation visualisation = new AnnotationVisualisation(annotation) { Feature = feature };
                 
                 Point point = feature.Geometry as Point;
                 var convertedPoint = GeometryVisualizationFactory.ConvertToCoordinate(originalCoordinateSystem, point.Coordinates);
@@ -102,7 +108,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-       
+        private void Update()
+        {
+            var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+            foreach (var kvp in spawnedVisualisations.Reverse())
+            {
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
+                kvp.Value.SetVisible(inCameraFrustum);
+                
+                if (!inCameraFrustum) continue;
+
+                kvp.Value.Update();
+            }
+        }
+
         /// <summary>
         /// Checks the Bounds of the visualisations and checks them against the camera frustum
         /// to remove visualisations that are out of view
@@ -122,6 +141,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void RemoveFeature(Feature feature)
         {
             FeatureRemoved?.Invoke(feature);
+            spawnedVisualisations[feature].Dispose();
             spawnedVisualisations.Remove(feature);
         }
         
@@ -153,7 +173,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         public class AnnotationVisualisation : IFeatureVisualisation<List<Coordinate>>
         {
-            public Annotation Annotation { get; set; }
+            private Annotation annotation;
             public Feature Feature { get; set; }
             
             private GameObject testObject = null;
@@ -166,11 +186,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             private float boundsRoundingCeiling = 1000;
             public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
+            
+            private CameraService cameraService;
+            private WorldUIService worldUIService;
+            private AppRootBehaviour appRootBehaviour;
+            private WorldText worldTextElement; 
+            private FloatingElement floatingElement;
+            private const float MaxPixelDistanceOffset = 100;
+            private const float worldSpaceOffset = 10;
+            private bool isVisible = false;
 
-            public AnnotationVisualisation()
+            public AnnotationVisualisation(Annotation annotation)
             {
+                this.annotation = annotation;
                 testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                worldUIService  = ServiceLocator.GetService<WorldUIService>();
+                cameraService = App.Cameras;
+                appRootBehaviour = App.UIRoot;
                 Origin.current.onPostShift.AddListener(OnOriginShifted);
+                
+                InitializeWorldUI();
+            }
+            
+            private void InitializeWorldUI()
+            {
+                floatingElement = new FloatingElement();
+                worldUIService.AddToFloatingElementsContent(floatingElement);
+                worldTextElement = new WorldText(annotation.Title);
+                worldTextElement.SetSnappingSide(WorldText.SnappingSide.Above);
+                worldTextElement.SetReadOnly(true);
+                floatingElement.Add(worldTextElement);
+
+                SetVisible(true);
             }
 
             ~AnnotationVisualisation()
@@ -219,6 +266,35 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 boundsPadding = padding; 
                 
                 testObject.transform.localScale = boundsPadding;
+            }
+            
+            public void SetVisible(bool visible)
+            {
+                if(this.isVisible == visible)
+                    return;
+                
+                this.isVisible = visible;
+                worldTextElement.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+            }
+            
+            public void Update()
+            {
+                var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(trueBounds.center);
+                Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
+                var localPos = worldUIService.FloatingElementsContent.WorldToLocal(panelPos);
+                floatingElement.SetPosition(localPos);
+
+                var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(trueBounds.center + Vector3.right * worldSpaceOffset);
+                float dist = Mathf.Abs(offsetScreenPos.x - screenPos.x);
+                float t = Mathf.InverseLerp(1500f, 0f, cameraService.ActiveCamera.transform.position.y);
+                float pixelOffset = Mathf.Min(dist * t, MaxPixelDistanceOffset);
+                worldTextElement.SetLabelOffset(pixelOffset);
+            }
+
+            public void Dispose()
+            {
+                worldUIService.RemoveFromFloatingElementsContent(floatingElement);
+                floatingElement = null;
             }
         }
     }

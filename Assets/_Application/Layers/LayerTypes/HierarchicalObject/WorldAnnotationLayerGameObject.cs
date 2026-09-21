@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     {
         private SelectionService selectionService;
         private InputService inputService;
-        private WorldUIService contextMenuBehaviour;
+        private WorldUIService worldUIService;
         private CameraService cameraService;
         private AppRootBehaviour appRootBehaviour;
         private WorldText worldTextElement; 
@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnVisualizationInitialize();
             inputService = ServiceLocator.GetService<InputService>();
             selectionService = ServiceLocator.GetService<SelectionService>();
-            contextMenuBehaviour  = ServiceLocator.GetService<WorldUIService>();
+            worldUIService  = ServiceLocator.GetService<WorldUIService>();
             cameraService = App.Cameras;
             appRootBehaviour = App.UIRoot;
             InitializeWorldUI();
@@ -49,7 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private void InitializeWorldUI()
         {
             floatingElement = new FloatingElement();
-            contextMenuBehaviour.AddToFloatingElementsContent(floatingElement);
+            worldUIService.AddToFloatingElementsContent(floatingElement);
             worldTextElement = new WorldText("");
             worldTextElement.SetSnappingSide(WorldText.SnappingSide.Above);
             floatingElement.Add(worldTextElement);
@@ -133,7 +133,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Vector3 worldPos = WorldTransform.Coordinate.ToUnity();
             var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(worldPos);
             Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
-            var localPos = contextMenuBehaviour.FloatingElementsContent.WorldToLocal(panelPos);
+            var localPos = worldUIService.FloatingElementsContent.WorldToLocal(panelPos);
             floatingElement.SetPosition(localPos);
 
             var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(worldPos + Vector3.right * worldSpaceOffset);
@@ -145,7 +145,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         private void OnDestroy()
         {
-            contextMenuBehaviour.RemoveFromFloatingElementsContent(floatingElement);
+            worldUIService.RemoveFromFloatingElementsContent(floatingElement);
             floatingElement = null;
         }
     }

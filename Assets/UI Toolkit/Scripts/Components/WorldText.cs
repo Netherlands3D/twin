@@ -21,6 +21,8 @@ namespace Netherlands3D.UI.Components
         private SnappingSide snappingSide = SnappingSide.Above;
         private float labelOffsetToPosition = 0;
         private string currentText;
+        private bool isReadOnly = false;
+        
 
         public WorldText()
         {
@@ -63,9 +65,16 @@ namespace Netherlands3D.UI.Components
             bool isEmpty = string.IsNullOrEmpty(currentText);
             placeholder.EnableInClassList(UtilityClassConstants.HIDDEN, !isEmpty);
         }
+
+        public void SetReadOnly(bool isReadOnly)
+        {
+            this.isReadOnly = isReadOnly;
+            nameField.IsEditable = !isReadOnly;
+        }
         
         public void SetText(string text)
         {
+            currentText = text;
             nameField.value = text;
             UpdatePlaceholder();
         }
