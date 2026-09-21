@@ -16,18 +16,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         }
 
         //This could be changed to a data member if we want to save the last used coloring type in the project file (eg. stroke or fill)
-        [JsonIgnore] private string colorType = Symbolizer.FillColorProperty; //default
-
-        [JsonIgnore]
-        public string ColorType
-        {
-            get => colorType;
-            set
-            {
-                colorType = value;
-                ColorTypeChanged.Invoke(value);
-            }
-        }
+       
 
         public void SetDefaultSymbolizerColor(Color? color)
         {
@@ -44,6 +33,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public override List<string> GetUsedColorTypes()
         {
+            //todo this should be a list of stylingrules where only the keys are gotten but filtered by the coloring key
             var list = DefaultSymbolizer.GetUsedColorProperties(); 
             
             if (!list.Contains(ColorType))
