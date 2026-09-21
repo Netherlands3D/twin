@@ -30,51 +30,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
-        private Dictionary<Feature, Annotation> spawnedVisualisations = new();
+        private Dictionary<Feature, AnnotationVisualisation> spawnedVisualisations = new();
 
         [SerializeField] private Material annotationMaterial;
 
-        private Annotation annotation;
-
-        public class Annotation
-        {
-            public string Title { get; set; }
-            public string AnnotationText { get; set; }
-            public string ImageUrl { get; set; }
-            public string ImageCaption { get; set; }
-            public Coordinate Coordinate { get; set; }
-            public Bounds trueBounds { get; set; }
-            public Bounds tiledBounds { get; set; }
-
-            public Feature Feature { get; set; }
-            public CoordinateSystem CoordinateSystem { get; set; }
-
-            public void CalculateBounds(Coordinate coord, Coordinate coord2)
-            {
-                Point point = Feature.Geometry as Point;
-                var convertedPoint =
-                    GeometryVisualizationFactory.ConvertToCoordinate(CoordinateSystem, point.Coordinates);
-                Coordinate = convertedPoint;
-
-                trueBounds = new Bounds(convertedPoint.ToUnity(), Vector3.zero);
-                trueBounds.Expand(Vector3.one * 5);
-                Bounds tiledBounds = new Bounds(trueBounds.center, trueBounds.size);
-                // Expand bounds to ceiling to steps
-                float BoundsRoundingCeiling = 1000;
-                tiledBounds.size = new Vector3(
-                    Mathf.Ceil(tiledBounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                    Mathf.Ceil(tiledBounds.size.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                    Mathf.Ceil(tiledBounds.size.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
-                );
-                tiledBounds.center = new Vector3(
-                    Mathf.Round(tiledBounds.center.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                    Mathf.Round(tiledBounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
-                    Mathf.Round(tiledBounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
-                );
-                this.tiledBounds = tiledBounds;
-            }
-        }
-
+        
 
         public Color RenderColor
         {
@@ -88,18 +48,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public Material RenderMaterial
-        {
-            get
-            {
-                return annotationMaterial;
-            }
-        }
+        public Material RenderMaterial => annotationMaterial;
 
-        public List<Mesh> GetMeshData(Feature feature)
-        {
-            return null;
-        }
+        public List<Mesh> GetMeshData(Feature feature) => null;
 
         public Bounds GetFeatureBounds(Feature feature)
         {
@@ -133,24 +84,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
                 return;
-
-            GeoJSONAnnotationLayer.Annotation annotation = null;
+            
             if (feature.Properties.TryGetValue("annotation", out var value) &&
                 value is JObject obj)
             {
-                annotation = obj.ToObject<GeoJSONAnnotationLayer.Annotation>();
-                Origin.current.onPostShift.AddListener(annotation.CalculateBounds);
+                Annotation annotation = obj.ToObject<Annotation>();
+                AnnotationVisualisation visualisation = new AnnotationVisualisation { Feature = feature, Annotation = annotation };
+            
+                visualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
+                visualisation.CalculateBounds();
+                spawnedVisualisations.Add(feature, visualisation);
             }
-
-            
-            spawnedVisualisations.Add(feature, annotation);
-            
-            testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            testObject.transform.localScale = Vector3.one * GetSelectionRange();
-            testObject.transform.position = annotation.trueBounds.center;
         }
 
-        private GameObject testObject = null;
+       
         /// <summary>
         /// Checks the Bounds of the visualisations and checks them against the camera frustum
         /// to remove visualisations that are out of view
@@ -163,7 +110,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
                 
-                Origin.current.onPostShift.RemoveListener(kvp.Value.CalculateBounds);
                 RemoveFeature(kvp.Key);
             }
         }
@@ -190,6 +136,85 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
+        }
+
+        public struct Annotation
+        {
+            public string Title { get; set; }
+            public string AnnotationText { get; set; }
+            public string ImageUrl { get; set; }
+            public string ImageCaption { get; set; }
+        }
+        
+        public class AnnotationVisualisation : IFeatureVisualisation<List<Coordinate>>
+        {
+            public Annotation Annotation { get; set; }
+            public Feature Feature { get; set; }
+            
+            private GameObject testObject = null;
+            public List<List<Coordinate>> Data => pointCollection;
+
+            private List<List<Coordinate>> pointCollection = new();
+            public Bounds tiledBounds;
+            public Bounds trueBounds;
+            private Vector3 boundsPadding;
+
+            private float boundsRoundingCeiling = 1000;
+            public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
+
+            public AnnotationVisualisation()
+            {
+                testObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                Origin.current.onPostShift.AddListener(OnOriginShifted);
+            }
+
+            ~AnnotationVisualisation()
+            {
+                Origin.current.onPostShift.RemoveListener(OnOriginShifted);
+            }
+            
+            public void CalculateBounds()
+            {
+                // Create combined rounded bounds of all lines
+                foreach (var pointCollection in pointCollection)
+                {
+                    for (var i = 0; i < pointCollection.Count; i++)
+                    {
+                        var coordinate = pointCollection[i];
+                        if (i == 0)
+                            trueBounds = new Bounds(coordinate.ToUnity(), Vector3.zero);
+                        else
+                            trueBounds.Encapsulate(coordinate.ToUnity());
+                    }
+                }
+                trueBounds.Expand(boundsPadding);
+                tiledBounds = new Bounds(trueBounds.center, trueBounds.size);
+                
+                // Expand bounds to ceiling to steps
+                tiledBounds.size = new Vector3(
+                    Mathf.Ceil(tiledBounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Ceil(tiledBounds.size.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Ceil(tiledBounds.size.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
+                );
+                tiledBounds.center = new Vector3(
+                    Mathf.Round(tiledBounds.center.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Round(tiledBounds.center.y / BoundsRoundingCeiling) * BoundsRoundingCeiling,
+                    Mathf.Round(tiledBounds.center.z / BoundsRoundingCeiling) * BoundsRoundingCeiling
+                );
+                testObject.transform.position = trueBounds.center;
+            }
+
+            private void OnOriginShifted(Coordinate from, Coordinate to)
+            {
+                CalculateBounds();
+            }
+
+            public void SetBoundsPadding(Vector3 padding)
+            {
+                boundsPadding = padding; 
+                
+                testObject.transform.localScale = boundsPadding;
+            }
         }
     }
 }
