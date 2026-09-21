@@ -90,7 +90,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 Annotation annotation = obj.ToObject<Annotation>();
                 AnnotationVisualisation visualisation = new AnnotationVisualisation { Feature = feature, Annotation = annotation };
-            
+                
+                Point point = feature.Geometry as Point;
+                var convertedPoint = GeometryVisualizationFactory.ConvertToCoordinate(originalCoordinateSystem, point.Coordinates);
+                var singlePointList = new List<Coordinate>() { convertedPoint };
+                visualisation.Data.Add(singlePointList);
+                
                 visualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
                 visualisation.CalculateBounds();
                 spawnedVisualisations.Add(feature, visualisation);
