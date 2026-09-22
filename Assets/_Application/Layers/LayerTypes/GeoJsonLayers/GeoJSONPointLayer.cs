@@ -48,18 +48,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 // of a material asset when replacing the material - no destroy of the old material must be done because
                 // that is an asset and not an instance
                 PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
+                var newColor = new Color(value.r, value.g, value.b, PointRenderer3D.PointMaterial.color.a); //todo: we don't support alpha yet in the color picker
                 //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
-                PointRenderer3D.SetAllColors(value);
+                PointRenderer3D.SetAllColors(newColor);
             }
         }
 
-        public Material RenderMaterial
-        {
-            get
-            {
-                return PointRenderer3D.PointMaterial;
-            }
-        }
+        public Material RenderMaterial => PointRenderer3D.PointMaterial;
 
         public List<Mesh> GetMeshData(Feature feature)
         {

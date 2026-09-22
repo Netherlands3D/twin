@@ -51,7 +51,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 if (polygonVisualizationMaterialInstance == null)
                     polygonVisualizationMaterialInstance = new Material(polygonVisualizationMaterial);
-                polygonVisualizationMaterialInstance.color = value;
+                var newColor = new Color(value.r, value.g, value.b, polygonVisualizationMaterial.color.a); //todo: we don't support alpha yet in the color picker
+                polygonVisualizationMaterialInstance.color = newColor;
                 //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
                 foreach (var visualisation in spawnedVisualisations.Values)
                     visualisation.SetMaterial(polygonVisualizationMaterialInstance);

@@ -89,12 +89,14 @@ namespace Netherlands3D.Twin.Services
             messageAddedDirty = true;
         }
        
-        private void OnLayerRemoved(LayerData layerData)
+        private void OnLayerRemoved(LayerData layerData, bool isRemovalRoot)
         {
+            if (!isRemovalRoot) return;
+            
             if(layerData is RootLayer) return;
             
             if (activeRemovalCounter > 0)
-                activeRemovalMessage += $" ,{layerData.Name}";
+                activeRemovalMessage += $", {layerData.Name}";
             else
                 activeRemovalMessage += layerData.Name;
             activeRemovalCounter++;
