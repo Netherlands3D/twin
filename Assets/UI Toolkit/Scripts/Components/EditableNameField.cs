@@ -4,6 +4,7 @@ using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -48,6 +49,8 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
 
         public UnityEvent<bool> OnEditingChanged = new();
+
+        private bool isEditing = false;
         
         [UxmlAttribute("value")]
         public string value
@@ -55,11 +58,14 @@ namespace Netherlands3D.UI.Components
             get { return label.text; }
             set
             {
-                if (label.text == value) return;
-                using var evt = ChangeEvent<string>.GetPooled(label.text, value);
+                var newValue = value;// value.Replace("\\n", "\n");
+                if (label.text == newValue) return;
+
+                using var evt = ChangeEvent<string>.GetPooled(label.text, newValue);
                 evt.target = this;
-                label.text = value.Replace("\\n", "\n");;
-                inputField.SetValueWithoutNotify(value);
+
+                label.text = newValue;
+                inputField.SetValueWithoutNotify(newValue);
                 CalculateOverflow();
                 SendEvent(evt);
             }
@@ -122,6 +128,9 @@ namespace Netherlands3D.UI.Components
        
         private void StartEditing()
         {
+            if(isEditing) return;
+            
+            isEditing = true;
             label.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
 
@@ -132,6 +141,9 @@ namespace Netherlands3D.UI.Components
         
         private void StopEditing()
         {
+            if(!isEditing) return;
+            
+            isEditing = false;
             label.EnableInClassList(UtilityClassConstants.HIDDEN, false);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             
@@ -176,14 +188,37 @@ namespace Netherlands3D.UI.Components
 
         private void OnNameInputFieldBlur(BlurEvent evt)
         {
+            if (Keyboard.current?.shiftKey.isPressed == true)
+            {
+                return;
+            }
             StopEditing();
         }
 
         private void OnNavigationSubmitted(NavigationSubmitEvent evt)
         {
+            if (Keyboard.current?.shiftKey.isPressed == true)
+            {
+                InsertNewLine();
+                evt.StopImmediatePropagation();
+                return;
+            }
             StopEditing();
         }
-        
+
+        private void InsertNewLine()
+        {
+            var caretPosition = inputField.CaretIndex;
+            var text = inputField.text.Insert(caretPosition, "\n");
+            inputField.value = text;
+
+            schedule.Execute(() =>
+            {
+                inputField.cursorIndex = caretPosition + 1;
+                inputField.selectIndex = caretPosition + 1;
+                inputField.CaretIndex = caretPosition + 1;
+            });
+        }
         private void OnLabelGeometryChanged(GeometryChangedEvent evt)
         {
             CalculateOverflow();
