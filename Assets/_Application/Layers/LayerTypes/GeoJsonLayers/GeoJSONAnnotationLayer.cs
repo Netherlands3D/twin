@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -9,7 +8,6 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts;
@@ -40,8 +38,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, AnnotationVisualisation> spawnedVisualisations = new();
 
         [SerializeField] private Material annotationMaterial;
-
-        
 
         public Color RenderColor
         {
@@ -81,9 +77,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
         }
 
+        private bool activeInHierarchy;
         public void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            
+            this.activeInHierarchy = activeInHierarchy;
+            foreach (var kvp in spawnedVisualisations)
+            {
+                kvp.Value.SetVisible(activeInHierarchy);
+            }
         }
 
         public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy)
@@ -92,8 +93,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             if (spawnedVisualisations.ContainsKey(feature))
                 return;
             
-            if (feature.Properties.TryGetValue("annotation", out var value) &&
-                value is JObject obj)
+            if (feature.Properties.TryGetValue("annotation", out var value) && value is JObject obj)
             {
                 Annotation annotation = obj.ToObject<Annotation>();
                 AnnotationVisualisation visualisation = new AnnotationVisualisation(annotation) { Feature = feature };
@@ -111,8 +111,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void Update()
         {
+            if(!activeInHierarchy) return;
+            
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            foreach (var kvp in spawnedVisualisations.Reverse())
+            foreach (var kvp in spawnedVisualisations)
             {
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 kvp.Value.SetVisible(inCameraFrustum);
@@ -122,11 +124,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 kvp.Value.Update();
             }
         }
-
-        /// <summary>
-        /// Checks the Bounds of the visualisations and checks them against the camera frustum
-        /// to remove visualisations that are out of view
-        /// </summary>
+    
         public void RemoveFeaturesOutOfView()
         {
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
@@ -138,7 +136,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 RemoveFeature(kvp.Key);
             }
         }
-
+        
         private void RemoveFeature(Feature feature)
         {
             FeatureRemoved?.Invoke(feature);
@@ -150,7 +148,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
-                kvp.Value.Dispose();
+                RemoveFeature(kvp.Key);
             }
         }
         
@@ -233,11 +231,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
                 SetVisible(true);
             }
-
-            ~AnnotationVisualisation()
-            {
-                Origin.current.onPostShift.RemoveListener(OnOriginShifted);
-            }
             
             public void CalculateBounds()
             {
@@ -304,9 +297,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 float pixelOffset = Mathf.Min(dist * t, MaxPixelDistanceOffset);
                 worldTextElement.SetLabelOffset(pixelOffset);
             }
-
+            
             public void Dispose()
             {
+                Origin.current.onPostShift.RemoveListener(OnOriginShifted);
                 worldUIService.RemoveFromFloatingElementsContent(floatingElement);
                 floatingElement = null;
             }

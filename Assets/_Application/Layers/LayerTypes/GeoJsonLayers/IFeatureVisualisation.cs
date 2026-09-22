@@ -6,5 +6,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         public List<T> Data { get; }
         public void CalculateBounds();
+        public void Dispose();
     }
 }

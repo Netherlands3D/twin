@@ -186,8 +186,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
+            featureVisualisation.Dispose();
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
+        }
+
+        private void OnDestroy()
+        {
+            // Remove all SpawnedVisualisations
+            foreach (var kvp in spawnedVisualisations.Reverse())
+            {
+                kvp.Value.Dispose();
+                //RemoveFeature(kvp.Value);
+            }
         }
 
         public BoundingBox GetBoundingBoxOfVisibleFeatures()

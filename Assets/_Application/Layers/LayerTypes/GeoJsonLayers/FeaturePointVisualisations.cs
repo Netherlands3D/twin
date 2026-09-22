@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 Origin.current.onPostShift.AddListener(OnOriginShifted);
             }
 
-            ~FeaturePointVisualisations()
+            public void Dispose()
             {
                 Origin.current.onPostShift.RemoveListener(OnOriginShifted);
             }
