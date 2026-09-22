@@ -13,7 +13,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     align-self: stretch;
-    padding-right: 12px;
+    padding-right: var(--spacing-3);
 }
 
 .default-hud__top-section {
@@ -24,9 +24,8 @@
     min-width: 0;
     min-height: var(--spacing-14);
     align-items: center;
-    overflow: hidden;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    overflow: visible;
+    padding-bottom: var(--spacing-3);
 }
 
 .default-hud__inspector-zone {
@@ -64,7 +63,7 @@
     flex-direction: row;
     align-items: flex-end;
     flex-shrink: 0;
-    padding-top: 12px;
+    padding-top: var(--spacing-3);
 }
 
 .default-hud__bottom-info {
@@ -77,14 +76,6 @@
 
 .default-hud__bottom-tools {
     flex-shrink: 0;
-}
-
-.default-hud__top-section > .toolbar-toolbox,
-.default-hud__top-section > .toolbar-scenario {
-    translate: 0 0;
-    transition-property: translate;
-    transition-duration: 0.25s;
-    transition-timing-function: ease-in-out;
 }
 
 .default-hud__left-header {
@@ -111,16 +102,6 @@
     flex-grow: 0;
     flex-shrink: 0;
     margin-right: 0;
-
-    transition-property: translate, margin-right;
-    transition-duration: 0.25s, 0.15s;
-    transition-timing-function: ease-in-out;
-    transition-delay: 0.15s, 0s;
-}
-
-.default-hud__navigation-section.presentation-section--hidden {
-    transition-duration: 0.40s, 0.15s;
-    transition-delay: 0s, 0s;
 }
 
 .default-hud__minimap-column {
@@ -179,23 +160,23 @@
 
 .presentation-reveal-zone--left-section {
     left: 0;
-    top: 32px;
-    bottom: 32px;
-    width: 32px;
+    top: var(--reveal-zone-size);
+    bottom: var(--reveal-zone-size);
+    width: var(--reveal-zone-size);
 }
 
 .presentation-reveal-zone--top-section {
-    left: 32px;
-    right: 32px;
+    left: var(--reveal-zone-size);
+    right: var(--reveal-zone-size);
     top: 0;
-    height: 32px;
+    height: var(--reveal-zone-size);
 }
 
 .presentation-reveal-zone--bottom-section {
-    left: 32px;
-    right: 32px;
+    left: var(--reveal-zone-size);
+    right: var(--reveal-zone-size);
     bottom: 0;
-    height: 32px;
+    height: var(--reveal-zone-size);
 }
 
 .presentation-reveal-zone--active {
@@ -205,7 +186,8 @@
 
 .default-hud__left-section,
 .default-hud__top-section,
-.default-hud__bottom-section {
+.default-hud__bottom-section 
+{
     translate: 0 0;
     transition-property: translate;
     transition-duration: 0.25s;
@@ -224,7 +206,7 @@
 }
 
 .default-hud__top-section.presentation-section--hidden {
-    translate: 0 -100%;
+    translate: 0 -56px; /* .toolbar-toolbox height + .toolbar-scenario margin-top = var(spacing-11) + var(spacing-3) = 44px + 12px = 56px */
 }
 
 .default-hud__bottom-section.presentation-section--hidden {
