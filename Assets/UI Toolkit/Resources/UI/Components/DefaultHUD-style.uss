@@ -13,6 +13,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     align-self: stretch;
+    padding-right: 12px;
 }
 
 .default-hud__top-section {
@@ -24,6 +25,8 @@
     min-height: var(--spacing-14);
     align-items: center;
     overflow: hidden;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 .default-hud__inspector-zone {
@@ -61,6 +64,7 @@
     flex-direction: row;
     align-items: flex-end;
     flex-shrink: 0;
+    padding-top: 12px;
 }
 
 .default-hud__bottom-info {
@@ -175,23 +179,23 @@
 
 .presentation-reveal-zone--left-section {
     left: 0;
-    top: 0;
-    bottom: 0;
-    width: 12px;
+    top: 32px;
+    bottom: 32px;
+    width: 32px;
 }
 
 .presentation-reveal-zone--top-section {
-    left: 0;
-    right: 0;
+    left: 32px;
+    right: 32px;
     top: 0;
-    height: 12px;
+    height: 32px;
 }
 
 .presentation-reveal-zone--bottom-section {
-    left: 0;
-    right: 0;
+    left: 32px;
+    right: 32px;
     bottom: 0;
-    height: 12px;
+    height: 32px;
 }
 
 .presentation-reveal-zone--active {
@@ -225,5 +229,11 @@
 
 .default-hud__bottom-section.presentation-section--hidden {
     translate: 0 100%;
+}
+
+.default-hud__left-section,
+.default-hud__top-section,
+.default-hud__bottom-section {
+    background-color: rgba(0, 100, 255, 0.2);
 }
     

@@ -7,7 +7,13 @@
     editor-extension-mode="False"  
     class="default-hud"
 >
-    <ui:VisualElement class="app__content">
+    <ui:VisualElement name="PresentationRevealZones" picking-mode="Ignore" class="presentation-reveal-zones">
+        <ui:VisualElement name="LeftRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--left-section presentation-reveal-zone--active" />
+        <ui:VisualElement name="TopRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--top-section presentation-reveal-zone--active" />
+        <ui:VisualElement name="BottomRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--bottom-section presentation-reveal-zone--active" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="app__content" picking-mode="Ignore">
         <ui:VisualElement picking-mode="Ignore" class="default-hud__main-section">
             <ui:VisualElement picking-mode="Ignore" name="LeftSection" class="default-hud__left-section presentation-section--hidden">
                 <ui:VisualElement picking-mode="Ignore" class="default-hud__left-header">
@@ -49,11 +55,4 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="PresentationRevealZones" picking-mode="Ignore" class="presentation-reveal-zones">
-        <ui:VisualElement name="LeftRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--left-section presentation-reveal-zone--active" />
-        <ui:VisualElement name="TopRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--top-section presentation-reveal-zone--active" />
-        <ui:VisualElement name="BottomRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--bottom-section presentation-reveal-zone--active" />
-    </ui:VisualElement>
-        
-
 </ui:UXML>
