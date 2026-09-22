@@ -5,7 +5,6 @@ using GeoJSON.Net.Feature;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -23,11 +22,14 @@ namespace Netherlands3D.Timeline
 
         private float minValue = Mathf.Infinity;
         private float maxValue = Mathf.NegativeInfinity;
+        
+        [SerializeField] private Color minColor = Color.red;
+        [SerializeField] private Color maxColor = Color.green;
 
-        void Start()
+        private void Start()
         {
             visualization = GetComponent<GeoJsonLayerGameObject>();
-            visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
+            // visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
             visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
 
             timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
@@ -74,8 +76,6 @@ namespace Netherlands3D.Timeline
             var colorAtCurrentTime = CalculateColorForFeature(feature, timestamp.timestamp);
             var useStroke = feature.Geometry.Type == GeoJSONObjectType.LineString || feature.Geometry.Type == GeoJSONObjectType.MultiLineString;
             var colorType = useStroke ? Symbolizer.StrokeColorProperty :  Symbolizer.FillColorProperty;
-            // Debug.Log(feature.Properties["location_id"] +" "+feature.GetHashCode());
-            Debug.Log(feature.GetHashCode() + "\t" + timestamp.value +"\t" + colorAtCurrentTime);
             timelineStylingLayerPropertyData.SetColorForFeatureById(feature.GetHashCode().ToString(), colorType, colorAtCurrentTime);
         }
 
@@ -87,7 +87,7 @@ namespace Netherlands3D.Timeline
                 return null;
             
             var t = Mathf.InverseLerp(minValue, maxValue, currentTimeStamp.ValueAsFloat.Value);
-            return Color.Lerp(Color.red, Color.green, t);
+            return Color.Lerp(minColor, maxColor, t);
         }
     }
 }

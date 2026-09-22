@@ -21,16 +21,18 @@ namespace Netherlands3D.Twin.layers.properties
         {
             visualization = GetComponent<GeoJsonLayerGameObject>();
             visualization.InitProperty<CartesianTileLayerFeatureColorPropertyData>(properties);
-            
+            visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
+
             SetupFeatures();
         }
        
         private void SetupFeatures()
         {
-            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+            // CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
-            featureColorPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
+            foreach (var stylingPropertyData in visualization.LayerData.GetProperties<StylingPropertyData>())
+                stylingPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             visualization.OnFeatureAdd.AddListener(UpdateStyling);
             visualization.OnFeatureRemove.AddListener(UpdateStyling);
@@ -47,6 +49,14 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void UpdateStyling(Feature feature)
         {
+            var layerFeature = visualization.GetLayerFeatureByGeometry(feature);
+            if (layerFeature == null)
+            {
+                layerFeature = visualization.CreateFeature(feature);
+                layerFeature.Attributes.Add(TimelineStylingLayerPropertyData.TimelineAttributeIdentifier, feature.GetHashCode().ToString());
+                visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            }
+
             IGeoJsonVisualisationLayer layer = null;
             for (int i = 0; i < layers.Count; i++)
             {
@@ -57,20 +67,20 @@ namespace Netherlands3D.Twin.layers.properties
                 }
             }
 
-            var layerFeature = visualization.GetLayerFeatureByGeometry(layer.RenderMaterial);
-            if (layerFeature == null)
+            var layerMaterialFeature = visualization.GetLayerFeatureByGeometry(layer.RenderMaterial);
+            if (layerMaterialFeature == null)
             {
-                layerFeature = visualization.CreateFeature(layer.RenderMaterial);
-                visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                layerMaterialFeature = visualization.CreateFeature(layer.RenderMaterial);
+                visualization.LayerFeatures.Add(layerMaterialFeature.Geometry, layerMaterialFeature);
             }
-            if (int.TryParse(layerFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
+            if (int.TryParse(layerMaterialFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
             {
                 CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
                 if (layer.FeatureCount > 0)
                 {
                     string colorProperty = GetColorPropertyTypeForLayer(layer);
-                    var color = featureColorPropertyData.GetColor(layerFeature, colorProperty);
-                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(visualization.LayerData.Color), colorProperty);
+                    var color = featureColorPropertyData.GetColor(layerMaterialFeature, colorProperty);
+                    featureColorPropertyData.SetColor(layerMaterialFeature, color.GetValueOrDefault(visualization.LayerData.Color), colorProperty);
                 }
                 else
                 {
@@ -96,6 +106,15 @@ namespace Netherlands3D.Twin.layers.properties
                             layers[materialIndex].RenderColor = color.Value;
                         }
                     }
+                }
+
+                if (feature.Geometry is Feature geojsonFeature)
+                {
+                    var useStroke = geojsonFeature.Geometry.Type == GeoJSONObjectType.LineString || geojsonFeature.Geometry.Type == GeoJSONObjectType.MultiLineString;
+                    var colorType = useStroke ? Symbolizer.StrokeColorProperty :  Symbolizer.FillColorProperty;
+                    Color? color = symbolizer.GetColor(colorType);
+                    Debug.Log("getting style " + geojsonFeature.GetHashCode() + "with color " + color );
+                //todo: apply color
                 }
             }
         }
@@ -150,10 +169,9 @@ namespace Netherlands3D.Twin.layers.properties
         
         private void OnDestroyLayer()
         {
-            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
-            
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
-            featureColorPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
+            foreach (var stylingPropertyData in visualization.LayerData.GetProperties<StylingPropertyData>())
+                stylingPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
             visualization.OnFeatureAdd.RemoveListener(UpdateStyling);
             visualization.OnFeatureRemove.RemoveListener(UpdateStyling);

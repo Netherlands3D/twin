@@ -14,7 +14,6 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void SetColorForFeatureById(string featureId, string colorType, Color? color)
         {
-            Debug.Log("setting " + featureId + " " + colorType + " to " + color);
             var stylingRuleKey = $"feature.{featureId}.{TimelineColorIdentifier}";
             var stylingRule = new StylingRule(
                 featureId,
