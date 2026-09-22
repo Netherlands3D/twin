@@ -58,7 +58,7 @@ namespace Netherlands3D.UI.Components
             get { return label.text; }
             set
             {
-                var newValue = value;// value.Replace("\\n", "\n");
+                var newValue = value.Replace("\\n", "\n");
                 if (label.text == newValue) return;
 
                 using var evt = ChangeEvent<string>.GetPooled(label.text, newValue);
@@ -133,7 +133,8 @@ namespace Netherlands3D.UI.Components
             isEditing = true;
             label.EnableInClassList(UtilityClassConstants.HIDDEN, true);
             inputField.EnableInClassList(UtilityClassConstants.HIDDEN, false);
-
+           
+            inputField.SetText(label.text);
             schedule.Execute(() => inputField.Focus());// we need to wait until the layout engine processes the new Display: flex of the input field before we can select focus the element
             
             OnEditingChanged.Invoke(true);
@@ -214,6 +215,7 @@ namespace Netherlands3D.UI.Components
 
             schedule.Execute(() =>
             {
+                inputField.Focus();
                 inputField.cursorIndex = caretPosition + 1;
                 inputField.selectIndex = caretPosition + 1;
                 inputField.CaretIndex = caretPosition + 1;
