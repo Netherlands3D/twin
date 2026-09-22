@@ -25,7 +25,7 @@ namespace Netherlands3D.Timeline
         void Start()
         {
             visualization = GetComponent<CityJSONLayerGameObject>();
-            visualization.InitProperty<TimelineLayerPropertyData>(visualization.LayerData.LayerProperties);
+            visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
             visualization.CityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes);
         }
 

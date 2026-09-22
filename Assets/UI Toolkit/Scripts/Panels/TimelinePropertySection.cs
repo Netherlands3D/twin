@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(TimelineLayerPropertyData), PropertySectionCategory.Styling)]
+    [PropertySection(typeof(TimelineStylingLayerPropertyData), PropertySectionCategory.Styling)]
     public partial class TimelinePropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private CheckboxToggle buildStartCheckBox;
@@ -23,7 +23,7 @@ namespace Netherlands3D.UI.Panels
         private DateField demolishStartDateField;
         private DateField demolishEndDateField;
 
-        private TimelineLayerPropertyData timelinePropertyData;
+        private TimelineStylingLayerPropertyData timelineStylingPropertyData;
 
         public TimelinePropertySection()
         {
@@ -35,73 +35,73 @@ namespace Netherlands3D.UI.Panels
             demolishStartCheckBox = this.Q<CheckboxToggle>("DemolishStartCheckBox");
             demolishEndCheckBox = this.Q<CheckboxToggle>("DemolishEndCheckBox");
 
-            buildStartCheckBox.RegisterValueChangedCallback(OnBuildStartCheckBoxChanged);
-            buildEndCheckBox.RegisterValueChangedCallback(OnBuildEndCheckBoxChanged);
-            demolishStartCheckBox.RegisterValueChangedCallback(OnDemolishStartCheckBoxChanged);
-            demolishEndCheckBox.RegisterValueChangedCallback(OnDemolishEndCheckBoxChanged);
+            // buildStartCheckBox.RegisterValueChangedCallback(OnBuildStartCheckBoxChanged);
+            // buildEndCheckBox.RegisterValueChangedCallback(OnBuildEndCheckBoxChanged);
+            // demolishStartCheckBox.RegisterValueChangedCallback(OnDemolishStartCheckBoxChanged);
+            // demolishEndCheckBox.RegisterValueChangedCallback(OnDemolishEndCheckBoxChanged);
             
             buildStartDateField = this.Q<DateField>("BuildStart");
             buildEndDateField = this.Q<DateField>("BuildEnd");
             demolishStartDateField = this.Q<DateField>("DemolishStart");
             demolishEndDateField = this.Q<DateField>("DemolishEnd");
 
-            buildStartDateField.SubmitEvent += OnBuildStartInputFieldChanged;
-            buildEndDateField.SubmitEvent += OnBuildEndInputFieldChanged;
-            demolishStartDateField.SubmitEvent += OnDemolishStartInputFieldChanged;
-            demolishEndDateField.SubmitEvent += OnDemolishEndInputFieldChanged;
+            // buildStartDateField.SubmitEvent += OnBuildStartInputFieldChanged;
+            // buildEndDateField.SubmitEvent += OnBuildEndInputFieldChanged;
+            // demolishStartDateField.SubmitEvent += OnDemolishStartInputFieldChanged;
+            // demolishEndDateField.SubmitEvent += OnDemolishEndInputFieldChanged;
         }
 
-        private void OnBuildStartCheckBoxChanged(ChangeEvent<bool> evt)
-        {
-            if(evt.newValue)
-                timelinePropertyData.BuildStart = DateTime.Now;
-            else
-                timelinePropertyData.BuildStart = null;
-        }
-        
-        private void OnBuildEndCheckBoxChanged(ChangeEvent<bool> evt)
-        {
-            if(evt.newValue)
-                timelinePropertyData.BuildEnd = DateTime.Now;
-            else
-                timelinePropertyData.BuildEnd = null;
-        }
-        
-        private void OnDemolishStartCheckBoxChanged(ChangeEvent<bool> evt)
-        {
-            if(evt.newValue)
-                timelinePropertyData.DemolishStart = DateTime.Now;
-            else
-                timelinePropertyData.DemolishStart = null;
-        }
-        
-        private void OnDemolishEndCheckBoxChanged(ChangeEvent<bool> evt)
-        {
-            if(evt.newValue)
-                timelinePropertyData.DemolishEnd = DateTime.Now;
-            else
-                timelinePropertyData.DemolishEnd = null;
-        }
-
-        private void OnBuildStartInputFieldChanged(int day, int month, int year)
-        {
-            timelinePropertyData.BuildStart = new DateTime(year, month, day);
-        }
-        
-        private void OnBuildEndInputFieldChanged(int day, int month, int year)
-        {
-            timelinePropertyData.BuildEnd = new DateTime(year, month, day);
-        }
-        
-        private void OnDemolishStartInputFieldChanged(int day, int month, int year)
-        {
-            timelinePropertyData.DemolishStart = new DateTime(year, month, day);
-        }
-        
-        private void OnDemolishEndInputFieldChanged(int day, int month, int year)
-        {
-            timelinePropertyData.DemolishEnd = new DateTime(year, month, day);
-        }
+        // private void OnBuildStartCheckBoxChanged(ChangeEvent<bool> evt)
+        // {
+        //     if(evt.newValue)
+        //         timelineStylingPropertyData.BuildStart = DateTime.Now;
+        //     else
+        //         timelineStylingPropertyData.BuildStart = null;
+        // }
+        //
+        // private void OnBuildEndCheckBoxChanged(ChangeEvent<bool> evt)
+        // {
+        //     if(evt.newValue)
+        //         timelineStylingPropertyData.BuildEnd = DateTime.Now;
+        //     else
+        //         timelineStylingPropertyData.BuildEnd = null;
+        // }
+        //
+        // private void OnDemolishStartCheckBoxChanged(ChangeEvent<bool> evt)
+        // {
+        //     if(evt.newValue)
+        //         timelineStylingPropertyData.DemolishStart = DateTime.Now;
+        //     else
+        //         timelineStylingPropertyData.DemolishStart = null;
+        // }
+        //
+        // private void OnDemolishEndCheckBoxChanged(ChangeEvent<bool> evt)
+        // {
+        //     if(evt.newValue)
+        //         timelineStylingPropertyData.DemolishEnd = DateTime.Now;
+        //     else
+        //         timelineStylingPropertyData.DemolishEnd = null;
+        // }
+        //
+        // private void OnBuildStartInputFieldChanged(int day, int month, int year)
+        // {
+        //     timelineStylingPropertyData.BuildStart = new DateTime(year, month, day);
+        // }
+        //
+        // private void OnBuildEndInputFieldChanged(int day, int month, int year)
+        // {
+        //     timelineStylingPropertyData.BuildEnd = new DateTime(year, month, day);
+        // }
+        //
+        // private void OnDemolishStartInputFieldChanged(int day, int month, int year)
+        // {
+        //     timelineStylingPropertyData.DemolishStart = new DateTime(year, month, day);
+        // }
+        //
+        // private void OnDemolishEndInputFieldChanged(int day, int month, int year)
+        // {
+        //     timelineStylingPropertyData.DemolishEnd = new DateTime(year, month, day);
+        // }
 
         private void OnBuildStartDateChanged(DateTime? newDate)
         {
@@ -129,17 +129,17 @@ namespace Netherlands3D.UI.Panels
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            timelinePropertyData = properties.Get<TimelineLayerPropertyData>();
+            timelineStylingPropertyData = properties.Get<TimelineStylingLayerPropertyData>();
             
-            timelinePropertyData.OnBuildStartChanged.AddListener(OnBuildStartDateChanged);
-            timelinePropertyData.OnBuildEndChanged.AddListener(OnBuildEndDateChanged);
-            timelinePropertyData.OnDemolishStartChanged.AddListener(OnDemolishStartDateChanged);
-            timelinePropertyData.OnDemolishEndChanged.AddListener(OnDemolishEndDateChanged);
-            
-            UpdateDateField(buildStartCheckBox, buildStartDateField, timelinePropertyData.BuildStart);
-            UpdateDateField(buildEndCheckBox, buildEndDateField, timelinePropertyData.BuildEnd);
-            UpdateDateField(demolishStartCheckBox ,demolishStartDateField, timelinePropertyData.DemolishStart);
-            UpdateDateField(demolishEndCheckBox, demolishEndDateField, timelinePropertyData.DemolishEnd);
+            // timelineStylingPropertyData.OnBuildStartChanged.AddListener(OnBuildStartDateChanged);
+            // timelineStylingPropertyData.OnBuildEndChanged.AddListener(OnBuildEndDateChanged);
+            // timelineStylingPropertyData.OnDemolishStartChanged.AddListener(OnDemolishStartDateChanged);
+            // timelineStylingPropertyData.OnDemolishEndChanged.AddListener(OnDemolishEndDateChanged);
+            //
+            // UpdateDateField(buildStartCheckBox, buildStartDateField, timelineStylingPropertyData.BuildStart);
+            // UpdateDateField(buildEndCheckBox, buildEndDateField, timelineStylingPropertyData.BuildEnd);
+            // UpdateDateField(demolishStartCheckBox ,demolishStartDateField, timelineStylingPropertyData.DemolishStart);
+            // UpdateDateField(demolishEndCheckBox, demolishEndDateField, timelineStylingPropertyData.DemolishEnd);
         }
 
         private void UpdateDateField(CheckboxToggle checkboxToggle, DateField field, DateTime? newDate)

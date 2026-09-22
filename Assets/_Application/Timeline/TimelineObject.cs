@@ -22,14 +22,14 @@ namespace Netherlands3D.Timeline
     public class TimelineObject : MonoBehaviour
     {
         LayerGameObject layerGameObject;
-        private TimelineLayerPropertyData timelineLayerPropertyData;
+        private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
         ColorPropertyData stylingPropertyData;
 
         void Start()
         {
             layerGameObject = GetComponent<LayerGameObject>();
-            layerGameObject.InitProperty<TimelineLayerPropertyData>(layerGameObject.LayerData.LayerProperties);
-            timelineLayerPropertyData = layerGameObject.LayerData.GetProperty<TimelineLayerPropertyData>();
+            layerGameObject.InitProperty<TimelineStylingLayerPropertyData>(layerGameObject.LayerData.LayerProperties);
+            timelineStylingLayerPropertyData = layerGameObject.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
 
             
             stylingPropertyData = layerGameObject.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
@@ -75,14 +75,14 @@ namespace Netherlands3D.Timeline
         private BuildState GetBuildState(DateTime currentTime)
         {
             var state = BuildState.Normal;
-            if (timelineLayerPropertyData.BuildStart.HasValue && currentTime < timelineLayerPropertyData.BuildStart.Value)
-                state = BuildState.PreBuild;
-            else if (timelineLayerPropertyData.BuildEnd.HasValue && currentTime < timelineLayerPropertyData.BuildEnd.Value)
-                state = BuildState.Building;
-            else if (timelineLayerPropertyData.DemolishEnd.HasValue && currentTime > timelineLayerPropertyData.DemolishEnd.Value)
-                state = BuildState.PostDemolish;
-            else if (timelineLayerPropertyData.DemolishStart.HasValue && currentTime > timelineLayerPropertyData.DemolishStart.Value)
-                state = BuildState.Demolishing;
+            // if (timelineStylingLayerPropertyData.BuildStart.HasValue && currentTime < timelineStylingLayerPropertyData.BuildStart.Value)
+            //     state = BuildState.PreBuild;
+            // else if (timelineStylingLayerPropertyData.BuildEnd.HasValue && currentTime < timelineStylingLayerPropertyData.BuildEnd.Value)
+            //     state = BuildState.Building;
+            // else if (timelineStylingLayerPropertyData.DemolishEnd.HasValue && currentTime > timelineStylingLayerPropertyData.DemolishEnd.Value)
+            //     state = BuildState.PostDemolish;
+            // else if (timelineStylingLayerPropertyData.DemolishStart.HasValue && currentTime > timelineStylingLayerPropertyData.DemolishStart.Value)
+            //     state = BuildState.Demolishing;
             
             return state;
         }

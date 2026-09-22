@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
+using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -16,24 +15,25 @@ namespace Netherlands3D.Timeline
     [RequireComponent(typeof(GeoJsonLayerGameObject))]
     public class TimelineGeoJson : MonoBehaviour
     {
-        GeoJsonLayerGameObject visualization;
-        // private TimelineLayerPropertyData timelineLayerPropertyData;
-        // ColorPropertyData stylingPropertyData;
+        private SunTime sunTime;
+        private GeoJsonLayerGameObject visualization;
+
+        private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
         private Dictionary<Feature, TimestampCollection> timelines = new();
-        
+
+        private float minValue = Mathf.Infinity;
+        private float maxValue = Mathf.NegativeInfinity;
+
         void Start()
         {
             visualization = GetComponent<GeoJsonLayerGameObject>();
-            visualization.InitProperty<TimelineLayerPropertyData>(visualization.LayerData.LayerProperties);
+            visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
             visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
 
-            // timelineLayerPropertyData = visualization.LayerData.GetProperty<TimelineLayerPropertyData>();
-            //
-            // stylingPropertyData = visualization.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            //
-            // if (stylingPropertyData == null) return;
-            //
-            // ServiceLocator.GetService<SunTime>().timeOfDayChanged.AddListener(OnTimeChanged);
+            timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
+
+            sunTime = ServiceLocator.GetService<SunTime>();
+            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
         }
 
         private void OnFeatureAdded(Feature feature)
@@ -42,75 +42,52 @@ namespace Netherlands3D.Timeline
             {
                 var timeline = new TimestampCollection(timestampObject.ToString());
                 timelines.Add(feature, timeline);
+                var currentTimestamp = timeline.GetCurrentTimestamp(sunTime.Time);
+                UpdateMinMax(timeline);
+                SetFeatureColor(feature, currentTimestamp);
             }
-            //todo: use the imported data
         }
 
+        private void UpdateMinMax(TimestampCollection timeline)
+        {
+            minValue = timeline.MinFloatValue < minValue ? timeline.MinFloatValue : minValue;
+            maxValue = timeline.MaxFloatValue > maxValue ? timeline.MaxFloatValue : maxValue;
+            OnTimeChanged(sunTime.Time); //recalculate the feature colors because the min/max changed
+        }
 
-        // private void OnTimeChanged(DateTime currentTime)
-        // {
-        //     // var currentState = GetBuildState(currentTime);
-        //     // SetVisibility(currentState == BuildState.Normal);
-        //
-        //     var stylingPropertyData = visualization.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-        //     var color = GetColorForFeature(currentTime);
-        //     stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
-        //     stylingPropertyData.SetDefaultSymbolizerColor(color);
-        //
-        //     // visualization.LineRenderer3D.SetAllColors(color);
-        // }
-        //
-        // // private void SetVisibility(bool visible)
-        // // {
-        // //     visualization.LineRenderer3D.enabled = visible;
-        // // }
-        //
-        // private BuildState GetBuildState(DateTime currentTime)
-        // {
-        //     var state = BuildState.Normal;
-        //     if (timelineLayerPropertyData.BuildStart.HasValue && currentTime < timelineLayerPropertyData.BuildStart.Value)
-        //         state = BuildState.PreBuild;
-        //     else if (timelineLayerPropertyData.BuildEnd.HasValue && currentTime < timelineLayerPropertyData.BuildEnd.Value)
-        //         state = BuildState.Building;
-        //     else if (timelineLayerPropertyData.DemolishEnd.HasValue && currentTime > timelineLayerPropertyData.DemolishEnd.Value)
-        //         state = BuildState.PostDemolish;
-        //     else if (timelineLayerPropertyData.DemolishStart.HasValue && currentTime > timelineLayerPropertyData.DemolishStart.Value)
-        //         state = BuildState.Demolishing;
-        //
-        //     return state;
-        // }
-        //
-        // private Color GetColorForFeature(DateTime currentTime)
-        // {
-        //     var color = Color.white;
-        //     foreach (var feature in visualization.GeoJsonFeatures)
-        //     {
-        //         Debug.Log(feature.Properties["hour"]);
-        //         if (DateTime.TryParse(feature.Properties["timestamp"].ToString(), out var dateTime))
-        //         {
-        //             if (float.TryParse(feature.Properties["count"].ToString(), out var count))
-        //             {
-        //                 Debug.Log("current feature time: " + dateTime.ToString("yy-MM-dd HH:mm") + "\tcount: " + count);
-        //                 if (currentTime > dateTime && currentTime < dateTime.AddHours(1d))
-        //                 {
-        //                     return GetColorForCount(count);
-        //                 }
-        //             }
-        //         }
-        //     }
-        //
-        //     return color;
-        // }
-        //
-        // private Color GetColorForCount(float count)
-        // {
-        //     if (count < 10f)
-        //         return Color.red;
-        //     if (count < 20f)
-        //         return Color.orange;
-        //     if (count < 30f)
-        //         return Color.yellow;
-        //     return Color.green;
-        // }
+        private void OnTimeChanged(DateTime currentTime)
+        {
+            foreach (var timelines in timelines)
+            {
+                var currentTimestampForFeature = timelines.Value.GetCurrentTimestamp(currentTime);
+                SetFeatureColor(timelines.Key, currentTimestampForFeature);
+            }
+        }
+
+        private void SetFeatureColor(Feature feature, Timestamp timestamp)
+        {
+            //each feature should have a unique id.
+            //set styling rules here per feature
+            // in GeoJsonLayerFeatureColoring: make read the styling rules after the per material styling rules (preferably this is done at once, but idk how
+            //change geojson point/line/polygon to accept more colors per featyre.
+
+            var colorAtCurrentTime = CalculateColorForFeature(feature, timestamp.timestamp);
+            var useStroke = feature.Geometry.Type == GeoJSONObjectType.LineString || feature.Geometry.Type == GeoJSONObjectType.MultiLineString;
+            var colorType = useStroke ? Symbolizer.StrokeColorProperty :  Symbolizer.FillColorProperty;
+            // Debug.Log(feature.Properties["location_id"] +" "+feature.GetHashCode());
+            Debug.Log(feature.GetHashCode() + "\t" + timestamp.value +"\t" + colorAtCurrentTime);
+            timelineStylingLayerPropertyData.SetColorForFeatureById(feature.GetHashCode().ToString(), colorType, colorAtCurrentTime);
+        }
+
+        private Color? CalculateColorForFeature(Feature feature, DateTime currentTime)
+        {
+            var timeline = timelines[feature];
+            var currentTimeStamp = timeline.GetCurrentTimestamp(currentTime);
+            if(!currentTimeStamp.ValueAsFloat.HasValue)
+                return null;
+            
+            var t = Mathf.InverseLerp(minValue, maxValue, currentTimeStamp.ValueAsFloat.Value);
+            return Color.Lerp(Color.red, Color.green, t);
+        }
     }
 }

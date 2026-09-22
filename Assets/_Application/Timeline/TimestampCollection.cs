@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Twin.ExtensionMethods;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SimpleJSON;
@@ -8,7 +10,9 @@ namespace Netherlands3D.Timeline
 {
     public class TimestampCollection
     {
-        public List<Timestamp> timestamps = new List<Timestamp>();
+        private List<Timestamp> timestamps = new List<Timestamp>();
+        public float MinFloatValue { get; private set; }
+        public float MaxFloatValue { get; private set; }
 
         public TimestampCollection(string timestampsJsonArray)
         {
@@ -18,15 +22,23 @@ namespace Netherlands3D.Timeline
             };
 
             timestamps = JsonConvert.DeserializeObject<List<Timestamp>>(timestampsJsonArray, settings);
-            
+
             Sort();
+            CalculateMinMax();
         }
 
-        public void Sort()
+        private void Sort()
         {
             timestamps.Sort((x, y) => x.timestamp.CompareTo(y.timestamp));
         }
-        
+
+        private void CalculateMinMax()
+        {
+            var timestampsWithFloatValues = timestamps.Where(t => t.ValueAsFloat.HasValue);
+            MinFloatValue = timestampsWithFloatValues.Min(t => t.ValueAsFloat.Value);
+            MaxFloatValue = timestampsWithFloatValues.Max(t => t.ValueAsFloat.Value);
+        }
+
         public Timestamp GetCurrentTimestamp(DateTime currentTime)
         {
             Timestamp current = timestamps[0];
