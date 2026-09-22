@@ -5,9 +5,11 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -16,10 +18,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
-
-        public bool SupportsGeometryType(GeoJSONObjectType geometryType)
+        
+        public string DisplayName => "Punten";
+        public string StylingColorProperty => Symbolizer.FillColorProperty;
+        public bool SupportsGeometryType(Feature feature)
         {
-            return  geometryType == GeoJSONObjectType.MultiPoint || geometryType == GeoJSONObjectType.Point;
+            return  feature.Geometry.Type == GeoJSONObjectType.MultiPoint || feature.Geometry.Type == GeoJSONObjectType.Point;
         }
 
         public int FeatureCount => spawnedVisualisations.Count;
@@ -128,7 +132,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
-
+            
             if (feature.Geometry is MultiPoint multiPoint)
             {
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualisation(multiPoint, originalCoordinateSystem, PointRenderer3D);
@@ -167,10 +171,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
+            featureVisualisation.Dispose();
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
-        
+
+        private void OnDestroy()
+        {
+            // Remove all SpawnedVisualisations
+            foreach (var kvp in spawnedVisualisations.Reverse())
+            {
+                kvp.Value.Dispose();
+                //RemoveFeature(kvp.Value);
+            }
+        }
+
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
         {
             if (spawnedVisualisations.Count == 0)
