@@ -4,6 +4,7 @@ using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
@@ -198,6 +199,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             private CameraService cameraService;
             private WorldUIService worldUIService;
             private AppRootBehaviour appRootBehaviour;
+            private SelectionService selectionService;
+            
             private WorldAnnotation worldTextElement; 
             private FloatingElement floatingElement;
             private const float MaxPixelDistanceOffset = 100;
@@ -211,6 +214,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 worldUIService  = ServiceLocator.GetService<WorldUIService>();
                 cameraService = App.Cameras;
                 appRootBehaviour = App.UIRoot;
+                selectionService = App.Selection;
                 Origin.current.onPostShift.AddListener(OnOriginShifted);
                 
                 InitializeWorldUI();
@@ -228,8 +232,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     worldTextElement.SetColor(parsedColor);
                 
                 floatingElement.Add(worldTextElement);
+                
+                worldTextElement.RegisterCallback<PointerDownEvent>(OnClickAnnotation);
 
                 SetVisible(true);
+            }
+            
+            
+            private void OnClickAnnotation(PointerDownEvent e)
+            {
+                selectionService.SelectGeoJsonFeatureAtPosition(trueBounds.center);
             }
             
             public void CalculateBounds()
