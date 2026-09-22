@@ -217,7 +217,7 @@ namespace Netherlands3D.Twin.Layers
             //called when the Proxy's parent changes            
         }
 
-        public virtual void OnSiblingIndexOrParentChanged(int newSiblingIndex)
+        public virtual void OnSiblingIndexOrParentChanged()
         {
             //called when the Proxy's sibling index changes. Also called when the parent changes but the sibling index stays the same.            
         }
