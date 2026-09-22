@@ -303,7 +303,7 @@ namespace Netherlands3D.UI.Components
             RequestTreeRefresh.Invoke();
         }
 
-        private void OnParentChanged(int newIndex)
+        private void OnParentChanged()
         {
             RequestTreeRebuild.Invoke();
         }
