@@ -288,6 +288,11 @@ namespace Netherlands3D.Twin.Configuration
 
         private void LoadFunctionalitiesFromProject(ProjectData changedData)
         {
+            foreach (var functionality in Functionalities)
+            {
+                functionality.ResetDataToDefaults();
+            }
+            
             foreach (var savedData in changedData.functionalities)
             {
                 var savedId = savedData.Id;
