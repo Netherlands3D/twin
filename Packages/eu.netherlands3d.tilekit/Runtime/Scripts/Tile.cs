@@ -5,18 +5,20 @@ namespace Netherlands3D.Tilekit
 {
     public readonly struct Tile : IEquatable<Tile>
     {
-        public Vector2Int Coordinate { get; }
+        public int RdX { get; }
+        public int RdY { get; }
         public int Size { get; }
 
-        public Tile(Vector2Int coordinate, int size)
+        public Tile(int rdX, int rdY, int size)
         {
-            Coordinate = coordinate;
+            RdX = rdX;
+            RdY = rdY;
             Size = size;
         }
         
         public bool Equals(Tile other)
         {
-            return Coordinate.Equals(other.Coordinate) && Size == other.Size;
+            return RdX == other.RdX && RdY == other.RdY && Size == other.Size;
         }
         
         public override bool Equals(object obj)
@@ -26,7 +28,7 @@ namespace Netherlands3D.Tilekit
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Coordinate, Size);
+            return HashCode.Combine(RdX, RdY, Size);
         }
         
         public static bool operator ==(Tile left, Tile right)
@@ -37,6 +39,11 @@ namespace Netherlands3D.Tilekit
         public static bool operator !=(Tile left, Tile right)
         {
             return !left.Equals(right);
+        }
+
+        public override string ToString()
+        {
+            return $"Tile({RdX},{RdY},{Size})";
         }
     }
 }
