@@ -116,6 +116,13 @@
     flex-shrink: 0;
 }
 
+.default-hud__minimap-column:hover > .map-viewport {
+    min-width: 512px;
+    max-width: 512px;
+    min-height: 512px;
+    max-height: 512px;
+}
+
 .default-hud__presentation-controls {
     display: flex;
     flex-direction: column;

@@ -1,14 +1,11 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.JavascriptConnection;
 using Netherlands3D.Minimap;
-using Netherlands3D.Services;
 using Netherlands3D.Twin;
-using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -19,7 +16,6 @@ namespace Netherlands3D.UI.Components
         private Vector2 pointerDownPosition;
         private const float dragDeadzone = 4f;
         private bool isDragging;
-        private bool unexpandOnMouseUp;
 
         private Icon locationPin;
         private bool showPin = true;
@@ -56,10 +52,7 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("top-right")] public Vector2Int TopRight { get; set; } //vector2Int is parsable in uxml
 
         [UxmlAttribute("layer-start-index")] public int LayerStartIndex { get; set; } = 6;
-        [UxmlAttribute("resize-on-hover")] public bool ResizeOnHover { get; set; } = false;
         [UxmlAttribute("move-to-clicked-location")] private bool MoveCameraToClickedLocation { get; set; } = true;
-
-        private const string EXPANDED_USS_CLASS = "expanded";
 
         public MapViewport()
         {
@@ -121,9 +114,6 @@ namespace Netherlands3D.UI.Components
 
         private void OnPointerEnter(PointerEnterEvent evt)
         {
-            if(ResizeOnHover)
-                EnableInClassList(EXPANDED_USS_CLASS, true);
-            
             if(!isDragging)
                 PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
         }
@@ -132,15 +122,11 @@ namespace Netherlands3D.UI.Components
         {
             if (isDragging)
             {
-                unexpandOnMouseUp = true;
                 return;
             }
 
             if(!isDragging)
                 PointerStyle.CancelCursorChange(this);
-            
-            if(ResizeOnHover)
-                EnableInClassList(EXPANDED_USS_CLASS, false);
         }
 
         private void OnViewportGeometryChanged(GeometryChangedEvent evt)
@@ -311,11 +297,6 @@ namespace Netherlands3D.UI.Components
 
         private void OnPointerUp(PointerUpEvent evt)
         {
-            if (unexpandOnMouseUp && ResizeOnHover)
-                EnableInClassList(EXPANDED_USS_CLASS, false);
-
-            unexpandOnMouseUp = false;
-
             if (Vector2.Distance(pointerDownPosition, evt.position) > dragDeadzone) return; //we cannot use the manipulator event functions to set isDragging to true or false, because this causes a race-condition.
 
             if(MoveCameraToClickedLocation)
