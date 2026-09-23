@@ -16,6 +16,7 @@
  *  permissions and limitations under the License.
  */
 
+using System;
 using GG.Extensions;
 using Netherlands3D.Collada;
 using Netherlands3D.Coordinates;
@@ -26,8 +27,14 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.UI;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Cameras;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.Functionalities
 {
@@ -40,9 +47,6 @@ namespace Netherlands3D.Functionalities
         [Tooltip("In what coordinate system should the coordinates be shown to the user?")]
         [SerializeField] private CoordinateSystem DisplayCrs = CoordinateSystem.RD;
         
-        [Header("References")]
-        [SerializeField] private TextPopout popoutPrefab;
-        
         private Coordinate NorthEast => ConvertBoundsToCoordinates(selectedArea).northEast;
         private Coordinate SouthWest => ConvertBoundsToCoordinates(selectedArea).southWest;
 
@@ -51,8 +55,15 @@ namespace Netherlands3D.Functionalities
         public string EastExtent => NorthEast.easting.ToString("0");
         public string WestExtent => SouthWest.easting.ToString("0");
         
-        private TextPopout northEastTooltip;
-        private TextPopout southWestTooltip;
+        private WorldAnnotation northEastTooltip;
+        private WorldAnnotation southWestTooltip;
+        private FloatingElement northEastFloatingElement;
+        private FloatingElement southWestFloatingElement;
+        private const float MaxPixelDistanceOffset = 100;
+        private const float worldSpaceOffset = 10;
+        private WorldUIService worldUIService;
+        private CameraService cameraService;
+        private AppRootBehaviour appRootBehaviour;
 
         public Bounds SelectedArea => selectedArea;
 
@@ -80,11 +91,20 @@ namespace Netherlands3D.Functionalities
             creationService.GridInput.whenDrawingArea.AddListener(SetDuringSelectionAreaBounds);
             creationService.GridInput.whenAreaIsSelected.AddListener(SetSelectionAreaBounds);
             
-            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
-            northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
-            northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);
-            southWestTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleRight);
-            southWestTooltip.SetSnappingSide(TextPopout.SnappingSide.Right);          
+            worldUIService  = ServiceLocator.GetService<WorldUIService>();
+            cameraService = App.Cameras;
+            appRootBehaviour = App.UIRoot;
+            
+            northEastFloatingElement = new FloatingElement();
+            southWestFloatingElement = new FloatingElement();
+            worldUIService.AddToFloatingElementsContent(northEastFloatingElement);
+            worldUIService.AddToFloatingElementsContent(southWestFloatingElement);
+            northEastTooltip = new WorldAnnotation("");
+            southWestTooltip = new WorldAnnotation("");
+            northEastTooltip.SetSnappingSide(WorldAnnotation.SnappingSide.Right);
+            southWestTooltip.SetSnappingSide(WorldAnnotation.SnappingSide.Left);
+            northEastFloatingElement.Add(northEastTooltip);
+            southWestFloatingElement.Add(southWestTooltip);
         }
 
         private void OnDisable()
@@ -98,8 +118,31 @@ namespace Netherlands3D.Functionalities
             creationService.GridInput.whenDrawingArea.RemoveListener(SetDuringSelectionAreaBounds);
             creationService.GridInput.whenAreaIsSelected.RemoveListener(SetSelectionAreaBounds);
 
-            Destroy(northEastTooltip.gameObject);
-            Destroy(southWestTooltip.gameObject);
+            worldUIService.RemoveFromFloatingElementsContent(northEastFloatingElement);
+            northEastFloatingElement = null;
+            worldUIService.RemoveFromFloatingElementsContent(southWestFloatingElement);
+            southWestFloatingElement = null;
+        }
+        
+        void Update()
+        {
+            if(northEastFloatingElement != null)
+                UpdateCoordinateTooltip(NorthEast, ref northEastFloatingElement, ref northEastTooltip);
+            if(southWestFloatingElement != null)
+                UpdateCoordinateTooltip(SouthWest, ref southWestFloatingElement, ref southWestTooltip);
+        }
+
+        private void UpdateCoordinateTooltip(Coordinate coordinate, ref FloatingElement element, ref WorldAnnotation label)
+        {
+            var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(coordinate.ToUnity());
+            Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
+            var localPos = worldUIService.FloatingElementsContent.WorldToLocal(panelPos);
+            element.SetPosition(localPos);
+
+            var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(coordinate.ToUnity() + cameraService.ActiveCamera.transform.right * worldSpaceOffset);
+            float dist = Mathf.Abs(offsetScreenPos.x - screenPos.x);
+            float pixelOffset = Mathf.Min(dist, MaxPixelDistanceOffset);
+            label.SetLabelOffset(pixelOffset);
         }
 
         public void SetNorthValue(int value)
@@ -153,8 +196,10 @@ namespace Netherlands3D.Functionalities
         private void WhenSelectionBoundsChanged(Bounds selectedArea)
         {
             this.selectedArea = selectedArea;
-            southWestTooltip.Show($"X: {WestExtent}\nY: {SouthExtent}", SouthWest, true);
-            northEastTooltip.Show($"X: {EastExtent}\nY: {NorthExtent}", NorthEast, true);
+            southWestTooltip.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            northEastTooltip.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            southWestTooltip.SetText($"X: {WestExtent}\nY: {SouthExtent}".Trim());
+            northEastTooltip.SetText($"X: {EastExtent}\nY: {NorthExtent}".Trim());
         }
 
         public void SetDuringSelectionAreaBounds(Bounds selectedAreaBounds)
@@ -164,8 +209,8 @@ namespace Netherlands3D.Functionalities
 
         private void WhenDeselected()
         {
-            southWestTooltip.Hide();
-            northEastTooltip.Hide();
+            southWestTooltip.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            northEastTooltip.EnableInClassList(UtilityClassConstants.HIDDEN, true);
 
             ClearSelection();
         }
@@ -173,15 +218,6 @@ namespace Netherlands3D.Functionalities
         {
             this.selectedArea = selectedAreaBounds;
             OnSelectionBoundsChanged.Invoke(this.selectedArea);
-        }
-
-        private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
-        {
-            var popout = Instantiate(popoutPrefab, canvasTransform);
-            popout.RectTransform().SetPivot(pivotPoint);
-            popout.transform.SetSiblingIndex(0);
-
-            return popout;
         }
 
         // TODO: This should be moved to the Coordinates package and make it configurable whether you want a 2D (where
@@ -260,7 +296,5 @@ namespace Netherlands3D.Functionalities
             };
             selectedAreaPoints.Clear();
         }
-
-        
     }
 }

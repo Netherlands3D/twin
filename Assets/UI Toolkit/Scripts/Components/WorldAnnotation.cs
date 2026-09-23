@@ -163,9 +163,13 @@ namespace Netherlands3D.UI.Components
             this.snappingSide = snappingSide;
         }
 
+        private float lastLabelOffset = 0;
         public void SetLabelOffset(float offset)
         {
+            lastLabelOffset = labelOffsetToPosition;
             labelOffsetToPosition = offset;
+            if(lastLabelOffset != labelOffsetToPosition)
+                UpdateSnapping();
         }
 
         private void UpdateSnapping()
