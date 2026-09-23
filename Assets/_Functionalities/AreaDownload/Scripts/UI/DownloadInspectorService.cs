@@ -126,10 +126,29 @@ namespace Netherlands3D.Functionalities
         
         void Update()
         {
-            if(northEastFloatingElement != null)
+            Vector3 ne = NorthEast.ToUnity();
+            Vector3 sw = SouthWest.ToUnity();
+            Vector3 diagonal = (ne - sw).normalized;
+            
+            Vector3 cameraForward = cameraService.ActiveCamera.transform.right;
+            cameraForward.y = 0f;
+            if (cameraForward.sqrMagnitude < 0.001f) return;
+
+            cameraForward.Normalize();
+            float northDot = Vector3.Dot(cameraForward, diagonal);
+            bool lookingNorth = northDot > 0f;
+
+            if (northEastFloatingElement != null)
+            {
                 UpdateCoordinateTooltip(NorthEast, ref northEastFloatingElement, ref northEastTooltip);
-            if(southWestFloatingElement != null)
+                northEastTooltip.SetSnappingSide(lookingNorth ? WorldAnnotation.SnappingSide.Right : WorldAnnotation.SnappingSide.Left);
+            }
+
+            if (southWestFloatingElement != null)
+            {
                 UpdateCoordinateTooltip(SouthWest, ref southWestFloatingElement, ref southWestTooltip);
+                southWestTooltip.SetSnappingSide(lookingNorth ? WorldAnnotation.SnappingSide.Left : WorldAnnotation.SnappingSide.Right);
+            }
         }
 
         private void UpdateCoordinateTooltip(Coordinate coordinate, ref FloatingElement element, ref WorldAnnotation label)
