@@ -1,5 +1,7 @@
 .toolbar-toolbox {
     --toolbar-toolbox-spacing: var(--spacing-2);
+    --toolbar-toolbox-negative-spacing: -8px;
+    --toolbar-toolbox-half-spacing: var(--spacing-1);
     --toolbar-height: var(--spacing-11);
     --toolbar-max-height: var(--spacing-14);
     
@@ -14,21 +16,24 @@
     height: var(--toolbar-height);
     min-height: var(--toolbar-height);
     max-height: var(--toolbar-max-height);
-    margin: 0 var(--spacing-2) 0 var(--spacing-2);
     background-color: transparent;
 }
 
 .toolbar-toolbox__group .button,
 .toolbar-toolbox__group .toggle {
     flex: 0 auto;
-    margin-right: var(--toolbar-toolbox-spacing);
+    margin-left: var(--toolbar-toolbox-half-spacing);
+    margin-right: var(--toolbar-toolbox-half-spacing);
 }
 
-.toolbar-toolbox__presentation-pin {
-    display: none;
-    align-self: flex-start;
-}
+.toolbar-toolbox__group > .toolbar-toolbox__presentation-pin {
+    position: absolute;
 
-.toolbar-toolbox--presentation .toolbar-toolbox__group > #Screenshot {
-    margin-right: 0;
+    left: 100%;
+    top: 0;
+
+    /* 4px left, and vertically centred using half the pin's own height */
+    translate: -4px 0;
+
+    margin: 0;
 }
