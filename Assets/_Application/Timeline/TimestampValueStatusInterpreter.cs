@@ -11,7 +11,7 @@ namespace Netherlands3D.Timeline
         private Color defaultColor;
         private Dictionary<string, Color> colors = new();
         
-        public UnityEvent<string, Color> OnColorInterpretationChanged;
+        public UnityEvent<string, Color> OnColorInterpretationChanged = new();
 
         public TimestampValueStatusInterpreter(Color defaultColor)
         {

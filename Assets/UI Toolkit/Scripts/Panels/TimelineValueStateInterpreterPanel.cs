@@ -9,7 +9,7 @@ using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using ListView = UnityEngine.UIElements.ListView;
+using ListView = Netherlands3D.UI.Components.ListView;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -48,28 +48,35 @@ namespace Netherlands3D.UI.Panels
                     listView.ClearSelection();
                 }
             });
-            
-            listView.selectedIndicesChanged += indices =>
-            {
-                //show selection in world when items in panel are selected
-                ColorPicker.SetVisible(indices.Any());
-            };
-            
+
+            listView.selectedIndicesChanged += OnListViewSelectionChanged;
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
         
-        private void OnDetachFromPanel(DetachFromPanelEvent evt)
-        {
-            timelineStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
-            ColorPicker.ColorChanged.RemoveListener(OnPickColor);
-        }
-
         public TimelineValueStateInterpreterPanel(TimestampValueStatusInterpreter interpreter, ColorPicker colorPicker) : this()
         {
             Interpreter = interpreter;
             ColorPicker = colorPicker;
             ColorPicker.ColorChanged.AddListener(OnPickColor);
             UpdateSwatches();
+            
+            Interpreter.OnColorInterpretationChanged.AddListener(OnColorInterpretationChanged);
+        }
+
+        private void OnColorInterpretationChanged(string status, Color newColor)
+        {
+            UpdateSwatches(); //todo: do this once per frame
+        }
+
+        private void OnListViewSelectionChanged(IEnumerable<int> indices)
+        {
+            ColorPicker.SetVisible(indices.Any());
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            timelineStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
+            ColorPicker.ColorChanged.RemoveListener(OnPickColor);
         }
         
         
@@ -117,7 +124,7 @@ namespace Netherlands3D.UI.Panels
         
         private void OnPickColor(Color color)
         {
-            foreach (int i in listView.selectedIndices)
+            foreach (int i in listView.selectedIndices.ToList())
             {
                 string status = listView.itemsSource[i] as string;
                 Interpreter.SetColorForStatus(status, color);
