@@ -35,24 +35,26 @@
                 <nl3dP:PropertiesPanel name="PropertiesPanel" class="default-hud__properties-zone-column"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section presentation-section--hidden">
-            <ui:VisualElement name="BottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
-                <nl3d:DebugInfo />
-                <nl3d:Footer />
-            </ui:VisualElement>
-            <ui:VisualElement name="PresentationControls" picking-mode="Ignore" class="default-hud__presentation-controls">
-                <nl3d:Toggle name="Presentation" class="default-hud__presentation-button" toggle-type="transparent" toggle-style="IconOnly" icon="PresentationChart" tooltip="Presentatiemodus (H)" />
-            </ui:VisualElement>
-            <ui:VisualElement name="NavigationSection" picking-mode="Ignore" class="default-hud__navigation-section presentation-section">
-                <ui:VisualElement name="BottomTools" picking-mode="Ignore" class="default-hud__bottom-tools">
-                    <nl3d:ToolbarNavigation />
-                    <ui:VisualElement name="CameraSlider" />
+        <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
+             <ui:VisualElement name="MovableBottomSection" class="default-hud__movable-bottom-section presentation-section--hidden"> 
+                <ui:VisualElement name="BottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
+                    <nl3d:DebugInfo />
+                    <nl3d:Footer />
                 </ui:VisualElement>
-                <ui:VisualElement name="MinimapColumn" picking-mode="Position" class="default-hud__minimap-column">
-                    <nl3d:PinToggle name="NavigationPresentationPin" value="true" class="presentation-section__pin" />
-                    <nl3d:MapViewport bottom-left="0, 300000" top-right="280000, 620000" layer-start-index="3" class="map-viewport--fixed-size" />
+                <ui:VisualElement name="PresentationControls" picking-mode="Ignore" class="default-hud__presentation-controls">
+                    <nl3d:Toggle name="Presentation" class="default-hud__presentation-button" toggle-type="transparent" toggle-style="IconOnly" icon="PresentationChart" tooltip="Presentatiemodus (H)" />
                 </ui:VisualElement>
-            </ui:VisualElement>
+                <ui:VisualElement name="NavigationSection" picking-mode="Ignore" class="default-hud__navigation-section presentation-section">
+                    <ui:VisualElement name="BottomTools" picking-mode="Ignore" class="default-hud__bottom-tools">
+                        <nl3d:ToolbarNavigation />
+                        <ui:VisualElement name="CameraSlider" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="MinimapColumn" picking-mode="Position" class="default-hud__minimap-column">
+                        <nl3d:PinToggle name="NavigationPresentationPin" value="true" class="presentation-section__pin" />
+                        <nl3d:MapViewport bottom-left="0, 300000" top-right="280000, 620000" layer-start-index="3" class="map-viewport--fixed-size" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+             </ui:VisualElement> 
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

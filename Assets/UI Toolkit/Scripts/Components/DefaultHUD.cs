@@ -17,7 +17,7 @@ namespace Netherlands3D.UI.Panels
             
             SetupAutoHideSection("LeftSection", "LeftRevealZone", "LeftPresentationPin");
             SetupAutoHideSection("TopSection", "TopRevealZone", "PresentationPin");
-            SetupAutoHideSection("BottomSection", "BottomRevealZone", "NavigationPresentationPin");
+            SetupAutoHideSection("MovableBottomSection", "BottomRevealZone", "NavigationPresentationPin");
         }
 
         private void SetupAutoHideSection(string sectionName, string revealZoneName, string pinName)
