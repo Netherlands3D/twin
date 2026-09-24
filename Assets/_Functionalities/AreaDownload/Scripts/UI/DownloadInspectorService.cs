@@ -95,16 +95,21 @@ namespace Netherlands3D.Functionalities
             cameraService = App.Cameras;
             appRootBehaviour = App.UIRoot;
             
-            northEastFloatingElement = new FloatingElement();
-            southWestFloatingElement = new FloatingElement();
-            worldUIService.AddToFloatingElementsContent(northEastFloatingElement);
-            worldUIService.AddToFloatingElementsContent(southWestFloatingElement);
-            northEastTooltip = new WorldAnnotation("");
-            southWestTooltip = new WorldAnnotation("");
+            northEastTooltip = CreateCoordinateLabel(ref northEastFloatingElement);
             northEastTooltip.SetSnappingSide(WorldAnnotation.SnappingSide.Right);
+            southWestTooltip = CreateCoordinateLabel(ref southWestFloatingElement);
             southWestTooltip.SetSnappingSide(WorldAnnotation.SnappingSide.Left);
-            northEastFloatingElement.Add(northEastTooltip);
-            southWestFloatingElement.Add(southWestTooltip);
+        }
+
+        private WorldAnnotation CreateCoordinateLabel(ref FloatingElement floatingElement)
+        {
+            floatingElement = new FloatingElement();
+            worldUIService.AddToFloatingElementsContent(floatingElement);
+            WorldAnnotation annotation = new WorldAnnotation("");
+            annotation.SetReadOnly(true);
+            annotation.SetCoordinateLabel();
+            floatingElement.Add(annotation);
+            return annotation;
         }
 
         private void OnDisable()
@@ -126,7 +131,7 @@ namespace Netherlands3D.Functionalities
         
         void Update()
         {
-            if (selectedAreaPoints.Count == 0 || northEastFloatingElement == null || southWestFloatingElement == null) return;
+            if (selectedArea.size == Vector3.zero || northEastFloatingElement == null || southWestFloatingElement == null) return;
             
             Vector3 ne = NorthEast.ToUnity();
             Vector3 sw = SouthWest.ToUnity();

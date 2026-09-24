@@ -17,6 +17,11 @@
     white-space: pre-wrap;
 }
 
+.editable-name-field-label-coordinates
+{
+    -unity-font-definition: var(--nl3d-coordinates-font);
+}
+
 .world-annotation__container .editable-name-field .unity-base-text-field__input {  
     padding: 0;
     margin: 0;

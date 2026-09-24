@@ -37,6 +37,7 @@ namespace Netherlands3D.UI.Components
         }
 
         public TextField InputField => inputField;
+        public Label Label => label;
 
         private Label label; // we will switch between label and input field
         private TextField inputField;

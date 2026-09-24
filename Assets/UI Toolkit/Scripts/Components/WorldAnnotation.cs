@@ -163,13 +163,18 @@ namespace Netherlands3D.UI.Components
             this.snappingSide = snappingSide;
         }
 
-        private float lastLabelOffset = 0;
+        public void SetCoordinateLabel()
+        {
+            nameField.Label.AddToClassList("editable-name-field-label-coordinates");
+        }
+        
         public void SetLabelOffset(float offset)
         {
-            lastLabelOffset = labelOffsetToPosition;
-            labelOffsetToPosition = offset;
-            if(lastLabelOffset != labelOffsetToPosition)
+            if(offset != labelOffsetToPosition)
+            {
+                labelOffsetToPosition = offset;
                 UpdateSnapping();
+            }
         }
 
         private void UpdateSnapping()
