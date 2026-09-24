@@ -13,7 +13,7 @@ namespace Netherlands3D.UI.Panels
     public partial class TimelinePropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
         private TimelineStylingLayerPropertyData timelineStylingPropertyData;
-        private TimelineValueStateToColorPanel spawnedPanel; //todo make generic base class
+        private TimelineValueStateInterpreterPanel spawnedPanel; //todo make generic base class
         public ColorPicker ColorPicker { get; set; }
 
         private ContentContainer container;
@@ -31,7 +31,7 @@ namespace Netherlands3D.UI.Panels
 
             if (timelineStylingPropertyData.Interpreter is TimestampValueStatusInterpreter valueStatusInterpreter)
             {
-                spawnedPanel = new TimelineValueStateToColorPanel(valueStatusInterpreter, ColorPicker);
+                spawnedPanel = new TimelineValueStateInterpreterPanel(valueStatusInterpreter, ColorPicker);
             }
         }
 

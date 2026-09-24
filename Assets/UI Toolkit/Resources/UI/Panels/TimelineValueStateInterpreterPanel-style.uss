@@ -1,0 +1,4 @@
+.timeline-value-state-interpreter-panel__list-view{
+    flex-grow: 1;
+    height: auto;
+}

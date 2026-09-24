@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns:ui="UnityEngine.UIElements" 
+         xmlns:nl3d="Netherlands3D.UI.Components"
+         xmlns:nl3dP="Netherlands3D.UI.Panels"
+         noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+         editor-extension-mode="False" 
+         name="TimelineValueStateInterpreterPanel"
+         class="timeline-value-state-interpreter-panel">
+        <nl3d:ListView class="timeline-value-state-interpreter-panel__list-view"/>
+</ui:UXML>
