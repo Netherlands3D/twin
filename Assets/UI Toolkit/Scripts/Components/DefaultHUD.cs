@@ -9,6 +9,7 @@ namespace Netherlands3D.UI.Panels
     {
         private const string HiddenClass = "presentation-section--hidden";
         private const string ActiveRevealZoneClass = "presentation-reveal-zone--active";
+        private const string PersistentVisibleClass = "default-hud__persistent-bottom-section--visible";
         
         public DefaultHUD()
         {
@@ -17,8 +18,8 @@ namespace Netherlands3D.UI.Panels
             
             SetupAutoHideSection("LeftSection", "LeftRevealZone", "LeftPresentationPin");
             SetupAutoHideSection("TopSection", "TopRevealZone", "PresentationPin");
-            SetupAutoHideSection("MovableBottomSection", "BottomRevealZone", "NavigationPresentationPin");
-        }
+            SetupAutoHideSection("BottomSection", "BottomRevealZone", "NavigationPresentationPin");
+          }
 
         private void SetupAutoHideSection(string sectionName, string revealZoneName, string pinName)
         {

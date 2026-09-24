@@ -66,6 +66,22 @@
     padding-top: var(--spacing-3);
 }
 
+.default-hud__movable-bottom-section {
+    flex-direction: row;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+.default-hud__persistent-bottom-section {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    flex-direction: row;
+    align-items: flex-end;
+}
+
 .default-hud__bottom-info {
     flex-grow: 1;
     flex-shrink: 1;
@@ -193,18 +209,32 @@
 
 .default-hud__left-section,
 .default-hud__top-section,
-.default-hud__movable-bottom-section 
-{
-    translate: 0 0;
-    transition-property: translate;
+.default-hud__movable-bottom-section,
+.default-hud__persistent-bottom-section {
     transition-duration: 0.25s;
     transition-delay: 0s;
-    transition-timing-function: ease-in-out;
+    transition-timing-function: ease-out;
+}
+
+.default-hud__left-section,
+.default-hud__top-section,
+.default-hud__movable-bottom-section 
+{
+    transition-property: translate;
+    translate: 0 0;
+}
+
+.default-hud__persistent-bottom-section {
+    transition-duration: 0.1s;
+    transition-property: opacity;
+    opacity: 0;
 }
 
 .default-hud__left-section.presentation-section--hidden,
 .default-hud__top-section.presentation-section--hidden,
-.default-hud__movable-bottom-section.presentation-section--hidden {
+.default-hud__bottom-section.presentation-section--hidden > .default-hud__movable-bottom-section,
+.default-hud__bottom-section.presentation-section--hidden > .default-hud__persistent-bottom-section {
+    transition-timing-function: ease-in;
     transition-delay: 0.5s;
 }
 
@@ -216,14 +246,14 @@
     translate: 0 -56px; /* .toolbar-toolbox height + .toolbar-scenario margin-top = var(spacing-11) + var(spacing-3) = 44px + 12px = 56px */
 }
 
-.default-hud__movable-bottom-section {
-    flex-direction: row;
-    align-items: flex-end;
-    flex-shrink: 0;
+.default-hud__bottom-section.presentation-section--hidden > .default-hud__movable-bottom-section {
+    translate: 0 100%;
 }
 
-.default-hud__movable-bottom-section.presentation-section--hidden {
-    translate: 0 100%;
+.default-hud__bottom-section.presentation-section--hidden > .default-hud__persistent-bottom-section {
+    transition-delay: 1s;
+    transition-duration: 0.5s;
+    opacity: 1;
 }
 
 .default-hud__left-section,
