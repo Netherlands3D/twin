@@ -165,7 +165,7 @@ namespace Netherlands3D.Tiles3D
 
             if (childTile.hascontent || childTile.children.Count > 0)
             {
-                parentTile.children.Add(childTile);
+                parentTile.AddChild(childTile);
             }
         }
     }
