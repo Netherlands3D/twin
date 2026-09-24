@@ -4,7 +4,7 @@ namespace Netherlands3D.Timeline
 {
     public interface ITimestampValueInterpreter
     {
-        Color? CalculateColor(Timestamp timestamp);
+        Color? GetColorForTimestamp(Timestamp timestamp);
         // bool Supports(TimestampCollection collection);
     }
 }

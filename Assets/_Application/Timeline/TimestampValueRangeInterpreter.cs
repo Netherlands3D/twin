@@ -15,7 +15,7 @@ namespace Netherlands3D.Timeline
             this.collection = collection;
         }
         
-        public Color? CalculateColor(Timestamp timestamp)
+        public Color? GetColorForTimestamp(Timestamp timestamp)
         {
             if(!timestamp.ValueAsFloat.HasValue)
                 return null;
