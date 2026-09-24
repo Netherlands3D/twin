@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using GeoJSON.Net;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
@@ -19,8 +18,8 @@ namespace Netherlands3D.Timeline
         
         private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
         private Dictionary<CityObject, TimestampCollection> timelines = new();
-        
-        private ITimestampValueInterpreter valueInterpreter = new TimestampValueStatusInterpreter(); //todo: make this changable
+
+        private ITimestampValueInterpreter interpreter => timelineStylingLayerPropertyData.Interpreter; //todo: make this changable
 
         private void Start()
         {
@@ -30,6 +29,9 @@ namespace Netherlands3D.Timeline
             visualization = GetComponent<CityJSONLayerGameObject>();
             visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
             visualization.CityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes);
+            
+            timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
+            timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
         }
 
         private void ReadTimeLineFromAttributes()
@@ -62,7 +64,7 @@ namespace Netherlands3D.Timeline
             // in GeoJsonLayerFeatureColoring: make read the styling rules after the per material styling rules (preferably this is done at once, but idk how
             //change geojson point/line/polygon to accept more colors per featyre.
 
-            var colorAtCurrentTime = valueInterpreter.CalculateColor(currentTimeStamp);
+            var colorAtCurrentTime = interpreter.GetColorForTimestamp(currentTimeStamp);
             var colorType = Symbolizer.FillColorProperty;
             timelineStylingLayerPropertyData.SetColorForFeatureById(cityObject.GetHashCode().ToString(), colorType, colorAtCurrentTime);
         }

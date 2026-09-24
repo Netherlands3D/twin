@@ -16,6 +16,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public const string TimelineAttributeIdentifier = "data-timeline-color";
         public const string TimelineColorIdentifier = "timeline-color";
 
+        [JsonIgnore] public ITimestampValueInterpreter Interpreter { get; set; }
         [JsonIgnore] public List<TimestampCollection> TimestampCollections = new();
         [JsonIgnore] public UnityEvent<TimestampCollection> OnTimestampCollectionAdded = new();
         

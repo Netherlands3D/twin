@@ -20,7 +20,7 @@ namespace Netherlands3D.Timeline
         private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
         private Dictionary<Feature, TimestampCollection> timelines = new();
         
-        private ITimestampValueInterpreter valueInterpreter = new TimestampValueStatusInterpreter(); //todo: make this changable
+        private ITimestampValueInterpreter interpreter => timelineStylingLayerPropertyData.Interpreter; //todo: make this changable
         
         private void Start()
         {
@@ -28,10 +28,11 @@ namespace Netherlands3D.Timeline
             sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
             
             visualization = GetComponent<GeoJsonLayerGameObject>();
-            // visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
+            visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
             visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
 
             timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
+            timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
         }
 
         private void OnFeatureAdded(Feature feature)
@@ -63,7 +64,7 @@ namespace Netherlands3D.Timeline
             // in GeoJsonLayerFeatureColoring: make read the styling rules after the per material styling rules (preferably this is done at once, but idk how
             //change geojson point/line/polygon to accept more colors per featyre.
 
-            var colorAtCurrentTime = valueInterpreter.CalculateColor(currentTimeStamp);
+            var colorAtCurrentTime = interpreter.GetColorForTimestamp(currentTimeStamp);
             var useStroke = feature.Geometry.Type == GeoJSONObjectType.LineString || feature.Geometry.Type == GeoJSONObjectType.MultiLineString;
             var colorType = useStroke ? Symbolizer.StrokeColorProperty :  Symbolizer.FillColorProperty;
             timelineStylingLayerPropertyData.SetColorForFeatureById(feature.GetHashCode().ToString(), colorType, colorAtCurrentTime);
