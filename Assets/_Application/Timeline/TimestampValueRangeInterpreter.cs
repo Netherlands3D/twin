@@ -14,7 +14,12 @@ namespace Netherlands3D.Timeline
         {
             this.collection = collection;
         }
-        
+
+        public void ProcessNewCollection(TimestampCollection newTimestampCollection)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Color? GetColorForTimestamp(Timestamp timestamp)
         {
             if(!timestamp.ValueAsFloat.HasValue)

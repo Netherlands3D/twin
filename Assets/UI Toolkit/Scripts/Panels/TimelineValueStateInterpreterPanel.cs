@@ -57,7 +57,7 @@ namespace Netherlands3D.UI.Panels
             
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
-
+        
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             timelineStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
@@ -69,20 +69,22 @@ namespace Netherlands3D.UI.Panels
             Interpreter = interpreter;
             ColorPicker = colorPicker;
             ColorPicker.ColorChanged.AddListener(OnPickColor);
-            listView.itemsSource = Interpreter.GetStates();
-        }
-        
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            timelineStylingPropertyData = properties.Get<TimelineStylingLayerPropertyData>();
-            timelineStylingPropertyData.OnTimestampCollectionAdded.AddListener(OnTimestampCollectionAdded);
-        }
-
-        private void OnTimestampCollectionAdded(TimestampCollection newCollection)
-        {
-            Interpreter.ProcessNewCollection(newCollection);
             UpdateSwatches();
         }
+        
+        
+        
+        // public void LoadProperties(List<LayerPropertyData> properties)
+        // {
+        //     timelineStylingPropertyData = properties.Get<TimelineStylingLayerPropertyData>();
+        //     timelineStylingPropertyData.OnTimestampCollectionAdded.AddListener(OnTimestampCollectionAdded);
+        // }
+
+        // private void OnTimestampCollectionAdded(TimestampCollection newCollection)
+        // {
+        //     Interpreter.ProcessNewCollection(newCollection);
+        //     UpdateSwatches();
+        // }
         
         private VisualElement MakeListViewItem()
         {

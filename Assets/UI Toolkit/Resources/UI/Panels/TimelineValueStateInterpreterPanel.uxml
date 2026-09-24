@@ -6,5 +6,5 @@
          editor-extension-mode="False" 
          name="TimelineValueStateInterpreterPanel"
          class="timeline-value-state-interpreter-panel">
-        <nl3d:ListView class="timeline-value-state-interpreter-panel__list-view"/>
+        <nl3d:ListView name="StatusList" class="timeline-value-state-interpreter-panel__list-view"/>
 </ui:UXML>

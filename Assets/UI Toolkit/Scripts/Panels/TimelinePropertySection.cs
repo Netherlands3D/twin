@@ -32,19 +32,8 @@ namespace Netherlands3D.UI.Panels
             if (timelineStylingPropertyData.Interpreter is TimestampValueStatusInterpreter valueStatusInterpreter)
             {
                 spawnedPanel = new TimelineValueStateInterpreterPanel(valueStatusInterpreter, ColorPicker);
+                container.Add(spawnedPanel);
             }
         }
-
-        // private void UpdateDateField(CheckboxToggle checkboxToggle, DateField field, DateTime? newDate)
-        // {
-        //     checkboxToggle.SetValueWithoutNotify(newDate.HasValue);
-        //     field.SetEnabled(newDate.HasValue);
-        //     
-        //     if (!newDate.HasValue)
-        //         return;
-        //
-        //     var newDateValue = newDate.Value;
-        //     field.SetValueWithoutNotify(newDateValue.Day, newDateValue.Month, newDateValue.Year);
-        // }
     }
 }

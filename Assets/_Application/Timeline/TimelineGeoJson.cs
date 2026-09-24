@@ -42,6 +42,7 @@ namespace Netherlands3D.Timeline
                 var timeline = new TimestampCollection(timestampObject.ToString());
                 timelines.Add(feature, timeline);
                 timelineStylingLayerPropertyData.AddTimestampCollection(timeline);
+                interpreter.ProcessNewCollection(timeline);
                 
                 var currentTimestamp = timeline.GetCurrentTimestamp(sunTime.Time);
                 SetFeatureColor(feature, currentTimestamp);

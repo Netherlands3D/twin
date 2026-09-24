@@ -9,7 +9,7 @@ namespace Netherlands3D.Timeline
     public class TimestampValueStatusInterpreter : ITimestampValueInterpreter
     {
         private Color defaultColor;
-        private Dictionary<string, Color> colors;
+        private Dictionary<string, Color> colors = new();
         
         public UnityEvent<string, Color> OnColorInterpretationChanged;
 
