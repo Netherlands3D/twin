@@ -6,6 +6,8 @@ namespace Netherlands3D
 {
     public class ThumbnailService : MonoBehaviour
     {
+	    public const float MIN_THUMBNAIL_BOUNDS_SIZE = 50;
+	    
 	    private RenderTexture temporaryThumbnailRenderTexture;
 	    private Texture2D temporaryThumbnailTexture;
 	    private int width = 340;

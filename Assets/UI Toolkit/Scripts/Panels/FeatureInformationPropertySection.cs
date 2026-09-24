@@ -120,8 +120,8 @@ namespace Netherlands3D.UI.Panels
                     var height = ServiceLocator.GetService<HeightMap>().GetHeight(bbox.Center);
                     currentObjectBounds.center = new(currentObjectBounds.center.x, height, currentObjectBounds.center.z);
                 }
-                if(currentObjectBounds.size.magnitude < 50)
-                    currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * 50);
+                if(currentObjectBounds.size.magnitude < ThumbnailService.MIN_THUMBNAIL_BOUNDS_SIZE)
+                    currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * ThumbnailService.MIN_THUMBNAIL_BOUNDS_SIZE);
                 Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
                 thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
                 float aspect = (float)tex.height / tex.width;
