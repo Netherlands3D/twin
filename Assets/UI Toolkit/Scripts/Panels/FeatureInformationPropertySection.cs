@@ -4,9 +4,11 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -67,13 +69,19 @@ namespace Netherlands3D.UI.Panels
         
         public void PopulateAddresses(Dictionary<string, object> properties)
         {
-            var list = properties
-                .Select(kv => new KeyValue
+            var list = new List<KeyValue>();
+            foreach (var kv in properties)
+            {
+                if (kv.Value is JObject nested)
                 {
-                    Key = kv.Key,
-                    Value = kv.Value?.ToString()
-                })
-                .ToList();
+                    foreach (var nestedKv in nested)
+                        list.Add(new KeyValue { Key = nestedKv.Key, Value = nestedKv.Value?.ToString() });
+                }
+                else
+                {
+                    list.Add(new KeyValue { Key = kv.Key, Value = kv.Value?.ToString() });
+                }
+            }
             propertiesListView.itemsSource = list;
         }
         
@@ -113,8 +121,14 @@ namespace Netherlands3D.UI.Panels
             thumbnailContainer.schedule.Execute(_ => 
             { 
                 ThumbnailService thumbnailService = ServiceLocator.GetService<ThumbnailService>();
-                //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
                 Bounds currentObjectBounds = bbox.ToUnityBounds();
+                if (bbox.BottomLeft.PointsLength == 2)//convert to 3d with an estimated height if the bbox is 2d.
+                {
+                    var height = ServiceLocator.GetService<HeightMap>().GetHeight(bbox.Center);
+                    currentObjectBounds.center = new(currentObjectBounds.center.x, height, currentObjectBounds.center.z);
+                }
+                if(currentObjectBounds.size.magnitude < 50)
+                    currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * 50);
                 Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
                 thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
                 float aspect = (float)tex.height / tex.width;

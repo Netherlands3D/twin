@@ -36,13 +36,9 @@ namespace Netherlands3D.Twin.layers.properties
             visualization.OnFeatureRemove.AddListener(UpdateStyling);
             
             layers.Clear();
-            layers.Add(visualization.PolygonLayer);
-            layers.Add(visualization.LineLayer);
-            layers.Add(visualization.PointLayer);
-            
-            visualization.PolygonLayer.RenderColor = visualization.LayerData.Color;
-            visualization.LineLayer.RenderColor = visualization.LayerData.Color;
-            visualization.PointLayer.RenderColor = visualization.LayerData.Color;
+            layers.AddRange(visualization.VisualisationLayers);
+            foreach (var layer in layers)
+                layer.RenderColor = visualization.LayerData.Color;
         }
 
         private void UpdateStyling(Feature feature)
@@ -50,7 +46,7 @@ namespace Netherlands3D.Twin.layers.properties
             IGeoJsonVisualisationLayer layer = null;
             for (int i = 0; i < layers.Count; i++)
             {
-                if (layers[i].SupportsGeometryType(feature.Geometry.Type))
+                if (layers[i].SupportsGeometryType(feature))
                 {
                     layer = layers[i];
                     break;
@@ -68,9 +64,8 @@ namespace Netherlands3D.Twin.layers.properties
                 CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
                 if (layer.FeatureCount > 0)
                 {
-                    string colorProperty = GetColorPropertyTypeForLayer(layer);
-                    var color = featureColorPropertyData.GetColor(layerFeature, colorProperty);
-                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(visualization.LayerData.Color), colorProperty);
+                    var color = featureColorPropertyData.GetColor(layerFeature, layer.StylingColorProperty);
+                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(visualization.LayerData.Color), layer.StylingColorProperty);
                 }
                 else
                 {
@@ -114,27 +109,10 @@ namespace Netherlands3D.Twin.layers.properties
             for(int i = 0; i < layers.Count; i++)
                 if(layers[i].RenderMaterial == material)
                 {
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.Point) || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiPoint))
-                        return "punten";
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.LineString) || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiLineString))
-                        return "lijnen";
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.Polygon) ||  layers[i].SupportsGeometryType(GeoJSONObjectType.MultiPolygon))
-                        return "polygonen";
+                    return layers[i].DisplayName;
                 }
             
             return null;
-        }
-
-        public string GetColorPropertyTypeForLayer(IGeoJsonVisualisationLayer layer)
-        {
-            if (layer.SupportsGeometryType(GeoJSONObjectType.Point) || layer.SupportsGeometryType(GeoJSONObjectType.MultiPoint))
-                return Symbolizer.FillColorProperty;
-            if (layer.SupportsGeometryType(GeoJSONObjectType.LineString) || layer.SupportsGeometryType(GeoJSONObjectType.MultiLineString))
-                return Symbolizer.StrokeColorProperty;
-            if (layer.SupportsGeometryType(GeoJSONObjectType.Polygon) ||  layer.SupportsGeometryType(GeoJSONObjectType.MultiPolygon))
-                return Symbolizer.FillColorProperty;
-            
-            return Symbolizer.FillColorProperty;
         }
         
         protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
