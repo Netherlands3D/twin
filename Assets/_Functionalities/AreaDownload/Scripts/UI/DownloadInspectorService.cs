@@ -106,8 +106,7 @@ namespace Netherlands3D.Functionalities
             floatingElement = new FloatingElement();
             worldUIService.AddToFloatingElementsContent(floatingElement);
             WorldAnnotation annotation = new WorldAnnotation("");
-            annotation.SetReadOnly(true);
-            annotation.SetCoordinateLabel();
+            annotation.IsCoordinate = true;
             floatingElement.Add(annotation);
             return annotation;
         }

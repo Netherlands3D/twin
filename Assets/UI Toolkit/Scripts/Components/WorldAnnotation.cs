@@ -32,6 +32,21 @@ namespace Netherlands3D.UI.Components
         private string currentText;
         private bool isReadOnly = false;
         
+        private bool isCoordinate = false;
+        [UxmlAttribute("coordinate")]
+        public bool IsCoordinate
+        {
+            get => isCoordinate;
+            set 
+            {
+                isCoordinate = value;
+                SetReadOnly(isCoordinate);
+                if(isCoordinate)
+                    nameField.Label.AddToClassList("editable-name-field-label-coordinates");
+                else
+                    nameField.Label.RemoveFromClassList("editable-name-field-label-coordinates");
+            }
+        }
 
         public WorldAnnotation()
         {
@@ -161,11 +176,6 @@ namespace Netherlands3D.UI.Components
         public void SetSnappingSide(SnappingSide snappingSide)
         {
             this.snappingSide = snappingSide;
-        }
-
-        public void SetCoordinateLabel()
-        {
-            nameField.Label.AddToClassList("editable-name-field-label-coordinates");
         }
         
         public void SetLabelOffset(float offset)
