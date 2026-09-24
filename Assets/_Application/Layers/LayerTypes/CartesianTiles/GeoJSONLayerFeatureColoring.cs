@@ -115,6 +115,7 @@ namespace Netherlands3D.Twin.layers.properties
                     Color? color = symbolizer.GetColor(colorType);
                     Debug.Log("getting style " + geojsonFeature.GetHashCode() + "with color " + color );
                 //todo: apply color
+                    visualization.SetFeatureColor(geojsonFeature, color);
                 }
             }
         }

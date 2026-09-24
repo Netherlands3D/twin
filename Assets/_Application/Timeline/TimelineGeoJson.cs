@@ -19,23 +19,19 @@ namespace Netherlands3D.Timeline
 
         private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
         private Dictionary<Feature, TimestampCollection> timelines = new();
-
-        private float minValue = Mathf.Infinity;
-        private float maxValue = Mathf.NegativeInfinity;
         
-        [SerializeField] private Color minColor = Color.red;
-        [SerializeField] private Color maxColor = Color.green;
-
+        private ITimestampValueInterpreter valueInterpreter = new TimestampValueStatusInterpreter(); //todo: make this changable
+        
         private void Start()
         {
+            sunTime = ServiceLocator.GetService<SunTime>();
+            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
+            
             visualization = GetComponent<GeoJsonLayerGameObject>();
             // visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
             visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
 
             timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
-
-            sunTime = ServiceLocator.GetService<SunTime>();
-            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
         }
 
         private void OnFeatureAdded(Feature feature)
@@ -44,19 +40,13 @@ namespace Netherlands3D.Timeline
             {
                 var timeline = new TimestampCollection(timestampObject.ToString());
                 timelines.Add(feature, timeline);
+                timelineStylingLayerPropertyData.AddTimestampCollection(timeline);
+                
                 var currentTimestamp = timeline.GetCurrentTimestamp(sunTime.Time);
-                UpdateMinMax(timeline);
                 SetFeatureColor(feature, currentTimestamp);
             }
         }
-
-        private void UpdateMinMax(TimestampCollection timeline)
-        {
-            minValue = timeline.MinFloatValue < minValue ? timeline.MinFloatValue : minValue;
-            maxValue = timeline.MaxFloatValue > maxValue ? timeline.MaxFloatValue : maxValue;
-            OnTimeChanged(sunTime.Time); //recalculate the feature colors because the min/max changed
-        }
-
+        
         private void OnTimeChanged(DateTime currentTime)
         {
             foreach (var timelines in timelines)
@@ -66,28 +56,17 @@ namespace Netherlands3D.Timeline
             }
         }
 
-        private void SetFeatureColor(Feature feature, Timestamp timestamp)
+        private void SetFeatureColor(Feature feature, Timestamp currentTimeStamp)
         {
             //each feature should have a unique id.
             //set styling rules here per feature
             // in GeoJsonLayerFeatureColoring: make read the styling rules after the per material styling rules (preferably this is done at once, but idk how
             //change geojson point/line/polygon to accept more colors per featyre.
 
-            var colorAtCurrentTime = CalculateColorForFeature(feature, timestamp.timestamp);
+            var colorAtCurrentTime = valueInterpreter.CalculateColor(currentTimeStamp);
             var useStroke = feature.Geometry.Type == GeoJSONObjectType.LineString || feature.Geometry.Type == GeoJSONObjectType.MultiLineString;
             var colorType = useStroke ? Symbolizer.StrokeColorProperty :  Symbolizer.FillColorProperty;
             timelineStylingLayerPropertyData.SetColorForFeatureById(feature.GetHashCode().ToString(), colorType, colorAtCurrentTime);
-        }
-
-        private Color? CalculateColorForFeature(Feature feature, DateTime currentTime)
-        {
-            var timeline = timelines[feature];
-            var currentTimeStamp = timeline.GetCurrentTimestamp(currentTime);
-            if(!currentTimeStamp.ValueAsFloat.HasValue)
-                return null;
-            
-            var t = Mathf.InverseLerp(minValue, maxValue, currentTimeStamp.ValueAsFloat.Value);
-            return Color.Lerp(minColor, maxColor, t);
         }
     }
 }

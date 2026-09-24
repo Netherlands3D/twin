@@ -272,5 +272,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
             }
         }
+
+        public void SetFeatureColor(Feature feature, Color? color)
+        {
+            var layer = GetVisualisationLayerForFeature(feature);
+            // layer.SetColorForFeature(feature, color);
+            Debug.Log("Setting color of geojson feature " + feature.GetHashCode() + " to color " + color);
+        }
     }
 }
