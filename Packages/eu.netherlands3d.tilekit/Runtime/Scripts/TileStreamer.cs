@@ -1,12 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Tilekit.BinaryMesh;
-using UnityEditor.Graphs;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
@@ -15,21 +11,20 @@ namespace Netherlands3D.Tilekit
     public class TileStreamer : MonoBehaviour
     {
         
-        private const int rootTileSize = 32000;
-        private const int minTileSize = 500;
+        private const int rootTileSize = 2000;
+        private const int minTileSize = 250;
 
         [SerializeField] private float splitThreshold = 500f;
         
         public bool IsStreaming { get; private set; }
         private Camera activeCamera;
-        
-        
+
         private readonly Dictionary<Tile, UnityWebRequest> runningRequests = new();
 
-        
-        
         private readonly TileSelector tileSelector = new();
         private readonly List<Tile> desiredTilesList = new(256);
+        
+        private readonly List<Tile> _debug_desiredTilesList = new(256);
         
         private readonly HashSet<Tile> desiredTiles = new();
         private readonly HashSet<Tile> loadingTiles = new();
@@ -45,11 +40,58 @@ namespace Netherlands3D.Tilekit
 
         private void OnDrawGizmos()
         {
-            foreach (var tile in desiredTilesList)
+            DrawGizmosDesiredTiles();
+            DrawGizmosCameraFrustum(activeCamera);
+        }
+
+        private void DrawGizmosDesiredTiles()
+        {
+            foreach (var tile in _debug_desiredTilesList)
             {
                 var tileBounds = TileMath.GetUnityBounds(tile);
                 Gizmos.DrawWireCube(tileBounds.center, tileBounds.size);
             }
+        }
+        
+        private static void DrawGizmosCameraFrustum(Camera camera)
+        {
+            if (!camera)
+                return;
+
+            var previousMatrix = Gizmos.matrix;
+            var previousColor = Gizmos.color;
+
+            Gizmos.color = Color.yellow;
+            Gizmos.matrix = Matrix4x4.TRS(
+                camera.transform.position,
+                camera.transform.rotation,
+                Vector3.one
+            );
+
+            if (camera.orthographic)
+            {
+                var depth = camera.farClipPlane - camera.nearClipPlane;
+                var height = camera.orthographicSize * 2f;
+                var width = height * camera.aspect;
+
+                Gizmos.DrawWireCube(
+                    new Vector3(0f, 0f, camera.nearClipPlane + depth * 0.5f),
+                    new Vector3(width, height, depth)
+                );
+            }
+            else
+            {
+                Gizmos.DrawFrustum(
+                    Vector3.zero,
+                    camera.fieldOfView,
+                    camera.farClipPlane,
+                    camera.nearClipPlane,
+                    camera.aspect
+                );
+            }
+
+            Gizmos.matrix = previousMatrix;
+            Gizmos.color = previousColor;
         }
 
 
@@ -85,6 +127,9 @@ namespace Netherlands3D.Tilekit
             if (!IsStreaming) return;
             
             tileSelector.GetDesiredTilesNonAlloc(activeCamera, activeCamera.farClipPlane, rootTileSize, minTileSize, splitThreshold, desiredTilesList);
+            
+            //tileSelector.GetDesiredTilesNonAlloc(activeCamera, activeCamera.farClipPlane, 100, 100, splitThreshold, _debug_desiredTilesList);
+            
             UpdateTileStreaming();
 
         }
@@ -312,7 +357,7 @@ namespace Netherlands3D.Tilekit
             {
                 byte[] data = null;
 
-                var randomNumber = UnityEngine.Random.Range(0f, 5f);
+                var randomNumber = UnityEngine.Random.Range(1f, 4f);
                 yield return new WaitForSeconds(randomNumber);
                 
                 yield return RunCoroutine<GameObject>(CreateTileCoroutine(tile, url, data), result => tileObject = result);
@@ -416,14 +461,8 @@ namespace Netherlands3D.Tilekit
             output((T)result);
         }
 
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = new Color(1f, 1f, 1f, .5f);
-            foreach (var desiredTile in desiredTilesList)
-            {
-                var tileBounds = TileMath.GetUnityBounds(desiredTile);
-                Gizmos.DrawWireCube(tileBounds.center, tileBounds.size);
-            }
-        }
+
+        
+        
     }
 }

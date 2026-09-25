@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D.CartesianTiles;
 using UnityEditor;
@@ -12,61 +14,67 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
 {
     public static class MaaiveldUnityTerrainTilesGenerator
     {
-        private const int TileSize = 1000;
+        private const int SourceTileSize = 1000;
         
         private const string MeshDataBaseUrl = "https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked/";
         private const string MeshDataFileNamePattern = "Terrain{0}_{1}.1.bin";
         private static readonly string TerrainCacheFolder = Path.Combine(Application.temporaryCachePath, "UnityTerrainTiles");
-        private static readonly string MeshDataCacheFolder = Path.Combine(TerrainCacheFolder, "MeshData");
+        private static readonly string SourceMeshDataCacheFolder = Path.Combine(TerrainCacheFolder, "SourceMeshData");
         private static readonly string TerrainMapCacheFolder = Path.Combine(TerrainCacheFolder, "Terrain");
 
         [MenuItem("Netherlands3D/Generate maaiveld terrain map tiles for Arnhem...")]
         public static async void ProcessArnhem()
         {
-            try
+            //try
             {
                 await ProcessArnhemAsync();
             }
-            catch (Exception e)
-            {
-                throw; // TODO handle exception
-            }
+            //catch (Exception e)
+            //{/
+             //   throw new Exception();
+            //}
         }
 
         
 
         private static async Task ProcessArnhemAsync()
         {
-            var area = new RectInt(new Vector2Int(188000, 444000), new Vector2Int(6000, 6000));
-            var tileSize = 1000;
-            await ProcessTilesAsync(area, tileSize);
+            var rdArea = new RectInt(new Vector2Int(186000, 444000), new Vector2Int(6000, 6000));
+            var tileSizes = new int[] { 1000, 2000, 4000, 8000 };
+            await ProcessTilesAsync(rdArea, tileSizes);
         }
         
-        private static async Task ProcessTilesAsync(RectInt area, int tileSize)
+        private static async Task ProcessTilesAsync(RectInt totalArea, int[] tileSizes)
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
 
             try
             {
-                
 
-                var tileCount = 0;
-                var tileCountTotal = (area.width/tileSize) * (area.height/tileSize);
                 var cancel = false;
-                
-                for (var y = area.yMin; y < area.yMax; y += tileSize)
+
+                foreach (var tileSize in tileSizes)
                 {
-                    for (var x = area.xMin; x < area.xMax; x += tileSize)
+                    var tileCount = 0;
+                    var tileCountTotal = (totalArea.width/tileSize) * (totalArea.height/tileSize);
+                    
+                    for (var y = totalArea.yMin; y < totalArea.yMax; y += tileSize)
                     {
-                        tileCount++;
-                        var title = "Generating tiles...";
-                        var description = $"{tileCount}/{tileCountTotal}";
-                        var progress = tileCount / (float)tileCountTotal;
-                        if (EditorUtility.DisplayCancelableProgressBar(title, description, progress))
+                        for (var x = totalArea.xMin; x < totalArea.xMax; x += tileSize)
                         {
-                            return;
+                            tileCount++;
+                            var title = "Generating tiles...";
+                            var description = $"{tileCount}/{tileCountTotal} {tileSize}";
+                            var progress = tileCount / (float)tileCountTotal;
+                            if (EditorUtility.DisplayCancelableProgressBar(title, description, progress))
+                            {
+                                return;
+                            }
+
+                            var tileArea = new Rect(x, y, tileSize, tileSize);
+
+                            await ProcessTileAsync(tileArea, scene);
                         }
-                        await ProcessTileAsync(x, y, scene);
                     }
                 }
             }
@@ -82,44 +90,63 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
             
         }
 
-        private static async Task ProcessTileAsync(int x, int y, Scene scene)
+        private static async Task ProcessTileAsync(Rect tileArea, Scene scene)
         {
-            var url = GetMeshDataUrl(x, y);
-            var meshData = await GetMeshDataAsync(url);
 
-            var gameObject = CreateMeshCollider(meshData);
 
-            SceneManager.MoveGameObjectToScene(
-                gameObject,
-                scene);
+            var sourceGameObjects = new List<GameObject>();
             
+            var minX = Mathf.Floor(tileArea.xMin / (float)SourceTileSize) * SourceTileSize;
+            var minY = Mathf.Floor(tileArea.yMin / (float)SourceTileSize) * SourceTileSize;
+            var maxX = Mathf.Ceil(tileArea.xMax / (float)SourceTileSize) * SourceTileSize;
+            var maxY = Mathf.Ceil(tileArea.yMax / (float)SourceTileSize) * SourceTileSize;
+
+            for (var x = minX; x < maxX; x += SourceTileSize)
+            {
+                for (var y = minY; y < maxY; y += SourceTileSize)
+                {
+                    var sourceUrl = GetSourceMeshDataUrl(x, y);
+                    var sourceMeshData = await GetSourceMeshDataAsync(sourceUrl);
+                    var sourceGameObject = CreateMeshCollider(sourceMeshData);
+                    SceneManager.MoveGameObjectToScene(sourceGameObject, scene);
+                    sourceGameObject.transform.position = new Vector3(x - tileArea.position.x + 500, 0, y - tileArea.position.y + 500);
+                    sourceGameObjects.Add(sourceGameObject);
+                }
+            }
+            
+            
+            await Awaitable.NextFrameAsync();
+
             var oldValue = Physics.queriesHitBackfaces;
             Physics.queriesHitBackfaces = true;
 
             try
             {
-                GenerateTerrainMap(x, y, gameObject);
+                GenerateTerrainMap(tileArea, sourceGameObjects);
             }
             finally
             {
                 Physics.queriesHitBackfaces = oldValue;
-                UnityEngine.Object.DestroyImmediate(gameObject);
+                foreach (var go in sourceGameObjects)
+                {
+                    UnityEngine.Object.DestroyImmediate(go);
+                }
             }
         }
 
-        private static string GetMeshDataUrl(int x, int y)
+        private static string GetSourceMeshDataUrl(float x, float y)
         {
             var fileName = string.Format(MeshDataFileNamePattern, x, y);
             return MeshDataBaseUrl + fileName;
         }
 
-        private static async Task<byte[]> GetMeshDataAsync(string url)
+        private static async Task<byte[]> GetSourceMeshDataAsync(string url)
         {
-            Directory.CreateDirectory(MeshDataCacheFolder);
+            Directory.CreateDirectory(SourceMeshDataCacheFolder);
 
             var fileName = Path.GetFileName(url);
 
-            var localPath = Path.Combine(MeshDataCacheFolder, fileName);
+            var localPath = Path.Combine(SourceMeshDataCacheFolder, fileName);
 
             if (File.Exists(localPath))
             {
@@ -146,6 +173,8 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
 
             await File.WriteAllBytesAsync(localPath, data);
 
+            
+
             return data;
         }
 
@@ -171,61 +200,72 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
 
             var collider = gameObject.AddComponent<MeshCollider>();
             collider.sharedMesh = mesh;
+            
+            mesh.RecalculateBounds();
              
             return gameObject;
         }
 
-        private static void GenerateTerrainMap(int tileX, int tileY, GameObject gameObject)
+        private static void GenerateTerrainMap(Rect tileArea, List<GameObject> sourceGameObjects)
         {
             const int resolution = 513;
             const float rayStartOffset = 10f;
 
             Directory.CreateDirectory(TerrainMapCacheFolder);
-
-            var collider = gameObject.GetComponent<MeshCollider>();
-            var bounds = collider.bounds;
-
-            var minHeight = bounds.min.y;
-            var maxHeight = bounds.max.y;
-
+            
             var texture = new Texture2D(resolution, resolution, TextureFormat.RGBA32, false);
 
             var pixels = new Color32[resolution * resolution];
 
-            for (var y = 0; y < resolution; y++)
+            var sourceBoundsCollection = sourceGameObjects.Select(e => e.GetComponent<MeshCollider>().bounds);
+
+            var tileBounds = new Bounds();
+
+            foreach (var sourceBounds in sourceBoundsCollection)
             {
-                for (var x = 0; x < resolution; x++)
+                tileBounds.Encapsulate(sourceBounds);
+            }
+            
+
+            foreach (var sourceGameObject in sourceGameObjects)
+            {
+                var collider = sourceGameObject.GetComponent<MeshCollider>();
+                
+                var minHeight = tileBounds.min.y;
+                var maxHeight = tileBounds.max.y;
+
+                for (var pixelY = 0; pixelY < resolution; pixelY++)
                 {
-                    var normalizedX = x / (float)(resolution - 1);
-                    var normalizedY = y / (float)(resolution - 1);
-
-                    var worldX = Mathf.Lerp(bounds.min.x, bounds.max.x, normalizedX);
-                    var worldZ = Mathf.Lerp(bounds.min.z, bounds.max.z, normalizedY);
-
-                    var rayOrigin = new Vector3(worldX, bounds.max.y + rayStartOffset, worldZ);
-                    
-                    
-                    var ray = new Ray(rayOrigin, Vector3.down);
-                    
-
-
-                    if (!collider.Raycast(ray, out var hit, bounds.size.y + rayStartOffset))
+                    for (var pixelX = 0; pixelX < resolution; pixelX++)
                     {
-                        continue;
+                        var normalizedX = pixelX / (float)(resolution - 1);
+                        var normalizedY = pixelY / (float)(resolution - 1);
+
+                        var worldX = Mathf.Lerp(0, tileArea.width, normalizedX);
+                        var worldZ = Mathf.Lerp(0, tileArea.height, normalizedY);
+
+                        var rayOrigin = new Vector3(worldX, tileBounds.max.y + rayStartOffset, worldZ);
+
+                        var ray = new Ray(rayOrigin, Vector3.down);
+
+                        if (!collider.Raycast(ray, out var hit, tileBounds.size.y + rayStartOffset))
+                        {
+                            continue;
+                        }
+
+                        var normalizedHeight = Mathf.InverseLerp(minHeight, maxHeight, hit.point.y);
+
+                        var heightByte = (byte)Mathf.RoundToInt(normalizedHeight * 255f);
+
+                        pixels[pixelY * resolution + pixelX] = new Color32(heightByte, 0, 0, 255);
                     }
-
-                    var normalizedHeight = Mathf.InverseLerp(minHeight, maxHeight, hit.point.y);
-
-                    var heightByte = (byte)Mathf.RoundToInt(normalizedHeight * 255f);
-
-                    pixels[y * resolution + x] = new Color32(heightByte, 0, 0, 255);
                 }
             }
 
             texture.SetPixels32(pixels);
             texture.Apply();
 
-            var fileName = $"Terrainmap{tileX}_{tileY}.png";
+            var fileName = $"Terrainmap{tileArea.width}_{tileArea.x}_{tileArea.y}.png";
 
             var path = Path.Combine(TerrainMapCacheFolder, fileName);
 
@@ -233,7 +273,7 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
 
             UnityEngine.Object.DestroyImmediate(texture);
 
-            Debug.Log($"Saved {path} " + $"(min {minHeight:F2}, max {maxHeight:F2})");
+            Debug.Log($"Saved {path}");
         }
     }
 }

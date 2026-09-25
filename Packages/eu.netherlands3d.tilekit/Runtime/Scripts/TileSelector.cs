@@ -85,7 +85,7 @@ namespace Netherlands3D.Tilekit
             }
 
             var viewportRect = TileMath.GetBoundsViewportRect(camera, bounds);
-            var tileScreenSize = Mathf.Max(
+            var tileScreenSize = Mathf.Min(
                 viewportRect.width * camera.pixelWidth, viewportRect.height * camera.pixelHeight);
 
             //DrawDebugLineViewport(camera, new Vector2(0,0), new Vector2(1,1), Color.green);
