@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Netherlands3D.CartesianTiles;
+using NetTopologySuite.Operation.Buffer;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityMeshSimplifier;
 
 namespace Netherlands3D.Editor.UnityTerrainTiles
 {
@@ -39,7 +43,7 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
 
         private static async Task ProcessArnhemAsync()
         {
-            var rdArea = new RectInt(new Vector2Int(186000, 444000), new Vector2Int(6000, 6000));
+            var rdArea = new RectInt(new Vector2Int(186000, 444000), new Vector2Int(3000, 3000));
             var tileSizes = new int[] { 1000, 2000, 4000, 8000 };
             await ProcessTilesAsync(rdArea, tileSizes);
         }
@@ -107,7 +111,7 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
                 {
                     var sourceUrl = GetSourceMeshDataUrl(x, y);
                     var sourceMeshData = await GetSourceMeshDataAsync(sourceUrl);
-                    var sourceGameObject = CreateMeshCollider(sourceMeshData);
+                    var sourceGameObject = CreateMeshCollider(sourceMeshData, $"source {x},{y}");
                     SceneManager.MoveGameObjectToScene(sourceGameObject, scene);
                     sourceGameObject.transform.position = new Vector3(x - tileArea.position.x + 500, 0, y - tileArea.position.y + 500);
                     sourceGameObjects.Add(sourceGameObject);
@@ -120,18 +124,62 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
             var oldValue = Physics.queriesHitBackfaces;
             Physics.queriesHitBackfaces = true;
 
+            List<GameObject> tempGameObjects = new List<GameObject>();
+
             try
             {
-                GenerateTerrainMap(tileArea, sourceGameObjects);
+                var bytes = GenerateTerrainMap(tileArea, sourceGameObjects);
+                PngPreviewWindow.Open(bytes);
+                await Task.Delay(1000);
+                /*
+                var fileName = $"Terrainmap{tileArea.width}_{tileArea.x}_{tileArea.y}.png";
+                var path = Path.Combine(TerrainMapCacheFolder, fileName);
+                await File.WriteAllBytesAsync(path, bytes);*/
+
+                var combinedMesh = GenerateCombinedMesh(tileArea, sourceGameObjects);
+                var previewCombinedMesh = CreateMeshCollider(combinedMesh, "Combined");
+                previewCombinedMesh.transform.position = Vector3.up * 2000;
+                tempGameObjects.Add(previewCombinedMesh);
+                await Task.Delay(1000);
+                //todo: create cutout
+
+                for (int i = 0; i <= 20; i++)
+                {
+                    var meshSimplifier = new MeshSimplifier(combinedMesh);
+                    var quality = (20f - i) / 20f;
+                    
+                    var options = meshSimplifier.SimplificationOptions;
+                    options.Agressiveness = 30;
+                    meshSimplifier.SimplificationOptions = options;
+                    
+                    meshSimplifier.SimplifyMesh(quality);
+                    var simplifiedMesh = meshSimplifier.ToMesh();
+                    Debug.Log($"Quality: {quality}, vertexCount:{simplifiedMesh.vertexCount}");
+                    var previwesimplifiedMesh = CreateMeshCollider(simplifiedMesh, "Simplified"+i);
+                    previwesimplifiedMesh.transform.position = Vector3.up * (2000 + i * 1000);
+                    tempGameObjects.Add(previwesimplifiedMesh);
+                    await Task.Delay(1000);
+                }
+                
+                await Task.Delay(5000);
             }
             finally
             {
                 Physics.queriesHitBackfaces = oldValue;
+                
+                foreach (var go in tempGameObjects)
+                {
+                    UnityEngine.Object.DestroyImmediate(go);
+                }
+                
                 foreach (var go in sourceGameObjects)
                 {
                     UnityEngine.Object.DestroyImmediate(go);
                 }
             }
+            
+            
+            
         }
 
         private static string GetSourceMeshDataUrl(float x, float y)
@@ -178,10 +226,15 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
             return data;
         }
 
-        private static GameObject CreateMeshCollider(byte[] data)
+        private static GameObject CreateMeshCollider(byte[] data, string name = null)
         {
             var mesh = BinaryMeshConversion.ReadBinaryMesh(data, out _);
-            var gameObject = new GameObject("MaaiveldTile");
+            return CreateMeshCollider(mesh);
+        }
+
+        private static GameObject CreateMeshCollider(Mesh mesh, string name = null)
+        {
+            var gameObject = new GameObject(name);
             
             var meshFilter = gameObject.AddComponent<MeshFilter>();
             meshFilter.sharedMesh = mesh;
@@ -206,7 +259,7 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
             return gameObject;
         }
 
-        private static void GenerateTerrainMap(Rect tileArea, List<GameObject> sourceGameObjects)
+        private static byte[] GenerateTerrainMap(Rect tileArea, List<GameObject> sourceGameObjects)
         {
             const int resolution = 513;
             const float rayStartOffset = 10f;
@@ -265,15 +318,56 @@ namespace Netherlands3D.Editor.UnityTerrainTiles
             texture.SetPixels32(pixels);
             texture.Apply();
 
+            var bytes = texture.EncodeToPNG();
+            UnityEngine.Object.DestroyImmediate(texture);
+
+            /*
             var fileName = $"Terrainmap{tileArea.width}_{tileArea.x}_{tileArea.y}.png";
 
             var path = Path.Combine(TerrainMapCacheFolder, fileName);
 
             File.WriteAllBytes(path, texture.EncodeToPNG());
 
-            UnityEngine.Object.DestroyImmediate(texture);
+            
 
-            Debug.Log($"Saved {path}");
+            Debug.Log($"Saved {path}");*/
+
+            return bytes;
         }
+
+        private static Mesh GenerateCombinedMesh(Rect tileArea, List<GameObject> sourceGameObjects)
+        {
+            var combineInstances = new List<CombineInstance>();
+            
+            for (var i = 0; i < sourceGameObjects.Count; i++)
+            {
+                var meshFilter = sourceGameObjects[i].GetComponent<MeshFilter>();
+                var meshRenderer =  sourceGameObjects[i].GetComponent<MeshRenderer>();
+                var mesh = meshFilter.sharedMesh;
+                Matrix4x4 transform = sourceGameObjects[i].transform.localToWorldMatrix;
+
+                for (var subMesh = 0; subMesh < mesh.subMeshCount; subMesh++)
+                {
+                    var combineInstance = new CombineInstance
+                    {
+                        mesh = mesh,
+                        subMeshIndex = subMesh,
+                        transform = transform
+                    };
+                    combineInstances.Add(combineInstance);
+                }
+                
+            }
+            var combinedMesh = new Mesh
+            {
+                name = "Combined",
+                indexFormat = IndexFormat.UInt32
+            };
+            combinedMesh.CombineMeshes(combineInstances.ToArray(), false, true);
+            return combinedMesh;
+          
+        }
+        
+        
     }
 }

@@ -14,6 +14,7 @@
     "com.unity.test-framework": "1.6.0",
     "com.unity.timeline": "1.8.10",
     "com.unity.ugui": "2.0.0",
+    "com.whinarn.unitymeshsimplifier": "https://github.com/Whinarn/UnityMeshSimplifier.git",
     "jillejr.newtonsoft.json-for-unity.converters": "1.6.3",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",

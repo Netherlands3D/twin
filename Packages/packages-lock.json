@@ -316,6 +316,13 @@
       },
       "url": "https://package.openupm.com"
     },
+    "com.whinarn.unitymeshsimplifier": {
+      "version": "https://github.com/Whinarn/UnityMeshSimplifier.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "53fdb3122645bcd3ad2c258235200dff3dfbaa9b"
+    },
     "eu.netherlands3d.address-search": {
       "version": "file:eu.netherlands3d.address-search",
       "depth": 0,
