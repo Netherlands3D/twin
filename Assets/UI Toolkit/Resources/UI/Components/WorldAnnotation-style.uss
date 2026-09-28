@@ -77,7 +77,5 @@
 .world-annotation .world-annotation__image {
     
     aspect-ratio: 1;
-    position: absolute;
-    /*background-size: contain;*/
-    
+    position: absolute;    
 }

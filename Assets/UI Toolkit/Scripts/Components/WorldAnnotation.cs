@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Threading.Tasks;
 using KindMen.Uxios;
 using Netherlands3D.UI_Toolkit;
@@ -31,6 +30,8 @@ namespace Netherlands3D.UI.Components
         private float labelOffsetToPosition = 0;
         private string currentText;
         private bool isReadOnly = false;
+
+        public const float Size = 5;
         
 
         public WorldAnnotation()

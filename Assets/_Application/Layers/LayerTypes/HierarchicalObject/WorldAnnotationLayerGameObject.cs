@@ -1,18 +1,15 @@
-using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
@@ -33,7 +30,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private const float worldSpaceOffset = 10;
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
-        public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
+        public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - WorldAnnotation.Size * Vector3.one), new Coordinate(transform.position + WorldAnnotation.Size * Vector3.one));
 
         protected override void OnVisualizationInitialize()
         {
