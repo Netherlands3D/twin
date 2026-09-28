@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     Id: las-bestanden-importeren
-    IsEnabled: 1
+    IsEnabled: 0
   Title: Las bestanden importeren
   Caption: LAS
   Header: Eigen .LAS bestanden tonen in de 3D viewer
