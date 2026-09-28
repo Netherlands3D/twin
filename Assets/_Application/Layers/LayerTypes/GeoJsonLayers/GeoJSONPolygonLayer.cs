@@ -5,6 +5,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -15,10 +16,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     public partial class GeoJSONPolygonLayer : MonoBehaviour, IGeoJsonVisualisationLayer
     {
         private GeoJsonLayerGameObject parentLayerVisualization;
+        
+        public string DisplayName => "Polygonen";
+        public string StylingColorProperty => Symbolizer.FillColorProperty;
 
-        public bool SupportsGeometryType(GeoJSONObjectType geometryType)
+        public bool SupportsGeometryType(Feature feature)
         {
-            return  geometryType == GeoJSONObjectType.MultiPolygon || geometryType == GeoJSONObjectType.Polygon;
+            return  feature.Geometry.Type == GeoJSONObjectType.MultiPolygon || feature.Geometry.Type == GeoJSONObjectType.Polygon;
         }
         
         public int FeatureCount => spawnedVisualisations.Count;
@@ -260,7 +264,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void RemoveFeature(FeaturePolygonVisualisations featureVisualisation)
         {
-            featureVisualisation.DestroyAllVisualisations();
+            featureVisualisation.Dispose();
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }

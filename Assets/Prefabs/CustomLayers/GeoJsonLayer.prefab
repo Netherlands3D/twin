@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &395531044104438726
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2424884657571623512}
+  - component: {fileID: 6147089387242072256}
+  m_Layer: 12
+  m_Name: GeoJsonAnnotationLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2424884657571623512
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395531044104438726}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.18519, y: 0, z: -12.96296}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8363319932289052987}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6147089387242072256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395531044104438726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37cfeca4bfaf724ca853e9485ee8b3fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers.GeoJSONAnnotationLayer
+  annotationMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
 --- !u!1 &2418701555395206593
 GameObject:
   m_ObjectHideFlags: 0
@@ -38,6 +83,7 @@ Transform:
   - {fileID: 7339978464758806496}
   - {fileID: 8118052479271315826}
   - {fileID: 7021337832595013684}
+  - {fileID: 2424884657571623512}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-2311983791405174025
@@ -64,9 +110,6 @@ MonoBehaviour:
   OnFeatureRemove:
     m_PersistentCalls:
       m_Calls: []
-  polygonFeaturesLayer: {fileID: 3268294129124562304}
-  lineFeaturesLayer: {fileID: 8750136846370291853}
-  pointFeaturesLayer: {fileID: 6163917346495886776}
 --- !u!114 &44681409752656876
 MonoBehaviour:
   m_ObjectHideFlags: 0

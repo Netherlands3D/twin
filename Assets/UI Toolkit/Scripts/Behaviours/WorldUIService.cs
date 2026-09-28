@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit;
 using UnityEngine;
@@ -18,11 +19,14 @@ namespace Netherlands3D.UI.Panels
         
         public VisualElement FloatingElementsContent => floatingElementsContent;
 
-        private void Start()
+        private void Awake()
         {
             floatingElementsContent = new VisualElement();
+        }
+
+        private void Start()
+        {
             App.UIRoot.Root.Add(floatingElementsContent);
-            
             foreach (var buttonBehaviour in floatingButtonBehaviour)
             {             
                 buttonBehaviour.Initialize(floatingElementsContent);
