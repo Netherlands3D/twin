@@ -148,6 +148,14 @@
     margin-right: var(--spacing-2);
 }
 
+.default-hud__persistent-bottom-section > .default-hud__presentation-controls {
+    display: none;
+}
+
+.default-hud--presenting .default-hud__persistent-bottom-section > .default-hud__presentation-controls {
+    display: flex;
+}
+
 .default-hud__presentation-button.toggle {
     flex: 0 0 auto;
     height: var(--spacing-11);
@@ -164,6 +172,11 @@
     display: flex;
 }
 
+.default-hud--presenting .presentation-section__pin,
+.default-hud--presenting .toolbar-toolbox__presentation-pin {
+    display: none;
+}
+
 .presentation-reveal-zones {
     position: absolute;
     left: 0;
@@ -174,6 +187,10 @@
 
 .presentation-reveal-zone {
     position: absolute;
+    display: none;
+}
+
+.default-hud--presenting .presentation-reveal-zone {
     display: none;
 }
 
@@ -238,19 +255,23 @@
     transition-delay: 0.5s;
 }
 
-.default-hud__left-section.presentation-section--hidden {
+.default-hud__left-section.presentation-section--hidden,
+.default-hud--presenting .default-hud__left-section.presentation-section--unpinned {
     translate: -100% 0;
 }
 
-.default-hud__top-section.presentation-section--hidden {
+.default-hud__top-section.presentation-section--hidden,
+.default-hud--presenting .default-hud__top-section.presentation-section--unpinned {
     translate: 0 -56px; /* .toolbar-toolbox height + .toolbar-scenario margin-top = var(spacing-11) + var(spacing-3) = 44px + 12px = 56px */
 }
 
-.default-hud__bottom-section.presentation-section--hidden > .default-hud__movable-bottom-section {
+.default-hud__bottom-section.presentation-section--hidden > .default-hud__movable-bottom-section,
+.default-hud--presenting .default-hud__bottom-section.presentation-section--unpinned > .default-hud__movable-bottom-section{
     translate: 0 100%;
 }
 
-.default-hud__bottom-section.presentation-section--hidden > .default-hud__persistent-bottom-section {
+.default-hud__bottom-section.presentation-section--hidden > .default-hud__persistent-bottom-section,
+.default-hud--presenting .default-hud__bottom-section.presentation-section--unpinned > .default-hud__persistent-bottom-section {
     transition-delay: 1s;
     transition-duration: 0.5s;
     opacity: 1;

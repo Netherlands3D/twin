@@ -18,7 +18,9 @@ namespace Netherlands3D.UI.Panels
             SetupAutoHideSection("LeftSection", "LeftRevealZone", "LeftPresentationPin");
             SetupAutoHideSection("TopSection", "TopRevealZone", "PresentationPin");
             SetupAutoHideSection("BottomSection", "BottomRevealZone", "NavigationPresentationPin");
-          }
+
+            SetupPresentationButtons();
+        }
 
         private void SetupAutoHideSection(string sectionName, string revealZoneName, string pinName)
         {
@@ -42,6 +44,7 @@ namespace Netherlands3D.UI.Panels
                 //When unpinnned, enabled the revealzone, and hide section.
                 revealZone.EnableInClassList(ActiveRevealZoneClass, !pinned);
                 section.EnableInClassList(HiddenClass, !pinned);
+                section.EnableInClassList("presentation-section--unpinned", !pinned);
             }
 
             revealZone.RegisterCallback<PointerEnterEvent>(_ => Show());
@@ -55,6 +58,22 @@ namespace Netherlands3D.UI.Panels
             SetPinned(pin.value);
         }
         
-        
+        private void SetupPresentationButtons()
+        {
+            var buttons = this.Query<UnityEngine.UIElements.Toggle>("Presentation").ToList();
+
+            foreach (var button in buttons)
+            {
+                button.RegisterValueChangedCallback(evt =>
+                {
+                    EnableInClassList("default-hud--presenting", evt.newValue);
+
+                    foreach (var otherButton in buttons)
+                    {
+                        otherButton.SetValueWithoutNotify(evt.newValue);
+                    }
+                });
+            }
+        }
     }
 }
