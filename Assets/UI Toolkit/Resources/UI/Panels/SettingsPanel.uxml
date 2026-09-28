@@ -15,6 +15,7 @@
                 <ui:Label text="Optionele functionaliteiten" class="text-header"/>
                 <nl3d:ListView name="Functionalities"/>
                 <ui:Label text="Experimentele functionaliteiten" class="text-header"/>
+                <nl3d:TextCallOut text="&lt;b&gt;&lt;color=#E35656&gt;Let op!&lt;/color&gt;&lt;/b&gt; Experimentele functionaliteiten zijn nog in ontwikkeling en kunnen ervoor zorgen dat de applicatie instabiel wordt of vastloopt."/>
                 <nl3d:ListView name="ExperimentalFunctionalities"/>
             </ui:VisualElement>
         </nl3d:ContentContainer>
