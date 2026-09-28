@@ -21,6 +21,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207, 462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
+        [SerializeField] public List<Functionality> ExperimentalFunctionalities = new();
         [SerializeField] private string corsProxyUrl = null;
 
         public string Title

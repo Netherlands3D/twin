@@ -14,6 +14,8 @@
             <ui:VisualElement>
                 <ui:Label text="Optionele functionaliteiten" class="text-header"/>
                 <nl3d:ListView name="Functionalities"/>
+                <ui:Label text="Experimentele functionaliteiten" class="text-header"/>
+                <nl3d:ListView name="ExperimentalFunctionalities"/>
             </ui:VisualElement>
         </nl3d:ContentContainer>
     </nl3d:ScrollView>
