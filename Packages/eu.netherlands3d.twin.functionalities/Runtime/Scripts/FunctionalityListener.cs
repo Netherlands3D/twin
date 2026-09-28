@@ -18,8 +18,8 @@ namespace Netherlands3D.Twin.Functionalities
             //events are set in awake, and removed in OnDestroy to still match changes when this gameObject is disabled 
             foreach (var functionality in functionalities)
             {
-                functionality.OnEnable.AddListener(EnableFunctionality);
-                functionality.OnDisable.AddListener(DisableFunctionality);
+                functionality.OnEnableFunctionality.AddListener(EnableFunctionality);
+                functionality.OnDisableFunctionality.AddListener(DisableFunctionality);
             }
         }
 
@@ -60,8 +60,8 @@ namespace Netherlands3D.Twin.Functionalities
         {
             foreach (var functionality in functionalities)
             {
-                functionality.OnEnable.RemoveListener(EnableFunctionality);
-                functionality.OnDisable.RemoveListener(DisableFunctionality);
+                functionality.OnEnableFunctionality.RemoveListener(EnableFunctionality);
+                functionality.OnDisableFunctionality.RemoveListener(DisableFunctionality);
             }
         }
     }

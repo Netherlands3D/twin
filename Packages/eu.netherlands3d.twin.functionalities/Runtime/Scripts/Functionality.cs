@@ -2,28 +2,40 @@
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {
-    [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality", fileName = "Functionality", order = 0)]
+    [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality/Generic", fileName = "Functionality", order = 0)]
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
-        [SerializeField] private FunctionalityData data = new();
+        [SerializeReference, FormerlySerializedAs("data")]
+        private FunctionalityData defaultData = new();
+
+        [NonSerialized]
+        private FunctionalityData currentData;
 
         public FunctionalityData Data
         {
-            get { return data; }
+            get => currentData ??= CreateDefaultData();
             set
             {
-                var oldEnabled = data.IsEnabled;
-                data = value;
+                var oldEnabled = Data.IsEnabled;
+                currentData = value;
 
-                //invoke events if the state of the new Data object and old Data object don't match
-                if (data.IsEnabled == oldEnabled)
-                    return;
-                
-                InvokeOnEnableChangeEvents();
+                if (currentData.IsEnabled != oldEnabled)
+                    InvokeOnEnableChangeEvents();
             }
+        }
+
+        public void ResetDataToDefaults()
+        {
+            Data = CreateDefaultData();
+        }
+
+        private FunctionalityData CreateDefaultData()
+        {
+            return defaultData.CreateCopy();
         }
 
         [Tooltip("Functionality button title")]
@@ -38,7 +50,7 @@ namespace Netherlands3D.Twin.Functionalities
         [TextArea(5, 10)] public string Description;
         public ScriptableObject configuration;
 
-        public string Id => Data.Id;
+        public string Id => defaultData.Id;
 
         public bool IsEnabled
         {
@@ -60,15 +72,15 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
-        public UnityEvent OnEnable = new();
-        public UnityEvent OnDisable = new();
+        public UnityEvent OnEnableFunctionality = new();
+        public UnityEvent OnDisableFunctionality = new();
 
         private void InvokeOnEnableChangeEvents()
         {
             if (Data.IsEnabled)
-                OnEnable.Invoke();
+                OnEnableFunctionality.Invoke();
             else
-                OnDisable.Invoke();
+                OnDisableFunctionality.Invoke();
         }
         
         public void Populate(JSONNode jsonNode)
@@ -85,13 +97,40 @@ namespace Netherlands3D.Twin.Functionalities
                 ["configuration"] = (configuration as IConfiguration)?.ToJsonNode()
             };
         }
-
-        private void OnValidate()
+        
+        protected virtual void OnEnable()
         {
-            if (string.IsNullOrEmpty(Data.Id))
+            defaultData ??= new FunctionalityData();
+        }
+        
+        protected virtual void OnValidate()
+        {
+            defaultData ??= new FunctionalityData();
+
+            if (string.IsNullOrEmpty(defaultData.Id))
+                defaultData.Id = Title.ToLower().Replace(" ", "-");
+
+            if (!Application.isPlaying)
             {
-                Data.Id = Title.ToLower().Replace(" ", "-");
+                currentData = null;
             }
+        }
+        
+        protected void EnsureDefaultDataType<T>()
+            where T : FunctionalityData, new()
+        {
+            if (defaultData is T)
+                return;
+
+            var previousData = defaultData;
+
+            defaultData = new T
+            {
+                Id = previousData?.Id,
+                IsEnabled = previousData?.IsEnabled ?? false
+            };
+            
+            currentData = null;
         }
     }
 }

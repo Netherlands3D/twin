@@ -126,7 +126,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             var context = new SnapContext
             {
-                HeightExtent = bounds.Size.ToUnity().y * 0.5f,
+                HeightExtent = (float)(bounds.UnitySize.y * 0.5f),
                 PivotOffset = boundsCenter.y - currentPosition.y,
                 PreviousPosition = currentPosition,
                 Target = this,

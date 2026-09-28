@@ -14,15 +14,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {      
         
         public bool HasFeatureMapping => featureMappings.Count > 0;
-        public bool HasPolygons
-        {
-            get
-            {
-                return featureMappings
-                    .SelectMany(entry => entry.Value)
-                    .Any(featureMapping => featureMapping.VisualisationLayer.IsPolygon);
-            }
-        }
         
         public List<FeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
 

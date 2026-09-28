@@ -29,8 +29,6 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
             var color = LayerColor.Random();
 
             var styling = new Symbolizer();
-            styling.SetFillColor(color);
-            styling.SetStrokeColor(color);
 
             return builder
                 .OfType(PrefabIdentifier)

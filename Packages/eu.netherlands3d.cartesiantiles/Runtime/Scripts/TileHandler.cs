@@ -53,6 +53,23 @@ namespace Netherlands3D.CartesianTiles
         [HideInInspector]
         public List<Layer> layers = new List<Layer>();
 
+        public int LoadedTileCount
+        {
+            get
+            {
+                var count = 0;
+                foreach (var layer in layers)
+                {
+                    count += layer.tiles.Count;
+                }
+
+                return count;
+            }
+        }
+
+        public int PendingTileChangeCount => pendingTileChanges.Count;
+        public int ActiveTileChangeCount => activeTileChanges.Count;
+
 
         private List<int> tileSizes = new List<int>();
         /// <summary>
