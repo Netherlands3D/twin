@@ -123,6 +123,8 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     
     public void AddSupportedFileType(string extention)
     {
+        if(supportedFileTypes.Contains(extention)) return;
+        
         supportedFileTypes.Add(extention);
     }
         
