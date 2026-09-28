@@ -168,7 +168,7 @@ namespace Netherlands3D.Twin.Utility
         public Bounds ToUnityBounds()
         {
             var size = UnitySize;
-            return new Bounds(Center.ToUnity(), size.AsVector3());
+            return new Bounds(Center.ToUnity(), (Vector3)size);
         }
 
         private static double Min(double lhs, double rhs)
