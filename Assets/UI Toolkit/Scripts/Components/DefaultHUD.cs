@@ -9,7 +9,6 @@ namespace Netherlands3D.UI.Panels
     {
         private const string HiddenClass = "presentation-section--hidden";
         private const string ActiveRevealZoneClass = "presentation-reveal-zone--active";
-        private const string PersistentVisibleClass = "default-hud__persistent-bottom-section--visible";
         
         public DefaultHUD()
         {

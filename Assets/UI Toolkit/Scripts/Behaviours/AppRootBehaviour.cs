@@ -4,8 +4,6 @@ using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using Netherlands3D.Services;
-using Netherlands3D.Twin.PresentationModus.UIHider;
 
 namespace Netherlands3D
 {
@@ -16,9 +14,6 @@ namespace Netherlands3D
 
         private UIDocument appDocument;
         private VisualElement appRoot;
-
-        private UIHider presentationUIHider;
-
 
         //the excuted order of this script should be executed very early to ensure the presence of the approot. 
         private void Awake()
