@@ -41,7 +41,6 @@ namespace Netherlands3D.Timeline
 
         private void ReadTimeLineFromAttributes()
         {
-            Debug.Log("reading time line");
             foreach (var co in cityJson.CityObjects)
             {
                 if (co.Attributes.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var attribute))
