@@ -1,3 +1,6 @@
+using Netherlands3D.Services;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.PresentationModus.UIHider;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
@@ -9,55 +12,52 @@ namespace Netherlands3D.UI.Panels
     {
         private const string HiddenClass = "presentation-section--hidden";
         private const string ActiveRevealZoneClass = "presentation-reveal-zone--active";
+
+        private PresentationModeService PresentationModeService => ServiceLocator.GetService<PresentationModeService>();
+
+        private PresentationModeService.HideableSection leftHideableSection;
+        private PresentationModeService.HideableSection topHideableSection;
+        private PresentationModeService.HideableSection bottomHideableSection;
         
         public DefaultHUD()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            
-            SetupAutoHideSection("LeftSection", "LeftRevealZone", "LeftPresentationPin");
-            SetupAutoHideSection("TopSection", "TopRevealZone", "PresentationPin");
-            SetupAutoHideSection("BottomSection", "BottomRevealZone", "NavigationPresentationPin");
 
             SetupPresentationButtons();
+            
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
-        private void SetupAutoHideSection(string sectionName, string revealZoneName, string pinName)
+        private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            var section = this.Q<VisualElement>(sectionName);
-            var revealZone = this.Q<VisualElement>(revealZoneName);
-            var pin = this.Q<PinToggle>(pinName);
-
-            void Show()
-            {
-                if (!pin.value)
-                    section.RemoveFromClassList(HiddenClass);
-            }
-            void Hide()
-            {
-                if (!pin.value)
-                    section.AddToClassList(HiddenClass);
-            }
-            void SetPinned(bool pinned)
-            {
-                //When pinned, disable the revealzone, and show section.
-                //When unpinnned, enabled the revealzone, and hide section.
-                revealZone.EnableInClassList(ActiveRevealZoneClass, !pinned);
-                section.EnableInClassList(HiddenClass, !pinned);
-                section.EnableInClassList("presentation-section--unpinned", !pinned);
-            }
-
-            revealZone.RegisterCallback<PointerEnterEvent>(_ => Show());
-            revealZone.RegisterCallback<PointerLeaveEvent>(_ => Hide());
-
-            section.RegisterCallback<PointerEnterEvent>(_ => Show());
-            section.RegisterCallback<PointerLeaveEvent>(_ => Hide());
-
-            pin.RegisterValueChangedCallback(evt => SetPinned(evt.newValue));
-
-            SetPinned(pin.value);
+            leftHideableSection ??= new PresentationModeService.HideableSection(
+                this.Q<VisualElement>("LeftSection"),
+                this.Q<VisualElement>("LeftRevealZone"),
+                this.Q<PinToggle>("LeftPresentationPin"));
+            PresentationModeService.RegisterHideableSection(leftHideableSection);
+            
+            topHideableSection ??= new PresentationModeService.HideableSection(
+                this.Q<VisualElement>("TopSection"),
+                this.Q<VisualElement>("TopRevealZone"),
+                this.Q<PinToggle>("PresentationPin"));
+            PresentationModeService.RegisterHideableSection(topHideableSection);
+            
+            bottomHideableSection ??= new PresentationModeService.HideableSection(
+                this.Q<VisualElement>("BottomSection"),
+                this.Q<VisualElement>("BottomRevealZone"),
+                this.Q<PinToggle>("NavigationPresentationPin"));
+            PresentationModeService.RegisterHideableSection(bottomHideableSection);
         }
         
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            PresentationModeService.UnregisterHideableSection(leftHideableSection);
+            PresentationModeService.UnregisterHideableSection(topHideableSection);
+            PresentationModeService.UnregisterHideableSection(bottomHideableSection);
+        }
+
         private void SetupPresentationButtons()
         {
             var buttons = this.Query<UnityEngine.UIElements.Toggle>("Presentation").ToList();
