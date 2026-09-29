@@ -75,6 +75,14 @@ namespace Netherlands3D.UI.Components
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel); // we can only update the layout after attaching to the panel
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            
+            nameInputField.OnEditingChanged.AddListener(OnEditingChangedEvent);
+        }
+        
+        private void OnEditingChangedEvent(bool isEditing)
+        {
+            InputService inputService = ServiceLocator.GetService<InputService>();
+            inputService.SetCameraActionsEnabled(!isEditing);
         }
 
         private void OnClick(ClickEvent evt)
