@@ -136,13 +136,12 @@ namespace Netherlands3D.Twin.Services
             foreach (var file in fileNames)
             {
                 string extension = Path.GetExtension(file).TrimStart('.');
-                if (fileImportService.IsExtentionExperimental(extension))
+                if (fileImportService.ExperimentalFileTypes.Contains(extension))
                 {
                     snackbarService.DisplayMessage($"Het lijkt er op dat je een bestand met extentie: {extension} wil importeren. Zet hiervoor eerst de experimentele functionaliteiten aan in het instellingen menu en probeer het opnieuw.");
                     break;
                 }
             }
-            
         }
 
         // TODO: Replace this specific method with a generic layer message flow.
