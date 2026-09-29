@@ -8,6 +8,7 @@ mergeInto(LibraryManager.library, {
         window.filesToSave = 0;
         window.counter = 0;
         window.databaseConnection = null;
+        window.fileImporterCallbackObject = "importerGameObject"
 
         window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB;
         window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;
@@ -49,15 +50,54 @@ mergeInto(LibraryManager.library, {
         document.addEventListener("dragover", function (event) {
             event.preventDefault();
         });
+        
+        window.allowedDropExtensions = [];
+
+	window.SetAllowedDropExtensions = function (extensions) {
+	    window.allowedDropExtensions = extensions.split(",").map(function (ext) {
+		    ext = ext.trim().toLowerCase();
+
+		    if (ext && ext.charAt(0) !== ".") {
+		        ext = "." + ext;
+		    }
+
+		    return ext;
+		})
+		.filter(Boolean);
+
+	    console.log("Allowed drop extensions:", window.allowedDropExtensions);
+	};
 
         document.addEventListener("drop", function (event) {
-            console.log("File dropped");
-            event.stopPropagation();
-            event.preventDefault();
+	    console.log("File dropped");
+	    event.stopPropagation();
+	    event.preventDefault();
 
-            // tell Unity how many files to expect
-            window.ReadFiles(event.dataTransfer.files);
-        });
+	    var files = Array.from(event.dataTransfer.files);
+
+	    var validFiles = files.filter(function (file) {
+		var fileName = file.name.toLowerCase();
+
+		return window.allowedDropExtensions.some(function (extension) {
+		    return fileName.endsWith(extension);
+		});
+	    });
+
+		if (validFiles.length === 0) {
+		    var filenames = files.map(function (file) {
+			return file.name;
+		    }).join(",");
+
+		    SendMessage(
+			window.fileImporterCallbackObject,
+			"UnsupportedFileDropped",
+			filenames
+		    );
+		    return;
+		}
+
+	    window.ReadFiles(validFiles);
+	});
 
         window.FileSaved = function FileSaved() {
             filesToSave = filesToSave - 1;
@@ -76,7 +116,7 @@ mergeInto(LibraryManager.library, {
         window.ReadFiles = function ReadFiles(SelectedFiles) {
             if (window.File && window.FileReader && window.FileList && window.Blob) {
                 window.ConnectToDatabaseAndReadFiles(SelectedFiles);
-                SendMessage('UserFileUploads', 'FileCount', SelectedFiles.length);
+                SendMessage(window.fileImporterCallbackObject, 'FileCount', SelectedFiles.length);
             } else {
                 alert("Bestanden inladen wordt helaas niet ondersteund door deze browser.");
             }
@@ -160,17 +200,26 @@ mergeInto(LibraryManager.library, {
 
                 console.log("Saving file: " + newIndexedFilePath);
                 dbRequest.onsuccess = function () {
-                    SendMessage('UserFileUploads', 'LoadFile', newFileName);
+                    SendMessage(window.fileImporterCallbackObject, 'LoadFile', newFileName);
                     console.log("File saved: " + newIndexedFilePath);
                     window.FileSaved();
                 };
                 dbRequest.onerror = function () {
-                    SendMessage('UserFileUploads', 'LoadFileError', newFileName);
+                    SendMessage(window.fileImporterCallbackObject, 'LoadFileError', newFileName);
                     alert("Could not save: " + newIndexedFilePath);
                     window.FileSaved();
                 };
             });
         };
+    },     
+	
+SetFileImporterCallbackObject: function (objectNamePtr) {
+    window.fileImporterCallbackObject = UTF8ToString(objectNamePtr);
+	},
+    
+    SetAllowedDropExtensions: function (extensionsPtr) {
+        var extensions = UTF8ToString(extensionsPtr);
+        window.SetAllowedDropExtensions(extensions);
     },
 
     /**
