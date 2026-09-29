@@ -17,6 +17,9 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     [DllImport("__Internal")]
     [UsedImplicitly]
     private static extern void BrowseForFile(string inputFieldName);
+    
+    [DllImport("__Internal")]
+    private static extern void SetAllowedDropExtensions(string extensions);
 
     [Tooltip("Allowed selection multiple files")] [SerializeField]
     private bool multiSelect = false;
@@ -59,6 +62,8 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
         // Each FileOpen gets its own DrawHTMLOverCanvas and HTML input element
         javaScriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
         javaScriptInput.AlignObjectID(fileInputName, false);
+
+        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
     }
 
     private void SetJavaScriptFileExtensions(string fileExtentions)
@@ -126,10 +131,14 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
         if(supportedFileTypes.Contains(extention)) return;
         
         supportedFileTypes.Add(extention);
+        
+        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
     }
         
     public void RemoveSupportedFileType(string extention)
     {
         supportedFileTypes.Remove(extention);
+        
+        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
     }
 }
