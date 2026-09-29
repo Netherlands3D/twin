@@ -143,7 +143,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnUploadStarted(ClickEvent evt)
         {
-            FileOpen importService = ServiceLocator.GetService<FileOpen>();
+            FileImportService importService = ServiceLocator.GetService<FileImportService>();
             importService.OpenFile(string.Join(",", importService.SupportedFileTypes));
         }
 

@@ -135,8 +135,8 @@ namespace Netherlands3D.Twin.Projects
 
         private void OpenProject()
         {
-            FileOpen fileOpenerService = ServiceLocator.GetService<FileOpen>();
-            fileOpenerService.OpenFile("nl3d");
+            FileImportService importService = ServiceLocator.GetService<FileImportService>();
+            importService.OpenFile("nl3d");
             ToolService tools = ServiceLocator.GetService<ToolService>();
             tools.GetTool(ToolType.OpenProject).Close();
         }
