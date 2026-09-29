@@ -46,6 +46,7 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
     private bool multiSelect = false;
 
     public UnityEvent<string> onFilesSelected = new();
+    public UnityEvent<string> onFilesNotSupported = new();
     
     public List<string> SupportedFileTypes => supportedFileTypes;
     
@@ -94,9 +95,9 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
     {
     }
     
-    public void UnsupportedFileDropped()
+    public void UnsupportedFileDropped(string fileNames)
     {
-        Debug.Log("Unsupported file dropped!");
+        onFilesNotSupported.Invoke(fileNames);
     }
 
     /// <summary>

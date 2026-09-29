@@ -83,10 +83,18 @@ mergeInto(LibraryManager.library, {
 		});
 	    });
 
-	    if (validFiles.length === 0) {
-		SendMessage(window.fileImporterCallbackObject, "UnsupportedFileDropped");
-		return;
-	    }
+		if (validFiles.length === 0) {
+		    var filenames = files.map(function (file) {
+			return file.name;
+		    }).join(",");
+
+		    SendMessage(
+			window.fileImporterCallbackObject,
+			"UnsupportedFileDropped",
+			filenames
+		    );
+		    return;
+		}
 
 	    window.ReadFiles(validFiles);
 	});
