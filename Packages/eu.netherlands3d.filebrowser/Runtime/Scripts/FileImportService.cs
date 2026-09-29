@@ -50,7 +50,8 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
     
     public List<string> SupportedFileTypes => supportedFileTypes;
     
-    private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" }; //todo populate from a const?
+    private readonly List<string> baseSupportedFileTypes = new(){ "obj", "csv", "json", "geojson", "glb" };
+    private List<string> supportedFileTypes = new List<string>();
 
 #if !UNITY_EDITOR && UNITY_WEBGL
     private string fileInputName = string.Empty;
@@ -59,6 +60,7 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
 
     private void Awake()
     {
+        supportedFileTypes.AddRange(baseSupportedFileTypes);
 #if !UNITY_EDITOR && UNITY_WEBGL
         InitializeIndexedDB(Application.persistentDataPath);
         SetFileImporterCallbackObject(this.gameObject.name);
@@ -163,6 +165,11 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
         supportedFileTypes.Remove(extention);
         
         SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
+    }
+
+    public bool IsExtentionExperimental(string extention) //todo this generic enough?
+    {
+        return !baseSupportedFileTypes.Contains(extention) && supportedFileTypes.Contains(extention);
     }
 
     public void SetCallbackAddress(Action<string> callback)
