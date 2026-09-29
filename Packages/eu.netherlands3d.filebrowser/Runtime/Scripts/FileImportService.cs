@@ -35,8 +35,6 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
     [DllImport("__Internal")]
     private static extern void SyncFilesToIndexedDB(string callbackObject, string callbackMethod);
     
-    [DllImport("__Internal")]
-    private static extern void SetFileUploadCallbackObject(string objectName);
 
     private Action<string> callbackAddress;
     private List<string> filenames = new List<string>();
