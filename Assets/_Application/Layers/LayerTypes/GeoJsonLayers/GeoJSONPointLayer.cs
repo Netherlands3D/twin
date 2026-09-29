@@ -50,6 +50,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
+        public void SetColorForFeature(Feature feature, Color color)
+        {
+            throw new NotImplementedException();
+        }
+        
         public Material RenderMaterial => PointRenderer3D.PointMaterial;
 
         public List<Mesh> GetMeshData(Feature feature)

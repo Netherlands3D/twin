@@ -278,6 +278,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var layer = GetVisualisationLayerForFeature(feature);
             // layer.SetColorForFeature(feature, color);
             Debug.Log("Setting color of geojson feature " + feature.GetHashCode() + " to color " + color);
+            if(color.HasValue)
+                layer.SetColorForFeature(feature, color.Value);
         }
     }
 }
