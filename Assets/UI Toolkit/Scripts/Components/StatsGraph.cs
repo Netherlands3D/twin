@@ -14,6 +14,8 @@ namespace Netherlands3D.UI.Components
     {
         private Label titleLabel;
         private Label valueLabel;
+        private Label minValueLabel;
+        private Label maxValueLabel;
         private VisualElement graphElement;
 
         private DebugStat source;
@@ -49,6 +51,8 @@ namespace Netherlands3D.UI.Components
 
             titleLabel = this.Q<Label>("Title");
             valueLabel = this.Q<Label>("Value");
+            minValueLabel = this.Q<Label>("MinValue");
+            maxValueLabel = this.Q<Label>("MaxValue");
             graphElement = this.Q<VisualElement>("Graph");
             graphElement.generateVisualContent += DrawGraph;
 
@@ -102,7 +106,10 @@ namespace Netherlands3D.UI.Components
                 return;
 
             source.GetValues(labelTimedValues);
-            valueLabel.text = labelTimedValues[^1].Value.ToString("F1",  CultureInfo.CurrentCulture);
+            valueLabel.text = labelTimedValues[^1].Value.ToString("N0",  CultureInfo.CurrentCulture);
+            var timedValuesSummary = labelTimedValues.Summarize();
+            minValueLabel.text = timedValuesSummary.Minimum.ToString("N0", CultureInfo.CurrentCulture);
+            maxValueLabel.text = timedValuesSummary.Maximum.ToString("N0", CultureInfo.CurrentCulture);
         }
 
         private void UpdateGraph()
