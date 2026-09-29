@@ -83,7 +83,7 @@ mergeInto(LibraryManager.library, {
 	    });
 
 	    if (validFiles.length === 0) {
-		console.log("No supported files were dropped.");
+		SendMessage("UserFileUploads", "UnsupportedFileDropped");
 		return;
 	    }
 
@@ -202,6 +202,11 @@ mergeInto(LibraryManager.library, {
                 };
             });
         };
+    },
+    
+    SetAllowedDropExtensions: function (extensionsPtr) {
+        var extensions = UTF8ToString(extensionsPtr);
+        window.SetAllowedDropExtensions(extensions);
     },
 
     /**
