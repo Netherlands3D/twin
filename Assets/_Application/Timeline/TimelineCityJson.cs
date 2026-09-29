@@ -13,8 +13,11 @@ namespace Netherlands3D.Timeline
     [RequireComponent(typeof(CityJSONLayerGameObject))]
     public class TimelineCityJson : MonoBehaviour
     {
+        const string TIMELINE_ATTRIBUTE_NAME = "+timestamps"; //in CityJson extensions start with a +
+        
         private SunTime sunTime;
         private CityJSONLayerGameObject visualization;
+        private CityJSON cityJson;
         
         private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
         private Dictionary<CityObject, TimestampCollection> timelines = new();
@@ -24,30 +27,36 @@ namespace Netherlands3D.Timeline
         private void Start()
         {
             sunTime = ServiceLocator.GetService<SunTime>();
-            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
+            sunTime.timeOfDayChanged.AddListener(OnTimeChanged); //todo: unsubscribe listener
             
             visualization = GetComponent<CityJSONLayerGameObject>();
             visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
-            visualization.CityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes);
             
             timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
             timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
+            cityJson = GetComponent<CityJSON>();
+            cityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes); //todo: unsubscribe listener
+            ReadTimeLineFromAttributes();
         }
 
         private void ReadTimeLineFromAttributes()
         {
-            foreach (var co in visualization.CityJson.CityObjects)
+            Debug.Log("reading time line");
+            foreach (var co in cityJson.CityObjects)
             {
-                if (co.Attributes.TryGetValue("timestamps", out var attribute))
+                if (co.Attributes.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var attribute))
                 {
                     var timeline = new TimestampCollection(attribute.Value.ToString());
                     timelines.Add(co, timeline);
+                    timelineStylingLayerPropertyData.AddTimestampCollection(timeline);
+                    interpreter.ProcessNewCollection(timeline);
+                    
                     var currentTimestamp = timeline.GetCurrentTimestamp(sunTime.Time);
                     SetFeatureColor(co, currentTimestamp);
                 }
             }
         }
-        
+
         private void OnTimeChanged(DateTime currentTime)
         {
             foreach (var timelines in timelines)
@@ -66,6 +75,7 @@ namespace Netherlands3D.Timeline
 
             var colorAtCurrentTime = interpreter.GetColorForTimestamp(currentTimeStamp);
             var colorType = Symbolizer.FillColorProperty;
+            Debug.Log("setting cityjson styling:" + colorAtCurrentTime);
             timelineStylingLayerPropertyData.SetColorForFeatureById(cityObject.GetHashCode().ToString(), colorType, colorAtCurrentTime);
         }
     }

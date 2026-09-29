@@ -14,6 +14,8 @@ namespace Netherlands3D.Timeline
     [RequireComponent(typeof(GeoJsonLayerGameObject))]
     public class TimelineGeoJson : MonoBehaviour
     {
+        const string TIMELINE_ATTRIBUTE_NAME = "timestamps";
+        
         private SunTime sunTime;
         private GeoJsonLayerGameObject visualization;
 
@@ -21,15 +23,15 @@ namespace Netherlands3D.Timeline
         private Dictionary<Feature, TimestampCollection> timelines = new();
         
         private ITimestampValueInterpreter interpreter => timelineStylingLayerPropertyData.Interpreter; //todo: make this changable
-        
+
         private void Start()
         {
             sunTime = ServiceLocator.GetService<SunTime>();
-            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
+            sunTime.timeOfDayChanged.AddListener(OnTimeChanged); //todo: unsubscribe listener
             
             visualization = GetComponent<GeoJsonLayerGameObject>();
             visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
-            visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
+            visualization.OnFeatureAdd.AddListener(OnFeatureAdded); //todo: unsubscribe listener
 
             timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
             timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
@@ -37,7 +39,7 @@ namespace Netherlands3D.Timeline
 
         private void OnFeatureAdded(Feature feature)
         {
-            if (feature.Properties.TryGetValue("timestamps", out var timestampObject))
+            if (feature.Properties.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var timestampObject))
             {
                 var timeline = new TimestampCollection(timestampObject.ToString());
                 timelines.Add(feature, timeline);

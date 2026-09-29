@@ -71,13 +71,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private void ApplyStylingToFeature(LayerFeature feature)
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
-
-            var stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            var symbolizer = stylingPropertyData.AnyFeature.Symbolizer;
+            
+            var symbolizer = GetStyling(feature);
             var fillColor = symbolizer.GetFillColor();
             if (fillColor.HasValue)
                 visualizer.SetFillColor(fillColor.Value);
-        
+            
             var strokeColor = symbolizer.GetStrokeColor();
             if (strokeColor.HasValue)
                 visualizer.SetLineColor(strokeColor.Value);
@@ -86,6 +85,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public void AddFeature(CityObjectVisualizer visualizer)
         {
             var layerFeature = CreateFeature(visualizer);
+            layerFeature.Attributes.Add(TimelineStylingLayerPropertyData.TimelineAttributeIdentifier, visualizer.CityObject.GetHashCode().ToString());
             LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);

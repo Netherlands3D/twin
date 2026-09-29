@@ -79,20 +79,6 @@ namespace Netherlands3D.UI.Panels
             ColorPicker.ColorChanged.RemoveListener(OnPickColor);
         }
         
-        
-        
-        // public void LoadProperties(List<LayerPropertyData> properties)
-        // {
-        //     timelineStylingPropertyData = properties.Get<TimelineStylingLayerPropertyData>();
-        //     timelineStylingPropertyData.OnTimestampCollectionAdded.AddListener(OnTimestampCollectionAdded);
-        // }
-
-        // private void OnTimestampCollectionAdded(TimestampCollection newCollection)
-        // {
-        //     Interpreter.ProcessNewCollection(newCollection);
-        //     UpdateSwatches();
-        // }
-        
         private VisualElement MakeListViewItem()
         {
             ColorTileListViewItem item = new();
