@@ -35,8 +35,11 @@ namespace Netherlands3D.Timeline
         private void CalculateMinMax()
         {
             var timestampsWithFloatValues = Timestamps.Where(t => t.ValueAsFloat.HasValue);
-            MinFloatValue = timestampsWithFloatValues.Min(t => t.ValueAsFloat.Value);
-            MaxFloatValue = timestampsWithFloatValues.Max(t => t.ValueAsFloat.Value);
+            if(timestampsWithFloatValues.Any())
+            {
+                MinFloatValue = timestampsWithFloatValues.Min(t => t.ValueAsFloat.Value);
+                MaxFloatValue = timestampsWithFloatValues.Max(t => t.ValueAsFloat.Value);
+            }
         }
 
         public Timestamp GetCurrentTimestamp(DateTime currentTime)
