@@ -35,10 +35,15 @@ namespace Netherlands3D.Timeline
             visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
 
             timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
-            timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
             cityJson = GetComponent<CityJSON>();
             cityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes); //todo: unsubscribe listener
             ReadTimeLineFromAttributes();
+            ((TimestampValueStatusInterpreter)interpreter).OnColorInterpretationChanged.AddListener(UpdateStylingForStatus);
+        }
+
+        private void UpdateStylingForStatus(string status, Color newColor)
+        {
+            visualization.ApplyStyling();
         }
 
         private void ReadTimeLineFromAttributes()

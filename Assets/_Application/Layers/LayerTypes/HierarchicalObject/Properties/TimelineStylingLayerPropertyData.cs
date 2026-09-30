@@ -16,9 +16,21 @@ namespace Netherlands3D.Twin.Layers.Properties
         public const string TimelineAttributeIdentifier = "data-timeline-color";
         public const string TimelineColorIdentifier = "timeline-color";
 
-        [JsonIgnore] public ITimestampValueInterpreter Interpreter { get; set; }
+        [JsonIgnore] public TimestampValueStatusInterpreter Interpreter { get; set; } = new TimestampValueStatusInterpreter(Color.white); //todo: use default color from styling
+
         [JsonIgnore] public List<TimestampCollection> TimestampCollections = new();
         [JsonIgnore] public UnityEvent<TimestampCollection> OnTimestampCollectionAdded = new();
+
+        public TimelineStylingLayerPropertyData() : base()
+        {
+            Interpreter.OnColorInterpretationChanged.AddListener(UpdateRule);
+        }
+
+        private void UpdateRule(string status, Color color)
+        {
+            var stylingRuleKey = $"feature.{status}.{TimelineColorIdentifier}";
+            StylingRules[stylingRuleKey].Symbolizer.SetColor(colorType, color);
+        }
 
         public void SetColorForFeatureById(string featureId, string colorType, Color? color)
         {
@@ -66,6 +78,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 );
                 stylingRule.Symbolizer.SetColor(colorType, kvp.Value);
                 rules.Add(stylingRuleKey, stylingRule);
+                Debug.Log("setting " + stylingRuleKey + " color to: " + kvp.Value);
             }
 
             SetStylingRules(rules);

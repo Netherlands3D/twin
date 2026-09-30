@@ -354,7 +354,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-        private void OnImportedObjectVisualized(GameObject importedObject)
+        protected virtual void OnImportedObjectVisualized(GameObject importedObject)
         {
             ApplyStyling();
         }

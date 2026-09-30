@@ -59,6 +59,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             heightReferenceCoordinateSystem = (CoordinateSystem)newCRSValue;
         }
 
+        protected override void OnImportedObjectVisualized(GameObject importedObject)
+        {
+            foreach (var visualizer in importedObject.GetComponentsInChildren<CityObjectVisualizer>())
+            {
+                ApplyStylingToFeature(LayerFeatures[visualizer]);
+            }
+        }
+
         public override void ApplyStyling()
         {
             base.ApplyStyling();
