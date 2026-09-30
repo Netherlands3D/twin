@@ -75,7 +75,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            timelineStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
+            // timelineStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
             ColorPicker.ColorChanged.RemoveListener(OnPickColor);
         }
         

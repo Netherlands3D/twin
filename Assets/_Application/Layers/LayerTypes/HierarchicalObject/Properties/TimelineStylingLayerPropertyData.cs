@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonIgnore] public ITimestampValueInterpreter Interpreter { get; set; }
         [JsonIgnore] public List<TimestampCollection> TimestampCollections = new();
         [JsonIgnore] public UnityEvent<TimestampCollection> OnTimestampCollectionAdded = new();
-        
+
         public void SetColorForFeatureById(string featureId, string colorType, Color? color)
         {
             var stylingRuleKey = $"feature.{featureId}.{TimelineColorIdentifier}";
@@ -49,6 +49,26 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             TimestampCollections.Add(collection);
             OnTimestampCollectionAdded.Invoke(collection);
+        }
+
+        public void SetRulesForStatuses(Dictionary<string, Color> stateColors)
+        {
+            var rules = new Dictionary<string, StylingRule>();
+            foreach (var kvp in stateColors)
+            {
+                var stylingRuleKey = $"feature.{kvp.Key}.{TimelineColorIdentifier}";
+                var stylingRule = new StylingRule(
+                    kvp.Key,
+                    Expression.EqualTo(
+                        Expression.Get(TimelineAttributeIdentifier),
+                        kvp.Key
+                    )
+                );
+                stylingRule.Symbolizer.SetColor(colorType, kvp.Value);
+                rules.Add(stylingRuleKey, stylingRule);
+            }
+
+            SetStylingRules(rules);
         }
     }
 }

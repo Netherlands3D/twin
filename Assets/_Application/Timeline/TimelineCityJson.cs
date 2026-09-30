@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Structure;
+using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -14,11 +16,11 @@ namespace Netherlands3D.Timeline
     public class TimelineCityJson : MonoBehaviour
     {
         const string TIMELINE_ATTRIBUTE_NAME = "+timestamps"; //in CityJson extensions start with a +
-        
+
         private SunTime sunTime;
         private CityJSONLayerGameObject visualization;
         private CityJSON cityJson;
-        
+
         private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
         private Dictionary<CityObject, TimestampCollection> timelines = new();
 
@@ -28,10 +30,10 @@ namespace Netherlands3D.Timeline
         {
             sunTime = ServiceLocator.GetService<SunTime>();
             sunTime.timeOfDayChanged.AddListener(OnTimeChanged); //todo: unsubscribe listener
-            
+
             visualization = GetComponent<CityJSONLayerGameObject>();
             visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
-            
+
             timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
             timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
             cityJson = GetComponent<CityJSON>();
@@ -49,19 +51,36 @@ namespace Netherlands3D.Timeline
                     timelines.Add(co, timeline);
                     timelineStylingLayerPropertyData.AddTimestampCollection(timeline);
                     interpreter.ProcessNewCollection(timeline);
-                    
-                    var currentTimestamp = timeline.GetCurrentTimestamp(sunTime.Time);
-                    SetFeatureColor(co, currentTimestamp);
+
+                    SetFeatureAttribute(sunTime.Time, co, timeline);
+                    // var currentTimestamp = timeline.GetCurrentTimestamp(sunTime.Time);
+                    // SetFeatureColor(co, currentTimestamp); 
                 }
+                // todo: rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat 
+                // todo: maxValue testen
             }
+
+            timelineStylingLayerPropertyData.SetRulesForStatuses(((TimestampValueStatusInterpreter)interpreter).Colors); //todo: this is now no longer an interface
         }
 
         private void OnTimeChanged(DateTime currentTime)
         {
-            foreach (var timelines in timelines)
+            foreach (var timeline in timelines)
             {
-                var currentTimestampForFeature = timelines.Value.GetCurrentTimestamp(currentTime);
-                SetFeatureColor(timelines.Key, currentTimestampForFeature);
+                SetFeatureAttribute(currentTime, timeline.Key, timeline.Value);
+            }
+        }
+
+        private void SetFeatureAttribute(DateTime currentTime, CityObject cityObject, TimestampCollection timeline)
+        {
+            var currentTimestampForFeature = timeline.GetCurrentTimestamp(currentTime);
+            // SetFeatureColor(timelines.Key, currentTimestampForFeature);
+            foreach (var visualizer in cityObject.GetComponents<CityObjectVisualizer>())
+            {
+                var layerFeature = visualization.LayerFeatures[visualizer];
+                var status = currentTimestampForFeature.value;
+                layerFeature.Attributes[TimelineStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
+                visualization.ApplyStylingToFeature(layerFeature);
             }
         }
 

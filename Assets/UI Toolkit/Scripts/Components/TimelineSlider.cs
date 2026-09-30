@@ -187,8 +187,9 @@ namespace Netherlands3D.UI.Components
 
         private void SetDate(DateTime dateTime)
         {
-            sunTime.SetDate(dateTime.Day, dateTime.Month, dateTime.Year);
-            sunTime.SetTime(dateTime.Hour, dateTime.Minute, dateTime.Second);
+            // sunTime.SetDate(dateTime.Day, dateTime.Month, dateTime.Year);
+            // sunTime.SetTime(dateTime.Hour, dateTime.Minute, dateTime.Second);
+            sunTime.SetTime(dateTime);
             currentTimeLabel.text = dateTime.ToString("dd/MM/yyyy HH:mm");
         }
 
