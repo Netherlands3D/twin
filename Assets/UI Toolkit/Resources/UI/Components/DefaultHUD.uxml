@@ -15,7 +15,7 @@
     
     <ui:VisualElement class="app__content" picking-mode="Ignore">
         <ui:VisualElement picking-mode="Ignore" class="default-hud__main-section">
-            <nl3d:HideableSection picking-mode="Ignore" name="LeftSection" class="default-hud__left-section presentation-section--hidden">
+            <nl3d:HideableSection picking-mode="Ignore" name="LeftSection" reveal-zone="LeftRevealZone" pin-toggle="LeftPresentationPin" class="default-hud__left-section presentation-section--hidden">
                 <ui:VisualElement picking-mode="Ignore" class="default-hud__left-header">
                     <nl3d:HamburgerMenu />
                     <nl3d:PinToggle name="LeftPresentationPin" value="true" class="presentation-section__pin" />
@@ -26,7 +26,7 @@
                     <nl3dP:LegendPanel />
                 </ui:VisualElement>
             </nl3d:HideableSection>
-            <nl3d:HideableSection name="TopSection" class="default-hud__top-section presentation-section--hidden" picking-mode="Ignore">
+            <nl3d:HideableSection name="TopSection" reveal-zone="TopRevealZone" pin-toggle="PresentationPin" class="default-hud__top-section presentation-section--hidden" picking-mode="Ignore">
                 <nl3d:ToolbarToolbox picking-mode="Ignore" />
                 <nl3d:ToolbarScenario />
             </nl3d:HideableSection>
@@ -35,7 +35,7 @@
                 <nl3dP:PropertiesPanel name="PropertiesPanel" class="default-hud__properties-zone-column"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <nl3d:HideableSection name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
+        <nl3d:HideableSection name="BottomSection" reveal-zone="BottomRevealZone" pin-toggle="NavigationPresentationPin" picking-mode="Ignore" class="default-hud__bottom-section">
             <ui:VisualElement name="PersistentBottomSection" picking-mode="Ignore" class="default-hud__persistent-bottom-section">
                 <ui:VisualElement name="PersistentBottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
                     <nl3d:Footer picking-mode="Ignore" />

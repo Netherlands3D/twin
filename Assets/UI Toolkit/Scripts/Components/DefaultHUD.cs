@@ -32,8 +32,9 @@ namespace Netherlands3D.UI.Panels
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
+            /*
             leftHideableSection ??= new PresentationModeService.HideableSection(
-                this.Q<VisualElement>("LeftSection"),
+                this.Q("LeftSection"),
                 this.Q<VisualElement>("LeftRevealZone"),
                 this.Q<PinToggle>("LeftPresentationPin"));
             PresentationModeService.RegisterHideableSection(leftHideableSection);
@@ -49,13 +50,16 @@ namespace Netherlands3D.UI.Panels
                 this.Q<VisualElement>("BottomRevealZone"),
                 this.Q<PinToggle>("NavigationPresentationPin"));
             PresentationModeService.RegisterHideableSection(bottomHideableSection);
+            */
         }
         
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
+            /*
             PresentationModeService.UnregisterHideableSection(leftHideableSection);
             PresentationModeService.UnregisterHideableSection(topHideableSection);
             PresentationModeService.UnregisterHideableSection(bottomHideableSection);
+            */
         }
 
         private void SetupPresentationButtons()
