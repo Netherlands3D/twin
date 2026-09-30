@@ -17,6 +17,11 @@ namespace Netherlands3D.Timeline
         {
             this.defaultColor = defaultColor;
         }
+
+        public void SetDefaultColor(Color defaultColor)
+        {
+            this.defaultColor = defaultColor;
+        }
         
         public void ProcessNewCollection(TimestampCollection newTimestampCollection)
         {

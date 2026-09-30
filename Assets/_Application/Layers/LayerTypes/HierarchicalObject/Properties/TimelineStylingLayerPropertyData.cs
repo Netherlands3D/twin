@@ -30,6 +30,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             var stylingRuleKey = $"feature.{status}.{TimelineColorIdentifier}";
             StylingRules[stylingRuleKey].Symbolizer.SetColor(colorType, color);
+            OnStylingChanged.Invoke();
         }
 
         public void SetColorForFeatureById(string featureId, string colorType, Color? color)
