@@ -7,7 +7,8 @@ namespace Netherlands3D.JavascriptConnection
     public class DrawHTMLOverCanvas : MonoBehaviour
     {
         [DllImport("__Internal")]
-        private static extern void AddFileInput(string inputName, string fileExtentions, bool multiSelect);
+        private static extern void AddFileInput(string inputName, string fileExtentions, bool multiSelect,
+            string streamedFileExtentions);
 
         [DllImport("__Internal")]
         private static extern void DisplayDOMObjectWithID(string id = "htmlID", string display = "none", float x = 0,
@@ -67,9 +68,10 @@ namespace Netherlands3D.JavascriptConnection
             this.headless = !rectTransform || headless;
         }
 
-        public void SetupInput(string fileInputName, string fileExtentions, bool multiSelect)
+        public void SetupInput(string fileInputName, string fileExtentions, bool multiSelect,
+            string streamedFileExtentions = "")
         {
-            AddFileInput(fileInputName, fileExtentions, multiSelect);
+            AddFileInput(fileInputName, fileExtentions, multiSelect, streamedFileExtentions);
         }
 
         /// <summary>

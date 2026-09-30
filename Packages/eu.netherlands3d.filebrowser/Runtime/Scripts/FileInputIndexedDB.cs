@@ -29,6 +29,7 @@ public class FileInputIndexedDB : MonoBehaviour
     private List<string> filenames = new List<string>();
     private int numberOfFilesToLoad = 0;
     private int fileCount = 0;
+    private bool requiresIndexedDbSync;
 
     private void Awake()
     {
@@ -51,6 +52,7 @@ public class FileInputIndexedDB : MonoBehaviour
     {
         numberOfFilesToLoad = count;
         fileCount = 0;
+        requiresIndexedDbSync = false;
         filenames = new List<string>();
         Debug.Log("expecting " + count + " files");
 
@@ -61,6 +63,8 @@ public class FileInputIndexedDB : MonoBehaviour
     public void LoadFile(string filename)
     {
         filenames.Add(filename);
+        if (!filename.StartsWith("browser-file://", StringComparison.OrdinalIgnoreCase))
+            requiresIndexedDbSync = true;
         fileCount++;
         Debug.Log("received: " + filename);
     }
@@ -87,6 +91,12 @@ public class FileInputIndexedDB : MonoBehaviour
 
     public void ProcessFiles()
     {
+        if (!requiresIndexedDbSync)
+        {
+            ProcessAllFiles();
+            return;
+        }
+
         // start js-function to update the contents of application.persistentdatapath to match the contents of indexedDB.
         SyncFilesFromIndexedDB(this.gameObject.name, "IndexedDBUpdated");
     }

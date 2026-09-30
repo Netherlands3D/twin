@@ -14,7 +14,7 @@ mergeInto(LibraryManager.library, {
         window.dbVersion = 21;
 
         //Inject our required html input fields
-        window.InjectHiddenFileInput = function InjectHiddenFileInput(inputFieldName, acceptedExtentions, multiFileSelect) {
+        window.InjectHiddenFileInput = function InjectHiddenFileInput(inputFieldName, acceptedExtentions, multiFileSelect, streamedExtentions) {
 
             var existing = document.getElementById(inputFieldName);
             if (existing) existing.parentNode.removeChild(existing);
@@ -30,6 +30,7 @@ mergeInto(LibraryManager.library, {
             newInput.type = 'file';
             newInput.accept = acceptedExtentionsArray.toString();
             newInput.multiple = multiFileSelect;
+            newInput.dataset.streamedExtentions = streamedExtentions || "";
             newInput.onclick = function () {
                 // Reset value to null so that onChange will always trigger, even when re-uploading the same file
                 this.value = null;
@@ -38,7 +39,7 @@ mergeInto(LibraryManager.library, {
             newInput.onchange = function () {
                 if (this.value === null) return;
 
-                window.ReadFiles(this.files);
+                window.ReadFiles(this.files, this.dataset.streamedExtentions);
             };
             newInput.style.cssText = 'display:none; cursor:pointer; opacity: 0; position: fixed; bottom: 0; left: 0; z-index: 2; width: 0px; height: 0px;';
 
@@ -56,7 +57,7 @@ mergeInto(LibraryManager.library, {
             event.preventDefault();
 
             // tell Unity how many files to expect
-            window.ReadFiles(event.dataTransfer.files);
+            window.ReadFiles(event.dataTransfer.files, "las");
         });
 
         window.FileSaved = function FileSaved() {
@@ -73,13 +74,44 @@ mergeInto(LibraryManager.library, {
             }
         };
 
-        window.ReadFiles = function ReadFiles(SelectedFiles) {
+        window.ReadFiles = function ReadFiles(SelectedFiles, streamedExtentions) {
             if (window.File && window.FileReader && window.FileList && window.Blob) {
-                window.ConnectToDatabaseAndReadFiles(SelectedFiles);
                 SendMessage('UserFileUploads', 'FileCount', SelectedFiles.length);
+
+                var streamedExtensionSet = {};
+                (streamedExtentions || "").split(",").forEach(function (extension) {
+                    var normalized = extension.trim().replace(/^\./, "").toLowerCase();
+                    if (normalized) streamedExtensionSet[normalized] = true;
+                });
+
+                var filesToPersist = [];
+                for (var i = 0; i < SelectedFiles.length; i++) {
+                    var selectedFile = SelectedFiles[i];
+                    var nameParts = selectedFile.name.split(".");
+                    var extension = nameParts.length > 1 ? nameParts.pop().toLowerCase() : "";
+                    if (streamedExtensionSet[extension]) {
+                        var browserFileUri = window.RegisterStreamedBrowserFile(selectedFile);
+                        SendMessage('UserFileUploads', 'LoadFile', browserFileUri);
+                    } else {
+                        filesToPersist.push(selectedFile);
+                    }
+                }
+
+                if (filesToPersist.length > 0)
+                    window.ConnectToDatabaseAndReadFiles(filesToPersist);
             } else {
                 alert("Bestanden inladen wordt helaas niet ondersteund door deze browser.");
             }
+        };
+
+        window.streamedBrowserFiles = window.streamedBrowserFiles || {};
+        window.RegisterStreamedBrowserFile = function RegisterStreamedBrowserFile(file) {
+            var id = (typeof crypto !== "undefined" && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+            id = id.toLowerCase();
+            window.streamedBrowserFiles[id] = file;
+            return "browser-file://" + id + "/" + encodeURIComponent(file.name);
         };
 
         window.ConnectToDatabaseAndReadFiles = function ConnectToDatabase(SelectedFiles) {
@@ -100,13 +132,22 @@ mergeInto(LibraryManager.library, {
         };
 
         window.ReadFile = function ReadFile(file) {
-            window.filereader = new FileReader();
-            window.filereader.onload = function (e) {
+            // Keep the reader scoped to this upload. A reader stored on window retains its
+            // ArrayBuffer result after the IndexedDB write and can keep an entire large file
+            // alive for the remainder of the session.
+            var fileReader = new FileReader();
+            fileReader.onload = function (e) {
                 const uint8Array = new Uint8Array(e.target.result);
                 window.SaveData(uint8Array, file.name);
                 window.counter = counter + 1;
             };
-            window.filereader.readAsArrayBuffer(file);
+            fileReader.onloadend = function () {
+                fileReader.onload = null;
+                fileReader.onloadend = null;
+                fileReader.onerror = null;
+                fileReader = null;
+            };
+            fileReader.readAsArrayBuffer(file);
         };
 
         window.SaveData = function SaveData(uint8Array, filename) {
@@ -171,6 +212,47 @@ mergeInto(LibraryManager.library, {
                 };
             });
         };
+    },
+
+    BrowserFileGetSize: function (fileIdPtr) {
+        var fileId = UTF8ToString(fileIdPtr).toLowerCase();
+        var file = window.streamedBrowserFiles && window.streamedBrowserFiles[fileId];
+        return file ? file.size : -1;
+    },
+
+    BrowserFileReadRange: function (fileIdPtr, offset, length, callbackObjectPtr, callbackMethodPtr, requestId) {
+        var fileId = UTF8ToString(fileIdPtr).toLowerCase();
+        var callbackObject = UTF8ToString(callbackObjectPtr);
+        var callbackMethod = UTF8ToString(callbackMethodPtr);
+        var file = window.streamedBrowserFiles && window.streamedBrowserFiles[fileId];
+
+        if (!file) {
+            SendMessage(callbackObject, callbackMethod, requestId + "|0|-1");
+            return;
+        }
+
+        var start = Math.max(0, Math.trunc(offset));
+        var end = Math.min(file.size, start + Math.max(0, length));
+        file.slice(start, end).arrayBuffer().then(function (buffer) {
+            var bytes = new Uint8Array(buffer);
+            var pointer = bytes.length > 0 ? Module._malloc(bytes.length) : 0;
+            if (bytes.length > 0 && !pointer) {
+                SendMessage(callbackObject, callbackMethod, requestId + "|0|-2");
+                return;
+            }
+
+            if (bytes.length > 0)
+                Module.HEAPU8.set(bytes, pointer);
+            SendMessage(callbackObject, callbackMethod, requestId + "|" + pointer + "|" + bytes.length);
+        }).catch(function (error) {
+            console.error("Browser file range read failed", error);
+            SendMessage(callbackObject, callbackMethod, requestId + "|0|-3");
+        });
+    },
+
+    BrowserFileReleaseBuffer: function (pointer) {
+        if (pointer)
+            Module._free(pointer);
     },
 
     /**
@@ -263,12 +345,13 @@ mergeInto(LibraryManager.library, {
         }
     },
 
-    AddFileInput: function (inputName, fileExtentions, multiSelect) {
+    AddFileInput: function (inputName, fileExtentions, multiSelect, streamedFileExtentions) {
         var inputNameID = UTF8ToString(inputName);
         var allowedFileExtentions = UTF8ToString(fileExtentions);
+        var streamedFileExtentionsString = UTF8ToString(streamedFileExtentions);
 
         if (typeof window.InjectHiddenFileInput !== "undefined") {
-            window.InjectHiddenFileInput(inputNameID, allowedFileExtentions, multiSelect);
+            window.InjectHiddenFileInput(inputNameID, allowedFileExtentions, multiSelect, streamedFileExtentionsString);
         } else {
             console.log("Cant create file inputfield. You need to initialize the IndexedDB connection first using InitializeIndexedDB(str)");
         }

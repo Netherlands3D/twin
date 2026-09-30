@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.LASImporter.LayerPresets;
@@ -12,7 +13,16 @@ namespace Netherlands3D.Functionalities.LASImporter
     {
         public bool Supports(LocalFile localFile)
         {
-            if (localFile == null || string.IsNullOrEmpty(localFile.LocalFilePath) || !File.Exists(localFile.LocalFilePath))
+            if (localFile == null)
+                return false;
+
+            if (Uri.TryCreate(localFile.SourceUrl, UriKind.Absolute, out var sourceUri)
+                && sourceUri.Scheme.Equals("browser-file", StringComparison.OrdinalIgnoreCase))
+            {
+                return Path.GetExtension(sourceUri.AbsolutePath).Equals(".las", StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (string.IsNullOrEmpty(localFile.LocalFilePath) || !File.Exists(localFile.LocalFilePath))
                 return false;
 
             try
@@ -36,7 +46,10 @@ namespace Netherlands3D.Functionalities.LASImporter
 
         public LayerPresetArgs Execute(LocalFile localFile)
         {
-            var uri = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
+            var uri = Uri.TryCreate(localFile.SourceUrl, UriKind.Absolute, out var sourceUri)
+                      && sourceUri.Scheme.Equals("browser-file", StringComparison.OrdinalIgnoreCase)
+                ? sourceUri
+                : AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
             return new LASPointCloudPreset.Args(localFile.FileName, uri);
         }
     }

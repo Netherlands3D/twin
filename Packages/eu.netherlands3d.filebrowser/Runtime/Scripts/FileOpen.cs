@@ -58,9 +58,9 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
         javaScriptInput.AlignObjectID(fileInputName, false);
     }
 
-    private void SetJavaScriptFileExtensions(string fileExtentions)
+    private void SetJavaScriptFileExtensions(string fileExtentions, string streamedFileExtentions)
     {
-        javaScriptInput.SetupInput(fileInputName, fileExtentions, multiSelect);
+        javaScriptInput.SetupInput(fileInputName, fileExtentions, multiSelect, streamedFileExtentions);
     }
     
 #endif
@@ -72,11 +72,11 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     /// <summary>
     /// Opens the File browser to pick a file to import
     /// </summary>
-    public void OpenFile(string fileExtentions)
+    public void OpenFile(string fileExtentions, string streamedFileExtentions = "")
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
         javaScriptFileInputHandler.SetCallbackAddress(SendResults);
-        SetJavaScriptFileExtensions(fileExtentions);
+        SetJavaScriptFileExtensions(fileExtentions, streamedFileExtentions);
         BrowseForFile(fileInputName);
 #else
         string[] fileExtentionNames = fileExtentions.Split(',');

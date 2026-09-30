@@ -38,16 +38,19 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             if (file.EndsWith(','))
                 file = file.Remove(file.Length - 1);
 
-            string fileExtension = Path.GetExtension(file).ToLower();
+            var isBrowserFile = Uri.TryCreate(file, UriKind.Absolute, out var browserFileUri)
+                                && browserFileUri.Scheme.Equals("browser-file", StringComparison.OrdinalIgnoreCase);
+            var extensionSource = isBrowserFile ? browserFileUri.AbsolutePath : file;
+            string fileExtension = Path.GetExtension(extensionSource).ToLower();
             if (fileExtension.StartsWith('.'))
                 fileExtension = fileExtension.Substring(1);
 
             var possibleFileTypeEvents = fileTypeEvents.Where(fte => fte.Extension == fileExtension);
 
-            var path = Path.Combine(Application.persistentDataPath, file);
+            var path = isBrowserFile ? string.Empty : Path.Combine(Application.persistentDataPath, file);
             var localFile = new LocalFile()
             {
-                SourceUrl = AssetUriFactory.CreateProjectAssetUri(file).ToString(),
+                SourceUrl = isBrowserFile ? file : AssetUriFactory.CreateProjectAssetUri(file).ToString(),
                 LocalFilePath = path
             };
 

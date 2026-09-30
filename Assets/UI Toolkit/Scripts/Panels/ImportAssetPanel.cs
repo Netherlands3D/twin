@@ -145,7 +145,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnUploadStarted(ClickEvent evt)
         {
-            ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes);
+            ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes, "las");
         }
 
         private void OnInportUriButtonClicked(ClickEvent evt)

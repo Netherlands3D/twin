@@ -17,6 +17,7 @@ namespace Netherlands3D.Functionalities.LASImporter.Parsing
         private readonly BinaryReader reader;
 
         public LASHeader Header { get; }
+        public long FileLength => stream.Length;
 
         public LASFileReader(string path)
         {
@@ -39,17 +40,15 @@ namespace Netherlands3D.Functionalities.LASImporter.Parsing
             if (stride < 1)
                 stride = 1;
 
-            stream.Position = Header.OffsetToPointData;
-
-            for (ulong i = 0; i < Header.PointCount; i++)
+            for (ulong i = 0; i < Header.PointCount; i += (ulong)stride)
             {
-                var recordStart = stream.Position;
+                var recordStart = Header.OffsetToPointData + (long)(i * Header.PointDataRecordLength);
+                if (recordStart < 0 || recordStart + Header.PointDataRecordLength > stream.Length)
+                    yield break;
+
+                stream.Position = recordStart;
                 var point = ReadPointRecord(Header);
-
-                if (i % (ulong)stride == 0)
-                    yield return point;
-
-                stream.Position = recordStart + Header.PointDataRecordLength;
+                yield return point;
             }
         }
 
@@ -211,7 +210,7 @@ namespace Netherlands3D.Functionalities.LASImporter.Parsing
             );
         }
 
-        private static int GetRgbOffset(byte pointDataFormat)
+        internal static int GetRgbOffset(byte pointDataFormat)
         {
             return pointDataFormat switch
             {
@@ -225,7 +224,7 @@ namespace Netherlands3D.Functionalities.LASImporter.Parsing
             };
         }
 
-        private static byte ToByteColor(ushort value)
+        internal static byte ToByteColor(ushort value)
         {
             return value > 255 ? (byte)(value / 256) : (byte)value;
         }
@@ -246,7 +245,7 @@ namespace Netherlands3D.Functionalities.LASImporter.Parsing
             return values;
         }
 
-        private static CoordinateSystem DetectCoordinateSystemFromGeoKeys(ushort[] geoKeys, string geoAscii)
+        internal static CoordinateSystem DetectCoordinateSystemFromGeoKeys(ushort[] geoKeys, string geoAscii)
         {
             if (geoKeys.Length >= 4)
             {
@@ -273,7 +272,7 @@ namespace Netherlands3D.Functionalities.LASImporter.Parsing
             return DetectCoordinateSystemFromText(geoAscii);
         }
 
-        private static CoordinateSystem DetectCoordinateSystemFromText(string text)
+        internal static CoordinateSystem DetectCoordinateSystemFromText(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return CoordinateSystem.Undefined;
@@ -287,7 +286,7 @@ namespace Netherlands3D.Functionalities.LASImporter.Parsing
             return CoordinateSystems.FindCoordinateSystem(text);
         }
 
-        private static CoordinateSystem DetectCoordinateSystemFromBounds(LASHeader header)
+        internal static CoordinateSystem DetectCoordinateSystemFromBounds(LASHeader header)
         {
             if (header.MinX >= MinDutchRdX &&
                 header.MaxX <= MaxDutchRdX &&

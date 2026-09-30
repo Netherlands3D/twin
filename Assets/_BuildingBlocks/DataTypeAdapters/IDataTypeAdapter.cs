@@ -9,7 +9,18 @@ namespace Netherlands3D.DataTypeAdapters
     {
         public string SourceUrl;
         public string LocalFilePath;
-        public string FileName => Path.GetFileName(LocalFilePath);
+        public string FileName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(LocalFilePath))
+                    return Path.GetFileName(LocalFilePath);
+
+                return Uri.TryCreate(SourceUrl, UriKind.Absolute, out var uri)
+                    ? Uri.UnescapeDataString(Path.GetFileName(uri.AbsolutePath))
+                    : Path.GetFileName(SourceUrl);
+            }
+        }
 
         public List<string> log = new();
     }

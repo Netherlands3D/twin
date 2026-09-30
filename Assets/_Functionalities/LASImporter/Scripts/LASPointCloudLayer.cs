@@ -24,6 +24,10 @@ namespace Netherlands3D.Functionalities.LASImporter
     {
         private const int MaxPointLoadFrameMilliseconds = 12;
         private const int ClassificationSyncInterval = 50000;
+        private const int ProfilingLogPointInterval = 250000;
+        private const int EstimatedRenderPointBytes = 20;
+        private const int MeshVertexBytes = 24;
+        private const int BrowserSourceChunkBytes = 4 * 1024 * 1024;
 
         [SerializeField] private int maxLoadedPoints = 2000000;
         [SerializeField] private float chunkSizeMeters = 75f;
@@ -58,6 +62,8 @@ namespace Netherlands3D.Functionalities.LASImporter
         private Vector3 previousScale;
         private WorldTransform worldTransform;
         private Coordinate? georeferencedAnchor;
+        private bool syncingClassificationCounts;
+        private int meshRebuildCount;
 
         private static readonly int PointSizeShaderProperty = Shader.PropertyToID("_PointSize");
         private static readonly int PointSizeReferenceDistanceShaderProperty = Shader.PropertyToID("_PointSizeReferenceDistance");
@@ -201,6 +207,12 @@ namespace Netherlands3D.Functionalities.LASImporter
             if (propertyData?.LasFile == null)
                 yield break;
 
+            if (propertyData.LasFile.Scheme.Equals("browser-file", StringComparison.OrdinalIgnoreCase))
+            {
+                yield return LoadBrowserPointCloudProgressively(centerAfterHeaderLoaded);
+                yield break;
+            }
+
             var localPath = AssetUriFactory.GetLocalPath(propertyData.LasFile);
             if (string.IsNullOrEmpty(localPath))
                 localPath = propertyData.LasFile.LocalPath;
@@ -240,6 +252,11 @@ namespace Netherlands3D.Functionalities.LASImporter
                 int stride = header.PointCount > (ulong)maxPointsToLoad
                     ? Mathf.CeilToInt(header.PointCount / (float)maxPointsToLoad)
                     : 1;
+                var totalLoadTimer = Stopwatch.StartNew();
+                var loadedPointCount = 0;
+                var nextProfilingLogPoint = ProfilingLogPointInterval;
+                meshRebuildCount = 0;
+                LogLoadStarted(localPath, reader.FileLength, header, stride, maxPointsToLoad, "FileStream seek", 0);
 
                 int pointsThisFrame = 0;
                 int pointsSinceClassificationSync = 0;
@@ -259,7 +276,14 @@ namespace Netherlands3D.Functionalities.LASImporter
 
                     AddPointToChunk(new RenderPoint(unityPosition, fileColor, point.HasColor, point.Classification));
                     AddClassification(point.Classification);
+                    loadedPointCount++;
                     pointsSinceClassificationSync++;
+
+                    if (loadedPointCount >= nextProfilingLogPoint)
+                    {
+                        LogLoadProgress(loadedPointCount, reader.FileLength, totalLoadTimer.ElapsedMilliseconds);
+                        nextProfilingLogPoint += ProfilingLogPointInterval;
+                    }
 
                     pointsThisFrame++;
                     if (pointsThisFrame >= pointsPerFrameWhileLoading ||
@@ -279,6 +303,7 @@ namespace Netherlands3D.Functionalities.LASImporter
 
                 UpdateChunkVisibilityAndLod(force: true);
                 SyncClassificationPropertyData();
+                LogLoadCompleted(loadedPointCount, reader.FileLength, totalLoadTimer.ElapsedMilliseconds);
             }
             finally
             {
@@ -507,10 +532,7 @@ namespace Netherlands3D.Functionalities.LASImporter
 
         private void AddPointToChunk(RenderPoint point)
         {
-            var key = new Vector2Int(
-                Mathf.FloorToInt(point.Position.x / chunkSizeMeters),
-                Mathf.FloorToInt(point.Position.z / chunkSizeMeters)
-            );
+            var key = GetChunkKey(point.Position, chunkSizeMeters);
 
             if (!chunkMap.TryGetValue(key, out var chunk))
             {
@@ -534,7 +556,194 @@ namespace Netherlands3D.Functionalities.LASImporter
             if (classificationColorPropertyData == null)
                 return;
 
-            classificationColorPropertyData.SetClassifications(classificationCounts);
+            syncingClassificationCounts = true;
+            try
+            {
+                classificationColorPropertyData.SetClassifications(classificationCounts);
+            }
+            finally
+            {
+                syncingClassificationCounts = false;
+            }
+        }
+
+        private IEnumerator LoadBrowserPointCloudProgressively(bool centerAfterHeaderLoaded)
+        {
+            loading = true;
+            LASStreamingReader reader = null;
+            var loadedPointCount = 0;
+            var totalLoadTimer = Stopwatch.StartNew();
+
+            try
+            {
+                ILASByteSource byteSource;
+                try
+                {
+                    byteSource = new WebGLBrowserFileLASByteSource(propertyData.LasFile);
+                    reader = new LASStreamingReader(byteSource);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogError($"Could not open streamed LAS source: {exception.Message}", this);
+                    yield break;
+                }
+
+                yield return reader.Initialize();
+                if (reader.Error != null)
+                {
+                    Debug.LogError($"Could not read streamed LAS header: {reader.Error.Message}", this);
+                    yield break;
+                }
+
+                header = reader.Header;
+                ClearChunks();
+                classificationCounts.Clear();
+                ApplyPlacementFromHeader(header);
+                SyncRenderPropertyData(header);
+                SetTransformEditingAvailability();
+                if (centerAfterHeaderLoaded)
+                    CenterAfterHeaderLoaded();
+                yield return null;
+
+                var pointCoordinateSystem = header.HasCoordinateSystem
+                    ? CoordinateSystems.To3D(header.CoordinateSystem)
+                    : CoordinateSystem.Undefined;
+                var anchor = georeferencedAnchor;
+                var centerX = (header.MinX + header.MaxX) * 0.5;
+                var centerY = (header.MinY + header.MaxY) * 0.5;
+                var centerZ = (header.MinZ + header.MaxZ) * 0.5;
+                var maxPointsToLoad = Math.Max(1, GetMaxLoadedPoints());
+                var pointBudget = (ulong)maxPointsToLoad;
+                var strideValue = header.PointCount > pointBudget
+                    ? header.PointCount / pointBudget + (header.PointCount % pointBudget == 0 ? 0UL : 1UL)
+                    : 1UL;
+                var stride = strideValue > int.MaxValue ? int.MaxValue : (int)strideValue;
+                var recordsPerChunk = Math.Max(1, BrowserSourceChunkBytes / header.PointDataRecordLength);
+                var pointBuffer = new byte[recordsPerChunk * header.PointDataRecordLength];
+                var nextProfilingLogPoint = ProfilingLogPointInterval;
+                meshRebuildCount = 0;
+                LogLoadStarted(
+                    Uri.UnescapeDataString(Path.GetFileName(propertyData.LasFile.AbsolutePath)),
+                    reader.FileLength,
+                    header,
+                    stride,
+                    maxPointsToLoad,
+                    "browser File.slice",
+                    pointBuffer.Length
+                );
+
+                var pointsThisFrame = 0;
+                var pointsSinceClassificationSync = 0;
+                var loadFrameTimer = Stopwatch.StartNew();
+                ulong pointIndex = 0;
+                long sourceOffset = header.OffsetToPointData;
+
+                while (pointIndex < header.PointCount)
+                {
+                    var remainingRecords = header.PointCount - pointIndex;
+                    var recordsToRead = (int)Math.Min((ulong)recordsPerChunk, remainingRecords);
+                    var bytesToRead = recordsToRead * header.PointDataRecordLength;
+                    var request = reader.ReadPointBytes(sourceOffset, pointBuffer, bytesToRead);
+                    while (!request.IsDone)
+                        yield return null;
+
+                    if (request.Error != null)
+                    {
+                        Debug.LogError($"Could not read streamed LAS point data: {request.Error.Message}", this);
+                        yield break;
+                    }
+
+                    var completeRecordsRead = request.BytesRead / header.PointDataRecordLength;
+                    if (completeRecordsRead <= 0)
+                    {
+                        Debug.LogWarning(
+                            $"Streamed LAS ended before point {pointIndex:N0} of {header.PointCount:N0}.",
+                            this
+                        );
+                        break;
+                    }
+
+                    for (var recordIndex = 0; recordIndex < completeRecordsRead; recordIndex++)
+                    {
+                        var currentPointIndex = pointIndex + (ulong)recordIndex;
+                        if (currentPointIndex % (ulong)stride != 0)
+                            continue;
+
+                        var point = LASStreamingReader.ParsePoint(
+                            pointBuffer,
+                            recordIndex * header.PointDataRecordLength,
+                            header
+                        );
+                        var fileColor = point.HasColor
+                            ? point.Color
+                            : LASClassificationColors.ForClassification(point.Classification);
+                        var unityPosition = header.HasCoordinateSystem
+                            ? CoordinateDeltaToLocalUnity(
+                                new Coordinate(pointCoordinateSystem, point.X, point.Y, point.Z),
+                                anchor.Value
+                            )
+                            : new Vector3(
+                                (float)(point.X - centerX),
+                                (float)(point.Z - centerZ),
+                                (float)(point.Y - centerY)
+                            );
+
+                        AddPointToChunk(new RenderPoint(
+                            unityPosition,
+                            fileColor,
+                            point.HasColor,
+                            point.Classification
+                        ));
+                        AddClassification(point.Classification);
+                        loadedPointCount++;
+                        pointsSinceClassificationSync++;
+
+                        if (loadedPointCount >= nextProfilingLogPoint)
+                        {
+                            LogLoadProgress(loadedPointCount, reader.FileLength, totalLoadTimer.ElapsedMilliseconds);
+                            nextProfilingLogPoint += ProfilingLogPointInterval;
+                        }
+
+                        pointsThisFrame++;
+                        if (pointsThisFrame >= pointsPerFrameWhileLoading
+                            || loadFrameTimer.ElapsedMilliseconds >= MaxPointLoadFrameMilliseconds)
+                        {
+                            if (pointsSinceClassificationSync >= ClassificationSyncInterval)
+                            {
+                                SyncClassificationPropertyData();
+                                pointsSinceClassificationSync = 0;
+                            }
+
+                            pointsThisFrame = 0;
+                            UpdateChunkVisibilityAndLod();
+                            loadFrameTimer.Restart();
+                            yield return null;
+                        }
+                    }
+
+                    pointIndex += (ulong)completeRecordsRead;
+                    sourceOffset += (long)completeRecordsRead * header.PointDataRecordLength;
+                    if (completeRecordsRead < recordsToRead)
+                    {
+                        Debug.LogWarning(
+                            $"Streamed LAS returned a partial final block at point {pointIndex:N0}.",
+                            this
+                        );
+                        break;
+                    }
+                }
+
+                UpdateChunkVisibilityAndLod(force: true);
+                SyncClassificationPropertyData();
+                LogLoadCompleted(loadedPointCount, reader.FileLength, totalLoadTimer.ElapsedMilliseconds);
+            }
+            finally
+            {
+                SyncClassificationPropertyData();
+                reader?.Dispose();
+                loading = false;
+                loadingCoroutine = null;
+            }
         }
 
         private void SyncRenderPropertyData(LASHeader lasHeader)
@@ -552,28 +761,48 @@ namespace Netherlands3D.Functionalities.LASImporter
                 return;
 
             var planes = GeometryUtility.CalculateFrustumPlanes(camera);
+            var cameraLocalPosition = transform.InverseTransformPoint(camera.transform.position);
+            var cameraChunkKey = GetChunkKey(cameraLocalPosition, chunkSizeMeters);
             foreach (var chunk in chunks)
             {
                 var worldBounds = chunk.WorldBounds;
-                var visible = LayerData.ActiveInHierarchy && GeometryUtility.TestPlanesAABB(planes, worldBounds);
+                var isCameraChunk = chunk.Key == cameraChunkKey;
+                var visible = LayerData.ActiveInHierarchy
+                              && (isCameraChunk || GeometryUtility.TestPlanesAABB(planes, worldBounds));
                 chunk.IsVisible = visible;
                 chunk.GameObject.SetActive(visible);
 
                 if (!visible)
+                {
+                    chunk.SetCameraPriorityBounds(false, camera);
                     continue;
+                }
 
-                int maxPointsForChunk = CalculateMaxPointsForChunk(camera, worldBounds, chunk);
-                int stride = CalculateLodStride(camera, worldBounds, chunk, maxPointsForChunk);
+                int maxPointsForChunk = CalculateMaxPointsForChunk(camera, worldBounds, chunk, isCameraChunk);
+                int stride = CalculateLodStride(camera, worldBounds, chunk, maxPointsForChunk, isCameraChunk);
                 if (force || chunk.IsDirty || stride != chunk.CurrentStride || maxPointsForChunk != chunk.CurrentMaxPoints)
+                {
                     chunk.RebuildMesh(stride, maxPointsForChunk, GetRenderColor);
+                    meshRebuildCount++;
+                }
+
+                // SetActive controls our own coarse culling, but Unity performs another frustum
+                // test against Mesh.bounds. Include the camera and a point beyond its near plane
+                // for the current cell so that its mesh is not clipped by that second test.
+                chunk.SetCameraPriorityBounds(isCameraChunk, camera);
             }
         }
 
-        private int CalculateMaxPointsForChunk(Camera camera, Bounds worldBounds, PointCloudChunk chunk)
+        private int CalculateMaxPointsForChunk(
+            Camera camera,
+            Bounds worldBounds,
+            PointCloudChunk chunk,
+            bool isCameraChunk
+        )
         {
             var maxPoints = GetMaxPointsPerChunkMesh();
             var distanceFactor = CalculateDistanceFactor(camera, worldBounds);
-            if (distanceFactor <= 1f)
+            if (isCameraChunk || distanceFactor <= 1f)
                 maxPoints = maxPoints > int.MaxValue / CloseChunkPointBudgetMultiplier
                     ? int.MaxValue
                     : maxPoints * CloseChunkPointBudgetMultiplier;
@@ -581,11 +810,26 @@ namespace Netherlands3D.Functionalities.LASImporter
             return chunk.GetMaxRenderablePointCount(maxPoints);
         }
 
-        private int CalculateLodStride(Camera camera, Bounds worldBounds, PointCloudChunk chunk, int maxRenderablePoints)
+        private int CalculateLodStride(
+            Camera camera,
+            Bounds worldBounds,
+            PointCloudChunk chunk,
+            int maxRenderablePoints,
+            bool isCameraChunk
+        )
         {
             var baseStride = Mathf.Max(1, Mathf.CeilToInt(chunk.Points.Count / (float)Math.Max(1, maxRenderablePoints)));
-            var detail = Mathf.Max(1f, CalculateDistanceFactor(camera, worldBounds));
+            var detail = isCameraChunk ? 1f : Mathf.Max(1f, CalculateDistanceFactor(camera, worldBounds));
             return Mathf.Max(baseStride, Mathf.NextPowerOfTwo(Mathf.CeilToInt(detail)));
+        }
+
+        internal static Vector2Int GetChunkKey(Vector3 localPosition, float chunkSize)
+        {
+            var safeChunkSize = Mathf.Max(0.01f, chunkSize);
+            return new Vector2Int(
+                Mathf.FloorToInt(localPosition.x / safeChunkSize),
+                Mathf.FloorToInt(localPosition.z / safeChunkSize)
+            );
         }
 
         private float CalculateDistanceFactor(Camera camera, Bounds worldBounds)
@@ -658,6 +902,12 @@ namespace Netherlands3D.Functionalities.LASImporter
 
         private void ApplyClassificationStylingChanged()
         {
+            // SetClassifications also raises OnStylingChanged when only the displayed counts
+            // changed. During loading that must refresh the panel, but it must not rebuild all
+            // visible meshes every 50,000 decoded points.
+            if (syncingClassificationCounts)
+                return;
+
             MarkChunksDirty();
             UpdateChunkVisibilityAndLod(force: true);
         }
@@ -739,6 +989,108 @@ namespace Netherlands3D.Functionalities.LASImporter
             material.SetFloat(MaxPointSizeShaderProperty, Mathf.Max(minPointSizePixels, maxPointSizePixels));
         }
 
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        [System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        private void LogLoadStarted(
+            string path,
+            long fileBytes,
+            LASHeader lasHeader,
+            int stride,
+            int pointBudget,
+            string sourceMode,
+            int sourceChunkBytes
+        )
+        {
+            var sourceChunkDescription = sourceChunkBytes > 0
+                ? $", sourceChunk={FormatBytes(sourceChunkBytes)}"
+                : string.Empty;
+            Debug.Log(
+                $"[LAS memory] Start '{Path.GetFileName(path)}': file={FormatBytes(fileBytes)}, " +
+                $"points={lasHeader.PointCount:N0}, record={lasHeader.PointDataRecordLength} B, " +
+                $"format={lasHeader.PointDataFormat}, sampleStride={stride}, pointBudget={pointBudget:N0}, " +
+                $"sourceMode={sourceMode}{sourceChunkDescription}, managedSourceBytesRetained=0 B, " +
+                $"spatialCell={chunkSizeMeters:0.##} m.",
+                this
+            );
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        [System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        private void LogLoadProgress(int decodedPoints, long fileBytes, long elapsedMilliseconds)
+        {
+            GetEstimatedMemoryUsage(
+                out var pointStorageBytes,
+                out var stagingBytes,
+                out var meshCpuBytes,
+                out var gpuBytes,
+                out var renderedPoints
+            );
+
+            Debug.Log(
+                $"[LAS memory] Progress: decoded={decodedPoints:N0}, spatialChunks={chunks.Count:N0}, " +
+                $"renderedMeshPoints={renderedPoints:N0}, pointStorageCapacity={FormatBytes(pointStorageBytes)}, " +
+                $"meshStagingCapacity={FormatBytes(stagingBytes)}, meshCpuEstimate={FormatBytes(meshCpuBytes)}, " +
+                $"gpuEstimate={FormatBytes(gpuBytes)}, sourceFile={FormatBytes(fileBytes)}, " +
+                $"meshRebuilds={meshRebuildCount:N0}, elapsed={elapsedMilliseconds / 1000f:0.00}s.",
+                this
+            );
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        [System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        private void LogLoadCompleted(int decodedPoints, long fileBytes, long elapsedMilliseconds)
+        {
+            GetEstimatedMemoryUsage(
+                out var pointStorageBytes,
+                out var stagingBytes,
+                out var meshCpuBytes,
+                out var gpuBytes,
+                out var renderedPoints
+            );
+
+            Debug.Log(
+                $"[LAS memory] Complete: file={FormatBytes(fileBytes)}, decoded={decodedPoints:N0}, " +
+                $"spatialChunks={chunks.Count:N0}, renderedMeshPoints={renderedPoints:N0}, " +
+                $"pointStorageCapacity={FormatBytes(pointStorageBytes)}, meshStagingCapacity={FormatBytes(stagingBytes)}, " +
+                $"meshCpuEstimate={FormatBytes(meshCpuBytes)}, gpuEstimate={FormatBytes(gpuBytes)}, " +
+                $"meshRebuilds={meshRebuildCount:N0}, elapsed={elapsedMilliseconds / 1000f:0.00}s. " +
+                "Browser FileReader/IndexedDB/MEMFS copies are outside these Unity-side estimates.",
+                this
+            );
+        }
+
+        private void GetEstimatedMemoryUsage(
+            out long pointStorageBytes,
+            out long stagingBytes,
+            out long meshCpuBytes,
+            out long gpuBytes,
+            out long renderedPoints
+        )
+        {
+            pointStorageBytes = 0;
+            stagingBytes = 0;
+            meshCpuBytes = 0;
+            gpuBytes = 0;
+            renderedPoints = 0;
+
+            foreach (var chunk in chunks)
+            {
+                pointStorageBytes += chunk.EstimatedPointStorageCapacityBytes;
+                stagingBytes += chunk.EstimatedStagingCapacityBytes;
+                meshCpuBytes += chunk.EstimatedMeshBytes;
+                gpuBytes += chunk.EstimatedMeshBytes;
+                renderedPoints += chunk.RenderedPointCount;
+            }
+        }
+
+        private static string FormatBytes(long bytes)
+        {
+            const double mebibyte = 1024d * 1024d;
+            return bytes >= mebibyte
+                ? $"{bytes / mebibyte:0.0} MiB"
+                : $"{bytes / 1024d:0.0} KiB";
+        }
+
         private void ClearChunks()
         {
             foreach (var chunk in chunks)
@@ -816,6 +1168,17 @@ namespace Netherlands3D.Functionalities.LASImporter
             public int CurrentMaxPoints { get; private set; } = -1;
             public bool IsVisible { get; set; }
             public bool IsDirty { get; private set; } = true;
+            public int RenderedPointCount => vertices.Count / 4;
+            public long EstimatedPointStorageCapacityBytes => (long)Points.Capacity * EstimatedRenderPointBytes;
+            public long EstimatedStagingCapacityBytes =>
+                (long)vertices.Capacity * 12 +
+                (long)colors.Capacity * 4 +
+                (long)corners.Capacity * 8 +
+                (long)indices.Capacity * 4;
+            public long EstimatedMeshBytes => mesh == null || mesh.subMeshCount == 0
+                ? 0
+                : (long)mesh.vertexCount * MeshVertexBytes +
+                  (long)mesh.GetIndexCount(0) * (mesh.indexFormat == IndexFormat.UInt16 ? 2 : 4);
 
             private Mesh mesh;
             private readonly List<Vector3> vertices = new();
@@ -901,6 +1264,25 @@ namespace Netherlands3D.Functionalities.LASImporter
                 meshBounds.Expand(2f);
                 mesh.bounds = meshBounds;
                 IsDirty = false;
+            }
+
+            public void SetCameraPriorityBounds(bool prioritized, Camera camera)
+            {
+                if (!mesh || !GameObject)
+                    return;
+
+                var renderBounds = LocalBounds;
+                renderBounds.Expand(2f);
+                if (prioritized && camera)
+                {
+                    var nearPlaneMargin = Mathf.Max(0.1f, camera.nearClipPlane + 0.1f);
+                    renderBounds.Encapsulate(GameObject.transform.InverseTransformPoint(camera.transform.position));
+                    renderBounds.Encapsulate(GameObject.transform.InverseTransformPoint(
+                        camera.transform.position + camera.transform.forward * nearPlaneMargin
+                    ));
+                }
+
+                mesh.bounds = renderBounds;
             }
 
             private bool ShouldRenderPoint(int pointIndex, int targetPointCount)

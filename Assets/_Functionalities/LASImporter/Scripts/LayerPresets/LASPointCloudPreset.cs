@@ -1,7 +1,6 @@
 using System;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.Functionalities.LASImporter.LayerPresets
 {
@@ -29,7 +28,7 @@ namespace Netherlands3D.Functionalities.LASImporter.LayerPresets
                 .OfType(PrefabIdentifier)
                 .AddProperty(new LASPointCloudPropertyData
                 {
-                    LasFile = AssetUriFactory.CreateProjectAssetUri(args.Url.ToString())
+                    LasFile = args.Url
                 });
         }
 
