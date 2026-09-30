@@ -15,7 +15,7 @@
     
     <ui:VisualElement class="app__content" picking-mode="Ignore">
         <ui:VisualElement picking-mode="Ignore" class="default-hud__main-section">
-            <ui:VisualElement picking-mode="Ignore" name="LeftSection" class="default-hud__left-section presentation-section--hidden">
+            <nl3d:HideableSection picking-mode="Ignore" name="LeftSection" class="default-hud__left-section presentation-section--hidden">
                 <ui:VisualElement picking-mode="Ignore" class="default-hud__left-header">
                     <nl3d:HamburgerMenu />
                     <nl3d:PinToggle name="LeftPresentationPin" value="true" class="presentation-section__pin" />
@@ -25,17 +25,17 @@
                     <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal" />
                     <nl3dP:LegendPanel />
                 </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement name="TopSection" class="default-hud__top-section presentation-section--hidden" picking-mode="Ignore">
+            </nl3d:HideableSection>
+            <nl3d:HideableSection name="TopSection" class="default-hud__top-section presentation-section--hidden" picking-mode="Ignore">
                 <nl3d:ToolbarToolbox picking-mode="Ignore" />
                 <nl3d:ToolbarScenario />
-            </ui:VisualElement>
+            </nl3d:HideableSection>
             <ui:VisualElement name="PropertiesZone" class="default-hud__properties-zone">
                 <nl3dP:SecondaryPropertiesPanel name="SecondaryPropertiesPanel" class="default-hud__properties-zone-column"/>
                 <nl3dP:PropertiesPanel name="PropertiesPanel" class="default-hud__properties-zone-column"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
+        <nl3d:HideableSection name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
             <ui:VisualElement name="PersistentBottomSection" picking-mode="Ignore" class="default-hud__persistent-bottom-section">
                 <ui:VisualElement name="PersistentBottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
                     <nl3d:Footer picking-mode="Ignore" />
@@ -63,6 +63,6 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
              </ui:VisualElement> 
-        </ui:VisualElement>
+        </nl3d:HideableSection>
     </ui:VisualElement>
 </ui:UXML>
