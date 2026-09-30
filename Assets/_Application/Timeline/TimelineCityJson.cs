@@ -76,7 +76,7 @@ namespace Netherlands3D.Timeline
             foreach (var visualizer in cityObject.GetComponents<CityObjectVisualizer>())
             {
                 var layerFeature = visualization.LayerFeatures[visualizer];
-                var status = currentTimestampForFeature.value;
+                var status = currentTimestampForFeature?.value;
                 layerFeature.Attributes[TimelineStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
                 visualization.ApplyStylingToFeature(layerFeature);
             }

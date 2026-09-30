@@ -45,6 +45,8 @@ namespace Netherlands3D.Timeline
         public Timestamp GetCurrentTimestamp(DateTime currentTime)
         {
             Timestamp current = Timestamps[0];
+            if (currentTime < current.timestamp)
+                return null;
 
             foreach (var t in Timestamps)
             {

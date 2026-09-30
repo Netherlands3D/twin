@@ -33,6 +33,9 @@ namespace Netherlands3D.Timeline
         
         public Color? GetColorForTimestamp(Timestamp timestamp)
         {
+            if(timestamp ==null)
+                return null;
+            
             if (colors.TryGetValue(timestamp.value, out var color))
             {
                 return color;
