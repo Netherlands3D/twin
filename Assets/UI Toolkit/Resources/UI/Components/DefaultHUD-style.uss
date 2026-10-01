@@ -145,7 +145,7 @@
     display: none;
 }
 
-.default-hud--presenting .default-hud__persistent-bottom-section > .default-hud__presentation-controls {
+.presenting-mode--presenting .default-hud__persistent-bottom-section > .default-hud__presentation-controls {
     display: flex;
 }
 
@@ -163,7 +163,7 @@
     display: flex;
 }
 
-.default-hud--presenting .hideable-section__pin {
+.presenting-mode--presenting .hideable-section__pin {
     display: none;
 }
 
@@ -180,7 +180,7 @@
     display: flex;
 }
 
-.default-hud--presenting .default-hud__reveal-zones {
+.presenting-mode--presenting .default-hud__reveal-zones {
     display: none;
 }
 
@@ -237,22 +237,22 @@
 }
 
 .default-hud__left-section.hideable-section--hidden,
-.default-hud--presenting .default-hud__left-section.hideable-section--unpinned {
+.presenting-mode--presenting .default-hud__left-section.hideable-section--unpinned {
     translate: -100% 0;
 }
 
 .default-hud__top-section.hideable-section--hidden,
-.default-hud--presenting .default-hud__top-section.hideable-section--unpinned {
+.presenting-mode--presenting .default-hud__top-section.hideable-section--unpinned {
     translate: 0 -56px; /* .toolbar-toolbox height + .toolbar-scenario margin-top = var(spacing-11) + var(spacing-3) = 44px + 12px = 56px */
 }
 
 .default-hud__bottom-section.hideable-section--hidden > .default-hud__movable-bottom-section,
-.default-hud--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__movable-bottom-section{
+.presenting-mode--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__movable-bottom-section{
     translate: 0 100%;
 }
 
 .default-hud__bottom-section.hideable-section--hidden > .default-hud__persistent-bottom-section,
-.default-hud--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__persistent-bottom-section {
+.presenting-mode--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__persistent-bottom-section {
     transition-delay: 1s;
     transition-duration: 0.5s;
     opacity: 1;
