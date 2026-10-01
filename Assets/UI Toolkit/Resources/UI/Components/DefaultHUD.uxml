@@ -7,18 +7,18 @@
     editor-extension-mode="False"  
     class="default-hud"
 >
-    <ui:VisualElement name="PresentationRevealZones" picking-mode="Ignore" class="presentation-reveal-zones">
-        <nl3d:HideableSectionRevealZone name="LeftRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--left-section presentation-reveal-zone--active" />
-        <nl3d:HideableSectionRevealZone name="TopRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--top-section presentation-reveal-zone--active" />
-        <nl3d:HideableSectionRevealZone name="BottomRevealZone" picking-mode="Position" class="presentation-reveal-zone presentation-reveal-zone--bottom-section presentation-reveal-zone--active" />
+    <ui:VisualElement picking-mode="Ignore" class="default-hud__reveal-zones">
+        <nl3d:HideableSectionRevealZone name="LeftRevealZone" class="default-hud__left-reveal-zone" />
+        <nl3d:HideableSectionRevealZone name="TopRevealZone" class="default-hud__top-reveal-zone" />
+        <nl3d:HideableSectionRevealZone name="BottomRevealZone" class="default-hud__bottom-reveal-zone" />
     </ui:VisualElement>
     
     <ui:VisualElement class="app__content" picking-mode="Ignore">
         <ui:VisualElement picking-mode="Ignore" class="default-hud__main-section">
-            <nl3d:HideableSection picking-mode="Ignore" name="LeftSection" reveal-zone="LeftRevealZone" pin-toggle="LeftPresentationPin" class="default-hud__left-section presentation-section--hidden">
+            <nl3d:HideableSection picking-mode="Ignore" name="LeftSection" reveal-zone="LeftRevealZone" pin-toggle="LeftSectionPin" class="default-hud__left-section hideable-section--hidden">
                 <ui:VisualElement picking-mode="Ignore" class="default-hud__left-header">
                     <nl3d:HamburgerMenu />
-                    <nl3d:PinToggle name="LeftPresentationPin" value="true" class="presentation-section__pin" />
+                    <nl3d:PinToggle name="LeftSectionPin" value="true" class="hideable-section__pin" />
                 </ui:VisualElement>
                 <ui:VisualElement picking-mode="Ignore" class="default-hud__inspector-zone">
                     <nl3d:ToolbarMain picking-mode="Ignore" />
@@ -26,7 +26,7 @@
                     <nl3dP:LegendPanel />
                 </ui:VisualElement>
             </nl3d:HideableSection>
-            <nl3d:HideableSection name="TopSection" reveal-zone="TopRevealZone" pin-toggle="PresentationPin" class="default-hud__top-section presentation-section--hidden" picking-mode="Ignore">
+            <nl3d:HideableSection name="TopSection" reveal-zone="TopRevealZone" pin-toggle="TopSectionPin" class="default-hud__top-section hideable-section--hidden" picking-mode="Ignore">
                 <nl3d:ToolbarToolbox picking-mode="Ignore" />
                 <nl3d:ToolbarScenario />
             </nl3d:HideableSection>
@@ -35,13 +35,13 @@
                 <nl3dP:PropertiesPanel name="PropertiesPanel" class="default-hud__properties-zone-column"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <nl3d:HideableSection name="BottomSection" reveal-zone="BottomRevealZone" pin-toggle="NavigationPresentationPin" picking-mode="Ignore" class="default-hud__bottom-section">
+        <nl3d:HideableSection name="BottomSection" reveal-zone="BottomRevealZone" pin-toggle="BottomSectionPin" picking-mode="Ignore" class="default-hud__bottom-section">
             <ui:VisualElement name="PersistentBottomSection" picking-mode="Ignore" class="default-hud__persistent-bottom-section">
                 <ui:VisualElement name="PersistentBottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
                     <nl3d:Footer picking-mode="Ignore" />
                 </ui:VisualElement>
                 <ui:VisualElement name="PersistentPresentationControls" picking-mode="Ignore" class="default-hud__presentation-controls">
-                    <nl3d:Toggle name="Presentation" class="default-hud__presentation-button" toggle-type="transparent" toggle-style="IconOnly" icon="PresentationChart" tooltip="Presentatiemodus (H)" />
+                    <nl3d:Toggle class="default-hud__presentation-mode-toggle" toggle-type="transparent" toggle-style="IconOnly" icon="PresentationChart" tooltip="Presentatiemodus (H)" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="MovableBottomSection" picking-mode="Ignore" class="default-hud__movable-bottom-section"> 
@@ -50,15 +50,15 @@
                     <nl3d:Footer />
                 </ui:VisualElement>
                 <ui:VisualElement name="PresentationControls" picking-mode="Ignore" class="default-hud__presentation-controls">
-                    <nl3d:Toggle name="Presentation" class="default-hud__presentation-button" toggle-type="transparent" toggle-style="IconOnly" icon="PresentationChart" tooltip="Presentatiemodus (H)" />
+                    <nl3d:Toggle class="default-hud__presentation-mode-toggle" toggle-type="transparent" toggle-style="IconOnly" icon="PresentationChart" tooltip="Presentatiemodus (H)" />
                 </ui:VisualElement>
-                <ui:VisualElement name="NavigationSection" picking-mode="Ignore" class="default-hud__navigation-section presentation-section">
+                <ui:VisualElement name="NavigationSection" picking-mode="Ignore" class="default-hud__navigation-section">
                     <ui:VisualElement name="BottomTools" picking-mode="Ignore" class="default-hud__bottom-tools">
                         <nl3d:ToolbarNavigation />
                         <ui:VisualElement name="CameraSlider" />
                     </ui:VisualElement>
                     <ui:VisualElement name="MinimapColumn" picking-mode="Position" class="default-hud__minimap-column">
-                        <nl3d:PinToggle name="NavigationPresentationPin" value="true" class="presentation-section__pin" />
+                        <nl3d:PinToggle name="BottomSectionPin" value="true" class="hideable-section__pin" />
                         <nl3d:MapViewport bottom-left="0, 300000" top-right="280000, 620000" layer-start-index="3" class="map-viewport--fixed-size" />
                     </ui:VisualElement>
                 </ui:VisualElement>

@@ -1,4 +1,3 @@
-using Netherlands3D.Twin;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -7,21 +6,17 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class DefaultHUD : VisualElement
     {
-        private PresentationModeService.HideableSection leftHideableSection;
-        private PresentationModeService.HideableSection topHideableSection;
-        private PresentationModeService.HideableSection bottomHideableSection;
-        
         public DefaultHUD()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            SetupPresentationButtons();
+            SetupPresentationModeToggles();
         }
 
-        private void SetupPresentationButtons()
+        private void SetupPresentationModeToggles()
         {
-            var buttons = this.Query<UnityEngine.UIElements.Toggle>("Presentation").ToList();
+            var buttons = this.Query<UnityEngine.UIElements.Toggle>(className:"default-hud__presentation-mode-toggle").ToList();
 
             foreach (var button in buttons)
             {

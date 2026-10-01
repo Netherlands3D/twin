@@ -1,0 +1,9 @@
+HideableSectionRevealZone {
+    position: absolute;
+    display: none;
+}
+
+HideableSectionRevealZone.hideable-section-reveal-zone--active {
+    display: flex;
+    background-color: rgba(255, 255, 0, 0.25);
+}

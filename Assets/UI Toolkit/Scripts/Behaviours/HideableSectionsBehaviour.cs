@@ -5,15 +5,16 @@ using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D
+namespace Netherlands3D.UI.Behaviours
 {
     public class HideableSectionsBehaviour : MonoBehaviour
     {
         
-        private const string HiddenClass = "presentation-section--hidden";
-        private const string ActiveRevealZoneClass = "presentation-reveal-zone--active";
+        private const string HiddenClass = "hideable-section--hidden";
+        private const string UnpinnedClass = "hideable-section--unpinned";
+        private const string RevealZoneActiveClass = "hideable-section-reveal-zone--active";
         
-        private HashSet<HideableSection> hideableSections = new();
+        private readonly HashSet<HideableSection> hideableSections = new();
 
         private readonly Dictionary<HideableSection, EventCallback<PointerEnterEvent>> revealZoneEnterCallbacks = new();
         private readonly Dictionary<HideableSection, EventCallback<PointerLeaveEvent>> revealZoneLeaveCallbacks = new();
@@ -29,6 +30,14 @@ namespace Netherlands3D
             root.RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
 
             RegisterHideableSections();
+        }
+
+        private void OnDestroy()
+        {
+            var root = App.UIRoot.Root;
+            
+            root.UnregisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+            root.UnregisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
@@ -60,42 +69,42 @@ namespace Netherlands3D
                 return;
             }
             
-            GetHideableElements(hideableSection, out var revealZone, out var pinToggle);
+            ResolveLinkedElements(hideableSection, out var revealZone, out var pinToggle);
 
-            EventCallback<PointerEnterEvent> sessionEnterCallback = _ => Show();
-            sectionEnterCallbacks.Add(hideableSection, sessionEnterCallback);
-            hideableSection.RegisterCallback<PointerEnterEvent>(sessionEnterCallback);
+            EventCallback<PointerEnterEvent> sectionEnterCallback = _ => ShowSection();
+            sectionEnterCallbacks.Add(hideableSection, sectionEnterCallback);
+            hideableSection.RegisterCallback<PointerEnterEvent>(sectionEnterCallback);
             
-            EventCallback<PointerLeaveEvent> sessionLeaveCallback = _ => Hide();
-            sectionLeaveCallbacks.Add(hideableSection, sessionLeaveCallback);
-            hideableSection.RegisterCallback<PointerLeaveEvent>(sessionLeaveCallback);
+            EventCallback<PointerLeaveEvent> sectionLeaveCallback = _ => HideSection();
+            sectionLeaveCallbacks.Add(hideableSection, sectionLeaveCallback);
+            hideableSection.RegisterCallback<PointerLeaveEvent>(sectionLeaveCallback);
 
             if (revealZone != null)
             {
-                EventCallback<PointerEnterEvent> revealZoneEnterCallback = _ => Show();
+                EventCallback<PointerEnterEvent> revealZoneEnterCallback = _ => ShowSection();
                 revealZoneEnterCallbacks.Add(hideableSection, revealZoneEnterCallback);
                 revealZone.RegisterCallback<PointerEnterEvent>(revealZoneEnterCallback);
 
-                EventCallback<PointerLeaveEvent> revealZoneLeaveCallback = _ => Hide();
+                EventCallback<PointerLeaveEvent> revealZoneLeaveCallback = _ => HideSection();
                 revealZoneLeaveCallbacks.Add(hideableSection, revealZoneLeaveCallback);
                 revealZone.RegisterCallback<PointerLeaveEvent>(revealZoneLeaveCallback);
             }
 
             if (pinToggle != null)
             {
-                EventCallback<ChangeEvent<bool>> pinChangedCallback = evt => SetPinned(evt.newValue);
+                EventCallback<ChangeEvent<bool>> pinChangedCallback = evt => ApplyPinnedState(evt.newValue);
                 pinChangedCallbacks.Add(hideableSection, pinChangedCallback);
                 pinToggle.RegisterValueChangedCallback<bool>(pinChangedCallback);
             }
 
             if (pinToggle != null)
             {
-                SetPinned(pinToggle.value);
+                ApplyPinnedState(pinToggle.value);
             }
 
             return;
 
-            void Show()
+            void ShowSection()
             {
                 if (pinToggle != null && !pinToggle.value)
                 {
@@ -104,7 +113,7 @@ namespace Netherlands3D
             }
             
             
-            void Hide()
+            void HideSection()
             {
                 if (pinToggle != null && !pinToggle.value)
                 {
@@ -112,13 +121,13 @@ namespace Netherlands3D
                 }
             }
 
-            void SetPinned(bool pinned)
+            void ApplyPinnedState(bool pinned)
             {
                 //When pinned, disable the revealzone, and show section.
                 //When unpinnned, enabled the revealzone, and hide section.
-                revealZone?.EnableInClassList(ActiveRevealZoneClass, !pinned);
+                revealZone?.EnableInClassList(RevealZoneActiveClass, !pinned);
                 hideableSection.EnableInClassList(HiddenClass, !pinned);
-                hideableSection.EnableInClassList("presentation-section--unpinned", !pinned);
+                hideableSection.EnableInClassList(UnpinnedClass, !pinned);
             }
         }
         
@@ -134,7 +143,7 @@ namespace Netherlands3D
         {
             hideableSections.Remove(hideableSection);
             
-            GetHideableElements(hideableSection, out var revealZone, out var pinToggle);
+            ResolveLinkedElements(hideableSection, out var revealZone, out var pinToggle);
 
             if (revealZoneEnterCallbacks.Remove(hideableSection, out var revealZoneEnterCallback))
                 revealZone?.UnregisterCallback<PointerEnterEvent>(revealZoneEnterCallback);
@@ -154,7 +163,7 @@ namespace Netherlands3D
             hideableSections.Remove(hideableSection);
         }
 
-        private void GetHideableElements(HideableSection hideableSection, out VisualElement revealZone, out PinToggle pinToggle)
+        private void ResolveLinkedElements(HideableSection hideableSection, out HideableSectionRevealZone revealZone, out PinToggle pinToggle)
         {
             var root = App.UIRoot.Root;
             revealZone = hideableSection.RevealZoneName != null ? root.Q<HideableSectionRevealZone>(hideableSection.RevealZoneName) : null;
