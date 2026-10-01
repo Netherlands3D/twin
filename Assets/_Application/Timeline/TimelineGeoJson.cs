@@ -325,28 +325,14 @@ namespace Netherlands3D
 
         public static string GetVehicleDisplayName(string vehicleType)
         {
-            return vehicleType switch
-            {
-                "car" => "Auto",
-                "bicycle" => "Fiets",
-                "moped" => "Bromfiets",
-                "motorcycle" => "Motor",
-                "medium_heavy" => "Middelzwaar",
-                "heavy" => "Zwaar",
-                _ => vehicleType
-            };
+            // Category values belong to the imported dataset. Keep their original wording
+            // instead of translating known English traffic values in the viewer.
+            return vehicleType;
         }
 
         public static string GetDayTypeDisplayName(string dayType)
         {
-            return dayType switch
-            {
-                "workday" => "Werkdag",
-                "weekday" => "Weekdag",
-                "saturday" => "Zaterdag",
-                "sunday" => "Zondag",
-                _ => dayType
-            };
+            return dayType;
         }
 
         private void OnFeatureAdded(Feature feature)
@@ -420,15 +406,17 @@ namespace Netherlands3D
                 scaleMaximumByVehicle[pair.Key] = pair.Value.Count == 0 ? 0f : pair.Value[percentileIndex];
             }
 
-            if (SelectedVehicleType == null || !availableVehicleTypes.Contains(SelectedVehicleType))
-                SelectedVehicleType = availableVehicleTypes.Contains("car")
-                    ? "car"
-                    : availableVehicleTypes.FirstOrDefault();
+            SelectedVehicleType = availableVehicleTypes.FirstOrDefault(value =>
+                                      string.Equals(value, SelectedVehicleType, StringComparison.OrdinalIgnoreCase))
+                                  ?? availableVehicleTypes.FirstOrDefault(value =>
+                                      string.Equals(value, "car", StringComparison.OrdinalIgnoreCase))
+                                  ?? availableVehicleTypes.FirstOrDefault();
 
-            if (SelectedDayType == null || !availableDayTypes.Contains(SelectedDayType))
-                SelectedDayType = availableDayTypes.Contains("workday")
-                    ? "workday"
-                    : availableDayTypes.FirstOrDefault();
+            SelectedDayType = availableDayTypes.FirstOrDefault(value =>
+                                  string.Equals(value, SelectedDayType, StringComparison.OrdinalIgnoreCase))
+                              ?? availableDayTypes.FirstOrDefault(value =>
+                                  string.Equals(value, "workday", StringComparison.OrdinalIgnoreCase))
+                              ?? availableDayTypes.FirstOrDefault();
 
             if (HasTrafficData)
                 ApplyTrafficSlice();
