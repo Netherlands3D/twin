@@ -25,5 +25,9 @@ MonoBehaviour:
     Adapter: {fileID: 11400000, guid: d5040145c2c0c440fa6e9c5a760263fa, type: 2}
   - Extension: las
     Adapter: {fileID: 11400000, guid: 34a0a43923df4aa5a2865dfcdaeb0846, type: 2}
+  - Extension: tif
+    Adapter: {fileID: 11400000, guid: e1714ec34a5c4773839ea5af307e7755, type: 2}
+  - Extension: tiff
+    Adapter: {fileID: 11400000, guid: e1714ec34a5c4773839ea5af307e7755, type: 2}
   - Extension: json
     Adapter: {fileID: 11400000, guid: 6e1704cdf27264f12b6666fa18971ba2, type: 2}
