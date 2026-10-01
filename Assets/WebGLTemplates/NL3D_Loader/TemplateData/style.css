@@ -101,6 +101,12 @@ body {
   color: #fff;
   pointer-events: none;
 }
+#reallocateLogo {
+  display: block;
+  width: min(70vw, 720px);
+  height: auto;
+  margin-bottom: 32px;
+}
 #flipbookLogo {
   width: 100px;
   height: 100px;
@@ -168,6 +174,10 @@ body {
   display: block;
 }
 @media (max-width: 600px) {
+  #reallocateLogo {
+    width: 88vw;
+    margin-bottom: 24px;
+  }
   #unity-mobile-warning, #unity-load-error {
     top: 10%; transform: translate(-50%);
   }
