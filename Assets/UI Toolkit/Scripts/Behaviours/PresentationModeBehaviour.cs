@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.PresentationModus;
 using Netherlands3D.UI.Components;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
 {
     public class PresentationModeBehaviour : MonoBehaviour
     {
+        [SerializeField] private PresentationModeFunctionality presentationModeFunctionality;
+        
         private const string PresentingClass = "presenting-mode--presenting";
         
         private List<PresentationModeToggle> presentationModeToggles;
@@ -26,9 +30,21 @@ namespace Netherlands3D.UI.Behaviours
                 toggle.RegisterValueChangedCallback(OnPresentationModeChanged);
             }
 
-            if (presentationModeToggles.Count > 0)
+            presentationModeFunctionality.OnDisableFunctionality
+                .AddListener(OnPresentationModeFunctionalityDisabled);
+
+            SetPresentationMode(presentationModeToggles.Count > 0 && presentationModeToggles[0].value);
+        }
+        
+        private void Update()
+        {
+            if (!presentationModeFunctionality.IsEnabled)
+                return;
+
+            if (Keyboard.current?.hKey.wasPressedThisFrame == true)
             {
-                SetPresentationMode(presentationModeToggles[0].value);
+                var isPresenting = root.ClassListContains(PresentingClass);
+                SetPresentationMode(!isPresenting);
             }
         }
 
@@ -44,9 +60,16 @@ namespace Netherlands3D.UI.Behaviours
         {
             SetPresentationMode(evt.newValue);
         }
+        
+        private void OnPresentationModeFunctionalityDisabled()
+        {
+            SetPresentationMode(false);
+        }
 
         private void SetPresentationMode(bool isPresenting)
         {
+            isPresenting &= presentationModeFunctionality.IsEnabled;
+            
             root.EnableInClassList(PresentingClass, isPresenting);
 
             foreach (var toggle in presentationModeToggles)
@@ -54,5 +77,6 @@ namespace Netherlands3D.UI.Behaviours
                 toggle.SetValueWithoutNotify(isPresenting);
             }
         }
+        
     }
 }
