@@ -1,8 +1,0 @@
-<ui:UXML 
-    xmlns:ui="UnityEngine.UIElements" 
-    xmlns:nl3d="Netherlands3D.UI.Components" 
-    editor-extension-mode="False"
-    class="hideable-section"
->
-
-</ui:UXML>

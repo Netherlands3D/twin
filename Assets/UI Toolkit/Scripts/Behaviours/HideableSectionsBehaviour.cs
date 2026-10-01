@@ -157,8 +157,10 @@ namespace Netherlands3D
         private void GetHideableElements(HideableSection hideableSection, out VisualElement revealZone, out PinToggle pinToggle)
         {
             var root = App.UIRoot.Root;
-            revealZone = hideableSection.RevealZoneName != null ? root.Q<VisualElement>(hideableSection.RevealZoneName) : null;
+            revealZone = hideableSection.RevealZoneName != null ? root.Q<HideableSectionRevealZone>(hideableSection.RevealZoneName) : null;
+            if (revealZone == null) Debug.LogError("Hideable section's HideableSectionRevealZone could not be found!");
             pinToggle = hideableSection.PinToggleName != null ? root.Q<PinToggle>(hideableSection.PinToggleName) : null;
+            if (pinToggle == null) Debug.LogError("Hideable section's PinToggle could not be found!");
         }
 
     }
