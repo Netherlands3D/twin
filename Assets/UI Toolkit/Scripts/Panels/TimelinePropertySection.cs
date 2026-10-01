@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Timeline;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using ListView = Netherlands3D.UI.Components.ListView;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -13,27 +17,96 @@ namespace Netherlands3D.UI.Panels
     public partial class TimelinePropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingPropertyData;
-        private TimelineValueStateInterpreterPanel spawnedPanel; //todo make generic base class
+        private ListView listView;
         public ColorPicker ColorPicker { get; set; }
-
-        private ContentContainer container;
         
         public TimelinePropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            container = this.Q<ContentContainer>();
+            listView = this.Q<ListView>("StatusList");
+            
+            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            listView.selectionType = SelectionType.Multiple;
+            
+            listView.makeItem = MakeListViewItem;
+            listView.bindItem = BindListViewItem;
+            
+            //when clicked outside the listview, deselect the current selection
+            listView.RegisterCallback<BlurEvent>(evt =>
+            {
+                var pos = Pointer.current.position.ReadValue();
+                var panelPos = RuntimePanelUtils.ScreenToPanel(
+                    listView.panel,
+                    new Vector2(pos.x, Screen.height - pos.y)
+                );
+                if (!listView.worldBound.Contains(panelPos) && !ColorPicker.worldBound.Contains(panelPos))
+                {
+                    listView.ClearSelection();
+                }
+            });
+
+            listView.selectedIndicesChanged += OnListViewSelectionChanged;
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+        
+        private void OnListViewSelectionChanged(IEnumerable<int> indices)
+        {
+            ColorPicker.SetVisible(indices.Any());
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            // timelineStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
+            ColorPicker.ColorChanged.RemoveListener(OnPickColor);
+        }
+        
+        private VisualElement MakeListViewItem()
+        {
+            ColorTileListViewItem item = new();
+            item.Tile.ShowLabel = true;
+            item.RegisterCallback<ClickEvent>(evt =>
+            {
+                ColorPicker.SetColorInputComponentsWithoutNotify(item.Tile.Color);
+            });
+            var listViewItem = new ListViewItem(item);
+            return listViewItem;
+        }
+        
+        private void BindListViewItem(VisualElement item, int index)
+        {
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
+           
+            string status = listView.itemsSource[index] as string;
+            Color? color = timelineStatusStylingPropertyData.GetColorForStatus(status);
+            
+            tile.Tile.ColorHex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : ColorUtility.ToHtmlStringRGB(Color.white);
+            tile.Tile.LabelText = status;
+        }
+        
+        private void UpdateSwatches()
+        {
+            listView.itemsSource = timelineStatusStylingPropertyData.GetStylingRuleNames();
+            listView.RefreshItems();
+        }
+        
+        private void OnPickColor(Color color)
+        {
+            foreach (int i in listView.selectedIndices.ToList())
+            {
+                string status = listView.itemsSource[i] as string;
+                timelineStatusStylingPropertyData.SetColorForStatus(status, color);
+            }
         }
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             timelineStatusStylingPropertyData = properties.Get<TimelineStatusStylingLayerPropertyData>();
-
-            // if (timelineStatusStylingPropertyData.Interpreter is TimestampValueStatusInterpreter valueStatusInterpreter)
-            // {
-                spawnedPanel = new TimelineValueStateInterpreterPanel(timelineStatusStylingPropertyData, ColorPicker);
-                container.Add(spawnedPanel);
-            // }
+            ColorPicker.ColorChanged.AddListener(OnPickColor);
+            
+            timelineStatusStylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches); //todo: do this once per frame
+            UpdateSwatches();
         }
     }
 }

@@ -24,9 +24,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         public TimelineStatusStylingLayerPropertyData(Color defaultColor) : base()
         {
             this.defaultColor = defaultColor;
-            // StylingRules.Remove(DefaultRuleName);
-            StylingRules[DefaultRuleName].Symbolizer.SetFillColor(defaultColor);
-            StylingRules[DefaultRuleName].Symbolizer.SetStrokeColor(defaultColor);
+            StylingRules.Remove(DefaultRuleName); //we do not need this here
+            // StylingRules[DefaultRuleName].Symbolizer.SetFillColor(defaultColor);
+            // StylingRules[DefaultRuleName].Symbolizer.SetStrokeColor(defaultColor);
         }
 
         private string GetStylingRuleKey(Timestamp timestamp)
@@ -53,15 +53,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             return null;
         }
 
-        public IList GetStates()
+        public IList GetStylingRuleNames()
         {
             var list = new List<string>(StylingRules.Count);
-            int i = 0;
-            foreach (var stylingRuleKey in StylingRules.Keys)
+            foreach (var kvp in StylingRules)
             {
-                Debug.Log(i+"\t"+ stylingRuleKey);
-                i++;
-                list.Add(GetStylingRuleName(stylingRuleKey));
+                list.Add(kvp.Value.Name);
             }
             return list; //todo: is this always the same order?
         }
