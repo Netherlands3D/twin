@@ -15,7 +15,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.Wfs
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
-    public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs[]>
+    public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetResult>
     {
         [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
 
@@ -68,7 +68,7 @@ namespace Netherlands3D.Functionalities.Wfs
             return true;
         }
 
-        public LayerPresetArgs[] Execute(LocalFile localFile)
+        public LayerPresetResult Execute(LocalFile localFile)
         {
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
@@ -95,16 +95,16 @@ namespace Netherlands3D.Functionalities.Wfs
 
                 //Create a folder layer 
                 var featureCount = featureTypes.Count();
-                var presets = new LayerPresetArgs[featureCount + 1];
-                presets[0] = folderPreset;
+                var presets = new LayerPresetArgs[featureCount];
+                
                 for (int i = 0; i < featureCount; i++)
                 {
                     var featureType = featureTypes.ElementAt(i);
                     string crs = featureType.DefaultCRS;
                     Debug.Log("Adding WFS preset for featureType: " + featureType);
-                    presets[i + 1] = CreateWFSPreset(featureType.Name, sourceUrl, crs, featureType.Title, geoJsonOutputFormatString);
+                    presets[i] = CreateWFSPreset(featureType.Name, sourceUrl, crs, featureType.Title, geoJsonOutputFormatString);
                 }
-                return presets;
+                return new LayerPresetResult() { parent = folderPreset, children = presets };
             }
 
             var isWfsGetFeature = OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetFeature);
@@ -134,7 +134,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     // Can't deduct a human-readable title at the moment, we should add that we always query for the
                     // capabilities; this also helps with things like outputFormat and CRS
                     var preset = CreateWFSPreset(featureType, sourceUrl, crs, featureType, geoJsonOutputFormatString);
-                    return new[] { preset };
+                    return new LayerPresetResult() { parent = preset, children = null };
                 }
             }
             

@@ -11,7 +11,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
-    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs[]>
+    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetResult>
     {
         public bool Supports(LocalFile localFile)
         {
@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 );
         }
 
-        public LayerPresetArgs[] Execute(LocalFile localFile)
+        public LayerPresetResult Execute(LocalFile localFile)
         {
             var layerName = CreateName(localFile);
             var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
@@ -35,15 +35,15 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
             Annotation[] annotations = ParseAnnotations(bodyContents);
             var geoJsonLayerPreset = new GeoJSONPreset.Args(layerName, url);
-            var presets = new LayerPresetArgs[annotations.Length + 1];
-            presets[0] = geoJsonLayerPreset;
+            var presets = new LayerPresetArgs[annotations.Length];
             for (int i = 0; i < annotations.Length; i++)
             {
                 var annotation = annotations[i];
                 Debug.Log("Adding Annotation preset for featureType: " + annotation);
-                presets[i + 1] = new GeoJSONAnnotationPreset.Args(annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption, annotation.Color, true);
+                ColorUtility.TryParseHtmlString(annotation.Color, out Color color);
+                presets[i] = new GeoJSONAnnotationPreset.Args(annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption,  color, true);
             }
-            return presets;
+            return new LayerPresetResult() { parent = geoJsonLayerPreset, children = presets };
         }
         
         private static Annotation[] ParseAnnotations(string bodyContents)

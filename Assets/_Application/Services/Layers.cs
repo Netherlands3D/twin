@@ -77,34 +77,39 @@ namespace Netherlands3D.Twin.Services
                 return new[] { layer };
             }
 
-            if (result is LayerPresetArgs[] presets)
+            if (result is LayerPresetResult r)
             {
-                return Add(presets, presets[0] is FolderPreset.Args);
+                var layers = Add(r);
+                return layers; //NB. An empty array is considered a success
             }
-
             throw new AdapterNotFoundException("Could not determine Layer adapter(s) for the url:  " + uri);
         }
 
-        public Layer[] Add(LayerPresetArgs[] presets, bool firstIsParent) //todo  UnityAction<LayerGameObject> callback = null does this need to be implemented??
+        public Layer[] Add(LayerPresetResult result)
         {
-            Layer parent = null;
-            Layer[] layers =  new Layer[presets.Length];
-            for (var i = 0; i < presets.Length; i++)
+            bool hasParent = result.parent != null;
+            int startIndex = hasParent ? 1 : 0;
+            int childrenCount = result.children == null ? 0 : result.children.Length;
+    
+            int length = startIndex + childrenCount;
+            Layer[] layers =  new Layer[length];
+
+            if (hasParent)
+                layers[0] = Add(result.parent);
+    
+            for (var i = startIndex; i < childrenCount; i++)
             {
-                var p = presets[i];
+                var p = result.children[i];
                 var layer = Add(p);
                 layers[i] = layer;
-                    
-                // todo: Currently we put presets[0] as the folder parent for wms/wfs. This is not part of the imported data, and once we will have a UI to allow users to select which layers will be imported, this will be removed.
-                if (i == 0)
-                    parent = layer;
-                    
-                if (i > 0 && firstIsParent)
+        
+                if (hasParent)
                 {
-                    layer.LayerData.SetParent(parent.LayerData);
+                    layer.LayerData.SetParent(layers[0].LayerData);
                 }
             }
-            return layers; //NB. An empty array is considered a success
+
+            return layers;
         }
 
         /// <summary>

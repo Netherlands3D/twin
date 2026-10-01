@@ -65,11 +65,11 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 var adapter = fte.DataTypeAdapter;
                 if (adapter.Supports(localFile))
                 {
-                    var preset = adapter.Execute(localFile, out bool firstIsParent);
+                    var preset = adapter.Execute(localFile);
                     
-                    if (preset is LayerPresetArgs[] layerpresetArgs)
+                    if (preset is LayerPresetResult result)
                     {
-                        App.Layers.Add(layerpresetArgs, firstIsParent);
+                        App.Layers.Add(result);
                     }
                     else if (preset is LayerPresetArgs layerPresetArgs) 
                     {

@@ -55,11 +55,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             worldAnnotation.SetImage(annotationPropertyData.ImageUrl);
             worldAnnotation.SetText(annotationPropertyData.AnnotationText);
             ColorPropertyData colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            if(ColorUtility.TryParseHtmlString(annotationPropertyData.AnnotationColor, out var color))
-            {
-                colorPropertyData.SetDefaultSymbolizerColor(color);
-                worldAnnotation.SetColor(color);
-            }
+            Color? color = colorPropertyData.GetDefaultSymbolizerColor();
+            if(color.HasValue)
+                worldAnnotation.SetColor(color.Value);
+            else
+                worldAnnotation.SetColor(LayerData.Color);
+            
             floatingElement.Add(worldAnnotation);
         }
 

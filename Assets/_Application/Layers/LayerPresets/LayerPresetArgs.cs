@@ -5,4 +5,10 @@
     
     public abstract class LayerPresetArgs<TPreset> : LayerPresetArgs
         where TPreset : ILayerPreset { }
+
+    public struct LayerPresetResult
+    {
+        public LayerPresetArgs parent;
+        public LayerPresetArgs[] children;
+    }
 }
