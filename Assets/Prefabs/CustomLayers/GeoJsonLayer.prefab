@@ -64,9 +64,6 @@ MonoBehaviour:
   OnFeatureRemove:
     m_PersistentCalls:
       m_Calls: []
-  polygonFeaturesLayer: {fileID: 3268294129124562304}
-  lineFeaturesLayer: {fileID: 8750136846370291853}
-  pointFeaturesLayer: {fileID: 6163917346495886776}
 --- !u!114 &44681409752656876
 MonoBehaviour:
   m_ObjectHideFlags: 0

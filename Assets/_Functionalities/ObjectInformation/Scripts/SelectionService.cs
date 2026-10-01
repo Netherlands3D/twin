@@ -15,9 +15,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.UI.Panels;
+using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -374,6 +376,20 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (!selectedMappings.ContainsKey(bagId))
                 selectedMappings.Add(bagId, mapping);
             SelectSubObjectWithBagId?.Invoke(mapping, bagId);
+        }
+        
+        /// <summary>
+        /// should only be used when the normal selection process is unavailable (like from world ui)
+        /// </summary>
+        /// <param name="position"></param>
+        public void SelectGeoJsonFeatureAtPosition(Vector3 position)
+        {
+            Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> mappings = featureSelector.FindFeatureByPosition(position);
+            foreach(var kvp in mappings)
+            {
+                if(kvp.Value.Count > 0)
+                    ProcessFeatureMappingSelection(kvp.Value[0]);    
+            }
         }
 
         private void ProcessFeatureMappingSelection(FeatureMapping feature)
