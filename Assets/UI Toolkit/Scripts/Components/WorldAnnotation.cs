@@ -15,6 +15,7 @@ namespace Netherlands3D.UI.Components
     {
         public EditableNameField NameField => nameField;
         public string Text => nameField.value;
+        public bool ReadOnly => isReadOnly;
         
         private VisualElement textContainer;
         private EditableNameField nameField;

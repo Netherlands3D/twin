@@ -112,6 +112,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             selectionService.SelectVisualisation(this);
         }
+        
+        public override void OnSelect(LayerData layer)
+        {
+            if(worldAnnotation.ReadOnly) return;
+            
+            AttachToTransformHandles();
+        }
 
         protected override void RegisterEventListeners()
         {
