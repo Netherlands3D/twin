@@ -5,6 +5,7 @@ env:
   BUILD_OUTPUT_FOLDER: 'build/WebGL/WebGL'
   PRODUCTION_BUILD_ARTEFACT_NAME: 'viewer'
   DEVELOPMENT_BUILD_ARTEFACT_NAME: 'viewer-development'
+  PREVIEW_BUILD_ARTEFACT_NAME: 'viewer-reallocate-preview'
 
 jobs:
   ## See: https://game.ci/docs/github/test-runner
@@ -160,9 +161,98 @@ jobs:
           unityVersion: auto
 
       - name: 'Upload artifact to build pipeline'
-        # see: https://github.com/actions/download-artifact      
+        # see: https://github.com/actions/upload-artifact
         uses: actions/upload-artifact@v4
         with: { name: '${{ env.DEVELOPMENT_BUILD_ARTEFACT_NAME }}', path: '${{ env.BUILD_OUTPUT_FOLDER }}' }
+
+  build-preview:
+    name: '🚀 Build Optimized Reallocate Preview'
+    if: github.ref_name == 'feature/REALLOCATE-pre-oplevering'
+    needs: [ 'test' ]
+    permissions: { contents: read }
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Free Disk Space'
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+
+      - name: 'Checkout code from repository'
+        uses: actions/checkout@v4
+        with: { lfs: true }
+
+      - name: 'Cache Library folder - restore and track'
+        uses: actions/cache@v4
+        with:
+          path: 'Library'
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      - name: 'Build optimized Unity project to WebGL'
+        # Deliberately omit Unity's -Development and -AllowDebugging flags so
+        # this separate preview has the same runtime optimizations as main.
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+          unityVersion: auto
+
+      - name: 'Upload optimized preview artifact'
+        id: uploadPreviewBuild
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PREVIEW_BUILD_ARTEFACT_NAME }}
+          path: ${{ env.BUILD_OUTPUT_FOLDER }}
+
+      - name: 'Add optimized preview artifact link to summary'
+        shell: bash
+        run: |
+          echo '## Optimized WebGL preview' >> "$GITHUB_STEP_SUMMARY"
+          echo "[Download this run's preview build](${{ steps.uploadPreviewBuild.outputs.artifact-url }})" >> "$GITHUB_STEP_SUMMARY"
+
+  # Set PROTOFUNK_PAGES_ENABLED to false (or remove it) to stop deployments.
+  # Removing the deploy key from the external repository fully revokes writes.
+  deploy-preview:
+    name: '🌐 Deploy Optimized Preview to Protofunk Pages'
+    if: github.ref_name == 'feature/REALLOCATE-pre-oplevering' && vars.PROTOFUNK_PAGES_ENABLED == 'true'
+    needs: [ 'build-preview' ]
+    permissions: { contents: read }
+    concurrency:
+      group: protofunk-reallocate-preview
+      cancel-in-progress: true
+
+    environment:
+      name: 'protofunk-preview'
+      url: 'https://protofunk.github.io/twin-reallocate/'
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Download optimized preview artifact'
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.PREVIEW_BUILD_ARTEFACT_NAME }}
+          path: ${{ env.BUILD_OUTPUT_FOLDER }}
+
+      - name: 'Publish preview to external GitHub Pages repository'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.PROTOFUNK_PAGES_DEPLOY_KEY }}
+          external_repository: 'Protofunk/twin-reallocate'
+          publish_branch: gh-pages
+          publish_dir: ${{ env.BUILD_OUTPUT_FOLDER }}
+          enable_jekyll: false
+          full_commit_message: 'Deploy Netherlands3D Twin preview from ${{ github.sha }}'
       
   build-docker-image:
     name: '🐳 Build and Publish Docker Image'
