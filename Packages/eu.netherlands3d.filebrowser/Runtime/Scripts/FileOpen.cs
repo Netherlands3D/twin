@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -10,19 +11,24 @@ using UnityEngine.Events;
 using Netherlands3D.JavascriptConnection;
 #endif
 
+//todo shouldnt this be like a importerservice from now on?
 public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no longer rely on the scriptable event after transition to UI Toolkit
 {
     [DllImport("__Internal")]
     [UsedImplicitly]
     private static extern void BrowseForFile(string inputFieldName);
-
-    // [Tooltip("Allowed file input selections")] [SerializeField]
-    // private string fileExtentions = "csv"; //todo: when transition to UI toolkit is complete, the serialized extensions should be able to be deleted and passed from the UI component
+    
+    [DllImport("__Internal")]
+    private static extern void SetAllowedDropExtensions(string extensions);
 
     [Tooltip("Allowed selection multiple files")] [SerializeField]
     private bool multiSelect = false;
 
     public UnityEvent<string> onFilesSelected = new();
+    
+    public List<string> SupportedFileTypes => supportedFileTypes;
+    
+    private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" }; //todo populate from a const?
 
 #if !UNITY_EDITOR && UNITY_WEBGL
     private string fileInputName = string.Empty;
@@ -56,6 +62,8 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
         // Each FileOpen gets its own DrawHTMLOverCanvas and HTML input element
         javaScriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
         javaScriptInput.AlignObjectID(fileInputName, false);
+
+        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
     }
 
     private void SetJavaScriptFileExtensions(string fileExtentions)
@@ -116,5 +124,21 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
     {
         Debug.Log("button received: " + filePaths);
         onFilesSelected.Invoke(filePaths);
+    }
+    
+    public void AddSupportedFileType(string extention)
+    {
+        if(supportedFileTypes.Contains(extention)) return;
+        
+        supportedFileTypes.Add(extention);
+        
+        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
+    }
+        
+    public void RemoveSupportedFileType(string extention)
+    {
+        supportedFileTypes.Remove(extention);
+        
+        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
     }
 }

@@ -49,15 +49,46 @@ mergeInto(LibraryManager.library, {
         document.addEventListener("dragover", function (event) {
             event.preventDefault();
         });
+        
+        window.allowedDropExtensions = [];
+
+	window.SetAllowedDropExtensions = function (extensions) {
+	    window.allowedDropExtensions = extensions.split(",").map(function (ext) {
+		    ext = ext.trim().toLowerCase();
+
+		    if (ext && ext.charAt(0) !== ".") {
+		        ext = "." + ext;
+		    }
+
+		    return ext;
+		})
+		.filter(Boolean);
+
+	    console.log("Allowed drop extensions:", window.allowedDropExtensions);
+	};
 
         document.addEventListener("drop", function (event) {
-            console.log("File dropped");
-            event.stopPropagation();
-            event.preventDefault();
+	    console.log("File dropped");
+	    event.stopPropagation();
+	    event.preventDefault();
 
-            // tell Unity how many files to expect
-            window.ReadFiles(event.dataTransfer.files);
-        });
+	    var files = Array.from(event.dataTransfer.files);
+
+	    var validFiles = files.filter(function (file) {
+		var fileName = file.name.toLowerCase();
+
+		return window.allowedDropExtensions.some(function (extension) {
+		    return fileName.endsWith(extension);
+		});
+	    });
+
+	    if (validFiles.length === 0) {
+		console.log("No supported files were dropped.");
+		return;
+	    }
+
+	    window.ReadFiles(validFiles);
+	});
 
         window.FileSaved = function FileSaved() {
             filesToSave = filesToSave - 1;
