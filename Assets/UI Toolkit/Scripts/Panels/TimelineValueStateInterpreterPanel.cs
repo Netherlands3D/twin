@@ -16,7 +16,7 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class TimelineValueStateInterpreterPanel : VisualElement
     {
-        private TimelineStylingLayerPropertyData timelineStylingPropertyData;
+        private TimelineStatusStylingLayerPropertyData timelineStatusStylingPropertyData;
         // private TimestampValueStatusInterpreter Interpreter;
 
         private ListView listView;
@@ -53,21 +53,16 @@ namespace Netherlands3D.UI.Panels
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
         
-        public TimelineValueStateInterpreterPanel(TimelineStylingLayerPropertyData propertyData, ColorPicker colorPicker) : this()
+        public TimelineValueStateInterpreterPanel(TimelineStatusStylingLayerPropertyData propertyData, ColorPicker colorPicker) : this()
         {
-            timelineStylingPropertyData = propertyData;
+            timelineStatusStylingPropertyData = propertyData;
             ColorPicker = colorPicker;
             ColorPicker.ColorChanged.AddListener(OnPickColor);
             UpdateSwatches();
             
-            timelineStylingPropertyData.OnColorInterpretationChanged.AddListener(OnColorInterpretationChanged);
+            timelineStatusStylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches); //todo: do this once per frame
         }
-
-        private void OnColorInterpretationChanged(string status, Color newColor)
-        {
-            UpdateSwatches(); //todo: do this once per frame
-        }
-
+        
         private void OnListViewSelectionChanged(IEnumerable<int> indices)
         {
             ColorPicker.SetVisible(indices.Any());
@@ -97,14 +92,15 @@ namespace Netherlands3D.UI.Panels
             if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
            
             string status = listView.itemsSource[index] as string;
-            Color color = timelineStylingPropertyData.GetColorForStatus(status);
-            tile.Tile.ColorHex = ColorUtility.ToHtmlStringRGB(color);
+            Color? color = timelineStatusStylingPropertyData.GetColorForStatus(status);
+            
+            tile.Tile.ColorHex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : ColorUtility.ToHtmlStringRGB(Color.white);
             tile.Tile.LabelText = status;
         }
         
         private void UpdateSwatches()
         {
-            listView.itemsSource = timelineStylingPropertyData.GetStates();
+            listView.itemsSource = timelineStatusStylingPropertyData.GetStates();
             listView.RefreshItems();
         }
         
@@ -113,7 +109,7 @@ namespace Netherlands3D.UI.Panels
             foreach (int i in listView.selectedIndices.ToList())
             {
                 string status = listView.itemsSource[i] as string;
-                timelineStylingPropertyData.SetColorForStatus(status, color);
+                timelineStatusStylingPropertyData.SetColorForStatus(status, color);
             }
         }
     }

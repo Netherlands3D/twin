@@ -15,42 +15,46 @@ namespace Netherlands3D.Timeline
     public class TimelineGeoJson : MonoBehaviour
     {
         const string TIMELINE_ATTRIBUTE_NAME = "timestamps";
-        
+
         private SunTime sunTime;
         private GeoJsonLayerGameObject visualization;
 
-        private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
+        private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
         private Dictionary<Feature, TimestampCollection> timelines = new();
-        
+
         // private ITimestampValueInterpreter interpreter => timelineStylingLayerPropertyData.Interpreter; //todo: make this changable
 
         private void Start()
         {
             sunTime = ServiceLocator.GetService<SunTime>();
             sunTime.timeOfDayChanged.AddListener(OnTimeChanged); //todo: unsubscribe listener
-            
+
             visualization = GetComponent<GeoJsonLayerGameObject>();
-            visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
+            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
             visualization.OnFeatureAdd.AddListener(OnFeatureAdded); //todo: unsubscribe listener
 
-            timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
+            timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
             // timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
         }
 
         private void OnFeatureAdded(Feature feature)
         {
+            Dictionary<string, Color> newStates = new Dictionary<string, Color>();
             if (feature.Properties.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var timestampObject))
             {
-                var timeline = new TimestampCollection(timestampObject.ToString());
-                timelines.Add(feature, timeline);
-                timelineStylingLayerPropertyData.AddTimestampCollection(timeline);
-                timelineStylingLayerPropertyData.ProcessNewCollection(timeline);
+                var collection = new TimestampCollection(timestampObject.ToString());
+                timelines.Add(feature, collection);
+
+                foreach (var timestamp in collection.Timestamps)
+                {
+                    newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
+                }
                 
-                var currentTimestamp = timeline.GetCurrentTimestamp(sunTime.Time);
-                SetFeatureColor(feature, currentTimestamp);
+                //todo: 
+                // SetFeatureAttribute(sunTime.Time, feature, collection);
             }
         }
-        
+
         private void OnTimeChanged(DateTime currentTime)
         {
             foreach (var timelines in timelines)
@@ -67,10 +71,11 @@ namespace Netherlands3D.Timeline
             // in GeoJsonLayerFeatureColoring: make read the styling rules after the per material styling rules (preferably this is done at once, but idk how
             //change geojson point/line/polygon to accept more colors per featyre.
 
-            var colorAtCurrentTime = timelineStylingLayerPropertyData.GetColorForTimestamp(currentTimeStamp);
+            var colorAtCurrentTime = timelineStatusStylingLayerPropertyData.GetColorForTimestamp(currentTimeStamp);
             var useStroke = feature.Geometry.Type == GeoJSONObjectType.LineString || feature.Geometry.Type == GeoJSONObjectType.MultiLineString;
-            var colorType = useStroke ? Symbolizer.StrokeColorProperty :  Symbolizer.FillColorProperty;
-            timelineStylingLayerPropertyData.SetColorForFeatureById(feature.GetHashCode().ToString(), colorType, colorAtCurrentTime);
+            var colorType = useStroke ? Symbolizer.StrokeColorProperty : Symbolizer.FillColorProperty;
+            // timelineStatusStylingLayerPropertyData.SetColorForFeatureById(feature.GetHashCode().ToString(), colorType, colorAtCurrentTime);
+            throw new NotImplementedException(); // todo
         }
     }
 }

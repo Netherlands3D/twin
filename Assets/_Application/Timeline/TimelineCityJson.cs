@@ -21,7 +21,7 @@ namespace Netherlands3D.Timeline
         private CityJSONLayerGameObject visualization;
         private CityJSON cityJson;
 
-        private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
+        private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
         private Dictionary<CityObject, TimestampCollection> timelines = new();
         
         private void Start()
@@ -30,10 +30,10 @@ namespace Netherlands3D.Timeline
             sunTime.timeOfDayChanged.AddListener(OnTimeChanged); //todo: unsubscribe listener
 
             visualization = GetComponent<CityJSONLayerGameObject>();
-            visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
+            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties, null, visualization.LayerData.Color);
 
-            timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
-            timelineStylingLayerPropertyData.SetDefaultColor(visualization.LayerData.Color);
+            timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
+            // timelineStatusStylingLayerPropertyData.SetDefaultColor(visualization.LayerData.Color);
             cityJson = GetComponent<CityJSON>();
             cityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes); //todo: unsubscribe listener
             ReadTimeLineFromAttributes();
@@ -41,24 +41,28 @@ namespace Netherlands3D.Timeline
 
         private void ReadTimeLineFromAttributes()
         {
+            Dictionary<string, Color> newStates = new Dictionary<string, Color>();
+
             foreach (var co in cityJson.CityObjects)
             {
                 if (co.Attributes.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var attribute))
                 {
-                    var timeline = new TimestampCollection(attribute.Value.ToString());
-                    timelines.Add(co, timeline);
-                    timelineStylingLayerPropertyData.AddTimestampCollection(timeline);
-                    timelineStylingLayerPropertyData.ProcessNewCollection(timeline);
-
-                    SetFeatureAttribute(sunTime.Time, co, timeline);
+                    var collection = new TimestampCollection(attribute.Value.ToString());
+                    timelines.Add(co, collection);
+                    
+                    foreach (var timestamp in collection.Timestamps)
+                    {
+                        newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
+                    }
+                    
+                    SetFeatureAttribute(sunTime.Time, co, collection);
                 }
                 // todo: rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat 
                 // todo: maxValue testen
             }
-
-            timelineStylingLayerPropertyData.SetRulesForStatuses(timelineStylingLayerPropertyData.Colors); //todo: this is now no longer an interface
+            timelineStatusStylingLayerPropertyData.AddRulesForStatuses(newStates);
         }
-
+        
         private void OnTimeChanged(DateTime currentTime)
         {
             foreach (var timeline in timelines)
@@ -74,8 +78,11 @@ namespace Netherlands3D.Timeline
             {
                 var layerFeature = visualization.LayerFeatures[visualizer];
                 var status = currentTimestampForFeature?.value;
-                if(status == null)
-                layerFeature.Attributes[TimelineStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
+                
+                if(layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] == status)
+                    continue;
+                
+                layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
                 visualization.ApplyStylingToFeature(layerFeature);
             }
         }

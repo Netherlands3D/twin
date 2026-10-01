@@ -22,14 +22,14 @@ namespace Netherlands3D.Timeline
     public class TimelineObject : MonoBehaviour
     {
         LayerGameObject layerGameObject;
-        private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
+        private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
         ColorPropertyData stylingPropertyData;
 
         void Start()
         {
             layerGameObject = GetComponent<LayerGameObject>();
-            layerGameObject.InitProperty<TimelineStylingLayerPropertyData>(layerGameObject.LayerData.LayerProperties);
-            timelineStylingLayerPropertyData = layerGameObject.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
+            layerGameObject.InitProperty<TimelineStatusStylingLayerPropertyData>(layerGameObject.LayerData.LayerProperties);
+            timelineStatusStylingLayerPropertyData = layerGameObject.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
 
             
             stylingPropertyData = layerGameObject.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();

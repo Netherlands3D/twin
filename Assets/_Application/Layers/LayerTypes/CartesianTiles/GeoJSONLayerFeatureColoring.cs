@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             visualization = GetComponent<GeoJsonLayerGameObject>();
             visualization.InitProperty<CartesianTileLayerFeatureColorPropertyData>(properties);
-            visualization.InitProperty<TimelineStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
+            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
 
             SetupFeatures();
         }
@@ -53,7 +53,7 @@ namespace Netherlands3D.Twin.layers.properties
             if (layerFeature == null)
             {
                 layerFeature = visualization.CreateFeature(feature);
-                layerFeature.Attributes.Add(TimelineStylingLayerPropertyData.TimelineAttributeIdentifier, feature.GetHashCode().ToString());
+                layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier, feature.GetHashCode().ToString());
                 visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
 

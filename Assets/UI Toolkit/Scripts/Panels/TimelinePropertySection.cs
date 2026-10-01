@@ -9,10 +9,10 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    [PropertySection(typeof(TimelineStylingLayerPropertyData), PropertySectionCategory.Styling)]
+    [PropertySection(typeof(TimelineStatusStylingLayerPropertyData), PropertySectionCategory.Styling)]
     public partial class TimelinePropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
     {
-        private TimelineStylingLayerPropertyData timelineStylingPropertyData;
+        private TimelineStatusStylingLayerPropertyData timelineStatusStylingPropertyData;
         private TimelineValueStateInterpreterPanel spawnedPanel; //todo make generic base class
         public ColorPicker ColorPicker { get; set; }
 
@@ -27,13 +27,13 @@ namespace Netherlands3D.UI.Panels
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            timelineStylingPropertyData = properties.Get<TimelineStylingLayerPropertyData>();
+            timelineStatusStylingPropertyData = properties.Get<TimelineStatusStylingLayerPropertyData>();
 
-            if (timelineStylingPropertyData.Interpreter is TimestampValueStatusInterpreter valueStatusInterpreter)
-            {
-                spawnedPanel = new TimelineValueStateInterpreterPanel(valueStatusInterpreter, ColorPicker);
+            // if (timelineStatusStylingPropertyData.Interpreter is TimestampValueStatusInterpreter valueStatusInterpreter)
+            // {
+                spawnedPanel = new TimelineValueStateInterpreterPanel(timelineStatusStylingPropertyData, ColorPicker);
                 container.Add(spawnedPanel);
-            }
+            // }
         }
     }
 }

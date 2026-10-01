@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public void AddFeature(CityObjectVisualizer visualizer)
         {
             var layerFeature = CreateFeature(visualizer);
-            layerFeature.Attributes.Add(TimelineStylingLayerPropertyData.TimelineAttributeIdentifier, null);
+            layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier, null);
             LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);
