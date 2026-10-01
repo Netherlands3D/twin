@@ -159,7 +159,7 @@
     display: none
 }
 
-.app--functionality-presentation-mode .hideable-section__pin {
+.app--functionality-hideable-sections .hideable-section__pin {
     display: flex;
 }
 

@@ -4,37 +4,45 @@ using System.Runtime.Serialization;
 using Netherlands3D.Twin.Functionalities;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.PresentationModus
+namespace Netherlands3D.Twin.HideableSections
 {
     [Serializable]
-    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/functionalities", Name = "PresentationMode")]
-    public sealed class PresentationModeFunctionalityData : TypedFunctionalityData<PresentationModeFunctionalityData>
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/functionalities", Name = "HideableSections")]
+    public sealed class HideableSectionsFunctionalityData : TypedFunctionalityData<HideableSectionsFunctionalityData>
     {
         [SerializeField] [DataMember(Name = "UnpinnedSectionIds")] private List<string> unpinnedSectionIds = new();
-        public event Action<string, bool> PinStateChanged;
-        
+        [field: NonSerialized] public event Action<string, bool> PinStateChanged;
+
         public bool IsPinned(string sectionId)
         {
             return !unpinnedSectionIds.Contains(sectionId);
         }
-        
+
         public void SetPinned(string sectionId, bool isPinned)
         {
             if (IsPinned(sectionId) == isPinned)
+            {
                 return;
-
+            }
+            
             if (isPinned)
-                unpinnedSectionIds.Remove(sectionId);
+            {
+                while (unpinnedSectionIds.Remove(sectionId))
+                {
+                }
+            }
             else
+            {
                 unpinnedSectionIds.Add(sectionId);
-
+            }
+            
             PinStateChanged?.Invoke(sectionId, isPinned);
+            
         }
-
         
-        protected override PresentationModeFunctionalityData CreateTypedCopy()
+        protected override HideableSectionsFunctionalityData CreateTypedCopy()
         {
-            return new PresentationModeFunctionalityData
+            return new HideableSectionsFunctionalityData
             {
                 Id = Id,
                 IsEnabled = IsEnabled,

@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.HideableSections;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,22 +12,21 @@ namespace Netherlands3D.UI.Behaviours
 {
     public class HideableSectionsBehaviour : MonoBehaviour
     {
-        
         private const string HiddenClass = "hideable-section--hidden";
         private const string UnpinnedClass = "hideable-section--unpinned";
         private const string RevealZoneActiveClass = "hideable-section-reveal-zone--active";
+
+        [SerializeField] private HideableSectionsFunctionality hideableSectionsFunctionality;
+
+        private readonly Dictionary<HideableSection, SectionRegistration> registrations = new();
+        private HideableSectionsFunctionalityData functionalityData;
         
-        private readonly HashSet<HideableSection> hideableSections = new();
+        private VisualElement root;
 
-        private readonly Dictionary<HideableSection, EventCallback<PointerEnterEvent>> revealZoneEnterCallbacks = new();
-        private readonly Dictionary<HideableSection, EventCallback<PointerLeaveEvent>> revealZoneLeaveCallbacks = new();
-        private readonly Dictionary<HideableSection, EventCallback<PointerEnterEvent>> sectionEnterCallbacks = new();
-        private readonly Dictionary<HideableSection, EventCallback<PointerLeaveEvent>> sectionLeaveCallbacks = new();
-        private readonly Dictionary<HideableSection, EventCallback<ChangeEvent<bool>>> pinChangedCallbacks = new();
-
-        private void Awake()
+        private void OnEnable()
         {
-            var root = App.UIRoot.Root;
+           
+            root = App.UIRoot.Root;
 
             root.RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             root.RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
@@ -32,19 +34,22 @@ namespace Netherlands3D.UI.Behaviours
             RegisterHideableSections();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
-            var root = App.UIRoot.Root;
-            
-            root.UnregisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            root.UnregisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            if (root != null)
+            {
+                root.UnregisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+                root.UnregisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            }
+
+            UnregisterHideableSections();
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
             RegisterHideableSections();
         }
-        
+
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             UnregisterHideableSections();
@@ -52,125 +57,178 @@ namespace Netherlands3D.UI.Behaviours
 
         private void RegisterHideableSections()
         {
-            var root = App.UIRoot.Root;
-
+            functionalityData = hideableSectionsFunctionality.Data;
+            
             var sections = root.Query<HideableSection>().ToList();
 
-            foreach (var hideableSection in sections)
+            foreach (var section in sections)
             {
-                RegisterHideableSection(hideableSection);
+                RegisterHideableSection(section);
             }
+
+            hideableSectionsFunctionality.OnDataReplaced.AddListener(HandleFunctionalityDataReplaced);
         }
 
-        private void RegisterHideableSection(HideableSection hideableSection)
+        private void RegisterHideableSection(HideableSection section)
         {
-            if (!hideableSections.Add(hideableSection))
+            if (registrations.ContainsKey(section))
             {
                 return;
             }
+
+            var revealZone = FindLinkedElement<HideableSectionRevealZone>(section.RevealZoneName, section);
+            var pinToggle = FindLinkedElement<PinToggle>(section.PinToggleName, section);
+
+            var registration = new SectionRegistration(section, revealZone, pinToggle);
+            registrations.Add(section, registration);
+
+            RegisterCallbacks(registration);
+            ApplyInitialPinState(registration);
+        }
+
+        private void RegisterCallbacks(SectionRegistration registration)
+        {
+            registration.SectionEnterCallback = _ => ShowSection(registration, hideableSectionsFunctionality.Data);
+            registration.Section.RegisterCallback(registration.SectionEnterCallback);
             
-            ResolveLinkedElements(hideableSection, out var revealZone, out var pinToggle);
+            registration.SectionLeaveCallback = _ => HideSection(registration, hideableSectionsFunctionality.Data);
+            registration.Section.RegisterCallback(registration.SectionLeaveCallback);
 
-            EventCallback<PointerEnterEvent> sectionEnterCallback = _ => ShowSection();
-            sectionEnterCallbacks.Add(hideableSection, sectionEnterCallback);
-            hideableSection.RegisterCallback<PointerEnterEvent>(sectionEnterCallback);
-            
-            EventCallback<PointerLeaveEvent> sectionLeaveCallback = _ => HideSection();
-            sectionLeaveCallbacks.Add(hideableSection, sectionLeaveCallback);
-            hideableSection.RegisterCallback<PointerLeaveEvent>(sectionLeaveCallback);
-
-            if (revealZone != null)
-            {
-                EventCallback<PointerEnterEvent> revealZoneEnterCallback = _ => ShowSection();
-                revealZoneEnterCallbacks.Add(hideableSection, revealZoneEnterCallback);
-                revealZone.RegisterCallback<PointerEnterEvent>(revealZoneEnterCallback);
-
-                EventCallback<PointerLeaveEvent> revealZoneLeaveCallback = _ => HideSection();
-                revealZoneLeaveCallbacks.Add(hideableSection, revealZoneLeaveCallback);
-                revealZone.RegisterCallback<PointerLeaveEvent>(revealZoneLeaveCallback);
+            if (registration.RevealZone != null) {
+                
+                registration.RevealZoneEnterCallback = _ => ShowSection(registration, hideableSectionsFunctionality.Data);
+                registration.RevealZone.RegisterCallback(registration.RevealZoneEnterCallback);
+                
+                registration.RevealZoneLeaveCallback = _ => HideSection(registration, hideableSectionsFunctionality.Data);
+                registration.RevealZone.RegisterCallback(registration.RevealZoneLeaveCallback);
             }
 
-            if (pinToggle != null)
+            if (registration.PinToggle != null)
             {
-                EventCallback<ChangeEvent<bool>> pinChangedCallback = evt => ApplyPinnedState(evt.newValue);
-                pinChangedCallbacks.Add(hideableSection, pinChangedCallback);
-                pinToggle.RegisterValueChangedCallback<bool>(pinChangedCallback);
+                registration.PinChangedCallback = evt => OnPinToggleChanged(registration, evt.newValue);
+                registration.PinToggle.RegisterValueChangedCallback(registration.PinChangedCallback);
             }
 
-            if (pinToggle != null)
-            {
-                ApplyPinnedState(pinToggle.value);
-            }
+            registration.PinStateChangedCallback = (sectionId, pinState) => OnPinStateChanged(registration, sectionId, pinState);
+            functionalityData.PinStateChanged += registration.PinStateChangedCallback;
+        }
 
-            return;
+        private void ApplyInitialPinState(SectionRegistration registration)
+        {
+            var isPinned = hideableSectionsFunctionality.Data.IsPinned(registration.SectionId);
+            ApplyPinnedState(registration, isPinned);
+        }
 
-            void ShowSection()
-            {
-                if (pinToggle != null && !pinToggle.value)
-                {
-                    hideableSection.RemoveFromClassList(HiddenClass);
-                }
-            }
-            
-            
-            void HideSection()
-            {
-                if (pinToggle != null && !pinToggle.value)
-                {
-                    hideableSection.AddToClassList(HiddenClass);
-                }
-            }
+        private void OnPinToggleChanged(SectionRegistration registration, bool isPinned)
+        {
+            hideableSectionsFunctionality.Data.SetPinned(registration.SectionId, isPinned);
+        }
 
-            void ApplyPinnedState(bool pinned)
+        private void OnPinStateChanged(SectionRegistration registration, string sectionId, bool isPinned) {
+
+            if (registration.SectionId == sectionId)
             {
-                //When pinned, disable the revealzone, and show section.
-                //When unpinnned, enabled the revealzone, and hide section.
-                revealZone?.EnableInClassList(RevealZoneActiveClass, !pinned);
-                hideableSection.EnableInClassList(HiddenClass, !pinned);
-                hideableSection.EnableInClassList(UnpinnedClass, !pinned);
+                ApplyPinnedState(registration, isPinned);
             }
         }
-        
+
+        private void ApplyPinnedState(SectionRegistration registration, bool isPinned)
+        {
+            registration.PinToggle?.SetValueWithoutNotify(isPinned);
+            registration.RevealZone?.EnableInClassList(RevealZoneActiveClass, !isPinned);
+            registration.Section.EnableInClassList(HiddenClass, !isPinned);
+            registration.Section.EnableInClassList(UnpinnedClass, !isPinned);
+        }
+
+        private static void ShowSection(SectionRegistration registration, HideableSectionsFunctionalityData data)
+        {
+            if (!data.IsPinned(registration.SectionId))
+            {
+                registration.Section.RemoveFromClassList(HiddenClass);
+            }
+        }
+
+        private static void HideSection(SectionRegistration registration, HideableSectionsFunctionalityData data)
+        {
+            if (!data.IsPinned(registration.SectionId))
+            {
+                registration.Section.AddToClassList(HiddenClass);
+            }
+        }
+
         private void UnregisterHideableSections()
         {
-            foreach (var hideableSection in hideableSections.ToArray())
+            foreach (var registration in registrations.Values.ToArray())
             {
-                UnregisterHideableSection(hideableSection);
+                UnregisterHideableSection(registration);
             }
+            
+            hideableSectionsFunctionality.OnDataReplaced.RemoveListener(HandleFunctionalityDataReplaced);
+        }
+
+        private void UnregisterHideableSection(
+            SectionRegistration registration)
+        {
+            registration.Section.UnregisterCallback(registration.SectionEnterCallback);
+            registration.Section.UnregisterCallback(registration.SectionLeaveCallback);
+
+            if (registration.RevealZone != null)
+            {
+                registration.RevealZone.UnregisterCallback(registration.RevealZoneEnterCallback);
+                registration.RevealZone.UnregisterCallback(registration.RevealZoneLeaveCallback);
+            }
+
+            if (registration.PinToggle != null) {
+                registration.PinToggle.UnregisterValueChangedCallback(registration.PinChangedCallback);
+            }
+
+            functionalityData.PinStateChanged -= registration.PinStateChangedCallback;
+
+            registrations.Remove(registration.Section);
+        }
+
+        private T FindLinkedElement<T>(string elementName, HideableSection section) where T : VisualElement
+        {
+            var element = string.IsNullOrWhiteSpace(elementName) ? null : root.Q<T>(elementName);
+
+            if (element == null)
+            {
+                Debug.LogError($"Could not find {typeof(T)} '{elementName}' for hideable section '{section.name}'.", this);
+            }
+
+            return element;
         }
         
-        private void UnregisterHideableSection(HideableSection hideableSection)
+        private void HandleFunctionalityDataReplaced(FunctionalityData previous, FunctionalityData current)
         {
-            hideableSections.Remove(hideableSection);
+            UnregisterHideableSections();
+            RegisterHideableSections();
+        }
+
+        private sealed class SectionRegistration
+        {
+            public HideableSection Section { get; }
+            public HideableSectionRevealZone RevealZone { get; }
+            public PinToggle PinToggle { get; }
+
+            public string SectionId => Section.SectionId;
+
+            public EventCallback<PointerEnterEvent> SectionEnterCallback { get; set; }
+            public EventCallback<PointerLeaveEvent> SectionLeaveCallback { get; set; }
+
+            public EventCallback<PointerEnterEvent> RevealZoneEnterCallback { get; set; }
+            public EventCallback<PointerLeaveEvent> RevealZoneLeaveCallback { get; set; }
+
+            public EventCallback<ChangeEvent<bool>> PinChangedCallback { get; set; }
             
-            ResolveLinkedElements(hideableSection, out var revealZone, out var pinToggle);
+            public Action<string, bool> PinStateChangedCallback { get; set; }
 
-            if (revealZoneEnterCallbacks.Remove(hideableSection, out var revealZoneEnterCallback))
-                revealZone?.UnregisterCallback<PointerEnterEvent>(revealZoneEnterCallback);
-
-            if (revealZoneLeaveCallbacks.Remove(hideableSection, out var revealZoneLeaveCallback))
-                revealZone?.UnregisterCallback<PointerLeaveEvent>(revealZoneLeaveCallback);
-
-            if (sectionEnterCallbacks.Remove(hideableSection, out var sectionEnterCallback))
-                hideableSection.UnregisterCallback<PointerEnterEvent>(sectionEnterCallback);
-
-            if (sectionLeaveCallbacks.Remove(hideableSection, out var sectionLeaveCallback))
-                hideableSection.UnregisterCallback<PointerLeaveEvent>(sectionLeaveCallback);
-
-            if (pinChangedCallbacks.Remove(hideableSection, out var pinChangedCallback))
-                pinToggle?.UnregisterValueChangedCallback(pinChangedCallback);
-
-            hideableSections.Remove(hideableSection);
+            public SectionRegistration(HideableSection section, HideableSectionRevealZone revealZone, PinToggle pinToggle)
+            {
+                Section = section;
+                RevealZone = revealZone;
+                PinToggle = pinToggle;
+            }
         }
-
-        private void ResolveLinkedElements(HideableSection hideableSection, out HideableSectionRevealZone revealZone, out PinToggle pinToggle)
-        {
-            var root = App.UIRoot.Root;
-            revealZone = hideableSection.RevealZoneName != null ? root.Q<HideableSectionRevealZone>(hideableSection.RevealZoneName) : null;
-            if (revealZone == null) Debug.LogError("Hideable section's HideableSectionRevealZone could not be found!");
-            pinToggle = hideableSection.PinToggleName != null ? root.Q<PinToggle>(hideableSection.PinToggleName) : null;
-            if (pinToggle == null) Debug.LogError("Hideable section's PinToggle could not be found!");
-        }
-
     }
 }
