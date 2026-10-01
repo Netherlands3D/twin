@@ -15,6 +15,7 @@ namespace Netherlands3D.CityJson.Visualisation
         [SerializeField] private BatchedMeshInstanceRenderer batchedMeshInstanceRenderer;
 
         public override Material[] Materials => batchedMeshInstanceRenderer.Materials;
+        public override bool HasData => batchedMeshInstanceRenderer.PointCount > 0;
 
         protected override void Visualize()
         {

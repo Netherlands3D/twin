@@ -11,6 +11,7 @@ namespace Netherlands3D.CityJson.Visualisation
         protected CityObject cityObject;
         public CityObject CityObject => cityObject;
         public abstract Material[] Materials { get; }
+        public abstract bool HasData { get; }
         
         protected virtual void Awake()
         {

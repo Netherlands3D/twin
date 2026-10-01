@@ -68,6 +68,7 @@ namespace Netherlands3D.CityJson.Visualisation
         [SerializeField] private CityMaterialConverter materialConverter;
 
         public override Material[] Materials => meshRenderer.materials;
+        public override bool HasData => meshes != null && meshes.Count > 0;
 
 #if UNITY_EDITOR
         // allow to change the visible LOD from the inspector during runtime

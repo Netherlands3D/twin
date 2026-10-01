@@ -79,6 +79,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
             
+            if(!visualizer.HasData)
+                return;
+            
             var symbolizer = GetStyling(feature);
             var fillColor = symbolizer.GetFillColor();
             if (fillColor.HasValue)
