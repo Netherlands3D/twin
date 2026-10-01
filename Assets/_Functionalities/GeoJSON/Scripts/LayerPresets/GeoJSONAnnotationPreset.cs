@@ -1,4 +1,5 @@
 ﻿using System;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.Properties;
@@ -19,11 +20,13 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
             public string ImageUrl { get; set; }
             public string ImageCaption { get; set; }
             public Color Color { get; set; }
-            
             public bool ReadOnly { get; set; }
+            
+            public Coordinate Coordinate { get; set; }
 
-            public Args(string title, string annotationText, string imageUrl, string imageCaption, Color color, bool readOnly = false)
+            public Args(Coordinate coordinate, string title, string annotationText, string imageUrl, string imageCaption, Color color, bool readOnly = false)
             {
+                Coordinate = coordinate;
                 Title = title;
                 AnnotationText = annotationText;
                 ImageUrl = imageUrl;
@@ -37,10 +40,12 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
             ILayerBuilder builder,
             Args args)
         {
+            AnnotationPropertyData annotationPropertyData = new AnnotationPropertyData(args.Title, args.AnnotationText, args.ImageUrl, args.ImageCaption, args.ReadOnly);
+            annotationPropertyData.StartCoordinate = args.Coordinate;
             return builder
                     .OfType(PrefabIdentifier)
                     .NamedAs(args.Title)
-                    .AddProperty(new AnnotationPropertyData(args.Title, args.AnnotationText, args.ImageUrl, args.ImageCaption, args.ReadOnly))
+                    .AddProperty(annotationPropertyData)
                     .WithColor(args.Color);
                 
         }

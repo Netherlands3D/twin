@@ -6,7 +6,7 @@
     public abstract class LayerPresetArgs<TPreset> : LayerPresetArgs
         where TPreset : ILayerPreset { }
 
-    public struct LayerPresetResult
+    public class LayerPresetResult
     {
         public LayerPresetArgs parent;
         public LayerPresetArgs[] children;

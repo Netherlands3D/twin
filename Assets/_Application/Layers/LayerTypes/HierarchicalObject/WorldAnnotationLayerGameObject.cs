@@ -4,6 +4,7 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI_Toolkit;
@@ -40,16 +41,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             worldUIService  = ServiceLocator.GetService<WorldUIService>();
             cameraService = App.Cameras;
             appRootBehaviour = App.UIRoot;
+            floatingElement = new FloatingElement();
+            worldUIService.AddToFloatingElementsContent(floatingElement);
+            worldAnnotation = new WorldAnnotation("");
+            floatingElement.Add(worldAnnotation);
         }
 
         protected override void OnVisualizationReady()
         {
             base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            
-            floatingElement = new FloatingElement();
-            worldUIService.AddToFloatingElementsContent(floatingElement);
-            worldAnnotation = new WorldAnnotation(annotationPropertyData.Title);
             worldAnnotation.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
             worldAnnotation.SetReadOnly(annotationPropertyData.ReadOnly);
             worldAnnotation.SetImage(annotationPropertyData.ImageUrl);
@@ -57,11 +58,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             ColorPropertyData colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
             Color? color = colorPropertyData.GetDefaultSymbolizerColor();
             if(color.HasValue)
+            {
                 worldAnnotation.SetColor(color.Value);
+            }
             else
+            {
+                LayerData.Color = Color.white;
                 worldAnnotation.SetColor(LayerData.Color);
-            
-            floatingElement.Add(worldAnnotation);
+            }
+
+            if (annotationPropertyData.startCoordinate.IsValid())
+            {
+                //the startcoordinate is valid, this means it is laoded from a geojson or other data source
+                TransformLayerPropertyData propertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+                propertyData.Position = annotationPropertyData.startCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            }
         }
 
         private void OnEditChanged(bool isEditing)
@@ -84,13 +95,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Symbolizer styling = GetStyling(feature);
             var fillColor = styling.GetFillColor();
             if (fillColor.HasValue)
+            {
                 worldAnnotation.SetColor(fillColor.Value);
+                LayerData.Color = fillColor.Value;
+            }
+            
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
-            InitProperty<AnnotationPropertyData>(properties, null, "");
+            InitProperty<AnnotationPropertyData>(properties, null, "", null, null, null, false);
         }
         
         private void OnClickAnnotation(PointerDownEvent e)

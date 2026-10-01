@@ -1,4 +1,5 @@
 using System.Runtime.Serialization;
+using Netherlands3D.Coordinates;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,7 +14,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         [DataMember] private string imageUrl;
         [DataMember] private string imageCaption;
         [DataMember] private bool readOnly;
-
+        
+        [JsonIgnore] public Coordinate startCoordinate;
         [JsonIgnore] public readonly UnityEvent<string> OnAnnotationTextChanged = new();
 
         [JsonIgnore]
@@ -55,6 +57,13 @@ namespace Netherlands3D.Twin.Layers.Properties
             set => readOnly = value;
         }
         
+        //this shoudl be ignored and not saved because it is only used on import
+        [JsonIgnore]
+        public Coordinate StartCoordinate
+        {
+            get => startCoordinate;
+            set => startCoordinate = value;
+        }
 
         [JsonConstructor]
         public AnnotationPropertyData(
@@ -62,7 +71,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             string title = null,
             string imageUrl = null,
             string imageCaption = null,
-            bool readOnly = false)
+            bool readOnly = false
+            )
         {
             this.annotationText = annotationText;
             this.title = title;

@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
+using Netherlands3D.Coordinates;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.GeoJSON.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerPresets;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -41,7 +46,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 var annotation = annotations[i];
                 Debug.Log("Adding Annotation preset for featureType: " + annotation);
                 ColorUtility.TryParseHtmlString(annotation.Color, out Color color);
-                presets[i] = new GeoJSONAnnotationPreset.Args(annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption,  color, true);
+                presets[i] = new GeoJSONAnnotationPreset.Args(annotation.Coordinate, annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption,  color, true);
             }
             return new LayerPresetResult() { parent = geoJsonLayerPreset, children = presets };
         }
@@ -54,14 +59,25 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             if (features == null)
                 return Array.Empty<Annotation>();
 
+            var serializer = JsonSerializer.CreateDefault();
             var annotations = new List<Annotation>();
 
-            foreach (var feature in features)
+            foreach (var featureToken in features)
             {
-                var annotation = feature["properties"]?["annotation"];
+                var annotation = featureToken["properties"]?["annotation"];
 
                 if (annotation is not JObject annotationObject)
                     continue;
+
+                Coordinate coordinate = new();
+                using var jsonReader = featureToken.CreateReader();
+                var feature = serializer.Deserialize<Feature>(jsonReader);
+                if (feature.Geometry is Point point)
+                {
+                    var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
+                    var convertedPoint = GeometryVisualizationFactory.ConvertToCoordinate(originalCoordinateSystem, point.Coordinates);
+                    coordinate = convertedPoint;
+                }
 
                 annotations.Add(new Annotation
                 {
@@ -69,7 +85,8 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     AnnotationText = annotationObject.Value<string>("annotationText"),
                     ImageUrl = annotationObject.Value<string>("imageUrl"),
                     ImageCaption = annotationObject.Value<string>("imageCaption"),
-                    Color = annotationObject.Value<string>("color")
+                    Color = annotationObject.Value<string>("color"),
+                    Coordinate = coordinate
                 });
             }
 
@@ -94,6 +111,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             public string ImageUrl { get; set; }
             public string ImageCaption { get; set; }
             public string Color { get; set; }
+            public Coordinate Coordinate { get; set; }
         }
     }
 }
