@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             return localFile.SourceUrl.ToLower().EndsWith(".nl3d");      
         }
 
-        public ProjectData Execute(LocalFile localFile)
+        public ProjectData Execute(LocalFile localFile, out bool firstIsParent)
         {
             return ProjectDataHandler.Instance.LoadFromFile(localFile.LocalFilePath);
         }

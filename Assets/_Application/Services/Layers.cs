@@ -76,31 +76,35 @@ namespace Netherlands3D.Twin.Services
                 var layer = Add(preset);
                 return new[] { layer };
             }
-            
+
             if (result is LayerPresetArgs[] presets)
             {
-                Layer parent = null;
-                Layer[] layers =  new Layer[presets.Length];
-                for (var i = 0; i < presets.Length; i++)
-                {
-                    var p = presets[i];
-                    var layer = Add(p);
-                    layers[i] = layer;
-                    
-                    // todo: Currently we put presets[0] as the folder parent for wms/wfs. This is not part of the imported data, and once we will have a UI to allow users to select which layers will be imported, this will be removed.
-                    if (i == 0)
-                        parent = layer;
-                    
-                    if (i > 0 && presets[0] is FolderPreset.Args)
-                    {
-                        layer.LayerData.SetParent(parent.LayerData);
-                    }
-                }
-
-                return layers; //NB. An empty array is considered a success
+                return Add(presets, presets[0] is FolderPreset.Args);
             }
 
             throw new AdapterNotFoundException("Could not determine Layer adapter(s) for the url:  " + uri);
+        }
+
+        public Layer[] Add(LayerPresetArgs[] presets, bool firstIsParent) //todo  UnityAction<LayerGameObject> callback = null does this need to be implemented??
+        {
+            Layer parent = null;
+            Layer[] layers =  new Layer[presets.Length];
+            for (var i = 0; i < presets.Length; i++)
+            {
+                var p = presets[i];
+                var layer = Add(p);
+                layers[i] = layer;
+                    
+                // todo: Currently we put presets[0] as the folder parent for wms/wfs. This is not part of the imported data, and once we will have a UI to allow users to select which layers will be imported, this will be removed.
+                if (i == 0)
+                    parent = layer;
+                    
+                if (i > 0 && firstIsParent)
+                {
+                    layer.LayerData.SetParent(parent.LayerData);
+                }
+            }
+            return layers; //NB. An empty array is considered a success
         }
 
         /// <summary>

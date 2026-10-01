@@ -1,15 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.GeoJSON.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
-    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs>
+    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs[]>
     {
         public bool Supports(LocalFile localFile)
         {
@@ -24,12 +26,54 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 );
         }
 
-        public LayerPresetArgs Execute(LocalFile localFile)
+        public LayerPresetArgs[] Execute(LocalFile localFile)
         {
             var layerName = CreateName(localFile);
             var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            return new GeoJSONPreset.Args(layerName, url);
+            var bodyContents = File.ReadAllText(localFile.LocalFilePath);
+
+            Annotation[] annotations = ParseAnnotations(bodyContents);
+            var geoJsonLayerPreset = new GeoJSONPreset.Args(layerName, url);
+            var presets = new LayerPresetArgs[annotations.Length + 1];
+            presets[0] = geoJsonLayerPreset;
+            for (int i = 0; i < annotations.Length; i++)
+            {
+                var annotation = annotations[i];
+                Debug.Log("Adding Annotation preset for featureType: " + annotation);
+                presets[i + 1] = new GeoJSONAnnotationPreset.Args(annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption, annotation.Color, true);
+            }
+            return presets;
+        }
+        
+        private static Annotation[] ParseAnnotations(string bodyContents)
+        {
+            var root = JObject.Parse(bodyContents);
+
+            var features = root["features"] as JArray;
+            if (features == null)
+                return Array.Empty<Annotation>();
+
+            var annotations = new List<Annotation>();
+
+            foreach (var feature in features)
+            {
+                var annotation = feature["properties"]?["annotation"];
+
+                if (annotation is not JObject annotationObject)
+                    continue;
+
+                annotations.Add(new Annotation
+                {
+                    Title = annotationObject.Value<string>("title"),
+                    AnnotationText = annotationObject.Value<string>("annotationText"),
+                    ImageUrl = annotationObject.Value<string>("imageUrl"),
+                    ImageCaption = annotationObject.Value<string>("imageCaption"),
+                    Color = annotationObject.Value<string>("color")
+                });
+            }
+
+            return annotations.ToArray();
         }
 
         private static string CreateName(LocalFile localFile)
@@ -41,6 +85,15 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
 
             return geoJsonLayerName;
+        }
+        
+        public struct Annotation
+        {
+            public string Title { get; set; }
+            public string AnnotationText { get; set; }
+            public string ImageUrl { get; set; }
+            public string ImageCaption { get; set; }
+            public string Color { get; set; }
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Netherlands3D.DataTypeAdapters
     public interface IDataTypeAdapter<out T>
     {
         public bool Supports(LocalFile localFile);
-        public T Execute(LocalFile localFile);
+        public T Execute(LocalFile localFile, out bool firstIsParent);
     }
 
     public class AdapterNotFoundException : Exception

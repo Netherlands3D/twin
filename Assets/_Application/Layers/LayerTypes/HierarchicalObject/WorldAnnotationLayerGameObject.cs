@@ -40,15 +40,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             worldUIService  = ServiceLocator.GetService<WorldUIService>();
             cameraService = App.Cameras;
             appRootBehaviour = App.UIRoot;
-            InitializeWorldUI();
         }
 
-        private void InitializeWorldUI()
+        protected override void OnVisualizationReady()
         {
+            base.OnVisualizationReady();
+            AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            
             floatingElement = new FloatingElement();
             worldUIService.AddToFloatingElementsContent(floatingElement);
-            worldAnnotation = new WorldAnnotation("");
+            worldAnnotation = new WorldAnnotation(annotationPropertyData.Title);
             worldAnnotation.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
+            worldAnnotation.SetReadOnly(annotationPropertyData.ReadOnly);
+            worldAnnotation.SetImage(annotationPropertyData.ImageUrl);
+            worldAnnotation.SetText(annotationPropertyData.AnnotationText);
+            ColorPropertyData colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
+            if(ColorUtility.TryParseHtmlString(annotationPropertyData.AnnotationColor, out var color))
+            {
+                colorPropertyData.SetDefaultSymbolizerColor(color);
+                worldAnnotation.SetColor(color);
+            }
             floatingElement.Add(worldAnnotation);
         }
 
@@ -79,13 +90,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.LoadProperties(properties);
             InitProperty<AnnotationPropertyData>(properties, null, "");
-        }
-
-        protected override void OnVisualizationReady()
-        {
-            base.OnVisualizationReady();
-            AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            worldAnnotation.SetText(annotationPropertyData.AnnotationText);
         }
         
         private void OnClickAnnotation(PointerDownEvent e)
