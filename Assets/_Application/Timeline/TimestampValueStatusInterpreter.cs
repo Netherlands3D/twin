@@ -6,58 +6,8 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Timeline
 {
-    public class TimestampValueStatusInterpreter : ITimestampValueInterpreter
-    {
-        private Color defaultColor;
-        private Dictionary<string, Color> colors = new();
-        public Dictionary<string, Color> Colors => colors;
-        public UnityEvent<string, Color> OnColorInterpretationChanged = new();
-
-        public TimestampValueStatusInterpreter(Color defaultColor)
-        {
-            this.defaultColor = defaultColor;
-        }
-
-        public void SetDefaultColor(Color defaultColor)
-        {
-            this.defaultColor = defaultColor;
-        }
-        
-        public void ProcessNewCollection(TimestampCollection newTimestampCollection)
-        {
-            foreach (var timestamp in newTimestampCollection.Timestamps)
-            {
-                colors.TryAdd(timestamp.value, defaultColor);
-            }
-        }
-        
-        public Color? GetColorForTimestamp(Timestamp timestamp)
-        {
-            if(timestamp ==null)
-                return null;
-            
-            if (colors.TryGetValue(timestamp.value, out var color))
-            {
-                return color;
-            }
-
-            return null;
-        }
-
-        public IList GetStates()
-        {
-            return colors.Keys.ToList(); //todo: is this always the same order?
-        }
-
-        public Color GetColorForStatus(string status)
-        {
-            return colors[status];
-        }
-
-        public void SetColorForStatus(string status, Color color)
-        {
-            colors[status] = color;
-            OnColorInterpretationChanged.Invoke(status, color);
-        }
-    }
+    // public class TimestampValueStatusInterpreter : ITimestampValueInterpreter
+    // {
+    //     
+    // }
 }

@@ -22,7 +22,7 @@ namespace Netherlands3D.Timeline
         private TimelineStylingLayerPropertyData timelineStylingLayerPropertyData;
         private Dictionary<Feature, TimestampCollection> timelines = new();
         
-        private ITimestampValueInterpreter interpreter => timelineStylingLayerPropertyData.Interpreter; //todo: make this changable
+        // private ITimestampValueInterpreter interpreter => timelineStylingLayerPropertyData.Interpreter; //todo: make this changable
 
         private void Start()
         {
@@ -34,7 +34,7 @@ namespace Netherlands3D.Timeline
             visualization.OnFeatureAdd.AddListener(OnFeatureAdded); //todo: unsubscribe listener
 
             timelineStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStylingLayerPropertyData>();
-            timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
+            // timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
         }
 
         private void OnFeatureAdded(Feature feature)
@@ -44,7 +44,7 @@ namespace Netherlands3D.Timeline
                 var timeline = new TimestampCollection(timestampObject.ToString());
                 timelines.Add(feature, timeline);
                 timelineStylingLayerPropertyData.AddTimestampCollection(timeline);
-                interpreter.ProcessNewCollection(timeline);
+                timelineStylingLayerPropertyData.ProcessNewCollection(timeline);
                 
                 var currentTimestamp = timeline.GetCurrentTimestamp(sunTime.Time);
                 SetFeatureColor(feature, currentTimestamp);
@@ -67,7 +67,7 @@ namespace Netherlands3D.Timeline
             // in GeoJsonLayerFeatureColoring: make read the styling rules after the per material styling rules (preferably this is done at once, but idk how
             //change geojson point/line/polygon to accept more colors per featyre.
 
-            var colorAtCurrentTime = interpreter.GetColorForTimestamp(currentTimeStamp);
+            var colorAtCurrentTime = timelineStylingLayerPropertyData.GetColorForTimestamp(currentTimeStamp);
             var useStroke = feature.Geometry.Type == GeoJSONObjectType.LineString || feature.Geometry.Type == GeoJSONObjectType.MultiLineString;
             var colorType = useStroke ? Symbolizer.StrokeColorProperty :  Symbolizer.FillColorProperty;
             timelineStylingLayerPropertyData.SetColorForFeatureById(feature.GetHashCode().ToString(), colorType, colorAtCurrentTime);

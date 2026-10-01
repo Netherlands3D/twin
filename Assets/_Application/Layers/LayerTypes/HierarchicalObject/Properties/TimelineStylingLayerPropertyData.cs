@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
@@ -16,14 +18,60 @@ namespace Netherlands3D.Twin.Layers.Properties
         public const string TimelineAttributeIdentifier = "data-timeline-color";
         public const string TimelineColorIdentifier = "timeline-color";
 
-        [JsonIgnore] public TimestampValueStatusInterpreter Interpreter { get; set; } = new TimestampValueStatusInterpreter(Color.white); //todo: use default color from styling
-
+        private Color defaultColor;
+        private Dictionary<string, Color> colors = new();
+        public Dictionary<string, Color> Colors => colors;
+        // public UnityEvent<string, Color> OnColorInterpretationChanged = new();
+        
         [JsonIgnore] public List<TimestampCollection> TimestampCollections = new();
         [JsonIgnore] public UnityEvent<TimestampCollection> OnTimestampCollectionAdded = new();
 
-        public TimelineStylingLayerPropertyData() : base()
+        public TimelineStylingLayerPropertyData(Color defaultColor) : base()
         {
-            Interpreter.OnColorInterpretationChanged.AddListener(UpdateRule);
+            // Interpreter.OnColorInterpretationChanged.AddListener(UpdateRule);
+            this.defaultColor = defaultColor;
+        }
+        
+        public void SetDefaultColor(Color defaultColor)
+        {
+            this.defaultColor = defaultColor;
+        }
+        
+        public void ProcessNewCollection(TimestampCollection newTimestampCollection)
+        {
+            foreach (var timestamp in newTimestampCollection.Timestamps)
+            {
+                colors.TryAdd(timestamp.value, defaultColor);
+            }
+        }
+        
+        public Color? GetColorForTimestamp(Timestamp timestamp)
+        {
+            if(timestamp ==null)
+                return null;
+            
+            if (colors.TryGetValue(timestamp.value, out var color))
+            {
+                return color;
+            }
+
+            return null;
+        }
+
+        public IList GetStates()
+        {
+            return colors.Keys.ToList(); //todo: is this always the same order?
+        }
+
+        public Color GetColorForStatus(string status)
+        {
+            return colors[status];
+        }
+
+        public void SetColorForStatus(string status, Color color)
+        {
+            colors[status] = color;
+            UpdateRule(status, color);
         }
 
         private void UpdateRule(string status, Color color)
