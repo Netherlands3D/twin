@@ -3,6 +3,7 @@ using Netherlands3D.Services;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Netherlands3D.UI_Toolkit.Scripts;
 
 namespace Netherlands3D.Twin.PresentationModus.UIHider
 {
@@ -12,18 +13,8 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
     {
         [SerializeField] private InputActionReference hideButton;
 
-        private readonly List<IPanelHider> panelHiders = new();
+        private List<IPanelHider> panelHiders = new List<IPanelHider>();
         private bool hideUI;
-        private const float RevealDelay = 0.15f;
-        private const float HideDelay = 0.30f;
-        private const float MinimumShowTime = 0.40f;
-
-        private readonly Dictionary<IPanelHider, HoverTiming> hoverTimings = new();
-
-        public const string FunctionalityId = "presentation-mode";
-
-        public bool IsPresenting { get; private set; }
-        public event System.Action PresentationChanged;
 
         private void Start()
         {
@@ -45,106 +36,33 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
 
         public void Unregister(IPanelHider panelHider)
         {
-            panelHiders.Remove(panelHider);
-            hoverTimings.Remove(panelHider);
+            if (panelHiders.Contains(panelHider))
+                panelHiders.Remove(panelHider);
         }
 
         private void Update()
         {
-            if (!hideUI || IsPresenting || Pointer.current == null)
-                return;
+            Vector2 mousePosition = Pointer.current.position.ReadValue();
 
-            var mousePosition = Pointer.current.position.ReadValue();
-            var now = Time.unscaledTime;
+            if (!hideUI) return;
 
-            for (var i = 0; i < panelHiders.Count; i++)
+            panelHiders.ForEach(panel =>
             {
-                var panel = panelHiders[i];
-                var timing = hoverTimings[panel];
+                bool isMouseOver = panel.IsMouseOver(mousePosition);
 
-                if (timing.IsHidden != panel.IsHidden)
-                {
-                    timing.IsHidden = panel.IsHidden;
-                    timing.StartedAt = -1f;
-                }
-
-                if (panel.Pinned)
-                {
-                    timing.StartedAt = -1f;
-                    hoverTimings[panel] = timing;
-                    continue;
-                }
-
-                var isMouseOver = panel.IsMouseOver(mousePosition);
-                var shouldChangeVisibility = panel.IsHidden ? isMouseOver : !isMouseOver;
-
-                if (!shouldChangeVisibility)
-                {
-                    timing.StartedAt = -1f;
-                }
-                else if (timing.StartedAt < 0f)
-                {
-                    timing.StartedAt = now;
-                }
-                else
-                {
-                    var delay = panel.IsHidden ? RevealDelay : HideDelay;
-
-                    if (now - timing.StartedAt >= delay && (panel.IsHidden || now >= timing.EarliestHideAt))
-                    {
-                        if (panel.IsHidden)
-                        {
-                            panel.Show();
-                            timing.EarliestHideAt = now + MinimumShowTime;
-                        }
-                        else
-                        {
-                            panel.Hide();
-                        }
-
-                        timing.IsHidden = panel.IsHidden;
-                        timing.StartedAt = -1f;
-                    }
-                }
-
-                hoverTimings[panel] = timing;
-            }
+                if (isMouseOver && panel.IsHidden)
+                    panel.Show();
+                else if (!isMouseOver && !panel.Pinned && !panel.IsHidden)
+                    panel.Hide();
+            });
         }
 
         public void ToggleUIHider()
         {
-            SetPresenting(!IsPresenting);
-        }
+            hideUI = !hideUI;
 
-        public void SetPresenting(bool presenting)
-        {
-            presenting &= hideUI;
-
-            if (IsPresenting == presenting)
-                return;
-
-            IsPresenting = presenting;
-            RefreshPanels();
-            PresentationChanged?.Invoke();
-        }
-
-        public void SetPresentationEnabled(bool enabled)
-        {
-            hideUI = enabled;
-
-            if (!enabled && IsPresenting)
-            {
-                SetPresenting(false);
-                return;
-            }
-
-            RefreshPanels();
-        }
-
-        public void RefreshPanels()
-        {
-            foreach (var panel in panelHiders)
-                SetPanelHide(panel);
+            panelHiders.ForEach(panel => SetPanelHide(panel));
+            App.Debug.DisplayMessage("Druk op H om de presentatiemodus te verlaten.", IconImage.PRESENTATION_CHART);
         }
 
         private void SetPanelHide(IPanelHider panel)
@@ -153,14 +71,8 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
 
             if (hideUI && !panel.Pinned)
                 panel.Hide();
-            else
+            else if (!hideUI)
                 panel.Show();
-
-            hoverTimings[panel] = new HoverTiming
-            {
-                IsHidden = panel.IsHidden,
-                StartedAt = -1f
-            };
         }
 
         private void OnHideUIPressed(InputAction.CallbackContext context)
@@ -170,13 +82,6 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
                 return;
 
             ToggleUIHider();
-        }
-
-        private struct HoverTiming
-        {
-            public bool IsHidden;
-            public float StartedAt;
-            public float EarliestHideAt;
         }
     }
 }

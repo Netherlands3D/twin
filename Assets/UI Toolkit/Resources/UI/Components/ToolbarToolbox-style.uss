@@ -1,6 +1,4 @@
 .toolbar-toolbox {
-    --toolbar-toolbox-spacing: var(--spacing-2);
-    --toolbar-toolbox-negative-spacing: -8px;
     --toolbar-toolbox-half-spacing: var(--spacing-1);
     --toolbar-height: var(--spacing-11);
     --toolbar-max-height: var(--spacing-14);
@@ -28,12 +26,8 @@
 
 .toolbar-toolbox__group > .toolbar-toolbox__pin {
     position: absolute;
-
     left: 100%;
     top: 0;
-
-    /* 4px left, and vertically centred using half the pin's own height */
     translate: -4px 0;
-
     margin: 0;
 }
