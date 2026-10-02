@@ -70,6 +70,7 @@
     flex-direction: row;
     align-items: flex-end;
     flex-shrink: 0;
+    padding-top: var(--spacing-3);
 }
 
 .default-hud__persistent-bottom-section {
