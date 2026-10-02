@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns:ui="UnityEngine.UIElements" 
+         xmlns:nl3d="Netherlands3D.UI.Components" 
+         noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+         editor-extension-mode="False" 
+         name="TimelinePropertySection">
+    <nl3d:ContentContainer leading-icon="ResetTime" text="Tijdlijn">
+        <nl3d:ListView name="StatusList" class="timeline-property-section__list-view"/>
+    </nl3d:ContentContainer>
+</ui:UXML>

@@ -1,18 +1,29 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.CityJSON;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
+    [RequireComponent(typeof(CityJSON))]
     public class CityJSONLayerGameObject : HierarchicalObjectLayerGameObject
     {
         public UnityEvent<CityObjectVisualizer> OnFeatureAdded;
         CoordinateSystem heightReferenceCoordinateSystem = CoordinateSystem.ETRS89_ECEF;
+
+        private CityJSON cityJson;
+        public CityJSON CityJson => cityJson;
+
+        protected override void OnVisualizationInitialize()
+        {
+            base.OnVisualizationInitialize();
+            cityJson = GetComponent<CityJSON>();
+        }
 
         protected override void RegisterEventListeners()
         {
@@ -47,6 +58,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             heightReferenceCoordinateSystem = (CoordinateSystem)newCRSValue;
         }
 
+        protected override void OnImportedObjectVisualized(GameObject importedObject)
+        {
+            foreach (var visualizer in importedObject.GetComponentsInChildren<CityObjectVisualizer>())
+            {
+                ApplyStylingToFeature(LayerFeatures[visualizer]);
+            }
+        }
+
         public override void ApplyStyling()
         {
             base.ApplyStyling();
@@ -56,16 +75,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
         
-        private void ApplyStylingToFeature(LayerFeature feature)
+        public void ApplyStylingToFeature(LayerFeature feature)
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
-
-            var stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            var symbolizer = stylingPropertyData.AnyFeature.Symbolizer;
+            
+            if(!visualizer.HasData)
+                return;
+            
+            var symbolizer = GetStyling(feature);
             var fillColor = symbolizer.GetFillColor();
             if (fillColor.HasValue)
                 visualizer.SetFillColor(fillColor.Value);
-        
+            
             var strokeColor = symbolizer.GetStrokeColor();
             if (strokeColor.HasValue)
                 visualizer.SetLineColor(strokeColor.Value);
@@ -74,6 +95,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public void AddFeature(CityObjectVisualizer visualizer)
         {
             var layerFeature = CreateFeature(visualizer);
+            layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier, null);
             LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);

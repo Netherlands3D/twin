@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         [JsonIgnore] public string StyleName => styleName;
         
-        private const string DefaultRuleName = "default";
+        protected const string DefaultRuleName = "default";
         
         [DataMember(Name = "metadata")] public Metadata Metadata { get; } = new();
 

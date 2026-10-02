@@ -54,7 +54,7 @@ namespace Netherlands3D.CityJson.Structure
         public Vector3Double AbsoluteCenter { get { return (MaxExtent + MinExtent) / 2; } }
 
         public List<CityGeometry> Geometries { get; protected set; } = new List<CityGeometry>();
-        public List<CityObjectAttribute> Attributes { get; protected set; } = new List<CityObjectAttribute>();
+        public Dictionary<string, CityObjectAttribute> Attributes { get; protected set; } = new();
 
         public CityAppearance Appearance { get; protected set; }
 
@@ -191,7 +191,7 @@ namespace Netherlands3D.CityJson.Structure
         protected virtual JSONObject GetAttributes()
         {
             var obj = new JSONObject();
-            foreach (var attribute in Attributes)
+            foreach (var attribute in Attributes.Values)
             {
                 obj.Add(attribute.Key, attribute.GetJSONValue());
             }
@@ -200,7 +200,7 @@ namespace Netherlands3D.CityJson.Structure
 
         public void AddAttribute(CityObjectAttribute attribute)
         {
-            Attributes.Add(attribute);
+            Attributes.Add(attribute.Key, attribute);
         }
 
         public static CityObject CreateEmpty(string id, CityObjectType type = CityObjectType.GenericCityObject, CoordinateSystem coordinateSystem = CoordinateSystem.RD)
@@ -211,7 +211,7 @@ namespace Netherlands3D.CityJson.Structure
             co.Type = type;
             co.CoordinateSystem = coordinateSystem;
             co.Geometries = new List<CityGeometry>();
-            co.Attributes = new List<CityObjectAttribute>();
+            co.Attributes = new();
 
             return co;
         }
