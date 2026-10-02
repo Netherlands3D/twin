@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Functionality_PresentationMode
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.PresentationModus.PresentationModeFunctionality
   defaultData:
-    rid: 6103832554270622057
+    rid: 6103832812264882572
   OnDataReplaced:
     m_PersistentCalls:
       m_Calls: []
@@ -31,10 +31,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6103832554270622057
-      type: {class: PresentationModeFunctionalityData, ns: Netherlands3D.Twin.PresentationModus,
-        asm: eu.netherlands3d.twin}
+    - rid: 6103832812264882572
+      type: {class: FunctionalityData, ns: Netherlands3D.Twin.Functionalities, asm: eu.netherlands3d.twin.functionalities}
       data:
         Id: presentation-mode
         IsEnabled: 0
-        unpinnedSectionIds: []

@@ -176,7 +176,7 @@
     bottom: 0;
 }
 
-.app--functionality-presentation-mode .default-hud__reveal-zones {
+.app--functionality-hideable-sections .default-hud__reveal-zones {
     display: flex;
 }
 
@@ -215,44 +215,56 @@
 }
 
 .default-hud__left-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__left-section,
 .default-hud__top-section,
-.default-hud__movable-bottom-section 
-{
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__top-section,
+.default-hud__bottom-section > .default-hud__movable-bottom-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__bottom-section > .default-hud__movable-bottom-section {
     transition-property: translate;
     translate: 0 0;
 }
 
-.default-hud__persistent-bottom-section {
+.default-hud__bottom-section > .default-hud__persistent-bottom-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__bottom-section > .default-hud__persistent-bottom-section {
     transition-duration: 0.1s;
     transition-property: opacity;
     opacity: 0;
 }
 
-.default-hud__left-section.hideable-section--hidden,
-.default-hud__top-section.hideable-section--hidden,
-.default-hud__bottom-section.hideable-section--hidden > .default-hud__movable-bottom-section,
-.default-hud__bottom-section.hideable-section--hidden > .default-hud__persistent-bottom-section {
+.app--functionality-hideable-sections .default-hud__left-section.hideable-section--hidden,
+.app--functionality-hideable-sections .default-hud__top-section.hideable-section--hidden,
+.app--functionality-hideable-sections .default-hud__bottom-section.hideable-section--hidden > .default-hud__movable-bottom-section,
+.app--functionality-hideable-sections .default-hud__bottom-section.hideable-section--hidden > .default-hud__persistent-bottom-section {
     transition-timing-function: ease-in;
     transition-delay: 0.5s;
 }
 
-.default-hud__left-section.hideable-section--hidden,
-.presenting-mode--presenting .default-hud__left-section.hideable-section--unpinned {
+/* Hide when:
+   - normally auto-hidden,
+   - presenting without Hideable Sections,
+   - or presenting with an unpinned section. */
+.app--functionality-hideable-sections .default-hud__left-section.hideable-section--hidden,
+.presenting-mode--presenting .default-hud__left-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__left-section.hideable-section--unpinned {
     translate: -100% 0;
 }
 
-.default-hud__top-section.hideable-section--hidden,
-.presenting-mode--presenting .default-hud__top-section.hideable-section--unpinned {
+.app--functionality-hideable-sections .default-hud__top-section.hideable-section--hidden,
+.presenting-mode--presenting .default-hud__top-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__top-section.hideable-section--unpinned {
     translate: 0 -56px; /* .toolbar-toolbox height + .toolbar-scenario margin-top = var(spacing-11) + var(spacing-3) = 44px + 12px = 56px */
 }
 
-.default-hud__bottom-section.hideable-section--hidden > .default-hud__movable-bottom-section,
-.presenting-mode--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__movable-bottom-section{
+.app--functionality-hideable-sections .default-hud__bottom-section.hideable-section--hidden > .default-hud__movable-bottom-section,
+.presenting-mode--presenting .default-hud__bottom-section > .default-hud__movable-bottom-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__movable-bottom-section
+{
     translate: 0 100%;
 }
 
-.default-hud__bottom-section.hideable-section--hidden > .default-hud__persistent-bottom-section,
-.presenting-mode--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__persistent-bottom-section {
+.app--functionality-hideable-sections .default-hud__bottom-section.hideable-section--hidden > .default-hud__persistent-bottom-section,
+.presenting-mode--presenting .default-hud__bottom-section > .default-hud__persistent-bottom-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__persistent-bottom-section{
     transition-delay: 1s;
     transition-duration: 0.5s;
     opacity: 1;
