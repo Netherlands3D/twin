@@ -270,10 +270,3 @@
     transition-duration: 0.5s;
     opacity: 1;
 }
-
-.default-hud__left-section,
-.default-hud__top-section,
-.default-hud__movable-bottom-section {
-    background-color: rgba(0, 100, 255, 0.2);
-}
-    
