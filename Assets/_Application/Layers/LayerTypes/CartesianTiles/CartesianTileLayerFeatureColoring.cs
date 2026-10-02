@@ -51,8 +51,8 @@ namespace Netherlands3D.Twin.layers.properties
 
                 var layerFeature = visualization.CreateFeature(material);
                 visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-                var color = featureColorPropertyData.GetColor(layerFeature);
-                featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white));
+                var color = featureColorPropertyData.GetColor(layerFeature, Symbolizer.FillColorProperty);
+                featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white), Symbolizer.FillColorProperty);
             }
         }
         
@@ -81,10 +81,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             if (feature.Geometry is not Material mat) return feature;
 
-            feature.Attributes.Add(
-                CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey,
-                binaryMeshLayer.DefaultMaterialList.IndexOf(mat).ToString()
-            );
+            feature.Attributes.Add(CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey, binaryMeshLayer.DefaultMaterialList.IndexOf(mat).ToString());
             feature.Attributes.Add(CartesianTileLayerFeatureColorPropertyData.MaterialNameIdentifier, mat.name);
             
             return feature;

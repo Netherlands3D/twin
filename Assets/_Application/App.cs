@@ -12,12 +12,11 @@ namespace Netherlands3D.Twin
     {
         public static Services.Layers Layers => ServiceLocator.GetService<Services.Layers>();
         public static Cameras.CameraService Cameras => ServiceLocator.GetService<Cameras.CameraService>();
+        public static ToolService Tools => ServiceLocator.GetService<ToolService>();
         public static AppRootBehaviour UIRoot => ServiceLocator.GetService<AppRootBehaviour>();
         public static SnackbarService Snackbar => ServiceLocator.GetService<SnackbarService>();
         public static LayerMessageService LayerMessages => ServiceLocator.GetService<LayerMessageService>();
         public static DebugMessageService Debug => ServiceLocator.GetService<DebugMessageService>();
         public static DomeService Dome => ServiceLocator.GetService<DomeService>();
-        
-
     }
 }

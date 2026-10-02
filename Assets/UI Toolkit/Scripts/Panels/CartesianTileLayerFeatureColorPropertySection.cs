@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
@@ -33,7 +34,6 @@ namespace Netherlands3D.UI.Panels
             
             swatchesListView.makeItem = MakeListViewItem;
             swatchesListView.bindItem = BindListViewItem;
-            
             
             //when clicked outside the listview, deselect the current selection
             swatchesListView.RegisterCallback<BlurEvent>(evt =>
@@ -71,19 +71,22 @@ namespace Netherlands3D.UI.Panels
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
-            //return item;
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
-            //if (item.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
            
-            string color = swatchesListView.itemsSource[index] as string;
-            tile.Tile.ColorHex = color;
-            
-            string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
+            string stylingRuleKey = swatchesListView.itemsSource[index] as string;
+            //todo getting the probable coloring type for a stylingrule like this should be fixed in the future by chosing the option in the ui since this is not available yet, we need to do a guess based on available coloring propertytypes in the styling rule
+            string colorProperty = stylingPropertyData.GetColorPropertyTypeForStylingRule(stylingRuleKey);
+            Color? color = stylingPropertyData.GetColorByStylingRuleKey(stylingRuleKey, colorProperty);
+            if (color.HasValue)
+            {
+                tile.Tile.ColorHex = ColorUtility.ToHtmlStringRGB(color.Value);
+            }
+            string layerName = stylingPropertyData.GetStylingRuleName(stylingRuleKey);
             //layer names usually will look like Twin_Something, lets use only the second part of the split on _
             string name = layerName.Contains('_') ? layerName.Split('_')[1] : layerName;
             tile.Tile.LabelText = name;
@@ -120,14 +123,15 @@ namespace Netherlands3D.UI.Panels
             //since we apply styling to multiple stylingrules we have to use the notify == false and invoke styling changed afterwards
             foreach (int i in swatchesListView.selectedIndices)
             {
-                string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(i);
+                string stylingRuleKey = swatchesListView.itemsSource[i] as string;
+                string layerName = stylingPropertyData.GetStylingRuleName(stylingRuleKey);
                 CartesianTileLayerFeatureColorPropertyData.ColorData data = new();
-                data.index = i;
+                data.index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(stylingRuleKey);
                 data.name = layerName;
                 data.color = color;
                 colorData.Add(data);
             }
-            stylingPropertyData.SetColorsByMaterialIndices(colorData);
+            stylingPropertyData.SetColorsByMaterialIndices(colorData, Symbolizer.FillColorProperty);
         }
     }
 }

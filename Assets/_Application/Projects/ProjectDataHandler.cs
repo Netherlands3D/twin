@@ -229,7 +229,7 @@ namespace Netherlands3D.Twin.Projects
 
             ProjectData.Current.RootLayer.ReconstructParentsRecursive();
 
-            ProjectData.Current.RootLayer.UpdateLayerTreeOrder(0);
+            ProjectData.Current.RootLayer.UpdateLayerTreeOrder();
             Debug.Log("Loaded project with uuid: " + ProjectData.Current.UUID);
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             ProjectData.Current.LoadVisualizations();

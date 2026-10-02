@@ -3,6 +3,7 @@ using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,9 @@ namespace Netherlands3D.UI.Panels
         //todo improve flow for specific imapping type?
         public override bool ShouldBeActive()
         {
+            if(App.UIRoot.IsPointerOverUI())
+                return false;
+            
             SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
             Dictionary<string, IMapping> selectedMappings = selectionService.SelectedMappings;
             
