@@ -1,0 +1,7 @@
+PresentationModeToggle {
+    display: none;
+}
+
+.app--functionality-presentation-mode PresentationModeToggle {
+    display: flex;
+}

@@ -2,13 +2,17 @@
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class FirstPersonViewManipulator : DragManipulator
 {
-    private readonly VisualElement draggedElement;
+    private readonly Icon sourceIcon;
+
+    private Icon dragPreview;
+    private VisualElement dragLayer;
     
     private Vector2 totalDrag;
     private Vector2 layoutPositionAtDragStart;
@@ -20,24 +24,45 @@ public class FirstPersonViewManipulator : DragManipulator
         "Buildings"
     );
 
-    public FirstPersonViewManipulator(VisualElement draggedElement, float deadzone) : base(deadzone, TrickleDown.TrickleDown)
+    public FirstPersonViewManipulator(Icon icon, float deadzone) : base(deadzone, TrickleDown.TrickleDown)
     {
-        this.draggedElement = draggedElement;
+        this.sourceIcon = icon;
     }
 
     protected override void OnDragStarted(Vector2 startPosition)
     {
         base.OnDragStarted(startPosition);
         totalDrag = Vector2.zero;
-        layoutPositionAtDragStart = new Vector2(target.layout.x, target.layout.y);
+        dragLayer = sourceIcon.panel.visualTree;
+        layoutPositionAtDragStart = dragLayer.WorldToLocal(sourceIcon.worldBound.position);
+
+        dragPreview = new Icon
+        {
+            Image = sourceIcon.Image,
+            pickingMode = PickingMode.Ignore
+        };
+        
+        dragPreview.style.unityBackgroundImageTintColor =
+            sourceIcon.resolvedStyle.unityBackgroundImageTintColor;
+        
+        dragPreview.style.position = Position.Absolute;
+        dragPreview.style.left = layoutPositionAtDragStart.x;
+        dragPreview.style.top = layoutPositionAtDragStart.y;
+        dragPreview.style.width = sourceIcon.resolvedStyle.width;
+        dragPreview.style.height = sourceIcon.resolvedStyle.height;
+
+        dragLayer.Add(dragPreview);
+        dragPreview.BringToFront();
+        
+        sourceIcon.style.visibility = Visibility.Hidden;
     }
 
     protected override void OnDrag(Vector2 delta)
     {
         base.OnDrag(delta);
         totalDrag += delta;
-        draggedElement.style.top = layoutPositionAtDragStart.y + totalDrag.y;
-        draggedElement.style.left = layoutPositionAtDragStart.x + totalDrag.x;
+        dragPreview.style.top = layoutPositionAtDragStart.y + totalDrag.y;
+        dragPreview.style.left = layoutPositionAtDragStart.x + totalDrag.x;
     }
 
     protected override void OnDragEnded(Vector2 endPosition)
@@ -47,7 +72,7 @@ public class FirstPersonViewManipulator : DragManipulator
         var mousePos = Mouse.current.position.ReadValue();
         var picked = App.UIRoot.Root.panel.Pick(App.UIRoot.GetPanelClickPosition());
         var isPointerOverUI = App.UIRoot.IsPointerOverUI(out picked);
-        isPointerOverUI = isPointerOverUI && picked != draggedElement;
+        isPointerOverUI = isPointerOverUI && picked != dragPreview;
         if (!isPointerOverUI)
         {
             App.UIRoot.EnableFPVUI();
@@ -59,8 +84,11 @@ public class FirstPersonViewManipulator : DragManipulator
 
     private void ResetTarget()
     {
-        draggedElement.style.top = 0;
-        draggedElement.style.left = 0;
+        dragPreview?.RemoveFromHierarchy();
+        dragPreview = null;
+        dragLayer = null;
+
+        sourceIcon.style.visibility = StyleKeyword.Null;
         totalDrag = Vector2.zero;
     }
 

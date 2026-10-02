@@ -1,11 +1,7 @@
-using System;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.Functionalities;
-using System.Collections.Generic;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
@@ -30,7 +26,7 @@ namespace Netherlands3D
         {
             DisableFPVUI();
         }
-
+        
         //todo: in the future we might want to create a list of huds we can switch between, so we avoid multiple true/false permutations, but for now we only have 2, so this is not needed yet
         public void DisableFPVUI()
         {

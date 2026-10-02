@@ -1,0 +1,35 @@
+.pin-toggle {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--spacing-8);
+    height: var(--spacing-8);
+    min-width: var(--spacing-8);
+    min-height: var(--spacing-8);
+
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    background-color: transparent;
+}
+
+.pin-toggle:hover,
+.pin-toggle:active,
+.pin-toggle:checked,
+.pin-toggle:focus {
+    border-width: 0;
+    background-color: transparent;
+}
+
+.pin-toggle > .unity-toggle__input,
+.pin-toggle > .unity-toggle__label {
+    display: none;
+}
+
+.pin-toggle > #Icon {
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+}

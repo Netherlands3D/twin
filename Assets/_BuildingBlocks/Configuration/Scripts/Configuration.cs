@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -292,7 +292,7 @@ namespace Netherlands3D.Twin.Configuration
             {
                 functionality.ResetDataToDefaults();
             }
-            
+
             foreach (var savedData in changedData.functionalities)
             {
                 var savedId = savedData.Id;

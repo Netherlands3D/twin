@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Projects
         [SerializeField, JsonProperty] public List<FunctionalityData> functionalities = new();
         [SerializeField, JsonProperty] private RootLayer rootLayer;
         [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
-
+        
         [JsonIgnore]
         public RootLayer RootLayer
         {
@@ -95,7 +95,7 @@ namespace Netherlands3D.Twin.Projects
                 App.Layers.VisualizeData(layer);
             }
         }
-        
+
         /// <summary>
         /// Recursively collect all assets from each of the property data elements of every layer for loading and
         /// saving purposes. 

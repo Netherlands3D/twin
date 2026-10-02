@@ -50,12 +50,12 @@ namespace Netherlands3D.UI.Panels
                 this.Q<ScrollView>().Add(fpvSection);
             }
         }
-        
+
         private VisualElement MakeFunctionalityItem()
         {
             var toggle = new CheckboxToggle();
-            var listViewItem = new ListViewItem(toggle);
-            return listViewItem;
+            toggle.RegisterValueChangedCallback(OnFunctionalityChanged);
+            return new ListViewItem(toggle);
         }
 
         private void BindFunctionalityItem(VisualElement item, int index)
@@ -63,15 +63,19 @@ namespace Netherlands3D.UI.Panels
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<CheckboxToggle>() is not CheckboxToggle toggle) return;
 
-            Functionality functionality = functionalitiesListView.itemsSource[index] as Functionality;
+            var functionality = (Functionality)functionalitiesListView.itemsSource[index];
+            toggle.userData = functionality;
             toggle.LabelText = functionality.Title;
             toggle.SetValueWithoutNotify(functionality.IsEnabled);
+        }
 
-            toggle.RegisterValueChangedCallback(evt =>
-            { 
-                functionality.IsEnabled = evt.newValue;
-                App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
-            });
+        private void OnFunctionalityChanged(ChangeEvent<bool> evt)
+        {
+            if (evt.currentTarget is not CheckboxToggle toggle || toggle.userData is not Functionality functionality)
+                return;
+
+            functionality.IsEnabled = evt.newValue;
+            App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
         }
 
         private void OnQualitySettingsChanged(ChangeEvent<int> evt)

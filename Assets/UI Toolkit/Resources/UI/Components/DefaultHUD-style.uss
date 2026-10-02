@@ -13,6 +13,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     align-self: stretch;
+    padding-right: var(--spacing-3);
 }
 
 .default-hud__top-section {
@@ -23,7 +24,8 @@
     min-width: 0;
     min-height: var(--spacing-14);
     align-items: center;
-    overflow: hidden;
+    overflow: visible;
+    padding-bottom: var(--spacing-3);
 }
 
 .default-hud__inspector-zone {
@@ -58,6 +60,25 @@
 }
 
 .default-hud__bottom-section {
+    position: relative;
+    align-items: stretch;
+    flex-shrink: 0;
+    padding-top: var(--spacing-3);
+}
+
+.default-hud__movable-bottom-section {
+    flex-direction: row;
+    align-items: flex-end;
+    flex-shrink: 0;
+    padding-top: var(--spacing-3);
+}
+
+.default-hud__persistent-bottom-section {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
     flex-direction: row;
     align-items: flex-end;
 }
@@ -72,4 +93,180 @@
 
 .default-hud__bottom-tools {
     flex-shrink: 0;
+}
+
+.default-hud__left-header {
+    flex-direction: row;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.default-hud__inspector-zone > .toolbar-main {
+    align-self: flex-start;
+}
+
+.default-hud__navigation-section {
+    position: relative;
+    flex-direction: row;
+    align-items: flex-end;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-right: 0;
+}
+
+.default-hud__minimap-column {
+    flex-direction: column;
+    align-items: flex-end;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.default-hud__minimap-column > .map-viewport {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.default-hud__minimap-column:hover > .map-viewport {
+    min-width: 512px;
+    max-width: 512px;
+    min-height: 512px;
+    max-height: 512px;
+}
+
+.default-hud__presentation-controls {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-items: flex-start;
+    margin-right: var(--spacing-2);
+}
+
+.default-hud__persistent-bottom-section > .default-hud__presentation-controls {
+    display: none;
+}
+
+.presenting-mode--presenting .default-hud__persistent-bottom-section > .default-hud__presentation-controls {
+    display: flex;
+}
+
+.default-hud__presentation-mode-toggle.toggle {
+    flex: 0 0 auto;
+    height: var(--spacing-11);
+    margin: 0;
+}
+
+.hideable-section__pin {
+    display: none
+}
+
+.app--functionality-hideable-sections .hideable-section__pin {
+    display: flex;
+}
+
+.presenting-mode--presenting .hideable-section__pin {
+    display: none;
+}
+
+.default-hud__reveal-zones {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.app--functionality-hideable-sections .default-hud__reveal-zones {
+    display: flex;
+}
+
+.presenting-mode--presenting .default-hud__reveal-zones {
+    display: none;
+}
+
+.default-hud__left-reveal-zone {
+    left: 0;
+    top: var(--reveal-zone-size);
+    bottom: var(--reveal-zone-size);
+    width: var(--reveal-zone-size);
+}
+
+.default-hud__top-reveal-zone {
+    left: var(--reveal-zone-size);
+    right: var(--reveal-zone-size);
+    top: 0;
+    height: var(--reveal-zone-size);
+}
+
+.default-hud__bottom-reveal-zone {
+    left: var(--reveal-zone-size);
+    right: var(--reveal-zone-size);
+    bottom: 0;
+    height: var(--reveal-zone-size);
+}
+
+.default-hud__left-section,
+.default-hud__top-section,
+.default-hud__movable-bottom-section,
+.default-hud__persistent-bottom-section {
+    transition-duration: 0.25s;
+    transition-delay: 0s;
+    transition-timing-function: ease-out;
+}
+
+.default-hud__left-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__left-section,
+.default-hud__top-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__top-section,
+.default-hud__bottom-section > .default-hud__movable-bottom-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__bottom-section > .default-hud__movable-bottom-section {
+    transition-property: translate;
+    translate: 0 0;
+}
+
+.default-hud__bottom-section > .default-hud__persistent-bottom-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__bottom-section > .default-hud__persistent-bottom-section {
+    transition-duration: 0.1s;
+    transition-property: opacity;
+    opacity: 0;
+}
+
+.app--functionality-hideable-sections .default-hud__left-section.hideable-section--hidden,
+.app--functionality-hideable-sections .default-hud__top-section.hideable-section--hidden,
+.app--functionality-hideable-sections .default-hud__bottom-section.hideable-section--hidden > .default-hud__movable-bottom-section,
+.app--functionality-hideable-sections .default-hud__bottom-section.hideable-section--hidden > .default-hud__persistent-bottom-section {
+    transition-timing-function: ease-in;
+    transition-delay: 0.5s;
+}
+
+/* Hide when:
+   - normally auto-hidden,
+   - presenting without Hideable Sections,
+   - or presenting with an unpinned section. */
+.app--functionality-hideable-sections .default-hud__left-section.hideable-section--hidden,
+.presenting-mode--presenting .default-hud__left-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__left-section.hideable-section--unpinned {
+    translate: -100% 0;
+}
+
+.app--functionality-hideable-sections .default-hud__top-section.hideable-section--hidden,
+.presenting-mode--presenting .default-hud__top-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__top-section.hideable-section--unpinned {
+    translate: 0 -56px; /* .toolbar-toolbox height + .toolbar-scenario margin-top = var(spacing-11) + var(spacing-3) = 44px + 12px = 56px */
+}
+
+.app--functionality-hideable-sections .default-hud__bottom-section.hideable-section--hidden > .default-hud__movable-bottom-section,
+.presenting-mode--presenting .default-hud__bottom-section > .default-hud__movable-bottom-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__movable-bottom-section
+{
+    translate: 0 100%;
+}
+
+.app--functionality-hideable-sections .default-hud__bottom-section.hideable-section--hidden > .default-hud__persistent-bottom-section,
+.presenting-mode--presenting .default-hud__bottom-section > .default-hud__persistent-bottom-section,
+.app--functionality-hideable-sections.presenting-mode--presenting .default-hud__bottom-section.hideable-section--unpinned > .default-hud__persistent-bottom-section{
+    transition-delay: 1s;
+    transition-duration: 0.5s;
+    opacity: 1;
 }
