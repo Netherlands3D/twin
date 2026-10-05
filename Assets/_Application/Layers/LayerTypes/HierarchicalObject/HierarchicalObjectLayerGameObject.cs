@@ -99,6 +99,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             previousRotation = WorldTransform.Rotation;
             previousScale = transform.localScale;
 
+            foreach (var meshRenderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                var layerFeature = CreateFeature(meshRenderer);
+                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            }
+            
             objectCreated.Invoke(gameObject);       
         }
 
@@ -356,27 +362,32 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void OnImportedObjectVisualized(GameObject importedObject)
         {
-            ApplyStyling();
+            foreach (var meshRenderer in importedObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                var layerFeature = CreateFeature(meshRenderer);
+                LayerFeatures.TryAdd(layerFeature.Geometry, layerFeature);
+            }
         }
         
         public override void ApplyStyling()
         {
-            // Dynamically create a list of Layer features because a different set of renderers could be present after
-            // an import or replacement.
-            var features = CreateFeaturesByType<MeshRenderer>();
-
-           
-            // Apply style to the features that was discovered
-            foreach (var feature in features)
+            foreach (var feature in LayerFeatures.Values)
             {
-                if (feature.Geometry is not MeshRenderer meshRenderer) return;
+                ApplyStylingToFeature(feature);
+            }
+            
+            base.ApplyStyling();
+        }
 
-                Symbolizer styling = GetStyling(feature);
-                var fillColor = styling.GetFillColor();
-
-                // Keep the original material color if fill color is not set (null)
-                if (!fillColor.HasValue) return;
-
+        public virtual void ApplyStylingToFeature(LayerFeature feature)
+        {
+            if (feature.Geometry is not MeshRenderer meshRenderer) return;
+            
+            Symbolizer styling = GetStyling(feature);
+            var fillColor = styling.GetFillColor();
+            
+            if (fillColor.HasValue)
+            {
                 LayerData.Color = fillColor.Value;
                 var block = new MaterialPropertyBlock();
                 for (int m = 0; m <= meshRenderer.sharedMaterials.Length - 1; m++)
@@ -386,8 +397,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     meshRenderer.SetPropertyBlock(block, m);
                 }
             }
-
-            base.ApplyStyling();
         }
 
         private void ConvertToScatterLayer(bool isScattered)

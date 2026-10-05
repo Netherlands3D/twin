@@ -60,22 +60,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected override void OnImportedObjectVisualized(GameObject importedObject)
         {
+            //do not call the base because we do not want to create LayerFeatures for the meshrenderers, just for the Visualizers
+            
             foreach (var visualizer in importedObject.GetComponentsInChildren<CityObjectVisualizer>())
             {
                 ApplyStylingToFeature(LayerFeatures[visualizer]);
             }
         }
-
-        public override void ApplyStyling()
-        {
-            base.ApplyStyling();
-            foreach (var feature in LayerFeatures.Values)
-            {
-                ApplyStylingToFeature(feature);
-            }
-        }
         
-        public void ApplyStylingToFeature(LayerFeature feature)
+        public override void ApplyStylingToFeature(LayerFeature feature)
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
             
