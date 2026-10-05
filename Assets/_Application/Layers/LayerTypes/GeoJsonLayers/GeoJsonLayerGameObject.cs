@@ -60,8 +60,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
-
-        public List<Feature> GeoJsonFeatures { get; private set; } = new();
         
         protected override void OnVisualizationInitialize()
         {
@@ -232,7 +230,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer)
         {
-            GeoJsonFeatures.Add(feature);
             layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
             CreateFeatureMappingsForFeature(feature, layer);
         }
@@ -271,15 +268,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 default:
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
             }
-        }
-
-        public void SetFeatureColor(Feature feature, Color? color)
-        {
-            var layer = GetVisualisationLayerForFeature(feature);
-            // layer.SetColorForFeature(feature, color);
-            Debug.Log("Setting color of geojson feature " + feature.GetHashCode() + " to color " + color);
-            if(color.HasValue)
-                layer.SetColorForFeature(feature, color.Value);
         }
     }
 }
