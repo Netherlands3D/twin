@@ -19,14 +19,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         public const string TimelineColorIdentifier = "timeline-color";
 
         private Color defaultColor;
-        // [JsonIgnore] public List<TimestampCollection> TimestampCollections = new();
 
         public TimelineStatusStylingLayerPropertyData(Color defaultColor) : base()
         {
             this.defaultColor = defaultColor;
             StylingRules.Remove(DefaultRuleName); //we do not need this here
-            // StylingRules[DefaultRuleName].Symbolizer.SetFillColor(defaultColor);
-            // StylingRules[DefaultRuleName].Symbolizer.SetStrokeColor(defaultColor);
         }
 
         private string GetStylingRuleKey(Timestamp timestamp)

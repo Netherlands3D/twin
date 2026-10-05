@@ -33,10 +33,18 @@ namespace Netherlands3D.Timeline
             visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties, null, visualization.LayerData.Color);
 
             timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
+            timelineStatusStylingLayerPropertyData.OnStylingChanged.AddListener(visualization.ApplyStyling);
             // timelineStatusStylingLayerPropertyData.SetDefaultColor(visualization.LayerData.Color);
             cityJson = GetComponent<CityJSON>();
             cityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes); //todo: unsubscribe listener
             ReadTimeLineFromAttributes();
+        }
+
+        private void OnDestroy()
+        {
+            sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged); //todo: unsubscribe listener
+            timelineStatusStylingLayerPropertyData.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
+            cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes); //todo: unsubscribe listener
         }
 
         private void ReadTimeLineFromAttributes()
