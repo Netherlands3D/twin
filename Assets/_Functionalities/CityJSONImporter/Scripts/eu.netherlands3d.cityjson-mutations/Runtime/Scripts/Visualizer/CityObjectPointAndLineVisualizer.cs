@@ -69,7 +69,10 @@ namespace Netherlands3D.CityJson.Visualisation
         
         public override void SetFillColor(Color color)
         {
-            batchedMeshInstanceRenderer.SetAllColors(color);
+            if (batchedMeshInstanceRenderer is PointRenderer3D pointRenderer)
+            {
+                pointRenderer.SetAllColors(color);
+            }
         }
 
         public override void SetLineColor(Color color)
