@@ -1,8 +1,8 @@
 @import url("SliderBase-style.uss");
 @import url("Slider.uss");
 
-.timeline-slider__container{
-    padding: 0 600px 0 600px;
+.timeline-slider__container {
+    margin: 0 var(--spacing-3) var(--spacing-1) 0;
 }
 
 .timeline-slider__scrubber{
