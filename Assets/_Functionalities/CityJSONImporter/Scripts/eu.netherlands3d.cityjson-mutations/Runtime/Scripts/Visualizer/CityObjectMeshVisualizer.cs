@@ -69,6 +69,8 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public override Material[] Materials => meshRenderer.materials;
         public override bool HasData => meshes != null && meshes.Count > 0;
+        
+        private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
 
 #if UNITY_EDITOR
         // allow to change the visible LOD from the inspector during runtime
@@ -439,9 +441,12 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public override void SetFillColor(Color color)
         {
-            foreach (var material in meshRenderer.materials)
+            var block = new MaterialPropertyBlock();
+            for (int m = 0; m < meshRenderer.sharedMaterials.Length; m++)
             {
-                material.color = color;
+                meshRenderer.GetPropertyBlock(block, m);
+                block.SetColor(baseColorID, color);
+                meshRenderer.SetPropertyBlock(block, m);
             }
         }
 
