@@ -27,24 +27,30 @@ namespace Netherlands3D.Timeline
         private void Start()
         {
             sunTime = ServiceLocator.GetService<SunTime>();
-            sunTime.timeOfDayChanged.AddListener(OnTimeChanged); //todo: unsubscribe listener
+            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
 
             visualization = GetComponent<CityJSONLayerGameObject>();
+            cityJson = GetComponent<CityJSON>();
+            cityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes);
+            ReadTimeLineFromAttributes();
+        }
+
+        private void InitTimelineStylingProperty()
+        {
+            if(timelineStatusStylingLayerPropertyData != null)
+                return; //already initialized
+            
             visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties, null, visualization.LayerData.Color);
 
             timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
             timelineStatusStylingLayerPropertyData.OnStylingChanged.AddListener(visualization.ApplyStyling);
-            // timelineStatusStylingLayerPropertyData.SetDefaultColor(visualization.LayerData.Color);
-            cityJson = GetComponent<CityJSON>();
-            cityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes); //todo: unsubscribe listener
-            ReadTimeLineFromAttributes();
         }
 
         private void OnDestroy()
         {
-            sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged); //todo: unsubscribe listener
-            timelineStatusStylingLayerPropertyData.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
-            cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes); //todo: unsubscribe listener
+            sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged);
+            timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
+            cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes);
         }
 
         private void ReadTimeLineFromAttributes()
@@ -55,6 +61,8 @@ namespace Netherlands3D.Timeline
             {
                 if (co.Attributes.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var attribute))
                 {
+                    InitTimelineStylingProperty();
+                    
                     var collection = new TimestampCollection(attribute.Value.ToString());
                     timelines.Add(co, collection);
                     
@@ -65,9 +73,14 @@ namespace Netherlands3D.Timeline
                     
                     SetFeatureAttribute(sunTime.Time, co, collection);
                 }
-                // todo: rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat 
-                // todo: maxValue testen
             }
+            if(timelineStatusStylingLayerPropertyData == null)
+            {
+                Destroy(this); //this CityJSON does not have timeline attributes, InitTimelineStylingProperty is never called, and we do not need this component anymore
+                return;
+            }
+            
+            // todo: if rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat (maxValue is tbd)
             timelineStatusStylingLayerPropertyData.AddRulesForStatuses(newStates);
         }
         
