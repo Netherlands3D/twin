@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -22,6 +24,8 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("empty-text")]
         public string EmptyText { get; set; } = "Deze lijst is leeg";
 
+        private static UnityEvent<ListView> ListViewSelected = new UnityEvent<ListView>(); // when we have 2 list views in a panel, changing the selection in one of them should cause the selection of another to deselect
+        
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
         /// </summary>
@@ -98,6 +102,14 @@ namespace Netherlands3D.UI.Components
             {
                 lastPointerPosition = evt.position;
             });
+            
+            ListViewSelected.AddListener(OnListViewSelected);
+        }
+
+        private void OnListViewSelected(ListView listView)
+        {
+            if(listView != this)
+                ClearSelection();
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -127,6 +139,9 @@ namespace Netherlands3D.UI.Components
             var referenceLayer = hoveredElement;
             if (referenceLayer == null)
                 referenceLayer = FindClosestElement(lastPointerPosition);
+            
+            if(obj.Any())
+                ListViewSelected.Invoke(this);
             
             this.OnSelectionChanged(
                 referenceLayer,
