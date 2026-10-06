@@ -21,21 +21,19 @@ namespace Netherlands3D.Twin.layers.properties
         {
             visualization = GetComponent<GeoJsonLayerGameObject>();
             visualization.InitProperty<CartesianTileLayerFeatureColorPropertyData>(properties);
-            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
-
+            
             SetupFeatures();
         }
        
         private void SetupFeatures()
         {
-            // CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
-            foreach (var stylingPropertyData in visualization.LayerData.GetProperties<StylingPropertyData>())
-                stylingPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
+            featureColorPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
-            visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
-            visualization.OnFeatureRemove.AddListener(OnFeatureRemoved);
+            visualization.OnFeatureAdd.AddListener(UpdateStyling);
+            visualization.OnFeatureRemove.AddListener(UpdateStyling);
             
             layers.Clear();
             layers.Add(visualization.PolygonLayer);
@@ -47,72 +45,7 @@ namespace Netherlands3D.Twin.layers.properties
             visualization.PointLayer.RenderColor = visualization.LayerData.Color;
         }
 
-        private void OnFeatureAdded(Feature geoJsonFeature)
-        {
-            CreateStylingFeatureForGeojsonFeature(geoJsonFeature);
-            UpdateLayerMaterialColorInPropertyData(geoJsonFeature);
-        }
-
-        private void OnFeatureRemoved(Feature geoJsonFeature)
-        {
-            UpdateLayerMaterialColorInPropertyData(geoJsonFeature);
-        }
-
-        private void UpdateLayerMaterialColorInPropertyData(Feature geoJsonFeature)
-        {
-            var typeVisualizer = CreateOrGetStylingFeatureForGeometryTypeVisualizer(geoJsonFeature);
-            var layerMaterialFeature = CreateOrGetStylingFeatureForGeometryTypeVisualizer(typeVisualizer);
-            if (int.TryParse(layerMaterialFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
-            {
-                CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
-                if (typeVisualizer.FeatureCount > 0)
-                {
-                    string colorProperty = GetColorPropertyTypeForLayer(typeVisualizer);
-                    var color = featureColorPropertyData.GetColor(layerMaterialFeature, colorProperty);
-                    featureColorPropertyData.SetColor(layerMaterialFeature, color.GetValueOrDefault(visualization.LayerData.Color), colorProperty);
-                }
-                else
-                {
-                    featureColorPropertyData.RemoveColorForMaterialIndex(materialIndex);
-                }
-            }
-        }
-        
-        private void UpdateStylingFeatures(Feature feature)
-        {
-            CreateStylingFeatureForGeojsonFeature(feature);
-            var layer = CreateOrGetStylingFeatureForGeometryTypeVisualizer(feature);
-            var layerMaterialFeature = CreateOrGetStylingFeatureForGeometryTypeVisualizer(layer);
-
-            if (int.TryParse(layerMaterialFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
-            {
-                CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
-                if (layer.FeatureCount > 0)
-                {
-                    string colorProperty = GetColorPropertyTypeForLayer(layer);
-                    var color = featureColorPropertyData.GetColor(layerMaterialFeature, colorProperty);
-                    featureColorPropertyData.SetColor(layerMaterialFeature, color.GetValueOrDefault(visualization.LayerData.Color), colorProperty);
-                }
-                else
-                {
-                    featureColorPropertyData.RemoveColorForMaterialIndex(materialIndex);
-                }
-            }
-        }
-
-        private StylingFeature CreateOrGetStylingFeatureForGeometryTypeVisualizer(IGeoJsonGeometryTypeVisualizer layer)
-        {
-            var layerMaterialFeature = visualization.GetStylingFeatureByGeometry(layer.RenderMaterial);
-            if (layerMaterialFeature == null)
-            {
-                layerMaterialFeature = visualization.CreateFeature(layer.RenderMaterial);
-                visualization.LayerFeatures.Add(layerMaterialFeature.Geometry, layerMaterialFeature);
-            }
-
-            return layerMaterialFeature;
-        }
-
-        private IGeoJsonGeometryTypeVisualizer CreateOrGetStylingFeatureForGeometryTypeVisualizer(Feature feature)
+        private void UpdateStyling(Feature feature)
         {
             IGeoJsonGeometryTypeVisualizer layer = null;
             for (int i = 0; i < layers.Count; i++)
@@ -124,51 +57,49 @@ namespace Netherlands3D.Twin.layers.properties
                 }
             }
 
-            return layer;
-        }
-
-        private void CreateStylingFeatureForGeojsonFeature(Feature feature)
-        {
-            var layerFeature = visualization.CreateFeature(feature);
-            layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier, null);
-            visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-            ApplyStylingToFeature(layerFeature);
+            var layerFeature = visualization.GetStylingFeatureByGeometry(layer.RenderMaterial);
+            if (layerFeature == null)
+            {
+                layerFeature = visualization.CreateFeature(layer.RenderMaterial);
+                visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            }
+            if (int.TryParse(layerFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
+            {
+                CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+                if (layer.FeatureCount > 0)
+                {
+                    string colorProperty = GetColorPropertyTypeForLayer(layer);
+                    var color = featureColorPropertyData.GetColor(layerFeature, colorProperty);
+                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(visualization.LayerData.Color), colorProperty);
+                }
+                else
+                {
+                    featureColorPropertyData.RemoveColorForMaterialIndex(materialIndex);
+                }
+            }
         }
         
         private void OnApplyStyling()
         {
             foreach (var (_, feature) in visualization.LayerFeatures)
             {
-                ApplyStylingToFeature(feature);
-            }
-        }
+                //do cascading to get css result styling
+                Symbolizer symbolizer = visualization.GetStyling(feature);
 
-        private void ApplyStylingToFeature(StylingFeature feature)
-        {
-            //do cascading to get css result styling
-            Symbolizer symbolizer = visualization.GetStyling(feature);
-
-            if (feature.Geometry is Material material)
-            {
-                Color? color = symbolizer.GetFillColor();
-                if (color.HasValue)
+                if (feature.Geometry is Material material)
                 {
-                    if (int.TryParse(feature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
+                    Color? color = symbolizer.GetFillColor();
+                    if (color.HasValue)
                     {
-                        layers[materialIndex].RenderColor = color.Value;
+                        if (int.TryParse(feature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
+                        {
+                            layers[materialIndex].RenderColor = color.Value;
+                        }
                     }
                 }
             }
-
-            if (feature.Geometry is Feature geojsonFeature)
-            {
-                var useStroke = geojsonFeature.Geometry.Type == GeoJSONObjectType.LineString || geojsonFeature.Geometry.Type == GeoJSONObjectType.MultiLineString;
-                var colorType = useStroke ? Symbolizer.StrokeColorProperty :  Symbolizer.FillColorProperty;
-                Color? color = symbolizer.GetColor(colorType);
-                visualization.ApplyStylingToFeature(geojsonFeature, color);
-            }
         }
-
+        
         private int GetRenderLayerIndex(Material material)
         {
             for(int i = 0; i < layers.Count; i++)
@@ -215,15 +146,17 @@ namespace Netherlands3D.Twin.layers.properties
             
             return feature;
         }
+
         
         private void OnDestroyLayer()
         {
+            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+            
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
-            foreach (var stylingPropertyData in visualization.LayerData.GetProperties<StylingPropertyData>())
-                stylingPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
+            featureColorPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
-            visualization.OnFeatureAdd.RemoveListener(OnFeatureAdded);
-            visualization.OnFeatureRemove.RemoveListener(OnFeatureRemoved);
+            visualization.OnFeatureAdd.RemoveListener(UpdateStyling);
+            visualization.OnFeatureRemove.RemoveListener(UpdateStyling);
         }
     }
 }
