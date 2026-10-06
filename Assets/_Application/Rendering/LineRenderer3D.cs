@@ -7,18 +7,16 @@ namespace Netherlands3D.Twin.Rendering
 {
     public class LineRenderer3D : BatchedMeshInstanceRenderer
     {
-        [Header("References")] 
-        [Tooltip("The mesh to use for the line segments")] [SerializeField]
+        [Header("References")] [Tooltip("The mesh to use for the line segments")] [SerializeField]
         private Mesh lineMesh;
 
 
-        [Header("Settings")] 
-        [SerializeField] private bool drawJoints = true;
+        [Header("Settings")] [SerializeField] private bool drawJoints = true;
         [SerializeField] private float lineDiameter = 1f;
-        
+
         private List<List<Matrix4x4>> lineTransformMatrixCache = new List<List<Matrix4x4>>();
         private List<BatchColor> lineBatchColors = new();
-        
+
         private int selectedLineIndex = -1;
 
         public Mesh LineMesh
@@ -28,6 +26,7 @@ namespace Netherlands3D.Twin.Rendering
         }
 
         private Material lineMaterial;
+
         public Material LineMaterial
         {
             get => lineMaterial;
@@ -42,7 +41,14 @@ namespace Netherlands3D.Twin.Rendering
         public bool DrawJoints
         {
             get => drawJoints;
-            set => drawJoints = value;
+            set
+            {
+                bool changed = value != drawJoints;
+                drawJoints = value;
+
+                if(changed)
+                    OnDrawJointsChanged();
+            }
         }
 
         public float LineDiameter
@@ -55,14 +61,14 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        public override Material[] Materials => new Material[]{ PointMaterial, LineMaterial };
+        public override Material[] Materials => new Material[] { PointMaterial, LineMaterial };
 
         protected override void MakeMaterialInstances()
         {
             base.MakeMaterialInstances();
             lineMaterial = new Material(materialTemplate); //make material instance to work with styling
         }
-        
+
         protected override void Draw()
         {
             UpdateColorBuffers();
@@ -72,7 +78,7 @@ namespace Netherlands3D.Twin.Rendering
                 var lineTransforms = lineTransformMatrixCache[i];
                 Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, lineBatchColors[i].MaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, renderCamera);
             }
-            
+
             if (!DrawJoints) return;
             for (var i = 0; i < pointTransformMatrixCache.Count; i++)
             {
@@ -99,16 +105,17 @@ namespace Netherlands3D.Twin.Rendering
         {
             PointMaterial.color = color;
             LineMaterial.color = color;
-            
+
             foreach (var batchColor in lineBatchColors)
             {
                 batchColor.SetAllColors(color);
             }
+
             foreach (var batchColor in pointBatchColors)
             {
                 batchColor.SetAllColors(color);
             }
-            
+
             UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
         }
 
@@ -122,7 +129,7 @@ namespace Netherlands3D.Twin.Rendering
         protected override void GenerateTransformMatrixCache(int collectionStartIndex = -1)
         {
             // For efficiency, we combine the point and line calculation in a single loop
-            
+
             var jointCount = pointCount; //each point should have a joint
             var segmentCount = jointCount - positionCollections.Count; // each line one more joint than segments, so subtracting the lineCount will result in the total number of segments
 
@@ -140,10 +147,10 @@ namespace Netherlands3D.Twin.Rendering
             lineTransformMatrixCache.Capacity = lineBatchCount;
 
             var flattenedStartIndex = GetFlattenedStartIndex(collectionStartIndex);
-            
+
             var jointIndices = GetMatrixIndices(flattenedStartIndex); //each point in the line is a joint
             var lineIndices = GetMatrixIndices(flattenedStartIndex - collectionStartIndex); //each line has one less segment than points, so we subtract the startIndex to account for the amount of segments before the start index
-            
+
             for (var i = collectionStartIndex; i < positionCollections.Count; i++)
             {
                 var line = positionCollections[i];
@@ -170,7 +177,7 @@ namespace Netherlands3D.Twin.Rendering
                         AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, Matrix4x4.zero);
                         continue;
                     }
-                    
+
                     // Calculate the rotation based on the direction vector
                     var rotation = Quaternion.LookRotation(direction);
                     // Calculate the scale based on the distance
@@ -194,11 +201,11 @@ namespace Netherlands3D.Twin.Rendering
                 }
             }
         }
-        
+
         protected override bool IsValid(List<Coordinate> line)
         {
             {
-                if (line == null) 
+                if (line == null)
                     return false;
                 if (line.Count < 2)
                 {
@@ -207,6 +214,43 @@ namespace Netherlands3D.Twin.Rendering
                 }
 
                 return true;
+            }
+        }
+
+        public override void SetCollectionColor(int collectionIndex, Color color)
+        {
+            UpdateColorBuffers();
+
+            int pointsInCollection = positionCollections[collectionIndex].Count;
+            int jointStart = GetFlattenedStartIndex(collectionIndex);
+
+            if (DrawJoints)
+                SetInstanceColorRange(pointBatchColors, jointStart, pointsInCollection, color);
+
+            SetInstanceColorRange(lineBatchColors, jointStart - collectionIndex, pointsInCollection - 1, color);
+        }
+
+        private void OnDrawJointsChanged()
+        {
+            if(!drawJoints)
+                return;
+            
+            UpdateColorBuffers(); // create the missing joint buffers
+
+            int jointStart = 0;
+            for (int i = 0; i < positionCollections.Count; i++)
+            {
+                int pointsInCollection = positionCollections[i].Count;
+
+                // The first line segment of this collection holds the color that was set for the entire line
+                var (batchIndex, matrixIndex) = GetMatrixIndices(jointStart - i);
+                if (batchIndex >= 0 && batchIndex < lineBatchColors.Count)
+                {
+                    Color color = lineBatchColors[batchIndex].Colors[matrixIndex];
+                    SetInstanceColorRange(pointBatchColors, jointStart, pointsInCollection, color);
+                }
+
+                jointStart += pointsInCollection;
             }
         }
     }

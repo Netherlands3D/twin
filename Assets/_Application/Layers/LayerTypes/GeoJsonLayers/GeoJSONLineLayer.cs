@@ -61,7 +61,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void SetColorForFeature(Feature feature, Color color)
         {
-            throw new NotImplementedException();
+            var data = spawnedVisualisations[feature];
+            foreach (var pointList in data.Data)
+            {
+                LineRenderer3D.SetColor(pointList, color);
+            }
         }
         
         public List<Mesh> GetMeshData(Feature feature)

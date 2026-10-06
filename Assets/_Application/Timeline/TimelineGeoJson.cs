@@ -62,7 +62,7 @@ namespace Netherlands3D.Timeline
                 {
                     newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
                 }
-
+                CreateStylingFeatureForGeojsonFeature(feature);
                 SetFeatureAttribute(sunTime.Time, feature, collection);
             }
         }
@@ -86,6 +86,14 @@ namespace Netherlands3D.Timeline
                 return;
 
             layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
+            visualization.ApplyStylingToFeature(feature);
+        }
+        
+        private void CreateStylingFeatureForGeojsonFeature(Feature feature)
+        {
+            var layerFeature = visualization.CreateFeature(feature);
+            layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier, null);
+            visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
         }
     }
 }

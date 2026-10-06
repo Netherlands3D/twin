@@ -48,21 +48,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public UnityEvent<Feature> OnFeatureRemove = new();
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
-        
+
         public GeoJSONPointLayer PointLayer => pointFeaturesLayer;
-        public GeoJSONLineLayer  LineLayer => lineFeaturesLayer;
+        public GeoJSONLineLayer LineLayer => lineFeaturesLayer;
         public GeoJSONPolygonLayer PolygonLayer => polygonFeaturesLayer;
 
-        [Header("Visualizer settings")]
-        [SerializeField] private GeoJSONPolygonLayer polygonFeaturesLayer;
+        [Header("Visualizer settings")] [SerializeField]
+        private GeoJSONPolygonLayer polygonFeaturesLayer;
+
         [SerializeField] private GeoJSONLineLayer lineFeaturesLayer;
         [SerializeField] private GeoJSONPointLayer pointFeaturesLayer;
-        
+
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
 
         public List<Feature> GeoJsonFeatures { get; private set; } = new();
-        
+
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
@@ -151,9 +152,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             base.RegisterEventListeners();
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
             parser.OnParseError.AddListener(VisualisationError.Invoke);
-            
+
             credentialHandler?.OnAuthorizationHandled.AddListener(HandleCredentials);
-            
+
             polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
             lineFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
             polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
@@ -164,9 +165,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             base.UnregisterEventListeners();
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
             parser.OnParseError.RemoveListener(VisualisationError.Invoke);
-            
+
             credentialHandler?.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            
+
             polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
             lineFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
             polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
@@ -236,13 +237,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
             CreateFeatureMappingsForFeature(feature, layer);
         }
-        
+
         protected void OnFeatureRemoved(Feature feature)
         {
             OnFeatureRemove.Invoke(feature);
             //we have to query first to find the corresponding featuremappings, cant do a remove right away
             //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
-            IGeoJsonGeometryTypeVisualizer layer = GetVisualisationLayerForFeature(feature);
+            IGeoJsonGeometryTypeVisualizer layer = GetTypeVisualizerForFeature(feature);
             BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
             List<IMapping> mappings = SelectionService.MappingTree.Query<FeatureMapping>(queryBoundingBox);
             foreach (FeatureMapping mapping in mappings)
@@ -255,7 +256,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public IGeoJsonGeometryTypeVisualizer GetVisualisationLayerForFeature(Feature feature)
+        public IGeoJsonGeometryTypeVisualizer GetTypeVisualizerForFeature(Feature feature)
         {
             switch (feature.Geometry.Type)
             {
@@ -273,11 +274,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void ApplyStylingToFeature(Feature feature, Color? color)
+        public void ApplyStylingToFeature(Feature geoJsonFeature)
         {
-            //todo: apply color
-
-            throw new NotImplementedException();
+            var layerFeature = LayerFeatures[geoJsonFeature];
+            
+            var symbolizer = GetStyling(layerFeature);
+            var visualizer = GetTypeVisualizerForFeature(geoJsonFeature);
+        
+            if (visualizer is GeoJSONLineLayer)
+            {
+                var strokeColor = symbolizer.GetStrokeColor();
+                if(strokeColor.HasValue)
+                    visualizer.SetColorForFeature(geoJsonFeature, strokeColor.Value);
+            }
+            else //if (fillColor.HasValue && (visualizer is GeoJSONPolygonLayer polygonVisualizer ||  visualizer is GeoJSONPointLayer lineVisualizer))
+            {
+                var fillColor = symbolizer.GetFillColor();
+                if(fillColor.HasValue)
+                    visualizer.SetColorForFeature(geoJsonFeature, fillColor.Value);
+            }
         }
     }
 }
