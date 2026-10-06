@@ -1,10 +1,6 @@
 using System;
 using System.Globalization;
-using Netherlands3D.Services;
-using Netherlands3D.Sun;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -12,6 +8,97 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class TimelineSlider : VisualElement
     {
+        private DateTime currentValue;
+
+        private readonly DateTimeLabel startLabel;
+        private readonly DateTimeLabel endLabel;
+        private readonly TimelineBar timelineBar;
+        
+        public DateTime CurrentValue
+        {
+            get => currentValue;
+            set => this.currentValue = value;
+        }
+        
+        [UxmlAttribute("current-value")]
+        public string CurrentValueString
+        {
+            set
+            {
+                if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var dateTime))
+                {
+                    this.CurrentValue = dateTime;
+                }
+            }
+        }
+
+        public DateTime StartValue
+        {
+            get => timelineBar.StartValue;
+            set
+            {
+                timelineBar.StartValue = value;
+                
+            }
+        }
+        
+        [UxmlAttribute("start-value")]
+        public string StartValueString
+        {
+            set
+            {
+                if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var dateTime))
+                {
+                    this.StartValue = dateTime;
+                }
+            }
+        }
+        
+        public DateTime EndValue
+        {
+            get => timelineBar.EndValue;
+            set
+            {
+                timelineBar.EndValue = value;
+                
+            }
+        }
+        
+        [UxmlAttribute("end-value")]
+        public string EndValueString
+        {
+            set
+            {
+                if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var dateTime))
+                {
+                    this.EndValue = dateTime;
+                }
+            }
+        }
+
+        public TimelineSlider()
+        {
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
+            
+            startLabel = this.Q<DateTimeLabel>("StartLabel");
+            endLabel = this.Q<DateTimeLabel>("EndLabel");
+            timelineBar = this.Q<TimelineBar>();
+            
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+        }
+        
+
+        
+
+        private void OnAttachToPanel(AttachToPanelEvent evt)
+        {
+            startLabel.Value = timelineBar.StartValue;
+            endLabel.Value = timelineBar.EndValue;
+        }
+
+
+        /*
         private SunTime sunTime;
         private float maxDragDistance = 100f;
         private float maxScrubSpeed = 1f;
@@ -83,7 +170,7 @@ namespace Netherlands3D.UI.Components
             maxField = this.Q<NumberField>("MaxField");
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            
+
             slider.RegisterValueChangedCallback(OnSliderChanged);
             var dragManipulator = new DragManipulator(4);
             scrubber.AddManipulator(dragManipulator);
@@ -145,7 +232,7 @@ namespace Netherlands3D.UI.Components
             }
             minField.SetValueWithoutNotify(minDateTime);
             maxField.SetValueWithoutNotify(maxDateTime);
-            
+
             minField.SetEnabled(false);
             maxField.SetEnabled(false);
 
@@ -171,7 +258,7 @@ namespace Netherlands3D.UI.Components
         {
             SetDate(SliderValueToDateTime(evt.newValue));
         }
-        
+
 
         private DateTime SliderValueToDateTime(float value)
         {
@@ -210,6 +297,6 @@ namespace Netherlands3D.UI.Components
                 SetInitialDate();
             }
             InitRangeFields();
-        }
+        }*/
     }
 }

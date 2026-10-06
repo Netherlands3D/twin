@@ -1,0 +1,16 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="timeline-bar"
+>
+    <ui:VisualElement name="TicksViewport" class="timeline-bar__ticks-viewport" picking-mode="Ignore">
+        <ui:VisualElement name="Ticks" class="timeline-bar__ticks" picking-mode="Ignore" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement name="LabelsViewport" class="timeline-bar__labels-viewport" picking-mode="Ignore">
+        <ui:VisualElement name="Labels" class="timeline-bar__labels" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

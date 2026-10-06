@@ -1,0 +1,63 @@
+.timeline-bar {
+    position: relative;
+    flex-grow: 1;
+    min-width: 0;
+    height: 200px;
+    background-color: #FFFFFF33;
+}
+
+.timeline-bar__ticks-viewport {
+    background-color: aqua;
+    flex-grow: 1;
+    border-radius: 16px;
+    border-color: orange;
+    border-width: 2px;
+    height: 64px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.timeline-bar__ticks {
+    position: absolute;
+    left: -25px;
+    right: -25px;
+    top: 0;
+    bottom: 0;
+}
+
+.timeline-bar__tick {
+    position: absolute;
+    top: 50%;
+    width: 2px;
+    height: 50px;
+    background-color: black;
+    translate: -50% -50%;
+}
+
+
+
+.timeline-bar__labels-viewport {
+    background-color: #b88383;
+    flex-grow: 1;
+    border-color: orange;
+    height: 64px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.timeline-bar__labels {
+    position: absolute;
+    left: -25px;
+    right: -25px;
+    top: 0;
+    bottom: 0;
+}
+
+.timeline-bar__label {
+    position: absolute;
+    top: 50%;
+    width: 2px;
+    height: 380px;
+    background-color: green;
+    translate: -50% -50%;
+}
