@@ -273,13 +273,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void SetFeatureColor(Feature feature, Color? color)
+        public void ApplyStylingToFeature(Feature feature, Color? color)
         {
-            var layer = GetVisualisationLayerForFeature(feature);
-            // layer.SetColorForFeature(feature, color);
-            Debug.Log("Setting color of geojson feature " + feature.GetHashCode() + " to color " + color);
-            if(color.HasValue)
-                layer.SetColorForFeature(feature, color.Value);
+            //todo: apply color
+
+            throw new NotImplementedException();
         }
     }
 }

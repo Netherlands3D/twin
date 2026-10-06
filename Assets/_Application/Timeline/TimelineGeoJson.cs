@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using GeoJSON.Net;
 using GeoJSON.Net.Feature;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
@@ -22,26 +20,41 @@ namespace Netherlands3D.Timeline
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
         private Dictionary<Feature, TimestampCollection> timelines = new();
 
-        // private ITimestampValueInterpreter interpreter => timelineStylingLayerPropertyData.Interpreter; //todo: make this changable
-
         private void Start()
         {
             sunTime = ServiceLocator.GetService<SunTime>();
-            sunTime.timeOfDayChanged.AddListener(OnTimeChanged); //todo: unsubscribe listener
+            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
 
             visualization = GetComponent<GeoJsonLayerGameObject>();
-            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
-            visualization.OnFeatureAdd.AddListener(OnFeatureAdded); //todo: unsubscribe listener
+            visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
+        }
+
+        private void OnDestroy()
+        {
+            sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged);
+            timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
+            visualization.OnFeatureAdd.RemoveListener(OnFeatureAdded);
+        }
+
+        private void InitTimelineStylingProperty()
+        {
+            if (timelineStatusStylingLayerPropertyData != null)
+                return; //already initialized
+
+            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties, null, visualization.LayerData.Color);
 
             timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
-            // timelineStylingLayerPropertyData.Interpreter = new TimestampValueStatusInterpreter(visualization.LayerData.Color); //todo: use default color from styling
+            timelineStatusStylingLayerPropertyData.OnStylingChanged.AddListener(visualization.ApplyStyling);
         }
 
         private void OnFeatureAdded(Feature feature)
         {
             Dictionary<string, Color> newStates = new Dictionary<string, Color>();
+
             if (feature.Properties.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var timestampObject))
             {
+                InitTimelineStylingProperty();
+
                 var collection = new TimestampCollection(timestampObject.ToString());
                 timelines.Add(feature, collection);
 
@@ -49,33 +62,30 @@ namespace Netherlands3D.Timeline
                 {
                     newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
                 }
-                
-                //todo: 
-                // SetFeatureAttribute(sunTime.Time, feature, collection);
+
+                SetFeatureAttribute(sunTime.Time, feature, collection);
             }
         }
 
         private void OnTimeChanged(DateTime currentTime)
         {
-            foreach (var timelines in timelines)
+            foreach (var timeline in timelines)
             {
-                var currentTimestampForFeature = timelines.Value.GetCurrentTimestamp(currentTime);
-                SetFeatureColor(timelines.Key, currentTimestampForFeature);
+                SetFeatureAttribute(currentTime, timeline.Key, timeline.Value);
             }
         }
 
-        private void SetFeatureColor(Feature feature, Timestamp currentTimeStamp)
+        private void SetFeatureAttribute(DateTime currentTime, Feature feature, TimestampCollection timeline)
         {
-            //each feature should have a unique id.
-            //set styling rules here per feature
-            // in GeoJsonLayerFeatureColoring: make read the styling rules after the per material styling rules (preferably this is done at once, but idk how
-            //change geojson point/line/polygon to accept more colors per featyre.
+            var currentTimestampForFeature = timeline.GetCurrentTimestamp(currentTime);
 
-            var colorAtCurrentTime = timelineStatusStylingLayerPropertyData.GetColorForTimestamp(currentTimeStamp);
-            var useStroke = feature.Geometry.Type == GeoJSONObjectType.LineString || feature.Geometry.Type == GeoJSONObjectType.MultiLineString;
-            var colorType = useStroke ? Symbolizer.StrokeColorProperty : Symbolizer.FillColorProperty;
-            // timelineStatusStylingLayerPropertyData.SetColorForFeatureById(feature.GetHashCode().ToString(), colorType, colorAtCurrentTime);
-            throw new NotImplementedException(); // todo
+            var layerFeature = visualization.LayerFeatures[feature];
+            var status = currentTimestampForFeature?.value;
+
+            if (layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] == status)
+                return;
+
+            layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
         }
     }
 }
