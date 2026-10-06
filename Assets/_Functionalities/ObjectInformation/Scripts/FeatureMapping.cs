@@ -18,7 +18,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public object MappingObject => feature;
         public string Id => feature.Id;
-        public IGeoJsonVisualisationLayer VisualisationLayer { get { return visualisationLayer; } }
+        public IGeoJsonGeometryTypeVisualizer VisualisationLayer { get { return visualisationLayer; } }
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
         public Feature Feature { get { return feature; } }
@@ -30,7 +30,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private Feature feature;
         private List<Mesh> meshes;
-        private IGeoJsonVisualisationLayer visualisationLayer;
+        private IGeoJsonGeometryTypeVisualizer visualisationLayer;
         private GeoJsonLayerGameObject geoJsonLayerParent;
         private BoundingBox boundingBox;
 
@@ -51,7 +51,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.meshes = meshes;       
         }
 
-        public void SetVisualisationLayer(IGeoJsonVisualisationLayer visualisationLayer)
+        public void SetVisualisationLayer(IGeoJsonGeometryTypeVisualizer visualisationLayer)
         {
             this.visualisationLayer = visualisationLayer;
             
@@ -135,7 +135,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             boundingBox = CreateBoundingBoxForFeature(feature, visualisationLayer);
         }
 
-        public static BoundingBox CreateBoundingBoxForFeature(Feature feature, IGeoJsonVisualisationLayer layer)
+        public static BoundingBox CreateBoundingBoxForFeature(Feature feature, IGeoJsonGeometryTypeVisualizer layer)
         {
             Bounds featureBounds = layer.GetFeatureBounds(feature);
             Coordinate bottomLeft = new Coordinate(featureBounds.min);

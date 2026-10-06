@@ -12,7 +12,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonVisualisationLayer
+    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonGeometryTypeVisualizer
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Transform Transform => transform;
 
-        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
+        public event IGeoJsonGeometryTypeVisualizer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         

@@ -189,17 +189,17 @@ namespace Netherlands3D.UI.Panels
         {
             //the feature being changed should always have its coordinate within the styling rule!
             Coordinate? coord;
-            LayerFeature layerFeature = HiddenObject.GetLayerFeatureFromBagId(objectId);
-            if(layerFeature != null)
+            StylingFeature stylingFeature = HiddenObject.GetLayerFeatureFromBagId(objectId);
+            if(stylingFeature != null)
             {               
-                coord = stylingPropertyData.GetVisibilityCoordinateForSubObject(layerFeature);
+                coord = stylingPropertyData.GetVisibilityCoordinateForSubObject(stylingFeature);
                 if(coord == null)
                 {
                     Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                     return null;
                 }
                 HiddenObjectsPropertyData.SubObjectData layerFeatureData = new HiddenObjectsPropertyData.SubObjectData();
-                layerFeatureData.layerFeature = layerFeature;
+                layerFeatureData.StylingFeature = stylingFeature;
                 layerFeatureData.coord = (Coordinate)coord;
                 layerFeatureData.visible = visible;
                 return layerFeatureData;
@@ -258,8 +258,8 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
-            LayerFeature layerFeature = HiddenObject.GetLayerFeatureFromBagId(objectId);
-            if(layerFeature == null)
+            StylingFeature stylingFeature = HiddenObject.GetLayerFeatureFromBagId(objectId);
+            if(stylingFeature == null)
             {
                 //there is no layerfeature present, lets attach a listener to wait for the mapping to be loaded
                 DestroyGhostMesh();

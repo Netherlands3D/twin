@@ -189,7 +189,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             pointFeaturesLayer?.RemoveFeaturesOutOfView();
         }
 
-        private void CreateFeatureMappingsForFeature(Feature feature, IGeoJsonVisualisationLayer layer)
+        private void CreateFeatureMappingsForFeature(Feature feature, IGeoJsonGeometryTypeVisualizer layer)
         {
             var meshData = layer?.GetMeshData(feature);
             if (meshData != null)
@@ -198,7 +198,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        private void CreateFeatureMappings(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
+        private void CreateFeatureMappings(IGeoJsonGeometryTypeVisualizer layer, Feature feature, List<Mesh> meshes)
         {
             FeatureMapping objectMapping = new FeatureMapping();
             objectMapping.SetFeature(feature);
@@ -230,7 +230,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer)
+        private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonGeometryTypeVisualizer layer)
         {
             GeoJsonFeatures.Add(feature);
             layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
@@ -242,7 +242,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             OnFeatureRemove.Invoke(feature);
             //we have to query first to find the corresponding featuremappings, cant do a remove right away
             //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
-            IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
+            IGeoJsonGeometryTypeVisualizer layer = GetVisualisationLayerForFeature(feature);
             BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
             List<IMapping> mappings = SelectionService.MappingTree.Query<FeatureMapping>(queryBoundingBox);
             foreach (FeatureMapping mapping in mappings)
@@ -255,7 +255,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public IGeoJsonVisualisationLayer GetVisualisationLayerForFeature(Feature feature)
+        public IGeoJsonGeometryTypeVisualizer GetVisualisationLayerForFeature(Feature feature)
         {
             switch (feature.Geometry.Type)
             {

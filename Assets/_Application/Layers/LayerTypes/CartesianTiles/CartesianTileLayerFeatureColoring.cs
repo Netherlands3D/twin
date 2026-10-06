@@ -77,7 +77,7 @@ namespace Netherlands3D.Twin.layers.properties
             }
         }
         
-        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             if (feature.Geometry is not Material mat) return feature;
 

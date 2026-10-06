@@ -49,10 +49,10 @@ namespace Netherlands3D.Twin.Layers
         public LayerData LayerData => layerData;
         public abstract BoundingBox Bounds { get; }
         
-        public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
-        public Func<LayerFeature, LayerFeature> OnFeatureCreated;
+        public Dictionary<object, StylingFeature> LayerFeatures { get; private set; } = new();
+        public Func<StylingFeature, StylingFeature> OnFeatureCreated;
         
-        public LayerFeature GetLayerFeatureByGeometry(object geometry)
+        public StylingFeature GetStylingFeatureByGeometry(object geometry)
         {
             LayerFeatures.TryGetValue(geometry, out var feature);
             return feature;
@@ -266,7 +266,7 @@ namespace Netherlands3D.Twin.Layers
         
         #region Styling
 
-        public Symbolizer GetStyling(LayerFeature feature)
+        public Symbolizer GetStyling(StylingFeature feature)
         {
             var stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
             if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
@@ -288,14 +288,14 @@ namespace Netherlands3D.Twin.Layers
         /// recorded in the local list of features to allow streaming services to request a list per tile, or to perform
         /// actions or filtering before registering these features.
         /// </summary>
-        protected List<LayerFeature> CreateFeaturesByType<T>() where T : Component
+        protected List<StylingFeature> CreateFeaturesByType<T>() where T : Component
         {
             return CreateFeaturesByType<T>(this.gameObject);
         }
         
-        protected List<LayerFeature> CreateFeaturesByType<T>(GameObject target) where T : Component
+        protected List<StylingFeature> CreateFeaturesByType<T>(GameObject target) where T : Component
         {
-            var cachedFeatures = new List<LayerFeature>();
+            var cachedFeatures = new List<StylingFeature>();
 
             // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
             // select the correct styling Rule to apply to the given "Feature". 
@@ -315,9 +315,9 @@ namespace Netherlands3D.Twin.Layers
         ///
         /// For example: to be able to match on material names you need to include the material names in the attributes.
         /// </summary>
-        public LayerFeature CreateFeature(object geometry)
+        public StylingFeature CreateFeature(object geometry)
         {
-            LayerFeature feature = LayerFeature.Create(this, geometry);
+            StylingFeature feature = StylingFeature.Create(this, geometry);
             AddAttributesToLayerFeature(feature);
             if(OnFeatureCreated != null)
                 feature = OnFeatureCreated.Invoke(feature);
@@ -333,7 +333,7 @@ namespace Netherlands3D.Twin.Layers
         /// and that the properties are encoded as Expression types so that the expression system does not need to do
         /// ad hoc implicit conversions from a primitive to an Expression type. 
         /// </summary>
-        protected virtual LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected virtual StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             return feature;
         }

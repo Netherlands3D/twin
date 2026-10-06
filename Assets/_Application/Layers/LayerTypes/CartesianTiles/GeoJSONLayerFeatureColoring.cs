@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.layers.properties
     [RequireComponent(typeof(GeoJsonLayerGameObject))]
     public class GeoJSONLayerFeatureColoring : MonoBehaviour, IVisualizationWithPropertyData
     {
-        private List<IGeoJsonVisualisationLayer> layers = new List<IGeoJsonVisualisationLayer>();
+        private List<IGeoJsonGeometryTypeVisualizer> layers = new List<IGeoJsonGeometryTypeVisualizer>();
         private GeoJsonLayerGameObject visualization;
         
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -144,7 +144,7 @@ namespace Netherlands3D.Twin.layers.properties
             return null;
         }
 
-        public string GetColorPropertyTypeForLayer(IGeoJsonVisualisationLayer layer)
+        public string GetColorPropertyTypeForLayer(IGeoJsonGeometryTypeVisualizer layer)
         {
             if (layer.SupportsGeometryType(GeoJSONObjectType.Point) || layer.SupportsGeometryType(GeoJSONObjectType.MultiPoint))
                 return Symbolizer.FillColorProperty;
@@ -156,7 +156,7 @@ namespace Netherlands3D.Twin.layers.properties
             return Symbolizer.FillColorProperty;
         }
         
-        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             if (feature.Geometry is not Material mat) return feature;
 

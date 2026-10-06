@@ -12,7 +12,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer
+    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonGeometryTypeVisualizer
     {
         public bool SupportsGeometryType(GeoJSONObjectType geometryType)
         {
@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public int FeatureCount => spawnedVisualisations.Count;
         public Transform Transform => transform;
 
-        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
+        public event IGeoJsonGeometryTypeVisualizer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
         public Dictionary<Feature, FeatureLineVisualisations> SpawnedVisualisations => spawnedVisualisations;

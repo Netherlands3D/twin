@@ -379,7 +379,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.ApplyStyling();
         }
 
-        public virtual void ApplyStylingToFeature(LayerFeature feature)
+        public virtual void ApplyStylingToFeature(StylingFeature feature)
         {
             if (feature.Geometry is not MeshRenderer meshRenderer) return;
             

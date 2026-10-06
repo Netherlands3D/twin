@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
         
-        public override void ApplyStylingToFeature(LayerFeature feature)
+        public override void ApplyStylingToFeature(StylingFeature feature)
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
             

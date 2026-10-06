@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
-    public interface IGeoJsonVisualisationLayer
+    public interface IGeoJsonGeometryTypeVisualizer
     {
         bool SupportsGeometryType(GeoJSONObjectType geometryType);
         int FeatureCount { get; }
