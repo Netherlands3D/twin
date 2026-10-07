@@ -51,22 +51,7 @@ mergeInto(LibraryManager.library, {
         });
         
         window.allowedDropExtensions = [];
-
-	window.SetAllowedDropExtensions = function (extensions) {
-	    window.allowedDropExtensions = extensions.split(",").map(function (ext) {
-		    ext = ext.trim().toLowerCase();
-
-		    if (ext && ext.charAt(0) !== ".") {
-		        ext = "." + ext;
-		    }
-
-		    return ext;
-		})
-		.filter(Boolean);
-
-	    console.log("Allowed drop extensions:", window.allowedDropExtensions);
-	};
-
+	
         document.addEventListener("drop", function (event) {
 	    console.log("File dropped");
 	    event.stopPropagation();
@@ -203,6 +188,22 @@ mergeInto(LibraryManager.library, {
             });
         };
     },
+
+    SetAllowedDropExtensions: function (extensions) {
+        window.allowedDropExtensions = UTF8ToString(extensions).split(",").map(function (ext) {
+            ext = ext.trim().toLowerCase();
+
+            if (ext && ext.charAt(0) !== ".") {
+                ext = "." + ext;
+            }
+
+            return ext;
+        })
+        .filter(Boolean);
+
+        console.log("Allowed drop extensions:", window.allowedDropExtensions);
+    },
+
 
     /**
      * Can be called by Unity to open (click) the file input with the given field name.

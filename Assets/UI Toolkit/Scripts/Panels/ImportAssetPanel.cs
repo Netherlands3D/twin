@@ -69,7 +69,7 @@ namespace Netherlands3D.UI.Panels
                 importService.AddSupportedDragAndDropExtention(extension);
 
             foreach (Functionality functionality in optionalFunctionalities)
-                SetFunctionalityEnabled(functionality, functionality.IsEnabled);
+                UpdateExtensionForFunctionality(functionality, functionality.IsEnabled);
             
             uploadButton = this.Q<ListViewItem>("FileUploadButton");
             goToAssetLibraryButton = this.Q<ListViewItem>("GoToAssetLibraryButton");
@@ -102,7 +102,7 @@ namespace Netherlands3D.UI.Panels
             SetSelectionAreaSectionActive(false);
         }
 
-        private void SetFunctionalityEnabled(Functionality functionality, bool enabled)
+        private void UpdateExtensionForFunctionality(Functionality functionality, bool enabled)
         {
             if (!functionality.IsExperimental || string.IsNullOrEmpty(functionality.FileExtension))
                 return;
@@ -116,16 +116,14 @@ namespace Netherlands3D.UI.Panels
         private void AddFileExtension(string extension)
         {
             if (!supportedFileTypes.Contains(extension))
-            {
                 supportedFileTypes.Add(extension);
-                importService.AddSupportedDragAndDropExtention(extension);
-            }
+            importService.AddSupportedDragAndDropExtention(extension);
         }
 
         private void RemoveFileExtension(string extension)
         {
-            if (supportedFileTypes.Remove(extension))
-                importService.RemoveSupportedDragAndDropExtention(extension);
+            supportedFileTypes.Remove(extension);
+            importService.RemoveSupportedDragAndDropExtention(extension);
         }
 
         private void OnCrumbClicked(int index, Breadcrumb.Crumb crumb)

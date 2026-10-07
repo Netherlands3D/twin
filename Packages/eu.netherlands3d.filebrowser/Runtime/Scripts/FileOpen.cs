@@ -62,7 +62,7 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
         javaScriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
         javaScriptInput.AlignObjectID(fileInputName, false);
 
-        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
+        SetAllowedDropExtensions(string.Join(",", allowedDragAndDropFileTypes));
     }
 
     private void SetJavaScriptFileExtensions(string fileExtentions)
@@ -130,10 +130,20 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
         if(allowedDragAndDropFileTypes.Contains(extension)) return;
         
         allowedDragAndDropFileTypes.Add(extension);
+        Debug.Log(string.Join(",", allowedDragAndDropFileTypes));
+#if !UNITY_EDITOR && UNITY_WEBGL
+        SetAllowedDropExtensions(string.Join(",", allowedDragAndDropFileTypes));
+#endif
     }
 
     public void RemoveSupportedDragAndDropExtention(string extension)
     {
-        allowedDragAndDropFileTypes.Remove(extension);
+        if (allowedDragAndDropFileTypes.Remove(extension))
+        {
+            Debug.Log(string.Join(",", allowedDragAndDropFileTypes));
+#if !UNITY_EDITOR && UNITY_WEBGL
+            SetAllowedDropExtensions(string.Join(",", allowedDragAndDropFileTypes));
+#endif
+        }
     }
 }
