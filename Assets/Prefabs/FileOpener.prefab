@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1470089695843067273}
   - component: {fileID: 1748615501916967598}
   - component: {fileID: 8779175394998946664}
-  - component: {fileID: 8566065976473265783}
   m_Layer: 0
   m_Name: FileOpener
   m_TagString: Untagged
@@ -75,47 +74,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin.services::Netherlands3D.Services.UniqueMonobehaviourService
   service: {fileID: 1748615501916967598}
---- !u!114 &8566065976473265783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2388221261345448311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: eu.netherlands3d.twin.functionalities::Netherlands3D.Twin.Functionalities.FunctionalityListener
-  functionalities:
-  - {fileID: 11400000, guid: 4b1d979670f91e8618cefe277006e51f, type: 2}
-  OnEnableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1748615501916967598}
-        m_TargetAssemblyTypeName: FileOpen, eu.netherlands3d.filebrowser.Runtime
-        m_MethodName: AddSupportedFileType
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: las
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnDisableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1748615501916967598}
-        m_TargetAssemblyTypeName: FileOpen, eu.netherlands3d.filebrowser.Runtime
-        m_MethodName: RemoveSupportedFileType
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: las
-          m_BoolArgument: 0
-        m_CallState: 2

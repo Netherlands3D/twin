@@ -12,17 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_LasImporter
   m_EditorClassIdentifier: 
-  data:
-    Id: las-bestanden-importeren
-    IsEnabled: 0
+  defaultData:
+    rid: 6450161991168557206
   Title: Las bestanden importeren
   Caption: LAS
   Header: Eigen .LAS bestanden tonen in de 3D viewer
   Description: 
   configuration: {fileID: 0}
-  OnEnable:
+  IsExperimental: 1
+  FileExtension: las
+  OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []
-  OnDisable:
+  OnDisableFunctionality:
     m_PersistentCalls:
       m_Calls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 6450161991168557206
+      type: {class: FunctionalityData, ns: Netherlands3D.Twin.Functionalities, asm: eu.netherlands3d.twin.functionalities}
+      data:
+        Id: las-bestanden-importeren
+        IsEnabled: 0

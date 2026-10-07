@@ -26,9 +26,8 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
 
     public UnityEvent<string> onFilesSelected = new();
     
-    public List<string> SupportedFileTypes => supportedFileTypes;
+    private List<string> allowedDragAndDropFileTypes = new(); 
     
-    private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" }; //todo populate from a const?
 
 #if !UNITY_EDITOR && UNITY_WEBGL
     private string fileInputName = string.Empty;
@@ -125,20 +124,16 @@ public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no lo
         Debug.Log("button received: " + filePaths);
         onFilesSelected.Invoke(filePaths);
     }
-    
-    public void AddSupportedFileType(string extention)
+
+    public void AddSupportedDragAndDropExtention(string extension)
     {
-        if(supportedFileTypes.Contains(extention)) return;
+        if(allowedDragAndDropFileTypes.Contains(extension)) return;
         
-        supportedFileTypes.Add(extention);
-        
-        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
+        allowedDragAndDropFileTypes.Add(extension);
     }
-        
-    public void RemoveSupportedFileType(string extention)
+
+    public void RemoveSupportedDragAndDropExtention(string extension)
     {
-        supportedFileTypes.Remove(extention);
-        
-        SetAllowedDropExtensions(string.Join(",", supportedFileTypes));
+        allowedDragAndDropFileTypes.Remove(extension);
     }
 }

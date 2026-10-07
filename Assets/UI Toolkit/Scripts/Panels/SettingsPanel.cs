@@ -42,13 +42,13 @@ namespace Netherlands3D.UI.Panels
             functionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             functionalitiesListView.makeItem = MakeFunctionalityItem;
             functionalitiesListView.bindItem = (item, index) => BindFunctionalityItem(item, index, functionalitiesListView);
-            functionalitiesListView.itemsSource = configuration.Functionalities;
+            functionalitiesListView.itemsSource = configuration.Functionalities.Where(f => !f.IsExperimental).ToList();
             
             experimentalFunctionalitiesListView = settingsSection.Q<ListView>("ExperimentalFunctionalities");
             experimentalFunctionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             experimentalFunctionalitiesListView.makeItem = MakeFunctionalityItem;
             experimentalFunctionalitiesListView.bindItem = (item, index) => BindFunctionalityItem(item, index, experimentalFunctionalitiesListView);
-            experimentalFunctionalitiesListView.itemsSource = configuration.ExperimentalFunctionalities;
+            experimentalFunctionalitiesListView.itemsSource = configuration.Functionalities.Where(f => f.IsExperimental).ToList();
             
             var fpvFunctionality = configuration.Functionalities.FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
             if (fpvFunctionality != null)
