@@ -17,12 +17,9 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         public const string TimelineAttributeIdentifier = "data-timeline-color";
         public const string TimelineColorIdentifier = "timeline-color";
-
-        private Color defaultColor;
-
-        public TimelineStatusStylingLayerPropertyData(Color defaultColor) : base()
+        
+        public TimelineStatusStylingLayerPropertyData() : base()
         {
-            this.defaultColor = defaultColor;
             StylingRules.Remove(DefaultRuleName); //we do not need this here
         }
 
@@ -79,6 +76,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             foreach (var kvp in stateColors)
             {
                 var stylingRuleKey = GetStylingRuleKey(kvp.Key);
+                if(StylingRules.TryGetValue(stylingRuleKey, out var rule))
+                {
+                    rule.Symbolizer.SetColor(colorType, kvp.Value);
+                    continue;
+                }
+                
                 var stylingRule = new StylingRule(
                     kvp.Key,
                     Expression.EqualTo(
