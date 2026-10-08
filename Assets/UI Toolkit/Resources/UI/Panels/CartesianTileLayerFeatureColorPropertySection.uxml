@@ -8,6 +8,6 @@
     class="cartesian-tile-layer-feature-color-property-section"
     >
     <nl3d:ContentContainer leading-icon="ColorFeatures" text="Maaiveld stijl aanpassen">
-        <nl3d:ListView class="cartesian-tile-layer-feature-color-property-section__list-view"/>
+        <nl3d:ListView class="cartesian-tile-layer-feature-color-property-section__list-view" list-group="PropertyPanel"/>
     </nl3d:ContentContainer>
 </ui:UXML>

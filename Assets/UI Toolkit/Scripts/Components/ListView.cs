@@ -21,11 +21,10 @@ namespace Netherlands3D.UI.Components
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
         private Vector2 lastPointerPosition;
 
-        [UxmlAttribute("empty-text")]
-        public string EmptyText { get; set; } = "Deze lijst is leeg";
+        [UxmlAttribute("empty-text")] public string EmptyText { get; set; } = "Deze lijst is leeg";
 
-        private static UnityEvent<ListView> ListViewSelected = new UnityEvent<ListView>(); // when we have 2 list views in a panel, changing the selection in one of them should cause the selection of another to deselect
-        
+        private static UnityEvent<ListView, string> ListViewSelected = new (); // deselect other lists in the same group
+
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
         /// </summary>
@@ -51,7 +50,7 @@ namespace Netherlands3D.UI.Components
 
             _userBind?.Invoke(ve, id);
         }
-        
+
         private void SetActiveElement(PointerEnterEvent evt)
         {
             hoveredElement = evt.target as VisualElement;
@@ -85,6 +84,15 @@ namespace Netherlands3D.UI.Components
             set => showAlternatingRowBackgrounds = value;
         }
 
+        private string listGroup = string.Empty;
+
+        [UxmlAttribute("list-group")]
+        public string ListGroup
+        {
+            get => listGroup;
+            set => listGroup = value;
+        }
+
         public ListView()
         {
             this.CloneComponentTree("Components");
@@ -95,20 +103,31 @@ namespace Netherlands3D.UI.Components
             if (base.bindItem == null) this.bindItem = DefaultBind;
 
             selectionChanged += OnSelectionChanged;
-            
+
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
 
-            RegisterCallback<PointerMoveEvent>(evt =>
-            {
-                lastPointerPosition = evt.position;
-            });
-            
+            RegisterCallback<PointerMoveEvent>(evt => { lastPointerPosition = evt.position; });
+
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+
+        private void OnAttachToPanel(AttachToPanelEvent evt)
+        {
             ListViewSelected.AddListener(OnListViewSelected);
         }
 
-        private void OnListViewSelected(ListView listView)
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            if(listView != this)
+            ListViewSelected.RemoveListener(OnListViewSelected);
+        }
+
+        private void OnListViewSelected(ListView caller, string listGroup)
+        {
+            if(caller == this)
+                return;
+            
+            if (listGroup != string.Empty && listGroup == ListGroup)
                 ClearSelection();
         }
 
@@ -139,10 +158,10 @@ namespace Netherlands3D.UI.Components
             var referenceLayer = hoveredElement;
             if (referenceLayer == null)
                 referenceLayer = FindClosestElement(lastPointerPosition);
-            
-            if(obj.Any())
-                ListViewSelected.Invoke(this);
-            
+
+            if (obj.Any())
+                ListViewSelected.Invoke(this, ListGroup);
+
             this.OnSelectionChanged(
                 referenceLayer,
                 indexDictionary,
@@ -150,7 +169,7 @@ namespace Netherlands3D.UI.Components
                 ref firstSelectedIndex,
                 ref lastDirection);
         }
-        
+
         private VisualElement FindClosestElement(Vector2 pointerPosition)
         {
             VisualElement closest = null;
