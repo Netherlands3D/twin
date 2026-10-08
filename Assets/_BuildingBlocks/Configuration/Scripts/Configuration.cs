@@ -78,6 +78,15 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
+        public bool ExperimentalFunctionalityHasFileExtension(string extension)
+        {
+            foreach (var functionality in Functionalities)
+                if(functionality.IsExperimental)
+                    if(functionality.FileExtension.Contains(extension)) //should work for "ext" & ".ext"
+                        return  true;
+            return false;
+        }
+
         public UnityEvent<bool> OnAllowUserSettingsChanged = new();
         public UnityEvent<bool> OnShouldStartSetupChanged = new();
         public UnityEvent<Coordinate> OnOriginChanged = new();

@@ -19,6 +19,9 @@ namespace Netherlands3D.Twin.Services
         private int activeAddedCounter;
         private int activeRemovalCounter;
         private DataTypeChain[] chains;
+
+        [SerializeField]
+        private Configuration.Configuration configuration;
         
         [SerializeField] private StringEvent layerSourceAttributionEvent;
         public UnityEvent<string> OnAttributionReceived;
@@ -136,7 +139,7 @@ namespace Netherlands3D.Twin.Services
             foreach (var file in fileNames)
             {
                 string extension = Path.GetExtension(file).TrimStart('.');
-                if (fileImportService.ExperimentalFileTypes.Contains(extension))
+                if (configuration.ExperimentalFunctionalityHasFileExtension(extension))
                 {
                     snackbarService.DisplayMessage($"Het lijkt er op dat je een bestand met extentie: {extension} wil importeren. Zet hiervoor eerst de experimentele functionaliteiten aan in het instellingen menu en probeer het opnieuw.");
                     break;

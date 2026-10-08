@@ -47,7 +47,7 @@ namespace Netherlands3D.UI.Panels
         private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" }; //todo populate from a const?
         private List<Functionality> optionalFunctionalities = new();
 
-        private FileOpen importService;
+        private FileImportService importService;
 
         public ImportAssetPanel()
         {
@@ -60,7 +60,7 @@ namespace Netherlands3D.UI.Panels
             this.AddComponentStylesheet("Panels");
             this.optionalFunctionalities = configuration.Functionalities.Where(f => !string.IsNullOrEmpty(f.FileExtension)).ToList();
             
-            importService = ServiceLocator.GetService<FileOpen>();
+            importService = ServiceLocator.GetService<FileImportService>();
 
             foreach (string extension in supportedFileTypes)
                 importService.AddSupportedDragAndDropExtention(extension);
@@ -190,7 +190,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnUploadStarted(ClickEvent evt)
         {
-            FileOpen importService = ServiceLocator.GetService<FileOpen>();
+            FileImportService importService = ServiceLocator.GetService<FileImportService>();
             importService.OpenFile(string.Join(",", supportedFileTypes));
         }
 
