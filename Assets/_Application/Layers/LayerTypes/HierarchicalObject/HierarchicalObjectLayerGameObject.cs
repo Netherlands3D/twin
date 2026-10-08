@@ -29,7 +29,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private int snappingCullingMask = 0;
         private bool meshIsScatterable = true;
-
+        private IImportedObject iImportedObject;
+            
         private BoundingBox CalculateWorldBoundsFromRenderers()
         {
             var renderers = GetComponentsInChildren<Renderer>(); //needs to be optimized if we call this function every frame.
@@ -64,6 +65,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
             WorldTransform = GetComponent<WorldTransform>();
+            iImportedObject = GetComponent<IImportedObject>();
         }
 
         protected override void OnEnable()
@@ -99,13 +101,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             previousRotation = WorldTransform.Rotation;
             previousScale = transform.localScale;
 
+            if (iImportedObject == null) //apply styling if this is not an imported object, otherwise we want it to be applied only after the import completes
+            {
+                CreateStylingFeaturesFromMeshRenderers();
+            }
+
+            objectCreated.Invoke(gameObject);       
+        }
+
+        private void CreateStylingFeaturesFromMeshRenderers()
+        {
             foreach (var meshRenderer in GetComponentsInChildren<MeshRenderer>())
             {
-                var layerFeature = CreateFeature(meshRenderer);
-                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                var stylingFeature = CreateFeature(meshRenderer);
+                LayerFeatures.Add(stylingFeature.Geometry, stylingFeature);
             }
-            
-            objectCreated.Invoke(gameObject);       
+
+            ApplyStyling();
         }
 
         private void UpdatePosition(Coordinate newPosition)
@@ -225,10 +237,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             if(toggleScatterPropertyData != null) toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);
 
-            var importedObject = GetComponent<IImportedObject>();
-            if (importedObject != null)
+            if (iImportedObject != null)
             {
-                importedObject.ObjectVisualized.AddListener(OnImportedObjectVisualized);
+                iImportedObject.ObjectVisualized.AddListener(OnImportedObjectVisualized);
             }
         }
 
@@ -243,10 +254,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             if (toggleScatterPropertyData != null) toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
             
-            var importedObject = GetComponent<IImportedObject>();
-            if (importedObject != null)
+            if (iImportedObject != null)
             {
-                importedObject.ObjectVisualized.RemoveListener(OnImportedObjectVisualized);
+                iImportedObject.ObjectVisualized.RemoveListener(OnImportedObjectVisualized);
             }
         }
 
@@ -362,12 +372,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void OnImportedObjectVisualized(GameObject importedObject)
         {
-            foreach (var meshRenderer in importedObject.GetComponentsInChildren<MeshRenderer>())
-            {
-                var layerFeature = CreateFeature(meshRenderer);
-                LayerFeatures.TryAdd(layerFeature.Geometry, layerFeature);
-            }
-            ApplyStyling();
+            CreateStylingFeaturesFromMeshRenderers();
         }
         
         public override void ApplyStyling()
