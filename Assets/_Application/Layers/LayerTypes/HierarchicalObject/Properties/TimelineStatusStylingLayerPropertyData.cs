@@ -1,14 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.Timeline;
-using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
@@ -66,7 +62,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void SetColorForStatus(string status, Color color)
         {
             var stylingRuleKey = GetStylingRuleKey(status);
-            StylingRules[stylingRuleKey].Symbolizer.SetColor(colorType, color);
+            StylingRules[stylingRuleKey].Symbolizer.SetColor(Symbolizer.FillColorProperty, color);
+            StylingRules[stylingRuleKey].Symbolizer.SetColor(Symbolizer.StrokeColorProperty, color);
             OnStylingChanged.Invoke();
         }
         
@@ -86,7 +83,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                         kvp.Key
                     )
                 );
-                stylingRule.Symbolizer.SetColor(colorType, kvp.Value);
+                stylingRule.Symbolizer.SetColor(Symbolizer.FillColorProperty, kvp.Value);
+                stylingRule.Symbolizer.SetColor(Symbolizer.StrokeColorProperty, kvp.Value);
                 rules.Add(stylingRuleKey, stylingRule);
             }
 
