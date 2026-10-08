@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
@@ -15,7 +16,7 @@ namespace Netherlands3D.Timeline
         {
             get
             {
-                if (int.TryParse(value, out var result))
+                if (int.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
                     return result;
                 return null;
             }
@@ -26,7 +27,7 @@ namespace Netherlands3D.Timeline
         {
             get
             {
-                if (float.TryParse(value, out var result))
+                if (float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
                     return result;
                 return null;
             }
