@@ -46,9 +46,6 @@ namespace Netherlands3D.UI.Panels
         public List<string> SupportedFileTypes => supportedFileTypes;
         private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" }; //todo populate from a const?
         private List<Functionality> optionalFunctionalities = new();
-        private readonly Dictionary<Functionality, UnityAction> enabledListeners = new();
-        private readonly Dictionary<Functionality, UnityAction> disabledListeners = new();
-
 
         private FileOpen importService;
 
@@ -104,7 +101,7 @@ namespace Netherlands3D.UI.Panels
 
         private void UpdateExtensionForFunctionality(Functionality functionality, bool enabled)
         {
-            if (!functionality.IsExperimental || string.IsNullOrEmpty(functionality.FileExtension))
+            if (string.IsNullOrEmpty(functionality.FileExtension))
                 return;
 
             if (enabled)
