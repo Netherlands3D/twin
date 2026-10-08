@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 var annotation = annotations[i];
                 Debug.Log("Adding Annotation preset for featureType: " + annotation);
                 ColorUtility.TryParseHtmlString(annotation.Color, out Color color);
-                presets[i] = new GeoJSONAnnotationPreset.Args(annotation.Coordinate, annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption,  color, true);
+                presets[i] = new GeoJSONAnnotationPreset.Args(annotation.Coordinate, annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption,  color);
             }
             return new LayerPresetResult() { parent = geoJsonLayerPreset, children = presets };
         }
