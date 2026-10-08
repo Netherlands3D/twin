@@ -100,10 +100,10 @@ namespace Netherlands3D.Timeline
                 var layerFeature = visualization.LayerFeatures[visualizer];
                 var status = currentTimestampForFeature?.value;
                 
-                if(layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] == status)
+                if(layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] == status)
                     continue;
                 
-                layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
+                layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
                 visualization.ApplyStylingToFeature(layerFeature);
             }
         }

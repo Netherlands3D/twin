@@ -15,8 +15,8 @@ namespace Netherlands3D.Twin.Layers.Properties
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "TimelineStatus")]
     public class TimelineStatusStylingLayerPropertyData : StylingPropertyData
     {
-        public const string TimelineAttributeIdentifier = "data-timeline-color";
-        public const string TimelineColorIdentifier = "timeline-color";
+        public const string TimelineStatusAttributeIdentifier = "data-timeline-status-color";
+        private const string TimelineStatusColorIdentifier = "timeline-status-color";
         
         public TimelineStatusStylingLayerPropertyData() : base()
         {
@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         private string GetStylingRuleKey(string status)
         {
-            return $"feature.{status}.{TimelineColorIdentifier}";
+            return $"feature.{status}.{TimelineStatusColorIdentifier}";
         }
 
         public Color? GetColorForTimestamp(Timestamp timestamp)
@@ -85,7 +85,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 var stylingRule = new StylingRule(
                     kvp.Key,
                     Expression.EqualTo(
-                        Expression.Get(TimelineAttributeIdentifier),
+                        Expression.Get(TimelineStatusAttributeIdentifier),
                         kvp.Key
                     )
                 );
