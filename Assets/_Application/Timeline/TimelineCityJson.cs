@@ -40,7 +40,7 @@ namespace Netherlands3D.Timeline
             if(timelineStatusStylingLayerPropertyData != null)
                 return; //already initialized
             
-            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties, null, visualization.LayerData.Color);
+            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
 
             timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
             timelineStatusStylingLayerPropertyData.OnStylingChanged.AddListener(visualization.ApplyStyling);
