@@ -81,7 +81,7 @@ namespace Netherlands3D.Timeline
             }
             
             // todo: if rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat (maxValue is tbd)
-            timelineStatusStylingLayerPropertyData.AddRulesForStatuses(newStates);
+            timelineStatusStylingLayerPropertyData.AddNewRulesForStatuses(newStates);
         }
         
         private void OnTimeChanged(DateTime currentTime)
