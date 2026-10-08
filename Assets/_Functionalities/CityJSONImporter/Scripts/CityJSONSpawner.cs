@@ -61,13 +61,18 @@ namespace Netherlands3D.Functionalities.CityJSON
                 yield break;
             }
 
-            var json = File.ReadAllText(file);
             var cityJson = GetComponent<CityJson.Structure.CityJSON>();
-            cityJson.ParseCityJSON(json);
 
+            // Wait until the CityJSON streaming parser has finished.
+            yield return StartCoroutine(
+                cityJson.ParseCityJSONStreaming(file)
+            );
+
+            // CityObjects now exist.
             foreach (var co in cityJson.CityObjects)
             {
                 var visualizers = co.GetComponents<CityObjectVisualizer>();
+
                 foreach (var visualizer in visualizers)
                 {
                     layerGameObject.AddFeature(visualizer);
