@@ -66,6 +66,20 @@ namespace Netherlands3D.Twin.Layers.Properties
             StylingRules[stylingRuleKey].Symbolizer.SetColor(Symbolizer.StrokeColorProperty, color);
             OnStylingChanged.Invoke();
         }
+
+        public void SetColorsForStatuses(Dictionary<string, Color> stateColors)
+        {
+            foreach (var kvp in stateColors)
+            {
+                var stylingRuleKey = GetStylingRuleKey(kvp.Key);
+                if (StylingRules.TryGetValue(stylingRuleKey, out var rule))
+                {
+                    rule.Symbolizer.SetColor(Symbolizer.FillColorProperty, kvp.Value);
+                    rule.Symbolizer.SetColor(Symbolizer.StrokeColorProperty, kvp.Value);
+                }
+            }
+            OnStylingChanged.Invoke();
+        }
         
         public void AddNewRulesForStatuses(Dictionary<string, Color> stateColors)
         {
