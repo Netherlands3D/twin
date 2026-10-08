@@ -8,6 +8,7 @@ mergeInto(LibraryManager.library, {
         window.filesToSave = 0;
         window.counter = 0;
         window.databaseConnection = null;
+        window.fileImporterCallbackObject = "importerGameObject"
 
         window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB;
         window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;
@@ -67,10 +68,18 @@ mergeInto(LibraryManager.library, {
 		});
 	    });
 
-	    if (validFiles.length === 0) {
-		console.log("No supported files were dropped.");
-		return;
-	    }
+		if (validFiles.length === 0) {
+		    var filenames = files.map(function (file) {
+			return file.name;
+		    }).join(",");
+
+		    SendMessage(
+			window.fileImporterCallbackObject,
+			"UnsupportedFileDropped",
+			filenames
+		    );
+		    return;
+		}
 
 	    window.ReadFiles(validFiles);
 	});
@@ -92,7 +101,7 @@ mergeInto(LibraryManager.library, {
         window.ReadFiles = function ReadFiles(SelectedFiles) {
             if (window.File && window.FileReader && window.FileList && window.Blob) {
                 window.ConnectToDatabaseAndReadFiles(SelectedFiles);
-                SendMessage('UserFileUploads', 'FileCount', SelectedFiles.length);
+                SendMessage(window.fileImporterCallbackObject, 'FileCount', SelectedFiles.length);
             } else {
                 alert("Bestanden inladen wordt helaas niet ondersteund door deze browser.");
             }
@@ -176,17 +185,26 @@ mergeInto(LibraryManager.library, {
 
                 console.log("Saving file: " + newIndexedFilePath);
                 dbRequest.onsuccess = function () {
-                    SendMessage('UserFileUploads', 'LoadFile', newFileName);
+                    SendMessage(window.fileImporterCallbackObject, 'LoadFile', newFileName);
                     console.log("File saved: " + newIndexedFilePath);
                     window.FileSaved();
                 };
                 dbRequest.onerror = function () {
-                    SendMessage('UserFileUploads', 'LoadFileError', newFileName);
+                    SendMessage(window.fileImporterCallbackObject, 'LoadFileError', newFileName);
                     alert("Could not save: " + newIndexedFilePath);
                     window.FileSaved();
                 };
             });
         };
+    },     
+	
+SetFileImporterCallbackObject: function (objectNamePtr) {
+    window.fileImporterCallbackObject = UTF8ToString(objectNamePtr);
+	},
+    
+    SetAllowedDropExtensions: function (extensionsPtr) {
+        var extensions = UTF8ToString(extensionsPtr);
+        window.SetAllowedDropExtensions(extensions);
     },
 
     SetAllowedDropExtensions: function (extensions) {

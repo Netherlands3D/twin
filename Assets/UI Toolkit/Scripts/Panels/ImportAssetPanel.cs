@@ -92,6 +92,7 @@ namespace Netherlands3D.UI.Panels
             
             //we dont want to show the warning first but immediately start with the input of credentials instead
             credentialPanel.StartWithInput();
+
             RegisterCallback<DetachFromPanelEvent>(_ => { credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials); });
 
             importUriField.RegisterCallback<NavigationSubmitEvent>(OnSubmit, TrickleDown.TrickleDown);
@@ -190,7 +191,7 @@ namespace Netherlands3D.UI.Panels
         private void OnUploadStarted(ClickEvent evt)
         {
             FileOpen importService = ServiceLocator.GetService<FileOpen>();
-            importService.OpenFile(string.Join(",", SupportedFileTypes));
+            importService.OpenFile(string.Join(",", supportedFileTypes));
         }
 
         private void OnInportUriButtonClicked(ClickEvent evt)
