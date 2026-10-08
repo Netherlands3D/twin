@@ -82,7 +82,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         private void OnClickAnnotation(PointerDownEvent e)
         {
-            selectionService.SelectGeoJsonFeatureAtPosition(trueBounds.center);
+            //selectionService.SelectGeoJsonFeatureAtPositionForLayer(trueBounds.center);
         }
         
         public void CalculateBounds()

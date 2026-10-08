@@ -37,13 +37,13 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void ProcessFeatureMappingForLayer(FeatureMapping mapping)
         {
-            if (mapping == null || visualization.LayerData != mapping.LayerData)
+            FeaturePropertyData propertyData = visualization.LayerData.GetProperty<FeaturePropertyData>();
+            if (mapping == null || propertyData == null)
             {
                 ClearFeatureMappingsForLayer();
                 return;
             }
-
-            FeaturePropertyData propertyData = visualization.LayerData.GetProperty<FeaturePropertyData>();
+            
             featureIds.Clear();
             SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)

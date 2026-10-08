@@ -115,8 +115,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         public override void OnSelect(LayerData layer)
         {
-            if(worldAnnotation.ReadOnly) return;
-            
+            if(worldAnnotation.ReadOnly)
+            {
+                return;
+            }
             AttachToTransformHandles();
         }
 
