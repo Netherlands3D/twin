@@ -5,6 +5,6 @@
          editor-extension-mode="False" 
          name="TimelinePropertySection">
     <nl3d:ContentContainer leading-icon="ResetTime" text="Tijdlijn">
-        <nl3d:ListView name="StatusList" class="timeline-property-section__list-view"/>
+        <nl3d:ListView name="StatusList" class="timeline-property-section__list-view" list-group="PropertyPanel"/>
     </nl3d:ContentContainer>
 </ui:UXML>

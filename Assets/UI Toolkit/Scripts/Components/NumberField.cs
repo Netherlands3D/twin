@@ -229,7 +229,7 @@ namespace Netherlands3D.UI.Components
             }
             else if(valueFormat == NumberFieldFormat.Date)
             {
-                InputField.SetValueWithoutNotify(dateTime.ToString("MM/dd/yyyy HH:mm:ss"));
+                InputField.SetValueWithoutNotify(dateTime.ToString("dd//MM/yyyy HH:mm:ss"));
             }
         }
 

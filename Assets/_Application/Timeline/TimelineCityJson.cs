@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -23,8 +21,8 @@ namespace Netherlands3D.Timeline
 
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
         private Dictionary<CityObject, TimestampCollection> timelines = new();
-        
-        private void Start()
+
+        private void OnEnable()
         {
             sunTime = ServiceLocator.GetService<SunTime>();
             sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
@@ -32,25 +30,24 @@ namespace Netherlands3D.Timeline
             visualization = GetComponent<CityJSONLayerGameObject>();
             cityJson = GetComponent<CityJSON>();
             cityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes);
-            ReadTimeLineFromAttributes();
         }
 
+        private void OnDisable()
+        {
+            sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged);
+            timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
+            cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes);
+        }
+        
         private void InitTimelineStylingProperty()
         {
             if(timelineStatusStylingLayerPropertyData != null)
                 return; //already initialized
             
-            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties, null, visualization.LayerData.Color);
+            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
 
             timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
             timelineStatusStylingLayerPropertyData.OnStylingChanged.AddListener(visualization.ApplyStyling);
-        }
-
-        private void OnDestroy()
-        {
-            sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged);
-            timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
-            cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes);
         }
 
         private void ReadTimeLineFromAttributes()
@@ -62,7 +59,9 @@ namespace Netherlands3D.Timeline
                 if (co.Attributes.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var attribute))
                 {
                     InitTimelineStylingProperty();
-                    
+                    visualization.AddStylingFeatureForCityObject(co);
+                    // stylingFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, null);
+
                     var collection = new TimestampCollection(attribute.Value.ToString());
                     timelines.Add(co, collection);
                     
@@ -81,7 +80,7 @@ namespace Netherlands3D.Timeline
             }
             
             // todo: if rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat (maxValue is tbd)
-            timelineStatusStylingLayerPropertyData.AddRulesForStatuses(newStates);
+            timelineStatusStylingLayerPropertyData.AddNewRulesForStatuses(newStates);
         }
         
         private void OnTimeChanged(DateTime currentTime)
@@ -100,10 +99,11 @@ namespace Netherlands3D.Timeline
                 var layerFeature = visualization.LayerFeatures[visualizer];
                 var status = currentTimestampForFeature?.value;
                 
-                if(layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] == status)
-                    continue;
+                if(layerFeature.Attributes.TryGetValue(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, out var savedStatus))
+                    if(savedStatus == status)
+                        continue;
                 
-                layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
+                layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
                 visualization.ApplyStylingToFeature(layerFeature);
             }
         }

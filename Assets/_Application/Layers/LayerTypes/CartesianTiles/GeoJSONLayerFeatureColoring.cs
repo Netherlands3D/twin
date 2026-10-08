@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
-using Netherlands3D.CartesianTiles;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;

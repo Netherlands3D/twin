@@ -71,7 +71,8 @@ namespace Netherlands3D.CityJson.Visualisation
         public override bool HasData => meshes != null && meshes.Count > 0;
         
         private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
-
+        private int activeMaterialCount;
+        
 #if UNITY_EDITOR
         // allow to change the visible LOD from the inspector during runtime
         private void OnValidate()
@@ -156,6 +157,7 @@ namespace Netherlands3D.CityJson.Visualisation
             {
                 ActiveMesh = mesh.Mesh;
                 meshRenderer.materials = mesh.Materials;
+                activeMaterialCount = mesh.Materials.Length;
             }
             else
             {
@@ -442,7 +444,8 @@ namespace Netherlands3D.CityJson.Visualisation
         public override void SetFillColor(Color color)
         {
             var block = new MaterialPropertyBlock();
-            for (int m = 0; m < meshRenderer.sharedMaterials.Length; m++)
+            
+            for (int m = 0; m < activeMaterialCount; m++)
             {
                 meshRenderer.GetPropertyBlock(block, m);
                 block.SetColor(baseColorID, color);
@@ -452,6 +455,7 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public override void SetLineColor(Color color)
         {
+            
         }
     }
 }

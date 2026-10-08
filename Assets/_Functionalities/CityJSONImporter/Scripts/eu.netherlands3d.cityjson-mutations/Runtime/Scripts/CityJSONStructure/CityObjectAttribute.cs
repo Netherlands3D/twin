@@ -32,14 +32,14 @@ namespace Netherlands3D.CityJson.Structure
 
         public static Dictionary<string, CityObjectAttribute> ParseAttributesNode(CityObject parentObject, JSONNode attributeNode)
         {
-            var list = new Dictionary<string, CityObjectAttribute>();
+            var dictionary = new Dictionary<string, CityObjectAttribute>();
             foreach(var node in attributeNode)
             {
                 var attribute = new CityObjectAttribute(parentObject, node.Key, node.Value);
                 //attribute.FromJSONNode(node.Key, node.Value);
-                list.Add(attribute.Key, attribute);
+                dictionary.Add(attribute.Key, attribute);
             }
-            return list;
+            return dictionary;
         }
     }
 }

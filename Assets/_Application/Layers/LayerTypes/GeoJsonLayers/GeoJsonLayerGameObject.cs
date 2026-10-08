@@ -53,9 +53,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public GeoJSONLineLayer LineLayer => lineFeaturesLayer;
         public GeoJSONPolygonLayer PolygonLayer => polygonFeaturesLayer;
 
-        [Header("Visualizer settings")] [SerializeField]
-        private GeoJSONPolygonLayer polygonFeaturesLayer;
-
+        [Header("Visualizer settings")]
+        [SerializeField] private GeoJSONPolygonLayer polygonFeaturesLayer;
         [SerializeField] private GeoJSONLineLayer lineFeaturesLayer;
         [SerializeField] private GeoJSONPointLayer pointFeaturesLayer;
 
@@ -64,6 +63,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public List<Feature> GeoJsonFeatures { get; private set; } = new();
 
+        
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
@@ -152,9 +152,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             base.RegisterEventListeners();
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
             parser.OnParseError.AddListener(VisualisationError.Invoke);
-
+            
             credentialHandler?.OnAuthorizationHandled.AddListener(HandleCredentials);
-
+            
             polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
             lineFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
             polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
@@ -165,9 +165,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             base.UnregisterEventListeners();
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
             parser.OnParseError.RemoveListener(VisualisationError.Invoke);
-
+            
             credentialHandler?.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-
+            
             polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
             lineFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
             polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;

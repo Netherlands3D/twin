@@ -57,7 +57,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            // timelineStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
+            timelineStatusStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
             ColorPicker.ColorChanged.RemoveListener(OnPickColor);
         }
         
@@ -93,11 +93,14 @@ namespace Netherlands3D.UI.Panels
         
         private void OnPickColor(Color color)
         {
-            foreach (int i in listView.selectedIndices.ToList())
+            var selectedIndices = listView.selectedIndices.ToList();
+            var changedStateColors = new Dictionary<string, Color>(selectedIndices.Count);
+            foreach (int i in selectedIndices)
             {
                 string status = listView.itemsSource[i] as string;
-                timelineStatusStylingPropertyData.SetColorForStatus(status, color);
+                changedStateColors.Add(status, color);
             }
+            timelineStatusStylingPropertyData.SetColorsForStatuses(changedStateColors);
         }
         
         public void LoadProperties(List<LayerPropertyData> properties)

@@ -1,28 +1,21 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.Timeline;
-using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "Transform")]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "TimelineStatus")]
     public class TimelineStatusStylingLayerPropertyData : StylingPropertyData
     {
-        public const string TimelineAttributeIdentifier = "data-timeline-color";
-        public const string TimelineColorIdentifier = "timeline-color";
-
-        private Color defaultColor;
-
-        public TimelineStatusStylingLayerPropertyData(Color defaultColor) : base()
+        public const string TimelineStatusAttributeIdentifier = "data-timeline-status-color";
+        private const string TimelineStatusColorIdentifier = "timeline-status-color";
+        
+        public TimelineStatusStylingLayerPropertyData()
         {
-            this.defaultColor = defaultColor;
             StylingRules.Remove(DefaultRuleName); //we do not need this here
         }
 
@@ -33,7 +26,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         private string GetStylingRuleKey(string status)
         {
-            return $"feature.{status}.{TimelineColorIdentifier}";
+            return $"feature.{status}.{TimelineStatusColorIdentifier}";
         }
 
         public Color? GetColorForTimestamp(Timestamp timestamp)
@@ -69,24 +62,43 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void SetColorForStatus(string status, Color color)
         {
             var stylingRuleKey = GetStylingRuleKey(status);
-            StylingRules[stylingRuleKey].Symbolizer.SetColor(colorType, color);
+            StylingRules[stylingRuleKey].Symbolizer.SetColor(Symbolizer.FillColorProperty, color);
+            StylingRules[stylingRuleKey].Symbolizer.SetColor(Symbolizer.StrokeColorProperty, color);
+            OnStylingChanged.Invoke();
+        }
+
+        public void SetColorsForStatuses(Dictionary<string, Color> stateColors)
+        {
+            foreach (var kvp in stateColors)
+            {
+                var stylingRuleKey = GetStylingRuleKey(kvp.Key);
+                if (StylingRules.TryGetValue(stylingRuleKey, out var rule))
+                {
+                    rule.Symbolizer.SetColor(Symbolizer.FillColorProperty, kvp.Value);
+                    rule.Symbolizer.SetColor(Symbolizer.StrokeColorProperty, kvp.Value);
+                }
+            }
             OnStylingChanged.Invoke();
         }
         
-        public void AddRulesForStatuses(Dictionary<string, Color> stateColors)
+        public void AddNewRulesForStatuses(Dictionary<string, Color> stateColors)
         {
             var rules = new Dictionary<string, StylingRule>();
             foreach (var kvp in stateColors)
             {
                 var stylingRuleKey = GetStylingRuleKey(kvp.Key);
+                if(StylingRules.ContainsKey(stylingRuleKey))
+                    continue; //rule already exists, do not overwrite the saved color
+                
                 var stylingRule = new StylingRule(
                     kvp.Key,
                     Expression.EqualTo(
-                        Expression.Get(TimelineAttributeIdentifier),
+                        Expression.Get(TimelineStatusAttributeIdentifier),
                         kvp.Key
                     )
                 );
-                stylingRule.Symbolizer.SetColor(colorType, kvp.Value);
+                stylingRule.Symbolizer.SetColor(Symbolizer.FillColorProperty, kvp.Value);
+                stylingRule.Symbolizer.SetColor(Symbolizer.StrokeColorProperty, kvp.Value);
                 rules.Add(stylingRuleKey, stylingRule);
             }
 

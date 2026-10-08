@@ -30,6 +30,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.RegisterEventListeners();
             var propertydata = LayerData.GetProperty<CityJSONPropertyData>();
             propertydata.OnCRSChanged.AddListener(UpdateCRS);
+            cityJson.onAllCityObjectsProcessed.AddListener(InitializeStylingFeatures);
+            
         }
 
         protected override void UnregisterEventListeners()
@@ -37,6 +39,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.UnregisterEventListeners();
             var propertydata = LayerData.GetProperty<CityJSONPropertyData>();
             propertydata.OnCRSChanged.RemoveListener(UpdateCRS);
+            cityJson.onAllCityObjectsProcessed.RemoveListener(InitializeStylingFeatures);
+            
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
@@ -85,10 +89,30 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 visualizer.SetLineColor(strokeColor.Value);
         }
         
-        public void AddFeature(CityObjectVisualizer visualizer)
+        private void InitializeStylingFeatures()
         {
+            foreach (var co in cityJson.CityObjects)
+            {
+                AddStylingFeatureForCityObject(co);
+            }
+
+        }
+
+        public void AddStylingFeatureForCityObject(CityObject co)
+        {
+            var visualizers = co.GetComponents<CityObjectVisualizer>();
+            foreach (var visualizer in visualizers)
+            {
+                AddStylingFeature(visualizer);
+            }
+        }
+        
+        private void AddStylingFeature(CityObjectVisualizer visualizer)
+        {
+            if(LayerFeatures.ContainsKey(visualizer))
+                return;
+            
             var layerFeature = CreateFeature(visualizer);
-            layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier, null);
             LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);
