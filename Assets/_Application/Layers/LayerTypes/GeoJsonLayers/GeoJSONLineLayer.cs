@@ -5,6 +5,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -14,9 +15,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer
     {
-        public bool SupportsGeometryType(GeoJSONObjectType geometryType)
+        public string DisplayName => "Lijnen";
+        public string StylingColorProperty => Symbolizer.StrokeColorProperty;
+        public bool SupportsGeometryType(Feature feature)
         {
-            return  geometryType == GeoJSONObjectType.MultiLineString || geometryType == GeoJSONObjectType.LineString;
+            return  feature.Geometry.Type == GeoJSONObjectType.MultiLineString || feature.Geometry.Type == GeoJSONObjectType.LineString;
         }
 
         public int FeatureCount => spawnedVisualisations.Count;
@@ -176,8 +179,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
+            featureVisualisation.Dispose();
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
+        }
+
+        private void OnDestroy()
+        {
+            // Remove all SpawnedVisualisations
+            foreach (var kvp in spawnedVisualisations.Reverse())
+            {
+                kvp.Value.Dispose();
+                //RemoveFeature(kvp.Value);
+            }
         }
 
         public BoundingBox GetBoundingBoxOfVisibleFeatures()

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -18391829949753534}
   - component: {fileID: 8026439383914201504}
   - component: {fileID: 5901895080740193470}
+  - component: {fileID: 8290760779627631893}
   m_Layer: 0
   m_Name: Annotatie
   m_TagString: Untagged
@@ -98,8 +99,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scaleUnitCharacter: '%'
-  debug: 0
-  debugMaterial: {fileID: 2100000, guid: 32d66cb461963494c8545032b6d11bd0, type: 2}
 --- !u!114 &5901895080740193470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,3 +117,15 @@ MonoBehaviour:
   positionAxes: 7
   rotationAxes: 7
   scaleAxes: 7
+--- !u!114 &8290760779627631893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937650689336427930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d965efdbd7af0fac9bb44622e1e20db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.FeatureObject
