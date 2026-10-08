@@ -41,7 +41,7 @@ namespace Netherlands3D.Timeline
             if (timelineStatusStylingLayerPropertyData != null)
                 return; //already initialized
 
-            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties, null, visualization.LayerData.Color);
+            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
 
             timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
             timelineStatusStylingLayerPropertyData.OnStylingChanged.AddListener(visualization.ApplyStyling);
@@ -82,17 +82,17 @@ namespace Netherlands3D.Timeline
             var layerFeature = visualization.LayerFeatures[feature];
             var status = currentTimestampForFeature?.value;
 
-            if (layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] == status)
+            if (layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] == status)
                 return;
 
-            layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier] = status;
+            layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
             visualization.ApplyStylingToFeature(feature);
         }
         
         private void CreateStylingFeatureForGeojsonFeature(Feature feature)
         {
             var layerFeature = visualization.CreateFeature(feature);
-            layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineAttributeIdentifier, null);
+            layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, null);
             visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
         }
     }
