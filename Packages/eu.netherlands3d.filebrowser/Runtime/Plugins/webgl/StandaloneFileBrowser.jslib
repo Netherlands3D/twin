@@ -9,7 +9,7 @@ mergeInto(LibraryManager.library, {
         window.counter = 0;
         window.databaseConnection = null;
         window.fileImporterCallbackObject = "importerGameObject"
-
+	window.allowedDropExtensions = [];
         window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB;
         window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;
         window.dbVersion = 21;
@@ -49,9 +49,7 @@ mergeInto(LibraryManager.library, {
         //Support for dragging dropping files on browser window
         document.addEventListener("dragover", function (event) {
             event.preventDefault();
-        });
-        
-        window.allowedDropExtensions = [];
+        });  
 	
         document.addEventListener("drop", function (event) {
 	    console.log("File dropped");
