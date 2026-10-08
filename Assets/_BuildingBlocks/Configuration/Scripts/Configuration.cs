@@ -302,8 +302,8 @@ namespace Netherlands3D.Twin.Configuration
             {
                 functionality.ResetDataToDefaults();
                 UpdateFunctionalityExtention(functionality);
+                functionality.OnFunctionalityChanged.RemoveAllListeners(); //reset
                 functionality.OnFunctionalityChanged.AddListener(UpdateFunctionalityExtention);
-                
             }
             
             foreach (var savedData in changedData.functionalities)
