@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -20,6 +23,12 @@ namespace Netherlands3D.Twin.layers.properties
         {
             visualization = GetComponent<LayerGameObject>();
             visualization.InitProperty<FeaturePropertyData>(properties);
+            visualization.LayerData.LayerSelected.AddListener(OnLayerSelected);
+        }
+
+        private void OnDestroy()
+        {
+            visualization.LayerData.LayerSelected.RemoveListener(OnLayerSelected);
         }
 
         private void OnEnable()
@@ -35,6 +44,17 @@ namespace Netherlands3D.Twin.layers.properties
             selectorService.OnDeselect.RemoveListener(ClearFeatureMappingsForLayer);
         }
 
+        private void OnLayerSelected(LayerData layer)
+        {
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
+            TransformLayerPropertyData transformLayerPropertyData = layer.GetProperty<TransformLayerPropertyData>();
+            //is this a sublayer of geojson? 
+            if (transformLayerPropertyData != null)
+            {
+                selectorService.SelectGeoJsonFeatureAtPositionForLayer(transformLayerPropertyData.Position.ToUnity(), layer);
+            }
+        }
+        
         private void ProcessFeatureMappingForLayer(FeatureMapping mapping)
         {
             FeaturePropertyData propertyData = visualization.LayerData.GetProperty<FeaturePropertyData>();

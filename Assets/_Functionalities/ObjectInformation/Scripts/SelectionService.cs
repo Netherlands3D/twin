@@ -27,6 +27,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     public class SelectionService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
+        public FeatureSelector FeatureSelector => featureSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
         public LayerGameObject SelectedVisualisation => selectedVisualisation;
 
@@ -276,6 +277,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnLeftClickUp(InputAction.CallbackContext ctx)
         {
+            if (App.UIRoot.IsPointerOverUI(out VisualElement element))
+            {
+                if (SelectedVisualisation is IVisualizationWithWorldUI worldUI && element != null)
+                {
+                    VisualElement parent = worldUI.VisualElement;
+                    if (parent == element || parent.Contains(element))
+                    {
+                        //in case of readonly its possible its a geojson feature annotation, if so try to select its corresponding feature data
+                        SelectGeoJsonFeatureAtPositionForLayer(selectedVisualisation.Bounds.Center.ToUnity(), selectedVisualisation.LayerData);
+                    }
+                }
+            }
+            
             if (!CanProcessSelection()) return;
 
             ProcessSelection(true);
@@ -297,21 +311,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 SelectVisualisation(ctxObject);
                 Deselect();
                 
-                // //in case of readonly its possible its a geojson feature annotation, if so try to select its corresponding feature data
-                // SelectGeoJsonFeatureAtPositionForLayer(ctxObject.Bounds.Center.ToUnity(), ctxObject.LayerData);
-                //
-                //
-                // if (App.UIRoot.IsPointerOverUI(out VisualElement element))
-                // {
-                //     if (SelectedVisualisation is IVisualizationWithWorldUI worldUI && element != null)
-                //     {
-                //         VisualElement parent = worldUI.VisualElement;
-                //         if (parent == element || parent.Contains(element))
-                //         {
-                //             
-                //         }
-                //     }
-                // }
+                //in case of readonly its possible its a geojson feature annotation, if so try to select its corresponding feature data
+                SelectGeoJsonFeatureAtPositionForLayer(ctxObject.Bounds.Center.ToUnity(), ctxObject.LayerData);
+                
+                
+                
                 return;
             }
 
@@ -415,7 +419,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     SelectFeatureMapping(mapping);
                     selectedMappings.TryAdd(layerData.Id.ToString(), mapping);
                     SelectFeature?.Invoke(mapping);
-                    OnSelectLayer.Invoke(layerData);
                 }
             }
         }
