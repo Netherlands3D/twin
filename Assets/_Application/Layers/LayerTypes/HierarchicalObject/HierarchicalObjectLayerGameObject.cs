@@ -367,6 +367,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 var layerFeature = CreateFeature(meshRenderer);
                 LayerFeatures.TryAdd(layerFeature.Geometry, layerFeature);
             }
+            ApplyStyling();
         }
         
         public override void ApplyStyling()
