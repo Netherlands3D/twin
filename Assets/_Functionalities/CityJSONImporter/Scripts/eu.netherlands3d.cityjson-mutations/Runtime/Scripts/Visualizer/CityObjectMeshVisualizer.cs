@@ -6,7 +6,6 @@ using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.CityJson.Visualisation
@@ -69,7 +68,11 @@ namespace Netherlands3D.CityJson.Visualisation
         [SerializeField] private CityMaterialConverter materialConverter;
 
         public override Material[] Materials => meshRenderer.materials;
-
+        public override bool HasData => meshes != null && meshes.Count > 0;
+        
+        private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
+        private int activeMaterialCount;
+        
 #if UNITY_EDITOR
         // allow to change the visible LOD from the inspector during runtime
         private void OnValidate()
@@ -154,6 +157,7 @@ namespace Netherlands3D.CityJson.Visualisation
             {
                 ActiveMesh = mesh.Mesh;
                 meshRenderer.materials = mesh.Materials;
+                activeMaterialCount = mesh.Materials.Length;
             }
             else
             {
@@ -439,14 +443,19 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public override void SetFillColor(Color color)
         {
-            foreach (var material in meshRenderer.materials)
+            var block = new MaterialPropertyBlock();
+            
+            for (int m = 0; m < activeMaterialCount; m++)
             {
-                material.color = color;
+                meshRenderer.GetPropertyBlock(block, m);
+                block.SetColor(baseColorID, color);
+                meshRenderer.SetPropertyBlock(block, m);
             }
         }
 
         public override void SetLineColor(Color color)
         {
+            
         }
     }
 }

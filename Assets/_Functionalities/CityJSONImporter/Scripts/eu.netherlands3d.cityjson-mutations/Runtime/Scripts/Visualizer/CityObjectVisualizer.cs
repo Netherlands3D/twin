@@ -9,7 +9,9 @@ namespace Netherlands3D.CityJson.Visualisation
     {
         public UnityEvent<CityObjectVisualizer> cityObjectVisualized;
         protected CityObject cityObject;
+        public CityObject CityObject => cityObject;
         public abstract Material[] Materials { get; }
+        public abstract bool HasData { get; }
         
         protected virtual void Awake()
         {

@@ -59,6 +59,7 @@ namespace Netherlands3D.Twin.Rendering
         [SerializeField] protected LayerMask layerMask = -1;
 
         public abstract Material[] Materials { get; }
+        public int PointCount => pointCount;
 
         public Mesh PointMesh
         {
