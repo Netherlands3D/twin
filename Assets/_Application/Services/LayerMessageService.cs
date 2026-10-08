@@ -1,3 +1,4 @@
+using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Layers;
@@ -12,11 +13,15 @@ namespace Netherlands3D.Twin.Services
     {
         private Layers layers;
         private SnackbarService snackbarService;
+        private FileImportService fileImportService;
         private string activeAddedMessage;
         private string activeRemovalMessage;
         private int activeAddedCounter;
         private int activeRemovalCounter;
         private DataTypeChain[] chains;
+
+        [SerializeField]
+        private Configuration.Configuration configuration;
         
         [SerializeField] private StringEvent layerSourceAttributionEvent;
         public UnityEvent<string> OnAttributionReceived;
@@ -28,6 +33,7 @@ namespace Netherlands3D.Twin.Services
         {
             layers = App.Layers;
             snackbarService = App.Snackbar;
+            fileImportService = App.FileImport;
             chains = FindObjectsByType<DataTypeChain>(FindObjectsSortMode.None);
         }
 
@@ -38,6 +44,7 @@ namespace Netherlands3D.Twin.Services
             layers.LayerRemoved.AddListener(OnLayerRemoved);
             layers.VisualizationCreated.AddListener(OnVisualizationCreated); // when the visualisation is created, we want to listen to potential error messages (eg. parse errors) to display
             layerSourceAttributionEvent.AddListenerStarted(OnAttributionReceived.Invoke);
+            fileImportService.onFilesNotSupported.AddListener(ImportFilesNotSupported);
 
             foreach (var chain in chains)
             {
@@ -121,6 +128,23 @@ namespace Netherlands3D.Twin.Services
         private void VisualizationErrorMessage(string message)
         {
             snackbarService.DisplayError(message);
+        }
+
+        private void ImportFilesNotSupported(string message)
+        {
+            string[] fileNames = message.Split(',');
+            string error = fileNames.Length > 1 ? "zijn fouten" : "is een fout";
+            snackbarService.DisplayError($"Er {error} opgetreden met het importeren van: " + message);
+
+            foreach (var file in fileNames)
+            {
+                string extension = Path.GetExtension(file).TrimStart('.');
+                if (configuration.ExperimentalFunctionalityHasFileExtension(extension))
+                {
+                    snackbarService.DisplayMessage($"Het lijkt er op dat je een bestand met extentie: {extension} wil importeren. Zet hiervoor eerst de experimentele functionaliteiten aan in het instellingen menu en probeer het opnieuw.");
+                    break;
+                }
+            }
         }
 
         // TODO: Replace this specific method with a generic layer message flow.

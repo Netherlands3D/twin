@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -21,8 +25,6 @@ namespace Netherlands3D.UI.Panels
     public partial class ImportAssetPanel : BaseInspectorContentPanel
     {
         public override string Title => "Importeren";
-
-        public const string supportedFileTypes = "obj,csv,json,geojson,glb";
         
         private Breadcrumb breadcrumb;
         private ListViewItem uploadButton;
@@ -41,12 +43,27 @@ namespace Netherlands3D.UI.Panels
         private VisualElement mainSection;
         private SelectionAreaPanel selectionAreaSection;
         
+        public List<string> SupportedFileTypes => supportedFileTypes;
+        private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" }; //todo populate from a const?
+        private List<Functionality> optionalFunctionalities = new();
+
+        private FileImportService importService;
+
         public ImportAssetPanel()
+        {
+            
+        }
+        
+        public ImportAssetPanel(Configuration configuration) : this()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
+            this.optionalFunctionalities = configuration.Functionalities.Where(f => !string.IsNullOrEmpty(f.FileExtension)).ToList();
+            
+            importService = ServiceLocator.GetService<FileImportService>();
 
-            //listView = this.Q<ListView>();
+            foreach (string extension in supportedFileTypes)
+                importService.AddSupportedDragAndDropExtention(extension);
             uploadButton = this.Q<ListViewItem>("FileUploadButton");
             goToAssetLibraryButton = this.Q<ListViewItem>("GoToAssetLibraryButton");
             selectionAreaButton = this.Q<ListViewItem>("SelectionAreaButton");
@@ -145,7 +162,8 @@ namespace Netherlands3D.UI.Panels
 
         private void OnUploadStarted(ClickEvent evt)
         {
-            ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes);
+            FileImportService importService = ServiceLocator.GetService<FileImportService>();
+            importService.OpenFile(string.Join(",", supportedFileTypes));
         }
 
         private void OnInportUriButtonClicked(ClickEvent evt)

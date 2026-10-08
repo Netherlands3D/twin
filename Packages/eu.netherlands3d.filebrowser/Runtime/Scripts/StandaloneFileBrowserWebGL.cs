@@ -10,9 +10,6 @@ namespace SFB
         [System.Runtime.InteropServices.DllImport("__Internal")]
         private static extern void UploadFile(string gameobjectname, string methodname, string filter, bool multiselect);
 
-        FileInputIndexedDB indexedDBConnection;
-
-        
 
         public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
         {
