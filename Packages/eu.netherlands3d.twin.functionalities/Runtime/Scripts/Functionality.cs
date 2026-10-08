@@ -1,5 +1,6 @@
 ﻿using System;
 using SimpleJSON;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -66,9 +67,12 @@ namespace Netherlands3D.Twin.Functionalities
                 if (value == Data.IsEnabled) //IsEnabled was not changed
                     return;
 
+                bool previousValue = Data.IsEnabled;
                 Data.IsEnabled = value;
                 
                 InvokeOnEnableChangeEvents();
+                if (previousValue != Data.IsEnabled)
+                    OnFunctionalityChanged.Invoke(this);
             }
         }
 
@@ -77,6 +81,7 @@ namespace Netherlands3D.Twin.Functionalities
 
         public UnityEvent OnEnableFunctionality = new();
         public UnityEvent OnDisableFunctionality = new();
+        [JsonIgnore] public UnityEvent<Functionality> OnFunctionalityChanged = new();
 
         private void InvokeOnEnableChangeEvents()
         {

@@ -64,10 +64,6 @@ namespace Netherlands3D.UI.Panels
 
             foreach (string extension in supportedFileTypes)
                 importService.AddSupportedDragAndDropExtention(extension);
-
-            foreach (Functionality functionality in optionalFunctionalities)
-                UpdateExtensionForFunctionality(functionality, functionality.IsEnabled);
-            
             uploadButton = this.Q<ListViewItem>("FileUploadButton");
             goToAssetLibraryButton = this.Q<ListViewItem>("GoToAssetLibraryButton");
             selectionAreaButton = this.Q<ListViewItem>("SelectionAreaButton");
@@ -98,30 +94,6 @@ namespace Netherlands3D.UI.Panels
             importUriField.RegisterCallback<NavigationSubmitEvent>(OnSubmit, TrickleDown.TrickleDown);
 
             SetSelectionAreaSectionActive(false);
-        }
-
-        private void UpdateExtensionForFunctionality(Functionality functionality, bool enabled)
-        {
-            if (string.IsNullOrEmpty(functionality.FileExtension))
-                return;
-
-            if (enabled)
-                AddFileExtension(functionality.FileExtension);
-            else
-                RemoveFileExtension(functionality.FileExtension);
-        }
-
-        private void AddFileExtension(string extension)
-        {
-            if (!supportedFileTypes.Contains(extension))
-                supportedFileTypes.Add(extension);
-            importService.AddSupportedDragAndDropExtention(extension);
-        }
-
-        private void RemoveFileExtension(string extension)
-        {
-            supportedFileTypes.Remove(extension);
-            importService.RemoveSupportedDragAndDropExtention(extension);
         }
 
         private void OnCrumbClicked(int index, Breadcrumb.Crumb crumb)
