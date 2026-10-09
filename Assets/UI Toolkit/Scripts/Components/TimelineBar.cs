@@ -48,14 +48,19 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             marksContainer = this.Q<VisualElement>("Ticks");
+            
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            marksContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            
             SetupDragging();
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
-            RequestMarksUpdate(true);
+            if (!Mathf.Approximately(evt.oldRect.width, evt.newRect.width))
+            {
+                RequestMarksUpdate(true);
+            }
         }
 
         private void SetupDragging()
@@ -137,7 +142,7 @@ namespace Netherlands3D.UI.Components
             //UpdateRange();
         }
 
-        private UnitGroup[] unitGroups = new UnitGroup[]
+        private DateTimeUnitGroup[] unitGroups = new DateTimeUnitGroup[]
         {
             new (DateTimeUnit.Year, 1000),
             new (DateTimeUnit.Year, 500),
@@ -176,26 +181,15 @@ namespace Netherlands3D.UI.Components
             new (DateTimeUnit.Second, 1),
         };
 
-        private struct UnitGroup {
-            
-            public UnitGroup(DateTimeUnit timeUnit, float timeUnitFactor)
-            {
-                this.TimeUnit = timeUnit;
-                this.TimeUnitFactor = timeUnitFactor;
-            }
-            
-            public DateTimeUnit TimeUnit { get; private set; }
-            public float TimeUnitFactor { get; private set; }
-        }
 
         /// <returns>Returns the amount of unit groups that fit between startDateTime and endDateTime.</returns>
-        private double GetUnitGroupCount(UnitGroup unitGroup, DateTime start, DateTime end)
+        private double GetUnitGroupCount(DateTimeUnitGroup dateTimeUnitGroup, DateTime start, DateTime end)
         {
-            var unitGroupCount = unitGroup.TimeUnit.GetDateTimeUnitCountBetween(start, end, unitGroup.TimeUnitFactor);
+            var unitGroupCount = dateTimeUnitGroup.TimeUnit.GetDateTimeUnitCountBetween(start, end, dateTimeUnitGroup.TimeUnitFactor);
             return unitGroupCount;
         }
 
-        private int GetUnitGroupIndex(ref UnitGroup[] groups, int currentIndex, double maxCount, DateTime startTime, DateTime endTime)
+        private int GetUnitGroupIndex(ref DateTimeUnitGroup[] groups, int currentIndex, double maxCount, DateTime startTime, DateTime endTime)
         {
             while (true)
             {
@@ -224,9 +218,6 @@ namespace Netherlands3D.UI.Components
 
         private void RequestMarksUpdate(bool requestUnitGroupUpdate)
         {
-            if (!Application.isPlaying)
-                return;
-            
             unitGroupsUpdateQueued = requestUnitGroupUpdate || unitGroupsUpdateQueued;
             
             if (marksUpdateQueued)
@@ -236,6 +227,7 @@ namespace Netherlands3D.UI.Components
 
             marksUpdateQueued = true;
 
+            
             schedule.Execute(() =>
             {
                 marksUpdateQueued = false;
@@ -246,12 +238,19 @@ namespace Netherlands3D.UI.Components
             
             void UpdateMarks()
             {
-                if (endValue < startValue)
+                var width = marksContainer.resolvedStyle.width;
+                
+                if (float.IsNaN(width) || float.IsInfinity(width) || width <= 0)
                 {
-                    endValue = startValue.AddSeconds(1);
+                    return;
                 }
 
-                var width = marksContainer.resolvedStyle.width;
+                if (endValue <= startValue)
+                {
+                    return;
+                }
+
+                
                 var maxNumMarks = (double)width / 4;
 
                 var start = startValue;
