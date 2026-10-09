@@ -18,8 +18,7 @@ namespace Netherlands3D.UI.Components
         private readonly List<DateTimeLabel> labelElements = new();
 
         private readonly VisualElement scrubberElement;
-        
-        
+
         private DateTime currentValue;
         private DateTime startValue;
         private DateTime endValue;
@@ -28,6 +27,9 @@ namespace Netherlands3D.UI.Components
 
         private DateTimeInterval marksInterval;
         private DateTimeInterval labelsInterval;
+
+        private DateTime timelineDragInitialStartTime;
+        private DateTime timelineDragInitialEndTime;
 
         private bool marksUpdateQueued = false;
         private bool unitGroupsUpdateQueued = false;
@@ -123,7 +125,33 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             
-            SetupTimelineDragging();
+            //SetupTimelineDragging();
+            var timelineDragManipulator = new DragManipulator(0);
+            timelineDragManipulator.DragStarted.AddListener(OnTimelineDragStarted);
+            timelineDragManipulator.Dragging.AddListener(OnTimelineDragging);
+            timelineDragManipulator.DragEnded.AddListener(OnTimelineDragEnded);
+            marksContainer.AddManipulator(timelineDragManipulator);
+        }
+
+        private void OnTimelineDragStarted(Vector2 startPointerPosition)
+        {
+            timelineDragInitialStartTime = startValue;
+            timelineDragInitialEndTime = endValue;
+        }
+        
+        private void OnTimelineDragging(Vector2 deltaPointerPosition)
+        {
+            var width = this.contentRect.width;
+            var duration = (timelineDragInitialEndTime - timelineDragInitialStartTime).TotalSeconds;
+            var offset = -(deltaPointerPosition.x / width) * duration;
+            
+            SetTimeRange(
+                timelineDragInitialStartTime.AddSeconds(offset),
+                timelineDragInitialEndTime.AddSeconds(offset));
+        }
+        
+        private void OnTimelineDragEnded(Vector2 endPointerPosition)
+        {
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -136,6 +164,7 @@ namespace Netherlands3D.UI.Components
 
         private void SetupTimelineDragging()
         {
+            /*
             var viewport = this.Q<VisualElement>("MarksViewport");
             viewport.pickingMode = PickingMode.Position;
 
@@ -195,6 +224,7 @@ namespace Netherlands3D.UI.Components
                 if (evt.pointerId == pointerId)
                     pointerId = -1;
             });
+            */
         }
         
         
