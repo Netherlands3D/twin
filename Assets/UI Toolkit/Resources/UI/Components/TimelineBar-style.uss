@@ -56,8 +56,12 @@
 .timeline-bar__label {
     position: absolute;
     top: 50%;
-    width: 2px;
-    height: 380px;
-    background-color: green;
+    width: 100px;
+    height: 100px;
     translate: -50% -50%;
+    justify-content: center;
+}
+
+.timeline-bar__label > .unity-label {
+    -unity-text-align: middle-center;
 }

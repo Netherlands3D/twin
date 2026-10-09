@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using log4net.DateFormatter;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
@@ -12,11 +13,18 @@ namespace Netherlands3D.UI.Components
     {
         private readonly VisualElement marksContainer;
         private readonly List<VisualElement> markElements = new();
+        
+        private readonly VisualElement labelsContainer;
+        private readonly List<DateTimeLabel> labelElements = new();
+        
         private DateTime currentValue;
         private DateTime startValue;
         private DateTime endValue;
+        private DateTimeUnit unitContext;
+        private DateTimeUnit unitPrecision;
 
         private DateTimeUnitGroup marksUnitGroup;
+        private DateTimeUnitGroup labelsUnitGroup;
 
         private bool marksUpdateQueued = false;
         private bool unitGroupsUpdateQueued = false;
@@ -79,6 +87,26 @@ namespace Netherlands3D.UI.Components
                 RequestUpdateMarkElements(true);
             }
         }
+        
+        public DateTimeUnit UnitContext
+        {
+            get => unitContext;
+            set
+            {
+                unitContext = value;
+                RequestUpdateMarkElements(true);
+            }
+        }
+        
+        public DateTimeUnit UnitPrecision
+        {
+            get => unitPrecision;
+            set
+            {
+                unitPrecision = value;
+                RequestUpdateMarkElements(true);
+            }
+        }
 
         public TimelineBar()
         {
@@ -86,9 +114,10 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             marksContainer = this.Q<VisualElement>("MarksContainer");
+            labelsContainer = this.Q<VisualElement>("LabelsContainer");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            marksContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             
             SetupDragging();
         }
@@ -213,7 +242,8 @@ namespace Netherlands3D.UI.Components
                     return;
                 }
                 
-                var maxNumMarks = (double)width / 4;
+                var maxMarkElements = (double)width / 20;
+                var maxLabelElements = (double)width / 100;
 
                 var start = startValue;
                 var end = endValue;
@@ -221,16 +251,17 @@ namespace Netherlands3D.UI.Components
                 if (unitGroupsUpdateQueued)
                 {
                     unitGroupsUpdateQueued = false;
-                    marksUnitGroup = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, start, end, maxNumMarks);
+                    marksUnitGroup = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start, end, maxMarkElements);
+                    labelsUnitGroup = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start, end, maxLabelElements);
                 }
             
                 var duration = endValue.Ticks - startValue.Ticks;
                 
-                var markDateTimes =
-                    marksUnitGroup.TimeUnit.GetDateTimesBetween(start, end, marksUnitGroup.TimeUnitFactor);
+                var markTimes = marksUnitGroup.TimeUnit.GetDateTimesBetween(start, end, marksUnitGroup.TimeUnitFactor);
+                var labelTimes = labelsUnitGroup.TimeUnit.GetDateTimesBetween(start, end, labelsUnitGroup.TimeUnitFactor);
 
                 var markIndex = 0;
-                foreach (var markDateTime in markDateTimes)
+                foreach (var markTime in markTimes)
                 {
                     if (markIndex == markElements.Count)
                     {
@@ -245,20 +276,53 @@ namespace Netherlands3D.UI.Components
                     markIndex++;
 
                     var position =
-                        (double)(markDateTime.Ticks - startValue.Ticks) / duration;
+                        (double)(markTime.Ticks - startValue.Ticks) / duration;
 
                     var left = Length.Percent((float)(position * 100));
 
                     markElement.style.display = DisplayStyle.Flex;
                     markElement.style.left = left;
                 }
-
+                
                 for (var i = markIndex; i < markElements.Count; i++)
                 {
                     markElements[i].style.display = DisplayStyle.None;
                 }
+                
+                var labelIndex = 0;
+                foreach (var labelTime in labelTimes)
+                {
+                    if (labelIndex == labelElements.Count)
+                    {
+                        var newLabel = new DateTimeLabel();
+                        newLabel.Value = labelTime;
+                        newLabel.pickingMode = PickingMode.Ignore;
+                        newLabel.AddToClassList("timeline-bar__label");
+                        labelsContainer.Add(newLabel);
+                        labelElements.Add(newLabel);
+                    }
+
+                    var labelElement = labelElements[labelIndex];
+                    labelIndex++;
+
+                    var position =
+                        (double)(labelTime.Ticks - startValue.Ticks) / duration;
+
+                    var left = Length.Percent((float)(position * 100));
+                    
+                    labelElement.style.display = DisplayStyle.Flex;
+                    labelElement.style.left = left;
+                }
+                
+                for (var i = labelIndex; i < labelElements.Count; i++)
+                {
+                    labelElements[i].style.display = DisplayStyle.None;
+                }
+                
             
             }
+            
+            
         }
         
     }

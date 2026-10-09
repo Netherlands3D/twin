@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -35,11 +36,7 @@ namespace Netherlands3D.UI.Components
         public DateTime StartValue
         {
             get => timelineBar.StartValue;
-            set
-            {
-                timelineBar.StartValue = value;
-                
-            }
+            set => timelineBar.StartValue = value;
         }
         
         [UxmlAttribute("start-value")]
@@ -74,6 +71,18 @@ namespace Netherlands3D.UI.Components
                     this.EndValue = dateTime;
                 }
             }
+        }
+        
+        public DateTimeUnit UnitContext
+        {
+            get => timelineBar.UnitContext;
+            set => timelineBar.UnitContext = value;
+        }
+        
+        public DateTimeUnit UnitPrecision
+        {
+            get => timelineBar.UnitPrecision;
+            set => timelineBar.UnitPrecision = value;
         }
 
         public TimelineSlider()

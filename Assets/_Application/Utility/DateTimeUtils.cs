@@ -83,11 +83,13 @@ namespace Netherlands3D.Twin.Utility
             return unitGroupCount;
         }
         
-        public static DateTimeUnitGroup SelectDateTimeUnitGroup(DateTimeUnitGroup[] groups, DateTime startTime, DateTime endTime, double maxCount)
+        public static DateTimeUnitGroup SelectDateTimeUnitGroup(DateTimeUnitGroup[] groups, DateTimeUnit unitContext, DateTimeUnit unitPrecision, DateTime startTime, DateTime endTime, double maxCount)
         {
+            unitPrecision = DateTimeUnit.Second;
+            DateTimeUnitGroup selectedGroup = new();
             for (var i = groups.Length - 1; i >= 0; i--)
             {
-                if (GetUnitGroupCount(groups[i], startTime, endTime) <= maxCount)
+                if (groups[i].TimeUnit <= unitPrecision && GetUnitGroupCount(groups[i], startTime, endTime) <= maxCount)
                     return groups[i];
             }
 
