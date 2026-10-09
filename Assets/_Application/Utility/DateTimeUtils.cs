@@ -43,7 +43,28 @@ namespace Netherlands3D.Twin.Utility
         }
 
 
+        public static void GetDateTimesBetweenNonAlloc(List<DateTime> results, DateTime startTime, DateTime endTime, DateTimeInterval interval)
+        {
+            results.Clear();
 
+            var anchor = startTime.RoundDown(interval);
+
+            for (var i = 0; ; i++)
+            {
+                var time = anchor.Add(new DateTimeInterval(interval.TimeUnit, interval.Amount * i));
+                if (time >= endTime)
+                {
+                    break;
+                }
+
+                if (time >= startTime && (results.Count == 0 || results[^1] != time))
+                {
+                    results.Add(time);
+                }
+            }
+        }
+
+        /*
         public static List<DateTime> GetDateTimesBetween(this DateTimeUnit value, DateTime startTime, DateTime endTime, double timeUnitFactor = 1)
         {
             var dateTimes = new List<DateTime>();
@@ -74,23 +95,28 @@ namespace Netherlands3D.Twin.Utility
             }
 
             return dateTimes;
-        }
+        }*/
         
         /// <returns>Returns the amount of unit groups that fit between startDateTime and endDateTime.</returns>
-        private static double GetUnitGroupCount(DateTimeUnitGroup dateTimeUnitGroup, DateTime startTime, DateTime endTime)
+        private static double GetUnitGroupCount(DateTimeInterval dateTimeInterval, DateTime startTime, DateTime endTime)
         {
-            var unitGroupCount = dateTimeUnitGroup.TimeUnit.GetDateTimeUnitCountBetween(startTime, endTime, dateTimeUnitGroup.TimeUnitFactor);
+            var unitGroupCount = dateTimeInterval.TimeUnit.GetDateTimeUnitCountBetween(startTime, endTime, dateTimeInterval.Amount);
             return unitGroupCount;
         }
         
-        public static DateTimeUnitGroup SelectDateTimeUnitGroup(DateTimeUnitGroup[] groups, DateTimeUnit unitContext, DateTimeUnit unitPrecision, DateTime startTime, DateTime endTime, double maxCount)
+        public static DateTimeInterval SelectDateTimeUnitGroup(DateTimeInterval[] groups, DateTimeUnit unitContext, DateTimeUnit unitPrecision, DateTime startTime, DateTime endTime, double maxCount)
         {
-            unitPrecision = DateTimeUnit.Second;
-            DateTimeUnitGroup selectedGroup = new();
             for (var i = groups.Length - 1; i >= 0; i--)
             {
-                if (groups[i].TimeUnit <= unitPrecision && GetUnitGroupCount(groups[i], startTime, endTime) <= maxCount)
+                if (groups[i].TimeUnit > unitPrecision || groups[i].TimeUnit == unitPrecision && groups[i].Amount < 1)
+                {
+                    continue;
+                }
+
+                if (GetUnitGroupCount(groups[i], startTime, endTime) <= maxCount)
+                {
                     return groups[i];
+                }
             }
 
             return groups[0];
@@ -136,10 +162,11 @@ namespace Netherlands3D.Twin.Utility
             }
         }*/
         
-        public static DateTime Add(this DateTime dateTime, DateTimeUnit timeUnit, double amount)
+        
+        public static DateTime Add(this DateTime dateTime, DateTimeInterval interval)
         {
-            var roundedAmount = (int)amount;
-            dateTime = timeUnit switch
+            var roundedAmount = (int)interval.Amount;
+            dateTime = interval.TimeUnit switch
             {
                 DateTimeUnit.Year => dateTime.AddYears(roundedAmount),
                 DateTimeUnit.Month => dateTime.AddMonths(roundedAmount),
@@ -147,12 +174,12 @@ namespace Netherlands3D.Twin.Utility
                 DateTimeUnit.Hour => dateTime.AddHours(roundedAmount),
                 DateTimeUnit.Minute => dateTime.AddMinutes(roundedAmount),
                 DateTimeUnit.Second => dateTime.AddSeconds(roundedAmount),
-                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), timeUnit, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
             };
 
-            var fraction = amount - roundedAmount;
+            var fraction = interval.Amount - roundedAmount;
             
-            dateTime = timeUnit switch
+            dateTime = interval.TimeUnit switch
             {
                 DateTimeUnit.Year => dateTime.AddMonths((int)Math.Floor(fraction * 12)),
                 DateTimeUnit.Month => dateTime.AddDays((int)Math.Floor(fraction * DateTime.DaysInMonth(dateTime.Year, dateTime.Month))),
@@ -160,17 +187,15 @@ namespace Netherlands3D.Twin.Utility
                 DateTimeUnit.Hour => dateTime.AddMinutes(Math.Floor(fraction * 60)),
                 DateTimeUnit.Minute => dateTime.AddSeconds(Math.Floor(fraction * 60)),
                 DateTimeUnit.Second => dateTime.AddMilliseconds(Math.Floor(fraction * 1000)),
-                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), timeUnit, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
             };
 
             return dateTime;
         }
-
-
-
-        public static DateTime RoundDown(this DateTime dateTime, DateTimeUnit timeUnit, double timeUnitFactor = 1)
+        
+        public static DateTime RoundDown(this DateTime dateTime, DateTimeInterval interval)
         {
-            var unitValue = timeUnit switch
+            var unitValue = interval.TimeUnit switch
             {
                 DateTimeUnit.Year => dateTime.Year - 1 + (dateTime.Month - 1) / 12d,
                 DateTimeUnit.Month => dateTime.Month - 1 +
@@ -179,12 +204,13 @@ namespace Netherlands3D.Twin.Utility
                 DateTimeUnit.Hour => dateTime.Hour + dateTime.Minute / 60d,
                 DateTimeUnit.Minute => dateTime.Minute + dateTime.Second / 60d,
                 DateTimeUnit.Second => dateTime.Second + dateTime.Millisecond / 1000d,
-                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), timeUnit, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
             };
+            
 
-            var roundedUnitValue = Math.Floor(unitValue / timeUnitFactor) * timeUnitFactor;
+            var roundedUnitValue = Math.Floor(unitValue / interval.Amount) * interval.Amount;
 
-            var baseDateTime = timeUnit switch
+            var baseDateTime = interval.TimeUnit switch
             {
                 DateTimeUnit.Year => new DateTime(1, 1, 1, 0, 0, 0, dateTime.Kind),
                 DateTimeUnit.Month => new DateTime(dateTime.Year, 1, 1, 0, 0, 0, dateTime.Kind),
@@ -192,12 +218,10 @@ namespace Netherlands3D.Twin.Utility
                 DateTimeUnit.Hour => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, dateTime.Kind),
                 DateTimeUnit.Minute => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 0, 0, dateTime.Kind),
                 DateTimeUnit.Second => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind),
-                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), timeUnit, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
             };
 
-            return baseDateTime.Add(timeUnit, roundedUnitValue);
+            return baseDateTime.Add(new DateTimeInterval(interval.TimeUnit, roundedUnitValue));
         }
-
-
     }
 }

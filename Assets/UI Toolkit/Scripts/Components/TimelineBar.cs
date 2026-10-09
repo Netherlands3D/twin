@@ -23,13 +23,13 @@ namespace Netherlands3D.UI.Components
         private DateTimeUnit unitContext;
         private DateTimeUnit unitPrecision;
 
-        private DateTimeUnitGroup marksUnitGroup;
-        private DateTimeUnitGroup labelsUnitGroup;
+        private DateTimeInterval marksInterval;
+        private DateTimeInterval labelsInterval;
 
         private bool marksUpdateQueued = false;
         private bool unitGroupsUpdateQueued = false;
         
-        private readonly DateTimeUnitGroup[] unitGroups = new DateTimeUnitGroup[]
+        private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
             new (DateTimeUnit.Year, 1000),
             new (DateTimeUnit.Year, 500),
@@ -242,8 +242,8 @@ namespace Netherlands3D.UI.Components
                     return;
                 }
                 
-                var maxMarkElements = (double)width / 20;
-                var maxLabelElements = (double)width / 100;
+                var maxMarkElements = (double)width / 10;
+                var maxLabelElements = (double)width / 50;
 
                 var start = startValue;
                 var end = endValue;
@@ -251,14 +251,17 @@ namespace Netherlands3D.UI.Components
                 if (unitGroupsUpdateQueued)
                 {
                     unitGroupsUpdateQueued = false;
-                    marksUnitGroup = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start, end, maxMarkElements);
-                    labelsUnitGroup = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start, end, maxLabelElements);
+                    marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start, end, maxMarkElements);
+                    labelsInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start, end, maxLabelElements);
                 }
             
                 var duration = endValue.Ticks - startValue.Ticks;
+
+                var markTimes = new List<DateTime>();
+                DateTimeUtils.GetDateTimesBetweenNonAlloc(markTimes, start, end, marksInterval);
                 
-                var markTimes = marksUnitGroup.TimeUnit.GetDateTimesBetween(start, end, marksUnitGroup.TimeUnitFactor);
-                var labelTimes = labelsUnitGroup.TimeUnit.GetDateTimesBetween(start, end, labelsUnitGroup.TimeUnitFactor);
+                var labelTimes = new List<DateTime>();
+                DateTimeUtils.GetDateTimesBetweenNonAlloc(labelTimes, start, end, labelsInterval);
 
                 var markIndex = 0;
                 foreach (var markTime in markTimes)
@@ -295,7 +298,6 @@ namespace Netherlands3D.UI.Components
                     if (labelIndex == labelElements.Count)
                     {
                         var newLabel = new DateTimeLabel();
-                        newLabel.Value = labelTime;
                         newLabel.pickingMode = PickingMode.Ignore;
                         newLabel.AddToClassList("timeline-bar__label");
                         labelsContainer.Add(newLabel);
@@ -312,6 +314,7 @@ namespace Netherlands3D.UI.Components
                     
                     labelElement.style.display = DisplayStyle.Flex;
                     labelElement.style.left = left;
+                    labelElement.Value = labelTime;
                 }
                 
                 for (var i = labelIndex; i < labelElements.Count; i++)
