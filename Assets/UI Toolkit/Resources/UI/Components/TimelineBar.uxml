@@ -6,11 +6,11 @@
     editor-extension-mode="False"  
     class="timeline-bar"
 >
-    <ui:VisualElement name="TicksViewport" class="timeline-bar__ticks-viewport" picking-mode="Ignore">
-        <ui:VisualElement name="Ticks" class="timeline-bar__ticks" picking-mode="Ignore" />
+    <ui:VisualElement name="MarksViewport" class="timeline-bar__marks-viewport" picking-mode="Ignore">
+        <ui:VisualElement name="MarksContainer" class="timeline-bar__marks-container" picking-mode="Ignore" />
     </ui:VisualElement>
     
     <ui:VisualElement name="LabelsViewport" class="timeline-bar__labels-viewport" picking-mode="Ignore">
-        <ui:VisualElement name="Labels" class="timeline-bar__labels" picking-mode="Ignore" />
+        <ui:VisualElement name="LabelsContainer" class="timeline-bar__labels-container" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

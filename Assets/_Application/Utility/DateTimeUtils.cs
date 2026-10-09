@@ -75,7 +75,65 @@ namespace Netherlands3D.Twin.Utility
 
             return dateTimes;
         }
+        
+        /// <returns>Returns the amount of unit groups that fit between startDateTime and endDateTime.</returns>
+        private static double GetUnitGroupCount(DateTimeUnitGroup dateTimeUnitGroup, DateTime startTime, DateTime endTime)
+        {
+            var unitGroupCount = dateTimeUnitGroup.TimeUnit.GetDateTimeUnitCountBetween(startTime, endTime, dateTimeUnitGroup.TimeUnitFactor);
+            return unitGroupCount;
+        }
+        
+        public static DateTimeUnitGroup SelectDateTimeUnitGroup(DateTimeUnitGroup[] groups, DateTime startTime, DateTime endTime, double maxCount)
+        {
+            for (var i = groups.Length - 1; i >= 0; i--)
+            {
+                if (GetUnitGroupCount(groups[i], startTime, endTime) <= maxCount)
+                    return groups[i];
+            }
 
+            return groups[0];
+        }
+        
+        /*
+        Maybe slightly more optimized? Does the same thing, though.
+        public static DateTimeUnitGroup SelectDateTimeUnitGroup(DateTimeUnitGroup[] groups, DateTime startTime, DateTime endTime, double maxCount, ref int groupIndex)
+        {
+            var currentIndex = groupIndex;
+            
+            while (true)
+            {
+                var currentCount = GetUnitGroupCount(groups[currentIndex], startTime, endTime);
+
+                if (currentCount > maxCount)
+                {
+                    currentIndex--;
+                    if (currentIndex == 0)
+                    {
+                        groupIndex = currentIndex;
+                        return groups[groupIndex];
+                    }
+                    else
+                    {
+                        var nextCount = GetUnitGroupCount(groups[currentIndex + 1], startTime, endTime);
+                        if (nextCount > maxCount)
+                        {
+                            groupIndex = currentIndex;
+                            return groups[groupIndex];
+                        }
+                        else
+                        {
+                            currentIndex++;
+                            if (currentIndex == groups.Length - 1)
+                            {
+                                groupIndex = currentIndex;
+                                return groups[groupIndex];
+                            }
+                        }
+                    }
+                }
+            }
+        }*/
+        
         public static DateTime Add(this DateTime dateTime, DateTimeUnit timeUnit, double amount)
         {
             var roundedAmount = (int)amount;

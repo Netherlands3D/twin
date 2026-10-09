@@ -16,11 +16,49 @@ namespace Netherlands3D.UI.Components
         private DateTime startValue;
         private DateTime endValue;
 
-        private int marksUnitGroupIndex = 0;
-        private int labelsUnitGroupIndex = 0;
+        private DateTimeUnitGroup marksUnitGroup;
 
         private bool marksUpdateQueued = false;
         private bool unitGroupsUpdateQueued = false;
+        
+        private readonly DateTimeUnitGroup[] unitGroups = new DateTimeUnitGroup[]
+        {
+            new (DateTimeUnit.Year, 1000),
+            new (DateTimeUnit.Year, 500),
+            new (DateTimeUnit.Year, 200),
+            new (DateTimeUnit.Year, 100),
+            new (DateTimeUnit.Year, 50),
+            new (DateTimeUnit.Year, 20),
+            new (DateTimeUnit.Year, 10),
+            new (DateTimeUnit.Year, 5),
+            new (DateTimeUnit.Year, 2),
+            new (DateTimeUnit.Year, 1),
+            new (DateTimeUnit.Month, 6),
+            new (DateTimeUnit.Month, 3),
+            new (DateTimeUnit.Month, 2),
+            new (DateTimeUnit.Month, 1),
+            new (DateTimeUnit.Month, 1/2f),
+            new (DateTimeUnit.Month, 1/4f),
+            new (DateTimeUnit.Month, 1/8f),
+            new (DateTimeUnit.Day, 1),
+            new (DateTimeUnit.Hour, 12),
+            new (DateTimeUnit.Hour, 6),
+            new (DateTimeUnit.Hour, 3),
+            new (DateTimeUnit.Hour, 2),
+            new (DateTimeUnit.Hour, 1),
+            new (DateTimeUnit.Minute, 30),
+            new (DateTimeUnit.Minute, 20),
+            new (DateTimeUnit.Minute, 15),
+            new (DateTimeUnit.Minute, 10),
+            new (DateTimeUnit.Minute, 5),
+            new (DateTimeUnit.Minute, 1),
+            new (DateTimeUnit.Second, 30),
+            new (DateTimeUnit.Second, 20),
+            new (DateTimeUnit.Second, 15),
+            new (DateTimeUnit.Second, 10),
+            new (DateTimeUnit.Second, 5),
+            new (DateTimeUnit.Second, 1),
+        };
 
         public DateTime StartValue
         {
@@ -28,7 +66,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 startValue = value;
-                RequestMarksUpdate(true);
+                RequestUpdateMarkElements(true);
             }
         }
 
@@ -38,7 +76,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 endValue = value;
-                RequestMarksUpdate(true);
+                RequestUpdateMarkElements(true);
             }
         }
 
@@ -47,7 +85,7 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            marksContainer = this.Q<VisualElement>("Ticks");
+            marksContainer = this.Q<VisualElement>("MarksContainer");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             marksContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -59,13 +97,13 @@ namespace Netherlands3D.UI.Components
         {
             if (!Mathf.Approximately(evt.oldRect.width, evt.newRect.width))
             {
-                RequestMarksUpdate(true);
+                RequestUpdateMarkElements(true);
             }
         }
 
         private void SetupDragging()
         {
-            var viewport = this.Q<VisualElement>("TicksViewport");
+            var viewport = this.Q<VisualElement>("MarksViewport");
             viewport.pickingMode = PickingMode.Position;
 
             var pointerId = -1;
@@ -133,90 +171,16 @@ namespace Netherlands3D.UI.Components
             startValue = newStartTime;
             endValue = newEndTime;
 
-            RequestMarksUpdate(endValue - startValue != previousDuration);
+            RequestUpdateMarkElements(endValue - startValue != previousDuration);
 
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            //UpdateRange();
+            RequestUpdateMarkElements(true);
         }
 
-        private DateTimeUnitGroup[] unitGroups = new DateTimeUnitGroup[]
-        {
-            new (DateTimeUnit.Year, 1000),
-            new (DateTimeUnit.Year, 500),
-            new (DateTimeUnit.Year, 200),
-            new (DateTimeUnit.Year, 100),
-            new (DateTimeUnit.Year, 50),
-            new (DateTimeUnit.Year, 20),
-            new (DateTimeUnit.Year, 10),
-            new (DateTimeUnit.Year, 5),
-            new (DateTimeUnit.Year, 2),
-            new (DateTimeUnit.Year, 1),
-            new (DateTimeUnit.Month, 6),
-            new (DateTimeUnit.Month, 3),
-            new (DateTimeUnit.Month, 2),
-            new (DateTimeUnit.Month, 1),
-            new (DateTimeUnit.Month, 1/2f),
-            new (DateTimeUnit.Month, 1/4f),
-            new (DateTimeUnit.Month, 1/8f),
-            new (DateTimeUnit.Day, 1),
-            new (DateTimeUnit.Hour, 12),
-            new (DateTimeUnit.Hour, 6),
-            new (DateTimeUnit.Hour, 3),
-            new (DateTimeUnit.Hour, 2),
-            new (DateTimeUnit.Hour, 1),
-            new (DateTimeUnit.Minute, 30),
-            new (DateTimeUnit.Minute, 20),
-            new (DateTimeUnit.Minute, 15),
-            new (DateTimeUnit.Minute, 10),
-            new (DateTimeUnit.Minute, 5),
-            new (DateTimeUnit.Minute, 1),
-            new (DateTimeUnit.Second, 30),
-            new (DateTimeUnit.Second, 20),
-            new (DateTimeUnit.Second, 15),
-            new (DateTimeUnit.Second, 10),
-            new (DateTimeUnit.Second, 5),
-            new (DateTimeUnit.Second, 1),
-        };
-
-
-        /// <returns>Returns the amount of unit groups that fit between startDateTime and endDateTime.</returns>
-        private double GetUnitGroupCount(DateTimeUnitGroup dateTimeUnitGroup, DateTime start, DateTime end)
-        {
-            var unitGroupCount = dateTimeUnitGroup.TimeUnit.GetDateTimeUnitCountBetween(start, end, dateTimeUnitGroup.TimeUnitFactor);
-            return unitGroupCount;
-        }
-
-        private int GetUnitGroupIndex(ref DateTimeUnitGroup[] groups, int currentIndex, double maxCount, DateTime startTime, DateTime endTime)
-        {
-            while (true)
-            {
-                var currentCount = GetUnitGroupCount(groups[currentIndex], startTime, endTime);
-
-                if (currentCount > maxCount)
-                {
-                    currentIndex --;
-                    if (currentIndex == 0) return currentIndex;
-                }
-                else
-                {
-                    var nextCount = GetUnitGroupCount(unitGroups[currentIndex + 1], startTime, endTime);
-                    if (nextCount > maxCount)
-                    {
-                        return currentIndex;
-                    }
-                    else
-                    {
-                        currentIndex ++;
-                        if (currentIndex == groups.Length - 1) return currentIndex;
-                    }
-                }
-            }
-        }
-
-        private void RequestMarksUpdate(bool requestUnitGroupUpdate)
+        private void RequestUpdateMarkElements(bool requestUnitGroupUpdate)
         {
             unitGroupsUpdateQueued = requestUnitGroupUpdate || unitGroupsUpdateQueued;
             
@@ -226,7 +190,6 @@ namespace Netherlands3D.UI.Components
             }
 
             marksUpdateQueued = true;
-
             
             schedule.Execute(() =>
             {
@@ -249,55 +212,52 @@ namespace Netherlands3D.UI.Components
                 {
                     return;
                 }
-
                 
                 var maxNumMarks = (double)width / 4;
 
                 var start = startValue;
                 var end = endValue;
-
+                
                 if (unitGroupsUpdateQueued)
                 {
                     unitGroupsUpdateQueued = false;
-                    marksUnitGroupIndex = GetUnitGroupIndex(ref unitGroups, this.marksUnitGroupIndex, maxNumMarks, start, end);
+                    marksUnitGroup = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, start, end, maxNumMarks);
                 }
             
                 var duration = endValue.Ticks - startValue.Ticks;
+                
+                var markDateTimes =
+                    marksUnitGroup.TimeUnit.GetDateTimesBetween(start, end, marksUnitGroup.TimeUnitFactor);
 
+                var markIndex = 0;
+                foreach (var markDateTime in markDateTimes)
                 {
-                    var marksUnitGroup = unitGroups[marksUnitGroupIndex];
-                    var markDateTimes =
-                        marksUnitGroup.TimeUnit.GetDateTimesBetween(start, end, marksUnitGroup.TimeUnitFactor);
-
-                    var markIndex = 0;
-                    foreach (var markDateTime in markDateTimes)
+                    if (markIndex == markElements.Count)
                     {
-                        if (markIndex == markElements.Count)
-                        {
-                            var newMark = new VisualElement();
-                            newMark.pickingMode = PickingMode.Ignore;
-                            newMark.AddToClassList("timeline-bar__tick");
-                            marksContainer.Add(newMark);
-                            markElements.Add(newMark);
-                        }
-
-                        var tick = markElements[markIndex];
-                        markIndex++;
-
-                        var position =
-                            (double)(markDateTime.Ticks - startValue.Ticks) / duration;
-
-                        var left = Length.Percent((float)(position * 100));
-
-                        tick.style.display = DisplayStyle.Flex;
-                        tick.style.left = left;
+                        var newMark = new VisualElement();
+                        newMark.pickingMode = PickingMode.Ignore;
+                        newMark.AddToClassList("timeline-bar__mark");
+                        marksContainer.Add(newMark);
+                        markElements.Add(newMark);
                     }
 
-                    for (var i = markIndex; i < markElements.Count; i++)
-                    {
-                        markElements[i].style.display = DisplayStyle.None;
-                    }
+                    var markElement = markElements[markIndex];
+                    markIndex++;
+
+                    var position =
+                        (double)(markDateTime.Ticks - startValue.Ticks) / duration;
+
+                    var left = Length.Percent((float)(position * 100));
+
+                    markElement.style.display = DisplayStyle.Flex;
+                    markElement.style.left = left;
                 }
+
+                for (var i = markIndex; i < markElements.Count; i++)
+                {
+                    markElements[i].style.display = DisplayStyle.None;
+                }
+            
             }
         }
         

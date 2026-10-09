@@ -6,7 +6,7 @@
     background-color: #FFFFFF33;
 }
 
-.timeline-bar__ticks-viewport {
+.timeline-bar__marks-viewport {
     background-color: aqua;
     flex-grow: 1;
     border-radius: 16px;
@@ -17,7 +17,7 @@
     margin-right: 10%;
 }
 
-.timeline-bar__ticks {
+.timeline-bar__marks-container {
     position: absolute;
     left: -25px;
     right: -25px;
@@ -25,7 +25,7 @@
     bottom: 0;
 }
 
-.timeline-bar__tick {
+.timeline-bar__mark {
     position: absolute;
     top: 50%;
     width: 2px;
@@ -45,7 +45,7 @@
     margin-right: 10%;
 }
 
-.timeline-bar__labels {
+.timeline-bar__labels-container {
     position: absolute;
     left: -25px;
     right: -25px;
