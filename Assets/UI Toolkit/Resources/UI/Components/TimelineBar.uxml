@@ -6,11 +6,18 @@
     editor-extension-mode="False"  
     class="timeline-bar"
 >
+
+    
     <ui:VisualElement name="MarksViewport" class="timeline-bar__marks-viewport" picking-mode="Ignore">
         <ui:VisualElement name="MarksContainer" class="timeline-bar__marks-container" picking-mode="Ignore" />
     </ui:VisualElement>
     
+    
+
     <ui:VisualElement name="LabelsViewport" class="timeline-bar__labels-viewport" picking-mode="Ignore">
         <ui:VisualElement name="LabelsContainer" class="timeline-bar__labels-container" picking-mode="Ignore" />
     </ui:VisualElement>
+    
+    <ui:VisualElement name="Scrubber" class="timeline-bar__scrubber" picking-mode="Ignore" />
+    
 </ui:UXML>

@@ -16,6 +16,9 @@ namespace Netherlands3D.UI.Components
         
         private readonly VisualElement labelsContainer;
         private readonly List<DateTimeLabel> labelElements = new();
+
+        private readonly VisualElement scrubberElement;
+        
         
         private DateTime currentValue;
         private DateTime startValue;
@@ -115,11 +118,12 @@ namespace Netherlands3D.UI.Components
 
             marksContainer = this.Q<VisualElement>("MarksContainer");
             labelsContainer = this.Q<VisualElement>("LabelsContainer");
+            scrubberElement = this.Q<VisualElement>("Scrubber");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             
-            SetupDragging();
+            SetupTimelineDragging();
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -130,7 +134,7 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        private void SetupDragging()
+        private void SetupTimelineDragging()
         {
             var viewport = this.Q<VisualElement>("MarksViewport");
             viewport.pickingMode = PickingMode.Position;
@@ -192,6 +196,8 @@ namespace Netherlands3D.UI.Components
                     pointerId = -1;
             });
         }
+        
+        
 
         private void SetTimeRange(DateTime newStartTime, DateTime newEndTime)
         {
