@@ -15,7 +15,8 @@ public class DragManipulator : PointerManipulator
     protected MouseButton dragMouseButton = MouseButton.LeftMouse;
     
     public UnityEvent<Vector2> DragStarted = new(); //parameter is startPosition
-    public UnityEvent<Vector2> Dragging = new(); //parameter is delta
+    public UnityEvent<Vector2> Dragging = new(); //parameter is delta per update
+    public UnityEvent<Vector2> DraggingTotal = new(); //parameter is offset from startPosition (total delta)
     public UnityEvent<Vector2> DragEnded = new(); //parameter is endPosition
     
     private Vector2 previousPosition;
@@ -81,11 +82,16 @@ public class DragManipulator : PointerManipulator
             return;
         }
         
-        Vector2 delta = (Vector2)e.position - previousPosition;
+        Vector2 deltaUpdate = (Vector2)e.position - previousPosition;
         previousPosition = e.position;
+        
+        Vector2 deltaTotal = (Vector2)e.position - (Vector2)start;
 
-        OnDrag(delta);
-        Dragging.Invoke(delta);
+        OnDrag(deltaUpdate);
+        Dragging.Invoke(deltaUpdate);
+        
+        OnDragTotal(deltaTotal);
+        DraggingTotal.Invoke(deltaTotal);
     }
     
     private void OnPointerUp(PointerUpEvent e)
@@ -115,6 +121,10 @@ public class DragManipulator : PointerManipulator
     }
     
     protected virtual void OnDrag(Vector2 delta)
+    {
+    }
+
+    protected virtual void OnDragTotal(Vector2 delta)
     {
     }
     

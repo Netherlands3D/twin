@@ -42,6 +42,12 @@ namespace Netherlands3D.Twin.Utility
             }
         }
 
+        public static List<DateTime> GetDateTimesBetween(DateTime startTime, DateTime endTime, DateTimeInterval interval)
+        {
+            var results = new List<DateTime>();
+            GetDateTimesBetweenNonAlloc(results, startTime, endTime, interval);
+            return results;
+        }
 
         public static void GetDateTimesBetweenNonAlloc(List<DateTime> results, DateTime startTime, DateTime endTime, DateTimeInterval interval)
         {

@@ -17,8 +17,8 @@ namespace Netherlands3D.UI.Components
         
         public DateTime CurrentValue
         {
-            get => currentValue;
-            set => this.currentValue = value;
+            get => timelineBar.CurrentValue;
+            set => timelineBar.CurrentValue = value;
         }
         
         [UxmlAttribute("current-value")]

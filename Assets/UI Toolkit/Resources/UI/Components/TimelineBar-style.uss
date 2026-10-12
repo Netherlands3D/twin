@@ -4,8 +4,6 @@
     min-width: 0;
     height: 200px;
     background-color: #FFFFFF33;
-    margin-left: 10%;
-    margin-right: 10%;
 }
 
 .timeline-bar__marks-viewport {
@@ -13,14 +11,13 @@
     flex-grow: 1;
     border-radius: 16px;
     border-color: orange;
-    border-width: 2px;
     height: 64px;
 }
 
 .timeline-bar__marks-container {
     position: absolute;
-    left: -25px;
-    right: -25px;
+    left: 0;
+    right: 0;
     top: 0;
     bottom: 0;
 }
@@ -43,8 +40,8 @@
 
 .timeline-bar__labels-container {
     position: absolute;
-    left: -25px;
-    right: -25px;
+    left: 0;
+    right: 0;
     top: 0;
     bottom: 0;
 }
@@ -62,7 +59,15 @@
     -unity-text-align: middle-center;
 }
 
-.timeline-bar__scrubber {
+.timeline-bar__thumb-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.timeline-bar__thumb {
     position: absolute;
     background-color: blue;
     width: 30px;
