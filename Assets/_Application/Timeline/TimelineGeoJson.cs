@@ -4,6 +4,7 @@ using GeoJSON.Net.Feature;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.layers.properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace Netherlands3D.Timeline
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
         private Dictionary<Feature, TimestampCollection> timelines = new();
 
-        private void Start()
+        private void OnEnable()
         {
             sunTime = ServiceLocator.GetService<SunTime>();
             sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
@@ -29,7 +30,7 @@ namespace Netherlands3D.Timeline
             visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged);
             timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
@@ -62,9 +63,10 @@ namespace Netherlands3D.Timeline
                 {
                     newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
                 }
-                CreateStylingFeatureForGeojsonFeature(feature);
                 SetFeatureAttribute(sunTime.Time, feature, collection);
             }
+            
+            timelineStatusStylingLayerPropertyData.AddNewRulesForStatuses(newStates);
         }
 
         private void OnTimeChanged(DateTime currentTime)
@@ -79,21 +81,26 @@ namespace Netherlands3D.Timeline
         {
             var currentTimestampForFeature = timeline.GetCurrentTimestamp(currentTime);
 
-            var layerFeature = visualization.LayerFeatures[feature];
+            var stylingFeature = visualization.LayerFeatures[feature];
             var status = currentTimestampForFeature?.value;
 
-            if (layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] == status)
-                return;
+            if(stylingFeature.Attributes.TryGetValue(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, out var savedStatus))
+                if(savedStatus == status)
+                    return;
 
-            layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
+            if(!string.IsNullOrEmpty(status))
+            {
+                var c = timelineStatusStylingLayerPropertyData.GetColorForStatus(status);
+                Debug.Log("setting status of " + feature.Id + " to " + status + " with color " + c.Value);
+            }
+            else
+            {
+                Debug.Log("setting status of " + feature.Id + " to " + status );
+            }
+            stylingFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
+            
+            GetComponent<GeoJSONLayerFeatureColoring>().OnApplyStyling(); //todo: this needs to be done to apply the default styling to features that no longer have a status. but this dependency is undesirable.
             visualization.ApplyStylingToFeature(feature);
-        }
-        
-        private void CreateStylingFeatureForGeojsonFeature(Feature feature)
-        {
-            var layerFeature = visualization.CreateFeature(feature);
-            layerFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, null);
-            visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
         }
     }
 }

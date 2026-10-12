@@ -9,6 +9,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
+using Netherlands3D.Twin.layers.properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -74,7 +75,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
         }
-
+        
         protected virtual void UpdateURL(Uri storedUri)
         {
             if (storedUri == credentialHandler.Uri && credentialHandler.Authorization != null)
@@ -177,6 +178,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
             VisualizeFeature(feature, originalCoordinateSystem);
+            AddStylingFeature(feature);
             OnFeatureAdd.Invoke(feature);
         }
 
@@ -273,13 +275,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
             }
         }
-
+        
         public void ApplyStylingToFeature(Feature geoJsonFeature)
         {
-            var layerFeature = LayerFeatures[geoJsonFeature];
+            var stylingFeature = LayerFeatures[geoJsonFeature];
             
-            var symbolizer = GetStyling(layerFeature);
             var visualizer = GetTypeVisualizerForFeature(geoJsonFeature);
+            var symbolizer = GetStyling(stylingFeature);
         
             if (visualizer is GeoJSONLineLayer)
             {
@@ -293,6 +295,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if(fillColor.HasValue)
                     visualizer.SetColorForFeature(geoJsonFeature, fillColor.Value);
             }
+        }
+        
+        private void AddStylingFeature(Feature geojsonFeature)
+        {
+            if(LayerFeatures.ContainsKey(geojsonFeature))
+                return;
+            
+            var stylingFeature = CreateFeature(geojsonFeature);
+            LayerFeatures.Add(stylingFeature.Geometry, stylingFeature);
+            ApplyStylingToFeature(geojsonFeature);
         }
     }
 }

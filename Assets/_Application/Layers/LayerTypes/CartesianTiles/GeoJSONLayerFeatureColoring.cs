@@ -19,16 +19,30 @@ namespace Netherlands3D.Twin.layers.properties
         {
             visualization = GetComponent<GeoJsonLayerGameObject>();
             visualization.InitProperty<CartesianTileLayerFeatureColorPropertyData>(properties);
-            
             SetupFeatures();
+            
         }
-       
+
+        private void OnPropertyAdded(LayerPropertyData property)
+        {
+            if (property is StylingPropertyData stylingPropertyData)
+            {
+                Debug.Log("listening to new prop " + stylingPropertyData.GetType());
+                stylingPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
+            }
+        }
+
         private void SetupFeatures()
         {
-            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+            // CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+            foreach (var stylingPropertyData in visualization.LayerData.GetProperties<StylingPropertyData>())
+            {
+                stylingPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
+                Debug.Log("listening to prop " + stylingPropertyData.GetType());
+            }
+            visualization.LayerData.PropertySet.AddListener(OnPropertyAdded);
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
-            featureColorPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             visualization.OnFeatureAdd.AddListener(UpdateStyling);
             visualization.OnFeatureRemove.AddListener(UpdateStyling);
@@ -77,15 +91,15 @@ namespace Netherlands3D.Twin.layers.properties
             }
         }
         
-        private void OnApplyStyling()
+        public void OnApplyStyling()
         {
             foreach (var (_, feature) in visualization.LayerFeatures)
             {
                 //do cascading to get css result styling
-                Symbolizer symbolizer = visualization.GetStyling(feature);
 
                 if (feature.Geometry is Material material)
                 {
+                    Symbolizer symbolizer = visualization.GetStyling(feature);
                     Color? color = symbolizer.GetFillColor();
                     if (color.HasValue)
                     {
@@ -148,10 +162,13 @@ namespace Netherlands3D.Twin.layers.properties
         
         private void OnDestroyLayer()
         {
-            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+            foreach (var stylingPropertyData in visualization.LayerData.GetProperties<StylingPropertyData>())
+            {
+                stylingPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
+            }
+            visualization.LayerData.PropertySet.RemoveListener(OnPropertyAdded);
             
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
-            featureColorPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
             visualization.OnFeatureAdd.RemoveListener(UpdateStyling);
             visualization.OnFeatureRemove.RemoveListener(UpdateStyling);
