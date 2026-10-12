@@ -81,12 +81,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             
             var symbolizer = GetStyling(feature);
             var fillColor = symbolizer.GetFillColor();
-            if (fillColor.HasValue)
-                visualizer.SetFillColor(fillColor.Value);
+            visualizer.SetFillColor(fillColor);
             
             var strokeColor = symbolizer.GetStrokeColor();
-            if (strokeColor.HasValue)
-                visualizer.SetLineColor(strokeColor.Value);
+            visualizer.SetLineColor(strokeColor);
         }
         
         private void InitializeStylingFeatures()

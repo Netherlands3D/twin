@@ -441,21 +441,32 @@ namespace Netherlands3D.CityJson.Visualisation
             return convertedPolygon;
         }
 
-        public override void SetFillColor(Color color)
+        public override void SetFillColor(Color? color)
         {
             var block = new MaterialPropertyBlock();
+
+            var hasValue = color.HasValue;
+            Color colorValue = default;
+            if (hasValue)
+                colorValue = color.Value;
             
             for (int m = 0; m < activeMaterialCount; m++)
             {
-                meshRenderer.GetPropertyBlock(block, m);
-                block.SetColor(baseColorID, color);
-                meshRenderer.SetPropertyBlock(block, m);
+                if (hasValue)
+                {
+                    meshRenderer.GetPropertyBlock(block, m);
+                    block.SetColor(baseColorID, colorValue);
+                    meshRenderer.SetPropertyBlock(block, m);
+                }
+                else
+                {
+                    meshRenderer.SetPropertyBlock(null, m);
+                }
             }
         }
 
-        public override void SetLineColor(Color color)
+        public override void SetLineColor(Color? color)
         {
-            
         }
     }
 }
