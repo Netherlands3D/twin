@@ -104,7 +104,7 @@ namespace Netherlands3D.CityJson.Structure
             // add this as child of new parents
             foreach (var parent in newParents)
             {
-                Assert.IsTrue(IsValidParent(this, parent));
+                Assert.IsTrue(IsValidParent(this, parent), name + " does not have a valid parent");
                 parent.cityChildren.Add(this);
             }
             // set newparents for this
@@ -220,7 +220,7 @@ namespace Netherlands3D.CityJson.Structure
         {
             var geometry = new CityGeometry(type, lod, includeSemantics, includeMaterials, includeTextures);
 
-            Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type));
+            Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type), name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type})");
             Geometries.Add(geometry);
             return geometry;
         }
@@ -235,7 +235,7 @@ namespace Netherlands3D.CityJson.Structure
             foreach (var g in geometryNode)
             {
                 var geometry = CityGeometry.FromJSONNode(g.Value, combinedVertices);
-                Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type));
+                Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type), name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type})");
                 Geometries.Add(geometry);
             }
             Attributes = CityObjectAttribute.ParseAttributesNode(this, cityObjectNode["attributes"]);
