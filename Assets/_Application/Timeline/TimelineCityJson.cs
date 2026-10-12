@@ -96,15 +96,15 @@ namespace Netherlands3D.Timeline
             var currentTimestampForFeature = timeline.GetCurrentTimestamp(currentTime);
             foreach (var visualizer in cityObject.GetComponents<CityObjectVisualizer>())
             {
-                var layerFeature = visualization.LayerFeatures[visualizer];
+                var stylingFeature = visualization.LayerFeatures[visualizer];
                 var status = currentTimestampForFeature?.value;
                 
-                if(layerFeature.Attributes.TryGetValue(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, out var savedStatus))
+                if(stylingFeature.Attributes.TryGetValue(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, out var savedStatus))
                     if(savedStatus == status)
                         continue;
                 
-                layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
-                visualization.ApplyStylingToFeature(layerFeature);
+                stylingFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
+                visualization.ApplyStylingToFeature(stylingFeature);
             }
         }
     }
