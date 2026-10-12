@@ -29,16 +29,30 @@ namespace Netherlands3D.CityJson.Structure
         TransportSquare = 1110,
         Tunnel = 1120,
         WaterBody = 1130,
+        Waterway = 1140,
+        OtherConstruction = 1200,
 
         //2000-3000: 2nd level city objects. the middle numbers indicates the required parent. e.g 200x has to be a parent of 1000, 201x of 1010 etc.
         BuildingPart = 2000,
         BuildingInstallation = 2001,
+        BuildingConstructiveElement = 2002,
+        BuildingFurniture = 2003,
+        BuildingStorey = 2004,
+        BuildingRoom = 2005,
+        BuildingUnit = 2006,
+        BridgeConstructiveElement =  2007,
+        
         BridgePart = 2010,
         BridgeInstallation = 2011,
         BridgeConstructionElement = 2012,
-
+        BridgeRoom = 2013,
+        BridgeFurniture = 2014,
+        
         TunnelPart = 2120,
-        TunnelInstallation = 2121
+        TunnelInstallation = 2121,
+        TunnelConstructiveElement = 2122,
+        TunnelHollowSpace = 2123,
+        TunnelFurniture = 2124
     }
 
     public class CityObject : MonoBehaviour
@@ -216,16 +230,16 @@ namespace Netherlands3D.CityJson.Structure
             return co;
         }
 
-        public CityGeometry AddEmptyGeometry(GeometryType type, int lod, bool includeSemantics, bool includeMaterials, bool includeTextures)
+        public CityGeometry AddEmptyGeometry(GeometryType type, int lod, bool includeSemantics, bool includeMaterials, bool includeTextures, string version)
         {
             var geometry = new CityGeometry(type, lod, includeSemantics, includeMaterials, includeTextures);
 
-            Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type), name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type})");
+            Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type, version), name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type})");
             Geometries.Add(geometry);
             return geometry;
         }
 
-        public void FromJSONNode(string id, JSONNode cityObjectNode, CoordinateSystem coordinateSystem, List<Vector3Double> combinedVertices)
+        public void FromJSONNode(string id, JSONNode cityObjectNode, CoordinateSystem coordinateSystem, List<Vector3Double> combinedVertices, string version)
         {
             SetId(id);
             Type = (CityObjectType)Enum.Parse(typeof(CityObjectType), cityObjectNode["type"]);
@@ -235,7 +249,7 @@ namespace Netherlands3D.CityJson.Structure
             foreach (var g in geometryNode)
             {
                 var geometry = CityGeometry.FromJSONNode(g.Value, combinedVertices);
-                Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type), name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type})");
+                Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type, version), name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type})");
                 Geometries.Add(geometry);
             }
             Attributes = CityObjectAttribute.ParseAttributesNode(this, cityObjectNode["attributes"]);
