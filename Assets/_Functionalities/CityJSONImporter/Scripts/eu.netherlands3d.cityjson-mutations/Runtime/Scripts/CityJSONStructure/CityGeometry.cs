@@ -33,57 +33,39 @@ namespace Netherlands3D.CityJson.Structure
         public bool IncludeSemantics { get; set; }
         public bool IncludeMaterials { get; set; }
         public bool IncludeTextures { get; set; } //todo: Textures currently not implemented yet
+
+        private static readonly Dictionary<CityObjectType, GeometryType[]> ValidGeometryTypes1_0 = new()
+        {
+            { CityObjectType.Building, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.BuildingPart, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.BuildingInstallation, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.Bridge, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.BridgePart, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.BridgeInstallation, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.BridgeConstructionElement, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.Tunnel, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.TunnelPart, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.TunnelInstallation, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.CityFurniture, new[] { GeometryType.MultiPoint, GeometryType.MultiLineString, GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.GenericCityObject, new[] { GeometryType.MultiPoint, GeometryType.MultiLineString, GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.SolitaryVegetationObject, new[] { GeometryType.MultiPoint, GeometryType.MultiLineString, GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+            { CityObjectType.LandUse, new[] { GeometryType.MultiSurface, GeometryType.CompositeSurface } },
+            { CityObjectType.PlantCover, new[] { GeometryType.MultiSurface, GeometryType.MultiSolid } },
+            { CityObjectType.Railway, new[] { GeometryType.MultiLineString, GeometryType.MultiSurface, GeometryType.CompositeSurface } },
+            { CityObjectType.Road, new[] { GeometryType.MultiLineString, GeometryType.MultiSurface, GeometryType.CompositeSurface } },
+            { CityObjectType.TransportSquare, new[] { GeometryType.MultiLineString, GeometryType.MultiSurface, GeometryType.CompositeSurface } },
+            { CityObjectType.TINRelief, new[] { GeometryType.CompositeSurface } },
+            { CityObjectType.WaterBody, new[] { GeometryType.MultiLineString, GeometryType.MultiSurface, GeometryType.CompositeSurface, GeometryType.Solid, GeometryType.CompositeSolid } },
+        }; 
         
-        //Certain CityObjectTypes can only have certain types of geometry. This is described in the specs
+        //Certain CityObjectTypes can only have certain types of geometry. This is described in the specs. todo: add support for types added in later versions
         public static bool IsValidType(CityObjectType cityObjectType, GeometryType geometryType)
         {
-            switch (cityObjectType)
-            {
-                case CityObjectType.Building:
-                    return geometryType == GeometryType.Solid || geometryType == GeometryType.MultiSolid || geometryType == GeometryType.MultiSurface;
-                case CityObjectType.Bridge:
-                    return geometryType == GeometryType.Solid || geometryType == GeometryType.CompositeSolid || geometryType == GeometryType.MultiSurface;
-                case CityObjectType.CityObjectGroup:
-                    return true;
-                case CityObjectType.CityFurniture:
-                    return geometryType == GeometryType.MultiPoint || geometryType == GeometryType.MultiLineString || geometryType == GeometryType.MultiSurface || geometryType == GeometryType.CompositeSurface || geometryType == GeometryType.Solid || geometryType == GeometryType.CompositeSolid;
-                case CityObjectType.GenericCityObject:
-                    return geometryType == GeometryType.MultiPoint || geometryType == GeometryType.MultiLineString || geometryType == GeometryType.MultiSurface || geometryType == GeometryType.CompositeSurface || geometryType == GeometryType.Solid || geometryType == GeometryType.CompositeSolid;
-                case CityObjectType.LandUse:
-                    return geometryType == GeometryType.MultiSurface || geometryType == GeometryType.CompositeSurface;
-                case CityObjectType.PlantCover:
-                    return geometryType == GeometryType.MultiSurface || geometryType == GeometryType.MultiSolid;
-                case CityObjectType.Railway:
-                    return geometryType == GeometryType.MultiSurface || geometryType == GeometryType.CompositeSurface || geometryType == GeometryType.MultiLineString;
-                case CityObjectType.Road:
-                    return geometryType == GeometryType.MultiSurface || geometryType == GeometryType.CompositeSurface || geometryType == GeometryType.MultiLineString;
-                case CityObjectType.SolitaryVegetationObject:
-                    return geometryType == GeometryType.MultiPoint || geometryType == GeometryType.MultiLineString || geometryType == GeometryType.MultiSurface || geometryType == GeometryType.CompositeSurface || geometryType == GeometryType.Solid || geometryType == GeometryType.CompositeSolid;
-                case CityObjectType.TINRelief:
-                    return geometryType == GeometryType.CompositeSurface;
-                case CityObjectType.TransportSquare:
-                    return geometryType == GeometryType.MultiSurface || geometryType == GeometryType.CompositeSurface || geometryType == GeometryType.MultiLineString;
-                case CityObjectType.Tunnel:
-                    return geometryType == GeometryType.Solid || geometryType == GeometryType.CompositeSolid || geometryType == GeometryType.MultiSurface;
-                case CityObjectType.WaterBody:
-                    return geometryType == GeometryType.MultiLineString || geometryType == GeometryType.MultiSurface || geometryType == GeometryType.CompositeSurface || geometryType == GeometryType.CompositeSolid;
-                case CityObjectType.BuildingPart:
-                    return geometryType == GeometryType.Solid || geometryType == GeometryType.MultiSolid || geometryType == GeometryType.MultiSurface;
-                case CityObjectType.BuildingInstallation:
-                    return true;
-                case CityObjectType.BridgePart:
-                    return geometryType == GeometryType.Solid || geometryType == GeometryType.CompositeSolid || geometryType == GeometryType.MultiSurface;
-                case CityObjectType.BridgeInstallation:
-                    return true;
-                case CityObjectType.BridgeConstructionElement:
-                    return true;
-                case CityObjectType.TunnelPart:
-                    return geometryType == GeometryType.Solid || geometryType == GeometryType.CompositeSolid || geometryType == GeometryType.MultiSurface;
-                case CityObjectType.TunnelInstallation:
-                    return true;
-                default:
-                    return false;
-            }
+            // if(!version.StartsWith("1.0"))
+                Debug.LogWarning("Currently Only v1.0 type checks are supported, this function may return a wrong validity check for other versions");
+            
+            var validTypes = ValidGeometryTypes1_0[cityObjectType];
+            return Array.IndexOf(validTypes, geometryType) >= 0;
         }
 
         public CityGeometry(GeometryType geometryType, int lod, bool includeSemantics, bool includeMaterials, bool includeTextures)
@@ -207,9 +189,9 @@ namespace Netherlands3D.CityJson.Structure
             //theme not found, return the first theme if there are themes defined
             if (MaterialIndicesForFullGeometry.Count > 0)
             {
-                return new List<int>(){MaterialIndicesForFullGeometry[0]};
+                return new List<int>() { MaterialIndicesForFullGeometry[0] };
             }
-            
+
             return new List<int>(); //no materials defined
         }
 
