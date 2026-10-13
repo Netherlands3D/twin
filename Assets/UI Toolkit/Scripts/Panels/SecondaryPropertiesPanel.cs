@@ -38,6 +38,13 @@ namespace Netherlands3D.UI.Panels
             contentContainer.CloseButtonClicked.AddListener(() => SetVisible(false));
             
             this.Q<ColorPicker>().ColorPickerEnabled.AddListener(SetVisible);
+            
+            this.RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            this.Q<ColorPicker>().ColorPickerEnabled.RemoveListener(SetVisible);
         }
 
         public void SetVisible(bool visible)

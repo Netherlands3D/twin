@@ -59,8 +59,7 @@ namespace Netherlands3D.UI.Panels
         {
             timelineStatusStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
             ColorPicker.ColorChanged.RemoveListener(OnPickColor);
-            ColorPicker.ColorPickerEnabled.RemoveListener(OnVisibilityChanged);
-
+            ColorPicker.VisibilityChanged.RemoveListener(OnVisibilityChanged);
         }
         
         private VisualElement MakeListViewItem()
@@ -122,6 +121,9 @@ namespace Netherlands3D.UI.Panels
         {
             var selectedIndices = listView.selectedIndices.ToList();
             var changedStateColors = new Dictionary<string, bool>(selectedIndices.Count);
+            if(selectedIndices.Count == 0)
+                return;
+            
             foreach (int i in selectedIndices)
             {
                 string status = listView.itemsSource[i] as string;

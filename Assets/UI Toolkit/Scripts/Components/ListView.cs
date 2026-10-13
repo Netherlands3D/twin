@@ -127,7 +127,7 @@ namespace Netherlands3D.UI.Components
             if(caller == this)
                 return;
             
-            if (listGroup != string.Empty && listGroup == ListGroup)
+            if (!string.IsNullOrEmpty(listGroup) && listGroup == ListGroup)
                 ClearSelection();
         }
 
