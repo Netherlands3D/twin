@@ -100,7 +100,6 @@ namespace Netherlands3D.Twin.Layers.Properties
                 var stylingRuleKey = GetStatusStylingRuleKey(kvp.Key);
                 if (StylingRules.TryGetValue(stylingRuleKey, out var rule))
                 {
-                    Debug.Log("setting " + kvp.Key + " to " + kvp.Value);
                     rule.Symbolizer.SetVisibility(kvp.Value);
                 }
             }

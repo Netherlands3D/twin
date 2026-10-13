@@ -40,14 +40,15 @@ namespace Netherlands3D.UI.Components
             brightnessSlider.RegisterValueChangedCallback(_ => OnColorInputChanged());
         }
 
-        public void SetTransparentToggleWithoutNotify(bool visible)
+        public void SetTransparentToggleWithoutNotify(bool objectVisible)
         {
-            transparentToggle.SetValueWithoutNotify(visible);
+            transparentToggle.SetValueWithoutNotify(!objectVisible);
         }
         
         private void OnTransparentToggleClicked(ChangeEvent<bool> evt)
         {
-            VisibilityChanged.Invoke(evt.newValue);
+            var objectVisible = !evt.newValue;
+            VisibilityChanged.Invoke(objectVisible);
         }
 
         private void OnHexColorSubmitted(NavigationSubmitEvent evt)
