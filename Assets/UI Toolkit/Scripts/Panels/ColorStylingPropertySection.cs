@@ -66,6 +66,7 @@ namespace Netherlands3D.UI.Panels
                 stylingPropertyData.ColorType = item.userData as string;
                 var color = GetColorFromPropertyData();
                 ColorPicker.SetColorInputComponentsWithoutNotify(color);
+                ColorPicker.SetTransparentToggleWithoutNotify(item.VisibilityState);
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
@@ -79,15 +80,21 @@ namespace Netherlands3D.UI.Panels
             string propertyName = swatchesListView.itemsSource[index] as string;
             tile.userData = propertyName;
             tile.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
+            
             var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
             tile.Tile.Color = color;
+            
+            bool? visibility = stylingPropertyData.GetDefaultSymbolizerVisibility();
+            tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateColorFromProperty);
             ColorPicker.ColorChanged.RemoveListener(OnColorPicked);
+            ColorPicker.VisibilityChanged.RemoveListener(OnVisibilityChanged);
+
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -98,6 +105,7 @@ namespace Netherlands3D.UI.Panels
 
             stylingPropertyData.OnStylingChanged.AddListener(UpdateColorFromProperty);
             ColorPicker.ColorChanged.AddListener(OnColorPicked);
+            ColorPicker.VisibilityChanged.AddListener(OnVisibilityChanged);
 
             UpdateSwatches();
             UpdateColorFromProperty();
@@ -138,6 +146,14 @@ namespace Netherlands3D.UI.Panels
             {
                 stylingPropertyData.ColorType = item;
                 stylingPropertyData.SetDefaultSymbolizerColor(color);
+            }
+        }
+        
+        private void OnVisibilityChanged(bool isVisible)
+        {
+            foreach (var item in swatchesListView.selectedItems.OfType<string>())
+            {
+                stylingPropertyData.SetDefaultSymbolizerVisibility(isVisible);
             }
         }
     }

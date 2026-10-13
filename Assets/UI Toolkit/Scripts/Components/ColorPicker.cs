@@ -14,9 +14,11 @@ namespace Netherlands3D.UI.Components
         private ColorSlider brightnessSlider;
         private TextField hexField;
         private ColorTile colorTile;
+        private Toggle transparentToggle;
 
         public UnityEvent<Color> ColorChanged = new();
-        public UnityEvent<bool> ColorPickerVisibilityChanged = new();
+        public UnityEvent<bool> VisibilityChanged = new();
+        public UnityEvent<bool> ColorPickerEnabled = new();
 
         public ColorPicker()
         {
@@ -27,12 +29,27 @@ namespace Netherlands3D.UI.Components
             brightnessSlider = this.Q<ColorSlider>();
             hexField = this.Q<TextField>();
             colorTile = this.Q<ColorTile>();
+            
+            transparentToggle = this.Q<Toggle>("TransparentToggle");
+            transparentToggle.RegisterValueChangedCallback(OnTransparentToggleClicked);
 
             hexField.RegisterValueChangedCallback(OnHexValueChanged);
             hexField.RegisterCallback<NavigationSubmitEvent>(OnHexColorSubmitted, TrickleDown.TrickleDown);
 
             colorSpectrum.SpectrumChanged.AddListener(OnColorInputChanged);
             brightnessSlider.RegisterValueChangedCallback(_ => OnColorInputChanged());
+        }
+
+        public void SetTransparentToggleWithoutNotify(bool visible)
+        {
+            transparentToggle.SetValueWithoutNotify(visible);
+        }
+        
+        private void OnTransparentToggleClicked(ChangeEvent<bool> evt)
+        {
+            // var color = new Color(0, 0, 0, 0);
+            // SetColorInputComponentsWithoutNotify(color);
+            VisibilityChanged.Invoke(!evt.newValue);
         }
 
         private void OnHexColorSubmitted(NavigationSubmitEvent evt)
@@ -83,7 +100,7 @@ namespace Netherlands3D.UI.Components
         public void SetVisible(bool visible)
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
-            ColorPickerVisibilityChanged.Invoke(visible);
+            ColorPickerEnabled.Invoke(visible);
         }
     }
 }
