@@ -101,5 +101,10 @@ namespace Netherlands3D.UI.Components
             EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
             ColorPickerEnabled.Invoke(visible);
         }
+
+        public void SetVisibilityToggleEnabled(bool allowVisibilityChange) //todo: this should be removed when all layers support setting visibility
+        {
+            transparentToggle.SetEnabled(allowVisibilityChange);            
+        }
     }
 }

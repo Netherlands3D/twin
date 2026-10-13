@@ -392,7 +392,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Symbolizer styling = GetStyling(feature);
             var visibilityStyling = styling.GetVisibility();
             var isVisible = visibilityStyling.HasValue ?  visibilityStyling.Value : true;
-            gameObject.SetActive(isVisible);
+            meshRenderer.enabled = isVisible;
             if(!isVisible)
                 return;
             
