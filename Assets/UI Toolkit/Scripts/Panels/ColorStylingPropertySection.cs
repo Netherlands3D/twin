@@ -50,11 +50,17 @@ namespace Netherlands3D.UI.Panels
                 }
             });
 
-            swatchesListView.selectedIndicesChanged += indices =>
-            {
-                //show selection in world when items in panel are selected
-                ColorPicker.SetVisible(indices.Any());
-            };
+            swatchesListView.selectedIndicesChanged += ActivateColorPicker;
+        }
+
+        private void ActivateColorPicker(IEnumerable<int> indices)
+        {
+            ColorPicker.SetVisible(indices.Any());
+            
+            var color = GetColorFromPropertyData();
+            ColorPicker.SetColorInputComponentsWithoutNotify(color);
+            var visibility = stylingPropertyData.GetDefaultSymbolizerVisibility();
+            ColorPicker.SetTransparentToggleWithoutNotify(visibility.HasValue ? visibility.Value : true);
         }
 
         private VisualElement MakeListViewItem()
@@ -64,9 +70,6 @@ namespace Netherlands3D.UI.Panels
             item.RegisterCallback<ClickEvent>(evt =>
             {
                 stylingPropertyData.ColorType = item.userData as string;
-                var color = GetColorFromPropertyData();
-                ColorPicker.SetColorInputComponentsWithoutNotify(color);
-                ColorPicker.SetTransparentToggleWithoutNotify(item.VisibilityState);
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
@@ -94,7 +97,7 @@ namespace Netherlands3D.UI.Panels
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateColorFromProperty);
             ColorPicker.ColorChanged.RemoveListener(OnColorPicked);
             ColorPicker.VisibilityChanged.RemoveListener(OnVisibilityChanged);
-
+            swatchesListView.selectedIndicesChanged -= ActivateColorPicker;
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)

@@ -47,9 +47,7 @@ namespace Netherlands3D.UI.Components
         
         private void OnTransparentToggleClicked(ChangeEvent<bool> evt)
         {
-            // var color = new Color(0, 0, 0, 0);
-            // SetColorInputComponentsWithoutNotify(color);
-            VisibilityChanged.Invoke(!evt.newValue);
+            VisibilityChanged.Invoke(evt.newValue);
         }
 
         private void OnHexColorSubmitted(NavigationSubmitEvent evt)
