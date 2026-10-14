@@ -112,6 +112,7 @@ namespace Netherlands3D.UI.Panels
             timelineStatusStylingPropertyData = properties.Get<TimelineStatusStylingLayerPropertyData>();
             ColorPicker.ColorChanged.AddListener(OnPickColor);
             ColorPicker.VisibilityChanged.AddListener(OnVisibilityChanged);
+            ColorPicker.SetVisibilityToggleEnabled(true);
             
             timelineStatusStylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches); //todo: do this once per frame
             UpdateSwatches();

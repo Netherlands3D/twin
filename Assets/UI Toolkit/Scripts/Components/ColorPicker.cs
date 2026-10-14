@@ -106,7 +106,7 @@ namespace Netherlands3D.UI.Components
 
         public void SetVisibilityToggleEnabled(bool allowVisibilityChange) //todo: this should be removed when all layers support setting visibility
         {
-            // transparentToggle.SetEnabled(allowVisibilityChange);            
+            transparentToggle.EnableInClassList(UtilityClassConstants.HIDDEN, !allowVisibilityChange);
         }
     }
 }
