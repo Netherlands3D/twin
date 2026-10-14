@@ -109,7 +109,9 @@ namespace Netherlands3D.UI.Panels
             stylingPropertyData.OnStylingChanged.AddListener(UpdateColorFromProperty);
             ColorPicker.ColorChanged.AddListener(OnColorPicked);
             ColorPicker.VisibilityChanged.AddListener(OnVisibilityChanged);
-            ColorPicker.SetVisibilityToggleEnabled(true);
+
+            var hasTimeline = properties.Get<TimelineStatusStylingLayerPropertyData>() != null; //todo: this dependency should not be here. Ideally the colorpicker is uniform for all panels
+            ColorPicker.SetVisibilityToggleEnabled(hasTimeline);
 
             UpdateSwatches();
             UpdateColorFromProperty();
