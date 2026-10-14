@@ -14,7 +14,7 @@ namespace Netherlands3D.UI.Components
         private ColorSlider brightnessSlider;
         private TextField hexField;
         private ColorTile colorTile;
-        private Toggle transparentToggle;
+        private VisibilityToggle transparentToggle;
 
         public UnityEvent<Color> ColorChanged = new();
         public UnityEvent<bool> VisibilityChanged = new();
@@ -30,7 +30,7 @@ namespace Netherlands3D.UI.Components
             hexField = this.Q<TextField>();
             colorTile = this.Q<ColorTile>();
             
-            transparentToggle = this.Q<Toggle>("TransparentToggle");
+            transparentToggle = this.Q<VisibilityToggle>("TransparentToggle");
             transparentToggle.RegisterValueChangedCallback(OnTransparentToggleClicked);
 
             hexField.RegisterValueChangedCallback(OnHexValueChanged);
@@ -42,12 +42,14 @@ namespace Netherlands3D.UI.Components
 
         public void SetTransparentToggleWithoutNotify(bool objectVisible)
         {
-            transparentToggle.SetValueWithoutNotify(!objectVisible);
+            transparentToggle.SetValueWithoutNotify(objectVisible);
+            var state = objectVisible ? VisibilityState.Visible : VisibilityState.Invisible;
+            transparentToggle.SetState(state);
         }
         
         private void OnTransparentToggleClicked(ChangeEvent<bool> evt)
         {
-            var objectVisible = !evt.newValue;
+            var objectVisible = evt.newValue;
             VisibilityChanged.Invoke(objectVisible);
         }
 
@@ -104,7 +106,7 @@ namespace Netherlands3D.UI.Components
 
         public void SetVisibilityToggleEnabled(bool allowVisibilityChange) //todo: this should be removed when all layers support setting visibility
         {
-            transparentToggle.SetEnabled(allowVisibilityChange);            
+            // transparentToggle.SetEnabled(allowVisibilityChange);            
         }
     }
 }
