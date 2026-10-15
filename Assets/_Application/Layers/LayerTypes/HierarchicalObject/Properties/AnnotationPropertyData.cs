@@ -15,7 +15,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         [DataMember] private string imageCaption;
         [DataMember] private bool readOnly;
         
-        [JsonIgnore] public Coordinate startCoordinate;
         [JsonIgnore] public readonly UnityEvent<string> OnAnnotationTextChanged = new();
 
         [JsonIgnore]
@@ -55,14 +54,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             get => readOnly;
             set => readOnly = value;
-        }
-        
-        //this shoudl be ignored and not saved because it is only used on import
-        [JsonIgnore]
-        public Coordinate StartCoordinate
-        {
-            get => startCoordinate;
-            set => startCoordinate = value;
         }
 
         [JsonConstructor]

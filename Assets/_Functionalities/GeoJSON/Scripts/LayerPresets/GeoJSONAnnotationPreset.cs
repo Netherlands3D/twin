@@ -2,6 +2,7 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
@@ -40,12 +41,11 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
             ILayerBuilder builder,
             Args args)
         {
-            AnnotationPropertyData annotationPropertyData = new AnnotationPropertyData(args.Title, args.AnnotationText, args.ImageUrl, args.ImageCaption, args.ReadOnly);
-            annotationPropertyData.StartCoordinate = args.Coordinate;
             return builder
                     .OfType(PrefabIdentifier)
                     .NamedAs(args.Title)
-                    .AddProperty(annotationPropertyData)
+                    .AddProperty(new AnnotationPropertyData(args.Title, args.AnnotationText, args.ImageUrl, args.ImageCaption, args.ReadOnly))
+                    .AddProperty(new GeoJSONPropertyData(args.Coordinate))
                     .WithColor(args.Color);
                 
         }

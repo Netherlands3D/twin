@@ -4,6 +4,7 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
@@ -67,11 +68,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 worldAnnotation.SetColor(LayerData.Color);
             }
 
-            if (annotationPropertyData.startCoordinate.IsValid())
+            GeoJSONPropertyData geoJsonPropertyData =  LayerData.GetProperty<GeoJSONPropertyData>();
+            if (geoJsonPropertyData  != null) //todo this should only happen once as the data is generated, when edited we need to not reposition from geojson coordinate
             {
-                //the startcoordinate is valid, this means it is laoded from a geojson or other data source
                 TransformLayerPropertyData propertyData = LayerData.GetProperty<TransformLayerPropertyData>();
-                propertyData.Position = annotationPropertyData.startCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                propertyData.Position = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
             }
         }
 

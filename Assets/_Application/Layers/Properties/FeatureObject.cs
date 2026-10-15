@@ -47,11 +47,11 @@ namespace Netherlands3D.Twin.layers.properties
         private void OnLayerSelected(LayerData layer)
         {
             SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
-            TransformLayerPropertyData transformLayerPropertyData = layer.GetProperty<TransformLayerPropertyData>();
+            GeoJSONPropertyData geoJsonPropertyData = layer.GetProperty<GeoJSONPropertyData>();
             //is this a sublayer of geojson? 
-            if (transformLayerPropertyData != null)
+            if (geoJsonPropertyData != null)
             {
-                selectorService.SelectGeoJsonFeatureAtPositionForLayer(transformLayerPropertyData.Position.ToUnity(), layer);
+                selectorService.SelectGeoJsonFeatureAtPositionForLayer(geoJsonPropertyData.GeoJSONCoordinate.ToUnity(), layer);
             }
         }
         

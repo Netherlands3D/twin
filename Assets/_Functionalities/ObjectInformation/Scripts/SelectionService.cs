@@ -15,9 +15,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Panels;
 using UnityEngine.UIElements;
 using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
@@ -285,7 +287,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     if (parent == element || parent.Contains(element))
                     {
                         //in case of readonly its possible its a geojson feature annotation, if so try to select its corresponding feature data
-                        SelectGeoJsonFeatureAtPositionForLayer(selectedVisualisation.Bounds.Center.ToUnity(), selectedVisualisation.LayerData);
+                        GeoJSONPropertyData geoJsonPropertyData = selectedVisualisation.LayerData.GetProperty<GeoJSONPropertyData>();
+                        if(geoJsonPropertyData != null)
+                            SelectGeoJsonFeatureAtPositionForLayer(geoJsonPropertyData.GeoJSONCoordinate.ToUnity(), selectedVisualisation.LayerData);
                     }
                 }
             }
