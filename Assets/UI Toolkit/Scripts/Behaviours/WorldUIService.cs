@@ -1,4 +1,3 @@
-using System;
 using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit;
 using UnityEngine;
@@ -19,14 +18,10 @@ namespace Netherlands3D.UI.Panels
         
         public VisualElement FloatingElementsContent => floatingElementsContent;
 
-        private void Awake()
-        {
-            floatingElementsContent = new VisualElement();
-        }
-
         private void Start()
         {
-            App.UIRoot.Root.Add(floatingElementsContent);
+            floatingElementsContent = new VisualElement();
+            App.UIRoot.Root.parent.Insert(0, floatingElementsContent); //world ui anchor
             foreach (var buttonBehaviour in floatingButtonBehaviour)
             {             
                 buttonBehaviour.Initialize(floatingElementsContent);
@@ -39,7 +34,6 @@ namespace Netherlands3D.UI.Panels
             App.UIRoot.Root.Add(floatingPanel);
             floatingPanel.OnClose.AddListener(ClearActivePanel);
             floatingPanel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            
         }
         
         void OnDisable()

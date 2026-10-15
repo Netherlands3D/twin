@@ -307,7 +307,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             ClearTransformHandles();
         }
         
-        private void AttachToTransformHandles()
+        protected void AttachToTransformHandles()
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 

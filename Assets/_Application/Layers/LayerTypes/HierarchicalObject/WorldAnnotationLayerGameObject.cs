@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
@@ -12,7 +12,6 @@ using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
@@ -33,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private const float worldSpaceOffset = 10;
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
-        public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
+        public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - WorldAnnotation.Size * Vector3.one), new Coordinate(transform.position + WorldAnnotation.Size * Vector3.one));
 
         protected override void OnVisualizationInitialize()
         {
@@ -43,16 +42,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             worldUIService  = ServiceLocator.GetService<WorldUIService>();
             cameraService = App.Cameras;
             appRootBehaviour = App.UIRoot;
-            InitializeWorldUI();
-        }
-
-        private void InitializeWorldUI()
-        {
             floatingElement = new FloatingElement();
             worldUIService.AddToFloatingElementsContent(floatingElement);
             worldAnnotation = new WorldAnnotation("");
-            worldAnnotation.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
             floatingElement.Add(worldAnnotation);
+        }
+
+        protected override void OnVisualizationReady()
+        {
+            base.OnVisualizationReady();
+            AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            worldAnnotation.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
+            worldAnnotation.SetReadOnly(annotationPropertyData.ReadOnly);
+            worldAnnotation.SetImage(annotationPropertyData.ImageUrl);
+            worldAnnotation.SetText(annotationPropertyData.AnnotationText);
+            ColorPropertyData colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
+            Color? color = colorPropertyData.GetDefaultSymbolizerColor();
+            if(color.HasValue)
+            {
+                worldAnnotation.SetColor(color.Value);
+            }
+            else
+            {
+                LayerData.Color = Color.white;
+                worldAnnotation.SetColor(LayerData.Color);
+            }
+
+            GeoJSONPropertyData geoJsonPropertyData =  LayerData.GetProperty<GeoJSONPropertyData>();
+            if (geoJsonPropertyData  != null) //todo this should only happen once as the data is generated, when edited we need to not reposition from geojson coordinate
+            {
+                TransformLayerPropertyData propertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+                propertyData.Position = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            }
         }
 
         private void OnEditChanged(bool isEditing)
@@ -75,25 +96,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Symbolizer styling = GetStyling(feature);
             var fillColor = styling.GetFillColor();
             if (fillColor.HasValue)
+            {
                 worldAnnotation.SetColor(fillColor.Value);
+                LayerData.Color = fillColor.Value;
+            }
+            
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
-            InitProperty<AnnotationPropertyData>(properties, null, "");
-        }
-
-        protected override void OnVisualizationReady()
-        {
-            base.OnVisualizationReady();
-            AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
-            worldAnnotation.SetText(annotationPropertyData.AnnotationText);
+            InitProperty<AnnotationPropertyData>(properties, null, "", null, null, null, false);
         }
         
         private void OnClickAnnotation(PointerDownEvent e)
         {
             selectionService.SelectVisualisation(this);
+        }
+        
+        public override void OnSelect(LayerData layer)
+        {
+            if(worldAnnotation.ReadOnly)
+            {
+                return;
+            }
+            AttachToTransformHandles();
         }
 
         protected override void RegisterEventListeners()
