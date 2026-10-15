@@ -167,7 +167,10 @@ namespace Netherlands3D.UI.Components
 
         public void SetLabelOffset(float offset)
         {
+            bool changed = offset != labelOffsetToPosition;
             labelOffsetToPosition = offset;
+            if(changed)
+                UpdateSnapping();
         }
 
         private void UpdateSnapping()
