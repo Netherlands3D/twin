@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Utility;
 using Newtonsoft.Json;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
 {

@@ -13,7 +13,7 @@ namespace Netherlands3D
         [SerializeField] private Texture2D sideSprite;
         private const float edgeWidth = 120;
 
-        void Start()
+        void Awake()
         {
             var anchor = App.UIRoot.Root.parent;
 
