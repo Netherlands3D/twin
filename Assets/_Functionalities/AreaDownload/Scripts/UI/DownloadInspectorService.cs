@@ -80,7 +80,7 @@ namespace Netherlands3D.Functionalities
 
         private GameObject exporterObject;
 
-        private void OnEnable()
+        private void Start()
         {
             OnSelectionBoundsChanged.AddListener(WhenSelectionBoundsChanged);
             
@@ -100,18 +100,8 @@ namespace Netherlands3D.Functionalities
             southWestTooltip = CreateCoordinateLabel(ref southWestFloatingElement);
             southWestTooltip.SetSnappingSide(WorldAnnotation.SnappingSide.Left);
         }
-
-        private WorldAnnotation CreateCoordinateLabel(ref FloatingElement floatingElement)
-        {
-            floatingElement = new FloatingElement();
-            worldUIService.AddToFloatingElementsContent(floatingElement);
-            WorldAnnotation annotation = new WorldAnnotation("");
-            annotation.IsCoordinate = true;
-            floatingElement.Add(annotation);
-            return annotation;
-        }
-
-        private void OnDisable()
+       
+        private void OnDestroy()
         {
             OnSelectionBoundsChanged.RemoveListener(WhenSelectionBoundsChanged);
             
@@ -126,6 +116,16 @@ namespace Netherlands3D.Functionalities
             northEastFloatingElement = null;
             worldUIService.RemoveFromFloatingElementsContent(southWestFloatingElement);
             southWestFloatingElement = null;
+        }
+        
+        private WorldAnnotation CreateCoordinateLabel(ref FloatingElement floatingElement)
+        {
+            floatingElement = new FloatingElement();
+            worldUIService.AddToFloatingElementsContent(floatingElement);
+            WorldAnnotation annotation = new WorldAnnotation("");
+            annotation.IsCoordinate = true;
+            floatingElement.Add(annotation);
+            return annotation;
         }
         
         void Update()
