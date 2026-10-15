@@ -279,6 +279,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnLeftClickUp(InputAction.CallbackContext ctx)
         {
+            //when a layer in the world has world ui, we need to intercept the selection because the default selection process checks the predicate ui element clicked.
             if (App.UIRoot.IsPointerOverUI(out VisualElement element))
             {
                 if (SelectedVisualisation is IVisualizationWithWorldUI worldUI && element != null)
@@ -286,7 +287,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     VisualElement parent = worldUI.VisualElement;
                     if (parent == element || parent.Contains(element))
                     {
-                        //in case of readonly its possible its a geojson feature annotation, if so try to select its corresponding feature data
                         GeoJSONPropertyData geoJsonPropertyData = selectedVisualisation.LayerData.GetProperty<GeoJSONPropertyData>();
                         if(geoJsonPropertyData != null)
                             SelectGeoJsonFeatureAtPositionForLayer(geoJsonPropertyData.GeoJSONCoordinate.ToUnity(), selectedVisualisation.LayerData);
@@ -315,11 +315,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 SelectVisualisation(ctxObject);
                 Deselect();
                 
-                //in case of readonly its possible its a geojson feature annotation, if so try to select its corresponding feature data
-                SelectGeoJsonFeatureAtPositionForLayer(ctxObject.Bounds.Center.ToUnity(), ctxObject.LayerData);
-                
-                
-                
+                //if the layer has geojson data and was not selected trhough world ui, select it through geometry
+                GeoJSONPropertyData geoJsonPropertyData = selectedVisualisation.LayerData.GetProperty<GeoJSONPropertyData>();
+                if (geoJsonPropertyData != null)
+                {
+                    SelectGeoJsonFeatureAtPositionForLayer(geoJsonPropertyData.GeoJSONCoordinate.ToUnity(), ctxObject.LayerData);   
+                }
                 return;
             }
 
