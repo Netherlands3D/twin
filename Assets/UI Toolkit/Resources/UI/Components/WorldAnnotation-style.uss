@@ -2,7 +2,8 @@
 {
     position:absolute;
     --text-border: -10px;
-    
+    --border-radius: var(--spacing-4);
+    --foto-spacing: -16px;
 }
 
 .world-annotation__container {
@@ -56,7 +57,7 @@
     right: var(--text-border);
     top: var(--text-border);
     bottom: var(--text-border);
-    border-radius: var(--spacing-4);
+    border-radius: var(--border-radius);
     border-width: var(--spacing-0_5);
     border-color: var(--color-blue-200); /*same color as containtcontainerborders?*/
 }
@@ -78,4 +79,6 @@
     
     aspect-ratio: 1;
     position: absolute;    
+    top: var(--foto-spacing);
+    border-radius: var(--border-radius);
 }
