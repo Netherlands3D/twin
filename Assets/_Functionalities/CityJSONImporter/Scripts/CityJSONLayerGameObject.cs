@@ -80,6 +80,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 return;
             
             var symbolizer = GetStyling(feature);
+            
+            var isVisibleStyling = symbolizer.GetVisibility();
+            var isVisible = isVisibleStyling.HasValue ?  isVisibleStyling.Value : true;
+
+            visualizer.gameObject.SetActive(isVisible);
+            if(!isVisible)
+                return;
+            
             var fillColor = symbolizer.GetFillColor();
             visualizer.SetFillColor(fillColor);
             
