@@ -15,15 +15,21 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Panels;
+using UnityEngine.UIElements;
+using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class SelectionService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
+        public FeatureSelector FeatureSelector => featureSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
         public LayerGameObject SelectedVisualisation => selectedVisualisation;
 
@@ -273,6 +279,21 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnLeftClickUp(InputAction.CallbackContext ctx)
         {
+            //when a layer in the world has world ui, we need to intercept the selection because the default selection process checks the predicate ui element clicked.
+            if (App.UIRoot.IsPointerOverUI(out VisualElement element))
+            {
+                if (SelectedVisualisation is IVisualizationWithWorldUI worldUI && element != null)
+                {
+                    VisualElement parent = worldUI.VisualElement;
+                    if (parent == element || parent.Contains(element))
+                    {
+                        GeoJSONPropertyData geoJsonPropertyData = selectedVisualisation.LayerData.GetProperty<GeoJSONPropertyData>();
+                        if(geoJsonPropertyData != null)
+                            SelectGeoJsonFeatureAtPositionForLayer(geoJsonPropertyData.GeoJSONCoordinate.ToUnity(), selectedVisualisation.LayerData);
+                    }
+                }
+            }
+            
             if (!CanProcessSelection()) return;
 
             ProcessSelection(true);
@@ -293,6 +314,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 SelectVisualisation(ctxObject);
                 Deselect();
+                
+                //if the layer has geojson data and was not selected trhough world ui, select it through geometry
+                GeoJSONPropertyData geoJsonPropertyData = selectedVisualisation.LayerData.GetProperty<GeoJSONPropertyData>();
+                if (geoJsonPropertyData != null)
+                {
+                    SelectGeoJsonFeatureAtPositionForLayer(geoJsonPropertyData.GeoJSONCoordinate.ToUnity(), ctxObject.LayerData);   
+                }
                 return;
             }
 
@@ -374,6 +402,30 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (!selectedMappings.ContainsKey(bagId))
                 selectedMappings.Add(bagId, mapping);
             SelectSubObjectWithBagId?.Invoke(mapping, bagId);
+        }
+        
+        /// <summary>
+        /// should only be used when the normal selection process is unavailable (like from world ui)
+        /// </summary>
+        /// <param name="position"></param>
+        public void SelectGeoJsonFeatureAtPositionForLayer(Vector3 position, LayerData layerData)
+        {
+            if(!layerData.IsSelected)
+                layerData.SelectLayer(true);
+            
+            lastSelectedMappingLayerData = layerData;
+            
+            Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> mappings = featureSelector.FindFeatureByPosition(position);
+            foreach(var kvp in mappings)
+            {
+                if (kvp.Value.Count > 0)
+                {
+                    FeatureMapping mapping = kvp.Value[0];
+                    SelectFeatureMapping(mapping);
+                    selectedMappings.TryAdd(layerData.Id.ToString(), mapping);
+                    SelectFeature?.Invoke(mapping);
+                }
+            }
         }
 
         private void ProcessFeatureMappingSelection(FeatureMapping feature)
