@@ -8,6 +8,7 @@ using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -68,13 +69,19 @@ namespace Netherlands3D.UI.Panels
         
         public void PopulateAddresses(Dictionary<string, object> properties)
         {
-            var list = properties
-                .Select(kv => new KeyValue
+            var list = new List<KeyValue>();
+            foreach (var kv in properties)
+            {
+                if (kv.Value is JObject nested)
                 {
-                    Key = kv.Key,
-                    Value = kv.Value?.ToString()
-                })
-                .ToList();
+                    foreach (var nestedKv in nested)
+                        list.Add(new KeyValue { Key = nestedKv.Key, Value = nestedKv.Value?.ToString() });
+                }
+                else
+                {
+                    list.Add(new KeyValue { Key = kv.Key, Value = kv.Value?.ToString() });
+                }
+            }
             propertiesListView.itemsSource = list;
         }
         
