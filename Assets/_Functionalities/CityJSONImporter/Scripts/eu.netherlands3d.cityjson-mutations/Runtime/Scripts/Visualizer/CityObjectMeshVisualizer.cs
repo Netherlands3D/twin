@@ -84,13 +84,14 @@ namespace Netherlands3D.CityJson.Visualisation
             meshFilter = GetComponent<MeshFilter>();
             meshRenderer = GetComponent<MeshRenderer>();
             meshCollider = GetComponent<MeshCollider>();
+            
         }
 
         //create the meshes
-        protected override void Visualize()
+        protected override void Visualize(CityJSON caller)
         {
             transform.localPosition = SetLocalPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
-            materialConverter.Initialize(cityObject.Appearance);
+            materialConverter=caller.MaterialConverter;
             StartCoroutine(CreateMeshesPerFrame(maxMeshesPerFrame));
         }
 
@@ -172,6 +173,7 @@ namespace Netherlands3D.CityJson.Visualisation
             meshes = new Dictionary<CityGeometry, MeshWithMaterials>(cityObject.Geometries.Count);
             foreach (var geometry in cityObject.Geometries)
             {
+                
                 if (geometry.Type == GeometryType.MultiPoint || geometry.Type == GeometryType.MultiLineString)
                     continue; // MultiPoint/Lines have their own visualizer and don't create meshes
 

@@ -26,7 +26,7 @@ namespace Netherlands3D.CityJson.Visualisation
             cityObject.CityObjectParsed.RemoveListener(Visualize);
         }
         
-        protected abstract void Visualize();
+        protected abstract void Visualize(CityJSON caller);
         public abstract void SetFillColor(Color color);
         public abstract void SetLineColor(Color color);
     }
