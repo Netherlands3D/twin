@@ -1,5 +1,7 @@
+using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
 using SimpleJSON;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,7 +25,7 @@ namespace Netherlands3D.CityJson.Structure
         public Vector3Double TransformTranslate { get; private set; } = new Vector3Double(0d, 0d, 0d);
         public CityAppearance Appearance { get; private set; }
         public JSONNode GeometryTemplates { get; private set; }
-
+    public CityMaterialConverter MaterialConverter;
         public List<CityObject> CityObjects { get; private set; } = new List<CityObject>();
         public Vector3Double MinExtent { get; private set; }
         public Vector3Double MaxExtent { get; private set; }
@@ -90,6 +92,7 @@ namespace Netherlands3D.CityJson.Structure
             Metadata = node["metadata"];
             Appearance = CityAppearance.FromJSON(node["appearance"]);
             GeometryTemplates = node["geometry-templates"]; //todo: not implemented yet
+            MaterialConverter.Initialize(Appearance);
             var transformNode = node["transform"];
 
             if (transformNode.Count > 0)
@@ -189,12 +192,25 @@ namespace Netherlands3D.CityJson.Structure
 
             CityObjects = cityObjects.Values.ToList();
 
-            foreach (var co in CityObjects)
-            {
-                co.OnCityObjectParseCompleted();
-            }
+           StartCoroutine("createGeometry");
 
-            onAllCityObjectsProcessed?.Invoke();
+            
+        }
+        private IEnumerator createGeometry()
+        {
+            
+            System.DateTime time = System.DateTime.UtcNow;
+             foreach (var co in CityObjects)
+            {   
+                co.OnCityObjectParseCompleted(this);
+                 if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
+                {
+                    time = System.DateTime.UtcNow;
+                     yield return null;
+                }
+            }
+           
+onAllCityObjectsProcessed?.Invoke();
         }
 
         //custom nodes must be added as is to the exporter to ensure they are preserved.

@@ -62,7 +62,7 @@ namespace Netherlands3D.CityJson.Structure
         public CityObject[] CityChildren => cityChildren.ToArray();
         public CityObject[] CityParents { get; private set; } = new CityObject[0];
 
-        public UnityEvent CityObjectParsed { get; private set; } = new();
+        public UnityEvent<CityJSON> CityObjectParsed { get; private set; } = new();
 
         private bool includeInExport;
         public bool IncludeInExport
@@ -272,9 +272,9 @@ namespace Netherlands3D.CityJson.Structure
         }
 
         //called by CityJSON.cs when CityObject is fully parsed and ready for further processing (such as visualization)
-        public void OnCityObjectParseCompleted()
+        public void OnCityObjectParseCompleted(CityJSON caller)
         {
-            CityObjectParsed.Invoke();
+            CityObjectParsed.Invoke(caller);
         }
     }
 }
