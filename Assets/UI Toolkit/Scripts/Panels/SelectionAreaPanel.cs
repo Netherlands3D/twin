@@ -38,6 +38,8 @@ namespace Netherlands3D.UI.Panels
         {
             polygonButton.SetActivePseudoState(true);
             lineButton.SetActivePseudoState(false);
+            polygonButton.SetCheckedPseudoState(true);
+            lineButton.SetCheckedPseudoState(false);
             polygonCreationService.SetPolygonToCreate();
         }
         
@@ -45,6 +47,8 @@ namespace Netherlands3D.UI.Panels
         {
             polygonButton.SetActivePseudoState(false);
             lineButton.SetActivePseudoState(true);
+            polygonButton.SetCheckedPseudoState(false);
+            lineButton.SetCheckedPseudoState(true);
             polygonCreationService.SetLineInputToCreate();
         }
 
