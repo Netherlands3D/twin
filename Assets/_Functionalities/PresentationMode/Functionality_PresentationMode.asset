@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a903cb4c365f3c247a983856059c13d4, type: 3}
+  m_Name: Functionality_PresentationMode
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.PresentationModus.PresentationModeFunctionality
+  defaultData:
+    rid: 6103832812264882572
+  OnDataReplaced:
+    m_PersistentCalls:
+      m_Calls: []
+  Title: Presentatiemodus
+  Caption: BETA
+  Header: 
+  Description: <i>Let op; deze functionaliteit is nog in ontwikkeling.</i>
+  configuration: {fileID: 0}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 6103832812264882572
+      type: {class: FunctionalityData, ns: Netherlands3D.Twin.Functionalities, asm: eu.netherlands3d.twin.functionalities}
+      data:
+        Id: presentation-mode
+        IsEnabled: 0

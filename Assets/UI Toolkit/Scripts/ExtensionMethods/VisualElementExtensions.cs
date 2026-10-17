@@ -16,6 +16,14 @@ namespace Netherlands3D.UI.ExtensionMethods
             asset.CloneTree(component);
         }
         
+        public static void CloneComponentTreeByType(this VisualElement component, Type type, string path = "")
+        {
+            if (!string.IsNullOrEmpty(path)) path += "/";
+
+            var asset = Resources.Load<VisualTreeAsset>($"UI/{path}{type.Name}");
+            asset.CloneTree(component);
+        }
+        
         public static void AddComponentStylesheet(this VisualElement component, string path = "")
         {
             if (!string.IsNullOrEmpty(path)) path += "/";

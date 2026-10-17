@@ -14,17 +14,27 @@ namespace Netherlands3D.Twin.Functionalities
 
         [NonSerialized]
         private FunctionalityData currentData;
+        
+        public UnityEvent<FunctionalityData, FunctionalityData> OnDataReplaced;
 
         public FunctionalityData Data
         {
             get => currentData ??= CreateDefaultData();
             set
             {
-                var oldEnabled = Data.IsEnabled;
+                var previousData = Data;
+
+                if (ReferenceEquals(previousData, value)) return;
+
+                var wasEnabled = previousData.IsEnabled;
                 currentData = value;
 
-                if (currentData.IsEnabled != oldEnabled)
+                OnDataReplaced?.Invoke(previousData, currentData);
+
+                if (currentData.IsEnabled != wasEnabled)
+                {
                     InvokeOnEnableChangeEvents();
+                }
             }
         }
 

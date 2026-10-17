@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a3c4fb03937da645b73bbc87da7a262, type: 3}
+  m_Name: Functionality_HideableSections
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.HideableSections.HideableSectionsFunctionality
+  defaultData:
+    rid: 6103832812264882367
+  OnDataReplaced:
+    m_PersistentCalls:
+      m_Calls: []
+  Title: Verbergbare panelen
+  Caption: BETA
+  Header: 
+  Description: <i>Let op; deze functionaliteit is nog in ontwikkeling.</i>
+  configuration: {fileID: 0}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 6103832812264882367
+      type: {class: HideableSectionsFunctionalityData, ns: Netherlands3D.Twin.HideableSections,
+        asm: eu.netherlands3d.twin}
+      data:
+        Id: hideable-sections
+        IsEnabled: 0
+        unpinnedSectionIds: []

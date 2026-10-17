@@ -1,5 +1,9 @@
 ﻿.app {
     flex-grow: 1;
+}
+
+.app__content {
+    flex-grow: 1;
     margin: 8px;
     padding: 4px;
 }

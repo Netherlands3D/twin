@@ -1,0 +1,8 @@
+HideableSectionRevealZone {
+    position: absolute;
+    display: none;
+}
+
+HideableSectionRevealZone.hideable-section-reveal-zone--active {
+    display: flex;
+}

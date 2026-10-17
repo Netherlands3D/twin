@@ -75,8 +75,8 @@ namespace Netherlands3D.UI.Components
 
         public Toggle()
         {
-            this.CloneComponentTree("Components");
-            this.AddComponentStylesheet("Components");
+            this.CloneComponentTreeByType(typeof(Toggle), "Components");
+            this.AddComponentStylesheetByType(typeof(Toggle));
 
             RegisterCallback<AttachToPanelEvent>(_ => UpdateClassList());
         }

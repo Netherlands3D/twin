@@ -7,12 +7,14 @@
     editor-extension-mode="False"
     class="fpv-hud"
     picking-mode="Ignore">
-    <nl3d:FPVExitBar name="FVPProgressBar" class="fpv-hud__exit-bar"/>
-    <ui:VisualElement name="TopSection" class="fpv-hud__top-section" picking-mode="Ignore">
-        <nl3d:ToolbarToolboxFPV />
-    </ui:VisualElement>
-    <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="fpv-hud__bottom-section">
-        <nl3d:Footer />
-        <!--            <nl3d:MapViewport/>-->
+    <ui:VisualElement class="app__content">
+        <nl3d:FPVExitBar name="FVPProgressBar" class="fpv-hud__exit-bar"/>
+        <ui:VisualElement name="TopSection" class="fpv-hud__top-section" picking-mode="Ignore">
+            <nl3d:ToolbarToolboxFPV />
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="fpv-hud__bottom-section">
+            <nl3d:Footer />
+            <!--            <nl3d:MapViewport/>-->
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
