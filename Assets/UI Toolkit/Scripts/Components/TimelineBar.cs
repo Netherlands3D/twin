@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Services;
+using Netherlands3D.Sun;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
@@ -10,9 +12,17 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class TimelineBar : VisualElement
     {
+        public event Action<int, int> TimeChanged;
+        
         private const int RenderPadding = 50;
         private const int ThumbScrollAreaSize = 100; 
         private const int ThumbScrollSpeed = 100;
+
+        private double thumbMaxScrollSpeed = .05d;
+        private double thumbCurrentScrollSpeed = 0d;
+        private int scrollAreaWidth = 50;
+        private double thumbMinPosition = .2d;
+        private double thumbMaxPosition = .8d;
        
         private readonly VisualElement marksContainer;
         private readonly List<VisualElement> markElements = new();
@@ -23,6 +33,7 @@ namespace Netherlands3D.UI.Components
         private readonly VisualElement thumbElement;
 
         private DateTime currentValue;
+        private DateTime roundedCurrentValue;
         private DateTime startValue;
         private DateTime endValue;
         private TimeSpan duration;
@@ -37,6 +48,7 @@ namespace Netherlands3D.UI.Components
         private DateTime timelineDragInitialStartTime;
         private DateTime timelineDragInitialEndTime;
 
+        private bool isThumbDrag;
         private DateTime thumbDragInitialCurrentTime;
         private double thumbDragInitialThumbElementPosition;
         private DateTime thumbDragInitialStartTime;
@@ -44,8 +56,8 @@ namespace Netherlands3D.UI.Components
         private double thumbElementPosition;
         private readonly IVisualElementScheduledItem thumbDragUpdateItem;
 
-        private bool marksUpdateQueued = false;
-        private bool unitGroupsUpdateQueued = false;
+        private bool markElementsUpdateRequested = false;
+        private bool unitGroupsUpdateRequested = false;
         
         private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
@@ -92,7 +104,9 @@ namespace Netherlands3D.UI.Components
             set
             {
                 startValue = value;
-                RequestUpdateMarkElements(true);
+                duration = new TimeSpan(endValue.Ticks - startValue.Ticks);
+                markElementsUpdateRequested = true;
+                unitGroupsUpdateRequested = true;
             }
         }
 
@@ -102,7 +116,9 @@ namespace Netherlands3D.UI.Components
             set
             {
                 endValue = value;
-                RequestUpdateMarkElements(true);
+                duration = new TimeSpan(endValue.Ticks - startValue.Ticks);
+                markElementsUpdateRequested = true;
+                unitGroupsUpdateRequested = true;
             }
         }
         
@@ -112,7 +128,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 currentValue = value;
-                RequestUpdateMarkElements(false);
+                markElementsUpdateRequested = true;
             }
         }
         
@@ -122,7 +138,8 @@ namespace Netherlands3D.UI.Components
             set
             {
                 unitContext = value;
-                RequestUpdateMarkElements(true);
+                markElementsUpdateRequested = true;
+                unitGroupsUpdateRequested = true;
             }
         }
         
@@ -132,7 +149,8 @@ namespace Netherlands3D.UI.Components
             set
             {
                 unitPrecision = value;
-                RequestUpdateMarkElements(true);
+                markElementsUpdateRequested = true;
+                unitGroupsUpdateRequested = true;
             }
         }
 
@@ -148,26 +166,40 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             
-            //SetupTimelineDragging();
             var viewport = this.Q<VisualElement>("MarksViewport");
+            
+            //Set up zooming
+            viewport.RegisterCallback<WheelEvent>(OnMouseWheelScrolled);
+            
+            //SetupTimelineDragging();
             var timelineDragManipulator = new DragManipulator(4);
             timelineDragManipulator.DragStarted.AddListener(OnTimelineDragStarted);
             timelineDragManipulator.DraggingTotal.AddListener(OnTimelineDraggingTotal);
             timelineDragManipulator.DragEnded.AddListener(OnTimelineDragEnded);
             viewport.pickingMode = PickingMode.Position;
             viewport.AddManipulator(timelineDragManipulator);
-            
-            
+
             //set up scrubber
-            var thumbDragManipulator = new DragManipulator(4);
+            var thumbDragManipulator = new DragManipulator(0);
             thumbDragManipulator.DragStarted.AddListener(OnThumbDragStarted);
             thumbDragManipulator.DraggingTotal.AddListener(OnThumbDraggingTotal);
             thumbDragManipulator.DragEnded.AddListener(OnThumbDragEnded);
             thumbElement.pickingMode = PickingMode.Position;
             thumbElement.AddManipulator(thumbDragManipulator);
-            thumbDragUpdateItem = schedule.Execute(UpdateThumbDrag).Every(0);
-            thumbDragUpdateItem.Pause();
+            
+            thumbDragUpdateItem = schedule.Execute(Update).Every(0);
 
+        }
+
+        private void Update()
+        {
+            UpdateThumbDrag();
+            UpdateMarks();
+        }
+        
+        private void OnMouseWheelScrolled(WheelEvent evt)
+        {
+            //todo: zoom in and out
         }
         
         private void OnTimelineDragStarted(Vector2 startPointerPosition)
@@ -180,6 +212,8 @@ namespace Netherlands3D.UI.Components
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
             SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
+            var currentTicks  = (long)Math.Clamp(currentValue.Ticks, startValue.Ticks + duration.Ticks * thumbMinPosition, startValue.Ticks + duration.Ticks * thumbMaxPosition);
+            currentValue = new DateTime(currentTicks, currentValue.Kind);
         }
         
         private void OnTimelineDragEnded(Vector2 endPointerPosition)
@@ -188,9 +222,11 @@ namespace Netherlands3D.UI.Components
 
         private void OnThumbDragStarted(Vector2 startPointerPosition)
         {
+            isThumbDrag = true;
+            thumbCurrentScrollSpeed = 0;
             thumbDragInitialCurrentTime = currentValue;
             thumbDragInitialThumbElementPosition = thumbElement.style.left.value.value / 100d;
-            thumbDragUpdateItem.Resume();
+            OnThumbDraggingTotal(Vector2.zero);
         }
         
         private void OnThumbDraggingTotal(Vector2 deltaPointerPosition)
@@ -199,32 +235,42 @@ namespace Netherlands3D.UI.Components
             var elementPositionOffset = (double)deltaPointerPosition.x / containerWidth;
             thumbElementPosition = thumbDragInitialThumbElementPosition + elementPositionOffset;
         }
+
         
         private void UpdateThumbDrag()
         {
-            if (thumbElementPosition < 0)
+
+            if (!isThumbDrag)
+                return;
+            
+            if (thumbElementPosition < thumbMinPosition || thumbElementPosition > thumbMaxPosition)
             {
-                SetTimeRange(startValue.AddMonths(-1), endValue.AddMonths(-1));
-            }
-            else if (thumbElementPosition > 1)
-            {
-                SetTimeRange(startValue.AddMonths(1), endValue.AddMonths(1));
+                var containerWidth = marksContainer.resolvedStyle.width;
+                var scrollAreaSize = scrollAreaWidth / containerWidth;
+                var boundPosition = (thumbElementPosition < thumbMinPosition) ? thumbMinPosition : thumbMaxPosition;
+                var exceedBoundsPosition = Math.Clamp(thumbElementPosition - boundPosition, -scrollAreaSize, scrollAreaSize);
+                thumbCurrentScrollSpeed = exceedBoundsPosition / scrollAreaSize;
+                var ticksOffset = (long)Math.Round(thumbCurrentScrollSpeed * Time.deltaTime * (endValue.Ticks - startValue.Ticks));
+                SetTimeRange(startValue.AddTicks(ticksOffset), endValue.AddTicks(ticksOffset));
             }
             
-            var clampedThumbElementPosition = Math.Clamp(thumbElementPosition, 0, 1);
+            var clampedThumbElementPosition = Math.Clamp(thumbElementPosition, thumbMinPosition, thumbMaxPosition);
             CurrentValue = startValue.Add(clampedThumbElementPosition * duration);
+            CurrentValue = new DateTime(CurrentValue.Year, CurrentValue.Month, CurrentValue.Day, thumbDragInitialCurrentTime.Hour, thumbDragInitialCurrentTime.Minute, thumbDragInitialCurrentTime.Second, thumbDragInitialCurrentTime.Millisecond);
         }
-        
+
         private void OnThumbDragEnded(Vector2 arg0)
         {
-            thumbDragUpdateItem.Pause();
+            isThumbDrag = false;
+            thumbCurrentScrollSpeed = 0;
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
             if (!Mathf.Approximately(evt.oldRect.width, evt.newRect.width))
             {
-                RequestUpdateMarkElements(true);
+                markElementsUpdateRequested = true;
+                unitGroupsUpdateRequested = true;
             }
         }
 
@@ -234,133 +280,146 @@ namespace Netherlands3D.UI.Components
             
             startValue = newStartTime;
             endValue = newEndTime;
+            duration = new TimeSpan(endValue.Ticks - startValue.Ticks);
 
-            RequestUpdateMarkElements(endValue - startValue != previousDuration);
+            markElementsUpdateRequested = true;
+            if (endValue - startValue != previousDuration)
+            {
+                unitGroupsUpdateRequested = true;
+            }
 
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            RequestUpdateMarkElements(true);
+            markElementsUpdateRequested = true;
+            unitGroupsUpdateRequested = true;
         }
-
-        private void RequestUpdateMarkElements(bool requestUnitGroupUpdate)
+        
+        private void UpdateMarks()
         {
-            unitGroupsUpdateQueued = requestUnitGroupUpdate || unitGroupsUpdateQueued;
+            if (!markElementsUpdateRequested) return;
+                
+            markElementsUpdateRequested = false;
             
-            if (marksUpdateQueued)
+            var width = marksContainer.resolvedStyle.width;
+
+            if (float.IsNaN(width) || float.IsInfinity(width) || width <= 0)
             {
                 return;
             }
 
-            marksUpdateQueued = true;
-            
-            var sdfdsf = schedule.Execute(() =>
+            if (endValue <= startValue)
             {
-                marksUpdateQueued = false;
-                UpdateMarks();
-                UpdateThumb();
-            });
-
-            return;
-            
-            void UpdateMarks()
-            {
-                var width = marksContainer.resolvedStyle.width;
-                
-                if (float.IsNaN(width) || float.IsInfinity(width) || width <= 0)
-                {
-                    return;
-                }
-
-                if (endValue <= startValue)
-                {
-                    return;
-                }
-                
-                var maxMarkElements = (double)width / 10;
-                var maxLabelElements = (double)width / 50;
-
-                var start = startValue;
-                var end = endValue;
-                
-                if (unitGroupsUpdateQueued)
-                {
-                    unitGroupsUpdateQueued = false;
-                    marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start, end, maxMarkElements);
-                    labelsInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start, end, maxLabelElements);
-                }
-            
-                duration = new TimeSpan(endValue.Ticks - startValue.Ticks);
-                ticksPerPixel = (duration.Ticks) / width;
-                var paddingTicks = (long)Math.Round(ticksPerPixel * 50d);
-                var markTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks), end.AddTicks(paddingTicks), marksInterval);
-                var labelTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks), end.AddTicks(paddingTicks), labelsInterval);
-
-                var markIndex = 0;
-                foreach (var markTime in markTimes)
-                {
-                    if (markIndex == markElements.Count)
-                    {
-                        var newMark = new VisualElement();
-                        newMark.pickingMode = PickingMode.Ignore;
-                        newMark.AddToClassList("timeline-bar__mark");
-                        marksContainer.Add(newMark);
-                        markElements.Add(newMark);
-                    }
-
-                    var markElement = markElements[markIndex];
-                    markIndex++;
-
-                    var position = (double)(markTime.Ticks - startValue.Ticks) / duration.Ticks;
-
-                    var left = Length.Percent((float)(position * 100));
-
-                    markElement.style.display = DisplayStyle.Flex;
-                    markElement.style.left = left;
-                }
-                
-                for (var i = markIndex; i < markElements.Count; i++)
-                {
-                    markElements[i].style.display = DisplayStyle.None;
-                }
-                
-                var labelIndex = 0;
-                foreach (var labelTime in labelTimes)
-                {
-                    if (labelIndex == labelElements.Count)
-                    {
-                        var newLabel = new DateTimeLabel();
-                        newLabel.pickingMode = PickingMode.Ignore;
-                        newLabel.AddToClassList("timeline-bar__label");
-                        labelsContainer.Add(newLabel);
-                        labelElements.Add(newLabel);
-                    }
-
-                    var labelElement = labelElements[labelIndex];
-                    labelIndex++;
-
-                    var position = (double)(labelTime.Ticks - startValue.Ticks) / duration.Ticks;
-
-                    var left = Length.Percent((float)(position * 100));
-                    
-                    labelElement.style.display = DisplayStyle.Flex;
-                    labelElement.style.left = left;
-                    labelElement.Value = labelTime;
-                }
-                
-                for (var i = labelIndex; i < labelElements.Count; i++)
-                {
-                    labelElements[i].style.display = DisplayStyle.None;
-                }
+                return;
             }
 
-            void UpdateThumb()
+            var maxMarkElements = (double)width / 10;
+            var maxLabelElements = (double)width / 50;
+
+            var start = startValue;
+            var end = endValue;
+
+            if (unitGroupsUpdateRequested)
             {
-                var position = (double)(currentValue.Ticks - startValue.Ticks) / duration.Ticks;
+                unitGroupsUpdateRequested = false;
+                marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start,
+                    end, maxMarkElements);
+                labelsInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision,
+                    start, end, maxLabelElements);
+            }
+
+            ticksPerPixel = (duration.Ticks) / width;
+            var paddingTicks = (long)Math.Round(ticksPerPixel * 50d);
+            var markTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks),
+                end.AddTicks(paddingTicks), marksInterval);
+            var labelTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks),
+                end.AddTicks(paddingTicks), labelsInterval);
+
+            var markIndex = 0;
+            foreach (var markTime in markTimes)
+            {
+                if (markIndex == markElements.Count)
+                {
+                    var newMark = new VisualElement();
+                    newMark.pickingMode = PickingMode.Ignore;
+                    newMark.AddToClassList("timeline-bar__mark");
+                    marksContainer.Add(newMark);
+                    markElements.Add(newMark);
+                }
+
+                var markElement = markElements[markIndex];
+                markIndex++;
+
+                var position = (double)(markTime.Ticks - startValue.Ticks) / duration.Ticks;
+
                 var left = Length.Percent((float)(position * 100));
-                thumbElement.style.left = left;
+
+                markElement.style.display = DisplayStyle.Flex;
+                markElement.style.left = left;
             }
+
+            for (var i = markIndex; i < markElements.Count; i++)
+            {
+                markElements[i].style.display = DisplayStyle.None;
+            }
+
+            var labelIndex = 0;
+            foreach (var labelTime in labelTimes)
+            {
+                if (labelIndex == labelElements.Count)
+                {
+                    var newLabel = new DateTimeLabel();
+                    newLabel.pickingMode = PickingMode.Ignore;
+                    newLabel.AddToClassList("timeline-bar__label");
+                    labelsContainer.Add(newLabel);
+                    labelElements.Add(newLabel);
+                }
+
+                var labelElement = labelElements[labelIndex];
+                labelIndex++;
+
+                var position = (double)(labelTime.Ticks - startValue.Ticks) / duration.Ticks;
+
+                var left = Length.Percent((float)(position * 100));
+
+                labelElement.style.display = DisplayStyle.Flex;
+                labelElement.style.left = left;
+                labelElement.Value = labelTime;
+            }
+
+            for (var i = labelIndex; i < labelElements.Count; i++)
+            {
+                labelElements[i].style.display = DisplayStyle.None;
+            }
+            
+            
+            //update thumb
+
+            UpdateThumb();
+            UpdateTimeService();
+
+        }
+
+        private void UpdateTimeService()
+        {
+            var sunTimeService = ServiceLocator.GetService<SunTime>();
+            if (sunTimeService == null) return;
+            sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
+            sunTimeService.SetTime(currentValue);
+            sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
+        }
+
+        private void OnSunTimeChanged(DateTime arg0)
+        {
+            CurrentValue = arg0;
+        }
+
+        void UpdateThumb()
+        {
+            var position = (double)(currentValue.Ticks - startValue.Ticks) / duration.Ticks;
+            var left = Length.Percent((float)(position * 100));
+            thumbElement.style.left = left;
         }
         
     }
