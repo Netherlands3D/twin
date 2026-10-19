@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Codice.CM.Common;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
 using Netherlands3D.Twin.Utility;
@@ -21,8 +22,8 @@ namespace Netherlands3D.UI.Components
         private double thumbMaxScrollSpeed = .25d;
         private double thumbCurrentScrollSpeed = 0d;
         private int scrollAreaWidth = 50;
-        private double thumbMinPosition = .45d;
-        private double thumbMaxPosition = .55d;
+        private double thumbMinPosition = .3d;
+        private double thumbMaxPosition = .7d;
        
         private readonly VisualElement marksContainer;
         private readonly List<VisualElement> markElements = new();
@@ -32,15 +33,17 @@ namespace Netherlands3D.UI.Components
         
         private readonly VisualElement thumbElement;
 
-        private DateTime currentValue;
-        private DateTime roundedCurrentValue;
+        private DateTime displayedValue;
+        private DateTime value;
         private DateTime startValue;
         private DateTime endValue;
         private TimeSpan duration;
         private double ticksPerPixel;
-        
+
         private DateTimeUnit unitContext;
         private DateTimeUnit unitPrecision;
+        private DateTimeInterval draggingSnapInterval = new DateTimeInterval(DateTimeUnit.Year, 1);
+        private DateTimeInterval snapInterval = new DateTimeInterval(DateTimeUnit.Year, 1);
 
         private DateTimeInterval marksInterval;
         private DateTimeInterval labelsInterval;
@@ -124,10 +127,10 @@ namespace Netherlands3D.UI.Components
         
         public DateTime CurrentValue
         {
-            get => currentValue;
+            get => displayedValue;
             set
             {
-                currentValue = value;
+                displayedValue = value;
                 markElementsUpdateRequested = true;
             }
         }
@@ -153,9 +156,32 @@ namespace Netherlands3D.UI.Components
                 unitGroupsUpdateRequested = true;
             }
         }
+        
+        public DateTimeInterval DraggingSnapInterval
+        {
+            get => draggingSnapInterval;
+            set
+            {
+                draggingSnapInterval = value;
+                markElementsUpdateRequested = true;
+                unitGroupsUpdateRequested = true;
+            }
+        }
+
+        public DateTimeInterval SnapInterval
+        {
+            get => snapInterval;
+            set
+            {
+                snapInterval = value;
+                markElementsUpdateRequested = true;
+                unitGroupsUpdateRequested = true;
+            }
+        }
 
         public TimelineBar()
         {
+            
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
             
@@ -212,8 +238,10 @@ namespace Netherlands3D.UI.Components
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
             SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
-            var currentTicks  = (long)Math.Clamp(currentValue.Ticks, startValue.Ticks + duration.Ticks * thumbMinPosition, startValue.Ticks + duration.Ticks * thumbMaxPosition);
-            currentValue = new DateTime(currentTicks, currentValue.Kind);
+            var currentTicks  = (long)Math.Clamp(displayedValue.Ticks, startValue.Ticks + duration.Ticks * thumbMinPosition, startValue.Ticks + duration.Ticks * thumbMaxPosition);
+            displayedValue = new DateTime(currentTicks, displayedValue.Kind);
+            value = displayedValue.Round(draggingSnapInterval);
+            markElementsUpdateRequested = true;
         }
         
         private void OnTimelineDragEnded(Vector2 endPointerPosition)
@@ -224,7 +252,7 @@ namespace Netherlands3D.UI.Components
         {
             isThumbDrag = true;
             thumbCurrentScrollSpeed = 0;
-            thumbDragInitialCurrentTime = currentValue;
+            thumbDragInitialCurrentTime = displayedValue;
             thumbDragInitialThumbElementPosition = thumbElement.style.left.value.value / 100d;
             OnThumbDraggingTotal(Vector2.zero);
         }
@@ -255,10 +283,12 @@ namespace Netherlands3D.UI.Components
             }
             
             var clampedThumbElementPosition = Math.Clamp(thumbElementPosition, thumbMinPosition, thumbMaxPosition);
-            CurrentValue = startValue.Add(clampedThumbElementPosition * duration);
-            CurrentValue = new DateTime(CurrentValue.Year, CurrentValue.Month, CurrentValue.Day, thumbDragInitialCurrentTime.Hour, thumbDragInitialCurrentTime.Minute, thumbDragInitialCurrentTime.Second, thumbDragInitialCurrentTime.Millisecond);
+            displayedValue = startValue.Add(clampedThumbElementPosition * duration);
+            value = displayedValue.Round(snapInterval);
+            
+            markElementsUpdateRequested = true;
         }
-
+        
         private void OnThumbDragEnded(Vector2 arg0)
         {
             isThumbDrag = false;
@@ -406,18 +436,20 @@ namespace Netherlands3D.UI.Components
             var sunTimeService = ServiceLocator.GetService<SunTime>();
             if (sunTimeService == null) return;
             sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
-            sunTimeService.SetTime(currentValue);
+            sunTimeService.SetTime(value);
             sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
         }
 
         private void OnSunTimeChanged(DateTime arg0)
         {
-            CurrentValue = arg0;
+            value = arg0;
+            displayedValue = arg0;
+            markElementsUpdateRequested = true;
         }
 
         void UpdateThumb()
         {
-            var position = (double)(currentValue.Ticks - startValue.Ticks) / duration.Ticks;
+            var position = (double)(displayedValue.Ticks - startValue.Ticks) / duration.Ticks;
             var left = Length.Percent((float)(position * 100));
             thumbElement.style.left = left;
         }

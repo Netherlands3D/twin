@@ -198,22 +198,30 @@ namespace Netherlands3D.Twin.Utility
 
             return dateTime;
         }
+
+        public static DateTime Round(this DateTime dateTime, DateTimeInterval interval)
+        {
+            var unitValue = dateTime.GetUnitValue(interval.TimeUnit);
+            var roundedUnitValue = Math.Round(unitValue / interval.Amount) * interval.Amount;
+            
+            var baseDateTime = interval.TimeUnit switch
+            {
+                DateTimeUnit.Year => new DateTime(1, 1, 1, 0, 0, 0, dateTime.Kind),
+                DateTimeUnit.Month => new DateTime(dateTime.Year, 1, 1, 0, 0, 0, dateTime.Kind),
+                DateTimeUnit.Day => new DateTime(dateTime.Year, dateTime.Month, 1, 0, 0, 0, dateTime.Kind),
+                DateTimeUnit.Hour => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, dateTime.Kind),
+                DateTimeUnit.Minute => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 0, 0, dateTime.Kind),
+                DateTimeUnit.Second => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind),
+                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
+            };
+
+            return baseDateTime.Add(new DateTimeInterval(interval.TimeUnit, roundedUnitValue));
+        }
+        
         
         public static DateTime RoundDown(this DateTime dateTime, DateTimeInterval interval)
         {
-            var unitValue = interval.TimeUnit switch
-            {
-                DateTimeUnit.Year => dateTime.Year - 1 + (dateTime.Month - 1) / 12d,
-                DateTimeUnit.Month => dateTime.Month - 1 +
-                                      (dateTime.Day - 1) / (double)DateTime.DaysInMonth(dateTime.Year, dateTime.Month),
-                DateTimeUnit.Day => dateTime.Day - 1 + dateTime.Hour / 24d,
-                DateTimeUnit.Hour => dateTime.Hour + dateTime.Minute / 60d,
-                DateTimeUnit.Minute => dateTime.Minute + dateTime.Second / 60d,
-                DateTimeUnit.Second => dateTime.Second + dateTime.Millisecond / 1000d,
-                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
-            };
-            
-
+            var unitValue = dateTime.GetUnitValue(interval.TimeUnit);
             var roundedUnitValue = Math.Floor(unitValue / interval.Amount) * interval.Amount;
 
             var baseDateTime = interval.TimeUnit switch
@@ -228,6 +236,22 @@ namespace Netherlands3D.Twin.Utility
             };
 
             return baseDateTime.Add(new DateTimeInterval(interval.TimeUnit, roundedUnitValue));
+        }
+
+        public static double GetUnitValue(this DateTime dateTime, DateTimeUnit timeUnit)
+        {
+            var unitValue = timeUnit switch
+            {
+                DateTimeUnit.Year => dateTime.Year - 1 + (dateTime.Month - 1) / 12d,
+                DateTimeUnit.Month => dateTime.Month - 1 +
+                                      (dateTime.Day - 1) / (double)DateTime.DaysInMonth(dateTime.Year, dateTime.Month),
+                DateTimeUnit.Day => dateTime.Day - 1 + dateTime.Hour / 24d,
+                DateTimeUnit.Hour => dateTime.Hour + dateTime.Minute / 60d,
+                DateTimeUnit.Minute => dateTime.Minute + dateTime.Second / 60d,
+                DateTimeUnit.Second => dateTime.Second + dateTime.Millisecond / 1000d,
+                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit),timeUnit, null)
+            };
+            return unitValue;
         }
     }
 }
