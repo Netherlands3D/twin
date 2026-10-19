@@ -31,6 +31,9 @@ namespace Netherlands3D.Timeline
 
         public Timestamp GetCurrentTimestamp(DateTime currentTime)
         {
+            if (Timestamps.Count == 0)
+                return null;
+            
             Timestamp current = Timestamps[0];
             if (currentTime < current.timestamp)
                 return null;
