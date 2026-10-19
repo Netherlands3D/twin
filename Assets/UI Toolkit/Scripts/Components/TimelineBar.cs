@@ -24,6 +24,7 @@ namespace Netherlands3D.UI.Components
         private int scrollAreaWidth = 50;
         private double thumbMinPosition = .3d;
         private double thumbMaxPosition = .7d;
+        private double maxScrollSpeed = .25d;
        
         private readonly VisualElement marksContainer;
         private readonly List<VisualElement> markElements = new();
@@ -33,15 +34,11 @@ namespace Netherlands3D.UI.Components
         
         private readonly VisualElement thumbElement;
         
-        private DateTime time;
+        private DateTime currentTime;
         private DateTime startTime;
         private DateTime endTime;
         private TimeSpan duration;
-
-        private DateTime calculatedTime;
-        private DateTime calculatedStartTime;
-        private DateTime calculatedEndTime;
-        private DateTime calculatedDuration;
+        private double thumbPosition;
         
         private double ticksPerPixel;
 
@@ -65,6 +62,11 @@ namespace Netherlands3D.UI.Components
 
         private bool markElementsUpdateRequested = false;
         private bool unitGroupsUpdateRequested = false;
+
+        private DateTime initialCurrentTime;
+        private DateTime initialStartTime;
+        private DateTime initialEndTime;
+        private double initialThumbPosition;
         
         private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
@@ -131,10 +133,10 @@ namespace Netherlands3D.UI.Components
         
         public DateTime CurrentValue
         {
-            get => time;
+            get => currentTime;
             set
             {
-                time = value;
+                currentTime = value;
                 markElementsUpdateRequested = true;
             }
         }
@@ -238,15 +240,17 @@ namespace Netherlands3D.UI.Components
         {
             timelineDragInitialStartTime = startTime;
             timelineDragInitialEndTime = endTime;
+
+            initialStartTime = startTime;
         }
         
         private void OnTimelineDraggingTotal(Vector2 deltaPointerPosition)
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
             SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
-            var currentTicks  = (long)Math.Clamp(time.Ticks, startTime.Ticks + duration.Ticks * thumbMinPosition, startTime.Ticks + duration.Ticks * thumbMaxPosition);
-            time = new DateTime(currentTicks, time.Kind);
-            time = time.Round(draggingSnapInterval);
+            var currentTicks  = (long)Math.Clamp(currentTime.Ticks, startTime.Ticks + duration.Ticks * thumbMinPosition, startTime.Ticks + duration.Ticks * thumbMaxPosition);
+            currentTime = new DateTime(currentTicks, currentTime.Kind);
+            currentTime = currentTime.Round(draggingSnapInterval);
             markElementsUpdateRequested = true;
         }
         
@@ -257,6 +261,12 @@ namespace Netherlands3D.UI.Components
         private void OnThumbDragStarted(Vector2 startPointerPosition)
         {
             isThumbDrag = true;
+
+            initialCurrentTime = currentTime;
+            initialStartTime = startTime;
+            initialEndTime = endTime;
+            initialThumbPosition = thumbElement.style.left.value.value / 100d;
+            
             thumbCurrentScrollSpeed = 0;
             thumbDragInitialThumbElementPosition = thumbElement.style.left.value.value / 100d;
             OnThumbDraggingTotal(Vector2.zero);
@@ -266,33 +276,35 @@ namespace Netherlands3D.UI.Components
         {
             var containerWidth = marksContainer.contentRect.width;
             var elementPositionOffset = (double)deltaPointerPosition.x / containerWidth;
+            thumbPosition = thumbDragInitialThumbElementPosition + elementPositionOffset;
+
             thumbElementPosition = thumbDragInitialThumbElementPosition + elementPositionOffset;
-            
-            
         }
 
         
         private void UpdateThumbDrag()
         {
-
             if (!isThumbDrag)
                 return;
+
+            currentTime = startTime.Add(thumbPosition * duration);
+            markElementsUpdateRequested = true;
+
+            var minCurrentTime = PositionToTime(thumbMinPosition, startTime, endTime);
+            var maxCurrentTime = PositionToTime(thumbMaxPosition, startTime, endTime);
             
-            if (thumbElementPosition < thumbMinPosition || thumbElementPosition > thumbMaxPosition)
+            if (currentTime < minCurrentTime || currentTime > maxCurrentTime)
             {
-                var containerWidth = marksContainer.resolvedStyle.width;
-                var scrollAreaSize = scrollAreaWidth / containerWidth;
-                var boundPosition = (thumbElementPosition < thumbMinPosition) ? thumbMinPosition : thumbMaxPosition;
-                var exceedBoundsPosition = Math.Clamp(thumbElementPosition - boundPosition, -scrollAreaSize, scrollAreaSize);
-                thumbCurrentScrollSpeed = exceedBoundsPosition / scrollAreaSize;
-                var ticksOffset = (long)Math.Round(thumbCurrentScrollSpeed * thumbMaxScrollSpeed * Time.deltaTime * (endTime.Ticks - startTime.Ticks));
-                SetTimeRange(startTime.AddTicks(ticksOffset), endTime.AddTicks(ticksOffset));
+                var boundTime = (currentTime < minCurrentTime) ? minCurrentTime : maxCurrentTime;
+                var exceededPxWidth = Math.Clamp((currentTime - boundTime).Ticks / ticksPerPixel, -scrollAreaWidth, scrollAreaWidth);
+                var scrollSpeed = exceededPxWidth / scrollAreaWidth;
+                var scrollOffset = scrollSpeed * maxScrollSpeed * Time.deltaTime * (endTime - startTime);
+                startTime = startTime.Add(scrollOffset);
+                endTime = endTime.Add(scrollOffset);
+                currentTime = boundTime;
             }
             
-            var clampedThumbElementPosition = Math.Clamp(thumbElementPosition, thumbMinPosition, thumbMaxPosition);
-            time = startTime.Add(clampedThumbElementPosition * duration);
-            
-            markElementsUpdateRequested = true;
+            currentTime = startTime.Add(Math.Clamp(thumbPosition, thumbMinPosition, thumbMaxPosition) * duration);
         }
         
         private void OnThumbDragEnded(Vector2 arg0)
@@ -324,6 +336,16 @@ namespace Netherlands3D.UI.Components
                 unitGroupsUpdateRequested = true;
             }
 
+        }
+
+        private double TimeToPosition(DateTime time, DateTime start, DateTime end)
+        {
+            return (time - start).Ticks / (double)(end - start).Ticks;
+        }
+
+        private DateTime PositionToTime(double position, DateTime start, DateTime end)
+        {
+            return start.Add(position * (end - start));
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
@@ -442,19 +464,19 @@ namespace Netherlands3D.UI.Components
             var sunTimeService = ServiceLocator.GetService<SunTime>();
             if (sunTimeService == null) return;
             sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
-            sunTimeService.SetTime(time);
+            sunTimeService.SetTime(currentTime);
             sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
         }
 
         private void OnSunTimeChanged(DateTime arg0)
         {
-            time = arg0;
+            currentTime = arg0;
             markElementsUpdateRequested = true;
         }
 
         void UpdateThumb()
         {
-            var position = (double)(time.Ticks - startTime.Ticks) / duration.Ticks;
+            var position = (double)(currentTime.Ticks - startTime.Ticks) / duration.Ticks;
             var left = Length.Percent((float)(position * 100));
             thumbElement.style.left = left;
         }
