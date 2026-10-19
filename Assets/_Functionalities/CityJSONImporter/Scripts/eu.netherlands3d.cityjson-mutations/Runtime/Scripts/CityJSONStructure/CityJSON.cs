@@ -191,11 +191,11 @@ namespace Netherlands3D.CityJson.Structure
 
             CityObjects = cityObjects.Values.ToList();
 
-           StartCoroutine("createGeometry");
+           StartCoroutine("CreateGeometry");
 
             
         }
-        private IEnumerator createGeometry()
+        private IEnumerator CreateGeometry()
         {
             
             System.DateTime time = System.DateTime.UtcNow;
