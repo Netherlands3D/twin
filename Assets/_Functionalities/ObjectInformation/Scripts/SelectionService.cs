@@ -28,13 +28,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public LayerGameObject SelectedVisualisation => selectedVisualisation;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
-        public UnityEvent<FeatureMapping> SelectFeature;
+        public UnityEvent<FeatureMapping> SelectGeoJsonFeature;
+        public UnityEvent<CityJSONMapping> SelectCityJsonMapping;
         public UnityEvent OnDeselect = new();
         public UnityEvent<LayerData> OnSelectLayer = new();
         public UnityEvent OnNoLayerSelected = new();
 
-        private FeatureSelector featureSelector;
+        private GeoJsonFeatureSelector geoJsonFeatureSelector;
+        private CityJsonFeatureSelector cityJsonFeatureSelector;
         private SubObjectSelector subObjectSelector;
+        
         private PolygonSelectionService polygonSelectionService;
         private List<IMapping> orderedMappings = new();
         private Dictionary<string, IMapping> selectedMappings = new();
@@ -78,8 +81,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
             subObjectSelector = gameObject.AddComponent<SubObjectSelector>();
-            featureSelector = gameObject.AddComponent<FeatureSelector>();
-            featureSelector.SetMappingTree(MappingTree);
+            geoJsonFeatureSelector = gameObject.AddComponent<GeoJsonFeatureSelector>();
+            cityJsonFeatureSelector = gameObject.AddComponent<CityJsonFeatureSelector>();
             
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
@@ -322,8 +325,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             if (mapping is MeshMapping map) 
                 ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed, primary);   
-            else if (mapping is FeatureMapping feature) 
-                ProcessFeatureMappingSelection(feature);
+            else if (mapping is FeatureMapping geojson) 
+                ProcessGeoJsonFeatureMappingSelection(geojson);
+            else if(mapping is CityJSONMapping cityjson)
+                ProcessCityJsonFeatureMappingSelection(cityjson);
             else
                 OnNoLayerSelected.Invoke();
         }
@@ -376,14 +381,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             SelectSubObjectWithBagId?.Invoke(mapping, bagId);
         }
 
-        private void ProcessFeatureMappingSelection(FeatureMapping feature)
+        private void ProcessGeoJsonFeatureMappingSelection(FeatureMapping feature)
         {
             LayerData layerData = feature.VisualisationParent.LayerData;
             if(!layerData.IsSelected)
                 layerData.SelectLayer(true);
                     
             lastSelectedMappingLayerData = layerData;
-            SelectFeatureMapping(feature);
+            geoJsonFeatureSelector.Select(feature);
 
             string key = feature.Id;
             //when feature has no id, then get the newly created submesh name
@@ -399,7 +404,34 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     key = children[children.Count - 1].gameObject.name;
             }
             selectedMappings.TryAdd(key, feature);
-            SelectFeature?.Invoke(feature);
+            SelectGeoJsonFeature?.Invoke(feature);
+            OnSelectLayer.Invoke(layerData);
+        }
+        
+        private void ProcessCityJsonFeatureMappingSelection(CityJSONMapping feature)
+        {
+            LayerData layerData = feature.VisualisationParent.LayerData;
+            if(!layerData.IsSelected)
+                layerData.SelectLayer(true);
+                    
+            lastSelectedMappingLayerData = layerData;
+            cityJsonFeatureSelector.Select(feature);
+
+            string key = feature.Id;
+            //when feature has no id, then get the newly created submesh name
+            if (feature.Id == null) 
+            {
+                List<Transform> children = feature.VisualisationParent.transform.GetChildren();
+                if (children.Count == 0)
+                {
+                    key = "invalid mapping";
+                    Debug.LogError(key);
+                }
+                else
+                    key = children[children.Count - 1].gameObject.name;
+            }
+            selectedMappings.TryAdd(key, feature);
+            SelectCityJsonMapping?.Invoke(feature);
             OnSelectLayer.Invoke(layerData);
         }
 
@@ -462,11 +494,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             subObjectSelector.Deselect(bagId);
         }
 
-        private void SelectFeatureMapping(FeatureMapping feature)
-        {
-            featureSelector.Select(feature);
-        }
-
         private bool IsMappingVisible(IMapping mapping, string bagId)
         {
             if (mapping is MeshMapping map)
@@ -493,45 +520,29 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 //when a geojson point is located on top of a feature in an objectmapping,
                 //we need to find the blocked objectmapping and find the hitpoint to find the geojson feature position beneath it
                 if (subObjectSelector.Object != null)
-                    featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
+                {
+                    geoJsonFeatureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
+                }
                 //the blocking objectmapping should be cleared when trying to select the next feature
                 else
-                    featureSelector.SetBlockingObjectMapping(null, Vector3.zero);
+                {
+                    geoJsonFeatureSelector.SetBlockingObjectMapping(null, Vector3.zero);
+                }
 
                 //no features are imported yet if mappingTreeInstance is null
                 if (mappingTreeInstance != null)
-                    featureSelector.FindFeatureAtPointerPosition();
+                {
+                    geoJsonFeatureSelector.FindFeatureAtPointerPosition();
+                    cityJsonFeatureSelector.FindFeatureAtPointerPosition();
+                }
 
                 orderedMappings.Clear();
                 Dictionary<IMapping, int> mappings = new Dictionary<IMapping, int>();
                 //lets order all mappings by layerorder (rootindex) from layerdata
-                if (featureSelector.HasFeatureMapping)
-                {
-                    List<Feature> filterDuplicates = new List<Feature>();
-                    foreach (FeatureMapping feature in featureSelector.FeatureMappings)
-                    {
-                        if (feature.VisualisationParent.LayerData.ActiveInHierarchy)
-                        {
-                            if (filterDuplicateFeatures)
-                            {
-                                if (!filterDuplicates.Contains(feature.Feature))
-                                    filterDuplicates.Add(feature.Feature);
-                                else
-                                    continue;
-                            }
-                            mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootId);
-                        }
-                    }
-                }
-                if (subObjectSelector.HasObjectMapping)
-                {
-                    LayerGameObject subObjectParent = subObjectSelector.Object.ObjectMapping.transform.GetComponentInParent<LayerGameObject>();
-                    if (subObjectParent != null)
-                    {
-                        if (subObjectParent.LayerData.ActiveInHierarchy)
-                            mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootId);
-                    }
-                }
+                geoJsonFeatureSelector.TryAddMappings(mappings, filterDuplicateFeatures);
+                subObjectSelector.TryAddMappings(mappings, filterDuplicateFeatures);
+                cityJsonFeatureSelector.TryAddMappings(mappings, filterDuplicateFeatures);
+                
                 orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
                 currentSelectedMappingIndex = 0;
             }
@@ -553,7 +564,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             selectedMappings.Clear();
             subObjectSelector.Deselect();
-            featureSelector.Deselect();
+            geoJsonFeatureSelector.Deselect();
+            cityJsonFeatureSelector.Deselect();
             OnDeselect.Invoke();
         }
 

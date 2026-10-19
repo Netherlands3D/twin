@@ -240,5 +240,18 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //when the object gets hidden, deselect the selection mesh.
             Deselect();
         }
+
+        public void TryAddMappings(Dictionary<IMapping, int> mappings, bool filterDuplicateFeatures)
+        {
+            if (HasObjectMapping)
+            {
+                LayerGameObject subObjectParent = Object.ObjectMapping.transform.GetComponentInParent<LayerGameObject>();
+                if (subObjectParent != null)
+                {
+                    if (subObjectParent.LayerData.ActiveInHierarchy)
+                        mappings.TryAdd(Object, subObjectParent.LayerData.RootId);
+                }
+            }
+        }
     }
 }

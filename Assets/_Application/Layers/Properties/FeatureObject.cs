@@ -25,13 +25,13 @@ namespace Netherlands3D.Twin.layers.properties
         private void OnEnable()
         {
             selectorService = ServiceLocator.GetService<SelectionService>();
-            selectorService.SelectFeature.AddListener(ProcessFeatureMappingForLayer);
+            selectorService.SelectGeoJsonFeature.AddListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.AddListener(ClearFeatureMappingsForLayer);
         }
 
         private void OnDisable()
         {
-            selectorService.SelectFeature.RemoveListener(ProcessFeatureMappingForLayer);
+            selectorService.SelectGeoJsonFeature.RemoveListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.RemoveListener(ClearFeatureMappingsForLayer);
         }
 

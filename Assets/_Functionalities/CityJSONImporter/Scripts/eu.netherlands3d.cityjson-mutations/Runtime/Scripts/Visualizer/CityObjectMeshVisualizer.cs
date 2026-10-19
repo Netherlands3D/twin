@@ -51,6 +51,8 @@ namespace Netherlands3D.CityJson.Visualisation
     [RequireComponent(typeof(MeshRenderer))]
     public class CityObjectMeshVisualizer : CityObjectVisualizer
     {
+        public MeshFilter MeshFilter => meshFilter;
+        
         private static int meshesCreatedThisFrame = 0;
         private const int maxMeshesPerFrame = 20;
         private static int lastFrameCount = -1;
@@ -149,6 +151,13 @@ namespace Netherlands3D.CityJson.Visualisation
 
             SetMesh(null);
             return false;
+        }
+
+        public List<Mesh> GetAllMeshes()
+        {
+            return meshes.Values
+                .Select(m => m.Mesh)
+                .ToList();
         }
 
         private void SetMesh(MeshWithMaterials mesh)
