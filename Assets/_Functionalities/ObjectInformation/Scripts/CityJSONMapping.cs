@@ -45,6 +45,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 worldPosition - cam.transform.position
             );
 
+            UpdateVisualizer();
             Transform meshTransform = visualizer.MeshFilter.gameObject.transform;
             
             foreach (Mesh mesh in meshes)
@@ -118,15 +119,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             this.feature = feature; 
         }
-        
-        public void Select(string subId = null)
+
+        private void UpdateVisualizer()
         {
             if (visualizer == null)
             {
                 visualizer = feature.GetComponent<CityObjectMeshVisualizer>();
                 meshes = visualizer.GetAllMeshes();
             }
-            
+        }
+        
+        public void Select(string subId = null)
+        {
+            UpdateVisualizer();
             foreach (var mesh in meshes)
             {
                 Color col = new Color(1, 0, 0, 0);
@@ -144,7 +149,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             foreach (var mesh in meshes)
             {
-                Color col = new Color(0, 0, 0, 0);
+                Color col = new Color(0, 0, 1, 0);
                 List<Color> colors = new List<Color>();
                 foreach (Vector3 v in mesh.vertices)
                     colors.Add(col);

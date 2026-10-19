@@ -66,7 +66,7 @@ namespace Netherlands3D.CityJson.Visualisation
         public int ActiveLod => activeLOD;
         public Mesh ActiveMesh { get; private set; }
 
-        [SerializeField] private bool addMeshCollider = true;
+        private bool addMeshCollider = false;
         [SerializeField] private CityMaterialConverter materialConverter;
 
         public override Material[] Materials => meshRenderer.materials;

@@ -141,6 +141,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             mappings.Add(objectMapping);
         }
         
+        protected override void OnMouseClickNothing()
+        {
+           //base NO!
+        }
+        
         private List<CityJSONMapping> mappings = new List<CityJSONMapping>();
 
         protected override void Update()
