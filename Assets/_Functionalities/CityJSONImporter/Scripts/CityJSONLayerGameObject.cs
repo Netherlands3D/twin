@@ -7,6 +7,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.CityJSON;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
@@ -35,6 +36,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             propertydata.OnCRSChanged.AddListener(UpdateCRS);
             cityJson.onAllCityObjectsProcessed.AddListener(InitializeStylingFeatures);
             
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformPropertyData.OnPositionChanged.AddListener(UpdateCityObjectTransforms);
+            
         }
 
         protected override void UnregisterEventListeners()
@@ -44,6 +48,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             propertydata.OnCRSChanged.RemoveListener(UpdateCRS);
             cityJson.onAllCityObjectsProcessed.RemoveListener(InitializeStylingFeatures);
             
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformPropertyData.OnPositionChanged.RemoveListener(UpdateCityObjectTransforms);
+            
+        }
+
+        private void UpdateCityObjectTransforms(Coordinate coordinate)
+        {
+            foreach (var m in mappings)
+            {
+                m.UpdateBoundingBox();
+            }
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
@@ -132,12 +147,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             CityJSONMapping objectMapping = new CityJSONMapping();
             objectMapping.SetFeature(feature);
-            //objectMapping.SetMeshes(meshes);
-            //objectMapping.SetVisualisationLayer(layer);
             objectMapping.SetCityJsonLayerParent(this);
-            objectMapping.UpdateBoundingBox();
             SelectionService.MappingTree.RootInsert(objectMapping);
-            
             mappings.Add(objectMapping);
         }
         

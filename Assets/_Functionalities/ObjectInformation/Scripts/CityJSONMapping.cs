@@ -5,6 +5,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private BoundingBox boundingBox;
         private CityJSONLayerGameObject visualisationParent;
         private CityObjectMeshVisualizer visualizer;
+        private Vector3 localPosition;
+        private Vector3Double localSize;
         private const float kEpsilon = 0.000001f;
 
         public BoundingBox BoundingBox
@@ -32,7 +35,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             get
             {
                 if(boundingBox == null)
+                {
                     UpdateBoundingBox();
+                }
                 return boundingBox;
             }
         }
@@ -103,16 +108,29 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void UpdateBoundingBox()
         {
-            Vector3Double MinExtent = feature.MinExtent;
-            Vector3Double MaxExtent = feature.MaxExtent;
+            TransformLayerPropertyData propertyData = visualisationParent.LayerData.GetProperty<TransformLayerPropertyData>();
+            Coordinate localOffset = new Coordinate(localPosition + propertyData.Position.ToUnity());
+            Coordinate rdpos = localOffset.Convert(CoordinateSystem.RDNAP);
+            Vector3Double MinExtent = new Vector3Double(rdpos.easting - localSize.x * 0.5f, rdpos.northing - localSize.y * 0.5f, rdpos.height - localSize.z * 0.5f);
+            Vector3Double MaxExtent = new Vector3Double(rdpos.easting + localSize.x * 0.5f, rdpos.northing + localSize.y * 0.5f, rdpos.height + localSize.z * 0.5f);
             Coordinate bottomLeft = new Coordinate(feature.CoordinateSystem, MinExtent.x, MinExtent.y, MinExtent.z);
             Coordinate topRight = new Coordinate(feature.CoordinateSystem, MaxExtent.x, MaxExtent.y, MaxExtent.z);
-            boundingBox = new BoundingBox(bottomLeft, topRight );    
+            boundingBox = new BoundingBox(bottomLeft, topRight ); 
         }
         
         public void SetCityJsonLayerParent(CityJSONLayerGameObject parentLayer)
         {
             visualisationParent = parentLayer;
+            TransformLayerPropertyData propertyData = visualisationParent.LayerData.GetProperty<TransformLayerPropertyData>();
+            Vector3Double MinExtent = feature.MinExtent;
+            Vector3Double MaxExtent = feature.MaxExtent;
+            Coordinate bottomLeft = new Coordinate(feature.CoordinateSystem, MinExtent.x, MinExtent.y, MinExtent.z);
+            Coordinate topRight = new Coordinate(feature.CoordinateSystem, MaxExtent.x, MaxExtent.y, MaxExtent.z);
+            boundingBox = new BoundingBox(bottomLeft, topRight ); 
+            localSize = topRight.ToUnity() - bottomLeft.ToUnity();
+            Vector3 bboxCenter = boundingBox.Center.ToUnity();
+            Vector3 parentCenter = propertyData.Position.ToUnity();
+            localPosition = bboxCenter - parentCenter;
         }
 
         public void SetFeature(CityObject feature)
