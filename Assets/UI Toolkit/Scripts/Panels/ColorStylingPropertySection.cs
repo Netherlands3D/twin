@@ -157,10 +157,7 @@ namespace Netherlands3D.UI.Panels
         
         private void OnVisibilityChanged(bool isVisible)
         {
-            foreach (var item in swatchesListView.selectedItems.OfType<string>())
-            {
-                stylingPropertyData.SetDefaultSymbolizerVisibility(isVisible);
-            }
+            stylingPropertyData.SetDefaultSymbolizerVisibility(isVisible);
         }
     }
 }
