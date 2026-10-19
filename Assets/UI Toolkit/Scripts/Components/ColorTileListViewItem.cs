@@ -8,7 +8,6 @@ namespace Netherlands3D.UI.Components
     {
         private ColorTile tile;
         public ColorTile Tile => tile ??= this.Q<ColorTile>();
-        public bool VisibilityState { get; set; } = true;
         
         public ColorTileListViewItem()
         {

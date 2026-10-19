@@ -89,7 +89,7 @@ namespace Netherlands3D.UI.Panels
             tile.Tile.Color = color;
             
             bool? visibility = stylingPropertyData.GetDefaultSymbolizerVisibility();
-            tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
+            tile.Tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
@@ -126,7 +126,9 @@ namespace Netherlands3D.UI.Panels
         private void UpdateColorFromProperty()
         {
             var color = GetColorFromPropertyData();
+            var visibility = GetVisibilityStateFromPropertyData();
             ColorPicker.SetColorInputComponentsWithoutNotify(color);
+            ColorPicker.SetTransparentToggleWithoutNotify(visibility);
 
             foreach (var index in swatchesListView.selectedIndices)
             {
@@ -135,6 +137,7 @@ namespace Netherlands3D.UI.Panels
                 if (tile != null)
                 {
                     tile.Tile.Color = color;
+                    tile.Tile.VisibilityState = visibility;
                 }
             }
         }
@@ -144,6 +147,13 @@ namespace Netherlands3D.UI.Panels
             Color? defaultSymbolizerColor = stylingPropertyData.GetDefaultSymbolizerColor();
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
             return color;
+        }
+        
+        private bool GetVisibilityStateFromPropertyData()
+        {
+            bool? defaultSymbolizerVisibilityState = stylingPropertyData.GetDefaultSymbolizerVisibility();
+            var isVisible = defaultSymbolizerVisibilityState.HasValue ? defaultSymbolizerVisibilityState.Value : true;
+            return isVisible;
         }
 
         private void OnColorPicked(Color color)

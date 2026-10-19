@@ -39,7 +39,6 @@ namespace Netherlands3D.UI.Panels
             listView = contentContainer.Q<ListView>("StatusList");
             
             listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            listView.selectionType = SelectionType.None;
             
             listView.makeItem = MakeListViewItem;
             listView.bindItem = BindListViewItem;
@@ -81,7 +80,7 @@ namespace Netherlands3D.UI.Panels
             }
             tile.Tile.ColorHex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : ColorUtility.ToHtmlStringRGB(Color.white);
             tile.Tile.LabelText = status;
-            tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
+            tile.Tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
         }
         
         private void UpdateSwatches()
