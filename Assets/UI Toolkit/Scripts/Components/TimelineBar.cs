@@ -18,11 +18,11 @@ namespace Netherlands3D.UI.Components
         private const int ThumbScrollAreaSize = 100; 
         private const int ThumbScrollSpeed = 100;
 
-        private double thumbMaxScrollSpeed = .05d;
+        private double thumbMaxScrollSpeed = .25d;
         private double thumbCurrentScrollSpeed = 0d;
         private int scrollAreaWidth = 50;
-        private double thumbMinPosition = .2d;
-        private double thumbMaxPosition = .8d;
+        private double thumbMinPosition = .45d;
+        private double thumbMaxPosition = .55d;
        
         private readonly VisualElement marksContainer;
         private readonly List<VisualElement> markElements = new();
@@ -250,7 +250,7 @@ namespace Netherlands3D.UI.Components
                 var boundPosition = (thumbElementPosition < thumbMinPosition) ? thumbMinPosition : thumbMaxPosition;
                 var exceedBoundsPosition = Math.Clamp(thumbElementPosition - boundPosition, -scrollAreaSize, scrollAreaSize);
                 thumbCurrentScrollSpeed = exceedBoundsPosition / scrollAreaSize;
-                var ticksOffset = (long)Math.Round(thumbCurrentScrollSpeed * Time.deltaTime * (endValue.Ticks - startValue.Ticks));
+                var ticksOffset = (long)Math.Round(thumbCurrentScrollSpeed * thumbMaxScrollSpeed * Time.deltaTime * (endValue.Ticks - startValue.Ticks));
                 SetTimeRange(startValue.AddTicks(ticksOffset), endValue.AddTicks(ticksOffset));
             }
             

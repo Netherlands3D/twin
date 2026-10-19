@@ -2,16 +2,16 @@
     position: relative;
     flex-grow: 1;
     min-width: 0;
-    height: 200px;
-    background-color: #FFFFFF33;
 }
 
 .timeline-bar__marks-viewport {
-    background-color: aqua;
+    background-color: white;
     flex-grow: 1;
-    border-radius: 16px;
-    border-color: orange;
-    height: 64px;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: #CCD7E4;
+    height: 15px;
+    overflow: hidden;
 }
 
 .timeline-bar__marks-container {
@@ -26,16 +26,16 @@
     position: absolute;
     top: 50%;
     width: 2px;
-    height: 50px;
-    background-color: black;
+    height: 4px;
+    background-color: #CCD7E4;
     translate: -50% -50%;
 }
 
 .timeline-bar__labels-viewport {
-    background-color: #b88383;
     flex-grow: 1;
-    border-color: orange;
-    height: 64px;
+    margin: 4px;
+    height: 16px;
+    overflow: hidden;
 }
 
 .timeline-bar__labels-container {
@@ -57,6 +57,9 @@
 
 .timeline-bar__label > .unity-label {
     -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    color: white;
+    text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.9);
 }
 
 .timeline-bar__thumb-container {
