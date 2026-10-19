@@ -10,3 +10,7 @@
 .legend-panel__content .unity-scroll-view__content-container{
     align-items: flex-start;
 }
+
+.legend-panel .unity-collection-view__item:hover {
+    background-color: transparent;
+}
