@@ -16,7 +16,7 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public override Material[] Materials => batchedMeshInstanceRenderer.Materials;
 
-        protected override void Visualize(CityJSON caller)
+        protected override void Visualize()
         {
             batchedMeshInstanceRenderer.Clear();
             foreach (var geometry in cityObject.Geometries)

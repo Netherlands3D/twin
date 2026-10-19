@@ -88,10 +88,10 @@ namespace Netherlands3D.CityJson.Visualisation
         }
 
         //create the meshes
-        protected override void Visualize(CityJSON caller)
+        protected override void Visualize()
         {
             transform.localPosition = SetLocalPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
-            materialConverter=caller.MaterialConverter;
+            materialConverter.Initialize(cityObject.Appearance);
             StartCoroutine(CreateMeshesPerFrame(maxMeshesPerFrame));
         }
 
