@@ -196,7 +196,6 @@ namespace Netherlands3D.CityJson.Structure
         }
         private IEnumerator CreateGeometry()
         {
-            
             System.DateTime time = System.DateTime.UtcNow;
              foreach (var co in CityObjects)
             {   
@@ -207,8 +206,7 @@ namespace Netherlands3D.CityJson.Structure
                      yield return null;
                 }
             }
-           
-onAllCityObjectsProcessed?.Invoke();
+        onAllCityObjectsProcessed?.Invoke();
         }
 
         //custom nodes must be added as is to the exporter to ensure they are preserved.

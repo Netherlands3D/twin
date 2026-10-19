@@ -84,7 +84,6 @@ namespace Netherlands3D.CityJson.Visualisation
             meshFilter = GetComponent<MeshFilter>();
             meshRenderer = GetComponent<MeshRenderer>();
             meshCollider = GetComponent<MeshCollider>();
-            
         }
 
         //create the meshes
@@ -173,7 +172,6 @@ namespace Netherlands3D.CityJson.Visualisation
             meshes = new Dictionary<CityGeometry, MeshWithMaterials>(cityObject.Geometries.Count);
             foreach (var geometry in cityObject.Geometries)
             {
-                
                 if (geometry.Type == GeometryType.MultiPoint || geometry.Type == GeometryType.MultiLineString)
                     continue; // MultiPoint/Lines have their own visualizer and don't create meshes
 
