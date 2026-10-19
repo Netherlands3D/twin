@@ -35,5 +35,5 @@
 
 .color-tile__fill--visibility-off{
     background-image: var(--icon-invisible);
-    -unity-background-image-tint-color: black;
+    -unity-background-image-tint-color: var(--color-blue-900-alpha);
 }
