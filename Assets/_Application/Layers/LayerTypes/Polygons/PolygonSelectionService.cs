@@ -32,13 +32,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public UnityEvent OnSelectActivePolygon = new();
         private bool polygonSelectionEnabled = false;
         
-        private void Awake()
-        {
-            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
-        }
-
         private void OnEnable()
         {
+            pointerToWorldPosition = ServiceLocator.GetService<PointerToWorldPosition>();
             polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
         }
