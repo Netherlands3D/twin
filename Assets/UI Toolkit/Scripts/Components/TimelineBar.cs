@@ -32,12 +32,17 @@ namespace Netherlands3D.UI.Components
         private readonly List<DateTimeLabel> labelElements = new();
         
         private readonly VisualElement thumbElement;
-
-        private DateTime displayedValue;
-        private DateTime value;
-        private DateTime startValue;
-        private DateTime endValue;
+        
+        private DateTime time;
+        private DateTime startTime;
+        private DateTime endTime;
         private TimeSpan duration;
+
+        private DateTime calculatedTime;
+        private DateTime calculatedStartTime;
+        private DateTime calculatedEndTime;
+        private DateTime calculatedDuration;
+        
         private double ticksPerPixel;
 
         private DateTimeUnit unitContext;
@@ -52,7 +57,6 @@ namespace Netherlands3D.UI.Components
         private DateTime timelineDragInitialEndTime;
 
         private bool isThumbDrag;
-        private DateTime thumbDragInitialCurrentTime;
         private double thumbDragInitialThumbElementPosition;
         private DateTime thumbDragInitialStartTime;
         private DateTime thumbDragInitialEndTime;
@@ -103,11 +107,11 @@ namespace Netherlands3D.UI.Components
 
         public DateTime StartValue
         {
-            get => startValue;
+            get => startTime;
             set
             {
-                startValue = value;
-                duration = new TimeSpan(endValue.Ticks - startValue.Ticks);
+                startTime = value;
+                duration = new TimeSpan(endTime.Ticks - startTime.Ticks);
                 markElementsUpdateRequested = true;
                 unitGroupsUpdateRequested = true;
             }
@@ -115,11 +119,11 @@ namespace Netherlands3D.UI.Components
 
         public DateTime EndValue
         {
-            get => endValue;
+            get => endTime;
             set
             {
-                endValue = value;
-                duration = new TimeSpan(endValue.Ticks - startValue.Ticks);
+                endTime = value;
+                duration = new TimeSpan(endTime.Ticks - startTime.Ticks);
                 markElementsUpdateRequested = true;
                 unitGroupsUpdateRequested = true;
             }
@@ -127,10 +131,10 @@ namespace Netherlands3D.UI.Components
         
         public DateTime CurrentValue
         {
-            get => displayedValue;
+            get => time;
             set
             {
-                displayedValue = value;
+                time = value;
                 markElementsUpdateRequested = true;
             }
         }
@@ -197,6 +201,7 @@ namespace Netherlands3D.UI.Components
             //Set up zooming
             viewport.RegisterCallback<WheelEvent>(OnMouseWheelScrolled);
             
+            /*
             //SetupTimelineDragging();
             var timelineDragManipulator = new DragManipulator(4);
             timelineDragManipulator.DragStarted.AddListener(OnTimelineDragStarted);
@@ -204,6 +209,7 @@ namespace Netherlands3D.UI.Components
             timelineDragManipulator.DragEnded.AddListener(OnTimelineDragEnded);
             viewport.pickingMode = PickingMode.Position;
             viewport.AddManipulator(timelineDragManipulator);
+            */
 
             //set up scrubber
             var thumbDragManipulator = new DragManipulator(0);
@@ -230,17 +236,17 @@ namespace Netherlands3D.UI.Components
         
         private void OnTimelineDragStarted(Vector2 startPointerPosition)
         {
-            timelineDragInitialStartTime = startValue;
-            timelineDragInitialEndTime = endValue;
+            timelineDragInitialStartTime = startTime;
+            timelineDragInitialEndTime = endTime;
         }
         
         private void OnTimelineDraggingTotal(Vector2 deltaPointerPosition)
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
             SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
-            var currentTicks  = (long)Math.Clamp(displayedValue.Ticks, startValue.Ticks + duration.Ticks * thumbMinPosition, startValue.Ticks + duration.Ticks * thumbMaxPosition);
-            displayedValue = new DateTime(currentTicks, displayedValue.Kind);
-            value = displayedValue.Round(draggingSnapInterval);
+            var currentTicks  = (long)Math.Clamp(time.Ticks, startTime.Ticks + duration.Ticks * thumbMinPosition, startTime.Ticks + duration.Ticks * thumbMaxPosition);
+            time = new DateTime(currentTicks, time.Kind);
+            time = time.Round(draggingSnapInterval);
             markElementsUpdateRequested = true;
         }
         
@@ -252,7 +258,6 @@ namespace Netherlands3D.UI.Components
         {
             isThumbDrag = true;
             thumbCurrentScrollSpeed = 0;
-            thumbDragInitialCurrentTime = displayedValue;
             thumbDragInitialThumbElementPosition = thumbElement.style.left.value.value / 100d;
             OnThumbDraggingTotal(Vector2.zero);
         }
@@ -262,6 +267,8 @@ namespace Netherlands3D.UI.Components
             var containerWidth = marksContainer.contentRect.width;
             var elementPositionOffset = (double)deltaPointerPosition.x / containerWidth;
             thumbElementPosition = thumbDragInitialThumbElementPosition + elementPositionOffset;
+            
+            
         }
 
         
@@ -278,13 +285,12 @@ namespace Netherlands3D.UI.Components
                 var boundPosition = (thumbElementPosition < thumbMinPosition) ? thumbMinPosition : thumbMaxPosition;
                 var exceedBoundsPosition = Math.Clamp(thumbElementPosition - boundPosition, -scrollAreaSize, scrollAreaSize);
                 thumbCurrentScrollSpeed = exceedBoundsPosition / scrollAreaSize;
-                var ticksOffset = (long)Math.Round(thumbCurrentScrollSpeed * thumbMaxScrollSpeed * Time.deltaTime * (endValue.Ticks - startValue.Ticks));
-                SetTimeRange(startValue.AddTicks(ticksOffset), endValue.AddTicks(ticksOffset));
+                var ticksOffset = (long)Math.Round(thumbCurrentScrollSpeed * thumbMaxScrollSpeed * Time.deltaTime * (endTime.Ticks - startTime.Ticks));
+                SetTimeRange(startTime.AddTicks(ticksOffset), endTime.AddTicks(ticksOffset));
             }
             
             var clampedThumbElementPosition = Math.Clamp(thumbElementPosition, thumbMinPosition, thumbMaxPosition);
-            displayedValue = startValue.Add(clampedThumbElementPosition * duration);
-            value = displayedValue.Round(snapInterval);
+            time = startTime.Add(clampedThumbElementPosition * duration);
             
             markElementsUpdateRequested = true;
         }
@@ -306,14 +312,14 @@ namespace Netherlands3D.UI.Components
 
         private void SetTimeRange(DateTime newStartTime, DateTime newEndTime)
         {
-            var previousDuration = endValue - startValue;
+            var previousDuration = endTime - startTime;
             
-            startValue = newStartTime;
-            endValue = newEndTime;
-            duration = new TimeSpan(endValue.Ticks - startValue.Ticks);
+            startTime = newStartTime;
+            endTime = newEndTime;
+            duration = new TimeSpan(endTime.Ticks - startTime.Ticks);
 
             markElementsUpdateRequested = true;
-            if (endValue - startValue != previousDuration)
+            if (endTime - startTime != previousDuration)
             {
                 unitGroupsUpdateRequested = true;
             }
@@ -339,7 +345,7 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            if (endValue <= startValue)
+            if (endTime <= startTime)
             {
                 return;
             }
@@ -347,8 +353,8 @@ namespace Netherlands3D.UI.Components
             var maxMarkElements = (double)width / 10;
             var maxLabelElements = (double)width / 50;
 
-            var start = startValue;
-            var end = endValue;
+            var start = startTime;
+            var end = endTime;
 
             if (unitGroupsUpdateRequested)
             {
@@ -381,7 +387,7 @@ namespace Netherlands3D.UI.Components
                 var markElement = markElements[markIndex];
                 markIndex++;
 
-                var position = (double)(markTime.Ticks - startValue.Ticks) / duration.Ticks;
+                var position = (double)(markTime.Ticks - startTime.Ticks) / duration.Ticks;
 
                 var left = Length.Percent((float)(position * 100));
 
@@ -409,7 +415,7 @@ namespace Netherlands3D.UI.Components
                 var labelElement = labelElements[labelIndex];
                 labelIndex++;
 
-                var position = (double)(labelTime.Ticks - startValue.Ticks) / duration.Ticks;
+                var position = (double)(labelTime.Ticks - startTime.Ticks) / duration.Ticks;
 
                 var left = Length.Percent((float)(position * 100));
 
@@ -436,20 +442,19 @@ namespace Netherlands3D.UI.Components
             var sunTimeService = ServiceLocator.GetService<SunTime>();
             if (sunTimeService == null) return;
             sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
-            sunTimeService.SetTime(value);
+            sunTimeService.SetTime(time);
             sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
         }
 
         private void OnSunTimeChanged(DateTime arg0)
         {
-            value = arg0;
-            displayedValue = arg0;
+            time = arg0;
             markElementsUpdateRequested = true;
         }
 
         void UpdateThumb()
         {
-            var position = (double)(displayedValue.Ticks - startValue.Ticks) / duration.Ticks;
+            var position = (double)(time.Ticks - startTime.Ticks) / duration.Ticks;
             var left = Length.Percent((float)(position * 100));
             thumbElement.style.left = left;
         }
