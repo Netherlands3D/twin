@@ -70,7 +70,6 @@ namespace Netherlands3D.Functionalities.CityJSON
                 var visualizers = co.GetComponents<CityObjectVisualizer>();
                 foreach (var visualizer in visualizers)
                 {
-                    layerGameObject.AddFeature(visualizer);
                     visualizer.cityObjectVisualized.AddListener(OnObjectVisualized);
                 }
             }

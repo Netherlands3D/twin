@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -5290351893147975871}
   - component: {fileID: 5482031777458148174}
   - component: {fileID: 5469177947320262563}
+  - component: {fileID: -1348589874469542267}
   m_Layer: 0
   m_Name: CityJSONlayer
   m_TagString: Untagged
@@ -52,16 +53,7 @@ MonoBehaviour:
   prefabIdentifier: 72d5fc36c601a427dac350e2b1146f0f
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
+  VisualisationError:
     m_PersistentCalls:
       m_Calls: []
   DebugBoundingBox: 0
@@ -69,6 +61,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scaleUnitCharacter: '%'
+  OnFeatureAdded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1646213389209705716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,3 +140,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc48b375ab884bad980e4629de70020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1348589874469542267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9204913902124509902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf930688e4cb4966816a6afa628721f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Timeline.TimelineCityJson
