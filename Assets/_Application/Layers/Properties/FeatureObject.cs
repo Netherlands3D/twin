@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
@@ -26,16 +27,18 @@ namespace Netherlands3D.Twin.layers.properties
         {
             selectorService = ServiceLocator.GetService<SelectionService>();
             selectorService.SelectGeoJsonFeature.AddListener(ProcessFeatureMappingForLayer);
+            selectorService.SelectCityJsonMapping.AddListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.AddListener(ClearFeatureMappingsForLayer);
         }
 
         private void OnDisable()
         {
             selectorService.SelectGeoJsonFeature.RemoveListener(ProcessFeatureMappingForLayer);
+            selectorService.SelectCityJsonMapping.RemoveListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.RemoveListener(ClearFeatureMappingsForLayer);
         }
 
-        private void ProcessFeatureMappingForLayer(FeatureMapping mapping)
+        private void ProcessFeatureMappingForLayer(IMapping mapping)
         {
             if (mapping == null || visualization.LayerData != mapping.LayerData)
             {
@@ -52,6 +55,23 @@ namespace Netherlands3D.Twin.layers.properties
                 {
                     BoundingBox bbox = map.BoundingBox;
                     Dictionary<string, object> properties = map.Feature.Properties as Dictionary<string, object>;
+                    FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
+                    data.Properties = properties;
+                    data.BoundingBox = bbox;
+                    featureIds.Add(kv.Key, data);
+                }
+                else if (kv.Value is CityJSONMapping city)
+                {
+                    BoundingBox bbox = city.BoundingBox;
+                    Dictionary<string, CityObjectAttribute> attributes = city.Feature.Attributes as Dictionary<string, CityObjectAttribute>;
+                    Dictionary<string, object> properties = new Dictionary<string, object>();
+                    if (attributes != null)
+                    {
+                        foreach (var attribute in attributes)
+                        {
+                            properties[attribute.Key] = attribute.Value.GetJSONValue();
+                        }
+                    }
                     FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
                     data.Properties = properties;
                     data.BoundingBox = bbox;

@@ -8,6 +8,8 @@ using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using Newtonsoft.Json.Linq;
+using SimpleJSON;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -68,14 +70,114 @@ namespace Netherlands3D.UI.Panels
         
         public void PopulateAddresses(Dictionary<string, object> properties)
         {
-            var list = properties
-                .Select(kv => new KeyValue
-                {
-                    Key = kv.Key,
-                    Value = kv.Value?.ToString()
-                })
-                .ToList();
+            var list = new List<KeyValue>();
+
+            foreach (var kv in properties)
+            {
+                FlattenValue(kv.Key, kv.Value, list);
+            }
+
             propertiesListView.itemsSource = list;
+            propertiesListView.Rebuild();
+        }
+
+        private void FlattenValue(string key, object value, List<KeyValue> list)
+        {
+            if (value == null)
+            {
+                list.Add(new KeyValue { Key = key, Value = "" });
+                return;
+            }
+
+            // Handle Newtonsoft JSON objects
+            if (value is JObject jObject)
+            {
+                foreach (var property in jObject.Properties())
+                {
+                    FlattenValue($"{key}.{property.Name}", property.Value, list);
+                }
+                return;
+            }
+
+            // Handle Newtonsoft JSON arrays
+            if (value is JArray jArray)
+            {
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    FlattenArrayValue(key, i, jArray[i], list);
+                }
+                return;
+            }
+
+            // Handle SimpleJSON
+            if (value is JSONNode jsonNode)
+            {
+                if (jsonNode.IsObject)
+                {
+                    foreach (var child in jsonNode.AsObject)
+                    {
+                        FlattenValue($"{key}.{child.Key}", child.Value, list);
+                    }
+                    return;
+                }
+
+                if (jsonNode.IsArray)
+                {
+                    for (int i = 0; i < jsonNode.AsArray.Count; i++)
+                    {
+                        FlattenArrayValue(key, i, jsonNode.AsArray[i], list);
+                    }
+                    return;
+                }
+
+                list.Add(new KeyValue
+                {
+                    Key = key,
+                    Value = jsonNode.IsNull ? "" : jsonNode.Value
+                });
+                return;
+            }
+
+            // Handle regular dictionaries
+            if (value is IDictionary<string, object> dictionary)
+            {
+                foreach (var child in dictionary)
+                {
+                    FlattenValue($"{key}.{child.Key}", child.Value, list);
+                }
+                return;
+            }
+
+            // Handle regular C# values
+            list.Add(new KeyValue
+            {
+                Key = key,
+                Value = value.ToString()
+            });
+        }
+
+        private void FlattenArrayValue(string key, int index, object value, List<KeyValue> list)
+        {
+            string arrayKey = $"{key} {index}";
+
+            if (value is JObject jObject)
+            {
+                foreach (var property in jObject.Properties())
+                {
+                    FlattenValue($"{arrayKey} : {property.Name}", property.Value, list);
+                }
+            }
+            else if (value is JSONNode jsonNode && jsonNode.IsObject)
+            {
+                foreach (var child in jsonNode.AsObject)
+                {
+                    FlattenValue($"{arrayKey} : {child.Key}", child.Value, list);
+                }
+            }
+            else
+            {
+                FlattenValue(arrayKey, value, list);
+            }
         }
         
         private VisualElement MakeListViewItem()

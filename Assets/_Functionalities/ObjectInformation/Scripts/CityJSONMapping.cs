@@ -14,12 +14,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {
         public object MappingObject => feature;
         public string Id => feature.Id;
-        public LayerData LayerData => null;
+        public LayerData LayerData => VisualisationParent.LayerData;
         
         public CityJSONLayerGameObject VisualisationParent  { get { return visualisationParent; } }
         public CityObject Feature { get { return feature; } }
         public CityObjectMeshVisualizer Visualizer => visualizer;
-        
+
         private CityObject feature;
         private List<Mesh> meshes;
         private BoundingBox boundingBox;
