@@ -14,9 +14,11 @@ namespace Netherlands3D.UI.Components
         private ColorSlider brightnessSlider;
         private TextField hexField;
         private ColorTile colorTile;
+        private VisibilityToggle transparentToggle;
 
         public UnityEvent<Color> ColorChanged = new();
-        public UnityEvent<bool> ColorPickerVisibilityChanged = new();
+        public UnityEvent<bool> VisibilityChanged = new();
+        public UnityEvent<bool> ColorPickerEnabled = new();
 
         public ColorPicker()
         {
@@ -27,12 +29,28 @@ namespace Netherlands3D.UI.Components
             brightnessSlider = this.Q<ColorSlider>();
             hexField = this.Q<TextField>();
             colorTile = this.Q<ColorTile>();
+            
+            transparentToggle = this.Q<VisibilityToggle>("TransparentToggle");
+            transparentToggle.RegisterValueChangedCallback(OnTransparentToggleClicked);
 
             hexField.RegisterValueChangedCallback(OnHexValueChanged);
             hexField.RegisterCallback<NavigationSubmitEvent>(OnHexColorSubmitted, TrickleDown.TrickleDown);
 
             colorSpectrum.SpectrumChanged.AddListener(OnColorInputChanged);
             brightnessSlider.RegisterValueChangedCallback(_ => OnColorInputChanged());
+        }
+
+        public void SetTransparentToggleWithoutNotify(bool objectVisible)
+        {
+            transparentToggle.SetValueWithoutNotify(objectVisible);
+            var state = objectVisible ? VisibilityState.Visible : VisibilityState.Invisible;
+            transparentToggle.SetState(state);
+        }
+        
+        private void OnTransparentToggleClicked(ChangeEvent<bool> evt)
+        {
+            var objectVisible = evt.newValue;
+            VisibilityChanged.Invoke(objectVisible);
         }
 
         private void OnHexColorSubmitted(NavigationSubmitEvent evt)
@@ -83,7 +101,12 @@ namespace Netherlands3D.UI.Components
         public void SetVisible(bool visible)
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
-            ColorPickerVisibilityChanged.Invoke(visible);
+            ColorPickerEnabled.Invoke(visible);
+        }
+
+        public void SetVisibilityToggleEnabled(bool allowVisibilityChange) //todo: this should be removed when all layers support setting visibility
+        {
+            transparentToggle.EnableInClassList(UtilityClassConstants.HIDDEN, !allowVisibilityChange);
         }
     }
 }
