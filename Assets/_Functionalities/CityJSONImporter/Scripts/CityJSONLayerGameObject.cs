@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net.Feature;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.CityJSON;
+using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
@@ -100,6 +103,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             foreach (var co in cityJson.CityObjects)
             {
                 AddStylingFeatureForCityObject(co);
+                CreateFeatureMappings(co);
             }
 
         }
@@ -122,6 +126,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);
+        }
+        
+        private void CreateFeatureMappings(CityObject feature)
+        {
+            CityJSONMapping objectMapping = new CityJSONMapping();
+            objectMapping.SetFeature(feature);
+            //objectMapping.SetMeshes(meshes);
+            //objectMapping.SetVisualisationLayer(layer);
+            objectMapping.SetCityJsonLayerParent(this);
+            objectMapping.UpdateBoundingBox();
+            SelectionService.MappingTree.RootInsert(objectMapping);
         }
     }
 }

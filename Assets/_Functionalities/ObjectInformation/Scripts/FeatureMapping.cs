@@ -143,13 +143,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             BoundingBox boundingBox = new BoundingBox(bottomLeft, topRight);
             return boundingBox;
         }
-        
-        public Coordinate GetCoordinateForFeatureMapping()
-        {
-            if(boundingBox == null)
-                UpdateBoundingBox();
-            return boundingBox.Center;
-        }
 
         //these gameobjects can represent selected features or thumbnail meshes
         private List<GameObject> CreateFeatureGameObjects()
