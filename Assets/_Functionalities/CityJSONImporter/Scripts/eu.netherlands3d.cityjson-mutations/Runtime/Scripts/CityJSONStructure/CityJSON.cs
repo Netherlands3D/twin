@@ -1,4 +1,3 @@
-using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
 using SimpleJSON;
 using System.Collections;
