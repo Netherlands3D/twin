@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Codice.CM.Common;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
@@ -118,6 +119,27 @@ namespace Netherlands3D.UI.Components
             new (DateTimeUnit.Second, 5),
             new (DateTimeUnit.Second, 1),
         };
+
+        [UxmlAttribute("start-time")]
+        private string StartTimeUxml
+        {
+            get => StartValue.ToString("O");
+            set => StartValue = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+        }
+        
+        [UxmlAttribute("end-time")]
+        private string EndTimeUxml
+        {
+            get => EndValue.ToString("O");
+            set => EndValue = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+        }
+        
+        [UxmlAttribute("current-time")]
+        private string CurrentTimeUxml
+        {
+            get => CurrentValue.ToString("O");
+            set => CurrentValue = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+        }
 
         public DateTime StartValue
         {

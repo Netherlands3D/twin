@@ -16,6 +16,11 @@
     flex-direction: row;
 }
 
+.timeline-slider__slider-row > .timeline {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
 .timeline-slider__slider{
     flex-grow: 1;
 }
