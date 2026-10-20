@@ -11,6 +11,8 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class TreeView : UnityEngine.UIElements.TreeView
     {
+        const string selectableUSSClassName = "collection-view--unselectable";
+
         private Action<VisualElement, int> _userBind;
 
         private int firstSelectedIndex = -1;
@@ -20,6 +22,17 @@ namespace Netherlands3D.UI.Components
         private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
         private Vector2 lastPointerPosition;
 
+        [UxmlAttribute("selection-type")]
+        public SelectionType SelectionMode
+        {
+            get => selectionType;
+            set
+            {
+                selectionType = value;
+                EnableInClassList(selectableUSSClassName, selectionType == SelectionType.None);
+            }
+        }
+        
         /// <summary>
         /// Intercept bindItem so we can apply inline fixes after user binding.
         /// </summary>
@@ -57,7 +70,10 @@ namespace Netherlands3D.UI.Components
             {
                 lastPointerPosition = evt.position;
             });
+            
+            EnableInClassList(selectableUSSClassName, selectionType == SelectionType.None);
         }
+        
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             LayerTreeViewUtility.ReleaseListsToPool(this);
