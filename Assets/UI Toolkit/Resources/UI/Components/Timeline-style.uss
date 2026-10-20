@@ -1,10 +1,10 @@
-.timeline-bar {
+.timeline {
     position: relative;
     flex-grow: 1;
     min-width: 0;
 }
 
-.timeline-bar__marks-viewport {
+.timeline__marks-viewport {
     background-color: white;
     flex-grow: 1;
     border-radius: 8px;
@@ -15,7 +15,7 @@
     margin-top: 12px;
 }
 
-.timeline-bar__marks-container {
+.timeline__marks-container {
     position: absolute;
     left: 0;
     right: 0;
@@ -23,7 +23,7 @@
     bottom: 0;
 }
 
-.timeline-bar__mark {
+.timeline__mark {
     position: absolute;
     top: 50%;
     width: 2px;
@@ -32,14 +32,14 @@
     translate: -50% -50%;
 }
 
-.timeline-bar__labels-viewport {
+.timeline__labels-viewport {
     flex-grow: 1;
     margin: 4px;
     height: 16px;
     overflow: hidden;
 }
 
-.timeline-bar__labels-container {
+.timeline__labels-container {
     position: absolute;
     left: 0;
     right: 0;
@@ -47,7 +47,7 @@
     bottom: 0;
 }
 
-.timeline-bar__label {
+.timeline__label {
     position: absolute;
     top: 50%;
     width: 100px;
@@ -56,14 +56,14 @@
     justify-content: center;
 }
 
-.timeline-bar__label > .unity-label {
+.timeline__label > .unity-label {
     -unity-text-align: middle-center;
     -unity-font-style: bold;
     color: white;
     text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.9);
 }
 
-.timeline-bar__thumb-container {
+.timeline__thumb-container {
     position: absolute;
     left: 0;
     right: 0;
@@ -72,7 +72,7 @@
 }
 
 
-.timeline-bar__thumb {
+.timeline__thumb {
     position: absolute;
     background-image: var(--image-timeline-scrubber-inactive);
     background-repeat: no-repeat;
@@ -84,11 +84,11 @@
     translate: -50% -15px;
 }
 
-.timeline-bar__thumb--dragging {
+.timeline__thumb--dragging {
     background-image: var(--image-timeline-scrubber-active);
 }
 
-.timeline-bar__thumb-label {
+.timeline__thumb-label {
     position: absolute;
     translate: -50% -55px;
     border-radius: 16px;
@@ -101,7 +101,7 @@
     padding-right: 8px;
 }
 
-.timeline-bar__thumb-label > .unity-label {
+.timeline__thumb-label > .unity-label {
     -unity-text-align: middle-center;
     -unity-font-style: bold;
     color: black;

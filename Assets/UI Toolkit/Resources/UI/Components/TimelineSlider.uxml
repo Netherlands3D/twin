@@ -4,7 +4,7 @@
 
         <ui:VisualElement class="timeline-slider__slider-row">
             <nl3d:DateTimeLabel name="StartLabel" picking-mode="Ignore"/>
-            <nl3d:TimelineBar name="Timeline" />
+            <nl3d:Timeline name="Timeline" />
             <nl3d:DateTimeLabel name="EndLabel" picking-mode="Ignore"/>
         </ui:VisualElement>
     </ui:VisualElement>

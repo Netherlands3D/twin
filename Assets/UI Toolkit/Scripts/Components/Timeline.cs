@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class TimelineBar : VisualElement
+    public partial class Timeline : VisualElement
     {
         public event Action<int, int> TimeChanged;
         
@@ -199,7 +199,7 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        public TimelineBar()
+        public Timeline()
         {
             
             this.CloneComponentTree("Components");
@@ -503,7 +503,7 @@ namespace Netherlands3D.UI.Components
                 {
                     var newMark = new VisualElement();
                     newMark.pickingMode = PickingMode.Ignore;
-                    newMark.AddToClassList("timeline-bar__mark");
+                    newMark.AddToClassList("timeline__mark");
                     marksContainer.Add(newMark);
                     markElements.Add(newMark);
                 }
@@ -531,7 +531,7 @@ namespace Netherlands3D.UI.Components
                 {
                     var newLabel = new DateTimeLabel();
                     newLabel.pickingMode = PickingMode.Ignore;
-                    newLabel.AddToClassList("timeline-bar__label");
+                    newLabel.AddToClassList("timeline__label");
                     labelsContainer.Add(newLabel);
                     labelElements.Add(newLabel);
                 }

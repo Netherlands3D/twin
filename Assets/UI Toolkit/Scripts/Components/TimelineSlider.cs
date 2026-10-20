@@ -13,12 +13,12 @@ namespace Netherlands3D.UI.Components
 
         private readonly DateTimeLabel startLabel;
         private readonly DateTimeLabel endLabel;
-        private readonly TimelineBar timelineBar;
+        private readonly Timeline timeline;
         
         public DateTime CurrentValue
         {
-            get => timelineBar.CurrentValue;
-            set => timelineBar.CurrentValue = value;
+            get => timeline.CurrentValue;
+            set => timeline.CurrentValue = value;
         }
         
         [UxmlAttribute("current-value")]
@@ -35,8 +35,8 @@ namespace Netherlands3D.UI.Components
 
         public DateTime StartValue
         {
-            get => timelineBar.StartValue;
-            set => timelineBar.StartValue = value;
+            get => timeline.StartValue;
+            set => timeline.StartValue = value;
         }
         
         [UxmlAttribute("start-value")]
@@ -53,10 +53,10 @@ namespace Netherlands3D.UI.Components
         
         public DateTime EndValue
         {
-            get => timelineBar.EndValue;
+            get => timeline.EndValue;
             set
             {
-                timelineBar.EndValue = value;
+                timeline.EndValue = value;
                 
             }
         }
@@ -75,14 +75,14 @@ namespace Netherlands3D.UI.Components
         
         public DateTimeUnit UnitContext
         {
-            get => timelineBar.UnitContext;
-            set => timelineBar.UnitContext = value;
+            get => timeline.UnitContext;
+            set => timeline.UnitContext = value;
         }
         
         public DateTimeUnit UnitPrecision
         {
-            get => timelineBar.UnitPrecision;
-            set => timelineBar.UnitPrecision = value;
+            get => timeline.UnitPrecision;
+            set => timeline.UnitPrecision = value;
         }
 
         public TimelineSlider()
@@ -92,7 +92,7 @@ namespace Netherlands3D.UI.Components
             
             startLabel = this.Q<DateTimeLabel>("StartLabel");
             endLabel = this.Q<DateTimeLabel>("EndLabel");
-            timelineBar = this.Q<TimelineBar>();
+            timeline = this.Q<Timeline>();
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
         }
@@ -102,8 +102,8 @@ namespace Netherlands3D.UI.Components
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            startLabel.Value = timelineBar.StartValue;
-            endLabel.Value = timelineBar.EndValue;
+            startLabel.Value = timeline.StartValue;
+            endLabel.Value = timeline.EndValue;
         }
 
 
