@@ -12,9 +12,8 @@
     border-radius: 8px;
     border-width: 2px;
     border-color: #CCD7E4;
-    height: 15px;
+    height: 16px;
     overflow: hidden;
-    margin-top: 12px;
 }
 
 .timeline__marks-container {
@@ -36,15 +35,14 @@
 
 .timeline__labels-viewport {
     flex-grow: 1;
-    margin: 4px;
-    height: 16px;
+    height: 30px;
     overflow: hidden;
 }
 
 .timeline__labels-container {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 2px;
+    right: 2px;
     top: 0;
     bottom: 0;
 }
