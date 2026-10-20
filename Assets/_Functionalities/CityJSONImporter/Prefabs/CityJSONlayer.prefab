@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: -4601171668286100971}
   - component: {fileID: -6073466579551587454}
   - component: {fileID: 2895824369187690745}
+  - component: {fileID: 2529455169659687712}
   m_Layer: 0
   m_Name: CityJSONlayer
   m_TagString: Untagged
@@ -123,21 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36187846006a245e39b1c2c56fb7a686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaterialConverter:
-    semanticMaterials:
-    - Type: 0
-      Material: {fileID: 2100000, guid: 1813c5b85524d4d9e842442713b84434, type: 2}
-    - Type: 1000
-      Material: {fileID: 2100000, guid: c19c85780cd7f450db02b55167f2b676, type: 2}
-    - Type: 1001
-      Material: {fileID: 2100000, guid: d0472e7df0c374cae9817021ec00f255, type: 2}
-    - Type: 1002
-      Material: {fileID: 2100000, guid: c2fe9701b3ad2444c9e146e5f28e983c, type: 2}
-    - Type: 1006
-      Material: {fileID: 2100000, guid: 35f607d55fd3a41df90eb90aa27d4c59, type: 2}
-    - Type: 1007
-      Material: {fileID: 2100000, guid: d27b4b3d1ad2a41de8bcf446eb52600f, type: 2}
-    cachedMaterials: []
   cityObjectPrefab: {fileID: 1807838613596807431, guid: 5db4ea97f9b3f4daa97b8121c433dd2c,
     type: 3}
   onAllCityObjectsProcessed:
@@ -246,4 +232,15 @@ MonoBehaviour:
   addMeshCollider: 1
   materialConverter:
     semanticMaterials: []
-    cachedMaterials: []
+--- !u!114 &2529455169659687712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9204913902124509902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf930688e4cb4966816a6afa628721f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Timeline.TimelineCityJson
