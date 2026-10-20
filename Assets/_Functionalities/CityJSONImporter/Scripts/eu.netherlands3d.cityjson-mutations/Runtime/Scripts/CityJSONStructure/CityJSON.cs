@@ -170,7 +170,7 @@ namespace Netherlands3D.CityJson.Structure
                     co = go.GetComponent<CityObject>();
                 }
                 co.SetCityAppearance(Appearance);
-                co.FromJSONNode(cityObjectNode.Key, cityObjectNode.Value, CoordinateSystem, parsedVertices);
+                co.FromJSONNode(cityObjectNode.Key, cityObjectNode.Value, CoordinateSystem, parsedVertices, Version);
                 cityObjects.Add(cityObjectNode.Value, co);
             }
 

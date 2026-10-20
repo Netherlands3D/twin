@@ -57,9 +57,9 @@ namespace Netherlands3D.Twin.Rendering
 
         public override Material[] Materials => new Material[]{ PointMaterial, LineMaterial };
 
-        protected override void MakeMaterialInstances()
+        public override void CreateMaterialInstances()
         {
-            base.MakeMaterialInstances();
+            base.CreateMaterialInstances();
             lineMaterial = new Material(materialTemplate); //make material instance to work with styling
         }
         

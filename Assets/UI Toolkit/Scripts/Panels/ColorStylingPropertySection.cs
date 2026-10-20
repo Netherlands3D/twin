@@ -50,11 +50,17 @@ namespace Netherlands3D.UI.Panels
                 }
             });
 
-            swatchesListView.selectedIndicesChanged += indices =>
-            {
-                //show selection in world when items in panel are selected
-                ColorPicker.SetVisible(indices.Any());
-            };
+            swatchesListView.selectedIndicesChanged += ActivateColorPicker;
+        }
+
+        private void ActivateColorPicker(IEnumerable<int> indices)
+        {
+            ColorPicker.SetVisible(indices.Any());
+            
+            var color = GetColorFromPropertyData();
+            ColorPicker.SetColorInputComponentsWithoutNotify(color);
+            var visibility = stylingPropertyData.GetDefaultSymbolizerVisibility();
+            ColorPicker.SetTransparentToggleWithoutNotify(visibility.HasValue ? visibility.Value : true);
         }
 
         private VisualElement MakeListViewItem()
@@ -64,8 +70,6 @@ namespace Netherlands3D.UI.Panels
             item.RegisterCallback<ClickEvent>(evt =>
             {
                 stylingPropertyData.ColorType = item.userData as string;
-                var color = GetColorFromPropertyData();
-                ColorPicker.SetColorInputComponentsWithoutNotify(color);
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
@@ -79,15 +83,21 @@ namespace Netherlands3D.UI.Panels
             string propertyName = swatchesListView.itemsSource[index] as string;
             tile.userData = propertyName;
             tile.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
+            
             var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
             var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
             tile.Tile.Color = color;
+            
+            bool? visibility = stylingPropertyData.GetDefaultSymbolizerVisibility();
+            tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateColorFromProperty);
             ColorPicker.ColorChanged.RemoveListener(OnColorPicked);
+            ColorPicker.VisibilityChanged.RemoveListener(OnVisibilityChanged);
+            swatchesListView.selectedIndicesChanged -= ActivateColorPicker;
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -98,6 +108,10 @@ namespace Netherlands3D.UI.Panels
 
             stylingPropertyData.OnStylingChanged.AddListener(UpdateColorFromProperty);
             ColorPicker.ColorChanged.AddListener(OnColorPicked);
+            ColorPicker.VisibilityChanged.AddListener(OnVisibilityChanged);
+
+            var hasTimeline = properties.Get<TimelineStatusStylingLayerPropertyData>() != null; //todo: this dependency should not be here. Ideally the colorpicker is uniform for all panels
+            ColorPicker.SetVisibilityToggleEnabled(hasTimeline);
 
             UpdateSwatches();
             UpdateColorFromProperty();
@@ -139,6 +153,11 @@ namespace Netherlands3D.UI.Panels
                 stylingPropertyData.ColorType = item;
                 stylingPropertyData.SetDefaultSymbolizerColor(color);
             }
+        }
+        
+        private void OnVisibilityChanged(bool isVisible)
+        {
+            stylingPropertyData.SetDefaultSymbolizerVisibility(isVisible);
         }
     }
 }
