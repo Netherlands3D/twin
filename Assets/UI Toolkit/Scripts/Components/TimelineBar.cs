@@ -18,13 +18,14 @@ namespace Netherlands3D.UI.Components
         private const int RenderPadding = 50;
         private const int ThumbScrollAreaSize = 100; 
         private const int ThumbScrollSpeed = 100;
-
-        private double thumbMaxScrollSpeed = .25d;
+        
         private double thumbCurrentScrollSpeed = 0d;
-        private int scrollAreaWidth = 50;
-        private double thumbMinPosition = .3d;
-        private double thumbMaxPosition = .7d;
-        private double maxScrollSpeed = .25d;
+        private int thumbElementMaxOffsetPx = 300;
+        private int scrollAreaWidthPx = 50;
+        private double scrollAreaWidth = .5f;
+        private double thumbMinPosition = .5d;
+        private double thumbMaxPosition = .5d;
+        private double maxScrollSpeed = 1d;
        
         private readonly VisualElement marksContainer;
         private readonly List<VisualElement> markElements = new();
@@ -33,6 +34,7 @@ namespace Netherlands3D.UI.Components
         private readonly List<DateTimeLabel> labelElements = new();
         
         private readonly VisualElement thumbElement;
+        private readonly DateTimeLabel thumbLabelElement;
         
         private DateTime currentTime;
         private DateTime preciseCurrentTime;
@@ -43,6 +45,7 @@ namespace Netherlands3D.UI.Components
         private double thumbPosition;
         
         private double ticksPerPixel;
+        private double timePerPixel;
 
         private DateTimeUnit unitContext;
         private DateTimeUnit unitPrecision;
@@ -61,11 +64,13 @@ namespace Netherlands3D.UI.Components
         private DateTime thumbDragInitialEndTime;
         private double thumbElementPosition;
         private readonly IVisualElementScheduledItem thumbDragUpdateItem;
+        private TimeSpan thumbElementTimeOffset;
 
         private bool markElementsUpdateRequested = false;
         private bool unitGroupsUpdateRequested = false;
 
         private bool isSnapping;
+        private TimeSpan snapStartedThumbElementTimeOffset;
 
         private DateTime initialCurrentTime;
         private DateTime initialStartTime;
@@ -200,6 +205,7 @@ namespace Netherlands3D.UI.Components
             marksContainer = this.Q<VisualElement>("MarksContainer");
             labelsContainer = this.Q<VisualElement>("LabelsContainer");
             thumbElement = this.Q<VisualElement>("Thumb");
+            thumbLabelElement = this.Q<DateTimeLabel>("ThumbLabel");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -305,12 +311,19 @@ namespace Netherlands3D.UI.Components
             if (currentTime < minCurrentTime || currentTime > maxCurrentTime)
             {
                 var boundTime = (currentTime < minCurrentTime) ? minCurrentTime : maxCurrentTime;
-                var exceededPxWidth = Math.Clamp((currentTime - boundTime).Ticks / ticksPerPixel, -scrollAreaWidth, scrollAreaWidth);
-                var scrollSpeed = exceededPxWidth / scrollAreaWidth;
+                var exceededPxWidth = Math.Clamp((currentTime - boundTime).Ticks / ticksPerPixel, -scrollAreaWidthPx, scrollAreaWidthPx);
+                var scrollSpeed = exceededPxWidth / scrollAreaWidthPx;
+                scrollSpeed = (currentTime - boundTime) / duration / scrollAreaWidth;
                 var scrollOffset = scrollSpeed * maxScrollSpeed * Time.deltaTime * (endTime - startTime);
                 startTime = startTime.Add(scrollOffset);
                 endTime = endTime.Add(scrollOffset);
+                thumbElementTimeOffset = currentTime - boundTime;
                 currentTime = boundTime;
+
+                //thumbElementOffset = scrollSpeed / scrollAreaWidth;
+                
+                UnityEngine.Debug.Log($"exceededPxWidth {exceededPxWidth}, scrollSpeed {scrollSpeed}");
+
             }
             
             preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, thumbMinPosition, thumbMaxPosition) * duration);
@@ -321,6 +334,7 @@ namespace Netherlands3D.UI.Components
         private void OnThumbDragEnded(Vector2 arg0)
         {
             isThumbDrag = false;
+            
             thumbCurrentScrollSpeed = 0;
 
             currentTime = preciseCurrentTime.Round(snapInterval);
@@ -361,18 +375,24 @@ namespace Netherlands3D.UI.Components
         {
             isSnapping = true;
             snapStartedRealTime = Time.realtimeSinceStartupAsDouble;
+            snapStartedThumbElementTimeOffset = thumbElementTimeOffset;
         }
 
         private void UpdateSnap()
         {
             if (!isSnapping) return;
-            markElementsUpdateRequested = true;
+            
+            
             var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .2d, 0d, 1d);
             var eased = 1d - Math.Pow(1d - t, 3d);
             displayedCurrentTime = t >= 1d
                 ? currentTime
-                : preciseCurrentTime.AddTicks(
-                    (long)Math.Round((currentTime.Ticks - preciseCurrentTime.Ticks) * eased));
+                : preciseCurrentTime.Add((currentTime - preciseCurrentTime) * eased);
+
+            thumbElementTimeOffset = t >= 1d
+                ? TimeSpan.Zero
+                : snapStartedThumbElementTimeOffset * (1-eased);
+            
             
             var minCurrentTime = PositionToTime(thumbMinPosition, startTime, endTime);
             var maxCurrentTime = PositionToTime(thumbMaxPosition, startTime, endTime);
@@ -384,6 +404,7 @@ namespace Netherlands3D.UI.Components
                 endTime = endTime.Add(offset);
             }
             
+            markElementsUpdateRequested = true;
             UpdateThumb();
             
             if (t >= 1d)
@@ -496,6 +517,15 @@ namespace Netherlands3D.UI.Components
                 labelElement.style.display = DisplayStyle.Flex;
                 labelElement.style.left = left;
                 labelElement.Value = labelTime;
+                labelElement.style.opacity = new StyleFloat(1f);
+
+                const int a = 50;
+                const int b = 7;
+                
+                //hide label element when it is behind thumb
+                var pixelOffset = (labelTime - displayedCurrentTime).Ticks / ticksPerPixel;
+                var opacity = Math.Clamp((float)(Math.Abs(pixelOffset) - 45f) / 5f, 0, 1);
+                labelElement.style.opacity = new StyleFloat(opacity);
             }
 
             for (var i = labelIndex; i < labelElements.Count; i++)
@@ -529,8 +559,14 @@ namespace Netherlands3D.UI.Components
         void UpdateThumb()
         {
             var position = (double)(displayedCurrentTime.Ticks - startTime.Ticks) / duration.Ticks;
-            var left = Length.Percent((float)(position * 100));
-            thumbElement.style.left = left;
+            var thumbElementOffsetPosition =
+                Math.Clamp(TimeToPosition(displayedCurrentTime, startTime, endTime), 0, 1);
+            thumbElement.style.left = Length.Percent((float)(thumbElementOffsetPosition * 100));
+            
+            var thumbLabelPosition = Math.Clamp(TimeToPosition(displayedCurrentTime, startTime, endTime), 0, 1);
+            thumbLabelElement.style.left = Length.Percent((float)(thumbLabelPosition * 100));
+            thumbLabelElement.Value = currentTime;
+
         }
         
     }
