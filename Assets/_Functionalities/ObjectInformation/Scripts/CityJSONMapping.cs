@@ -155,10 +155,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 meshes = visualizer.GetAllMeshes();
             }
         }
-        
+
+        private int previousLayerMask;
         public void Select(string subId = null)
         {
             UpdateVisualizer();
+            previousLayerMask = visualizer.gameObject.layer;
+            visualizer.gameObject.layer = LayerMask.NameToLayer("Projected");
             foreach (var mesh in meshes)
             {
                 Color col = new Color(1, 0, 0, 0);
@@ -172,6 +175,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Deselect()
         {
+            visualizer.gameObject.layer =  previousLayerMask;
             if(meshes == null || meshes.Count == 0) return;
             
             foreach (var mesh in meshes)
@@ -183,6 +187,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
                 mesh.SetColors(colors);
             }
+            
         }
 
         public void Debug()
