@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void UpdateCityObjectTransforms(Coordinate coordinate)
         {
-            foreach (var m in mappings)
+            foreach (var m in debugMappings)
             {
                 m.UpdateBoundingBox();
             }
@@ -151,23 +151,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             objectMapping.SetCityJsonLayerParent(this);
             objectMapping.UpdateBoundingBox();
             SelectionService.MappingTree.RootInsert(objectMapping);
-            mappings.Add(objectMapping);
         }
         
         protected override void OnMouseClickNothing()
         {
-           //base NO!
-        }
-        
-        private List<CityJSONMapping> mappings = new List<CityJSONMapping>();
-
-        protected override void Update()
-        {
-            base.Update();
-            foreach (var m in mappings)
-            {
-                m.Debug();
-            }
+           //override base because we want no deselection while selecting
         }
     }
 }
