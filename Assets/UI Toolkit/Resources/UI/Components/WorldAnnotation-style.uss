@@ -74,11 +74,3 @@
     height: 48px;
     -unity-background-image-tint-color: var(--color-white); /*default white until set by styling*/
 }
-
-.world-annotation .world-annotation__image {
-    
-    aspect-ratio: 1;
-    position: absolute;    
-    top: var(--foto-spacing);
-    border-radius: var(--border-radius);
-}

@@ -12,5 +12,5 @@
         <nl3d:EditableNameField value="test text" />
         <ui:Label class="text-field__placeholder" name="Placeholder" text="Plaats hier uw tekst" picking-mode="Ignore"/>
     </ui:VisualElement>
-    <ui:VisualElement name="Image" class="world-annotation__image"/>
+    <nl3d:WorldImage />
 </ui:UXML>

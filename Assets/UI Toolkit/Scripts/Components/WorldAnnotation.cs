@@ -24,7 +24,7 @@ namespace Netherlands3D.UI.Components
         private VisualElement background;
         
         private const int MaxImageDimension = 512;
-        private VisualElement image;
+        private WorldImage image;
         
         public enum SnappingSide { Left, Right, Above }
         private SnappingSide snappingSide = SnappingSide.Above;
@@ -46,7 +46,8 @@ namespace Netherlands3D.UI.Components
             position = this.Q<Icon>("Position");
             position.pickingMode = PickingMode.Ignore;
             background = this.Q<VisualElement>("Background");
-            image =  this.Q<VisualElement>("Image");
+            image =  this.Q<WorldImage>();
+            image.ImageLoaded.AddListener(UpdateSnapping);
             
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             nameField.RegisterValueChangedCallback(OnNameChanged);
@@ -83,81 +84,17 @@ namespace Netherlands3D.UI.Components
             this.isReadOnly = isReadOnly;
             nameField.IsEditable = !isReadOnly;
         }
+
+        public void SetImage(string url)
+        {
+            image.SetImage(url);
+        }
         
         public void SetText(string text)
         {
             currentText = text;
             nameField.value = text;
             UpdatePlaceholder();
-        }
-
-        public async Task SetImage(string url)
-        {
-            var imageUrl = AddImageSizeParameters(url);
-            var texture = await DownloadTextureAsync(imageUrl);
-
-            if (texture == null)
-                return;
-
-            if (texture.width > MaxImageDimension || texture.height > MaxImageDimension)
-            {
-                Debug.LogError($"image has too large resolution: {texture.width}x{texture.height}");
-                return;
-            }
-
-            image.style.width = texture.width;
-            image.style.height = texture.height;
-            image.style.backgroundImage = new StyleBackground(texture);
-
-            UpdateSnapping();
-        }
-
-        private string AddImageSizeParameters(string url)
-        {
-            var uri = new Uri(url);
-            var queryParameters = QueryString.Decode(uri.Query);
-            var uriBuilder = new UriBuilder(uri);
-
-            if (int.TryParse(queryParameters.Single("w"), out var sourceWidth) &&
-                int.TryParse(queryParameters.Single("h"), out var sourceHeight))
-            {
-                int largestSide = Mathf.Max(sourceWidth, sourceHeight);
-
-                if (largestSide > MaxImageDimension)
-                {
-                    float scale = MaxImageDimension / (float)largestSide;
-
-                    int width = Mathf.Max(1, Mathf.RoundToInt(sourceWidth * scale));
-                    int height = Mathf.Max(1, Mathf.RoundToInt(sourceHeight * scale));
-
-                    uriBuilder.SetQueryParameter("w", width.ToString());
-                    uriBuilder.SetQueryParameter("h", height.ToString());
-                }
-            }
-            string format = queryParameters.Single("format")?.ToLowerInvariant();
-            if (format is not "png" and not "jpg")
-            {
-                format = "jpg";
-            }
-            uriBuilder.SetQueryParameter("format", format);
-            return uriBuilder.Uri.ToString();
-        }
-
-        private async Task<Texture2D> DownloadTextureAsync(string url)
-        {
-            using var request = UnityWebRequestTexture.GetTexture(url);
-            var operation = request.SendWebRequest();
-            var tcs = new TaskCompletionSource<bool>();
-            operation.completed += _ => tcs.TrySetResult(true);
-            await tcs.Task;
-
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Failed to download image: {request.error}");
-                return null;
-            }
-
-            return DownloadHandlerTexture.GetContent(request);
         }
 
         public void SetSnappingSide(SnappingSide snappingSide)
@@ -208,20 +145,6 @@ namespace Netherlands3D.UI.Components
             );
         }
         
-        public void SetAnnotationImage(Texture2D texture)
-        {
-            if (texture == null)
-                return;
-
-            int width = texture.width;
-            image.style.width = width;
-
-            var aspectRatio = (float)width / texture.height;
-            image.style.height = width / aspectRatio;
-
-            image.style.backgroundImage = new StyleBackground(texture);
-        }
-        
         private void UpdateContainerSize()
         {
             schedule.Execute(() =>
@@ -241,7 +164,7 @@ namespace Netherlands3D.UI.Components
             textContainer.style.backgroundColor = color;
             position.style.unityBackgroundImageTintColor = color;
             background.style.backgroundColor = color;
-            image.style.backgroundColor = color;
+            image.SetColor(color);
         }
     }
 }

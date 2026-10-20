@@ -19,10 +19,8 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Panels;
 using UnityEngine.UIElements;
-using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
