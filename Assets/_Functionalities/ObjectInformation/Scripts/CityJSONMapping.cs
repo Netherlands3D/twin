@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GltfMeshFeatures;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
@@ -8,6 +9,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using Mesh = UnityEngine.Mesh;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -26,8 +28,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private BoundingBox boundingBox;
         private CityJSONLayerGameObject visualisationParent;
         private CityObjectMeshVisualizer visualizer;
-        private Vector3 localPosition;
-        private Vector3Double localSize;
+        private Vector3Double localPosition;
         private const float kEpsilon = 0.000001f;
 
         public BoundingBox BoundingBox
@@ -40,6 +41,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
                 return boundingBox;
             }
+        }
+
+        public void SetLocalPosition(Vector3Double localPosition)
+        {
+            this.localPosition = localPosition;
         }
         
         public bool IsPositionHit(Vector3 worldPosition)
@@ -109,10 +115,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void UpdateBoundingBox()
         {
             TransformLayerPropertyData propertyData = visualisationParent.LayerData.GetProperty<TransformLayerPropertyData>();
-            Coordinate localOffset = new Coordinate(localPosition + propertyData.Position.ToUnity());
-            Coordinate rdpos = localOffset.Convert(CoordinateSystem.RDNAP);
-            Vector3Double MinExtent = new Vector3Double(rdpos.easting - localSize.x * 0.5f, rdpos.northing - localSize.y * 0.5f, rdpos.height - localSize.z * 0.5f);
-            Vector3Double MaxExtent = new Vector3Double(rdpos.easting + localSize.x * 0.5f, rdpos.northing + localSize.y * 0.5f, rdpos.height + localSize.z * 0.5f);
+            Coordinate rdpos = propertyData.Position.Convert(CoordinateSystem.RDNAP);
+            Vector3Double MinExtent = new Vector3Double(rdpos.easting, rdpos.northing, rdpos.height);
+            Vector3Double MaxExtent = new Vector3Double(rdpos.easting, rdpos.northing, rdpos.height);
+            MinExtent += localPosition;
+            MaxExtent += localPosition;
+            
+            Vector3Double size = feature.MaxExtent - feature.MinExtent;
+            MinExtent -= size * 0.5f;
+            MaxExtent += size * 0.5f;
+            
             Coordinate bottomLeft = new Coordinate(feature.CoordinateSystem, MinExtent.x, MinExtent.y, MinExtent.z);
             Coordinate topRight = new Coordinate(feature.CoordinateSystem, MaxExtent.x, MaxExtent.y, MaxExtent.z);
             boundingBox = new BoundingBox(bottomLeft, topRight ); 
@@ -121,16 +133,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void SetCityJsonLayerParent(CityJSONLayerGameObject parentLayer)
         {
             visualisationParent = parentLayer;
-            TransformLayerPropertyData propertyData = visualisationParent.LayerData.GetProperty<TransformLayerPropertyData>();
-            Vector3Double MinExtent = feature.MinExtent;
-            Vector3Double MaxExtent = feature.MaxExtent;
-            Coordinate bottomLeft = new Coordinate(feature.CoordinateSystem, MinExtent.x, MinExtent.y, MinExtent.z);
-            Coordinate topRight = new Coordinate(feature.CoordinateSystem, MaxExtent.x, MaxExtent.y, MaxExtent.z);
-            boundingBox = new BoundingBox(bottomLeft, topRight ); 
-            localSize = topRight.ToUnity() - bottomLeft.ToUnity();
-            Vector3 bboxCenter = boundingBox.Center.ToUnity();
-            Vector3 parentCenter = propertyData.Position.ToUnity();
-            localPosition = bboxCenter - parentCenter;
         }
 
         public void SetFeature(CityObject feature)
@@ -179,6 +181,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void Debug()
         {
             boundingBox.Debug(Color.blueViolet);
+            UnityEngine.Debug.DrawLine(feature.gameObject.transform.position, boundingBox.Center.ToUnity(), Color.blueViolet);
         }
     }
 }

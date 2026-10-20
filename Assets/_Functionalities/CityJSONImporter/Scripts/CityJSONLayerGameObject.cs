@@ -147,7 +147,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             CityJSONMapping objectMapping = new CityJSONMapping();
             objectMapping.SetFeature(feature);
+            objectMapping.SetLocalPosition(feature.AbsoluteCenter - cityJson.AbsoluteCenter);
             objectMapping.SetCityJsonLayerParent(this);
+            objectMapping.UpdateBoundingBox();
             SelectionService.MappingTree.RootInsert(objectMapping);
             mappings.Add(objectMapping);
         }
