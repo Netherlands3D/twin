@@ -13,7 +13,6 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class TimelineLegendPanel : VisualElement
     {
-        private Label emptyTextLabel;
         private ListView listView;
         
         private ColorPropertyData colorPropertyData;
