@@ -117,8 +117,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private bool Remove(Node node, IMapping obj)
         {
-            if (!node.Bounds.Contains(obj.BoundingBox)) return false;
-
+            //todo this check is not working correctly!
+            // if (!node.Bounds.Intersects(obj.BoundingBox))
+            //     return false;
+            
             if (node.Remove(obj))
                 return true;
 
@@ -133,7 +135,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     }
                 }
             }
-
             return false;
         }
 

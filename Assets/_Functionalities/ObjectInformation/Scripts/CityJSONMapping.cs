@@ -128,6 +128,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             Coordinate bottomLeft = new Coordinate(feature.CoordinateSystem, MinExtent.x, MinExtent.y, MinExtent.z);
             Coordinate topRight = new Coordinate(feature.CoordinateSystem, MaxExtent.x, MaxExtent.y, MaxExtent.z);
             boundingBox = new BoundingBox(bottomLeft, topRight ); 
+            
+            SelectionService.MappingTree.Remove(this);
+            SelectionService.MappingTree.RootInsert(this);
         }
         
         public void SetCityJsonLayerParent(CityJSONLayerGameObject parentLayer)
