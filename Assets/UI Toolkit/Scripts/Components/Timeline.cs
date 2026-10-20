@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Codice.CM.Common;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
 using Netherlands3D.Twin.Utility;
@@ -14,14 +13,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Timeline : VisualElement
     {
-        public event Action<int, int> TimeChanged;
-        
-        private const int RenderPadding = 50;
-        private const int ThumbScrollAreaSize = 100; 
-        private const int ThumbScrollSpeed = 100;
-        
-        private double thumbCurrentScrollSpeed = 0d;
-        private int thumbElementMaxOffsetPx = 300;
         private int scrollAreaWidthPx = 50;
         private double scrollAreaWidth = .5f;
         private double thumbScrollMinPosition = .5d;
@@ -76,11 +67,6 @@ namespace Netherlands3D.UI.Components
         private bool isSnapping;
         private TimeSpan snapStartedThumbElementTimeOffset;
 
-        private DateTime initialCurrentTime;
-        private DateTime initialStartTime;
-        private DateTime initialEndTime;
-        private double initialThumbPosition;
-        
         private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
             new (DateTimeUnit.Year, 1000),
@@ -278,8 +264,6 @@ namespace Netherlands3D.UI.Components
         {
             timelineDragInitialStartTime = startTime;
             timelineDragInitialEndTime = endTime;
-
-            initialStartTime = startTime;
         }
         
         private void OnTimelineDraggingTotal(Vector2 deltaPointerPosition)
@@ -301,13 +285,7 @@ namespace Netherlands3D.UI.Components
         private void OnThumbDragStarted(Vector2 startPointerPosition)
         {
             isThumbDrag = true;
-
-            initialCurrentTime = currentTime;
-            initialStartTime = startTime;
-            initialEndTime = endTime;
-            initialThumbPosition = thumbElement.style.left.value.value / 100d;
             
-            thumbCurrentScrollSpeed = 0;
             thumbDragInitialThumbElementPosition = thumbElement.style.left.value.value / 100d;
             OnThumbDraggingTotal(Vector2.zero);
         }
@@ -359,8 +337,6 @@ namespace Netherlands3D.UI.Components
         private void OnThumbDragEnded(Vector2 arg0)
         {
             isThumbDrag = false;
-            
-            thumbCurrentScrollSpeed = 0;
 
             currentTime = preciseCurrentTime.Round(snapInterval);
 
