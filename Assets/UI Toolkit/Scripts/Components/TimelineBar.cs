@@ -23,8 +23,10 @@ namespace Netherlands3D.UI.Components
         private int thumbElementMaxOffsetPx = 300;
         private int scrollAreaWidthPx = 50;
         private double scrollAreaWidth = .5f;
-        private double thumbMinPosition = .5d;
-        private double thumbMaxPosition = .5d;
+        private double thumbScrollMinPosition = .5d;
+        private double thumbScrollMaxPosition = .5d;
+        private double thumbMinPosition = 0d;
+        private double thumbMaxPosition = 1d;
         private double maxScrollSpeed = 1d;
        
         private readonly VisualElement marksContainer;
@@ -262,7 +264,7 @@ namespace Netherlands3D.UI.Components
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
             SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
-            var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * thumbMinPosition, startTime.Ticks + duration.Ticks * thumbMaxPosition);
+            var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * thumbScrollMinPosition, startTime.Ticks + duration.Ticks * thumbScrollMaxPosition);
             preciseCurrentTime = new DateTime(currentTicks, displayedCurrentTime.Kind);
             currentTime = preciseCurrentTime.Round(snapInterval);
             displayedCurrentTime = preciseCurrentTime;
@@ -306,8 +308,8 @@ namespace Netherlands3D.UI.Components
             currentTime = startTime.Add(thumbPosition * duration);
             markElementsUpdateRequested = true;
 
-            var minCurrentTime = PositionToTime(thumbMinPosition, startTime, endTime);
-            var maxCurrentTime = PositionToTime(thumbMaxPosition, startTime, endTime);
+            var minCurrentTime = PositionToTime(thumbScrollMinPosition, startTime, endTime);
+            var maxCurrentTime = PositionToTime(thumbScrollMaxPosition, startTime, endTime);
             
             if (currentTime < minCurrentTime || currentTime > maxCurrentTime)
             {
@@ -319,7 +321,7 @@ namespace Netherlands3D.UI.Components
                 startTime = startTime.Add(scrollOffset);
                 endTime = endTime.Add(scrollOffset);
                 thumbElementTimeOffset = currentTime - boundTime;
-                currentTime = boundTime;
+                //currentTime = boundTime;
 
                 //thumbElementOffset = scrollSpeed / scrollAreaWidth;
                 
@@ -327,7 +329,7 @@ namespace Netherlands3D.UI.Components
 
             }
             
-            preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, thumbMinPosition, thumbMaxPosition) * duration);
+            preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, 0, 1) * duration);
             currentTime = preciseCurrentTime.Round(snapInterval);
             displayedCurrentTime = preciseCurrentTime;
         }
@@ -371,12 +373,30 @@ namespace Netherlands3D.UI.Components
         }
 
         private double snapStartedRealTime;
+        private DateTime snapStartedInitialStartTime;
+        private DateTime snapStartedTargetStartTime;
+        private DateTime snapStartedInitialEndTime;
+        private DateTime snapStartedTargetEndTime;
+        
+        
 
         private void StartSnap()
         {
             isSnapping = true;
             snapStartedRealTime = Time.realtimeSinceStartupAsDouble;
             snapStartedThumbElementTimeOffset = thumbElementTimeOffset;
+            snapStartedInitialStartTime = startTime;
+            snapStartedInitialEndTime = endTime;
+            
+            var thumbScrollMinTime = PositionToTime(thumbScrollMinPosition, startTime, endTime);
+            var thumbScrollMaxTime = PositionToTime(thumbScrollMaxPosition, startTime, endTime);
+            if (currentTime < thumbScrollMinTime || currentTime > thumbScrollMaxTime)
+            {
+                var boundTime = (currentTime < thumbScrollMinTime) ? thumbScrollMinTime : thumbScrollMaxTime;
+                var offset = currentTime - boundTime;
+                snapStartedTargetStartTime = snapStartedInitialStartTime.Add(offset);
+                snapStartedTargetEndTime = snapStartedInitialEndTime.Add(offset);
+            }
         }
 
         private void UpdateSnap()
@@ -393,13 +413,21 @@ namespace Netherlands3D.UI.Components
             thumbElementTimeOffset = t >= 1d
                 ? TimeSpan.Zero
                 : snapStartedThumbElementTimeOffset * (1-eased);
+
+            startTime = t >= 1d
+                ? snapStartedTargetStartTime
+                : snapStartedInitialStartTime.Add((snapStartedTargetStartTime - snapStartedInitialStartTime) * eased);
+            
+            endTime = t >= 1d
+                ? snapStartedTargetEndTime
+                : snapStartedInitialEndTime.Add((snapStartedTargetEndTime - snapStartedInitialEndTime) * eased);
             
             
-            var minCurrentTime = PositionToTime(thumbMinPosition, startTime, endTime);
-            var maxCurrentTime = PositionToTime(thumbMaxPosition, startTime, endTime);
-            if (displayedCurrentTime < minCurrentTime || displayedCurrentTime > maxCurrentTime)
+            var thumbMinTime = PositionToTime(thumbMinPosition, startTime, endTime);
+            var thumbMaxTime = PositionToTime(thumbMaxPosition, startTime, endTime);
+            if (displayedCurrentTime < thumbMinTime || displayedCurrentTime > thumbMaxTime)
             {
-                var boundTime = (displayedCurrentTime < minCurrentTime) ? minCurrentTime : maxCurrentTime;
+                var boundTime = (displayedCurrentTime < thumbMinTime) ? thumbMinTime : thumbMaxTime;
                 var offset = displayedCurrentTime - boundTime;
                 startTime = startTime.Add(offset);
                 endTime = endTime.Add(offset);
