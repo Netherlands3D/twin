@@ -22,6 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private CityJSON cityJson;
         public CityJSON CityJson => cityJson;
+        private List<CityJSONMapping> mappings = new();
 
         protected override void OnVisualizationInitialize()
         {
@@ -55,7 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void UpdateCityObjectTransforms(Coordinate coordinate)
         {
-            foreach (var m in debugMappings)
+            foreach (var m in mappings)
             {
                 m.UpdateBoundingBox();
             }
@@ -151,6 +152,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             objectMapping.SetCityJsonLayerParent(this);
             objectMapping.UpdateBoundingBox();
             SelectionService.MappingTree.RootInsert(objectMapping);
+            mappings.Add(objectMapping);
         }
         
         protected override void OnMouseClickNothing()
