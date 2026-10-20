@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Netherlands3D.Legend;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI_Toolkit;
@@ -9,7 +7,6 @@ using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
-using ScrollView = UnityEngine.UIElements.ScrollView;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -17,12 +14,8 @@ namespace Netherlands3D.UI.Panels
     public partial class TimelineLegendPanel : VisualElement
     {
         private Label emptyTextLabel;
-        private ScrollView imageContainer;
         private ListView listView;
         
-        public LegendUrlContainer activeLegendUrlContainer;
-        public bool Visible => !ClassListContains(UtilityClassConstants.HIDDEN);
-
         private ColorPropertyData colorPropertyData;
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingPropertyData;
 
@@ -30,9 +23,6 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-
-            // emptyTextLabel = this.Q<Label>("EmptyText");
-            imageContainer = this.Q<ScrollView>("ImageListView");
             
             this.Q<ContentContainer>().CloseButtonClicked.AddListener(Close);
             
@@ -94,11 +84,6 @@ namespace Netherlands3D.UI.Panels
         public void SetVisible(bool show)
         {
             EnableInClassList(UtilityClassConstants.HIDDEN, !show);
-        }
-
-        private void ShowEmptyText(bool show)
-        {
-            emptyTextLabel.EnableInClassList(UtilityClassConstants.HIDDEN, !show);
         }
 
         private void Close()
