@@ -35,6 +35,8 @@ namespace Netherlands3D.UI.Components
         private readonly VisualElement thumbElement;
         
         private DateTime currentTime;
+        private DateTime preciseCurrentTime;
+        private DateTime displayedCurrentTime;
         private DateTime startTime;
         private DateTime endTime;
         private TimeSpan duration;
@@ -62,6 +64,8 @@ namespace Netherlands3D.UI.Components
 
         private bool markElementsUpdateRequested = false;
         private bool unitGroupsUpdateRequested = false;
+
+        private bool isSnapping;
 
         private DateTime initialCurrentTime;
         private DateTime initialStartTime;
@@ -137,6 +141,8 @@ namespace Netherlands3D.UI.Components
             set
             {
                 currentTime = value;
+                preciseCurrentTime = value;
+                displayedCurrentTime = value;
                 markElementsUpdateRequested = true;
             }
         }
@@ -203,7 +209,7 @@ namespace Netherlands3D.UI.Components
             //Set up zooming
             viewport.RegisterCallback<WheelEvent>(OnMouseWheelScrolled);
             
-            /*
+            
             //SetupTimelineDragging();
             var timelineDragManipulator = new DragManipulator(4);
             timelineDragManipulator.DragStarted.AddListener(OnTimelineDragStarted);
@@ -211,7 +217,7 @@ namespace Netherlands3D.UI.Components
             timelineDragManipulator.DragEnded.AddListener(OnTimelineDragEnded);
             viewport.pickingMode = PickingMode.Position;
             viewport.AddManipulator(timelineDragManipulator);
-            */
+            
 
             //set up scrubber
             var thumbDragManipulator = new DragManipulator(0);
@@ -227,6 +233,7 @@ namespace Netherlands3D.UI.Components
 
         private void Update()
         {
+            UpdateSnap();
             UpdateThumbDrag();
             UpdateMarks();
         }
@@ -248,14 +255,16 @@ namespace Netherlands3D.UI.Components
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
             SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
-            var currentTicks  = (long)Math.Clamp(currentTime.Ticks, startTime.Ticks + duration.Ticks * thumbMinPosition, startTime.Ticks + duration.Ticks * thumbMaxPosition);
-            currentTime = new DateTime(currentTicks, currentTime.Kind);
-            currentTime = currentTime.Round(draggingSnapInterval);
+            var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * thumbMinPosition, startTime.Ticks + duration.Ticks * thumbMaxPosition);
+            preciseCurrentTime = new DateTime(currentTicks, displayedCurrentTime.Kind);
+            currentTime = preciseCurrentTime.Round(snapInterval);
+            displayedCurrentTime = preciseCurrentTime;
             markElementsUpdateRequested = true;
         }
         
         private void OnTimelineDragEnded(Vector2 endPointerPosition)
         {
+            StartSnap();
         }
 
         private void OnThumbDragStarted(Vector2 startPointerPosition)
@@ -304,13 +313,21 @@ namespace Netherlands3D.UI.Components
                 currentTime = boundTime;
             }
             
-            currentTime = startTime.Add(Math.Clamp(thumbPosition, thumbMinPosition, thumbMaxPosition) * duration);
+            preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, thumbMinPosition, thumbMaxPosition) * duration);
+            currentTime = preciseCurrentTime.Round(snapInterval);
+            displayedCurrentTime = preciseCurrentTime;
         }
         
         private void OnThumbDragEnded(Vector2 arg0)
         {
             isThumbDrag = false;
             thumbCurrentScrollSpeed = 0;
+
+            currentTime = preciseCurrentTime.Round(snapInterval);
+
+            markElementsUpdateRequested = true;
+            
+            StartSnap();
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -336,6 +353,41 @@ namespace Netherlands3D.UI.Components
                 unitGroupsUpdateRequested = true;
             }
 
+        }
+
+        private double snapStartedRealTime;
+
+        private void StartSnap()
+        {
+            isSnapping = true;
+            snapStartedRealTime = Time.realtimeSinceStartupAsDouble;
+        }
+
+        private void UpdateSnap()
+        {
+            if (!isSnapping) return;
+            markElementsUpdateRequested = true;
+            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .2d, 0d, 1d);
+            var eased = 1d - Math.Pow(1d - t, 3d);
+            displayedCurrentTime = t >= 1d
+                ? currentTime
+                : preciseCurrentTime.AddTicks(
+                    (long)Math.Round((currentTime.Ticks - preciseCurrentTime.Ticks) * eased));
+            
+            var minCurrentTime = PositionToTime(thumbMinPosition, startTime, endTime);
+            var maxCurrentTime = PositionToTime(thumbMaxPosition, startTime, endTime);
+            if (displayedCurrentTime < minCurrentTime || displayedCurrentTime > maxCurrentTime)
+            {
+                var boundTime = (displayedCurrentTime < minCurrentTime) ? minCurrentTime : maxCurrentTime;
+                var offset = displayedCurrentTime - boundTime;
+                startTime = startTime.Add(offset);
+                endTime = endTime.Add(offset);
+            }
+            
+            UpdateThumb();
+            
+            if (t >= 1d)
+                isSnapping = false;
         }
 
         private double TimeToPosition(DateTime time, DateTime start, DateTime end)
@@ -476,7 +528,7 @@ namespace Netherlands3D.UI.Components
 
         void UpdateThumb()
         {
-            var position = (double)(currentTime.Ticks - startTime.Ticks) / duration.Ticks;
+            var position = (double)(displayedCurrentTime.Ticks - startTime.Ticks) / duration.Ticks;
             var left = Length.Percent((float)(position * 100));
             thumbElement.style.left = left;
         }
