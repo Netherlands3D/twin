@@ -37,6 +37,7 @@ namespace Netherlands3D.UI.Components
         private readonly DateTimeLabel thumbLabelElement;
         
         private DateTime currentTime;
+        private DateTime lastCurrentTime;
         private DateTime preciseCurrentTime;
         private DateTime displayedCurrentTime;
         private DateTime startTime;
@@ -543,11 +544,15 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateTimeService()
         {
-            var sunTimeService = ServiceLocator.GetService<SunTime>();
-            if (sunTimeService == null) return;
-            sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
-            sunTimeService.SetTime(currentTime);
-            sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
+            if (currentTime != lastCurrentTime)
+            {
+                var sunTimeService = ServiceLocator.GetService<SunTime>();
+                if (sunTimeService == null) return;
+                sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
+                sunTimeService.SetTime(currentTime);
+                sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
+                lastCurrentTime = currentTime;
+            }
         }
 
         private void OnSunTimeChanged(DateTime arg0)
