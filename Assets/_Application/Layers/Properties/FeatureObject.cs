@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.layers.properties
             SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)
             {
-                if (kv.Value is FeatureMapping map)
+                if (kv.Value is GeoJsonFeatureMapping map)
                 {
                     BoundingBox bbox = map.BoundingBox;
                     Dictionary<string, object> properties = map.Feature.Properties as Dictionary<string, object>;

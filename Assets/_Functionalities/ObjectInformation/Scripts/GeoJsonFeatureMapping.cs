@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class FeatureMapping : IMapping
+    public class GeoJsonFeatureMapping : IMapping
     {
         public string DebugID;
 

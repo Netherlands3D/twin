@@ -198,7 +198,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void CreateFeatureMappings(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
         {
-            FeatureMapping objectMapping = new FeatureMapping();
+            GeoJsonFeatureMapping objectMapping = new GeoJsonFeatureMapping();
             objectMapping.SetFeature(feature);
             objectMapping.SetMeshes(meshes);
             objectMapping.SetVisualisationLayer(layer);
@@ -240,9 +240,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             //we have to query first to find the corresponding featuremappings, cant do a remove right away
             //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
             IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
-            BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
-            List<IMapping> mappings = SelectionService.MappingTree.Query<FeatureMapping>(queryBoundingBox);
-            foreach (FeatureMapping mapping in mappings)
+            BoundingBox queryBoundingBox = GeoJsonFeatureMapping.CreateBoundingBoxForFeature(feature, layer);
+            List<IMapping> mappings = SelectionService.MappingTree.Query<GeoJsonFeatureMapping>(queryBoundingBox);
+            foreach (GeoJsonFeatureMapping mapping in mappings)
             {
                 if (mapping.Feature == feature)
                 {

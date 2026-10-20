@@ -14,11 +14,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     { 
         public bool HasFeatureMapping => featureMappings.Count > 0;
         
-        public List<FeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
+        public List<GeoJsonFeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
         
         private GameObject testHitPosition;
         private GameObject testGroundPosition;
-        private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
+        private Dictionary<GeoJsonLayerGameObject, List<GeoJsonFeatureMapping>> featureMappings = new();
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
         private PointerToWorldPosition pointerToWorldPosition;
@@ -28,7 +28,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
         }
 
-        public void Select(FeatureMapping mapping)
+        public void Select(GeoJsonFeatureMapping mapping)
         {
             mapping.Select(null);
         }
@@ -57,8 +57,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (blockingObjectMapping != null)
             {
                 Coordinate blockingCoordinate = new Coordinate(blockingObjectMappingHitPoint);
-                List<IMapping> potentialMappingsUnderBlockingObject = SelectionService.MappingTree.QueryMappingsContainingNode<FeatureMapping>(blockingCoordinate);
-                foreach (FeatureMapping map in potentialMappingsUnderBlockingObject)
+                List<IMapping> potentialMappingsUnderBlockingObject = SelectionService.MappingTree.QueryMappingsContainingNode<GeoJsonFeatureMapping>(blockingCoordinate);
+                foreach (GeoJsonFeatureMapping map in potentialMappingsUnderBlockingObject)
                 {
                     Vector3 hitPoint;
                     if (map.IsPositionHit(blockingCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
@@ -72,13 +72,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //ShowFeatureDebuggingIndicator(groundPosition);
 
             Coordinate targetCoordinate = new Coordinate(position);
-            List<IMapping> foundMappings = SelectionService.MappingTree.QueryMappingsContainingNode<FeatureMapping>(targetCoordinate);
-            foreach (FeatureMapping map in foundMappings)
+            List<IMapping> foundMappings = SelectionService.MappingTree.QueryMappingsContainingNode<GeoJsonFeatureMapping>(targetCoordinate);
+            foreach (GeoJsonFeatureMapping map in foundMappings)
             {
                 Vector3 hitPoint;
                 if (map.IsPositionHit(targetCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
                 {
-                    featureMappings.TryAdd(map.VisualisationParent, new List<FeatureMapping>());
+                    featureMappings.TryAdd(map.VisualisationParent, new List<GeoJsonFeatureMapping>());
                     featureMappings[map.VisualisationParent].Add(map);
                 }
             }
@@ -166,7 +166,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (HasFeatureMapping)
             {
                 List<Feature> filterDuplicates = new List<Feature>();
-                foreach (FeatureMapping feature in FeatureMappings)
+                foreach (GeoJsonFeatureMapping feature in FeatureMappings)
                 {
                     if (feature.VisualisationParent.LayerData.ActiveInHierarchy)
                     {

@@ -27,8 +27,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
         public LayerGameObject SelectedVisualisation => selectedVisualisation;
 
-        public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
-        public UnityEvent<FeatureMapping> SelectGeoJsonFeature;
+        public UnityEvent<BagMeshMapping, string> SelectSubObjectWithBagId;
+        public UnityEvent<GeoJsonFeatureMapping> SelectGeoJsonFeature;
         public UnityEvent<CityJSONMapping> SelectCityJsonMapping;
         public UnityEvent OnDeselect = new();
         public UnityEvent<LayerData> OnSelectLayer = new();
@@ -323,9 +323,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 lastSelectedMappingLayerData.DeselectLayer();
                 lastSelectedMappingLayerData = null;
             }
-            if (mapping is MeshMapping map) 
+            if (mapping is BagMeshMapping map) 
                 ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed, primary);   
-            else if (mapping is FeatureMapping geojson) 
+            else if (mapping is GeoJsonFeatureMapping geojson) 
                 ProcessGeoJsonFeatureMappingSelection(geojson);
             else if(mapping is CityJSONMapping cityjson)
                 ProcessCityJsonFeatureMappingSelection(cityjson);
@@ -333,7 +333,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 OnNoLayerSelected.Invoke();
         }
 
-        private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed, bool primary)
+        private void ProcessMeshMappingSelection(BagMeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed, bool primary)
         {
             LayerData layerData = map.LayerData;
             if (!mappingVisible)
@@ -372,7 +372,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         public void SelectBagId(string bagId, Coordinate coordinate)
         {
-            MeshMapping mapping = subObjectSelector.FindSubObjectAtCoordinate(coordinate, bagId);
+            BagMeshMapping mapping = subObjectSelector.FindSubObjectAtCoordinate(coordinate, bagId);
             if(mapping == null) return;
             
             SelectBagId(bagId, false);
@@ -381,7 +381,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             SelectSubObjectWithBagId?.Invoke(mapping, bagId);
         }
 
-        private void ProcessGeoJsonFeatureMappingSelection(FeatureMapping feature)
+        private void ProcessGeoJsonFeatureMappingSelection(GeoJsonFeatureMapping feature)
         {
             LayerData layerData = feature.VisualisationParent.LayerData;
             if(!layerData.IsSelected)
@@ -452,7 +452,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnAddObjectMapping(ObjectMapping mapping)
         {
-            MeshMapping objectMapping = new MeshMapping(mapping.name);
+            BagMeshMapping objectMapping = new BagMeshMapping(mapping.name);
             objectMapping.SetMeshObject(mapping);
             objectMapping.UpdateBoundingBox();
             objectMapping.SetSelectionMaterial(selectionMaterial);
@@ -466,8 +466,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //the getcomponent is unfortunate, if its performanc heavy maybe use cellcaching
             BoundingBox queryBoundingBox = new BoundingBox(mapping.GetComponent<MeshRenderer>().bounds);
             queryBoundingBox.Convert(CoordinateSystem.WGS84_LatLon);
-            List<IMapping> mappings = MappingTree.Query<MeshMapping>(queryBoundingBox);
-            foreach (MeshMapping map in mappings)
+            List<IMapping> mappings = MappingTree.Query<BagMeshMapping>(queryBoundingBox);
+            foreach (BagMeshMapping map in mappings)
             {
                 if (map.ObjectMapping == mapping)
                 {
@@ -496,7 +496,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private bool IsMappingVisible(IMapping mapping, string bagId)
         {
-            if (mapping is MeshMapping map)
+            if (mapping is BagMeshMapping map)
             {
                 return subObjectSelector.IsMappingVisible(map, bagId);
             }

@@ -30,6 +30,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private CityObjectMeshVisualizer visualizer;
         private Vector3Double localPosition;
         private const float kEpsilon = 0.000001f;
+        private Vector3 lastPosition;
 
         public BoundingBox BoundingBox
         {
@@ -76,7 +77,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             return false;
         }
-
        
         /// <summary>
         /// if it hits a triangle it returns a length towards the triangle (distance from the ray origin to the hit point)
@@ -115,6 +115,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void UpdateBoundingBox()
         {
             TransformLayerPropertyData propertyData = visualisationParent.LayerData.GetProperty<TransformLayerPropertyData>();
+            Vector3 unityPosition = propertyData.Position.ToUnity();
+            if(unityPosition == lastPosition) return;
+            
             Coordinate rdpos = propertyData.Position.Convert(CoordinateSystem.RDNAP);
             Vector3Double MinExtent = new Vector3Double(rdpos.easting, rdpos.northing, rdpos.height);
             Vector3Double MaxExtent = new Vector3Double(rdpos.easting, rdpos.northing, rdpos.height);
@@ -127,7 +130,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             Coordinate bottomLeft = new Coordinate(feature.CoordinateSystem, MinExtent.x, MinExtent.y, MinExtent.z);
             Coordinate topRight = new Coordinate(feature.CoordinateSystem, MaxExtent.x, MaxExtent.y, MaxExtent.z);
-            boundingBox = new BoundingBox(bottomLeft, topRight ); 
+            boundingBox = new BoundingBox(bottomLeft, topRight );
+            lastPosition = unityPosition;
             
             SelectionService.MappingTree.Remove(this);
             SelectionService.MappingTree.RootInsert(this);

@@ -13,13 +13,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     public class SubObjectSelector : MonoBehaviour, IObjectSelector
     {
         public bool HasObjectMapping => foundObject != null;
-        public MeshMapping Object => foundObject; 
+        public BagMeshMapping Object => foundObject; 
 
-        private MeshMapping foundObject;
+        private BagMeshMapping foundObject;
 
         private PointerToWorldPosition pointerToWorldPosition;
         private Dictionary<string, bool> blockedBagIds = new Dictionary<string, bool>();
-        private Dictionary<MeshMapping, List<string>> selectedMappings = new();
+        private Dictionary<BagMeshMapping, List<string>> selectedMappings = new();
 
         private void Awake()
         {
@@ -28,7 +28,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void UpdateReplacedSelectedMappings()
         {
-            var keysToReplace = new List<MeshMapping>();
+            var keysToReplace = new List<BagMeshMapping>();
             foreach (var kvp in selectedMappings)
             {
                 if (kvp.Key.ObjectMapping == null)
@@ -36,7 +36,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             foreach (var oldKey in keysToReplace)
             {
-                MeshMapping replacedMapping = ServiceLocator.GetService<SelectionService>().GetReplacedMapping(oldKey);
+                BagMeshMapping replacedMapping = ServiceLocator.GetService<SelectionService>().GetReplacedMapping(oldKey);
                 if(replacedMapping == null) continue;
                 
                 if (selectedMappings.TryGetValue(oldKey, out var oldList))
@@ -102,7 +102,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             selectedMappings.Clear();
         }
         
-        public bool IsMappingVisible(MeshMapping mapping, string bagId)
+        public bool IsMappingVisible(BagMeshMapping mapping, string bagId)
         {
             LayerFeature feature = GetLayerFeatureFromBagID(bagId, mapping, out LayerGameObject layer);
             if (feature != null)
@@ -119,7 +119,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             layer = null;
-            if (selectedMapping is not MeshMapping mapping) return null;
+            if (selectedMapping is not BagMeshMapping mapping) return null;
             if(mapping.ObjectMapping == null) return null;
 
             layer = GetLayerGameObjectFromMapping(selectedMapping);
@@ -129,14 +129,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public LayerGameObject GetLayerGameObjectFromMapping(IMapping mapping)
         {
-            if (mapping is FeatureMapping featureMapping)
+            if (mapping is GeoJsonFeatureMapping featureMapping)
             {
                 return featureMapping.VisualisationLayer as LayerGameObject;
             }
 
-            if (mapping is MeshMapping meshMapping)
+            if (mapping is BagMeshMapping meshMapping)
             {
-                MeshMapping map = meshMapping;
+                BagMeshMapping map = meshMapping;
                 if (meshMapping.ObjectMapping == null)                    
                 {
                     //when tile is replacing lod the objectmapping can be missing
@@ -165,17 +165,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             string bagId = null;
             Vector3 groundPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
             Coordinate coord = new Coordinate(groundPosition);
-            List<IMapping> mappings = SelectionService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
+            List<IMapping> mappings = SelectionService.MappingTree.QueryMappingsContainingNode<BagMeshMapping>(coord);
             if (mappings.Count == 0)
                 return bagId;
             
-            foreach (MeshMapping mapping in mappings)
+            foreach (BagMeshMapping mapping in mappings)
             { 
                 LayerData data = mapping.LayerData;
                 if (data == null || !data.ActiveInHierarchy)
                     continue;
                 
-                MeshMappingItem item = mapping.FindItemForPosition(groundPosition);
+                BagMeshMappingItem item = mapping.FindItemForPosition(groundPosition);
                 if (item != null)
                 {
                     if(IsMappingVisible(mapping, item.ObjectMappingItem.objectID) == false)
@@ -189,10 +189,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return bagId;
         }
         
-        public MeshMapping FindSubObjectAtCoordinate(Coordinate coordinate, string bagId)
+        public BagMeshMapping FindSubObjectAtCoordinate(Coordinate coordinate, string bagId)
         {
-            List<IMapping> mappings = SelectionService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coordinate);
-            foreach (MeshMapping mapping in mappings)
+            List<IMapping> mappings = SelectionService.MappingTree.QueryMappingsContainingNode<BagMeshMapping>(coordinate);
+            foreach (BagMeshMapping mapping in mappings)
             { 
                 LayerData data = mapping.LayerData;
                 if (data == null || !data.ActiveInHierarchy)
@@ -214,10 +214,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void HideSelectedMappings()
         {
             SelectionService selector = ServiceLocator.GetService<SelectionService>();
-            foreach(KeyValuePair<MeshMapping, List<string>> selectedMapping in selectedMappings.ToList())
+            foreach(KeyValuePair<BagMeshMapping, List<string>> selectedMapping in selectedMappings.ToList())
             {
                 LayerGameObject layer;
-                MeshMapping mapping = selectedMapping.Key;
+                BagMeshMapping mapping = selectedMapping.Key;
                 if (mapping.ObjectMapping == null)
                     mapping = selector.GetReplacedMapping(mapping);
 
