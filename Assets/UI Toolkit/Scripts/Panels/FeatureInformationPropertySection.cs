@@ -9,7 +9,7 @@ using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Newtonsoft.Json.Linq;
-using SimpleJSON;
+using SimpleJSON; //todo when cityjson attributes will not use simplejson, convert also the parsing methods to flatten arrays also to newtonsoft
 using UnityEngine;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
