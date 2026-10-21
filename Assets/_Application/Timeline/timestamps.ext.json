@@ -1,10 +1,10 @@
 {
   "type": "CityJSONExtension",
   "name": "Timestamps",
-  "uri": "https://example.com/extensions/timestamps.ext.json",
+  "url": "https://github.com/Netherlands3D/twin/blob/main/Assets/_Application/Timeline/timestamps.ext.json",
   "version": "1.0",
   "versionCityJSON": "2.0",
-  "description": "Adds a list of named timestamps (e.g. start and end dates) as an attribute on city objects.",
+  "description": "Adds a list of named timestamps as an attribute to city objects.",
   "definitions": {
     "timestampList": {
       "type": "array",
@@ -22,21 +22,10 @@
   },
   "extraAttributes": {
     "Bridge": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BridgePart": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BridgeInstallation": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BridgeConstructiveElement": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BridgeRoom": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BridgeFurniture": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "Building": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BuildingPart": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BuildingInstallation": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BuildingConstructiveElement": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BuildingFurniture": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BuildingStorey": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BuildingRoom": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "BuildingUnit": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "CityFurniture": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "CityObjectGroup": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "GenericCityObject": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "LandUse": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "OtherConstruction": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "PlantCover": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
@@ -46,11 +35,30 @@
     "Railway": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "Road": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "Tunnel": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "WaterBody": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "Waterway": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    
+    "BridgePart": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BridgeInstallation": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BridgeConstructiveElement": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BridgeRoom": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BridgeFurniture": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    
+    "BuildingPart": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BuildingInstallation": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BuildingConstructiveElement": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BuildingFurniture": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BuildingStorey": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BuildingRoom": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    "BuildingUnit": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
+    
     "TunnelPart": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "TunnelInstallation": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "TunnelConstructiveElement": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
     "TunnelHollowSpace": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "TunnelFurniture": { "+timestamps": { "$ref": "#/definitions/timestampList" } },
-    "WaterBody": { "+timestamps": { "$ref": "#/definitions/timestampList" } }
-  }
+    "TunnelFurniture": { "+timestamps": { "$ref": "#/definitions/timestampList" } }
+  },
+  "extraCityObjects": {},
+  "extraRootProperties": {},
+  "extraSemanticSurfaces": {}
 }
