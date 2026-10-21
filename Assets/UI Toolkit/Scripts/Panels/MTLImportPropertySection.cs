@@ -21,7 +21,7 @@ namespace Netherlands3D.UI.Panels
             Error
         }
         
-        private FileOpen fileOpen;
+        private FileImportService importService;
         
         private ColorPropertyData stylingPropertyData;
         private OBJPropertyData objPropertyData;
@@ -38,8 +38,8 @@ namespace Netherlands3D.UI.Panels
 
             importButton = this.Q<Button>();
             importButton.RegisterCallback<ClickEvent>(StartImport);
-            fileOpen = ServiceLocator.GetService<FileOpen>();
-            fileOpen.onFilesSelected.AddListener(ImportMtl);
+            importService = ServiceLocator.GetService<FileImportService>();
+            importService.onFilesSelected.AddListener(ImportMtl);
 
             defaultImportPanel = this.Q<VisualElement>("ImportMTLSection");
             errorPanel = this.Q<ErrorPanelContent>();
@@ -53,13 +53,13 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            fileOpen.onFilesSelected.RemoveListener(ImportMtl);
+            importService.onFilesSelected.RemoveListener(ImportMtl);
             objPropertyData.MtlImportSuccess.RemoveListener(OnMTLImportCompleted);
         }
 
         private void StartImport(ClickEvent evt)
         {
-            fileOpen.OpenFile("mtl");
+            importService.OpenFile("mtl");
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
