@@ -1,10 +1,47 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Utility
 {
     public static class DateTimeUtils
     {
+        public static DateTime ToDateTime(this Length length, DateTime startTime, DateTime endTime, double ticksPerPixel)
+        {
+            if (length.unit == LengthUnit.Pixel)
+            {
+                return length.ToDateTime(startTime, ticksPerPixel);
+            } else if (length.unit == LengthUnit.Percent)
+            {
+                return length.ToDateTime(startTime, endTime);
+            }
+            throw new Exception();
+        }
+
+        public static DateTime ToDateTime(this Length length, DateTime startTime, double ticksPerPixel)
+        {
+            if (length.unit != LengthUnit.Pixel)
+            {
+                throw new Exception();
+            }
+            return startTime.AddTicks((long)Math.Round(length.value * ticksPerPixel));
+        }
+        
+        public static DateTime ToDateTime(this Length length, DateTime startTime, DateTime endTime)
+        {
+            if (length.unit != LengthUnit.Percent)
+            {
+                throw new Exception();
+            }
+            return startTime.Add((endTime - startTime)*length.value*0.01d);
+        }
+
+        public static Length ToLength(this DateTime time, DateTime startTime, double ticksPerPixel)
+        {
+            return new Length();
+        }
+        
+        
         public static double GetDateTimeUnitCountBetween(this DateTimeUnit timeUnit, DateTime startTime, DateTime endTime, double timeUnitFactor = 1)
         {
             var unitCount = timeUnit switch
@@ -199,44 +236,47 @@ namespace Netherlands3D.Twin.Utility
             return dateTime;
         }
 
-        public static DateTime Round(this DateTime dateTime, DateTimeInterval interval)
+        public static DateTime Round(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
         {
-            var unitValue = dateTime.GetUnitValue(interval.TimeUnit);
-            var roundedUnitValue = Math.Round(unitValue / interval.Amount) * interval.Amount;
+            var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(rootTime, time, interval.Amount);
+
+            var previousIntervalIndex = Math.Floor(intervalCount);
+
+            var previous = rootTime.Add(new DateTimeInterval(interval.TimeUnit, previousIntervalIndex * interval.Amount));
+
+            var next = rootTime.Add(new DateTimeInterval(interval.TimeUnit, (previousIntervalIndex + 1) * interval.Amount));
+
+            return Math.Abs(time.Ticks - previous.Ticks)
+                   < Math.Abs(next.Ticks - time.Ticks)
+                ? previous
+                : next;
+        }
+        
+        
+        public static DateTime RoundDown(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
+        {
+            var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(rootTime, time, interval.Amount);
             
-            var baseDateTime = interval.TimeUnit switch
-            {
-                DateTimeUnit.Year => new DateTime(1, 1, 1, 0, 0, 0, dateTime.Kind),
-                DateTimeUnit.Month => new DateTime(dateTime.Year, 1, 1, 0, 0, 0, dateTime.Kind),
-                DateTimeUnit.Day => new DateTime(dateTime.Year, dateTime.Month, 1, 0, 0, 0, dateTime.Kind),
-                DateTimeUnit.Hour => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, dateTime.Kind),
-                DateTimeUnit.Minute => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 0, 0, dateTime.Kind),
-                DateTimeUnit.Second => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind),
-                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
-            };
+            var previousIndex = Math.Floor(intervalCount);
 
-            return baseDateTime.Add(new DateTimeInterval(interval.TimeUnit, roundedUnitValue));
+            return rootTime.Add(new DateTimeInterval(
+                interval.TimeUnit, previousIndex * interval.Amount));
         }
-        
-        
-        public static DateTime RoundDown(this DateTime dateTime, DateTimeInterval interval)
+
+        private static DateTime GetBaseTime(this DateTime time,  DateTimeUnit timeUnit, DateTime rootTime = default)
         {
-            var unitValue = dateTime.GetUnitValue(interval.TimeUnit);
-            var roundedUnitValue = Math.Floor(unitValue / interval.Amount) * interval.Amount;
-
-            var baseDateTime = interval.TimeUnit switch
+            return timeUnit switch
             {
-                DateTimeUnit.Year => new DateTime(1, 1, 1, 0, 0, 0, dateTime.Kind),
-                DateTimeUnit.Month => new DateTime(dateTime.Year, 1, 1, 0, 0, 0, dateTime.Kind),
-                DateTimeUnit.Day => new DateTime(dateTime.Year, dateTime.Month, 1, 0, 0, 0, dateTime.Kind),
-                DateTimeUnit.Hour => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, dateTime.Kind),
-                DateTimeUnit.Minute => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 0, 0, dateTime.Kind),
-                DateTimeUnit.Second => new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, dateTime.Kind),
-                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
+                DateTimeUnit.Year => new DateTime(1, rootTime.Month, rootTime.Day, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Month => new DateTime(time.Year, 1, rootTime.Day, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Day => new DateTime(time.Year, time.Month, 1, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Hour => new DateTime(time.Year, time.Month, time.Day, 0, rootTime.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Minute => new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, rootTime.Second, time.Kind),
+                DateTimeUnit.Second => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, 0, time.Kind),
+                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), timeUnit, null)
             };
-
-            return baseDateTime.Add(new DateTimeInterval(interval.TimeUnit, roundedUnitValue));
         }
+
 
         public static double GetUnitValue(this DateTime dateTime, DateTimeUnit timeUnit)
         {

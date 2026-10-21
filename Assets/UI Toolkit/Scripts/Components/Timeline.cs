@@ -15,8 +15,10 @@ namespace Netherlands3D.UI.Components
     {
         private int scrollAreaWidthPx = 50;
         private double scrollAreaWidth = .5f;
-        private double thumbScrollMinPosition = .5d;
-        private double thumbScrollMaxPosition = .5d;
+
+        private double thumbScrollMinPosition = .3d;
+        private double thumbScrollMaxPosition = .7d;
+        
         private double thumbMinPosition = 0d;
         private double thumbMaxPosition = 1d;
         private double maxScrollSpeed = 1d;
@@ -34,6 +36,7 @@ namespace Netherlands3D.UI.Components
         private DateTime lastCurrentTime;
         private DateTime preciseCurrentTime;
         private DateTime displayedCurrentTime;
+        private DateTime rootTime; //used for snapping
         private DateTime startTime;
         private DateTime endTime;
         private TimeSpan duration;
@@ -79,13 +82,10 @@ namespace Netherlands3D.UI.Components
             new (DateTimeUnit.Year, 5),
             new (DateTimeUnit.Year, 2),
             new (DateTimeUnit.Year, 1),
-            new (DateTimeUnit.Month, 6),
             new (DateTimeUnit.Month, 3),
-            new (DateTimeUnit.Month, 2),
             new (DateTimeUnit.Month, 1),
-            new (DateTimeUnit.Month, 1/2f),
-            new (DateTimeUnit.Month, 1/4f),
-            new (DateTimeUnit.Month, 1/8f),
+            new (DateTimeUnit.Month, 1/3f),
+            new (DateTimeUnit.Month, 1/6f),
             new (DateTimeUnit.Day, 1),
             new (DateTimeUnit.Hour, 12),
             new (DateTimeUnit.Hour, 6),
@@ -159,10 +159,12 @@ namespace Netherlands3D.UI.Components
                 currentTime = value;
                 preciseCurrentTime = value;
                 displayedCurrentTime = value;
+                rootTime = value;
                 markElementsUpdateRequested = true;
             }
         }
         
+        [UxmlAttribute]
         public DateTimeUnit UnitContext
         {
             get => unitContext;
@@ -174,6 +176,7 @@ namespace Netherlands3D.UI.Components
             }
         }
         
+        [UxmlAttribute]
         public DateTimeUnit UnitPrecision
         {
             get => unitPrecision;
@@ -257,7 +260,18 @@ namespace Netherlands3D.UI.Components
         
         private void OnMouseWheelScrolled(WheelEvent evt)
         {
-            //todo: zoom in and out
+            const float zoomSensitivity = 0.05f;
+            var scrollDirection = -evt.delta.y;
+            var zoomMultiplier = Mathf.Pow(2.0f, zoomSensitivity * scrollDirection);
+
+            var startSpan = (currentTime - startTime);
+            var endSpan = (endTime - currentTime);
+            
+            startTime = currentTime - startSpan * zoomMultiplier;
+            endTime = currentTime + endSpan * zoomMultiplier;
+            duration = new TimeSpan(endTime.Ticks - startTime.Ticks);
+            markElementsUpdateRequested = true;
+            unitGroupsUpdateRequested = true;
         }
         
         private void OnTimelineDragStarted(Vector2 startPointerPosition)
@@ -272,7 +286,7 @@ namespace Netherlands3D.UI.Components
             SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
             var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * thumbScrollMinPosition, startTime.Ticks + duration.Ticks * thumbScrollMaxPosition);
             preciseCurrentTime = new DateTime(currentTicks, displayedCurrentTime.Kind);
-            currentTime = preciseCurrentTime.Round(snapInterval);
+            currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
             displayedCurrentTime = preciseCurrentTime;
             markElementsUpdateRequested = true;
         }
@@ -330,7 +344,7 @@ namespace Netherlands3D.UI.Components
             }
             
             preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, 0, 1) * duration);
-            currentTime = preciseCurrentTime.Round(snapInterval);
+            currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
             displayedCurrentTime = preciseCurrentTime;
         }
         
@@ -338,7 +352,7 @@ namespace Netherlands3D.UI.Components
         {
             isThumbDrag = false;
 
-            currentTime = preciseCurrentTime.Round(snapInterval);
+            currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
 
             markElementsUpdateRequested = true;
             
@@ -383,8 +397,8 @@ namespace Netherlands3D.UI.Components
             isSnapping = true;
             snapStartedRealTime = Time.realtimeSinceStartupAsDouble;
             snapStartedThumbElementTimeOffset = thumbElementTimeOffset;
-            snapStartedInitialStartTime = startTime;
-            snapStartedInitialEndTime = endTime;
+            snapStartedInitialStartTime = snapStartedTargetStartTime = startTime;
+            snapStartedInitialEndTime = snapStartedTargetEndTime = endTime;
             
             var thumbScrollMinTime = PositionToTime(thumbScrollMinPosition, startTime, endTime);
             var thumbScrollMaxTime = PositionToTime(thumbScrollMaxPosition, startTime, endTime);
@@ -483,6 +497,7 @@ namespace Netherlands3D.UI.Components
                 unitGroupsUpdateRequested = false;
                 marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start,
                     end, maxMarkElements);
+                snapInterval = marksInterval;
                 labelsInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision,
                     start, end, maxLabelElements);
             }
@@ -543,6 +558,8 @@ namespace Netherlands3D.UI.Components
 
                 labelElement.style.display = DisplayStyle.Flex;
                 labelElement.style.left = left;
+                labelElement.Context = labelsInterval.TimeUnit;
+                labelElement.Precision = labelsInterval.TimeUnit;
                 labelElement.Value = labelTime;
                 labelElement.style.opacity = new StyleFloat(1f);
 
@@ -583,8 +600,7 @@ namespace Netherlands3D.UI.Components
 
         private void OnSunTimeChanged(DateTime arg0)
         {
-            currentTime = arg0;
-            markElementsUpdateRequested = true;
+            CurrentValue = arg0;
         }
 
         void UpdateThumb()

@@ -85,7 +85,7 @@ namespace Netherlands3D.UI.Components
             var timeParts = new List<string>(3);
             
             if (Includes(DateTimeUnit.Day)) dateParts.Add("%d");
-            if (Includes(DateTimeUnit.Month)) dateParts.Add("MMMM");
+            if (Includes(DateTimeUnit.Month)) dateParts.Add("MMM");
             if (Includes(DateTimeUnit.Year)) dateParts.Add("yyyy");
 
             if (Includes(DateTimeUnit.Hour)) timeParts.Add("HH");
