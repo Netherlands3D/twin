@@ -63,15 +63,7 @@ namespace Netherlands3D.Twin.layers.properties
                 else if (kv.Value is CityJSONMapping city)
                 {
                     BoundingBox bbox = city.BoundingBox;
-                    Dictionary<string, CityObjectAttribute> attributes = city.Feature.Attributes as Dictionary<string, CityObjectAttribute>;
-                    Dictionary<string, object> properties = new Dictionary<string, object>();
-                    if (attributes != null)
-                    {
-                        foreach (var attribute in attributes)
-                        {
-                            properties[attribute.Key] = attribute.Value.GetJSONValue();
-                        }
-                    }
+                    Dictionary<string, object> properties = city.Feature.GetProperties();
                     FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
                     data.Properties = properties;
                     data.BoundingBox = bbox;

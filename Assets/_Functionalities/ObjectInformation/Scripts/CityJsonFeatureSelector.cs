@@ -14,8 +14,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public bool HasFeatureMapping => featureMappings.Count > 0;
         public List<CityJSONMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
         
-        private GameObject testHitPosition;
-        private GameObject testGroundPosition;
         private Dictionary<CityJSONLayerGameObject, List<CityJSONMapping>> featureMappings = new();
         private Vector3 blockingObjectMappingHitPoint;
         private ObjectMapping blockingObjectMapping;

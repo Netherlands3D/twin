@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using GltfMeshFeatures;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
@@ -31,6 +30,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private Vector3Double localPosition;
         private const float kEpsilon = 0.000001f;
         private Vector3 lastPosition;
+        private int previousLayerMask;
 
         public BoundingBox BoundingBox
         {
@@ -58,7 +58,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             );
 
             UpdateVisualizer();
-            Transform meshTransform = visualizer.MeshFilter.gameObject.transform;
+            Transform meshTransform = visualizer.gameObject.transform;
             
             foreach (Mesh mesh in meshes)
             {
@@ -155,8 +155,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 meshes = visualizer.GetAllMeshes();
             }
         }
-
-        private int previousLayerMask;
         public void Select(string subId = null)
         {
             UpdateVisualizer();
@@ -189,11 +187,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             
         }
-
+#if UNITY_EDITOR
         public void Debug()
         {
             boundingBox.Debug(Color.blueViolet);
             UnityEngine.Debug.DrawLine(feature.gameObject.transform.position, boundingBox.Center.ToUnity(), Color.blueViolet);
         }
+#endif
     }
 }

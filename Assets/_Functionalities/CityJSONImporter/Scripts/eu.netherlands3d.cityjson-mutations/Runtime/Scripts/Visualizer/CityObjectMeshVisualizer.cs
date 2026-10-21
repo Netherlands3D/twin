@@ -51,7 +51,7 @@ namespace Netherlands3D.CityJson.Visualisation
     [RequireComponent(typeof(MeshRenderer))]
     public class CityObjectMeshVisualizer : CityObjectVisualizer
     {
-        public MeshFilter MeshFilter => meshFilter;
+      
         
         private static int meshesCreatedThisFrame = 0;
         private const int maxMeshesPerFrame = 20;
@@ -66,7 +66,8 @@ namespace Netherlands3D.CityJson.Visualisation
         public int ActiveLod => activeLOD;
         public Mesh ActiveMesh { get; private set; }
 
-        private bool addMeshCollider = false;
+        //enabling the meshcollider will cause the cityjson to not be selectable with the quadtree
+        [SerializeField] private bool addMeshCollider = false;
         [SerializeField] private CityMaterialConverter materialConverter;
 
         public override Material[] Materials => meshRenderer.materials;
