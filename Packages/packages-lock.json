@@ -478,6 +478,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "eu.netherlands3d.simplejson": {
+      "version": "file:eu.netherlands3d.simplejson",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.snapshots": {
       "version": "file:eu.netherlands3d.snapshots",
       "depth": 0,
