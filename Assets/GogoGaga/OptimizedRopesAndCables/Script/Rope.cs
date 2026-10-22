@@ -74,8 +74,13 @@ namespace GogoGaga.OptimizedRopesAndCables
         
         
         public bool IsPrefab => gameObject.scene.rootCount == 0;
-        
+
         private void Start()
+        {
+            Init();
+        }
+
+        public void Init()
         {
             InitializeLineRenderer();
             if (AreEndPointsValid())

@@ -124,7 +124,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cdcf22a491277ce0ab1e4bb664c90fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Functionalities.ObjectLibrary.ElectricityPole
-  Connectors: []
+  ropeMaterial: {fileID: 2100000, guid: 1813c5b85524d4d9e842442713b84434, type: 2}
+  Connectors:
+  - {fileID: 938570610676316399}
+  - {fileID: 8430868374875963086}
+  - {fileID: 637172144015934100}
+  - {fileID: 622769478378608071}
+  - {fileID: 6894255859657240613}
+  - {fileID: 7574574816855921237}
 --- !u!1001 &5521774249214407847
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -202,6 +209,42 @@ PrefabInstance:
 --- !u!4 &579166002335764851 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4947437311112914388, guid: 6fd63ee1087c09246b29346d3ed1bfeb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5521774249214407847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &622769478378608071 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4901550161247117664, guid: 6fd63ee1087c09246b29346d3ed1bfeb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5521774249214407847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &637172144015934100 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4289967967379458509, guid: 6fd63ee1087c09246b29346d3ed1bfeb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5521774249214407847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &938570610676316399 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4492568691406713784, guid: 6fd63ee1087c09246b29346d3ed1bfeb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5521774249214407847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6894255859657240613 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7850872279694801790, guid: 6fd63ee1087c09246b29346d3ed1bfeb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5521774249214407847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7574574816855921237 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6503475185595455758, guid: 6fd63ee1087c09246b29346d3ed1bfeb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5521774249214407847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8430868374875963086 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4152668994095843945, guid: 6fd63ee1087c09246b29346d3ed1bfeb,
     type: 3}
   m_PrefabInstance: {fileID: 5521774249214407847}
   m_PrefabAsset: {fileID: 0}

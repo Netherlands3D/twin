@@ -11,6 +11,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
     public class ConnectableHierarchicalLayerPropertyData : LayerPropertyData
     {
         [DataMember] private LayerData target;
+
+        [JsonIgnore] private Transform[] connectors;
         
         [JsonIgnore]
         public LayerData Target
@@ -22,7 +24,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
                 OnTargetChanged.Invoke(target);
             }
         }
+        
+        public Transform[] Connectors
+        {
+            get => connectors;
+            set
+            {
+                connectors = value;
+            }
+        }
 
         [JsonIgnore] public readonly UnityEvent<LayerData> OnTargetChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Transform[]> OnConnectorsChanged = new();
     }
 }
