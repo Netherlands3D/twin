@@ -1,0 +1,109 @@
+@import url("TextField-style.uss");
+
+.number-field {
+    flex-direction: row;
+    align-items: stretch;
+    height: var(--spacing-8);
+    margin: 0;
+}
+
+/* Left label container */
+.number-field__label {
+    min-width: var(--spacing-8);
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-1);
+
+    background-color: var(--color-blue-200);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-200);
+
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
+}
+
+.number-field__label-text {
+    margin: 0;
+    -unity-text-align: middle-center;
+}
+
+/* Number input field */
+.number-field__input {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: var(--spacing-16);
+}
+
+.number-field .textfield .unity-base-text-field__input {
+    padding: var(--spacing-1) var(--spacing-2);
+    border-width: var(--spacing-0_5);
+    border-left-width: 0;
+    border-color: var(--color-blue-200);
+    background-color: var(--color-white);
+
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+}
+
+.number-field .textfield.no-label .unity-base-text-field__input {
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
+    border-left-width: var(--spacing-0_5);
+}
+
+.number-field .textfield .unity-base-text-field__input:hover {
+    background-color: var(--color-blue-100);
+}
+
+.number-field .textfield TextElement {
+    -unity-text-align: middle-right;
+}
+
+.number-field .textfield.no-label TextElement {
+    -unity-text-align: middle-center;
+}
+
+/* Disabled */
+.number-field:disabled {
+    opacity: 1;
+}
+
+.number-field .number-field__label:disabled {
+    background-color: var(--color-white);
+}
+
+.number-field:disabled .number-field__label-text {
+    color: var(--color-blue-200);
+}
+
+/* Variant for Small style */
+.number-field.number-field--style-small {
+    width: var(--spacing-24);
+    min-width: var(--spacing-12);
+    height: var(--spacing-7);
+}
+
+.number-field.number-field--style-small .number-field__label {
+    padding: var(--spacing-1);
+    width: var(--spacing-6);
+    min-width: var(--spacing-6);
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-md);
+}
+
+.number-field.number-field--style-small .textfield .unity-base-text-field__input {
+    padding: var(--spacing-1);
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+}
+
+.number-field.number-field--style-small .textfield {
+    min-height: var(--spacing-7);
+}
+
+
+.number-field.number-field--style-small .textfield TextElement {
+    -unity-text-align: middle-left;
+}

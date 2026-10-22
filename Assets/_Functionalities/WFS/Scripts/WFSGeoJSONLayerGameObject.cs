@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials.StoredAuthorization;
@@ -18,6 +19,10 @@ namespace Netherlands3D.Functionalities.Wfs
         public override BoundingBox Bounds => cartesianTileWFSLayer?.BoundingBox;
 
         public WFSGeoJSONTileDataLayer CartesianTileWFSLayer => cartesianTileWFSLayer;
+        
+        //The following is needed to send a valid GetFeature request to check for credentials. We don't want to waste many resources, so request only 1 feature
+        public const string testBBox = "0,300000,280000,625000";
+        private static readonly Regex CountRegex = new(@"([?&])count=\d+", RegexOptions.IgnoreCase);
 
         protected override void OnVisualizationInitialize()
         {
@@ -27,7 +32,11 @@ namespace Netherlands3D.Functionalities.Wfs
 
         protected override void UpdateURL(Uri storedUri)
         {
-            base.UpdateURL(storedUri);
+            string testUrl = storedUri.ToString().Replace("{0}", testBBox);
+            // Add or replace count to limit resource usage
+            testUrl = CountRegex.IsMatch(testUrl) ? CountRegex.Replace(testUrl, "${1}count=1") : testUrl + "&count=1";
+
+            base.UpdateURL(new Uri(testUrl));
             cartesianTileWFSLayer.WfsUrl = storedUri.ToString();
         }
 

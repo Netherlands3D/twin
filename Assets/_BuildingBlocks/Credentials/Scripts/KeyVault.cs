@@ -21,7 +21,8 @@ namespace Netherlands3D.Credentials
 
         public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationTypeDetermined = new();
         public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationTypeDeterminationFailed = new();
-
+        public UnityEvent<string, string> UntestedQueryStringAuthFound = new ();
+        
         public Dictionary<string, Type> expectedAuthorizationTypes = new()
         {
             { "tile.googleapis.com", typeof(Key) },
@@ -77,6 +78,7 @@ namespace Netherlands3D.Credentials
                 .StartCoroutine(TryFindAuthorization(inputUri, username, passwordOrKey));
         }
 
+       
         private IEnumerator TryFindAuthorization(Uri inputUri, string username, string passwordOrKey)
         {
             Uri domain = new Uri(inputUri.GetLeftPart(UriPartial.Path));
@@ -87,6 +89,9 @@ namespace Netherlands3D.Credentials
                 if (log) Debug.Log(
                     $"Found potential query key type in url: {potentialAuthorisation.GetType()} with key {potentialAuthorisation.QueryKeyValue}"
                 );
+                
+                //this event is triggered just to give back the pre authorized query parameters
+                UntestedQueryStringAuthFound.Invoke(potentialAuthorisation.QueryKeyName, potentialAuthorisation.QueryKeyValue);
                 
                 var request = TrySupportedAuthorization(potentialAuthorisation, inputUri);
                 
@@ -125,6 +130,7 @@ namespace Netherlands3D.Credentials
             if (log) Debug.Log("This url either has invalid credentials, or we don't support the credential type: " + inputUri);
             OnAuthorizationTypeDetermined.Invoke(new FailedOrUnsupported(inputUri));
         }
+
 
         private bool TryToFindAuthorizationInUriQuery(Uri uri, out QueryStringAuthorization potentialAuthorisation)
         {

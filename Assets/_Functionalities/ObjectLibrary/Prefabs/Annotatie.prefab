@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3322842894136088838}
+  - component: {fileID: 3911686655617183084}
   - component: {fileID: -18391829949753534}
   - component: {fileID: 8026439383914201504}
   - component: {fileID: 5901895080740193470}
@@ -34,6 +35,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3911686655617183084
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937650689336427930}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-18391829949753534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,16 +90,7 @@ MonoBehaviour:
   prefabIdentifier: 292690ace10994ff5bd502be1f5a5bf2
   thumbnail: {fileID: 11400000, guid: 266c50999165c4f81a1d93d2ffa9f307, type: 2}
   spawnLocation: 0
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
+  VisualisationError:
     m_PersistentCalls:
       m_Calls: []
   DebugBoundingBox: 0
@@ -85,9 +98,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scaleUnitCharacter: '%'
-  popoutPrefab: {fileID: 1268885788563908924, guid: 0c75754029f6c6940848c9f8bfe7edb9,
-    type: 3}
-  layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  debug: 0
+  debugMaterial: {fileID: 2100000, guid: 32d66cb461963494c8545032b6d11bd0, type: 2}
 --- !u!114 &5901895080740193470
 MonoBehaviour:
   m_ObjectHideFlags: 0

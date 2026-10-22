@@ -524,7 +524,7 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
-            Vector3 position = pointer.GetWorldPoint();
+            Vector3 position = pointer.GetWorldPointUsingHeightMap();
             rotateTarget = new Coordinate(position);
             zoomTarget = new Coordinate(position);
             dragStart = position;

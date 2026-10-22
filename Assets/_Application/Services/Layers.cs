@@ -10,14 +10,29 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Services
 {
-    public class Layers : MonoBehaviour, ILayersServiceFacade
+    public class Layers : MonoBehaviour
     {
         [SerializeField] private PrefabLibrary prefabLibrary;
         [SerializeField] private DataTypeChain fromUrlImporter;
         private VisualizationSpawner spawner;
-
+        
         public UnityEvent<LayerData> LayerAdded { get; } = new();
-        public UnityEvent<LayerData> LayerRemoved { get; } = new();
+        
+        // <summary>
+        /// Invoked when a layer is removed.
+        /// </summary>
+        /// <remarks>
+        /// Arguments:
+        /// <list type="bullet">
+        /// <item><see cref="LayerData"/>: the removed layer.</item>
+        /// <item>
+        /// <see cref="bool"/> (<c>isRemovalRoot</c>): <c>true</c> when this is the
+        /// top-level layer being removed; <c>false</c> for recursively removed descendants.
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public UnityEvent<LayerData, bool> LayerRemoved { get; } = new();
+        public UnityEvent<LayerGameObject> VisualizationCreated = new();
 
         private void Awake()
         {
@@ -106,8 +121,18 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public void Remove(LayerData layerData)
         {
-            layerData.Dispose();
-            LayerRemoved.Invoke(layerData);
+            RemoveRecursive(layerData, true);
+        }
+
+        private void RemoveRecursive(LayerData layerData, bool isRemovalRoot)
+        {
+            for (var i = layerData.ChildrenLayers.Count - 1; i >= 0; i--)
+            {
+                RemoveRecursive(layerData.ChildrenLayers[i], false);
+            }
+            
+            layerData.Destroy();
+            LayerRemoved.Invoke(layerData, isRemovalRoot);
         }
 
         public Layer VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
@@ -116,8 +141,8 @@ namespace Netherlands3D.Twin.Services
             Visualize(layer, spawner, callback);
             return layer;
         }
-
-        private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
+        
+        private async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
         {
             try
             {
@@ -129,10 +154,13 @@ namespace Netherlands3D.Twin.Services
                 }
 
                 var visualization = await visualizationTask;
+                VisualizationCreated.Invoke(visualization);
 
                 if (layer.LayerData == null || layer.LayerData.IsDisposed)
                 {
-                    Debug.Log("Layer " + layer.LayerData.Name + " was disposed before the visualisation was spawned, destroying the visualisation");
+                    var errorMessage = "Layer " + layer.LayerData.Name + " was disposed before the visualisation was spawned, destroying the visualisation";
+                    Debug.Log(errorMessage);
+                    visualization.SendErrorMessage(errorMessage);
                     Destroy(visualization.gameObject);
                     return;
                 }

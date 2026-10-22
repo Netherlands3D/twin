@@ -10,16 +10,14 @@ using UnityEngine.Events;
 using Netherlands3D.JavascriptConnection;
 #endif
 
-public class FileOpen : MonoBehaviour
+public class FileOpen : MonoBehaviour //todo: the FileOpener prefab should no longer rely on the scriptable event after transition to UI Toolkit
 {
-    private Button button;
-
     [DllImport("__Internal")]
     [UsedImplicitly]
     private static extern void BrowseForFile(string inputFieldName);
 
-    [Tooltip("Allowed file input selections")] [SerializeField]
-    private string fileExtentions = "csv";
+    // [Tooltip("Allowed file input selections")] [SerializeField]
+    // private string fileExtentions = "csv"; //todo: when transition to UI toolkit is complete, the serialized extensions should be able to be deleted and passed from the UI component
 
     [Tooltip("Allowed selection multiple files")] [SerializeField]
     private bool multiSelect = false;
@@ -27,55 +25,59 @@ public class FileOpen : MonoBehaviour
     public UnityEvent<string> onFilesSelected = new();
 
 #if !UNITY_EDITOR && UNITY_WEBGL
-    private string fileInputName;
+    private string fileInputName = string.Empty;
     private FileInputIndexedDB javaScriptFileInputHandler;
+    private DrawHTMLOverCanvas javaScriptInput;
 #endif
-
-    private void Awake()
-    {
-        button = GetComponent<Button>();
-    }
 
     private void Start()
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
-        javaScriptFileInputHandler = FindObjectOfType<FileInputIndexedDB>(true);
-        if (javaScriptFileInputHandler == null)
+        CreateJavaScriptImporter();
+#endif
+    }
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+    private void CreateJavaScriptImporter()
+    {
+        fileInputName = "_" + gameObject.GetInstanceID();
+
+        var existingHandler = FindObjectOfType<FileInputIndexedDB>(true);
+        if (existingHandler != null)
+        {
+            javaScriptFileInputHandler = existingHandler;
+        }
+        else
         {
             GameObject go = new GameObject("UserFileUploads");
             javaScriptFileInputHandler = go.AddComponent<FileInputIndexedDB>();
         }
 
-        // Set file input name with generated id to avoid html conflicts
-        fileInputName += "_" + gameObject.GetInstanceID();
-        name = fileInputName;
-
-        DrawHTMLOverCanvas javascriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
-        javascriptInput.SetupInput(fileInputName, fileExtentions, multiSelect);
-
-        // if button is null, no visual element is attached and we should prevent the DrawHTMLOverCanvas from actually
-        // drawing something over the whole canvas. We still need the HTML input element though as that triggers the
-        // file upload dialog in `OpenFile()`
-        javascriptInput.AlignObjectID(fileInputName, button != null);
-#else
-        if (button) button.onClick.AddListener(OpenFile);
-#endif
+        // Each FileOpen gets its own DrawHTMLOverCanvas and HTML input element
+        javaScriptInput = gameObject.AddComponent<DrawHTMLOverCanvas>();
+        javaScriptInput.AlignObjectID(fileInputName, false);
     }
 
-#if !UNITY_EDITOR && UNITY_WEBGL
-    public void ClickNativeButton()
+    private void SetJavaScriptFileExtensions(string fileExtentions)
     {
-        javaScriptFileInputHandler.SetCallbackAddress(SendResults);
+        javaScriptInput.SetupInput(fileInputName, fileExtentions, multiSelect);
     }
+    
 #endif
+
+    public void ClickNativeButton() //called in the jslib
+    {
+    }
 
     /// <summary>
     /// Opens the File browser to pick a file to import
     /// </summary>
-    public void OpenFile()
+    public void OpenFile(string fileExtentions)
     {
 #if !UNITY_EDITOR && UNITY_WEBGL
-        BrowseForFile("_" + gameObject.GetInstanceID());
+        javaScriptFileInputHandler.SetCallbackAddress(SendResults);
+        SetJavaScriptFileExtensions(fileExtentions);
+        BrowseForFile(fileInputName);
 #else
         string[] fileExtentionNames = fileExtentions.Split(',');
         ExtensionFilter[] extentionfilters = new ExtensionFilter[1];

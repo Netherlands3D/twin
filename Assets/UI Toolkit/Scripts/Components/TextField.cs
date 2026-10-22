@@ -1,4 +1,6 @@
 using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -24,6 +26,7 @@ namespace Netherlands3D.UI.Components
         }
 
         private TextFieldStyle fieldStyle = TextFieldStyle.Normal;
+
         [UxmlAttribute("textfield-style")]
         public TextFieldStyle Style
         {
@@ -37,28 +40,67 @@ namespace Netherlands3D.UI.Components
         }
 
         private string labelText = string.Empty;
+
         [UxmlAttribute("label")]
         public string LabelText
         {
             get => label;
-            set { labelText = value; label = value ?? string.Empty; }
+            set
+            {
+                labelText = value;
+                label = value ?? string.Empty;
+            }
         }
 
         private TextStyle textStyle = TextStyle.Base;
+
         [UxmlAttribute("text-style")]
         public TextStyle Typography
         {
             get => textStyle;
-            set { textStyle = value; UpdateClassList(); }
+            set
+            {
+                textStyle = value;
+                UpdateClassList();
+            }
         }
 
         /// <summary>Masks input characters when true.</summary>
         private bool password = false;
+
         [UxmlAttribute("password")]
         public bool Password
         {
             get => password;
-            set { password = value; isPasswordField = password; }
+            set
+            {
+                password = value;
+                isPasswordField = password;
+            }
+        }
+
+        private int caretIndex;
+        private int selectionStart;
+        private int selectionEnd;
+
+        public string CachedSelection { get; private set; } = "";
+
+        public int CaretIndex
+        {
+            get { return caretIndex; }
+            set { caretIndex = value; }
+        }
+
+        public int SelectionStart
+        {
+            get { return selectionStart; }
+            set { selectionStart = value; }
+        }
+
+        public int SelectionEnd
+        {
+            get { return selectionEnd; }
+            set { selectionEnd = value; }
         }
 
         public TextField()
@@ -66,13 +108,30 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                ApplyStyleVariant();
-                UpdateClassList();
-            });
+            ApplyStyleVariant();
+            UpdateClassList();
+            var textInput = this.Q("unity-text-input"); // internal TextInput element
+            textInput.RegisterCallback<KeyUpEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
+            textInput.RegisterCallback<PointerDownEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
+            textInput.RegisterCallback<PointerUpEvent>(e => UpdateInput(), TrickleDown.TrickleDown);
+            textInput.RegisterCallback<PointerCaptureOutEvent>(e => UpdateInput());
         }
-        
+
+        private void UpdateInput()
+        {
+            CaretIndex = this.cursorIndex;
+            SelectionStart = this.selectIndex;
+            SelectionEnd = this.cursorIndex;
+
+            int start = Mathf.Min(SelectionStart, SelectionEnd);
+            int end = Mathf.Max(SelectionStart, SelectionEnd);
+
+            if (!string.IsNullOrEmpty(value) && start < end && end <= value.Length)
+                CachedSelection = value.Substring(start, end - start);
+            else
+                CachedSelection = "";
+        }
+
         /// <summary>
         /// Ensures reasonable defaults per style. Keeps label text even when label is visually hidden,
         /// so it can serve as an accessible name or for debugging/QA.
@@ -84,13 +143,18 @@ namespace Netherlands3D.UI.Components
                 if (string.IsNullOrEmpty(LabelText)) LabelText = "Label";
             }
         }
-        
+
         private void UpdateClassList()
         {
             this.RemoveFromClassListStartingWith("text-");
             AddToClassList("text-" + textStyle.ToString().ToKebabCase());
             this.RemoveFromClassListStartingWith("textfield-style-");
             AddToClassList("textfield-style-" + fieldStyle.ToString().ToKebabCase());
+        }
+
+        public void SetText(string text)
+        {
+            this.text = text;
         }
     }
 }

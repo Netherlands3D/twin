@@ -1,126 +1,207 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Netherlands3D.Catalogs;
-using Netherlands3D.Twin;
-using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI_Toolkit.Scripts.Panels;
+using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI_Toolkit.Scripts.Panels;
+using System.Linq;
+using System.Threading.Tasks;
+using Netherlands3D.UI_Toolkit;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
 
 namespace Netherlands3D.UI.Panels
 {
-    [UxmlElement]
+    [UxmlElement, InspectorPanel]
     public partial class AssetLibraryPanel : BaseInspectorContentPanel
     {
-        public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.Library;
+        public override string Title => "Bibliotheek";
         
         private AssetLibrary.AssetLibrary assetLibrary;
         private ListView listView;
-        private ListView ListView => listView ??= this.Q<ListView>();
         private Breadcrumb breadcrumb;
-        private Breadcrumb Breadcrumb => breadcrumb ??= this.Q<Breadcrumb>();
-
-        public Action<ICatalogItem> OnOpenCatalogItem;
+        private Button importButton;
         
-        public AssetLibraryPanel()
+        public AssetLibraryPanel(){}
+        public AssetLibraryPanel(AssetLibrary.AssetLibrary assetLibrary) : this()
         {
+            this.assetLibrary = assetLibrary;
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
 
-            OnShow += () => EnableInClassList("active", true);
-            OnHide += () => EnableInClassList("active", false);
+            listView = this.Q<ListView>();
+            breadcrumb = this.Q<Breadcrumb>();
+            importButton = this.Q<Button>("ImportButton");
+            importButton.RegisterCallback<ClickEvent>(ImportAssets);
 
             // Virtualization and selection
-            ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            ListView.selectionType = SelectionType.None;
+            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            listView.selectionType = SelectionType.Multiple;
 
-            ListView.makeItem = MakeListViewItem;
-            ListView.bindItem = BindListViewItem;
-            Breadcrumb.CrumbClicked += OnBreadcrumbClicked;
+            listView.makeItem = MakeListViewItem;
+            listView.bindItem = BindListViewItem;
+            breadcrumb.CrumbClicked += OnBreadcrumbClicked;
+
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                LoadCatalog(assetLibrary.Catalog);
+            });
+            listView.selectionChanged += objects =>
+            {
+                var items = listView.itemsSource.Cast<ICatalogItem>().ToList();
+
+                var validIndices = listView.selectedIndices
+                    .Where(i => IsImportable(items[i]))
+                    .ToList();
+
+                if (validIndices.Count != listView.selectedIndices.Count())
+                {
+                    listView.SetSelection(validIndices);
+                    return;
+                }
+
+                UpdateImportButton();
+            };
         }
-
-        public override string GetTitle() => "Toevoegen";
 
         public async void LoadCatalog(ICatalog catalog)
         {
-            Breadcrumb.ClearCrumbs();
+            breadcrumb.ClearCrumbs();
+            listView.ClearSelection();
 
             // TODO: Until we officially support pagination - set the page limit to the max of 1000
             var pagination = new Pagination(0, 1000);
             
-            var catalogItemCollection = await Load(async () => await catalog.BrowseAsync(pagination));
+            var catalogItemCollection = await catalog.BrowseAsync(pagination);
             await OpenFolder("Bibliotheek", catalogItemCollection);
-        }
-
-        private async Task<T> Load<T>(Func<Task<T>> callback)
-        {
-            // TODO: show loader
-            var result = await callback();
-            // TODO: Close loader
-
-            return result;
-        }
-
-        private async Task OpenAsset(ICatalogItem catalogItem)
-        {
-            switch (catalogItem)
-            {
-                case ICatalog catalog: 
-                    var catalogItemCollection = await Load(async () => await catalog.BrowseAsync());
-                    await OpenFolder(catalog.Title, catalogItemCollection);
-                    return;
-                case ICatalogItemCollection collection: await OpenFolder(catalogItem.Title, collection); return;
-                default: OnOpenCatalogItem?.Invoke(catalogItem); break;
-            }
         }
 
         private async Task OpenFolder(string title, ICatalogItemCollection catalogItemCollection)
         {
-            Breadcrumb.AddCrumb(title, catalogItemCollection);
+            breadcrumb.AddCrumb(title, catalogItemCollection);
+            listView.ClearSelection();
             await LoadItemsIntoListView(catalogItemCollection);
         }
 
         private async void OnBreadcrumbClicked(int _, Breadcrumb.Crumb crumb)
         {
+            listView.ClearSelection();
             await LoadItemsIntoListView(crumb.Target as ICatalogItemCollection);
         }
 
         private async Task LoadItemsIntoListView(ICatalogItemCollection catalogItemCollection)
         {
-            var currentCatalogItems = await Load(catalogItemCollection.GetItemsAsync);
+            var currentCatalogItems = await catalogItemCollection.GetItemsAsync();
 
-            ListView.itemsSource = currentCatalogItems.ToList();
-            ListView.RefreshItems();
+            listView.itemsSource = currentCatalogItems.ToList();
+            listView.RefreshItems();
         }
 
         private VisualElement MakeListViewItem()
-        {
-            var button = new Button { name = "LayerButton" };
-            var listViewItem = new ListViewItem(button);
-            button.RegisterCallback<ClickEvent>(_ => OpenAsset(button.userData as ICatalogItem));
-            
+        { 
+            var assetLibraryListViewItem = new AssetLibraryListViewItem();
+            var listViewItem = new ListViewItem(assetLibraryListViewItem);
+            listViewItem.RegisterCallback<ClickEvent>(async _ =>
+            {
+                if (listViewItem.userData is not ICatalogItem item)
+                    return;
+
+                switch (item)
+                {
+                    case ICatalog catalog:
+                        {                            
+                            await OpenFolder(catalog.Title, await catalog.BrowseAsync());
+                            break;
+                        }
+
+                    case ICatalogItemCollection collection:
+                        {
+                            await OpenFolder(item.Title, collection);
+                            break;
+                        }
+                }
+            });
             return listViewItem;
+        }
+
+        private void ImportAssets(ClickEvent evt)
+        {
+            var selectedItems = listView.selectedItems
+                .Cast<ICatalogItem>()
+                .ToList();
+
+            foreach (var item in selectedItems)
+            {
+                switch (item)
+                {
+                    case RecordItem recordItem: assetLibrary.Load(recordItem); 
+                        break;
+                    case DataService dataService: assetLibrary.Trigger(dataService);
+                        break;
+                    default:
+                        Debug.LogError(
+                            $"Tried to open catalog item with type {item.GetType().Name}, but this is not a record item"
+                        );
+                        break;
+                }
+            }
+        }
+
+        private bool IsImportable(ICatalogItem catalogItem)
+        {
+            return  catalogItem is RecordItem || catalogItem is DataService;
+        }
+
+        private void UpdateImportButton()
+        {
+            var selectedItems = listView.selectedItems
+                .Cast<ICatalogItem>()
+                .ToList();
+            
+            importButton.EnableInClassList(UtilityClassConstants.HIDDEN, selectedItems.Count == 0);
         }
 
         private void BindListViewItem(VisualElement item, int index)
         {
             if (item is not ListViewItem listViewItem) return;
-            if (listViewItem.Q<Button>() is not Button button) return;
-            
-            ICatalogItem catalogItem = ListView.itemsSource[index] as ICatalogItem;
-            button.LabelText = catalogItem.Title;
+
+            AssetLibraryListViewItem assetItem = listViewItem.Q<AssetLibraryListViewItem>();
+
+            ICatalogItem catalogItem = listView.itemsSource[index] as ICatalogItem;
+            assetItem.LabelText = catalogItem.Title;
             var icon = catalogItem switch
             {
-                ICatalogItemCollection => IconImage.Folder,
-                ICatalog => IconImage.Library,
-                _ => IconImage.Map
+                ICatalogItemCollection => IconImage.FOLDER,
+                ICatalog => IconImage.LIBRARY,
+                _ => IconImage.MAP
             };
-            button.Image = icon;
-            button.userData = catalogItem;
+
+            RecordItem recordItem = catalogItem as RecordItem;
+            if(recordItem != null)
+            {
+                if (recordItem.Url != null)
+                {
+                    if (recordItem.Url.IsRemoteAsset())
+                        icon = IconImage.LINK;
+                    else
+                    {
+                        string prefabId = recordItem.Url.AbsolutePath.Trim('/');
+                        icon = LayerTypeSpriteLibrary.GetIconImage(prefabId);
+                    }
+                }
+                else
+                {
+                    //todo add a type of icon when this is happening
+                    icon = IconImage.WARNING;
+                }
+            }
+
+            assetItem.Image = icon;
+            listViewItem.userData = catalogItem;
         }
     }
 }

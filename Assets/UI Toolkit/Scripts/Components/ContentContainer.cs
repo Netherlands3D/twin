@@ -1,7 +1,8 @@
-using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI;
+using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -23,7 +24,10 @@ namespace Netherlands3D.UI.Components
         // Elements from UXML
         private Icon leadingIcon => this.Q<Icon>("LeadingIcon");
         private HelpButton helpButton => this.Q<HelpButton>("HelpButton");
-
+        private DropDown dropDown => this.Q<DropDown>("DropDown");
+        private CloseButton closeButton => this.Q<CloseButton>("CloseButton");
+        public UnityEvent CloseButtonClicked = new UnityEvent();
+        
         public enum ContainerType
         {
             Foldout,
@@ -31,7 +35,6 @@ namespace Netherlands3D.UI.Components
         }
 
         private ContainerType containerType = ContainerType.Foldout;
-        private const string HideCheckmarkClass = "hide-checkmark";
 
         public enum ContainerStyle
         {
@@ -88,12 +91,13 @@ namespace Netherlands3D.UI.Components
             set
             {
                 showDivider = value;
+                EnsureDividerPosition();
                 SetDividerVisibility();
             }
         }
 
         [UxmlAttribute("leading-icon")]
-        public IconImage LeadingIconImage
+        public string LeadingIconImage
         {
             get => leadingIcon.Image;
             set => leadingIcon.Image = value;
@@ -113,6 +117,60 @@ namespace Netherlands3D.UI.Components
             }
         }
 
+        private bool showDropDown;
+        
+        [UxmlAttribute("show-dropdown")]
+        public bool ShowDropDown
+        {
+            get => showDropDown;
+            set
+            {
+                showDropDown = value;
+                UpdateIcons();
+                ReorderHeaderChildren();
+            }
+        }
+        
+        private bool showCloseButton = false;
+        [UxmlAttribute("show-close-button")]
+        public bool ShowCloseButton
+        {
+            get => showCloseButton;
+            set
+            {
+                showCloseButton = value;
+                UpdateIcons();
+                ReorderHeaderChildren();
+            }
+        }
+        
+        public int DropDownValue => dropDown.choices.IndexOf(dropDown.value);
+
+        public void SetDropdownValues(List<string> values)
+        {
+            if(values == null || values.Count == 0) return;
+            
+            dropDown.SetValueIcons(values);
+            var choiceStrings = values.Select(value => value.ToString()).ToList();
+            dropDown.choices = choiceStrings;
+            SetDropdownValue(0); 
+        }
+
+        public void SetDropdownValue(int value)
+        {
+            dropDown.SetValue(value);
+        }
+
+        public void AddDropDownListener(UnityAction<int> listener)
+        {
+            dropDown.DropDownValueChanged.AddListener(listener);
+        }
+
+        public void RemoveDropDownListener(UnityAction<int> listener)
+        {
+            dropDown.DropDownValueChanged.RemoveListener(listener);
+        }
+
         private string helpUrl;
         private VisualElement headerDivider;
 
@@ -126,6 +184,13 @@ namespace Netherlands3D.UI.Components
                 if (helpButton != null)
                     helpButton.HelpUrl = value;
             }
+        }
+
+        [UxmlAttribute("help-tooltip")]
+        public string HelpTooltip
+        {
+            get => helpButton.tooltip;
+            set => helpButton.tooltip = value;
         }
 
         public ContentContainer()
@@ -154,6 +219,8 @@ namespace Netherlands3D.UI.Components
                 if (!string.IsNullOrEmpty(helpUrl) && helpButton != null)
                     helpButton.HelpUrl = helpUrl;
             });
+            
+            closeButton.RegisterCallback<ClickEvent>(evt => CloseButtonClicked.Invoke());
         }
 
         /// <summary>
@@ -170,13 +237,17 @@ namespace Netherlands3D.UI.Components
             if (leadingIcon != null && leadingIcon.parent != input) input.Add(leadingIcon);
             if (label != null && label.parent != input) input.Add(label);
             if (helpButton != null && helpButton.parent != input) input.Add(helpButton);
+            if(dropDown != null && dropDown.parent != input) input.Add(dropDown);
             if (check.parent != input) input.Add(check);
+            if(closeButton != null && closeButton.parent != input) input.Add(closeButton);
 
             int i = 0;
             if (leadingIcon != null) input.Insert(i++, leadingIcon);
             if (label != null) input.Insert(i++, label);
             if (helpButton != null) input.Insert(i++, helpButton);
-            input.Insert(i, check);
+            if(dropDown != null) input.Insert(i++, dropDown);
+            input.Insert(i++, check);
+            if (closeButton != null) input.Insert(i++, closeButton);
         }
 
         /// <summary>
@@ -197,7 +268,7 @@ namespace Netherlands3D.UI.Components
             // Mouse-interaction off when NoFoldout
             var check = Checkmark;
             if (check != null)
-                check.EnableInClassList(HideCheckmarkClass, containerType == ContainerType.NoFoldout);
+                check.EnableInClassList(UtilityClassConstants.HIDDEN, containerType == ContainerType.NoFoldout);
         }
 
         /// <summary>
@@ -206,35 +277,45 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void EnsureDividerPosition()
         {
-            if (headerDivider == null)
-            {
-                headerDivider = new VisualElement { name = "Divider" };
-                headerDivider.AddToClassList("divider");
-                headerDivider.AddToClassList("divider-header");
-            }
+            if (headerDivider != null)
+                return;
+
+            headerDivider = new VisualElement { name = "Divider" };
+            headerDivider.AddToClassList("divider");
+            headerDivider.AddToClassList("divider-header");
             if (headerDivider.parent != contentContainer)
             {
                 contentContainer.Insert(0, headerDivider);
             }
+
+            headerDivider.EnableInClassList(UtilityClassConstants.HIDDEN, !showDivider);
         }
 
-        /// <summary>
-        /// Divider visibility is controlled only by showDivider.
-        /// Foldout collapse/expand already hides/shows the entire content container.
-        /// </summary>
+        // /// <summary>
+        // /// Divider visibility is controlled only by showDivider.
+        // /// Foldout collapse/expand already hides/shows the entire content container.
+        // /// </summary>
         private void SetDividerVisibility()
         {
-            EnableInClassList("divider-active", showDivider);
+            headerDivider.EnableInClassList(UtilityClassConstants.HIDDEN, !showDivider);
         }
 
         private void UpdateIcons()
         {
             bool showLeading = (containerStyle == ContainerStyle.WithIcon);
             if (leadingIcon != null)
-                leadingIcon.style.display = showLeading ? DisplayStyle.Flex : DisplayStyle.None;
+                leadingIcon.EnableInClassList(UtilityClassConstants.HIDDEN, !showLeading);
 
             if (helpButton != null)
-                helpButton.style.display = showHelpIcon ? DisplayStyle.Flex : DisplayStyle.None;
+                helpButton.EnableInClassList(UtilityClassConstants.HIDDEN, !showHelpIcon);
+            
+            if(dropDown != null)
+                dropDown.EnableInClassList(UtilityClassConstants.HIDDEN, !showDropDown);
+
+            ApplyContainerType();
+            
+            if(closeButton != null)
+                closeButton.EnableInClassList(UtilityClassConstants.HIDDEN, !showCloseButton);
         }
     }
 }

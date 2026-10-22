@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.Layers
 {
-    [PropertySection(typeof(FirstPersonLayerPropertyData))]
+    [PropertySection(typeof(FirstPersonLayerPropertyData), PropertySectionCategory.Settings)]
     public class FirstPersonPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         private FirstPersonLayerPropertyData firstPersonData;

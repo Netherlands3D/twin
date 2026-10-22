@@ -6,12 +6,14 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class PropertySectionAttribute : Attribute
     {
         public Type RequiredPropertyType { get; }
-        public string SubType { get; }
+        public PropertySectionCategory Category { get; }
+        public int Order { get; }
 
-        public PropertySectionAttribute(Type requiredPropertyType, string subType = null)
+        public PropertySectionAttribute(Type requiredPropertyType,  PropertySectionCategory category, int order = 0)
         {
             RequiredPropertyType = requiredPropertyType;
-            SubType = subType;
+            Category = category;
+            Order = order;
         }
     }
 }

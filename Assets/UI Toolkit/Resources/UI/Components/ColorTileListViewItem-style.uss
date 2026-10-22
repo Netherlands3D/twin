@@ -1,0 +1,37 @@
+.color-tile-listview-item {
+    flex-direction: row;
+    align-items: center;
+    transition-property: background-color;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in;
+}
+
+.color-tile-listview-item > * {
+    align-items: stretch;
+}
+
+.color-tile-listview-item .icon {
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
+}
+
+
+.color-tile-listview-item.unity-list-view__item {
+    background-color: transparent;
+}
+
+.color-tile-listview-item.unity-list-view__item:hover {
+    background-color: transparent;
+}
+
+.color-tile-listview-item.unity-collection-view__item {
+    background-color: transparent;
+}
+
+.color-tile-listview-item.unity-collection-view__item:hover {
+    background-color: var(--color-blue-700-hover);    
+}
+
+.color-tile-listview-item:checked{
+    background-color: var(--color-selection);
+}

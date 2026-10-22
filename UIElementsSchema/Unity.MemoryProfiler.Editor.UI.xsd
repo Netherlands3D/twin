@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Accessibility" elementFormDefault="qualified" targetNamespace="Unity.MemoryProfiler.Editor.UI" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
-  <xs:complexType name="DetailedSizeBarType">
+  <xs:complexType name="MemoryBarElementType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -23,54 +23,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DetailedSizeBar" substitutionGroup="engine:VisualElement" xmlns:q1="Unity.MemoryProfiler.Editor.UI" type="q1:DetailedSizeBarType" />
-  <xs:complexType name="DeltaBarCellType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DeltaBarCell" substitutionGroup="engine:VisualElement" xmlns:q2="Unity.MemoryProfiler.Editor.UI" type="q2:DeltaBarCellType" />
-  <xs:complexType name="BackgroundPatternType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="1" name="scale" type="xs:float" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BackgroundPattern" substitutionGroup="engine:VisualElement" xmlns:q3="Unity.MemoryProfiler.Editor.UI" type="q3:BackgroundPatternType" />
+  <xs:element name="MemoryBarElement" substitutionGroup="engine:VisualElement" xmlns:q1="Unity.MemoryProfiler.Editor.UI" type="q1:MemoryBarElementType" />
   <xs:complexType name="ProgressBarType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -93,30 +46,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ProgressBar" substitutionGroup="engine:VisualElement" xmlns:q4="Unity.MemoryProfiler.Editor.UI" type="q4:ProgressBarType" />
-  <xs:complexType name="AllTrackedMemoryDescriptionCellType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="AllTrackedMemoryDescriptionCell" substitutionGroup="engine:VisualElement" xmlns:q5="Unity.MemoryProfiler.Editor.UI" type="q5:AllTrackedMemoryDescriptionCellType" />
+  <xs:element name="ProgressBar" substitutionGroup="engine:VisualElement" xmlns:q2="Unity.MemoryProfiler.Editor.UI" type="q2:ProgressBarType" />
   <xs:complexType name="ToolbarDropDownButtonType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -150,8 +80,8 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ToolbarDropDownButton" substitutionGroup="engine:VisualElement" xmlns:q6="Unity.MemoryProfiler.Editor.UI" type="q6:ToolbarDropDownButtonType" />
-  <xs:complexType name="ActivityIndicatorOverlayType">
+  <xs:element name="ToolbarDropDownButton" substitutionGroup="engine:VisualElement" xmlns:q3="Unity.MemoryProfiler.Editor.UI" type="q3:ToolbarDropDownButtonType" />
+  <xs:complexType name="DeltaBarCellType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -173,19 +103,8 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ActivityIndicatorOverlay" substitutionGroup="engine:VisualElement" xmlns:q7="Unity.MemoryProfiler.Editor.UI" type="q7:ActivityIndicatorOverlayType" />
-  <xs:simpleType name="ObjectOrTypeLabel_type_Type">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="PureCSharpType" />
-      <xs:enumeration value="NativeUnityType" />
-      <xs:enumeration value="UnifiedUnityType" />
-      <xs:enumeration value="ManagedObject" />
-      <xs:enumeration value="NativeObject" />
-      <xs:enumeration value="UnifiedUnityObject" />
-      <xs:enumeration value="LeakedShell" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="ObjectOrTypeLabelType">
+  <xs:element name="DeltaBarCell" substitutionGroup="engine:VisualElement" xmlns:q4="Unity.MemoryProfiler.Editor.UI" type="q4:DeltaBarCellType" />
+  <xs:complexType name="UnityObjectsDescriptionCellType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -200,10 +119,6 @@
         <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="UnifiedUnityObject" name="type" xmlns:q8="Unity.MemoryProfiler.Editor.UI" type="q8:ObjectOrTypeLabel_type_Type" use="optional" />
-        <xs:attribute default="" name="managed-type-name" type="xs:string" use="optional" />
-        <xs:attribute default="" name="native-type-name" type="xs:string" use="optional" />
-        <xs:attribute default="" name="native-object-name" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
@@ -211,7 +126,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ObjectOrTypeLabel" substitutionGroup="engine:VisualElement" xmlns:q9="Unity.MemoryProfiler.Editor.UI" type="q9:ObjectOrTypeLabelType" />
+  <xs:element name="UnityObjectsDescriptionCell" substitutionGroup="engine:VisualElement" xmlns:q5="Unity.MemoryProfiler.Editor.UI" type="q5:UnityObjectsDescriptionCellType" />
   <xs:complexType name="ActivityIndicatorType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -234,8 +149,8 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ActivityIndicator" substitutionGroup="engine:VisualElement" xmlns:q10="Unity.MemoryProfiler.Editor.UI" type="q10:ActivityIndicatorType" />
-  <xs:complexType name="RibbonButtonType">
+  <xs:element name="ActivityIndicator" substitutionGroup="engine:VisualElement" xmlns:q6="Unity.MemoryProfiler.Editor.UI" type="q6:ActivityIndicatorType" />
+  <xs:complexType name="CountDeltaCellType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -245,22 +160,11 @@
         <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
         <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
         <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
         <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
         <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="text" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enable-rich-text" type="xs:boolean" use="optional" />
-        <xs:attribute default="true" name="emoji-fallback-support" type="xs:boolean" use="optional" />
-        <xs:attribute default="false" name="parse-escape-sequences" type="xs:boolean" use="optional" />
-        <xs:attribute default="false" name="selectable" type="xs:boolean" use="optional" />
-        <xs:attribute default="true" name="double-click-selects-word" type="xs:boolean" use="optional" />
-        <xs:attribute default="true" name="triple-click-selects-line" type="xs:boolean" use="optional" />
-        <xs:attribute default="true" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="icon-image" type="xs:string" use="optional" />
-        <xs:attribute default="false" name="toggled" type="xs:boolean" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
@@ -268,7 +172,86 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="RibbonButton" substitutionGroup="engine:VisualElement" xmlns:q11="Unity.MemoryProfiler.Editor.UI" type="q11:RibbonButtonType" />
+  <xs:element name="CountDeltaCell" substitutionGroup="engine:VisualElement" xmlns:q7="Unity.MemoryProfiler.Editor.UI" type="q7:CountDeltaCellType" />
+  <xs:complexType name="DetailedSizeBarType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DetailedSizeBar" substitutionGroup="engine:VisualElement" xmlns:q8="Unity.MemoryProfiler.Editor.UI" type="q8:DetailedSizeBarType" />
+  <xs:complexType name="AllTrackedMemoryDescriptionCellType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AllTrackedMemoryDescriptionCell" substitutionGroup="engine:VisualElement" xmlns:q9="Unity.MemoryProfiler.Editor.UI" type="q9:AllTrackedMemoryDescriptionCellType" />
+  <xs:simpleType name="InfoBox_issue-level_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Info" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="Error" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="InfoBoxType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="Info" name="issue-level" xmlns:q10="Unity.MemoryProfiler.Editor.UI" type="q10:InfoBox_issue-level_Type" use="optional" />
+        <xs:attribute default="Info about something&#xA;That may or may not be interesting" name="message" type="xs:string" use="optional" />
+        <xs:attribute default="" name="documentation-link" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InfoBox" substitutionGroup="engine:VisualElement" xmlns:q11="Unity.MemoryProfiler.Editor.UI" type="q11:InfoBoxType" />
   <xs:simpleType name="Ribbon_alignment_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Auto" />
@@ -305,14 +288,19 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="Ribbon" substitutionGroup="engine:VisualElement" xmlns:q13="Unity.MemoryProfiler.Editor.UI" type="q13:RibbonType" />
-  <xs:simpleType name="InfoBox_issue-level_Type">
+  <xs:simpleType name="ObjectOrTypeLabel_type_Type">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Info" />
-      <xs:enumeration value="Warning" />
-      <xs:enumeration value="Error" />
+      <xs:enumeration value="PureCSharpType" />
+      <xs:enumeration value="NativeUnityType" />
+      <xs:enumeration value="UnifiedUnityType" />
+      <xs:enumeration value="ManagedObject" />
+      <xs:enumeration value="NativeObject" />
+      <xs:enumeration value="UnifiedUnityObject" />
+      <xs:enumeration value="GCHandle" />
+      <xs:enumeration value="LeakedShell" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="InfoBoxType">
+  <xs:complexType name="ObjectOrTypeLabelType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -327,9 +315,10 @@
         <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="Info" name="issue-level" xmlns:q14="Unity.MemoryProfiler.Editor.UI" type="q14:InfoBox_issue-level_Type" use="optional" />
-        <xs:attribute default="Info about something&#xA;That may or may not be interesting" name="message" type="xs:string" use="optional" />
-        <xs:attribute default="" name="documentation-link" type="xs:string" use="optional" />
+        <xs:attribute default="UnifiedUnityObject" name="type" xmlns:q14="Unity.MemoryProfiler.Editor.UI" type="q14:ObjectOrTypeLabel_type_Type" use="optional" />
+        <xs:attribute default="" name="managed-type-name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="native-type-name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="native-object-name" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
@@ -337,8 +326,66 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="InfoBox" substitutionGroup="engine:VisualElement" xmlns:q15="Unity.MemoryProfiler.Editor.UI" type="q15:InfoBoxType" />
-  <xs:complexType name="UnityObjectsDescriptionCellType">
+  <xs:element name="ObjectOrTypeLabel" substitutionGroup="engine:VisualElement" xmlns:q15="Unity.MemoryProfiler.Editor.UI" type="q15:ObjectOrTypeLabelType" />
+  <xs:complexType name="RibbonButtonType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enable-rich-text" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="emoji-fallback-support" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="parse-escape-sequences" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="selectable" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="double-click-selects-word" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="triple-click-selects-line" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="icon-image" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="toggled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="RibbonButton" substitutionGroup="engine:VisualElement" xmlns:q16="Unity.MemoryProfiler.Editor.UI" type="q16:RibbonButtonType" />
+  <xs:complexType name="BackgroundPatternType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="1" name="scale" type="xs:float" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BackgroundPattern" substitutionGroup="engine:VisualElement" xmlns:q17="Unity.MemoryProfiler.Editor.UI" type="q17:BackgroundPatternType" />
+  <xs:complexType name="ActivityIndicatorOverlayType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -360,30 +407,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="UnityObjectsDescriptionCell" substitutionGroup="engine:VisualElement" xmlns:q16="Unity.MemoryProfiler.Editor.UI" type="q16:UnityObjectsDescriptionCellType" />
-  <xs:complexType name="MemoryBarElementType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="MemoryBarElement" substitutionGroup="engine:VisualElement" xmlns:q17="Unity.MemoryProfiler.Editor.UI" type="q17:MemoryBarElementType" />
+  <xs:element name="ActivityIndicatorOverlay" substitutionGroup="engine:VisualElement" xmlns:q18="Unity.MemoryProfiler.Editor.UI" type="q18:ActivityIndicatorOverlayType" />
   <xs:complexType name="DropDownButtonType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -417,28 +441,5 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DropDownButton" substitutionGroup="engine:VisualElement" xmlns:q18="Unity.MemoryProfiler.Editor.UI" type="q18:DropDownButtonType" />
-  <xs:complexType name="CountDeltaCellType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CountDeltaCell" substitutionGroup="engine:VisualElement" xmlns:q19="Unity.MemoryProfiler.Editor.UI" type="q19:CountDeltaCellType" />
+  <xs:element name="DropDownButton" substitutionGroup="engine:VisualElement" xmlns:q19="Unity.MemoryProfiler.Editor.UI" type="q19:DropDownButtonType" />
 </xs:schema>

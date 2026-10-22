@@ -1,20 +1,7 @@
-.asset-library-panel {
-    display: none;
-    flex-wrap: nowrap;
-    flex-shrink: 1;
-    flex-grow: 1;
-    opacity: 0;
-}
-
-.asset-library-panel .breadcrumb {
-    margin-bottom: var(--spacing-3);
-    width: auto;
-    height: auto;
-}
-
-.asset-library-panel.active {
-    display: flex;
-    transition-property: opacity;
-    transition-duration: 0.3s;
-    opacity: 1;
+.asset-library-panel__footer{
+    margin-top: var(--spacing-2);
+    flex-shrink: 0;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
 }

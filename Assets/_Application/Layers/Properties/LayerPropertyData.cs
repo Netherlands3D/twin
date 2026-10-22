@@ -17,11 +17,16 @@ namespace Netherlands3D.Twin.Layers.Properties
         [DataMember] public Guid UUID = Guid.NewGuid();
 
         [JsonIgnore] protected bool isEditable = true;
+        [JsonIgnore] public UnityEvent<bool> IsEditableChanged = new UnityEvent<bool>();
 
         [JsonIgnore] public bool IsEditable
         {
             get => isEditable;
-            set => isEditable = value;
+            set
+            {
+                isEditable = value;
+                IsEditableChanged.Invoke(value);
+            }
         }
     }
 }

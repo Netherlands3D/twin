@@ -1,0 +1,34 @@
+using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI_Toolkit;
+using UnityEngine.UIElements;
+
+namespace Netherlands3D.UI.Components
+{
+    [UxmlElement]
+    public partial class Tooltip : VisualElement
+    {
+        private Label labelField;
+        private Label Label => labelField ??= this.Q<Label>("Label");
+
+        [UxmlAttribute("text")]
+        public string Text
+        {
+            get => Label.text;
+            set => Label.text = value;
+        }
+
+        public Tooltip()
+        {
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
+            
+            Show(false);
+        }
+        
+        public void Show(bool show)
+        {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+        }
+    }
+}

@@ -1,10 +1,7 @@
-using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -13,12 +10,18 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class StylingPropertyData : LayerPropertyData
     {
         public const string NameOfDefaultStyle = "default";
+        
+        public static readonly Dictionary<string, string> DisplayPropertyNames = new()
+        {
+            { Symbolizer.FillColorProperty, "Vulkleur" },
+            { Symbolizer.StrokeColorProperty,  "Lijnkleur" }
+        };
 
         [DataMember] private string styleName = NameOfDefaultStyle;
         
         [JsonIgnore] public string StyleName => styleName;
         
-        private const string DefaultRuleName = "default";
+        protected const string DefaultRuleName = "default";
         
         [DataMember(Name = "metadata")] public Metadata Metadata { get; } = new();
 
@@ -43,6 +46,19 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         [JsonIgnore] public readonly UnityEvent OnStylingChanged = new();
         [JsonIgnore] public readonly UnityEvent<string> ColorTypeChanged = new();
+        
+        [JsonIgnore] protected string colorType = Symbolizer.FillColorProperty; //default
+
+        [JsonIgnore]
+        public string ColorType
+        {
+            get => colorType;
+            set
+            {
+                colorType = value;
+                ColorTypeChanged.Invoke(value);
+            }
+        }
 
         public StylingPropertyData()
         {   
@@ -50,13 +66,31 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         public void SetStylingRule(string stylingRuleKey, StylingRule stylingRule)
         {
-            StylingRules[stylingRuleKey] = stylingRule;
+            StylingRules[stylingRuleKey] = stylingRule; 
+            OnStylingChanged.Invoke();
+        }
+        
+        public void SetStylingRules(Dictionary<string, StylingRule> stylingRuleKeys)
+        {
+            foreach (KeyValuePair<string, StylingRule> pair in stylingRuleKeys)
+                StylingRules[pair.Key] = pair.Value;
+            OnStylingChanged.Invoke();
+        }
+
+        public void RemoveStylingRule(string stylingRuleKey)
+        {
+            StylingRules.Remove(stylingRuleKey);
             OnStylingChanged.Invoke();
         }
         
         public string GetStylingRuleName(string stylingRuleKey)
         {
             return StylingRules[stylingRuleKey].Name;
+        }
+        
+        public virtual List<string> GetUsedColorTypes()
+        {
+            return null; //todo: CartesianTyleLayerFeaturePropertyData should maybe become a subclass of ColorPropertyData so this function does not exist here but in ColorPropertyData
         }
     }
 }

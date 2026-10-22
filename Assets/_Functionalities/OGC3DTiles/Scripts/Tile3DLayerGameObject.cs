@@ -4,13 +4,13 @@ using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Services;
 using Netherlands3D.Tiles3D;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.OGC3DTiles
@@ -26,8 +26,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private ICredentialHandler credentialHandler;
         private ICredentialHandler CredentialHandler => GetAndCacheComponent(ref credentialHandler);
-
-        public UnityEvent<string> UnsupportedExtensionsMessage;
 
         private void EnableTileset()
         {
@@ -143,7 +141,8 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 message += "\n" + extension;
             }
 
-            UnsupportedExtensionsMessage.Invoke(message);
+            // TODO: Route unsupported extension warnings through a generic layer message flow.
+            App.LayerMessages.UnsupportedExtensionsMessage(message);
         }
 
         public void ClearCredentials()

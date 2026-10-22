@@ -58,7 +58,7 @@ namespace Netherlands3D.UI.Components
         /// Leading icon override (unset = CSS variable; set = explicit enum image).
         /// </summary>
         [UxmlAttribute("leading-icon-image")]
-        public IconImage LeadingIconImageExposed
+        public string LeadingIconImageExposed
         {
             get => LeadingIcon.Image;
             set => LeadingIcon.Image = value;
@@ -164,6 +164,7 @@ namespace Netherlands3D.UI.Components
         {
             var btn = new Button { name = $"Crumb{index}" };
             btn.AddToClassList("crumb-link");
+            btn.ShowIcon = Button.ButtonStyle.Normal;
             btn.LabelText = text ?? string.Empty;
             btn.clicked += () => GoTo(index);
             
@@ -173,7 +174,6 @@ namespace Netherlands3D.UI.Components
         private VisualElement CreateCrumbLabel(string text, int index)
         {
             var lab = new Label(text ?? string.Empty) { name = $"Crumb{index}" };
-            lab.AddToClassList("crumb-label");
             lab.AddToClassList("current");
             
             return lab;

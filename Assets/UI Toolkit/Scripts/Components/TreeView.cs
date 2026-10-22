@@ -1,0 +1,129 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Netherlands3D.UI.Components
+{
+    [UxmlElement]
+    public partial class TreeView : UnityEngine.UIElements.TreeView
+    {
+        const string selectableUSSClassName = "collection-view--unselectable";
+
+        private Action<VisualElement, int> _userBind;
+
+        private int firstSelectedIndex = -1;
+        private int lastDirection = 0;
+        private VisualElement hoveredElement;
+        private List<int> lastSelectedIndices = new();
+        private readonly Dictionary<VisualElement, int> indexDictionary = new Dictionary<VisualElement, int>();
+        private Vector2 lastPointerPosition;
+
+        [UxmlAttribute("selection-type")]
+        public SelectionType SelectionMode
+        {
+            get => selectionType;
+            set
+            {
+                selectionType = value;
+                EnableInClassList(selectableUSSClassName, selectionType == SelectionType.None);
+            }
+        }
+        
+        /// <summary>
+        /// Intercept bindItem so we can apply inline fixes after user binding.
+        /// </summary>
+        public new Action<VisualElement, int> bindItem
+        {
+            get => _userBind;
+            set
+            {
+                _userBind = value;
+                base.bindItem = OnBindItem;
+            }
+        }
+
+        private void OnBindItem(VisualElement ve, int id)
+        {
+            indexDictionary[ve] = id;
+            ve.RegisterCallback<PointerEnterEvent>(SetActiveElement);
+
+            _userBind?.Invoke(ve, id);
+        }
+
+        private void SetActiveElement(PointerEnterEvent evt)
+        {
+            hoveredElement = evt.target as VisualElement;
+        }
+
+        public TreeView()
+        {
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
+
+            selectionChanged += OnSelectionChanged;
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            RegisterCallback<PointerMoveEvent>(evt =>
+            {
+                lastPointerPosition = evt.position;
+            });
+            
+            EnableInClassList(selectableUSSClassName, selectionType == SelectionType.None);
+        }
+        
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            LayerTreeViewUtility.ReleaseListsToPool(this);
+        }
+        
+        private void OnSelectionChanged(IEnumerable<object> obj)
+        {
+            var referenceLayer = hoveredElement;
+            if (referenceLayer == null)
+                referenceLayer = FindClosestElement(lastPointerPosition);
+            this.OnSelectionChanged(
+                referenceLayer,
+                indexDictionary,
+                lastSelectedIndices,
+                ref firstSelectedIndex,
+                ref lastDirection);
+        }
+
+        public int GetIndexFromElement(VisualElement item)
+        {
+            return indexDictionary[item];
+        }
+
+        public VisualElement GetItemFromIndex(int index)
+        {
+            return indexDictionary.FirstOrDefault(p => p.Value == index).Key;
+        }
+        
+        private VisualElement FindClosestElement(Vector2 pointerPosition)
+        {
+            VisualElement closest = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var element in indexDictionary.Keys)
+            {
+                if (element == null)
+                    continue;
+
+                Vector2 elementPosition = element.worldBound.position;
+
+                float distance = Mathf.Abs(pointerPosition.y - elementPosition.y);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = element;
+                }
+            }
+
+            return closest;
+        }
+    }
+}

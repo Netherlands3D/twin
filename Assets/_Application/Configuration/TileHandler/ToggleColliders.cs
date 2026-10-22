@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Configuration.TileHandler
             toolThatEnablesColliders.onOpen.AddListener(EnableColliders);
             toolThatEnablesColliders.onClose.AddListener(DisableColliders);    
 
-            if(toolThatEnablesColliders.Open) {
+            if(toolThatEnablesColliders.IsOpen) {
                 EnableColliders();
             }        
         }

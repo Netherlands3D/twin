@@ -1,0 +1,8 @@
+.hidden-objects-property-section {
+    flex-direction: column;
+}
+
+.hidden-objects-property-section__list-view{
+    flex-grow: 1;
+    height: auto;
+}

@@ -90,25 +90,27 @@ namespace Netherlands3D.Tiles3D
             tile.requestedDispose = true;
             tile.childrenCountDelayingDispose = 0;
 
-            if (tile.CountLoadingChildren()+tile.CountLoadedChildren()>0) // there are active children
+            if (tile.loadingChildren+tile.loadedChildren>0) // there are active children
             {
-                if (tile.CountLoadingChildren() > 0)
+                if (tile.loadingChildren > 0)
                 {
                     anyChildLoading = true;
                 }
             }
-            if(tile.isLoading==true)
+
+            if(anyChildLoading && immediately==false)
             {
                 delayedDisposeList.Add(tile);
             }
-            else if(anyChildLoading && immediately==false)
+            else if(tile.content !=null)
             {
-                delayedDisposeList.Add(tile);
-            }
-            else
-            {
+                if(tile.content.State == Content.ContentLoadState.DOWNLOADED)
+                {
                 Dispose(tile);
+                }
+                else{delayedDisposeList.Add(tile);}
             }
+            else{delayedDisposeList.Add(tile);};
 
         }
 
@@ -119,18 +121,19 @@ namespace Netherlands3D.Tiles3D
         {
             if (delayedDisposeList.Count > 0)
             {
-                for (int i = delayedDisposeList.Count - 1; i >= 0; i--)
+                int listcount = delayedDisposeList.Count;
+                for (int i = listcount - 1; i >= 0; i--)
                 {
                     var tile = delayedDisposeList[i];
-                    int loadingchildcount = tile.CountLoadingChildren();
-
-                    foreach (var child in tile.children)
+                    if(tile == null)
                     {
-                        if (loadingchildcount==0)
-                        {
-                            Dispose(tile);
-                            delayedDisposeList.RemoveAt(i);
-                        }
+                        delayedDisposeList.RemoveAt(i);
+                        continue;
+                    }
+                    int loadingchildcount = tile.CountLoadingChildren();
+                    if (loadingchildcount==0)
+                    {
+                        delayedDisposeList.RemoveAt(i);
                     }
 
                     
@@ -173,7 +176,7 @@ namespace Netherlands3D.Tiles3D
                 priorityScore += DistanceScore(tile);
                 priorityScore += InViewCenterScore(tile.ContentBounds.center, screenCenterScore);
                 priorityScore += sseScore(tile);
-                int loadedChildren = tile.CountLoadedChildren();
+                //not used int loadedChildren = tile.CountLoadedChildren();
                 int loadedParents = tile.CountLoadedParents();
                 if (loadedParents<1) // no parents loaded
                 {

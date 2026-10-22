@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
@@ -39,7 +41,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
         private void Awake()
         {
             cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
-            gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
+            gameObject.transform.position = ServiceLocator.GetService<PointerToWorldPosition>().GetWorldPointCenterViewUsingHeightMap();
             layerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
         }
 
@@ -97,6 +99,10 @@ namespace Netherlands3D.Functionalities.OBJImporter
             // the copying can be removed after the code for the importer is changed
 
             string copiedObjFilename = objPath + ".temp";
+            if (File.Exists(copiedObjFilename))
+            {
+                File.Delete(copiedObjFilename);
+            }
             File.Copy(objPath, copiedObjFilename);
             importer.objFilePath = copiedObjFilename;
 
@@ -113,6 +119,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             importer.BaseMaterial = baseMaterial;
             importer.createSubMeshes = createSubMeshes;
+            importer.errormessage += layerGameObject.VisualisationError.Invoke;
             importer.StartImporting(OnObjImported);
         }
 
@@ -181,6 +188,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
             if (importer == null) return;
 
             importer.MtlImportSucceeded.RemoveListener(propertyData.MtlImportSuccess.Invoke);
+            importer.errormessage -= layerGameObject.VisualisationError.Invoke;
             Destroy(importer.gameObject);
         }
 

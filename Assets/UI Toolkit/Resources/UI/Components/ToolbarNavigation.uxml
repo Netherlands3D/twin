@@ -1,0 +1,5 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="toolbar-navigation">
+    <nl3d:Button class="toolbar-navigation__button toolbar-navigation__fpv" name="FPV" button-type="transparent" button-style="IconOnly" icon="Fpv" tooltip="First Person view" />
+    <nl3d:Button class="toolbar-navigation__button" name="North" button-type="transparent" button-style="IconOnly" icon="NorthArrow" tooltip="Draai richting het Noorden" />
+    <nl3d:Toggle class="toolbar-navigation__button" name="Perspective" toggle-type="transparent" toggle-style="IconOnly" icon="OrthogonalView" tooltip="Ortografisch / Perspectief Camera" />
+</ui:UXML>

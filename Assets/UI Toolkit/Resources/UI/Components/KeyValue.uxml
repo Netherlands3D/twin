@@ -1,0 +1,12 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    editor-extension-mode="False" 
+    class="key-value"
+>
+    <ui:Label name="Key" text="key" class="key-value__key"/>
+    <ui:Label name="Value" text="value" class="key-value__value"/>
+    <nl3d:Hyperlink name="ValueLink"/>
+    <ui:VisualElement name="Divider" class="key-value__divider" />
+</ui:UXML>

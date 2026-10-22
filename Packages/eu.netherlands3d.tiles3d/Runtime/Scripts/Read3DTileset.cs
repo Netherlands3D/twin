@@ -404,7 +404,7 @@ namespace Netherlands3D.Tiles3D
                 tile.content.tilesetReader = this;
                 tile.content.State = Content.ContentLoadState.NOTLOADING;
                 tile.content.ParentTile = tile;
-                tile.content.uri = GetFullContentUri(tile);
+                //tile.content.uri = GetFullContentUri(tile);
                 tile.content.parseAssetMetaData = parseAssetMetadata;
                 tile.content.onTileLoadCompleted.AddListener(OnTileLoaded.Invoke);
 #if SUBOBJECT
@@ -453,9 +453,11 @@ namespace Netherlands3D.Tiles3D
                 currentCamera.transform.GetPositionAndRotation(out currentCameraPosition, out currentCameraRotation);
                 lastCameraAngle = (currentCamera.orthographic ? currentCamera.orthographicSize : currentCamera.fieldOfView);
                 currentCamera.transform.GetPositionAndRotation(out lastCameraPosition, out lastCameraRotation);
-
+                root.CountLoadingChildren();
+                root.CountLoadedChildren();
                 SetSSEComponent(currentCamera);
                 DisposeTilesOutsideView(currentCamera);
+                destroyOutOfViewTilesets(currentCamera);
                 foreach (var child in root.children)
                 {
                     LoadInViewRecursively(child, currentCamera);
@@ -465,6 +467,15 @@ namespace Netherlands3D.Tiles3D
             }
         }
 
+private void destroyOutOfViewTilesets(Camera currentCamera)
+        {
+            foreach (Tile child in root.children)
+            {
+                child.DestroyChildTilesIfTilesetOutOfView(currentCamera);
+            }
+        }
+
+
         /// <summary>
         /// Check for tiles in our visibile tiles list that moved out of the view / max distance.
         /// Request dispose for tiles that moved out of view
@@ -472,13 +483,6 @@ namespace Netherlands3D.Tiles3D
         /// <param name="currentCamera">Camera to use for visibility check</param>
         private void DisposeTilesOutsideView(Camera currentCamera)
         {
-            for (int i = visibleTiles.Count - 1; i >= 0; i--)
-            {
-                var tile = visibleTiles[i];
-                var closestPointOnBounds = tile.ContentBounds.ClosestPoint(currentCamera.transform.position); //Returns original point when inside the bounds
-                CalculateTileScreenSpaceError(tile, currentCamera, closestPointOnBounds);
-            }
-
             //Clean up list op previously loaded tiles outside of view
             for (int i = visibleTiles.Count - 1; i >= 0; i--)
             {
@@ -491,7 +495,8 @@ namespace Netherlands3D.Tiles3D
                     continue;
                 }
 
-
+                var closestPointOnBounds = tile.ContentBounds.ClosestPoint(currentCamera.transform.position); //Returns original point when inside the bounds
+                CalculateTileScreenSpaceError(tile, currentCamera, closestPointOnBounds);
                 var enoughDetail = tile.screenSpaceError < maximumScreenSpaceError;
                 if (enoughDetail) // tile has (more then) enoug detail
                 {
@@ -515,9 +520,9 @@ namespace Netherlands3D.Tiles3D
                     {
                         // tile should remain
                     }
-                    else if (tile.CountLoadingChildren() == 0)
+                    else if (tile.loadingChildren == 0)
                     {
-                        if (tile.CountLoadedChildren() > 0)
+                        if (tile.loadedChildren > 0)
                         {
                             tilePrioritiser.RequestDispose(tile);
 
@@ -692,7 +697,7 @@ namespace Netherlands3D.Tiles3D
             }
         }
 
-        private string GetFullContentUri(Tile tile)
+        public string GetFullContentUri(Tile tile)
         {
             var relativeContentUrl = tile.contentUri;
 

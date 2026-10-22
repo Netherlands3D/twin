@@ -42,6 +42,7 @@ namespace Netherlands3D.Sun
         [Header("Settings")] [SerializeField] private Light sunDirectionalLight;
         [SerializeField] private bool animate = true;
         [SerializeField] private float timeSpeed = 1;
+        [SerializeField] private float maxSpeed = 43200;
         [SerializeField] private int frameSteps = 1;
 
         [Header("Events")] public UnityEvent<DateTime> timeOfDayChanged = new();
@@ -120,6 +121,9 @@ namespace Netherlands3D.Sun
 
         public void ToggleAnimation(bool animate)
         {
+            // Only do something if the state changed - otherwise you may get an infinite loop
+            if (this.animate == animate) return;
+            
             this.animate = animate;
             isAnimatingChanged.Invoke(animate);
         }
@@ -221,13 +225,13 @@ namespace Netherlands3D.Sun
 
         public void MultiplyTimeSpeed(float multiplicationFactor)
         {
-            timeSpeed = Math.Clamp(timeSpeed * multiplicationFactor, 1, 43200);
+            timeSpeed = Math.Clamp(timeSpeed * multiplicationFactor, 1, maxSpeed);
             timeSpeedChanged.Invoke(timeSpeed);
         }
 
         public void SetTimeSpeed(float speed)
         {
-            timeSpeed = Math.Clamp(speed, 1, 43200);
+            timeSpeed = Math.Clamp(speed, 1, maxSpeed);
             timeSpeedChanged.Invoke(timeSpeed);
         }
 

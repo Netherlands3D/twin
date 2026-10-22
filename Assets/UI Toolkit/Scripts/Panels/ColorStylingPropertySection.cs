@@ -1,0 +1,173 @@
+using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+using ListView = Netherlands3D.UI.Components.ListView;
+
+namespace Netherlands3D.UI.Panels
+{
+    [UxmlElement]
+    [PropertySection(typeof(ColorPropertyData), PropertySectionCategory.Styling)]
+    public partial class ColorStylingPropertySection : VisualElement, IVisualizationWithPropertyData, IPropertyPanelWithColorPicker
+    {
+        private Color defaultColor = Color.white;
+        private ColorPropertyData stylingPropertyData;
+        private ListView swatchesListView;
+
+        public ColorPicker ColorPicker { get; set; }
+
+        public ColorStylingPropertySection()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
+
+            swatchesListView = this.Q<ListView>();
+
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+
+            swatchesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            swatchesListView.selectionType = SelectionType.Multiple;
+
+            swatchesListView.makeItem = MakeListViewItem;
+            swatchesListView.bindItem = BindListViewItem;
+
+            //when clicked outside the listview, deselect the current selection
+            swatchesListView.RegisterCallback<BlurEvent>(evt =>
+            {
+                var pos = Pointer.current.position.ReadValue();
+                var panelPos = RuntimePanelUtils.ScreenToPanel(
+                    swatchesListView.panel,
+                    new Vector2(pos.x, Screen.height - pos.y)
+                );
+                if (!swatchesListView.worldBound.Contains(panelPos) && !ColorPicker.worldBound.Contains(panelPos))
+                {
+                    swatchesListView.ClearSelection();
+                }
+            });
+
+            swatchesListView.selectedIndicesChanged += ActivateColorPicker;
+        }
+
+        private void ActivateColorPicker(IEnumerable<int> indices)
+        {
+            ColorPicker.SetVisible(indices.Any());
+            
+            var color = GetColorFromPropertyData();
+            ColorPicker.SetColorInputComponentsWithoutNotify(color);
+            var visibility = stylingPropertyData.GetDefaultSymbolizerVisibility();
+            ColorPicker.SetTransparentToggleWithoutNotify(visibility.HasValue ? visibility.Value : true);
+        }
+
+        private VisualElement MakeListViewItem()
+        {
+            ColorTileListViewItem item = new();
+            item.Tile.ShowLabel = true;
+            item.RegisterCallback<ClickEvent>(evt =>
+            {
+                stylingPropertyData.ColorType = item.userData as string;
+            });
+            var listViewItem = new ListViewItem(item);
+            return listViewItem;
+        }
+
+        private void BindListViewItem(VisualElement item, int index)
+        {
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
+
+            string propertyName = swatchesListView.itemsSource[index] as string;
+            tile.userData = propertyName;
+            tile.Tile.LabelText = StylingPropertyData.DisplayPropertyNames[propertyName];
+            
+            var defaultSymbolizerColor = stylingPropertyData.AnyFeature.Symbolizer.GetColor(propertyName);
+            var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
+            tile.Tile.Color = color;
+            
+            bool? visibility = stylingPropertyData.GetDefaultSymbolizerVisibility();
+            tile.Tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            stylingPropertyData.OnStylingChanged.RemoveListener(UpdateColorFromProperty);
+            ColorPicker.ColorChanged.RemoveListener(OnColorPicked);
+            ColorPicker.VisibilityChanged.RemoveListener(OnVisibilityChanged);
+            swatchesListView.selectedIndicesChanged -= ActivateColorPicker;
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<ColorPropertyData>();
+
+            if (stylingPropertyData == null) return;
+
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateColorFromProperty);
+            ColorPicker.ColorChanged.AddListener(OnColorPicked);
+            ColorPicker.VisibilityChanged.AddListener(OnVisibilityChanged);
+
+            var hasTimeline = properties.Get<TimelineStatusStylingLayerPropertyData>() != null; //todo: this dependency should not be here. Ideally the colorpicker is uniform for all panels
+            ColorPicker.SetVisibilityToggleEnabled(hasTimeline);
+
+            UpdateSwatches();
+            UpdateColorFromProperty();
+        }
+
+        private void UpdateSwatches()
+        {
+            swatchesListView.itemsSource = stylingPropertyData.GetUsedColorTypes();
+            swatchesListView.RefreshItems();
+        }
+
+        private void UpdateColorFromProperty()
+        {
+            var color = GetColorFromPropertyData();
+            var visibility = GetVisibilityStateFromPropertyData();
+            ColorPicker.SetColorInputComponentsWithoutNotify(color);
+            ColorPicker.SetTransparentToggleWithoutNotify(visibility);
+
+            foreach (var index in swatchesListView.selectedIndices)
+            {
+                var element = swatchesListView.GetRootElementForIndex(index) as ListViewItem;
+                ColorTileListViewItem tile = element.Q<ColorTileListViewItem>();
+                if (tile != null)
+                {
+                    tile.Tile.Color = color;
+                    tile.Tile.VisibilityState = visibility;
+                }
+            }
+        }
+
+        private Color GetColorFromPropertyData()
+        {
+            Color? defaultSymbolizerColor = stylingPropertyData.GetDefaultSymbolizerColor();
+            var color = defaultSymbolizerColor.HasValue ? defaultSymbolizerColor.Value : defaultColor;
+            return color;
+        }
+        
+        private bool GetVisibilityStateFromPropertyData()
+        {
+            bool? defaultSymbolizerVisibilityState = stylingPropertyData.GetDefaultSymbolizerVisibility();
+            var isVisible = defaultSymbolizerVisibilityState.HasValue ? defaultSymbolizerVisibilityState.Value : true;
+            return isVisible;
+        }
+
+        private void OnColorPicked(Color color)
+        {
+            foreach (var item in swatchesListView.selectedItems.OfType<string>())
+            {
+                stylingPropertyData.ColorType = item;
+                stylingPropertyData.SetDefaultSymbolizerColor(color);
+            }
+        }
+        
+        private void OnVisibilityChanged(bool isVisible)
+        {
+            stylingPropertyData.SetDefaultSymbolizerVisibility(isVisible);
+        }
+    }
+}

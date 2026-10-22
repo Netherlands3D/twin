@@ -1,0 +1,56 @@
+.transform-property-section__row {
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: var(--spacing-2);
+}
+
+.transform-property-section__row .transform-property-section__item{
+    margin-right: var(--spacing-2);
+}
+
+.transform-property-section__item.transform-property-section__item-last{
+    margin-right: 0;
+}
+
+.transform-property-section__axis-header {
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: var(--spacing-1);
+}
+
+.transform-property-section__axis-header-spacer {
+    width: var(--spacing-6);
+    min-width: var(--spacing-6);
+    margin-right: var(--spacing-2);
+}
+
+.transform-property-section__axis-labels {
+    flex-direction: row;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.transform-property-section__axis-label {
+    flex-grow: 1;
+    margin-right: var(--spacing-2);
+    -unity-text-align: middle-center;
+}
+
+.transform-property-section__axis-label.transform-property-section__axis-label-last {
+    margin-right: 0;
+}
+
+.transform-property-section__row .xyz-field {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.transform-property-section__row .xyz-field .number-field {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.transform-property-section__row .xyz-field .number-field__input {
+    flex-grow: 1;
+    min-width: 0;
+}

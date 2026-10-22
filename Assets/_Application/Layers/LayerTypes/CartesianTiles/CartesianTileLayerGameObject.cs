@@ -34,16 +34,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public override void OnSelect(LayerData layer)
         {
-            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            if (transformInterfaceToggle)
-                transformInterfaceToggle.ShowVisibilityPanel(true);
         }
 
         public override void OnDeselect(LayerData layer)
         {
-            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            if (transformInterfaceToggle)
-                transformInterfaceToggle.ShowVisibilityPanel(false);
         }
 
         protected void OnDestroy()

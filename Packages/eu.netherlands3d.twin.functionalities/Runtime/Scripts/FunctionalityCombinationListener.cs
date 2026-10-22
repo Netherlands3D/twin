@@ -54,11 +54,11 @@ namespace Netherlands3D.Twin.Functionalities
             {
                 foreach (var functionality in combination.enabledFunctionalities)
                 {
-                    functionality.OnEnable.AddListener(EnableFunctionality);
+                    functionality.OnEnableFunctionality.AddListener(EnableFunctionality);
                 }
                 foreach (var functionality in combination.disabledFunctionalities)
                 {
-                    functionality.OnDisable.AddListener(DisableFunctionality);
+                    functionality.OnDisableFunctionality.AddListener(DisableFunctionality);
                 }
             }
         }
@@ -69,11 +69,11 @@ namespace Netherlands3D.Twin.Functionalities
             {
                 foreach (var functionality in combination.enabledFunctionalities)
                 {
-                    functionality.OnEnable.RemoveListener(EnableFunctionality);
+                    functionality.OnEnableFunctionality.RemoveListener(EnableFunctionality);
                 }
                 foreach (var functionality in combination.disabledFunctionalities)
                 {
-                    functionality.OnDisable.RemoveListener(DisableFunctionality);
+                    functionality.OnDisableFunctionality.RemoveListener(DisableFunctionality);
                 }
             }
         }

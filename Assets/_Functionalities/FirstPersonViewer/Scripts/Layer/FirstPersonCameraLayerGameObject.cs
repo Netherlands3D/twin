@@ -27,7 +27,7 @@ namespace Netherlands3D.FirstPersonViewer.Layers
 
         protected override void OnDoubleClick(LayerData layer)
         {
-            layerTool.CloseInspector();
+            layerTool.Close();
 
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
             

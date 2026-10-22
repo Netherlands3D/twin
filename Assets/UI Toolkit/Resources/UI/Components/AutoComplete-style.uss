@@ -1,0 +1,88 @@
+﻿@import url("TextField-style.uss");
+
+.auto-complete {
+    --auto-complete-height: var(--spacing-8);
+    --auto-complete-list-height: 200px;
+    --auto-complete-padding-x: var(--spacing-2);
+    --auto-complete-padding-y: 0;
+    --auto-complete-border-radius: var(--border-radius-md);
+    --auto-complete-border-width: var(--spacing-0_5);
+    --auto-complete-border-color: var(--color-blue-200);
+    
+    flex-direction: column;
+    margin: 0;
+    min-height: var(--auto-complete-height);
+    height: auto;
+    justify-content: flex-start;
+    padding: var(--auto-complete-padding-y) var(--auto-complete-padding-x);
+    background-color: var(--color-white);
+    border-radius: var(--auto-complete-border-radius);
+    border-width: var(--auto-complete-border-width);
+    border-color: var(--auto-complete-border-color);
+}
+
+.auto-complete__row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.auto-complete .textfield .unity-base-text-field__input {
+    padding: 0;
+    background-color: transparent;
+    border-width: 0;
+}
+
+.auto-complete .textfield .unity-base-text-field__input:hover {
+    background-color: transparent;
+}
+
+.auto-complete__results {
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.auto-complete--open .auto-complete__results {
+    display: flex;
+}
+
+.auto-complete__divider {
+    margin-top: var(--spacing-2);
+    height: var(--spacing-0_5);
+    background-color: var(--color-blue-200);
+}
+
+.auto-complete:disabled {
+    opacity: 1;
+}
+
+.auto-complete .textfield:disabled .unity-base-text-field__input {
+    background-color: var(--color-white);
+    border-width: 0;
+}
+
+.auto-complete__list {
+    max-height: var(--auto-complete-list-height);
+}
+
+.auto-complete__list .listview-item > .label {
+    color: var(--color-blue-300);
+}
+
+.auto-complete__list .listview-item.unity-collection-view__item:hover > .label,
+.auto-complete__list .listview-item.unity-list-view__item:hover > .label {
+    color: var(--color-blue-900);
+}
+
+.auto-complete__list .listview-item.unity-collection-view__item--selected > .label,
+.auto-complete__list .listview-item.unity-list-view__item--selected > .label,
+.auto-complete__list .listview-item.unity-collection-view__item.unity-collection-view__item--selected > .label {
+    color: var(--color-blue-900);
+}
+
+.auto-complete__list .listview-item.unity-collection-view__item--selected,
+.auto-complete__list .listview-item.unity-list-view__item--selected {
+    background-color: var(--color-blue-100);
+}
+

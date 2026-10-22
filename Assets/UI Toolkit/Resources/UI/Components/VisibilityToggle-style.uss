@@ -1,0 +1,39 @@
+.visibility-toggle {
+    --toggle-bg-color: transparent;
+    --toggle-active-color: var(--color-blue-700);
+    --toggle-active-contrast-color: var(--toggle-bg-color);
+    --toggle-disabled-color: var(--color-blue-200);
+    --toggle-padding: var(--spacing-2);
+    --toggle-border-color: var(--color-blue-200);
+    --toggle-border-width: var(--spacing-0_5);
+    --toggle-border-radius: var(--spacing-2);
+    --toggle-icon-gap: var(--spacing-2);
+
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: var(--toggle-bg-color);
+    border-color: var(--toggle-border-color);
+    border-width: var(--toggle-border-width);
+    border-radius: var(--toggle-border-radius);
+    flex-basis: auto;
+    border-width: 0;
+}
+
+.visibility-toggle .unity-checkmark,
+.visibility-toggle .unity-toggle__input,
+.visibility-toggle .unity-toggle__checkmark {
+    display: none;
+}
+
+.visibility-toggle > .icon {
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+}
+
+.visibility-toggle:disabled {
+    opacity: 1;
+    border-color: var(--toggle-disabled-color);
+}

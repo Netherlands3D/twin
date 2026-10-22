@@ -22,7 +22,7 @@ using RequestInterceptor = KindMen.Uxios.Interceptors.RequestInterceptor;
 namespace Netherlands3D.Twin.Configuration
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Configurator", fileName = "Configurator", order = 0)]
-    public class Configurator : ScriptableObject, IWindow
+    public class Configurator : ScriptableObject //todo: is dit nog nodig?
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")]
@@ -34,10 +34,6 @@ namespace Netherlands3D.Twin.Configuration
         public Configuration Configuration { get => configuration; }
 
         private Uri uri;
-
-        [SerializeField] 
-        [Tooltip("The scene with the Setup Window that needs to load additively")]
-        private string setupSceneName;
 
         [SerializeField]
         [Tooltip("The main scene that will be loaded after the setup scene is closed")]
@@ -60,16 +56,6 @@ namespace Netherlands3D.Twin.Configuration
         [Header("Events")]
         public UnityEvent OnStartedLoading = new();
         public UnityEvent<Configuration> OnLoaded = new();
-        public UnityEvent OnOpenInterface = new();
-        public UnityEvent OnCloseInterface = new();
-        public UnityEvent OnOpen { get => OnOpenInterface; }
-        public UnityEvent OnClose { get => OnCloseInterface; }
-        
-        public bool SetupSceneLoaded { 
-            get{
-                return SceneManager.GetSceneByName(setupSceneName) == null || SceneManager.GetSceneByName(setupSceneName).isLoaded;
-            } 
-        }
         
 #if UNITY_EDITOR
         [MenuItem("Netherlands3D/Change Debug Configuration")]
@@ -81,20 +67,6 @@ namespace Netherlands3D.Twin.Configuration
         }
 #endif
 
-        public bool IsOpen { 
-            get => SetupSceneLoaded; 
-            set
-            {
-                if (value)
-                {
-                    Open();
-                }
-                else
-                {
-                    Close();
-                }
-            }
-        }
 
         public IEnumerator Execute()
         {
@@ -142,14 +114,7 @@ namespace Netherlands3D.Twin.Configuration
 
             //TODO the following is disabled temporarily
             //indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);
-
-            SceneManager.sceneLoaded += (scene, mode) => {
-                if(scene.name == mainSceneName && Configuration.ShouldStartSetup)
-                {
-                    StartSetup();
-                }
-            };
-
+            
             yield return null;
         }
 
@@ -230,41 +195,11 @@ namespace Netherlands3D.Twin.Configuration
         {
             debugUrl = $"https://netherlands3d.eu/twin/{configuration.ToQueryString()}";
         }
-
-        public void StartSetup()
-        {
-            if (!configuration.ShouldStartSetup) return;
-
-            Open();
-        }
         
-        public void Open()
-        {
-            if (SetupSceneLoaded)
-            {
-                return;
-            }
-
-            SceneManager.LoadScene(setupSceneName, LoadSceneMode.Additive);
-            OnOpenInterface.Invoke();
-        }
-
-        public void Close()
-        {
-            if (!SetupSceneLoaded)
-            {
-                return;
-            }
-            
-            SceneManager.UnloadSceneAsync(setupSceneName);
-            OnCloseInterface.Invoke();
-        }
-
         public void CompleteSetup()
         {
             // We assume the Setup Window modifies the configuration object; this is merely a hook for the rest of
             // the application to know that we are done.
-            Close();
             OnLoaded.Invoke(configuration);
         }
     }

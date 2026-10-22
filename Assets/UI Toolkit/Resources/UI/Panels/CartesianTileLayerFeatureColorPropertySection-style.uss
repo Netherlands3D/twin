@@ -1,0 +1,8 @@
+.cartesian-tile-layer-feature-color-property-section {
+    flex-direction: column;
+}
+
+.cartesian-tile-layer-feature-color-property-section__list-view{
+    flex-grow: 1;
+    height: auto;
+}

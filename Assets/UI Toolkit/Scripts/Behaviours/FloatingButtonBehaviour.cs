@@ -1,0 +1,30 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Netherlands3D.UI.Panels
+{   
+    public abstract class FloatingButtonBehaviour : ScriptableObject
+    {     
+        protected VisualElement content;
+        protected FloatingElement floatingButton;
+
+        public virtual void Initialize(VisualElement parent)
+        {
+            this.content = parent;
+            floatingButton = new FloatingElement();
+            VisualElement element = SpawnFloatingButtonContent();
+            floatingButton.Add(element);
+            content.Add(floatingButton);
+        }
+
+        public virtual void Dispose()
+        {
+            content.Remove(floatingButton);
+            content = null;
+        }
+
+        public abstract VisualElement SpawnFloatingButtonContent();
+        
+        public abstract void UpdateBehaviour();
+    }
+}

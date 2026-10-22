@@ -1,18 +1,16 @@
-﻿using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI;
-using Netherlands3D.UI.ExtensionMethods;
+﻿using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class HelpButton : UnityEngine.UIElements.Button
+    public partial class HelpButton : ChangePointerStyleElement
     {
         private Icon Icon => this.Q<Icon>("Icon");
 
         [UxmlAttribute("icon")]
-        public IconImage Image
+        public string Image
         {
             get => Icon.Image;
             set => Icon.Image = value;
@@ -27,7 +25,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 helpUrl = value;
-                if (Icon != null) Icon.tooltip = string.IsNullOrEmpty(value) ? null : "Meer informatie";
+                StyleOnHover = string.IsNullOrEmpty(helpUrl) ? PointerStyle.Style.AUTO : PointerStyle.Style.POINTER;
             }
         }
 
@@ -35,16 +33,16 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
+            
+            RegisterCallback<ClickEvent>(OnClick);
 
-            if (string.IsNullOrEmpty(helpUrl))
-                helpUrl = "Link naar documentatie";
-
-            // Click navigates to HelpUrl when provided
-            clicked += () =>
-            {
-                if (!string.IsNullOrEmpty(helpUrl))
-                    Application.OpenURL(helpUrl);
-            };
+            StyleOnHover = PointerStyle.Style.AUTO;
+        }
+        
+        private void OnClick(ClickEvent evt)
+        {
+            if (!string.IsNullOrEmpty(helpUrl))
+                Application.OpenURL(helpUrl);
         }
     }
 }

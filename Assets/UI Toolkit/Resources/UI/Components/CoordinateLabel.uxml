@@ -1,0 +1,15 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="coordinate-label"
+>
+    <ui:Label class="coordinate-label__axis" text="x" />
+    <ui:Label name="CoordinateX" class="coordinate-label__value" text="00000000" />
+    <ui:Label class="coordinate-label__axis" text=", y" />
+    <ui:Label name="CoordinateY" class="coordinate-label__value" text="00000000" />
+    <ui:Label class="coordinate-label__axis" text=", z" />
+    <ui:Label name="CoordinateZ" class="coordinate-label__value" text="0000" />
+</ui:UXML>

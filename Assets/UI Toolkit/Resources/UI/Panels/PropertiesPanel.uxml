@@ -1,0 +1,17 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    class="properties-panel"
+>
+    <ui:VisualElement name="Header" class="properties-panel__header">
+        <nl3d:Header icon="AdjustmentsHorizontal" text="Eigenschappen" class="properties-panel__header-title"/>
+        <nl3d:CloseButton name="CloseButton"/>
+    </ui:VisualElement>
+    <nl3d:PropertyPanelToolbar />
+    <nl3d:ScrollView class="properties-panel__content" name="InformationContent" />
+    <nl3d:ScrollView class="properties-panel__content" name="SettingsContent" />
+    <nl3d:ScrollView class="properties-panel__content" name="StylingContent" />
+</ui:UXML>

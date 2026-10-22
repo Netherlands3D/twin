@@ -551,7 +551,7 @@ MonoBehaviour:
   RotationLocked: 0
   ScaleLocked: 1
   positionAxes: 7
-  rotationAxes: 2
+  rotationAxes: 1
   scaleAxes: 7
 --- !u!114 &2889220090886471414
 MonoBehaviour:

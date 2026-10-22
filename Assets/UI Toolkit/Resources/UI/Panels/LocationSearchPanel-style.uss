@@ -1,0 +1,40 @@
+.location-search-panel {
+    --field-spacing: var(--spacing-3);
+    
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-shrink: 1;
+    flex-grow: 1;
+    padding: var(--spacing-3);
+}
+
+.location-search-panel .auto-complete {
+    margin-bottom: var(--field-spacing);
+}
+
+.location-search-panel__coordinates {
+    flex-direction: column;
+}
+
+.location-search-panel__coordinates-row {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.number-field.location-search-panel__coordinate-field {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.number-field.location-search-panel__coordinate-field-x {
+    margin-right: var(--field-spacing);
+}
+
+.location-search-panel__coordinate-field.invalid .unity-base-text-field__input {
+    color: var(--color-warning);
+}
+
+.location-search-panel__minimap{
+    margin-top: var(--spacing-3);
+    max-height: 320px;
+}

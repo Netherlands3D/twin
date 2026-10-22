@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="toolbar-toolbox">
+    <ui:VisualElement picking-mode="Ignore" class="toolbar-toolbox__group">
+        <nl3d:Toggle name="Dome" toggle-type="transparent" toggle-style="IconOnly" icon="SurfaceDome" tooltip="Kijk onder de grond"/>
+        <nl3d:Button name="Screenshot" button-type="transparent" button-style="IconOnly" icon="Camera" tooltip="Neem een screenshot"/>
+    </ui:VisualElement>
+</ui:UXML>

@@ -4,8 +4,12 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Rendering
 {
+	//TODO make this class a static helper class with only static methods after UIToolkit is fully implemented. No need to keep this as a monobehaviour.
+	
     public class RenderedThumbnail : MonoBehaviour
     {
+	    
+	    
         [Header("Thumbnail")]
         [SerializeField] private RawImage thumbnail;
         [SerializeField] private GameObject displayIfNoThumbnail;
@@ -21,6 +25,7 @@ namespace Netherlands3D.Twin.Rendering
 		[SerializeField] private bool orthographic = false;
 		[SerializeField] private float farClipPlaneCamera = 20000;
 		private RenderTexture thumbnailRenderTexture;
+		
 
         /// <summary>
 		/// Render world bounds to thumbnail

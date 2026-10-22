@@ -1,0 +1,27 @@
+.toolbar-toolbox-fpv {
+    --toolbar-toolbox-spacing: var(--spacing-2);
+    --toolbar-height: var(--spacing-11);
+    --toolbar-max-height: var(--spacing-14);
+    
+    margin-left: 0;
+    margin-top: 0;
+    flex: 0 1 auto;
+    align-items: center;
+}
+
+.toolbar-toolbox-fpv__group {
+    flex-direction: row;
+    height: var(--toolbar-height);
+    min-height: var(--toolbar-height);
+    max-height: var(--toolbar-max-height);
+    margin: 0 var(--spacing-1) var(--spacing-3) var(--spacing-3);
+    background-color: transparent;
+}
+
+.toolbar-toolbox-fpv__group .button,
+.toolbar-toolbox-fpv__group .toggle {
+    flex: 0 auto;
+    margin-right: var(--toolbar-toolbox-spacing);
+}
+
+.icon.image-snap-to-maaiveld { background-image: url("project://database/Assets/Sprites/UI/Icons/SnapToGroundFirstPerson.png");  }

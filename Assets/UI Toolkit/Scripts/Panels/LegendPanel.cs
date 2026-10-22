@@ -1,0 +1,99 @@
+using Netherlands3D.Legend;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
+using UnityEngine;
+using UnityEngine.UIElements;
+using ScrollView = UnityEngine.UIElements.ScrollView;
+
+namespace Netherlands3D.UI.Panels
+{
+    [UxmlElement]
+    public partial class LegendPanel : VisualElement
+    {
+        private Label emptyTextLabel;
+        private ScrollView imageContainer;
+
+        public LegendUrlContainer activeLegendUrlContainer;
+        public bool Visible => !ClassListContains(UtilityClassConstants.HIDDEN);
+
+        public LegendPanel()
+        {
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
+
+            emptyTextLabel = this.Q<Label>("EmptyText");
+            imageContainer = this.Q<ScrollView>("ImageListView");
+            
+            this.Q<ContentContainer>().CloseButtonClicked.AddListener(Close);
+        }
+
+        public void SetVisible(bool show)
+        {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+        }
+
+        public void SetContainer(LegendUrlContainer container)
+        {
+            ClearGraphics();
+
+            if (activeLegendUrlContainer != null)
+            {
+                foreach (var entry in activeLegendUrlContainer.LayerNameLegendUrlDictionary.Values)
+                    entry.LayerActiveChanged.RemoveListener(SetImageActive);
+            }
+
+            activeLegendUrlContainer = container;
+
+            bool isEmpty = container.LayerNameLegendUrlDictionary.Count == 0;
+            ShowEmptyText(isEmpty);
+
+            foreach (var entry in container.LayerNameLegendUrlDictionary.Values)
+            {
+                AddImageComponent(entry.LayerName, entry.Texture, entry.Active);
+                entry.LayerActiveChanged.AddListener(SetImageActive);
+            }
+        }
+
+        private void AddImageComponent(string layerName, Texture2D texture, bool isActive)
+        {
+            var image = new Image();
+            image.name = layerName;
+            image.image = texture;
+            image.AddToClassList("wms-legend-panel__image");
+            imageContainer.Add(image);
+            SetImageActive(layerName, isActive);
+            image.RegisterCallback<GeometryChangedEvent>(e =>
+            {
+                image.style.marginTop = StyleKeyword.Auto; //For some reason the image component gets an inline margin top style that we have to reset
+            });
+        }
+
+        public void RefreshImage(string layerName, Texture2D texture)
+        {
+            var image = imageContainer.Q<Image>(layerName);
+            if (image == null) return;
+            image.image = texture;
+        }
+
+        private void SetImageActive(string layerName, bool isActive)
+        {
+            imageContainer.Q<Image>(layerName).EnableInClassList(UtilityClassConstants.HIDDEN, !isActive);
+        }
+
+        private void ShowEmptyText(bool show)
+        {
+            emptyTextLabel.EnableInClassList(UtilityClassConstants.HIDDEN, !show);
+        }
+
+        private void ClearGraphics()
+        {
+            imageContainer.Clear();
+        }
+
+        private void Close()
+        {
+            SetVisible(false);
+        }
+    }
+}

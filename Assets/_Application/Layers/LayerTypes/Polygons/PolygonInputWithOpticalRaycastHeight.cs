@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Samplers;
 
@@ -11,17 +11,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         protected override void Awake()
         {
             base.Awake();
-            pointerToWorldPosition = GameObject.FindAnyObjectByType<PointerToWorldPosition>();
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
         }
 
-        protected override void UpdateCurrentWorldCoordinate()
+        public override void SetSelectionCurrentPosition(Vector3 position)
         {
-            var point = pointerToWorldPosition.WorldPoint.ToUnity();
+            var point = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
 
             if (point != Vector3.zero)
-                currentWorldCoordinate = point;
+                base.SetSelectionCurrentPosition(point);
             else
-                base.UpdateCurrentWorldCoordinate();
+                base.SetSelectionCurrentPosition(selectionCurrentPosition);
         }
     }
 }

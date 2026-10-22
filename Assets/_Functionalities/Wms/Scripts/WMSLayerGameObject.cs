@@ -1,15 +1,17 @@
 using System;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
-using KindMen.Uxios;
+using System.Text.RegularExpressions;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
+using Netherlands3D.Legend;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -29,7 +31,12 @@ namespace Netherlands3D.Functionalities.Wms
         public Vector2Int PreferredImageSize = Vector2Int.one * 512;
         public bool ShowLegendOnSelect { get; set; } = true;
         public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
-
+        
+        //The following is needed to send a valid getMap request to check for credentials. We don't want to waste many resources, so request a texture of 1x1 px
+        public const string testBBox = "0,300000,280000,625000";
+        private static readonly Regex WidthRegex = new(@"([?&]width=)\d+", RegexOptions.IgnoreCase);
+        private static readonly Regex HeightRegex = new(@"([?&]height=)\d+", RegexOptions.IgnoreCase);
+        
         protected override void OnVisualizationInitialize()
         {
             base.OnVisualizationInitialize();
@@ -42,7 +49,7 @@ namespace Netherlands3D.Functionalities.Wms
             base.OnVisualizationReady();
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
-            SetRenderOrder(LayerData.RootIndex);
+            SetRenderOrder(LayerData.RootId);
             SetLegendActive(ShowLegendOnSelect && LayerData.IsSelected);
         }
 
@@ -54,7 +61,7 @@ namespace Netherlands3D.Functionalities.Wms
             if (!LayerData.HasValidCredentials)
                 active = false;
             
-            Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), active);
+            ServiceLocator.GetService<LegendBehaviour>().ShowLegend(urlPropertyData.Url.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
@@ -80,6 +87,9 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
 
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            ServiceLocator.GetService<LegendBehaviour>().RegisterLayer(urlPropertyData.Url, auth, LayerData.ActiveSelf);
+            
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
@@ -115,9 +125,14 @@ namespace Netherlands3D.Functionalities.Wms
                 HandleCredentials(storedUri, credentialHandler.Authorization);
                 return;
             }
-            
-            credentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
+
             wmsProjectionLayer.WmsUrl = storedUri.ToString();
+
+            string testUrl = storedUri.ToString().Replace("{0}", testBBox);
+            testUrl = WidthRegex.Replace(testUrl, "${1}1");
+            testUrl = HeightRegex.Replace(testUrl, "${1}1");
+
+            credentialHandler.Uri = new Uri(testUrl);
             credentialHandler.ApplyCredentials();
         }
 
@@ -126,8 +141,8 @@ namespace Netherlands3D.Functionalities.Wms
             base.RegisterEventListeners();
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
+            // var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            // ServiceLocator.GetService<LegendBehaviour>().RegisterLayer(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
         }
 
         protected override void UnregisterEventListeners()
@@ -136,7 +151,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            Legend.Instance.UnregisterUrl(urlPropertyData.Url.ToString());
+            ServiceLocator.GetService<LegendBehaviour>().UnregisterLayer(urlPropertyData.Url.ToString());
         }
 
         public override void OnSelect(LayerData layer)
@@ -160,7 +175,7 @@ namespace Netherlands3D.Functionalities.Wms
             //we need to parse the layertype from the getmap request url
             var wmsUrl = urlPropertyData.Url.ToString();
             if(OgcWebServicesUtility.GetLayerNameFromURL(wmsUrl, out var layerName))
-                Legend.Instance.ToggleLayer(layerName, isActive);
+                ServiceLocator.GetService<LegendBehaviour>().SetLayerActive(layerName, isActive);
             
             if (wmsProjectionLayer.isEnabled == isActive) return;
 

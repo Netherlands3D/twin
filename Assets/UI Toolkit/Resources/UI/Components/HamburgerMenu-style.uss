@@ -1,0 +1,88 @@
+.hamburger-menu {
+    --menu-bg-color: transparent;
+    --menu-border-color: var(--color-white);
+    --menu-border-width: var(--spacing-0_5);
+    --menu-border-radius: var(--spacing-2);   
+    --hamburger-button-bg: transparent;
+    --hamburger-button-bg-hover: var(--color-blue-700-hover);
+
+    flex-direction: row;
+    width: auto;
+    min-width: 0;
+    align-items: center; 
+    align-self: flex-start;
+    margin-bottom: var(--spacing-2);
+    background-color: var(--menu-bg-color);
+    border-color: var(--menu-border-color);
+    border-width: var(--menu-border-width);
+    border-radius: var(--menu-border-radius);    
+    max-height: var(--spacing-11);
+}
+
+.hamburger-menu .unity-foldout__toggle {
+    margin: 0;
+    padding: 0;
+}
+
+.hamburger-menu .unity-toggle__input {
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+/* Use the Foldout checkmark as hamburger icon */
+.hamburger-menu .unity-foldout__checkmark {
+    background-image: var(--icon-burgermenu);
+    margin: var(--spacing-2);
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    align-items: center;   
+    background-color: var(--hamburger-button-bg);
+    -unity-background-image-tint-color: var(--color-white);
+}
+
+/*todo the -2px shifts the right edge towards the button edge, find out why */ 
+.hamburger-menu .unity-foldout__content {
+    right: -2px;
+    margin-left: 0; /* overriding the hamburger menu spacing between icon and buttons when folded out!*/
+}
+
+.hamburger-menu .unity-toggle__input > .unity-label {
+    display: none;
+    color: var(--color-white);
+    margin-left: var(--spacing-2);
+}
+
+.hamburger-menu:hover {
+    border-color: var(--color-blue-700);
+    background-color: var(--hamburger-button-bg-hover);
+}
+
+.hamburger-menu.is-expanded:hover {
+    border-color: var(--color-white);
+    background-color: transparent;
+}
+
+.hamburger-menu__group {
+    flex-direction: row;
+}
+
+.hamburger-menu__group .button {   
+    border-color: transparent;
+    max-height: var(--spacing-11);
+}
+
+.hamburger-menu__group .button:hover {
+    border-color: var(--color-blue-700);
+}
+
+.hamburger-menu__group > .divider {
+    width: var(--spacing-0_5);
+    min-width: var(--spacing-0_5);
+    height: var(--spacing-6);
+    min-height: var(--spacing-6);
+    background-color: var(--color-white);
+    border-radius: 1px;
+    align-self: center;
+    margin-right: var(--spacing-2);
+}
+

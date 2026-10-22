@@ -22,10 +22,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
         public Feature Feature { get { return feature; } }
-        public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
+        public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootId; } }
         //todo: Mapping.BoundingBox should be the bbox of all meshes in the feature, this is currently not working correctly.
         public BoundingBox BoundingBox => boundingBox;
         public LayerData LayerData => geoJsonLayerParent.LayerData;
+        private List<GameObject> selectedGameObjects = new List<GameObject>();
 
         private Feature feature;
         private List<Mesh> meshes;
@@ -139,10 +140,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             Bounds featureBounds = layer.GetFeatureBounds(feature);
             Coordinate bottomLeft = new Coordinate(featureBounds.min);
             Coordinate topRight = new Coordinate(featureBounds.max);
-            Coordinate blWgs84 = bottomLeft.Convert(CoordinateSystem.WGS84_LatLon);
-            Coordinate trWgs84 = topRight.Convert(CoordinateSystem.WGS84_LatLon);
-            BoundingBox boundingBox = new BoundingBox(blWgs84, trWgs84);
+            BoundingBox boundingBox = new BoundingBox(bottomLeft, topRight);
             return boundingBox;
+        }
+        
+        public Coordinate GetCoordinateForFeatureMapping()
+        {
+            if(boundingBox == null)
+                UpdateBoundingBox();
+            return boundingBox.Center;
         }
 
         //these gameobjects can represent selected features or thumbnail meshes
@@ -248,11 +254,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             return subObjects;
         }
-
-        public GameObject SelectedGameObject => selectedGameObjects.FirstOrDefault();
-
-        private List<GameObject> selectedGameObjects = new List<GameObject>();
-
+        
         public void Select(string subId = null)
         {
             //transform for mesh world matrix

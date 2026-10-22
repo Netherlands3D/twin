@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
@@ -36,7 +36,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             foreach (var oldKey in keysToReplace)
             {
-                MeshMapping replacedMapping = ServiceLocator.GetService<ObjectSelectorService>().GetReplacedMapping(oldKey);
+                MeshMapping replacedMapping = ServiceLocator.GetService<SelectionService>().GetReplacedMapping(oldKey);
                 if(replacedMapping == null) continue;
                 
                 if (selectedMappings.TryGetValue(oldKey, out var oldList))
@@ -131,7 +131,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (mapping is FeatureMapping featureMapping)
             {
-                return featureMapping.VisualisationParent;
+                return featureMapping.VisualisationLayer as LayerGameObject;
             }
 
             if (mapping is MeshMapping meshMapping)
@@ -140,7 +140,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 if (meshMapping.ObjectMapping == null)                    
                 {
                     //when tile is replacing lod the objectmapping can be missing
-                    map = ServiceLocator.GetService<ObjectSelectorService>().GetReplacedMapping(meshMapping);
+                    map = ServiceLocator.GetService<SelectionService>().GetReplacedMapping(meshMapping);
                 }
                 if (map == null) return null;
 
@@ -163,9 +163,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             foundObject = null;
             string bagId = null;
-            Vector3 groundPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
+            Vector3 groundPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
             Coordinate coord = new Coordinate(groundPosition);
-            List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
+            List<IMapping> mappings = SelectionService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)
                 return bagId;
             
@@ -187,6 +187,58 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
             }
             return bagId;
+        }
+        
+        public MeshMapping FindSubObjectAtCoordinate(Coordinate coordinate, string bagId)
+        {
+            List<IMapping> mappings = SelectionService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coordinate);
+            foreach (MeshMapping mapping in mappings)
+            { 
+                LayerData data = mapping.LayerData;
+                if (data == null || !data.ActiveInHierarchy)
+                    continue;
+                
+                mapping.ObjectMapping.items.TryGetValue(bagId, out var item);
+                if (item != null)
+                {
+                    if (IsMappingVisible(mapping, item.objectID))
+                    {
+                        foundObject = mapping;
+                        return mapping;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void HideSelectedMappings()
+        {
+            SelectionService selector = ServiceLocator.GetService<SelectionService>();
+            foreach(KeyValuePair<MeshMapping, List<string>> selectedMapping in selectedMappings.ToList())
+            {
+                LayerGameObject layer;
+                MeshMapping mapping = selectedMapping.Key;
+                if (mapping.ObjectMapping == null)
+                    mapping = selector.GetReplacedMapping(mapping);
+
+                foreach (string bagId in selectedMapping.Value)
+                {
+                    //try to get the existing layerfeature if the feature was already styled, if not create a new and add to the visualisation
+                    LayerFeature feature = selector.SubObjectSelector.GetLayerFeatureFromBagID(bagId, mapping, out layer);
+                    if (feature == null)
+                    {
+                        ObjectMappingItem item = selector.SubObjectSelector.GetMappingItemForBagID(bagId, mapping, out layer);
+                        feature = layer.CreateFeature(item);
+                        layer.LayerFeatures.Add(feature.Geometry, feature);
+                    }
+
+                    Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
+                    HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                    hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+                }
+            }
+            //when the object gets hidden, deselect the selection mesh.
+            Deselect();
         }
     }
 }

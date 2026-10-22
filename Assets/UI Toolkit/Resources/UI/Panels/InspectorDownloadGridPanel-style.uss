@@ -1,0 +1,63 @@
+.inspector-download-grid-panel {    
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    opacity: 1;
+}
+
+.inspector-download-grid__container{
+    flex-shrink: 0;
+    margin-bottom: var(--spacing-2);
+}
+
+.inspector-download-grid-thumbnail__container{
+    flex-shrink: 0;
+}
+
+.inspector-download-grid__body-tip-text{
+    white-space: pre-wrap;
+}
+
+.inspector-download-grid__number-fields-row{
+    flex-direction: row;
+    align-items: center;
+    align-self: stretch;
+}
+
+.inspector-download-grid__number-fields-row .inspector-download-grid__item{
+    margin-right: var(--spacing-2);
+}
+
+.inspector-download-grid__item.inspector-download-grid__item-last{
+    margin-right: 0;
+}
+
+.inspector-download-grid__number-fields-text{
+    flex-grow: 1;
+}
+
+.inspector-download-grid__button-copy.button{   
+    border-radius: 0;
+    border-width: 0;
+    padding: 0;
+    min-height: auto;
+}
+
+.inspector-download-grid__checkbox.checkbox-toggle{
+    margin-left: var(--spacing-0_5);
+     margin-bottom: var(--spacing-2);
+}
+
+.inspector-download-grid__button-row{
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: var(--spacing-3);
+}
+
+.inspector-download-grid__button.button{
+    margin-left: var(--spacing-3);
+}
+
+/*todo: this is a quick fix for the release, we should check if this can have a more robust solution*/
+.inspector-download-grid__item.number-field.number-field--style-small{
+    width: var(--spacing-25);
+}

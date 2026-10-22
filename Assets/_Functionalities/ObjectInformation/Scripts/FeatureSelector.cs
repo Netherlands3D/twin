@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Netherlands3D.SubObjects;
@@ -14,15 +14,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {      
         
         public bool HasFeatureMapping => featureMappings.Count > 0;
-        public bool HasPolygons
-        {
-            get
-            {
-                return featureMappings
-                    .SelectMany(entry => entry.Value)
-                    .Any(featureMapping => featureMapping.VisualisationLayer.IsPolygon);
-            }
-        }
         
         public List<FeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
 
@@ -105,7 +96,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void FindFeatureAtPointerPosition()
         {            
-            Vector3 groundPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
+            Vector3 groundPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
             FindFeatureByPosition(groundPosition);            
         }
 

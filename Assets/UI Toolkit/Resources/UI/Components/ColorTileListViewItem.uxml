@@ -1,0 +1,9 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    editor-extension-mode="False" 
+    class="color-tile-listview-item"
+>
+    <nl3d:ColorTile/>
+</ui:UXML>

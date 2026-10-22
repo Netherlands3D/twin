@@ -1,0 +1,1199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Accessibility" elementFormDefault="qualified" targetNamespace="Netherlands3D.UI.Components" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
+  <xs:complexType name="ListViewItemType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ListViewItem" substitutionGroup="engine:VisualElement" xmlns:q1="Netherlands3D.UI.Components" type="q1:ListViewItemType" />
+  <xs:complexType name="TextCallOutType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TextCallOut" substitutionGroup="engine:VisualElement" xmlns:q2="Netherlands3D.UI.Components" type="q2:TextCallOutType" />
+  <xs:simpleType name="Toggle_toggle-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Standard" />
+      <xs:enumeration value="transparent" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Toggle_toggle-style_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="WithIcon" />
+      <xs:enumeration value="IconOnly" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Toggle_toggle-icon-position_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Left" />
+      <xs:enumeration value="Right" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Toggle_icon_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Plus" />
+      <xs:enumeration value="Map" />
+      <xs:enumeration value="Folder" />
+      <xs:enumeration value="Trash" />
+      <xs:enumeration value="Back" />
+      <xs:enumeration value="ChevronDown" />
+      <xs:enumeration value="ChevronRight" />
+      <xs:enumeration value="Help" />
+      <xs:enumeration value="Library" />
+      <xs:enumeration value="LibraryAdd" />
+      <xs:enumeration value="Close" />
+      <xs:enumeration value="Tile" />
+      <xs:enumeration value="BurgerMenu" />
+      <xs:enumeration value="AdjustmentsHorizontal" />
+      <xs:enumeration value="Annotation" />
+      <xs:enumeration value="Squares" />
+      <xs:enumeration value="Width" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="VideoCamera" />
+      <xs:enumeration value="UploadFolder" />
+      <xs:enumeration value="Save" />
+      <xs:enumeration value="DownloadTile" />
+      <xs:enumeration value="Object" />
+      <xs:enumeration value="NorthArrow" />
+      <xs:enumeration value="SurfaceDome" />
+      <xs:enumeration value="Settings" />
+      <xs:enumeration value="SelectionPointer" />
+      <xs:enumeration value="Sheets" />
+      <xs:enumeration value="Link" />
+      <xs:enumeration value="CopyPaste" />
+      <xs:enumeration value="Key" />
+      <xs:enumeration value="Credentials" />
+      <xs:enumeration value="FPV" />
+      <xs:enumeration value="KeyTokenCode" />
+      <xs:enumeration value="Legend" />
+      <xs:enumeration value="OrthogonalView" />
+      <xs:enumeration value="PerspectiveView" />
+      <xs:enumeration value="Username" />
+      <xs:enumeration value="UsernamePassword" />
+      <xs:enumeration value="UpdateCredentials" />
+      <xs:enumeration value="Tree" />
+      <xs:enumeration value="SnapToGround" />
+      <xs:enumeration value="SelectionBox" />
+      <xs:enumeration value="Search" />
+      <xs:enumeration value="ScatterObject" />
+      <xs:enumeration value="ScaleV2" />
+      <xs:enumeration value="ScaleV1" />
+      <xs:enumeration value="Checkmark" />
+      <xs:enumeration value="ChevronLeft" />
+      <xs:enumeration value="ChevronUp" />
+      <xs:enumeration value="CSV" />
+      <xs:enumeration value="Down" />
+      <xs:enumeration value="Edit" />
+      <xs:enumeration value="Height" />
+      <xs:enumeration value="Picture" />
+      <xs:enumeration value="LayerMask" />
+      <xs:enumeration value="Line" />
+      <xs:enumeration value="Location" />
+      <xs:enumeration value="MetaData" />
+      <xs:enumeration value="Move" />
+      <xs:enumeration value="Point" />
+      <xs:enumeration value="Polygon" />
+      <xs:enumeration value="Raster" />
+      <xs:enumeration value="ResetTime" />
+      <xs:enumeration value="RotateV1" />
+      <xs:enumeration value="RotateV2" />
+      <xs:enumeration value="Square" />
+      <xs:enumeration value="Up" />
+      <xs:enumeration value="Backward" />
+      <xs:enumeration value="BackwardBlocked" />
+      <xs:enumeration value="Camera" />
+      <xs:enumeration value="Clock" />
+      <xs:enumeration value="ColorWheel" />
+      <xs:enumeration value="EyedropperFull" />
+      <xs:enumeration value="Filters" />
+      <xs:enumeration value="Forward" />
+      <xs:enumeration value="ForwardBlocked" />
+      <xs:enumeration value="Moon" />
+      <xs:enumeration value="Next" />
+      <xs:enumeration value="NoEdit" />
+      <xs:enumeration value="Paint" />
+      <xs:enumeration value="Pause" />
+      <xs:enumeration value="Play" />
+      <xs:enumeration value="Sun" />
+      <xs:enumeration value="Collection" />
+      <xs:enumeration value="LineOfSight" />
+      <xs:enumeration value="Measure" />
+      <xs:enumeration value="Pinned" />
+      <xs:enumeration value="PresentationChart" />
+      <xs:enumeration value="Section" />
+      <xs:enumeration value="Unpinned" />
+      <xs:enumeration value="SmallChevronDown" />
+      <xs:enumeration value="SmallChevronRight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ToggleType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="label" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="value" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="toggle-on-label-click" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="Standard" name="toggle-type" xmlns:q3="Netherlands3D.UI.Components" type="q3:Toggle_toggle-type_Type" use="optional" />
+        <xs:attribute default="WithIcon" name="toggle-style" xmlns:q4="Netherlands3D.UI.Components" type="q4:Toggle_toggle-style_Type" use="optional" />
+        <xs:attribute default="Left" name="toggle-icon-position" xmlns:q5="Netherlands3D.UI.Components" type="q5:Toggle_toggle-icon-position_Type" use="optional" />
+        <xs:attribute default="Map" name="icon" xmlns:q6="Netherlands3D.UI.Components" type="q6:Toggle_icon_Type" use="optional" />
+        <xs:attribute default="Label" name="LabelText" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Toggle" substitutionGroup="engine:VisualElement" xmlns:q7="Netherlands3D.UI.Components" type="q7:ToggleType" />
+  <xs:simpleType name="Breadcrumb_leading-icon-image_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Plus" />
+      <xs:enumeration value="Map" />
+      <xs:enumeration value="Folder" />
+      <xs:enumeration value="Trash" />
+      <xs:enumeration value="Back" />
+      <xs:enumeration value="ChevronDown" />
+      <xs:enumeration value="ChevronRight" />
+      <xs:enumeration value="Help" />
+      <xs:enumeration value="Library" />
+      <xs:enumeration value="LibraryAdd" />
+      <xs:enumeration value="Close" />
+      <xs:enumeration value="Tile" />
+      <xs:enumeration value="BurgerMenu" />
+      <xs:enumeration value="AdjustmentsHorizontal" />
+      <xs:enumeration value="Annotation" />
+      <xs:enumeration value="Squares" />
+      <xs:enumeration value="Width" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="VideoCamera" />
+      <xs:enumeration value="UploadFolder" />
+      <xs:enumeration value="Save" />
+      <xs:enumeration value="DownloadTile" />
+      <xs:enumeration value="Object" />
+      <xs:enumeration value="NorthArrow" />
+      <xs:enumeration value="SurfaceDome" />
+      <xs:enumeration value="Settings" />
+      <xs:enumeration value="SelectionPointer" />
+      <xs:enumeration value="Sheets" />
+      <xs:enumeration value="Link" />
+      <xs:enumeration value="CopyPaste" />
+      <xs:enumeration value="Key" />
+      <xs:enumeration value="Credentials" />
+      <xs:enumeration value="FPV" />
+      <xs:enumeration value="KeyTokenCode" />
+      <xs:enumeration value="Legend" />
+      <xs:enumeration value="OrthogonalView" />
+      <xs:enumeration value="PerspectiveView" />
+      <xs:enumeration value="Username" />
+      <xs:enumeration value="UsernamePassword" />
+      <xs:enumeration value="UpdateCredentials" />
+      <xs:enumeration value="Tree" />
+      <xs:enumeration value="SnapToGround" />
+      <xs:enumeration value="SelectionBox" />
+      <xs:enumeration value="Search" />
+      <xs:enumeration value="ScatterObject" />
+      <xs:enumeration value="ScaleV2" />
+      <xs:enumeration value="ScaleV1" />
+      <xs:enumeration value="Checkmark" />
+      <xs:enumeration value="ChevronLeft" />
+      <xs:enumeration value="ChevronUp" />
+      <xs:enumeration value="CSV" />
+      <xs:enumeration value="Down" />
+      <xs:enumeration value="Edit" />
+      <xs:enumeration value="Height" />
+      <xs:enumeration value="Picture" />
+      <xs:enumeration value="LayerMask" />
+      <xs:enumeration value="Line" />
+      <xs:enumeration value="Location" />
+      <xs:enumeration value="MetaData" />
+      <xs:enumeration value="Move" />
+      <xs:enumeration value="Point" />
+      <xs:enumeration value="Polygon" />
+      <xs:enumeration value="Raster" />
+      <xs:enumeration value="ResetTime" />
+      <xs:enumeration value="RotateV1" />
+      <xs:enumeration value="RotateV2" />
+      <xs:enumeration value="Square" />
+      <xs:enumeration value="Up" />
+      <xs:enumeration value="Backward" />
+      <xs:enumeration value="BackwardBlocked" />
+      <xs:enumeration value="Camera" />
+      <xs:enumeration value="Clock" />
+      <xs:enumeration value="ColorWheel" />
+      <xs:enumeration value="EyedropperFull" />
+      <xs:enumeration value="Filters" />
+      <xs:enumeration value="Forward" />
+      <xs:enumeration value="ForwardBlocked" />
+      <xs:enumeration value="Moon" />
+      <xs:enumeration value="Next" />
+      <xs:enumeration value="NoEdit" />
+      <xs:enumeration value="Paint" />
+      <xs:enumeration value="Pause" />
+      <xs:enumeration value="Play" />
+      <xs:enumeration value="Sun" />
+      <xs:enumeration value="Collection" />
+      <xs:enumeration value="LineOfSight" />
+      <xs:enumeration value="Measure" />
+      <xs:enumeration value="Pinned" />
+      <xs:enumeration value="PresentationChart" />
+      <xs:enumeration value="Section" />
+      <xs:enumeration value="Unpinned" />
+      <xs:enumeration value="SmallChevronDown" />
+      <xs:enumeration value="SmallChevronRight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="BreadcrumbType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="show-leading-icon" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="show-back-button" type="xs:boolean" use="optional" />
+        <xs:attribute default="Map" name="leading-icon-image" xmlns:q8="Netherlands3D.UI.Components" type="q8:Breadcrumb_leading-icon-image_Type" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Breadcrumb" substitutionGroup="engine:VisualElement" xmlns:q9="Netherlands3D.UI.Components" type="q9:BreadcrumbType" />
+  <xs:simpleType name="ToolbarInspector_toolbar-style_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="Library" />
+      <xs:enumeration value="AddLayer" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ToolbarInspectorType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="Normal" name="toolbar-style" xmlns:q10="Netherlands3D.UI.Components" type="q10:ToolbarInspector_toolbar-style_Type" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ToolbarInspector" substitutionGroup="engine:VisualElement" xmlns:q11="Netherlands3D.UI.Components" type="q11:ToolbarInspectorType" />
+  <xs:simpleType name="Button_button-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Standard" />
+      <xs:enumeration value="transparent" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Button_button-style_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="WithIcon" />
+      <xs:enumeration value="IconOnly" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Button_button-icon-position_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Left" />
+      <xs:enumeration value="Right" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Button_icon_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Plus" />
+      <xs:enumeration value="Map" />
+      <xs:enumeration value="Folder" />
+      <xs:enumeration value="Trash" />
+      <xs:enumeration value="Back" />
+      <xs:enumeration value="ChevronDown" />
+      <xs:enumeration value="ChevronRight" />
+      <xs:enumeration value="Help" />
+      <xs:enumeration value="Library" />
+      <xs:enumeration value="LibraryAdd" />
+      <xs:enumeration value="Close" />
+      <xs:enumeration value="Tile" />
+      <xs:enumeration value="BurgerMenu" />
+      <xs:enumeration value="AdjustmentsHorizontal" />
+      <xs:enumeration value="Annotation" />
+      <xs:enumeration value="Squares" />
+      <xs:enumeration value="Width" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="VideoCamera" />
+      <xs:enumeration value="UploadFolder" />
+      <xs:enumeration value="Save" />
+      <xs:enumeration value="DownloadTile" />
+      <xs:enumeration value="Object" />
+      <xs:enumeration value="NorthArrow" />
+      <xs:enumeration value="SurfaceDome" />
+      <xs:enumeration value="Settings" />
+      <xs:enumeration value="SelectionPointer" />
+      <xs:enumeration value="Sheets" />
+      <xs:enumeration value="Link" />
+      <xs:enumeration value="CopyPaste" />
+      <xs:enumeration value="Key" />
+      <xs:enumeration value="Credentials" />
+      <xs:enumeration value="FPV" />
+      <xs:enumeration value="KeyTokenCode" />
+      <xs:enumeration value="Legend" />
+      <xs:enumeration value="OrthogonalView" />
+      <xs:enumeration value="PerspectiveView" />
+      <xs:enumeration value="Username" />
+      <xs:enumeration value="UsernamePassword" />
+      <xs:enumeration value="UpdateCredentials" />
+      <xs:enumeration value="Tree" />
+      <xs:enumeration value="SnapToGround" />
+      <xs:enumeration value="SelectionBox" />
+      <xs:enumeration value="Search" />
+      <xs:enumeration value="ScatterObject" />
+      <xs:enumeration value="ScaleV2" />
+      <xs:enumeration value="ScaleV1" />
+      <xs:enumeration value="Checkmark" />
+      <xs:enumeration value="ChevronLeft" />
+      <xs:enumeration value="ChevronUp" />
+      <xs:enumeration value="CSV" />
+      <xs:enumeration value="Down" />
+      <xs:enumeration value="Edit" />
+      <xs:enumeration value="Height" />
+      <xs:enumeration value="Picture" />
+      <xs:enumeration value="LayerMask" />
+      <xs:enumeration value="Line" />
+      <xs:enumeration value="Location" />
+      <xs:enumeration value="MetaData" />
+      <xs:enumeration value="Move" />
+      <xs:enumeration value="Point" />
+      <xs:enumeration value="Polygon" />
+      <xs:enumeration value="Raster" />
+      <xs:enumeration value="ResetTime" />
+      <xs:enumeration value="RotateV1" />
+      <xs:enumeration value="RotateV2" />
+      <xs:enumeration value="Square" />
+      <xs:enumeration value="Up" />
+      <xs:enumeration value="Backward" />
+      <xs:enumeration value="BackwardBlocked" />
+      <xs:enumeration value="Camera" />
+      <xs:enumeration value="Clock" />
+      <xs:enumeration value="ColorWheel" />
+      <xs:enumeration value="EyedropperFull" />
+      <xs:enumeration value="Filters" />
+      <xs:enumeration value="Forward" />
+      <xs:enumeration value="ForwardBlocked" />
+      <xs:enumeration value="Moon" />
+      <xs:enumeration value="Next" />
+      <xs:enumeration value="NoEdit" />
+      <xs:enumeration value="Paint" />
+      <xs:enumeration value="Pause" />
+      <xs:enumeration value="Play" />
+      <xs:enumeration value="Sun" />
+      <xs:enumeration value="Collection" />
+      <xs:enumeration value="LineOfSight" />
+      <xs:enumeration value="Measure" />
+      <xs:enumeration value="Pinned" />
+      <xs:enumeration value="PresentationChart" />
+      <xs:enumeration value="Section" />
+      <xs:enumeration value="Unpinned" />
+      <xs:enumeration value="SmallChevronDown" />
+      <xs:enumeration value="SmallChevronRight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ButtonType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enable-rich-text" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="emoji-fallback-support" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="parse-escape-sequences" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="selectable" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="double-click-selects-word" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="triple-click-selects-line" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="icon-image" type="xs:string" use="optional" />
+        <xs:attribute default="Standard" name="button-type" xmlns:q12="Netherlands3D.UI.Components" type="q12:Button_button-type_Type" use="optional" />
+        <xs:attribute default="WithIcon" name="button-style" xmlns:q13="Netherlands3D.UI.Components" type="q13:Button_button-style_Type" use="optional" />
+        <xs:attribute default="Left" name="button-icon-position" xmlns:q14="Netherlands3D.UI.Components" type="q14:Button_button-icon-position_Type" use="optional" />
+        <xs:attribute default="false" name="show-type" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="type-label" type="xs:string" use="optional" />
+        <xs:attribute default="Map" name="icon" xmlns:q15="Netherlands3D.UI.Components" type="q15:Button_icon_Type" use="optional" />
+        <xs:attribute default="Label" name="LabelText" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Button" substitutionGroup="engine:VisualElement" xmlns:q16="Netherlands3D.UI.Components" type="q16:ButtonType" />
+  <xs:simpleType name="ListView_virtualization-method_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FixedHeight" />
+      <xs:enumeration value="DynamicHeight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ListView_selection-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Single" />
+      <xs:enumeration value="Multiple" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ListView_show-alternating-row-backgrounds_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="ContentOnly" />
+      <xs:enumeration value="All" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ListView_reorder-mode_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Simple" />
+      <xs:enumeration value="Animated" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ListView_binding-source-selection-mode_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Manual" />
+      <xs:enumeration value="AutoAssign" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ListViewType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Ignore" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="22" name="fixed-item-height" type="xs:float" use="optional" />
+        <xs:attribute default="FixedHeight" name="virtualization-method" xmlns:q17="Netherlands3D.UI.Components" type="q17:ListView_virtualization-method_Type" use="optional" />
+        <xs:attribute default="false" name="show-border" type="xs:boolean" use="optional" />
+        <xs:attribute default="Single" name="selection-type" xmlns:q18="Netherlands3D.UI.Components" type="q18:ListView_selection-type_Type" use="optional" />
+        <xs:attribute default="None" name="show-alternating-row-backgrounds" xmlns:q19="Netherlands3D.UI.Components" type="q19:ListView_show-alternating-row-backgrounds_Type" use="optional" />
+        <xs:attribute default="false" name="reorderable" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="horizontal-scrolling" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="show-foldout-header" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="header-title" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="show-add-remove-footer" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="allow-add" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="allow-remove" type="xs:boolean" use="optional" />
+        <xs:attribute default="Simple" name="reorder-mode" xmlns:q20="Netherlands3D.UI.Components" type="q20:ListView_reorder-mode_Type" use="optional" />
+        <xs:attribute default="true" name="show-bound-collection-size" type="xs:boolean" use="optional" />
+        <xs:attribute default="Manual" name="binding-source-selection-mode" xmlns:q21="Netherlands3D.UI.Components" type="q21:ListView_binding-source-selection-mode_Type" use="optional" />
+        <xs:attribute default="" name="item-template" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ListView" substitutionGroup="engine:VisualElement" xmlns:q22="Netherlands3D.UI.Components" type="q22:ListViewType" />
+  <xs:simpleType name="ContentContainer_container-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Foldout" />
+      <xs:enumeration value="NoFoldout" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ContentContainer_container-style_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="WithIcon" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ContentContainer_leading-icon_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Plus" />
+      <xs:enumeration value="Map" />
+      <xs:enumeration value="Folder" />
+      <xs:enumeration value="Trash" />
+      <xs:enumeration value="Back" />
+      <xs:enumeration value="ChevronDown" />
+      <xs:enumeration value="ChevronRight" />
+      <xs:enumeration value="Help" />
+      <xs:enumeration value="Library" />
+      <xs:enumeration value="LibraryAdd" />
+      <xs:enumeration value="Close" />
+      <xs:enumeration value="Tile" />
+      <xs:enumeration value="BurgerMenu" />
+      <xs:enumeration value="AdjustmentsHorizontal" />
+      <xs:enumeration value="Annotation" />
+      <xs:enumeration value="Squares" />
+      <xs:enumeration value="Width" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="VideoCamera" />
+      <xs:enumeration value="UploadFolder" />
+      <xs:enumeration value="Save" />
+      <xs:enumeration value="DownloadTile" />
+      <xs:enumeration value="Object" />
+      <xs:enumeration value="NorthArrow" />
+      <xs:enumeration value="SurfaceDome" />
+      <xs:enumeration value="Settings" />
+      <xs:enumeration value="SelectionPointer" />
+      <xs:enumeration value="Sheets" />
+      <xs:enumeration value="Link" />
+      <xs:enumeration value="CopyPaste" />
+      <xs:enumeration value="Key" />
+      <xs:enumeration value="Credentials" />
+      <xs:enumeration value="FPV" />
+      <xs:enumeration value="KeyTokenCode" />
+      <xs:enumeration value="Legend" />
+      <xs:enumeration value="OrthogonalView" />
+      <xs:enumeration value="PerspectiveView" />
+      <xs:enumeration value="Username" />
+      <xs:enumeration value="UsernamePassword" />
+      <xs:enumeration value="UpdateCredentials" />
+      <xs:enumeration value="Tree" />
+      <xs:enumeration value="SnapToGround" />
+      <xs:enumeration value="SelectionBox" />
+      <xs:enumeration value="Search" />
+      <xs:enumeration value="ScatterObject" />
+      <xs:enumeration value="ScaleV2" />
+      <xs:enumeration value="ScaleV1" />
+      <xs:enumeration value="Checkmark" />
+      <xs:enumeration value="ChevronLeft" />
+      <xs:enumeration value="ChevronUp" />
+      <xs:enumeration value="CSV" />
+      <xs:enumeration value="Down" />
+      <xs:enumeration value="Edit" />
+      <xs:enumeration value="Height" />
+      <xs:enumeration value="Picture" />
+      <xs:enumeration value="LayerMask" />
+      <xs:enumeration value="Line" />
+      <xs:enumeration value="Location" />
+      <xs:enumeration value="MetaData" />
+      <xs:enumeration value="Move" />
+      <xs:enumeration value="Point" />
+      <xs:enumeration value="Polygon" />
+      <xs:enumeration value="Raster" />
+      <xs:enumeration value="ResetTime" />
+      <xs:enumeration value="RotateV1" />
+      <xs:enumeration value="RotateV2" />
+      <xs:enumeration value="Square" />
+      <xs:enumeration value="Up" />
+      <xs:enumeration value="Backward" />
+      <xs:enumeration value="BackwardBlocked" />
+      <xs:enumeration value="Camera" />
+      <xs:enumeration value="Clock" />
+      <xs:enumeration value="ColorWheel" />
+      <xs:enumeration value="EyedropperFull" />
+      <xs:enumeration value="Filters" />
+      <xs:enumeration value="Forward" />
+      <xs:enumeration value="ForwardBlocked" />
+      <xs:enumeration value="Moon" />
+      <xs:enumeration value="Next" />
+      <xs:enumeration value="NoEdit" />
+      <xs:enumeration value="Paint" />
+      <xs:enumeration value="Pause" />
+      <xs:enumeration value="Play" />
+      <xs:enumeration value="Sun" />
+      <xs:enumeration value="Collection" />
+      <xs:enumeration value="LineOfSight" />
+      <xs:enumeration value="Measure" />
+      <xs:enumeration value="Pinned" />
+      <xs:enumeration value="PresentationChart" />
+      <xs:enumeration value="Section" />
+      <xs:enumeration value="Unpinned" />
+      <xs:enumeration value="SmallChevronDown" />
+      <xs:enumeration value="SmallChevronRight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ContentContainerType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="Label" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="toggle-on-label-click" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="value" type="xs:boolean" use="optional" />
+        <xs:attribute default="Foldout" name="container-type" xmlns:q23="Netherlands3D.UI.Components" type="q23:ContentContainer_container-type_Type" use="optional" />
+        <xs:attribute default="WithIcon" name="container-style" xmlns:q24="Netherlands3D.UI.Components" type="q24:ContentContainer_container-style_Type" use="optional" />
+        <xs:attribute default="true" name="expanded" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="show-divider" type="xs:boolean" use="optional" />
+        <xs:attribute default="Map" name="leading-icon" xmlns:q25="Netherlands3D.UI.Components" type="q25:ContentContainer_leading-icon_Type" use="optional" />
+        <xs:attribute default="false" name="show-help-icon" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="help-url" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ContentContainer" substitutionGroup="engine:VisualElement" xmlns:q26="Netherlands3D.UI.Components" type="q26:ContentContainerType" />
+  <xs:simpleType name="InspectorPanel_toolbar-style_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="Library" />
+      <xs:enumeration value="AddLayer" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="InspectorPanelType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="Label" name="header-text" type="xs:string" use="optional" />
+        <xs:attribute default="Normal" name="toolbar-style" xmlns:q27="Netherlands3D.UI.Components" type="q27:InspectorPanel_toolbar-style_Type" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="InspectorPanel" substitutionGroup="engine:VisualElement" xmlns:q28="Netherlands3D.UI.Components" type="q28:InspectorPanelType" />
+  <xs:complexType name="BackButtonType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BackButton" substitutionGroup="engine:VisualElement" xmlns:q29="Netherlands3D.UI.Components" type="q29:BackButtonType" />
+  <xs:simpleType name="ScrollView_mode_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Vertical" />
+      <xs:enumeration value="Horizontal" />
+      <xs:enumeration value="VerticalAndHorizontal" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ScrollView_nested-interaction-kind_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default" />
+      <xs:enumeration value="StopScrolling" />
+      <xs:enumeration value="ForwardScrolling" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ScrollView_horizontal-scroller-visibility_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Auto" />
+      <xs:enumeration value="AlwaysVisible" />
+      <xs:enumeration value="Hidden" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ScrollView_vertical-scroller-visibility_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Auto" />
+      <xs:enumeration value="AlwaysVisible" />
+      <xs:enumeration value="Hidden" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ScrollView_touch-scroll-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unrestricted" />
+      <xs:enumeration value="Elastic" />
+      <xs:enumeration value="Clamped" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ScrollViewType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="Vertical" name="mode" xmlns:q30="Netherlands3D.UI.Components" type="q30:ScrollView_mode_Type" use="optional" />
+        <xs:attribute default="Default" name="nested-interaction-kind" xmlns:q31="Netherlands3D.UI.Components" type="q31:ScrollView_nested-interaction-kind_Type" use="optional" />
+        <xs:attribute default="false" name="show-horizontal-scroller" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="show-vertical-scroller" type="xs:boolean" use="optional" />
+        <xs:attribute default="Auto" name="horizontal-scroller-visibility" xmlns:q32="Netherlands3D.UI.Components" type="q32:ScrollView_horizontal-scroller-visibility_Type" use="optional" />
+        <xs:attribute default="Auto" name="vertical-scroller-visibility" xmlns:q33="Netherlands3D.UI.Components" type="q33:ScrollView_vertical-scroller-visibility_Type" use="optional" />
+        <xs:attribute default="-1" name="horizontal-page-size" type="xs:float" use="optional" />
+        <xs:attribute default="-1" name="vertical-page-size" type="xs:float" use="optional" />
+        <xs:attribute default="18" name="mouse-wheel-scroll-size" type="xs:float" use="optional" />
+        <xs:attribute default="Clamped" name="touch-scroll-type" xmlns:q34="Netherlands3D.UI.Components" type="q34:ScrollView_touch-scroll-type_Type" use="optional" />
+        <xs:attribute default="0.135" name="scroll-deceleration-rate" type="xs:float" use="optional" />
+        <xs:attribute default="0.1" name="elasticity" type="xs:float" use="optional" />
+        <xs:attribute default="16" name="elastic-animation-interval-ms" type="xs:long" use="optional" />
+        <xs:attribute default="8" name="item-gap" type="xs:float" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ScrollView" substitutionGroup="engine:VisualElement" xmlns:q35="Netherlands3D.UI.Components" type="q35:ScrollViewType" />
+  <xs:simpleType name="Icon_image_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Plus" />
+      <xs:enumeration value="Map" />
+      <xs:enumeration value="Folder" />
+      <xs:enumeration value="Trash" />
+      <xs:enumeration value="Back" />
+      <xs:enumeration value="ChevronDown" />
+      <xs:enumeration value="ChevronRight" />
+      <xs:enumeration value="Help" />
+      <xs:enumeration value="Library" />
+      <xs:enumeration value="LibraryAdd" />
+      <xs:enumeration value="Close" />
+      <xs:enumeration value="Tile" />
+      <xs:enumeration value="BurgerMenu" />
+      <xs:enumeration value="AdjustmentsHorizontal" />
+      <xs:enumeration value="Annotation" />
+      <xs:enumeration value="Squares" />
+      <xs:enumeration value="Width" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="VideoCamera" />
+      <xs:enumeration value="UploadFolder" />
+      <xs:enumeration value="Save" />
+      <xs:enumeration value="DownloadTile" />
+      <xs:enumeration value="Object" />
+      <xs:enumeration value="NorthArrow" />
+      <xs:enumeration value="SurfaceDome" />
+      <xs:enumeration value="Settings" />
+      <xs:enumeration value="SelectionPointer" />
+      <xs:enumeration value="Sheets" />
+      <xs:enumeration value="Link" />
+      <xs:enumeration value="CopyPaste" />
+      <xs:enumeration value="Key" />
+      <xs:enumeration value="Credentials" />
+      <xs:enumeration value="FPV" />
+      <xs:enumeration value="KeyTokenCode" />
+      <xs:enumeration value="Legend" />
+      <xs:enumeration value="OrthogonalView" />
+      <xs:enumeration value="PerspectiveView" />
+      <xs:enumeration value="Username" />
+      <xs:enumeration value="UsernamePassword" />
+      <xs:enumeration value="UpdateCredentials" />
+      <xs:enumeration value="Tree" />
+      <xs:enumeration value="SnapToGround" />
+      <xs:enumeration value="SelectionBox" />
+      <xs:enumeration value="Search" />
+      <xs:enumeration value="ScatterObject" />
+      <xs:enumeration value="ScaleV2" />
+      <xs:enumeration value="ScaleV1" />
+      <xs:enumeration value="Checkmark" />
+      <xs:enumeration value="ChevronLeft" />
+      <xs:enumeration value="ChevronUp" />
+      <xs:enumeration value="CSV" />
+      <xs:enumeration value="Down" />
+      <xs:enumeration value="Edit" />
+      <xs:enumeration value="Height" />
+      <xs:enumeration value="Picture" />
+      <xs:enumeration value="LayerMask" />
+      <xs:enumeration value="Line" />
+      <xs:enumeration value="Location" />
+      <xs:enumeration value="MetaData" />
+      <xs:enumeration value="Move" />
+      <xs:enumeration value="Point" />
+      <xs:enumeration value="Polygon" />
+      <xs:enumeration value="Raster" />
+      <xs:enumeration value="ResetTime" />
+      <xs:enumeration value="RotateV1" />
+      <xs:enumeration value="RotateV2" />
+      <xs:enumeration value="Square" />
+      <xs:enumeration value="Up" />
+      <xs:enumeration value="Backward" />
+      <xs:enumeration value="BackwardBlocked" />
+      <xs:enumeration value="Camera" />
+      <xs:enumeration value="Clock" />
+      <xs:enumeration value="ColorWheel" />
+      <xs:enumeration value="EyedropperFull" />
+      <xs:enumeration value="Filters" />
+      <xs:enumeration value="Forward" />
+      <xs:enumeration value="ForwardBlocked" />
+      <xs:enumeration value="Moon" />
+      <xs:enumeration value="Next" />
+      <xs:enumeration value="NoEdit" />
+      <xs:enumeration value="Paint" />
+      <xs:enumeration value="Pause" />
+      <xs:enumeration value="Play" />
+      <xs:enumeration value="Sun" />
+      <xs:enumeration value="Collection" />
+      <xs:enumeration value="LineOfSight" />
+      <xs:enumeration value="Measure" />
+      <xs:enumeration value="Pinned" />
+      <xs:enumeration value="PresentationChart" />
+      <xs:enumeration value="Section" />
+      <xs:enumeration value="Unpinned" />
+      <xs:enumeration value="SmallChevronDown" />
+      <xs:enumeration value="SmallChevronRight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Icon_color_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="White" />
+      <xs:enumeration value="Black" />
+      <xs:enumeration value="Blue50" />
+      <xs:enumeration value="Blue100" />
+      <xs:enumeration value="Blue200" />
+      <xs:enumeration value="Blue300" />
+      <xs:enumeration value="Blue700" />
+      <xs:enumeration value="Blue900" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="IconType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="Map" name="image" xmlns:q36="Netherlands3D.UI.Components" type="q36:Icon_image_Type" use="optional" />
+        <xs:attribute default="Blue900" name="color" xmlns:q37="Netherlands3D.UI.Components" type="q37:Icon_color_Type" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Icon" substitutionGroup="engine:VisualElement" xmlns:q38="Netherlands3D.UI.Components" type="q38:IconType" />
+  <xs:simpleType name="HelpButton_icon_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Plus" />
+      <xs:enumeration value="Map" />
+      <xs:enumeration value="Folder" />
+      <xs:enumeration value="Trash" />
+      <xs:enumeration value="Back" />
+      <xs:enumeration value="ChevronDown" />
+      <xs:enumeration value="ChevronRight" />
+      <xs:enumeration value="Help" />
+      <xs:enumeration value="Library" />
+      <xs:enumeration value="LibraryAdd" />
+      <xs:enumeration value="Close" />
+      <xs:enumeration value="Tile" />
+      <xs:enumeration value="BurgerMenu" />
+      <xs:enumeration value="AdjustmentsHorizontal" />
+      <xs:enumeration value="Annotation" />
+      <xs:enumeration value="Squares" />
+      <xs:enumeration value="Width" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="VideoCamera" />
+      <xs:enumeration value="UploadFolder" />
+      <xs:enumeration value="Save" />
+      <xs:enumeration value="DownloadTile" />
+      <xs:enumeration value="Object" />
+      <xs:enumeration value="NorthArrow" />
+      <xs:enumeration value="SurfaceDome" />
+      <xs:enumeration value="Settings" />
+      <xs:enumeration value="SelectionPointer" />
+      <xs:enumeration value="Sheets" />
+      <xs:enumeration value="Link" />
+      <xs:enumeration value="CopyPaste" />
+      <xs:enumeration value="Key" />
+      <xs:enumeration value="Credentials" />
+      <xs:enumeration value="FPV" />
+      <xs:enumeration value="KeyTokenCode" />
+      <xs:enumeration value="Legend" />
+      <xs:enumeration value="OrthogonalView" />
+      <xs:enumeration value="PerspectiveView" />
+      <xs:enumeration value="Username" />
+      <xs:enumeration value="UsernamePassword" />
+      <xs:enumeration value="UpdateCredentials" />
+      <xs:enumeration value="Tree" />
+      <xs:enumeration value="SnapToGround" />
+      <xs:enumeration value="SelectionBox" />
+      <xs:enumeration value="Search" />
+      <xs:enumeration value="ScatterObject" />
+      <xs:enumeration value="ScaleV2" />
+      <xs:enumeration value="ScaleV1" />
+      <xs:enumeration value="Checkmark" />
+      <xs:enumeration value="ChevronLeft" />
+      <xs:enumeration value="ChevronUp" />
+      <xs:enumeration value="CSV" />
+      <xs:enumeration value="Down" />
+      <xs:enumeration value="Edit" />
+      <xs:enumeration value="Height" />
+      <xs:enumeration value="Picture" />
+      <xs:enumeration value="LayerMask" />
+      <xs:enumeration value="Line" />
+      <xs:enumeration value="Location" />
+      <xs:enumeration value="MetaData" />
+      <xs:enumeration value="Move" />
+      <xs:enumeration value="Point" />
+      <xs:enumeration value="Polygon" />
+      <xs:enumeration value="Raster" />
+      <xs:enumeration value="ResetTime" />
+      <xs:enumeration value="RotateV1" />
+      <xs:enumeration value="RotateV2" />
+      <xs:enumeration value="Square" />
+      <xs:enumeration value="Up" />
+      <xs:enumeration value="Backward" />
+      <xs:enumeration value="BackwardBlocked" />
+      <xs:enumeration value="Camera" />
+      <xs:enumeration value="Clock" />
+      <xs:enumeration value="ColorWheel" />
+      <xs:enumeration value="EyedropperFull" />
+      <xs:enumeration value="Filters" />
+      <xs:enumeration value="Forward" />
+      <xs:enumeration value="ForwardBlocked" />
+      <xs:enumeration value="Moon" />
+      <xs:enumeration value="Next" />
+      <xs:enumeration value="NoEdit" />
+      <xs:enumeration value="Paint" />
+      <xs:enumeration value="Pause" />
+      <xs:enumeration value="Play" />
+      <xs:enumeration value="Sun" />
+      <xs:enumeration value="Collection" />
+      <xs:enumeration value="LineOfSight" />
+      <xs:enumeration value="Measure" />
+      <xs:enumeration value="Pinned" />
+      <xs:enumeration value="PresentationChart" />
+      <xs:enumeration value="Section" />
+      <xs:enumeration value="Unpinned" />
+      <xs:enumeration value="SmallChevronDown" />
+      <xs:enumeration value="SmallChevronRight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="HelpButtonType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enable-rich-text" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="emoji-fallback-support" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="parse-escape-sequences" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="selectable" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="double-click-selects-word" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="triple-click-selects-line" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="icon-image" type="xs:string" use="optional" />
+        <xs:attribute default="Map" name="icon" xmlns:q39="Netherlands3D.UI.Components" type="q39:HelpButton_icon_Type" use="optional" />
+        <xs:attribute default="Link naar documentatie" name="help-url" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="HelpButton" substitutionGroup="engine:VisualElement" xmlns:q40="Netherlands3D.UI.Components" type="q40:HelpButtonType" />
+  <xs:simpleType name="TextField_vertical-scroller-visibility_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Auto" />
+      <xs:enumeration value="AlwaysVisible" />
+      <xs:enumeration value="Hidden" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TextField_keyboard-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default" />
+      <xs:enumeration value="ASCIICapable" />
+      <xs:enumeration value="NumbersAndPunctuation" />
+      <xs:enumeration value="URL" />
+      <xs:enumeration value="NumberPad" />
+      <xs:enumeration value="PhonePad" />
+      <xs:enumeration value="NamePhonePad" />
+      <xs:enumeration value="EmailAddress" />
+      <xs:enumeration value="NintendoNetworkAccount" />
+      <xs:enumeration value="Social" />
+      <xs:enumeration value="Search" />
+      <xs:enumeration value="DecimalPad" />
+      <xs:enumeration value="OneTimeCode" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TextField_textfield-style_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="WithLabel" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TextField_text-style_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Base" />
+      <xs:enumeration value="Header" />
+      <xs:enumeration value="InspectorHeader" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="TextFieldType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Ignore" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="label" type="xs:string" use="optional" />
+        <xs:attribute default="" name="value" type="xs:string" use="optional" />
+        <xs:attribute default="-1" name="max-length" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="password" type="xs:boolean" use="optional" />
+        <xs:attribute default="*" name="mask-character" type="xs:string" use="optional" />
+        <xs:attribute default="" name="placeholder-text" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="hide-placeholder-on-focus" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="readonly" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="is-delayed" type="xs:boolean" use="optional" />
+        <xs:attribute default="Hidden" name="vertical-scroller-visibility" xmlns:q41="Netherlands3D.UI.Components" type="q41:TextField_vertical-scroller-visibility_Type" use="optional" />
+        <xs:attribute default="true" name="select-all-on-mouse-up" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="select-all-on-focus" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="select-word-by-double-click" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="select-line-by-triple-click" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="emoji-fallback-support" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="hide-mobile-input" type="xs:boolean" use="optional" />
+        <xs:attribute default="Default" name="keyboard-type" xmlns:q42="Netherlands3D.UI.Components" type="q42:TextField_keyboard-type_Type" use="optional" />
+        <xs:attribute default="false" name="auto-correction" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="multiline" type="xs:boolean" use="optional" />
+        <xs:attribute default="Normal" name="textfield-style" xmlns:q43="Netherlands3D.UI.Components" type="q43:TextField_textfield-style_Type" use="optional" />
+        <xs:attribute default="Base" name="text-style" xmlns:q44="Netherlands3D.UI.Components" type="q44:TextField_text-style_Type" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TextField" substitutionGroup="engine:VisualElement" xmlns:q45="Netherlands3D.UI.Components" type="q45:TextFieldType" />
+</xs:schema>

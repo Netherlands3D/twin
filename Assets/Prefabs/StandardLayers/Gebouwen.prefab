@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 1917550957201454778}
   - component: {fileID: 5658425303180220110}
   - component: {fileID: 6432123512545269546}
-  - component: {fileID: -1780917372914214898}
   - component: {fileID: 2626529733265145809}
   - component: {fileID: -1431062917293908258}
   - component: {fileID: 1552071124099096867}
   - component: {fileID: 8885966354490939882}
+  - component: {fileID: 886315986121191821}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -106,38 +106,6 @@ MonoBehaviour:
   prefabIdentifier: cc9d0f9a5a1724c9695a1bef5ecccaec
   thumbnail: {fileID: 0}
   spawnLocation: -1
---- !u!114 &-1780917372914214898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4311489376399559593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  functionalities:
-  - {fileID: 11400000, guid: 621d91ece5b6d0145a271a1899949cdd, type: 2}
-  OnEnableFunctionality:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDisableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6432123512545269546}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
-        m_MethodName: DestroyLayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2626529733265145809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040e59742c03762f891b4749d60c2b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectionMaterial: {fileID: 2100000, guid: 32d66cb461963494c8545032b6d11bd0, type: 2}
+  debugFeatures: 0
 --- !u!114 &8885966354490939882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,3 +163,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cf6eebb305744f697547e83f79458c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &886315986121191821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311489376399559593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c084be5c84d8f65b3ac964cd1244059b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.layers.properties.Gebouwen

@@ -1,0 +1,26 @@
+.color-spectrum {
+    width: var(--spacing-40);
+    height: var(--spacing-40);
+    min-width: var(--spacing-40);
+    min-height: var(--spacing-40);
+    border-radius: 100%;
+}
+
+.color-spectrum__surface {
+    width: 100%;
+    height: 100%;
+    background-image: var(--image-color-wheel);
+}
+
+.color-spectrum__thumb {
+    position: absolute;
+    translate: -50% -50%;
+
+    width: var(--spacing-5);
+    height: var(--spacing-5);
+
+    border-radius: 100%;
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-900);
+    background-color: transparent;
+}

@@ -1,0 +1,51 @@
+.toolbar-main {
+    flex-direction: column;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+}
+
+.unity-button-group {
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-self: flex-start;
+    align-content: flex-start;
+    width: 44px;
+    min-width: 44px;
+    max-width: 52px;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+}
+
+.unity-toggle-button-group {
+    margin: 0px;
+    padding: 0px;
+}
+
+.toolbar-main > .divider {
+    width: var(--spacing-6);       
+    min-height: var(--spacing-0_5);
+    max-height: var(--spacing-0_5);
+    background-color: var(--color-white);
+    border-radius: 1px;
+    align-self: flex-start;
+    margin-left: var(--spacing-2_5); /* todo: find better way to center this in the group*/
+    margin-bottom: var(--spacing-2);
+}
+
+.toolbar-main__group .button {
+    margin-bottom: var(--spacing-2);
+}
+
+.toolbar-main__group {
+    flex-direction: column;
+}
+
+.toolbar-main__group .button.checked,
+.toolbar-main__group .button.active {
+    background-color: var(--color-blue-700); /* or whatever your active state color is */
+    border-color: var(--color-blue-700);
+}

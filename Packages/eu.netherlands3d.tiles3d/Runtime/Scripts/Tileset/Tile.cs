@@ -19,7 +19,7 @@ namespace Netherlands3D.Tiles3D
         //webtileprioritizer properties
         public int priority = 0;
         public int childrenCountDelayingDispose = 0;
-
+        public int loadingChildren=0;
         //BoundingVolume properties
         internal bool boundsAvailable = false;
         private Bounds unityBounds = new Bounds();
@@ -42,9 +42,8 @@ namespace Netherlands3D.Tiles3D
         
 
         //tileproperties
-
+        
         public TileTransform tileTransform = TileTransform.Identity();
-        public double[] transform = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
         public double geometricError;
         public float screenSpaceError = float.MaxValue;
         public string refine;
@@ -56,15 +55,17 @@ namespace Netherlands3D.Tiles3D
             int result = 0;
             if (refine == "ADD")
             {
+                loadingChildren=0;
                 return 0;
             }
             foreach (var childTile in children)
             {
                 if (childTile.content != null)
                 {
-                    if (childTile.contentUri.Contains(".json") == false)
+                    //todo make this a method
+                    if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
                     {
-                        if (childTile.content.State != Content.ContentLoadState.DOWNLOADED)
+                        if (childTile.isLoading)
                         {
                             result += 1;
                         }
@@ -73,7 +74,7 @@ namespace Netherlands3D.Tiles3D
                 }
             }
            
-            
+            loadingChildren=result;
             return result;
         }
         public int loadedChildren;
@@ -81,14 +82,15 @@ namespace Netherlands3D.Tiles3D
         {
             int result = 0;
             if (refine=="ADD")
-            {
+            {   loadedChildren =0;
                 return 0;
             }
             foreach (var childTile in children)
             {
                 if (childTile.content != null)
                 {
-                    if (childTile.contentUri.Contains(".json") == false)
+                    //todo make this a method
+                    if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
                     {
 
                         if (childTile.content.State != Content.ContentLoadState.DOWNLOADING)
@@ -170,41 +172,10 @@ namespace Netherlands3D.Tiles3D
             set => unityBounds = value;
         }
 
-        public Vector3 EulerRotationToVertical()
-        {
-            float posX = (float)(transform[12] / 1000); // measured for earth-center to prime meridian (greenwich)
-            float posY = (float)(transform[13] / 1000); // measured from earth-center to 90degrees east at equator
-            float posZ = (float)(transform[14] / 1000); // measured from earth-center to nothpole
+        
 
-            float angleX = -Mathf.Rad2Deg * Mathf.Atan(posY / posZ);
-            float angleY = -Mathf.Rad2Deg * Mathf.Atan(posX / posZ);
-            float angleZ = -Mathf.Rad2Deg * Mathf.Atan(posY / posX);
-            Vector3 result = new Vector3(angleX, angleY, angleZ);
-            return result;
-        }
 
-        public Quaternion RotationToVertical()
-        {
-            float posX = (float)(transform[12] / 1000000); // measured for earth-center to prime meridian (greenwich)
-            float posY = (float)(transform[13] / 1000000); // measured from earth-center to 90degrees east at equator
-            float posZ = (float)(transform[14] / 1000000); // measured from earth-center to nothpole
 
-            Quaternion rotation = Quaternion.FromToRotation(new Vector3(posX, posY, posZ), new Vector3(0, 0, 1));
-
-            return rotation;
-        }
-
-        public bool ChildrenHaveContent()
-        {
-            if (children.Count > 0) { 
-                foreach (var child in children)
-                {
-                    if (!child.content || child.content.State != Content.ContentLoadState.DOWNLOADED) return false;
-                    break;
-                }
-            }
-            return true;
-        }
 
         public int GetNestingDepth()
         {
@@ -458,6 +429,47 @@ namespace Netherlands3D.Tiles3D
             {
                 content.Dispose();
                 content = null;
+            }
+        }
+    
+        public bool ChildrenHaveContentActive()
+        {
+            return loadedChildren+loadingChildren>0;
+        }
+        public void DestroyChildTilesIfTilesetOutOfView(Camera ofCamera)
+        {
+
+            if(ChildrenHaveContentActive())
+            {
+                return;
+            }
+            //todo use inverse of method that needs be created for this
+            if (contentUri.Contains(".json") || contentUri.Contains(".subtree"))
+            {
+                if(IsInViewFrustrum(ofCamera)==false)
+                    {
+                    DestroyChildTiles();
+                    }
+            }
+            else
+            {
+                foreach (Tile child in children)
+                    {
+                        child.DestroyChildTilesIfTilesetOutOfView(ofCamera);
+                    }
+            }
+
+            
+
+        }
+        private void DestroyChildTiles()
+        {
+            if(children.Count == 0) return;
+            for (int i = children.Count - 1; i >= 0 ; i--)
+            {
+                children[i].DestroyChildTiles();
+                children[i] = null;
+                children.RemoveAt(i);
             }
         }
     }

@@ -5,66 +5,59 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [Serializable]
-    public class PropertyPanelEntry
+    public readonly struct RegisteredPropertySectionType
     {
-        public string TypeName;
-        public GameObject Prefab;
+        public readonly Type SectionType;
+        public readonly int Order;
+
+        public RegisteredPropertySectionType(Type sectionType, int order)
+        {
+            SectionType = sectionType;
+            Order = order;
+        }
     }
-
-    [CreateAssetMenu(fileName = "PropertyPanelRegistry", menuName = "Netherlands3D/PropertyPanelRegistry", order = 0)]
-    public class PropertySectionRegistry : ScriptableObject
+    
+    public class PropertySectionTypeCollection
     {
-        [SerializeField] private List<PropertyPanelEntry> Entries = new();
-#if UNITY_EDITOR
-        private void OnValidate()
+        public Dictionary<Type, List<RegisteredPropertySectionType>> Collection = new ();
+    }
+    
+    public static class PropertySectionRegistry
+    {
+        public static Dictionary<PropertySectionCategory, PropertySectionTypeCollection> TypeRegistry = new();
+            
+        static PropertySectionRegistry()
         {
-            PropertySectionRegistryBuilder.Rebuild();
-        }
-#endif
-        public void AddEntry(string typeName, GameObject prefab)
-        {
-            var entry = new PropertyPanelEntry();
-            entry.TypeName = typeName;
-            entry.Prefab = prefab;
-            Entries.Add(entry);
-        }
-
-        public void Clear()
-        {
-            Entries.Clear();
-        }
-
-        public bool HasPanel(Type type)
-        {
-            return Entries.Any(entry => entry.TypeName == type.AssemblyQualifiedName);
-        }
-
-        public List<GameObject> GetPanelPrefabs(Type type, LayerPropertyData propertyData)
-        {
-            List<GameObject> prefabs = new List<GameObject>();  
-            foreach(var entry in Entries)
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
             {
-                if (entry.TypeName == type.AssemblyQualifiedName)
+                foreach (var type in assembly.GetTypes())
                 {
-                    prefabs.Add(entry.Prefab);
-                }
-            }
-
-            foreach (var interfaceType in type.GetInterfaces())
-            {
-                if (!HasPanel(interfaceType))
-                    continue;
-
-                foreach (var entry in Entries)
-                {
-                    if (entry.TypeName == interfaceType.AssemblyQualifiedName)
+                    if (type
+                            .GetCustomAttributes(typeof(PropertySectionAttribute), false)
+                            .FirstOrDefault() is PropertySectionAttribute attr)
                     {
-                        prefabs.Add(entry.Prefab);
+                        if (type.IsNested) continue; //The [UxmlElement] attribute causes Unity to code-generate a nested UxmlSerializedData class inside the panel classes, and that nested class inherits the attributes (PropertySectionAttribute) of its parent, so it will be picked up twice here.
+                        if (type.IsSubclassOf(typeof(MonoBehaviour))) continue; //todo: Remove this once all property panels are converted
+
+                        if (!TypeRegistry.ContainsKey(attr.Category))
+                        {
+                            TypeRegistry.Add(attr.Category, new ());
+                        }
+                        
+                        var entry = new RegisteredPropertySectionType(type, attr.Order);
+                        
+                        if (TypeRegistry[attr.Category].Collection.ContainsKey(attr.RequiredPropertyType))
+                        {
+                            TypeRegistry[attr.Category].Collection[attr.RequiredPropertyType].Add(entry);
+                        }
+                        else
+                        {
+                            TypeRegistry[attr.Category].Collection.Add(attr.RequiredPropertyType, new() { entry });
+                        }
                     }
                 }
             }
-            return prefabs;
         }
     }
 }

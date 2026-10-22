@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
 using Newtonsoft.Json;
@@ -12,32 +14,48 @@ namespace Netherlands3D.Twin.Layers.Properties
         public ColorPropertyData()
         {
         }
-        
-        //This could be changed to a data member if we want to save the last used coloring type in the project file (eg. stroke or fill)
-        [JsonIgnore] private string colorType = Symbolizer.FillColorProperty; //default
 
-        [JsonIgnore]
-        public string ColorType
-        {
-            get => colorType;
-            set
-            {
-                colorType = value;
-                ColorTypeChanged.Invoke(value);
-            }
-        }
-        
+        //This could be changed to a data member if we want to save the last used coloring type in the project file (eg. stroke or fill)
+       
+
         public void SetDefaultSymbolizerColor(Color? color)
         {
             var symbolizer = AnyFeature.Symbolizer;
             symbolizer.SetColor(ColorType, color);
             OnStylingChanged.Invoke();
         }
-        
+
+        public void SetDefaultSymbolizerVisibility(bool? isVisible)
+        {
+            if(!isVisible.HasValue)
+                return;
+            
+            var symbolizer = AnyFeature.Symbolizer;
+            symbolizer.SetVisibility(isVisible.Value);
+            OnStylingChanged.Invoke();
+        }
+
         public Color? GetDefaultSymbolizerColor()
         {
             var symbolizer = AnyFeature.Symbolizer;
             return symbolizer.GetColor(ColorType);
+        }
+
+        public bool? GetDefaultSymbolizerVisibility()
+        {
+            var symbolizer = AnyFeature.Symbolizer;
+            return symbolizer.GetVisibility();
+        }
+
+        public override List<string> GetUsedColorTypes()
+        {
+            //todo this should be a list of stylingrules where only the keys are gotten but filtered by the coloring key
+            var list = DefaultSymbolizer.GetUsedColorProperties(); 
+            
+            if (!list.Contains(ColorType))
+                list.Add(ColorType); //todo: this is the currently activated Color property, not a list of all supported color properties. We currently do not have a method of determining which color types are supported.
+    
+            return list; 
         }
     }
 }

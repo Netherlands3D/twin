@@ -1,0 +1,13 @@
+.asset-library-listview-item {   
+
+   flex-direction: row;
+}
+
+.asset-library-listview-item > * {
+    align-items: stretch;
+    flex-shrink: 1;
+}
+
+.asset-library-listview-item .icon {
+   align-self: center;
+}

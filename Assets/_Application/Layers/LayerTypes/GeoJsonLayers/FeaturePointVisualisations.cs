@@ -48,26 +48,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             public void CalculateBounds()
             {
                 // Create combined rounded bounds of all lines
-                tiledBounds = new Bounds();
-
-                bool initBounds = false;                
                 foreach (var pointCollection in pointCollection)
                 {
-                    foreach (var coordinate in pointCollection)
+                    for (var i = 0; i < pointCollection.Count; i++)
                     {
-                        Vector3 coordUnity = coordinate.ToUnity();
-                        if(!initBounds)
-                        {
-                            trueBounds = new Bounds(coordUnity, Vector3.zero);
-                            initBounds = true;
-                        }
-
-                        tiledBounds.Encapsulate(coordUnity);
-                        trueBounds.Encapsulate(coordUnity);
+                        var coordinate = pointCollection[i];
+                        if (i == 0)
+                            trueBounds = new Bounds(coordinate.ToUnity(), Vector3.zero);
+                        else
+                            trueBounds.Encapsulate(coordinate.ToUnity());
                     }
                 }
                 trueBounds.Expand(boundsPadding);
-
+                tiledBounds = new Bounds(trueBounds.center, trueBounds.size);
+                
                 // Expand bounds to ceiling to steps
                 tiledBounds.size = new Vector3(
                     Mathf.Ceil(tiledBounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,

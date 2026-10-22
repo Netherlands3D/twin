@@ -1,0 +1,12 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    class="xyz-field"
+>
+    <nl3d:NumberField name="X" label-text="X" class="xyz-field__item"/>
+    <nl3d:NumberField name="Y" label-text="Y" class="xyz-field__item"/>
+    <nl3d:NumberField name="Z" label-text="Z" class="xyz-field__item xyz-field__item-last"/>
+</ui:UXML>

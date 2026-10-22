@@ -1,4 +1,3 @@
-using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Samplers;
@@ -6,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace Netherlands3D.FirstPersonViewer.Measurement
 {
@@ -52,8 +49,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private Action<Vector3, bool> removeMeasurementPointCallback;
         private Action<FirstPersonMeasurementElement> removeElementCallback;
         
-        
-
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
@@ -87,21 +82,29 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         public void HandleInput()
         {
-            if (Interface.PointerIsOverUI()) return;
+            if (App.UIRoot.IsPointerOverUI()) return;
             
             if (mouseLClick.action.WasPressedThisFrame())
             {
                  clickPosition = Pointer.current.position.ReadValue();
                  float heldTime = Time.time - LastClickTime;
                  if (heldTime > maxClickDuration)
-                    raycaster.GetWorldPointAsync(clickPosition, setMeasurementPointCallback, App.Cameras.ActiveCamera, measurementLayerMask);
+                 {
+                     var ray = App.Cameras.ActiveCamera.ScreenPointToRay(clickPosition);
+                     var hit = raycaster.Raycast(ray.origin, ray.direction, out var worldPosition, measurementLayerMask);
+                     setMeasurementPointCallback(worldPosition, hit);
+                 }
 
                  LastClickTime = Time.time;
             }
             if (mouseRClick.action.WasPressedThisFrame())
             {
-                if(measurementSegments.Count > 0)
-                    raycaster.GetWorldPointAsync(Pointer.current.position.ReadValue(), removeMeasurementPointCallback, App.Cameras.ActiveCamera, measurementLayerMask);
+                if (measurementSegments.Count > 0)
+                {
+                    var ray = App.Cameras.ActiveCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
+                    var hit = raycaster.Raycast(ray.origin, ray.direction, out var worldPosition, measurementLayerMask);
+                    removeMeasurementPointCallback(worldPosition, hit);
+                }
             }
         }
 

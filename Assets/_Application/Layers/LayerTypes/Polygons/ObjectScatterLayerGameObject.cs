@@ -340,9 +340,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        public override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
+        public override void OnSiblingIndexOrParentChanged()
         {
-            base.OnSiblingIndexOrParentChanged(newSiblingIndex);
+            base.OnSiblingIndexOrParentChanged();
 
             var newPolygonParent = LayerData.ParentLayer;
             if (newPolygonParent != polygonLayer) //the parent changed

@@ -10,6 +10,7 @@
     "com.unity.ide.rider": "3.0.39",
     "com.unity.ide.visualstudio": "2.0.27",
     "com.unity.memoryprofiler": "1.1.11",
+    "com.unity.meshopt.decompress": "0.3.0-exp.1",
     "com.unity.render-pipelines.universal": "17.3.0",
     "com.unity.splines": "2.8.4",
     "com.unity.test-framework": "1.6.0",

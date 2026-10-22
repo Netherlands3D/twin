@@ -1,0 +1,17 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="ObjectPanel" 
+    class="object-panel"
+>
+    <nl3d:Header icon="Object" text="Object transformeren"/>
+    <ui:VisualElement name="Content" class="object-panel__body">
+        <nl3d:Toggle name="Position" icon="Move" LabelText="Verplaatsen"/>
+        <nl3d:Toggle name="Rotation" icon="RotateV2" LabelText="Roteren"/>
+        <nl3d:Toggle name="Scale" icon="ScaleV2" LabelText="Verschalen"/>
+        <nl3d:Button name="Snap" button-style="WithIcon" icon="SnapToGround" LabelText="Plaats op hoogste raakpunt"/>
+    </ui:VisualElement>
+</ui:UXML>

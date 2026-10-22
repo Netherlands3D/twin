@@ -1,23 +1,12 @@
 .import-asset-panel {
-    display: none;
-    flex-wrap: wrap;
-    flex-shrink: 0;
-    flex-grow: 1;
-    opacity: 0;
-}
-
-.import-asset-panel .contentcontainer {
-    margin-left: var(--spacing-1);
-    margin-right: var(--spacing-1);
-    margin-top: var(--spacing-0_5);
-    margin-bottom: var(--spacing-0_5);
-}
-
-.import-asset-panel.active {
-    display: flex;
     transition-property: opacity;
     transition-duration: 0.3s;
     opacity: 1;
+}
+
+.import-asset-panel .contentcontainer {    
+    margin-top: var(--spacing-0_5);
+    margin-bottom: var(--spacing-0_5);
 }
 
 .import-asset-panel__button-upload,
@@ -31,6 +20,11 @@
     flex-direction: row;
     flex-shrink: 0;
     align-content: auto;
+    margin-bottom: var(--spacing-3);
+}
+
+.import-asset-panel__open-url-icon {
+    display: none;
 }
 
 .import-asset-panel__open-url-field {
@@ -45,15 +39,3 @@
     margin-right: 0;
     margin-top: var(--spacing-2);
 }
-
-/* ================================================================================== */
-/* TODO: Remove as soon as we have fixed copy/paste and credential flow in UI Toolkit */
-.import-asset-panel__button-open-url {
-    width: auto;
-    align-self: stretch;
-}
-
-.import-asset-panel__open-url {
-    display: none
-}
-/* ================================================================================== */

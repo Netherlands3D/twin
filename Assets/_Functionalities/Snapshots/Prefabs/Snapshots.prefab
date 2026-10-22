@@ -71,10 +71,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5966231008024666975, guid: 284367d2433d7f943813c6c5b764aebf,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: -4496860696340268987}
-    - targetCorrespondingSourceObject: {fileID: 5966231008024666975, guid: 284367d2433d7f943813c6c5b764aebf,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2601333904868479103}
   m_SourcePrefab: {fileID: 100100000, guid: 284367d2433d7f943813c6c5b764aebf, type: 3}
 --- !u!114 &3940005848846984673 stripped
@@ -95,34 +91,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7233336306473322173}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-4496860696340268987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3940005848846984674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b7e70441345c14ab89bfbaf4f57f18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: b1c270f3fc728cc4ea719d048fa6ea7f, type: 2}
-  trigger:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3940005848846984673}
-        m_TargetAssemblyTypeName: Netherlands3D.SnapshotTrigger, Assembly-CSharp
-        m_MethodName: TakeSnapshot
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2601333904868479103
 MonoBehaviour:
   m_ObjectHideFlags: 0

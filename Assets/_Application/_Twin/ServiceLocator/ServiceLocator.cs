@@ -10,12 +10,24 @@ namespace Netherlands3D.Services
 
         public static void RegisterService(MonoBehaviour service)
         {
+            if (service == null)
+            {
+                Debug.LogError("Service is null");
+                return;
+            }
+            
             Debug.Log("Registering service: " + service.GetType(), service);
             registeredServices.Add(service.GetType(), service);
         }
 
         public static void UnRegisterService(MonoBehaviour service)
         {
+            if (service == null)
+            {
+                Debug.LogError("Service is null");
+                return;
+            }
+            
             Debug.Log("Unregistering service: " + service.GetType(), service);
             registeredServices.Remove(service.GetType());
         }

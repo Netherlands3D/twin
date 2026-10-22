@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4114483817524287800}
   - component: {fileID: 386381869955578018}
   - component: {fileID: 4447745080902320339}
-  - component: {fileID: 8284198237993072344}
   - component: {fileID: -4083834515804018632}
   - component: {fileID: 8494173785329764173}
   - component: {fileID: 3353194959869015899}
@@ -117,38 +116,6 @@ MonoBehaviour:
   prefabIdentifier: 2e71ce721dd3e41c194c6fb05ad10520
   thumbnail: {fileID: 0}
   spawnLocation: -1
---- !u!114 &8284198237993072344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354824856556962616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  functionalities:
-  - {fileID: 11400000, guid: 388ed5cdb7e3bc94d9f8b15243890251, type: 2}
-  OnEnableFunctionality:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDisableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4447745080902320339}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.ReferencedLayer, Assembly-CSharp
-        m_MethodName: DestroyLayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &-4083834515804018632
 MonoBehaviour:
   m_ObjectHideFlags: 0

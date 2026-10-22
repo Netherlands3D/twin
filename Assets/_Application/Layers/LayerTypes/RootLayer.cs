@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 AddedSelectedLayer.Invoke(layer);
             }
         }
-
+        
         public void RemoveLayerFromSelection(LayerData layer)
         {
             if (SelectedLayers.Remove(layer))
@@ -42,16 +42,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             {
                 selectedLayer.DeselectLayer();
             }
-        }
-
-        public override void Dispose()
-        {
-            foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
-            {
-                child.Dispose();
-            }
-            
-            LayerDestroyed.Invoke();
         }
 
         public void ReconstructParentsRecursive()
@@ -79,17 +69,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     ChildrenLayers.Insert(siblingIndex, layer);
                 else
                     ChildrenLayers.Add(layer);
+                
+                UpdateLayerTreeOrder(); //recalculate the RootIndices since the hierarchy changed
                 ChildrenChanged.Invoke();
             }
         }
 
-        public void UpdateLayerTreeOrder(int index)
+        public void UpdateLayerTreeOrder()
         {
             List<LayerData> children = GetLayerDataTree();
             int count = children.Count();
             for (int i = 0; i < count; i++)
             {
-                children[i].RootIndex = i;
+                children[i].RootId = i-1; //substract 1 so the rootLayer has index -1 instead of 0
             }
         }
 
@@ -101,6 +93,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
             list.Remove(this); //remove rootLayer
             return list;
+        }
+
+        internal override void RemoveFromParent()
+        {
+            //Rootlayer has no parent.
+            return;
         }
 
         private void AddLayersRecursive(LayerData layer, List<LayerData> list)

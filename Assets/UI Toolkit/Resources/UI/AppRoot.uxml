@@ -1,5 +1,14 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="App" picking-mode="Ignore" class="app" style="flex-grow: 1;">
-        <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal" />
-    </ui:VisualElement>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    xmlns:nl3dP="Netherlands3D.UI.Panels"
+    editor-extension-mode="False"
+    name="App"
+    class="app">
+    <ui:Style src="./AppRoot.uss" />
+    <nl3dP:DefaultHUD picking-mode="Ignore" />
+    <nl3dP:FPVHUD class="hidden" picking-mode="Ignore" />
+    <nl3dP:SnackbarPanel />
 </ui:UXML>

@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.Wms.LayerPresets;
+using Netherlands3D.Legend;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using UnityEngine;
 
@@ -50,6 +52,10 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 var request = new WmsGetCapabilities(url, bodyContents);
                 BoundingBoxCache.AddBoundingBoxContainer(request);
+                
+                //since we already have the GetCapabilities downloaded, we can set the legend urls. this will save a webrequest to re-download the GetCapabilities when the legends are requested.
+                var legends = request.GetLegendUrls();
+                ServiceLocator.GetService<LegendBehaviour>().SetLegendUrls(url.ToString(), legends);
 
                 var maps = request.GetMaps(
                     layerPrefab.PreferredImageSize.x,
