@@ -234,7 +234,9 @@ namespace Netherlands3D.CityJson.Structure
         {
             var geometry = new CityGeometry(type, lod, includeSemantics, includeMaterials, includeTextures);
 
-            Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type, version), name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type})");
+            if (!CityGeometry.IsValidType(Type, geometry.Type, version))
+                Debug.LogWarning(name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type}). Loading will continue.");
+            
             Geometries.Add(geometry);
             return geometry;
         }
@@ -249,7 +251,9 @@ namespace Netherlands3D.CityJson.Structure
             foreach (var g in geometryNode)
             {
                 var geometry = CityGeometry.FromJSONNode(g.Value, combinedVertices);
-                Assert.IsTrue(CityGeometry.IsValidType(Type, geometry.Type, version), name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type})");
+                if (!CityGeometry.IsValidType(Type, geometry.Type, version))
+                    Debug.LogWarning(name + $" does not have a valid CityObjectType ({Type}) for the GeometryType ({geometry.Type}). Loading will continue.");
+                
                 Geometries.Add(geometry);
             }
             Attributes = CityObjectAttribute.ParseAttributesNode(this, cityObjectNode["attributes"]);

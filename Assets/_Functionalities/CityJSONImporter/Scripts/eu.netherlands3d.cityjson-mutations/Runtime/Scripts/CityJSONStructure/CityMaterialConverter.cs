@@ -11,10 +11,13 @@ namespace Netherlands3D.CityJson.Visualisation
     {
         [SerializeField] private SemanticMaterials[] semanticMaterials;
         private Material materialTemplate;
-        public Material[] cachedMaterials;
+        public Dictionary<int, Material> cachedMaterials;
 
+        private CityAppearance appearance;
         public void Initialize(CityAppearance appearance)
         {
+            cachedMaterials = new Dictionary<int, Material>();
+            this.appearance = appearance;
             var nullMaterial = semanticMaterials.FirstOrDefault(sm => sm.Type == SurfaceSemanticType.Null);
             if (nullMaterial == null)
             {
@@ -23,20 +26,10 @@ namespace Netherlands3D.CityJson.Visualisation
 
             materialTemplate = nullMaterial.Material;
 
-            ConvertMaterialInfosToUnityMaterials(appearance.MaterialInfos);
+
         }
 
-        private void ConvertMaterialInfosToUnityMaterials(List<CityMaterialInfo> cityMaterialInfos)
-        {
-            cachedMaterials = new Material[cityMaterialInfos.Count];
-            for (var i = 0; i < cityMaterialInfos.Count; i++)
-            {
-                var cityMaterialInfo = cityMaterialInfos[i];
-                var material = ToUnityMaterial(cityMaterialInfo, materialTemplate);
-                cachedMaterials[i] = material;
-            }
-        }
-
+       
         public Material[] GetMaterials(List<int> materialIndices, SurfaceSemanticType semanticTypeFallback)
         {
             var semanticMaterial = semanticMaterials.FirstOrDefault(sm => sm.Type == semanticTypeFallback);
@@ -56,8 +49,15 @@ namespace Netherlands3D.CityJson.Visualisation
                     materials[i] = semanticMaterial.Material;
                     continue;
                 }
-
-                materials[i] = cachedMaterials[materialIndex];
+                if(cachedMaterials.ContainsKey(materialIndex))
+                {
+                    materials[i] = cachedMaterials[materialIndex];
+                    continue;
+                }
+                var cityMaterialInfo = appearance.MaterialInfos[materialIndex];
+                var material = ToUnityMaterial(cityMaterialInfo, materialTemplate);
+                cachedMaterials.Add(materialIndex,material);
+                materials[i]=material;
             }
 
             return materials;
