@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.Layers
             var importedObject = GetComponent<IImportedObject>();
             if (importedObject != null)
             {
-                importedObject.ObjectVisualized.AddListener(OnImportedObjectVisualized);
+                importedObject.ObjectVisualized.RemoveListener(OnImportedObjectVisualized);
             }
         }
 

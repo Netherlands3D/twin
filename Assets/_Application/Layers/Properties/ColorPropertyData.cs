@@ -25,10 +25,26 @@ namespace Netherlands3D.Twin.Layers.Properties
             OnStylingChanged.Invoke();
         }
 
+        public void SetDefaultSymbolizerVisibility(bool? isVisible)
+        {
+            if(!isVisible.HasValue)
+                return;
+            
+            var symbolizer = AnyFeature.Symbolizer;
+            symbolizer.SetVisibility(isVisible.Value);
+            OnStylingChanged.Invoke();
+        }
+
         public Color? GetDefaultSymbolizerColor()
         {
             var symbolizer = AnyFeature.Symbolizer;
             return symbolizer.GetColor(ColorType);
+        }
+
+        public bool? GetDefaultSymbolizerVisibility()
+        {
+            var symbolizer = AnyFeature.Symbolizer;
+            return symbolizer.GetVisibility();
         }
 
         public override List<string> GetUsedColorTypes()
