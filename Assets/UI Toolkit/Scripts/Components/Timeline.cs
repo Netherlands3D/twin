@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Netherlands3D.Functionalities.CityJSON;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
 using Netherlands3D.Timeline;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.ExtensionMethods;
@@ -219,7 +213,6 @@ namespace Netherlands3D.UI.Components
             thumbLabelElement = this.Q<DateTimeLabel>("ThumbLabel");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             
             var viewport = this.Q<VisualElement>("MarksViewport");
@@ -248,15 +241,6 @@ namespace Netherlands3D.UI.Components
             thumbDragUpdateItem = schedule.Execute(Update).Every(0);
         }
 
-        private List<LayerData> FindTimelineCityJsonLayers()
-        {
-            var cityJsonTimelineLayers = ProjectData.Current.RootLayer
-                .GetFlatHierarchy()
-                .FindAll(layer => layer.HasProperty<CityJSONPropertyData>() && layer.HasProperty<TimelineStatusStylingLayerPropertyData>());
-            return cityJsonTimelineLayers;
-        }
-
-        
         private void Update()
         {
             UpdateSnap();
@@ -463,79 +447,11 @@ namespace Netherlands3D.UI.Components
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            if (Application.isPlaying)
-            {
-                /*
-                layersService = App.Layers;
-                
-                foreach (var visualization in layersService.Visualizations)
-                {
-                    HandleLayerVisualizationCreated(visualization);
-                }
-                
-                layersService.VisualizationCreated.AddListener(HandleLayerVisualizationCreated);
-                layersService.LayerRemoved.AddListener(HandleLayerRemoved);
-                */
-            }
-            
             StartSnap();
             markElementsUpdateRequested = true;
             unitGroupsUpdateRequested = true;
         }
 
-
-
-        private void HandleLayerVisualizationCreated(LayerGameObject visualization)
-        {
-            if (visualization is not CityJSONLayerGameObject cityJsonLayerGameObject) return;
-            if (!cityJsonLayerGameObject.TryGetComponent<TimelineCityJson>(out var timelineCityJson)) return;
-            foreach (var entry in timelineLayers)
-            {
-                if (entry.Layer == cityJsonLayerGameObject) return;
-            }
-            timelineLayers.Add((cityJsonLayerGameObject, timelineCityJson));
-            timelineCityJson.TimelineInitialized.AddListener(UpdateTimelineVisibility);
-            UpdateTimelineVisibility();
-        }
-
-        private void UpdateTimelineVisibility()
-        {
-            var hasTimeline = false;
-            foreach (var entry in timelineLayers)
-            {
-                if (entry.Layer == null 
-                    || entry.Timeline == null 
-                    || !entry.Layer.HasLayerData 
-                    || entry.Layer.LayerData.IsDisposed 
-                    || !(entry.Timeline.TimestampCollections.Count > 0))
-                {
-                    continue;
-                }
-
-                hasTimeline = true;
-                break;
-
-            }
-            
-            EnableInClassList("hidden", !hasTimeline);
-
-            if (hasTimeline)
-            {
-                markElementsUpdateRequested = true;
-                unitGroupsUpdateRequested = true;
-            }
-        }
-        
-        private void HandleLayerRemoved(LayerData arg0, bool arg1)
-        {
-            
-        }
-
-        private void OnDetachFromPanel(DetachFromPanelEvent evt)
-        {
-            
-        }
-        
         private void UpdateMarks()
         {
             if (!markElementsUpdateRequested) return;
