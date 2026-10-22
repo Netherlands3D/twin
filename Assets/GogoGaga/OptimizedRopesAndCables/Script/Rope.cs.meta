@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e2fcc597881599646a35e7161a5504ff
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 287164
+  packageName: Optimized Ropes And Cables Tool
+  packageVersion: 1.2
+  assetPath: Assets/GogoGaga/OptimizedRopesAndCables/Script/Rope.cs
+  uploadId: 683666

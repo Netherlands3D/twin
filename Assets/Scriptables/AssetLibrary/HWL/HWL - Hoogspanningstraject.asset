@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9933fa3bab514aeabeac36958097985f, type: 3}
+  m_Name: HWL - Hoogspanningstraject
+  m_EditorClassIdentifier: 
+  id: HWL_hoogspanningstraject
+  title: Hoogspanningstraject
+  description: 
+  children:
+  - {fileID: 11400000, guid: c515af8476cd3304bad7fb65d2220222, type: 2}
+  - {fileID: 11400000, guid: fbfe2e3e8657a2c44b20b0d9dfd06c16, type: 2}
+  - {fileID: 11400000, guid: 72d2dfae3791ca44381b7c044938de93, type: 2}
+  - {fileID: 11400000, guid: 2c2a35a602b453744a0b5f8568782f18, type: 2}
+  - {fileID: 11400000, guid: 6dfe52da5b2d6ca4eb07d868b33b794f, type: 2}
+  - {fileID: 11400000, guid: 5a5d6a8b106dfc54d86de38962a342f1, type: 2}

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 36bb784470883a244898108cda33580f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 287164
+  packageName: Optimized Ropes And Cables Tool
+  packageVersion: 1.2
+  assetPath: Assets/GogoGaga/OptimizedRopesAndCables/Script/RopeWindEffect.cs
+  uploadId: 683666

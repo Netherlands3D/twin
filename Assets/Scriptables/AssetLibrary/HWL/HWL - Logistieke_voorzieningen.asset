@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9933fa3bab514aeabeac36958097985f, type: 3}
+  m_Name: HWL - Logistieke_voorzieningen
+  m_EditorClassIdentifier: 
+  id: HWL_logistieke_voorzieningen
+  title: Logistieke voorzieningen
+  description: 
+  children:
+  - {fileID: 11400000, guid: f630cf523b5142c49b4291306e91d960, type: 2}
+  - {fileID: 11400000, guid: e5a908d55a411444b9f49874989d0b73, type: 2}
+  - {fileID: 11400000, guid: 5c5f1d9e9d687e04cb8a3c4dcf945c6c, type: 2}
+  - {fileID: 11400000, guid: c533777ddd6351447affd0e9c1462fb8, type: 2}
+  - {fileID: 11400000, guid: dd67f6ae0d0ebc043b15b4919ff798b5, type: 2}
+  - {fileID: 11400000, guid: 48b492a01870ef241a948c623db1af78, type: 2}
