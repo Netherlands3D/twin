@@ -1,5 +1,6 @@
 using Netherlands3D.Coordinates;
 using SimpleJSON;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -144,7 +145,7 @@ namespace Netherlands3D.CityJson.Structure
                 MinExtent = new Vector3Double(minX, minY, minZ);
                 MaxExtent = new Vector3Double(maxX, maxY, maxZ);
             }
-            
+
             var absoluteCenter = AbsoluteCenter;
             if (CoordinateSystems.TryFindValidCoordinates(absoluteCenter.x, absoluteCenter.y, absoluteCenter.z, out var possibleCoordinates))
             {
@@ -168,6 +169,7 @@ namespace Netherlands3D.CityJson.Structure
                     go = Instantiate(cityObjectPrefab, transform);
                     co = go.GetComponent<CityObject>();
                 }
+
                 co.SetCityAppearance(Appearance);
                 co.FromJSONNode(cityObjectNode.Key, cityObjectNode.Value, CoordinateSystem, parsedVertices, Version);
                 cityObjects.Add(cityObjectNode.Value, co);
@@ -189,9 +191,20 @@ namespace Netherlands3D.CityJson.Structure
 
             CityObjects = cityObjects.Values.ToList();
 
+            StartCoroutine(CreateGeometry());
+        }
+
+        private IEnumerator CreateGeometry()
+        {
+            System.DateTime time = System.DateTime.UtcNow;
             foreach (var co in CityObjects)
             {
                 co.OnCityObjectParseCompleted();
+                if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
+                {
+                    time = System.DateTime.UtcNow;
+                    yield return null;
+                }
             }
 
             onAllCityObjectsProcessed?.Invoke();

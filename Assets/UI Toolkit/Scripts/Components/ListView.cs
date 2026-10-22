@@ -11,6 +11,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ListView : UnityEngine.UIElements.ListView
     {
+        const string selectableUSSClassName = "collection-view--unselectable";
         // Keep user bind so we can call it first.
         private Action<VisualElement, int> _userBind;
 
@@ -67,7 +68,11 @@ namespace Netherlands3D.UI.Components
         public SelectionType SelectionMode
         {
             get => selectionType;
-            set => selectionType = value;
+            set
+            {
+                selectionType = value;
+                EnableInClassList(selectableUSSClassName, selectionType == SelectionType.None);
+            }
         }
 
         [UxmlAttribute("virtualization-method")]
@@ -110,6 +115,8 @@ namespace Netherlands3D.UI.Components
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+            
+            EnableInClassList(selectableUSSClassName, selectionType == SelectionType.None);
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
