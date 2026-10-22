@@ -33,6 +33,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private IGeoJsonVisualisationLayer visualisationLayer;
         private GeoJsonLayerGameObject geoJsonLayerParent;
         private BoundingBox boundingBox;
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            return Feature.Properties as Dictionary<string, object>;
+        }
 
         public void SetGeoJsonLayerParent(GeoJsonLayerGameObject parentLayer)
         {
@@ -268,6 +273,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             selectedGameObjects.Clear();
 
             visualisationLayer.SetVisualisationDeselected();
+        }
+
+        public void SetMappingProjected(bool projected)
+        {
+            //todo the subobject can be changed here to be projected in the future
         }
     }
 }

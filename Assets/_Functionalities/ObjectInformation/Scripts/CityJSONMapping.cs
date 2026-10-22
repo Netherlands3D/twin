@@ -44,6 +44,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+        public Dictionary<string, object> GetProperties()
+        {
+            return feature.GetProperties();
+        }
+
         public void SetLocalPosition(Vector3Double localPosition)
         {
             this.localPosition = localPosition;
@@ -158,8 +163,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void Select(string subId = null)
         {
             UpdateVisualizer();
-            previousLayerMask = visualizer.gameObject.layer;
-            visualizer.gameObject.layer = LayerMask.NameToLayer("Projected");
             foreach (var mesh in meshes)
             {
                 Color col = new Color(1, 0, 0, 0);
@@ -173,7 +176,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Deselect()
         {
-            visualizer.gameObject.layer =  previousLayerMask;
             if(meshes == null || meshes.Count == 0) return;
             
             foreach (var mesh in meshes)
@@ -185,8 +187,21 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
                 mesh.SetColors(colors);
             }
-            
         }
+
+        public void SetMappingProjected(bool projected)
+        {
+            if (projected)
+            {
+                previousLayerMask = visualizer.gameObject.layer;
+                visualizer.gameObject.layer = LayerMask.NameToLayer("Projected");
+            }
+            else
+            {
+                visualizer.gameObject.layer = previousLayerMask;   
+            }
+        }
+
 #if UNITY_EDITOR
         public void Debug()
         {

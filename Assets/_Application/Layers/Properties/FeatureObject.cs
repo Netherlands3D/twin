@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
@@ -51,24 +50,13 @@ namespace Netherlands3D.Twin.layers.properties
             SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)
             {
-                if (kv.Value is GeoJsonFeatureMapping map)
-                {
-                    BoundingBox bbox = map.BoundingBox;
-                    Dictionary<string, object> properties = map.Feature.Properties as Dictionary<string, object>;
-                    FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
-                    data.Properties = properties;
-                    data.BoundingBox = bbox;
-                    featureIds.Add(kv.Key, data);
-                }
-                else if (kv.Value is CityJSONMapping city)
-                {
-                    BoundingBox bbox = city.BoundingBox;
-                    Dictionary<string, object> properties = city.Feature.GetProperties();
-                    FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
-                    data.Properties = properties;
-                    data.BoundingBox = bbox;
-                    featureIds.Add(kv.Key, data);
-                }
+                BoundingBox bbox = kv.Value.BoundingBox;
+                Dictionary<string, object> properties = kv.Value.GetProperties();
+                FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
+                data.Properties = properties;
+                data.BoundingBox = bbox;
+                data.FeatureMapping = kv.Value;
+                featureIds.Add(kv.Key, data);
             }
             propertyData.FeatureIds = featureIds;
         }

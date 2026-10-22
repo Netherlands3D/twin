@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
@@ -204,13 +205,14 @@ namespace Netherlands3D.UI.Panels
             {
                 Dictionary<string, object> featureProperties = kv.Value.Properties;
                 BoundingBox bbox = kv.Value.BoundingBox;
-                GetFeatureThumbnail(bbox);
+                IMapping mapping = kv.Value.FeatureMapping;
+                GetFeatureThumbnail(bbox, mapping);
                 PopulateAddresses(featureProperties);
                 break;
             }
         }
 
-        private void GetFeatureThumbnail(BoundingBox bbox)
+        private void GetFeatureThumbnail(BoundingBox bbox, IMapping mapping)
         {
             //schedule for next frame so the style is resolved
             thumbnailContainer.schedule.Execute(_ => 
@@ -224,7 +226,10 @@ namespace Netherlands3D.UI.Panels
                 }
                 if(currentObjectBounds.size.magnitude < ThumbnailService.MIN_THUMBNAIL_BOUNDS_SIZE)
                     currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * ThumbnailService.MIN_THUMBNAIL_BOUNDS_SIZE);
+                
+                mapping.SetMappingProjected(true);
                 Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
+                mapping.SetMappingProjected(false);
                 thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
                 float aspect = (float)tex.height / tex.width;
                 float newHeight = thumbnailContainer.resolvedStyle.width * aspect;

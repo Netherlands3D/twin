@@ -1,4 +1,5 @@
-﻿using Netherlands3D.Coordinates;
+﻿using System;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
@@ -38,6 +39,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public BagMeshMapping(string id)
         {
             this.id = id;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            throw new NotImplementedException();
         }
 
         public void SetMeshObject(ObjectMapping mapping)
@@ -211,6 +217,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void Deselect()
         {
            
+        }
+
+        public void SetMappingProjected(bool projected)
+        {
+            
         }
     }
 
