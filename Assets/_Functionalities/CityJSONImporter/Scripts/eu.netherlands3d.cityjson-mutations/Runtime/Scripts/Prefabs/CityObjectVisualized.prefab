@@ -139,7 +139,6 @@ MonoBehaviour:
       Material: {fileID: 2100000, guid: 35f607d55fd3a41df90eb90aa27d4c59, type: 2}
     - Type: 1007
       Material: {fileID: 2100000, guid: d27b4b3d1ad2a41de8bcf446eb52600f, type: 2}
-    cachedMaterials: []
 --- !u!114 &-4129343486682630258
 MonoBehaviour:
   m_ObjectHideFlags: 0

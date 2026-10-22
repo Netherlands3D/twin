@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             return $"feature.{status}.{TimelineStatusColorIdentifier}";
         }
         
-        public IList GetStylingRuleNames()
+        public List<string> GetStylingRuleNames()
         {
             var list = new List<string>(StylingRules.Count);
             foreach (var kvp in StylingRules)
