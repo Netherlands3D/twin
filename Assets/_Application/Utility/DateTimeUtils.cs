@@ -46,6 +46,8 @@ namespace Netherlands3D.Twin.Utility
         {
             var unitCount = timeUnit switch
             {
+                DateTimeUnit.Century => GetYears() / 100d,
+                DateTimeUnit.Decade => GetYears() / 10d,
                 DateTimeUnit.Year => GetYears(),
                 DateTimeUnit.Month => GetMonths(),
                 DateTimeUnit.Day => (endTime - startTime).TotalDays,
@@ -106,39 +108,7 @@ namespace Netherlands3D.Twin.Utility
                 }
             }
         }
-
-        /*
-        public static List<DateTime> GetDateTimesBetween(this DateTimeUnit value, DateTime startTime, DateTime endTime, double timeUnitFactor = 1)
-        {
-            var dateTimes = new List<DateTime>();
-            
-            var anchor = value switch
-            {
-                DateTimeUnit.Year => new DateTime(1, 1, 1, 0, 0, 0, startTime.Kind),
-                DateTimeUnit.Month => startTime.RoundDown(DateTimeUnit.Year),
-                DateTimeUnit.Day => startTime.RoundDown(DateTimeUnit.Month),
-                DateTimeUnit.Hour => startTime.RoundDown(DateTimeUnit.Day),
-                DateTimeUnit.Minute => startTime.RoundDown(DateTimeUnit.Hour),
-                DateTimeUnit.Second => startTime.RoundDown(DateTimeUnit.Minute),
-                _ => throw new ArgumentOutOfRangeException(nameof(value))
-            };
-
-            for (var i = 0;; i++)
-            {
-                var time = anchor.Add(value, i * timeUnitFactor);
-                if (time >= endTime)
-                {
-                    break;
-                }
-
-                if (time >= startTime && (dateTimes.Count == 0 || dateTimes[^1] != time))
-                {
-                    dateTimes.Add(time);
-                }
-            }
-
-            return dateTimes;
-        }*/
+        
         
         /// <returns>Returns the amount of unit groups that fit between startDateTime and endDateTime.</returns>
         private static double GetUnitGroupCount(DateTimeInterval dateTimeInterval, DateTime startTime, DateTime endTime)
@@ -164,53 +134,14 @@ namespace Netherlands3D.Twin.Utility
 
             return groups[0];
         }
-        
-        /*
-        Maybe slightly more optimized? Does the same thing, though.
-        public static DateTimeUnitGroup SelectDateTimeUnitGroup(DateTimeUnitGroup[] groups, DateTime startTime, DateTime endTime, double maxCount, ref int groupIndex)
-        {
-            var currentIndex = groupIndex;
-            
-            while (true)
-            {
-                var currentCount = GetUnitGroupCount(groups[currentIndex], startTime, endTime);
 
-                if (currentCount > maxCount)
-                {
-                    currentIndex--;
-                    if (currentIndex == 0)
-                    {
-                        groupIndex = currentIndex;
-                        return groups[groupIndex];
-                    }
-                    else
-                    {
-                        var nextCount = GetUnitGroupCount(groups[currentIndex + 1], startTime, endTime);
-                        if (nextCount > maxCount)
-                        {
-                            groupIndex = currentIndex;
-                            return groups[groupIndex];
-                        }
-                        else
-                        {
-                            currentIndex++;
-                            if (currentIndex == groups.Length - 1)
-                            {
-                                groupIndex = currentIndex;
-                                return groups[groupIndex];
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
-        
-        
         public static DateTime Add(this DateTime dateTime, DateTimeInterval interval)
         {
             var roundedAmount = (int)interval.Amount;
             dateTime = interval.TimeUnit switch
             {
+                DateTimeUnit.Century => dateTime.AddYears(roundedAmount * 100),
+                DateTimeUnit.Decade => dateTime.AddYears(roundedAmount * 10),
                 DateTimeUnit.Year => dateTime.AddYears(roundedAmount),
                 DateTimeUnit.Month => dateTime.AddMonths(roundedAmount),
                 DateTimeUnit.Day => dateTime.AddDays(roundedAmount),
@@ -224,6 +155,8 @@ namespace Netherlands3D.Twin.Utility
             
             dateTime = interval.TimeUnit switch
             {
+                DateTimeUnit.Century => dateTime.AddMonths((int)Math.Floor(fraction * 1200)),
+                DateTimeUnit.Decade => dateTime.AddMonths((int)Math.Floor(fraction * 120)),
                 DateTimeUnit.Year => dateTime.AddMonths((int)Math.Floor(fraction * 12)),
                 DateTimeUnit.Month => dateTime.AddDays((int)Math.Floor(fraction * DateTime.DaysInMonth(dateTime.Year, dateTime.Month))),
                 DateTimeUnit.Day => dateTime.AddHours(Math.Floor(fraction * 24d)),
@@ -251,47 +184,37 @@ namespace Netherlands3D.Twin.Utility
                 ? previous
                 : next;
         }
-        
+
+        public static DateTime RoundDown(this DateTime time, DateTimeUnit timeUnit)
+        {
+            return timeUnit switch
+            {
+                DateTimeUnit.Century => new DateTime((time.Year - 1) / 100 * 100 + 1, 1, 1, 0, 0, 0, time.Kind),
+                DateTimeUnit.Decade => new DateTime((time.Year - 1) / 10 * 10 + 1, 1, 1, 0, 0, 0, time.Kind),
+                DateTimeUnit.Year => new DateTime(time.Year, 1, 1, 0, 0, 0, time.Kind),
+                DateTimeUnit.Month => new DateTime(time.Year, time.Month, 1, 0, 0, 0, time.Kind),
+                DateTimeUnit.Day => time.Date,
+                DateTimeUnit.Hour => new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, 0, time.Kind),
+                DateTimeUnit.Minute => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, 0, time.Kind),
+                DateTimeUnit.Second => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, time.Second, time.Kind),
+
+                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit))
+            };
+        }
         
         public static DateTime RoundDown(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
         {
+            if (interval.Amount == 1 && rootTime == default)
+            {
+                return time.RoundDown(interval.TimeUnit);
+            }
+            
             var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(rootTime, time, interval.Amount);
             
             var previousIndex = Math.Floor(intervalCount);
 
             return rootTime.Add(new DateTimeInterval(
                 interval.TimeUnit, previousIndex * interval.Amount));
-        }
-
-        private static DateTime GetBaseTime(this DateTime time,  DateTimeUnit timeUnit, DateTime rootTime = default)
-        {
-            return timeUnit switch
-            {
-                DateTimeUnit.Year => new DateTime(1, rootTime.Month, rootTime.Day, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
-                DateTimeUnit.Month => new DateTime(time.Year, 1, rootTime.Day, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
-                DateTimeUnit.Day => new DateTime(time.Year, time.Month, 1, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
-                DateTimeUnit.Hour => new DateTime(time.Year, time.Month, time.Day, 0, rootTime.Minute, rootTime.Second, time.Kind),
-                DateTimeUnit.Minute => new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, rootTime.Second, time.Kind),
-                DateTimeUnit.Second => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, 0, time.Kind),
-                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), timeUnit, null)
-            };
-        }
-
-
-        public static double GetUnitValue(this DateTime dateTime, DateTimeUnit timeUnit)
-        {
-            var unitValue = timeUnit switch
-            {
-                DateTimeUnit.Year => dateTime.Year - 1 + (dateTime.Month - 1) / 12d,
-                DateTimeUnit.Month => dateTime.Month - 1 +
-                                      (dateTime.Day - 1) / (double)DateTime.DaysInMonth(dateTime.Year, dateTime.Month),
-                DateTimeUnit.Day => dateTime.Day - 1 + dateTime.Hour / 24d,
-                DateTimeUnit.Hour => dateTime.Hour + dateTime.Minute / 60d,
-                DateTimeUnit.Minute => dateTime.Minute + dateTime.Second / 60d,
-                DateTimeUnit.Second => dateTime.Second + dateTime.Millisecond / 1000d,
-                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit),timeUnit, null)
-            };
-            return unitValue;
         }
     }
 }

@@ -37,9 +37,9 @@
     background-color: black;
 }
 
-.timeline__mark--primary   { height: 12px; }
-.timeline__mark--secondary { height: 8px; }
-.timeline__mark--tertiary  { height: 4px; }
+.timeline__mark--primary   { height: 8px; }
+.timeline__mark--secondary { height: 4px; }
+.timeline__mark--tertiary  { height: 2px; }
 
 .timeline__labels-viewport {
     flex-grow: 1;
@@ -66,9 +66,12 @@
 
 .timeline__label > .unity-label {
     -unity-text-align: middle-center;
-    -unity-font-style: bold;
     color: white;
     text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.9);
+}
+
+.timeline__label--primary > .unity-label {
+    -unity-font-style: bold;
 }
 
 .timeline__thumb-container {
@@ -116,3 +119,5 @@
     text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.9);
     margin: 4px;
 }
+
+.timeline__thumb-label > .unity-label {

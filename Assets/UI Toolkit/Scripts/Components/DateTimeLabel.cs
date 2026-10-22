@@ -15,6 +15,8 @@ namespace Netherlands3D.UI.Components
         private DateTime value = default(DateTime);
         private DateTimeUnit context;
         private DateTimeUnit precision;
+
+        private CultureInfo culture = CultureInfo.GetCultureInfo("nl-NL");
         
         
         public DateTimeLabel()
@@ -86,7 +88,7 @@ namespace Netherlands3D.UI.Components
             
             if (Includes(DateTimeUnit.Day)) dateParts.Add("%d");
             if (Includes(DateTimeUnit.Month)) dateParts.Add("MMM");
-            if (Includes(DateTimeUnit.Year)) dateParts.Add("yyyy");
+            if (Includes(DateTimeUnit.Year) || Includes(DateTimeUnit.Decade) || Includes(DateTimeUnit.Century)) dateParts.Add("yyyy");
 
             if (Includes(DateTimeUnit.Hour)) timeParts.Add("HH");
             if (Includes(DateTimeUnit.Minute)) timeParts.Add("mm");
@@ -99,7 +101,7 @@ namespace Netherlands3D.UI.Components
 
             displayLabel.text = value.ToString(
                 format,
-                CultureInfo.CurrentCulture
+                culture
             );
             
         }
