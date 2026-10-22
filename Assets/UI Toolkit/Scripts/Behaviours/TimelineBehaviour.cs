@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Timeline;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
-using Netherlands3D.Twin.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,25 +13,35 @@ namespace Netherlands3D
     
     public class TimelineBehaviour : MonoBehaviour
     {
-
-        private Layers layersService;
+        
         private UI.Components.Timeline timelineElement;
 
         private readonly List<(CityJSONLayerGameObject Layer, TimelineCityJson TimelineLayer)> timelineLayerPairs = new();
 
-        private VisualElement root;
+
         
-        void Awake()
+        void OnEnable()
         {
-            layersService = App.Layers;
-            timelineElement = App.UIRoot.Root.Q<UI.Components.Timeline>();
+            var layersService = App.Layers;
             foreach (var layer in layersService.Visualizations)
             {
                 SubscribeToTimelineLayer(layer);
             }
             layersService.VisualizationCreated.AddListener(HandleLayerVisualizationAdded);
             layersService.LayerRemoved.AddListener(HandleLayerRemoved);
-
+            UpdateTimelineElementVisibility();
+        }
+        
+        void OnDisable() 
+        {
+            var layersService = App.Layers;
+            foreach (var layer in layersService.Visualizations)
+            {
+                UnsubscribeToTimelineLayer(layer);
+            }
+            layersService.VisualizationCreated.RemoveListener(HandleLayerVisualizationAdded);
+            layersService.LayerRemoved.RemoveListener(HandleLayerRemoved);
+            SetTimelineElementVisibility(false);
         }
 
         private void HandleLayerVisualizationAdded(LayerGameObject layerGameObject)
@@ -70,6 +81,20 @@ namespace Netherlands3D
             cityJsonTimelineLayer.TimelineInitialized.AddListener(HandleTimelineLayerInitialized);
             UpdateTimelineElementVisibility();
         }
+        
+        private void UnsubscribeToTimelineLayer(LayerGameObject layer)
+        {
+            if (layer is not CityJSONLayerGameObject cityJsonLayer) return;
+            if (!cityJsonLayer.TryGetComponent<TimelineCityJson>(out var cityJsonTimelineLayer)) return;
+            cityJsonTimelineLayer.TimelineInitialized.RemoveListener(HandleTimelineLayerInitialized);
+            var pairsToRemove = timelineLayerPairs.FindAll(e => e.Layer == cityJsonLayer);
+            foreach (var pairToRemove in pairsToRemove)
+            {
+                timelineLayerPairs.Remove(pairToRemove);
+            }
+
+            UpdateTimelineElementVisibility();
+        }
 
         private void HandleTimelineLayerInitialized()
         {
@@ -79,16 +104,24 @@ namespace Netherlands3D
         private void UpdateTimelineElementVisibility()
         {
             var hasTimeline = false;
+            
             foreach (var timelineLayerPair in timelineLayerPairs)
             {
-                if (timelineLayerPair.TimelineLayer.TimestampCollections.Count > 0)
+                var timelineLayer = timelineLayerPair.TimelineLayer;
+                if (timelineLayer.TimestampCollections.Count > 0)
                 {
                     hasTimeline = true;
                     continue;
                 }
             }
 
-            timelineElement.EnableInClassList("hidden", !hasTimeline);
+            SetTimelineElementVisibility(!hasTimeline);
+        }
+
+        private void SetTimelineElementVisibility(bool visible)
+        {
+            timelineElement ??= App.UIRoot.Root.Q<UI.Components.Timeline>();
+            timelineElement.EnableInClassList("hidden", visible);
         }
     }
     
