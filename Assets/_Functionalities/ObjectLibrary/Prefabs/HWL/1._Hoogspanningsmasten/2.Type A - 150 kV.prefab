@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4705758047892485819}
   - component: {fileID: -18391829949753534}
   - component: {fileID: -1451336180358219254}
+  - component: {fileID: 2517188873492522495}
   m_Layer: 0
   m_Name: 2.Type A - 150 kV
   m_TagString: Untagged
@@ -72,6 +73,9 @@ MonoBehaviour:
   prefabIdentifier: 353ba723424e3d0469d4c770da8fc061
   thumbnail: {fileID: 0}
   spawnLocation: 0
+  VisualisationError:
+    m_PersistentCalls:
+      m_Calls: []
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
@@ -108,6 +112,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2517188873492522495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937650689336427930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cdcf22a491277ce0ab1e4bb664c90fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Functionalities.ObjectLibrary.ElectricityPole
+  Connectors: []
 --- !u!1001 &5521774249214407847
 PrefabInstance:
   m_ObjectHideFlags: 0
