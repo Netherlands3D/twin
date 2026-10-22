@@ -142,7 +142,7 @@ namespace Netherlands3D.Twin.Rendering
 
         private void Awake()
         {
-            MakeMaterialInstances();
+            CreateMaterialInstances();
         }
 
         private void Start()
@@ -150,7 +150,7 @@ namespace Netherlands3D.Twin.Rendering
             IsProjected = isProjected; //initialize layers
         }
 
-        protected virtual void MakeMaterialInstances()
+        public virtual void CreateMaterialInstances()
         {
             pointMaterial = new Material(materialTemplate); //make material instance to work with styling
         }

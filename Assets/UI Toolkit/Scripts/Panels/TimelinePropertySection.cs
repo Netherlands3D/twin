@@ -57,8 +57,9 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            // timelineStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
+            timelineStatusStylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
             ColorPicker.ColorChanged.RemoveListener(OnPickColor);
+            ColorPicker.VisibilityChanged.RemoveListener(OnVisibilityChanged);
         }
         
         private VisualElement MakeListViewItem()
@@ -68,6 +69,7 @@ namespace Netherlands3D.UI.Panels
             item.RegisterCallback<ClickEvent>(evt =>
             {
                 ColorPicker.SetColorInputComponentsWithoutNotify(item.Tile.Color);
+                ColorPicker.SetTransparentToggleWithoutNotify(item.Tile.VisibilityState);
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
@@ -80,9 +82,11 @@ namespace Netherlands3D.UI.Panels
            
             string status = listView.itemsSource[index] as string;
             Color? color = timelineStatusStylingPropertyData.GetColorForStatus(status);
+            bool? visibility = timelineStatusStylingPropertyData.GetVisibilityForStatus(status);
             
             tile.Tile.ColorHex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : ColorUtility.ToHtmlStringRGB(Color.white);
             tile.Tile.LabelText = status;
+            tile.Tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
         }
         
         private void UpdateSwatches()
@@ -93,20 +97,40 @@ namespace Netherlands3D.UI.Panels
         
         private void OnPickColor(Color color)
         {
-            foreach (int i in listView.selectedIndices.ToList())
+            var selectedIndices = listView.selectedIndices.ToList();
+            var changedStateColors = new Dictionary<string, Color>(selectedIndices.Count);
+            foreach (int i in selectedIndices)
             {
                 string status = listView.itemsSource[i] as string;
-                timelineStatusStylingPropertyData.SetColorForStatus(status, color);
+                changedStateColors.Add(status, color);
             }
+            timelineStatusStylingPropertyData.SetColorsForStatuses(changedStateColors);
         }
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             timelineStatusStylingPropertyData = properties.Get<TimelineStatusStylingLayerPropertyData>();
             ColorPicker.ColorChanged.AddListener(OnPickColor);
+            ColorPicker.VisibilityChanged.AddListener(OnVisibilityChanged);
+            ColorPicker.SetVisibilityToggleEnabled(true);
             
             timelineStatusStylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches); //todo: do this once per frame
             UpdateSwatches();
+        }
+
+        private void OnVisibilityChanged(bool isVisible)
+        {
+            var selectedIndices = listView.selectedIndices.ToList();
+            var changedStateColors = new Dictionary<string, bool>(selectedIndices.Count);
+            if(selectedIndices.Count == 0)
+                return;
+            
+            foreach (int i in selectedIndices)
+            {
+                string status = listView.itemsSource[i] as string;
+                changedStateColors.Add(status, isVisible);
+            }
+            timelineStatusStylingPropertyData.SetVisibilityForStatuses(changedStateColors);
         }
     }
 }

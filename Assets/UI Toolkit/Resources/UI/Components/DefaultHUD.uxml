@@ -1,4 +1,4 @@
-<ui:UXML 
+﻿<ui:UXML 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:ui="UnityEngine.UIElements" 
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
@@ -14,6 +14,7 @@
                 <nl3d:ToolbarMain picking-mode="Ignore"/>
                 <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
                 <nl3dP:LegendPanel />
+                <nl3dP:TimelineLegendPanel />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="TopSection" class="default-hud__top-section" picking-mode="Ignore">
@@ -28,8 +29,8 @@
     <ui:VisualElement name="BottomSection" picking-mode="Ignore" class="default-hud__bottom-section">
         <ui:VisualElement name="BottomInfo" picking-mode="Ignore" class="default-hud__bottom-info">
             <nl3d:Timeline start-time="2020-06-15T00:00:00+02:00" end-time="2040-06-15T23:59:59+02:00" current-time="2025-01-01T00:00:00+02:00" unit-context="Year" unit-precision="Month"/>
-            <nl3d:DebugInfo />
-            <nl3d:Footer />
+            <nl3d:DebugInfo/>
+            <nl3d:Footer/>
         </ui:VisualElement>
         <ui:VisualElement name="BottomTools" picking-mode="Ignore" class="default-hud__bottom-tools">
             <nl3d:ToolbarNavigation />

@@ -25,7 +25,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
-        public Dictionary<Feature, FeatureLineVisualisations> SpawnedVisualisations => spawnedVisualisations;
         private List<List<Coordinate>> visualisationsToRemove = new();
         private List<List<Coordinate>> selectionList = new();
         
@@ -58,11 +57,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
         
         public Material RenderMaterial => LineRenderer3D.LineMaterial;
-
-        public void SetColorForFeature(Feature feature, Color color)
-        {
-            throw new NotImplementedException();
-        }
         
         public List<Mesh> GetMeshData(Feature feature)
         {

@@ -67,16 +67,25 @@ namespace Netherlands3D.CityJson.Visualisation
             return coordinates;
         }
         
-        public override void SetFillColor(Color color)
+        public override void SetFillColor(Color? color)
         {
-            batchedMeshInstanceRenderer.SetAllColors(color);
+            if (batchedMeshInstanceRenderer is PointRenderer3D pointRenderer)
+            {
+                if(color.HasValue)
+                    pointRenderer.SetAllColors(color.Value);
+                else
+                    pointRenderer.CreateMaterialInstances();
+            }
         }
 
-        public override void SetLineColor(Color color)
+        public override void SetLineColor(Color? color)
         {
             if (batchedMeshInstanceRenderer is LineRenderer3D lineRenderer)
             {
-                lineRenderer.SetAllColors(color);
+                if(color.HasValue)
+                    lineRenderer.SetAllColors(color.Value);
+                else
+                    lineRenderer.CreateMaterialInstances();
             }
         }
     }

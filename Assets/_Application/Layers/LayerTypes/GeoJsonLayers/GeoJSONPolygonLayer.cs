@@ -55,15 +55,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
         
-        public void SetColorForFeature(Feature feature, Color color)
-        {
-            var pv = spawnedVisualisations[feature];
-            foreach (var polygon in pv.Data)
-            {
-                polygon.VisualisationMaterial.color = color;
-            }
-        }
-        
         public Material RenderMaterial
         {
             get

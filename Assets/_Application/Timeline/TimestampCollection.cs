@@ -11,8 +11,6 @@ namespace Netherlands3D.Timeline
     public class TimestampCollection
     {
         public List<Timestamp> Timestamps = new List<Timestamp>();
-        public float MinFloatValue { get; private set; }
-        public float MaxFloatValue { get; private set; }
 
         public TimestampCollection(string timestampsJsonArray)
         {
@@ -24,7 +22,6 @@ namespace Netherlands3D.Timeline
             Timestamps = JsonConvert.DeserializeObject<List<Timestamp>>(timestampsJsonArray, settings);
 
             Sort();
-            CalculateMinMax();
         }
 
         private void Sort()
@@ -32,18 +29,11 @@ namespace Netherlands3D.Timeline
             Timestamps.Sort((x, y) => x.timestamp.CompareTo(y.timestamp));
         }
 
-        private void CalculateMinMax()
-        {
-            var timestampsWithFloatValues = Timestamps.Where(t => t.ValueAsFloat.HasValue);
-            if(timestampsWithFloatValues.Any())
-            {
-                MinFloatValue = timestampsWithFloatValues.Min(t => t.ValueAsFloat.Value);
-                MaxFloatValue = timestampsWithFloatValues.Max(t => t.ValueAsFloat.Value);
-            }
-        }
-
         public Timestamp GetCurrentTimestamp(DateTime currentTime)
         {
+            if (Timestamps.Count == 0)
+                return null;
+            
             Timestamp current = Timestamps[0];
             if (currentTime < current.timestamp)
                 return null;
