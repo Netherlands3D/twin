@@ -130,7 +130,10 @@ namespace Netherlands3D.UI.Components
             set => CurrentValue = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
         }
 
-        public DateTime StartValue
+        private DateTime unpaddedStartValue;
+        private DateTime unpaddedEndValue;
+        
+        private DateTime StartValue
         {
             get => startTime;
             set
@@ -142,7 +145,7 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        public DateTime EndValue
+        private DateTime EndValue
         {
             get => endTime;
             set
@@ -242,14 +245,54 @@ namespace Netherlands3D.UI.Components
             thumbDragUpdateItem = schedule.Execute(Update).Every(0);
         }
 
-        private List<LayerData> FindTimelineCityJsonLayers()
+        public void SetUnpaddedRange(DateTime min, DateTime max, DateTime current)
         {
-            var cityJsonTimelineLayers = ProjectData.Current.RootLayer
-                .GetFlatHierarchy()
-                .FindAll(layer => layer.HasProperty<CityJSONPropertyData>() && layer.HasProperty<TimelineStatusStylingLayerPropertyData>());
-            return cityJsonTimelineLayers;
+            CurrentValue = current;
+            unpaddedStartValue = min;
+            unpaddedEndValue = max;
+            SetRange(min, max);
+        }
+        
+        public void SetRange(DateTime addedMin, DateTime addedMax)
+        {
+            var currentTime = CurrentValue;
+            var newMin = Min(Min(unpaddedStartValue, addedMin), currentTime);
+            var newMax = Max(Max(unpaddedEndValue, addedMax), currentTime);
+
+            unpaddedStartValue = newMin;
+            unpaddedEndValue = newMax;
+
+            Debug.Log("setting new unpadded minmax : " + newMin.ToString("F") + " -> " + newMax.ToString("F"));
+            
+            if (thumbScrollMaxPosition == thumbScrollMinPosition)
+            {
+                StartValue = newMin;
+                EndValue = newMax;
+                return;
+            }
+            
+            // We will set min and max at the positions where the timeline starts scrolling.
+            double selectedTicks = (newMax - newMin).Ticks;
+            double fullTicks = selectedTicks / (thumbScrollMaxPosition - thumbScrollMinPosition);
+
+            // Extend the new values by the fraction where the scrolling starts
+            var realStart= newMin.AddTicks(-(long)Math.Round(fullTicks * thumbScrollMinPosition));
+            var realEnd= newMax.AddTicks((long)Math.Round(fullTicks * (1d - thumbScrollMaxPosition)));
+
+            Debug.Log("setting new real range : " + realStart.ToString("F") + " -> " + realEnd.ToString("F"));
+            StartValue = realStart;
+            EndValue = realEnd;
+        }
+        
+        static DateTime Min(DateTime a, DateTime b)
+        {
+            return a <= b ? a : b;
         }
 
+        static DateTime Max(DateTime a, DateTime b)
+        {
+            return a >= b ? a : b;
+        }
         
         private void Update()
         {

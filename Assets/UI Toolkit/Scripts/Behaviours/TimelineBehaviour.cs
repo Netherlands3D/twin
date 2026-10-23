@@ -21,9 +21,7 @@ namespace Netherlands3D
         {
             timelineElement = App.UIRoot.Root.Q<UI.Components.Timeline>();
             var currentTime = ProjectData.Current.CurrentDateTime;
-            timelineElement.StartValue = currentTime;
-            timelineElement.EndValue = currentTime;
-            timelineElement.CurrentValue = currentTime;
+            timelineElement.SetUnpaddedRange(currentTime, currentTime, currentTime);
 
             OnProjectDataChanged(ProjectData.Current);
 
@@ -112,28 +110,9 @@ namespace Netherlands3D
 
         private void HandleTimestampCollectionAdded(CityObject co, TimestampCollection timestampCollection)
         {
-            var currentTime = timelineElement.CurrentValue;
-            var currentMin = timelineElement.StartValue;
-            var currentMax = timelineElement.EndValue;
-
             var addedMin = timestampCollection.LowestTimestamp;
             var addedMax = timestampCollection.HighestTimestamp;
-
-            var newMin = Min(Min(currentMin, addedMin.timestamp), currentTime);
-            var newMax = Max(Max(currentMax, addedMax.timestamp), currentTime);
-
-            timelineElement.StartValue = newMin;
-            timelineElement.EndValue = newMax;
-        }
-
-        static DateTime Min(DateTime a, DateTime b)
-        {
-            return a <= b ? a : b;
-        }
-
-        static DateTime Max(DateTime a, DateTime b)
-        {
-            return a >= b ? a : b;
+            timelineElement.SetRange(addedMin.timestamp, addedMax.timestamp);
         }
 
         private void UpdateTimelineElementVisibility()
