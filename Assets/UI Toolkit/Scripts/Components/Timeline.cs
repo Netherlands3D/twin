@@ -22,8 +22,8 @@ namespace Netherlands3D.UI.Components
         private readonly int scrollAreaWidthPx = 50;
         private double scrollAreaWidth = .5f;
 
-        private double thumbScrollMinPosition = .5d;
-        private double thumbScrollMaxPosition = .5d;
+        private double thumbScrollMinPosition = .2d;
+        private double thumbScrollMaxPosition = .8d;
         
         private double thumbMinPosition = 0d;
         private double thumbMaxPosition = 1d;
