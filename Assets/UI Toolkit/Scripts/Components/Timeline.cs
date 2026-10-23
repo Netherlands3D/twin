@@ -1,13 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Netherlands3D.Functionalities.CityJSON;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.Services;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
