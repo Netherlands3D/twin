@@ -8,15 +8,12 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Timeline
 {
     [RequireComponent(typeof(CityJSONLayerGameObject))]
     public class TimelineCityJson : MonoBehaviour
     {
-        public UnityEvent TimelineInitialized { get; } = new();
-        
         const string TIMELINE_ATTRIBUTE_NAME = "+timestamps"; //in CityJson extensions start with a +
 
         private CityJSONLayerGameObject visualization;
@@ -95,9 +92,6 @@ namespace Netherlands3D.Timeline
             
             // todo: if rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat (maxValue is tbd)
             timelineStatusStylingLayerPropertyData.AddNewRulesForStatuses(newStates);
-
-            TimelineInitialized?.Invoke();
-
         }
 
         private void AddTimelineCollection(CityObject co, TimestampCollection collection)

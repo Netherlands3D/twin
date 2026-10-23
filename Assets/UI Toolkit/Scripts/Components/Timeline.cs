@@ -19,9 +19,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Timeline : VisualElement
     {
-        private Layers layersService;
-        private readonly List<TimelineStatusStylingLayerPropertyData> timelinePropertyDatas = new();
-        
         private readonly int scrollAreaWidthPx = 50;
         private double scrollAreaWidth = .5f;
 
@@ -480,29 +477,15 @@ namespace Netherlands3D.UI.Components
             unitGroupsUpdateRequested = true;
         }
 
-        private void OnTimelinePropertyDataCreated(TimelineStatusStylingLayerPropertyData propertyData)
+        public void UpdateTimelineVisibility(bool visible)
         {
-            timelinePropertyDatas.Add(propertyData);
-            UpdateTimelineVisibility();
-        }
-
-        private void OnTimelinePropertyDataRemoved(TimelineStatusStylingLayerPropertyData propertyData)
-        {
-            timelinePropertyDatas.Remove(propertyData);
-            UpdateTimelineVisibility();
-        }
-
-        private void UpdateTimelineVisibility()
-        {
-            var hasTimeline = timelinePropertyDatas.Count > 0;
-    
-            EnableInClassList(UtilityClassConstants.HIDDEN, !hasTimeline);
-
-            if (hasTimeline)
+            EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+        
+            if (visible)
             {
                 markElementsUpdateRequested = true;
                 unitGroupsUpdateRequested = true;
-            }
+            } 
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
