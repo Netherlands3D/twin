@@ -76,7 +76,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cloud.draco": {
-      "version": "5.5.0",
+      "version": "5.4.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -100,7 +100,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.13.6",
+      "version": "2.11.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -285,7 +285,7 @@
       }
     },
     "com.unity.timeline": {
-      "version": "1.8.13",
+      "version": "1.8.10",
       "depth": 0,
       "source": "registry",
       "dependencies": {
