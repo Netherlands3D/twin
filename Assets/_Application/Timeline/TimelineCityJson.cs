@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Services;
-using Netherlands3D.Sun;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -15,19 +15,15 @@ namespace Netherlands3D.Timeline
     [RequireComponent(typeof(CityJSONLayerGameObject))]
     public class TimelineCityJson : MonoBehaviour
     {
-        public IReadOnlyDictionary<CityObject, TimestampCollection> TimestampCollections => timelines;
         public UnityEvent TimelineInitialized { get; } = new();
         
         const string TIMELINE_ATTRIBUTE_NAME = "+timestamps"; //in CityJson extensions start with a +
 
-        private SunTime sunTime;
         private CityJSONLayerGameObject visualization;
         private CityJSON cityJson;
 
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
-        private Dictionary<CityObject, TimestampCollection> timelines = new();
         
-
         private TimelineLegendBehaviour timelineLegendBehaviour;
 
         private void Awake()
@@ -37,8 +33,7 @@ namespace Netherlands3D.Timeline
 
         private void OnEnable()
         {
-            sunTime = ServiceLocator.GetService<SunTime>();
-            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
+            ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
 
             visualization = GetComponent<CityJSONLayerGameObject>();
             cityJson = GetComponent<CityJSON>();
@@ -47,7 +42,7 @@ namespace Netherlands3D.Timeline
 
         private void OnDisable()
         {
-            sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged);
+            ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnTimeChanged);
             timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
             cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes);
             
@@ -82,14 +77,14 @@ namespace Netherlands3D.Timeline
                     // stylingFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, null);
 
                     var collection = new TimestampCollection(attribute.Value.ToString());
-                    timelines.Add(co, collection);
+                    AddTimelineCollection(co, collection);
                     
                     foreach (var timestamp in collection.Timestamps)
                     {
                         newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
                     }
                     
-                    SetFeatureAttribute(sunTime.Time, co, collection);
+                    SetFeatureAttribute(ProjectData.Current.CurrentDateTime, co, collection);
                 }
             }
             if(timelineStatusStylingLayerPropertyData == null)
@@ -104,10 +99,15 @@ namespace Netherlands3D.Timeline
             TimelineInitialized?.Invoke();
 
         }
-        
+
+        private void AddTimelineCollection(CityObject co, TimestampCollection collection)
+        {
+            timelineStatusStylingLayerPropertyData.AddTimestampCollection(co, collection);
+        }
+
         private void OnTimeChanged(DateTime currentTime)
         {
-            foreach (var timeline in timelines)
+            foreach (var timeline in timelineStatusStylingLayerPropertyData.TimestampCollections)
             {
                 SetFeatureAttribute(currentTime, timeline.Key, timeline.Value);
             }
