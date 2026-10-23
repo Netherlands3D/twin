@@ -1,19 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Netherlands3D.Functionalities.CityJSON;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
 using Netherlands3D.Timeline;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
 using Netherlands3D.Twin.Utility;
-using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -24,16 +17,16 @@ namespace Netherlands3D.UI.Components
     public partial class Timeline : VisualElement
     {
         private Layers layersService;
-        private readonly List<TimelineStatusStylingLayerPropertyData> timelinePropertyDatas = new();
+        private readonly List<(CityJSONLayerGameObject Layer, TimelineCityJson Timeline)> timelineLayers = new();
         
         private readonly int scrollAreaWidthPx = 50;
-        private double scrollAreaWidth = .5f;
+        private double scrollAreaWidth = .1f;
 
-        private double thumbScrollMinPosition = .5d;
-        private double thumbScrollMaxPosition = .5d;
+        private double thumbScrollMinPosition = .1d;
+        private double thumbScrollMaxPosition = .9d;
         
-        private double thumbMinPosition = 0d;
-        private double thumbMaxPosition = 1d;
+        private double thumbMinPosition = 0.1d;
+        private double thumbMaxPosition = 1.9d;
         private double maxScrollSpeed = 1d;
        
         private readonly VisualElement marksContainer;
@@ -220,7 +213,6 @@ namespace Netherlands3D.UI.Components
             thumbLabelElement = this.Q<DateTimeLabel>("ThumbLabel");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
-            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             
             var viewport = this.Q<VisualElement>("MarksViewport");
@@ -249,15 +241,6 @@ namespace Netherlands3D.UI.Components
             thumbDragUpdateItem = schedule.Execute(Update).Every(0);
         }
 
-        private List<LayerData> FindTimelineCityJsonLayers()
-        {
-            var cityJsonTimelineLayers = ProjectData.Current.RootLayer
-                .GetFlatHierarchy()
-                .FindAll(layer => layer.HasProperty<CityJSONPropertyData>() && layer.HasProperty<TimelineStatusStylingLayerPropertyData>());
-            return cityJsonTimelineLayers;
-        }
-
-        
         private void Update()
         {
             UpdateSnap();
@@ -416,7 +399,7 @@ namespace Netherlands3D.UI.Components
         {
             if (!isSnapping) return;
 
-            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .2d, 0d, 1d);
+            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .1d, 0d, 1d);
             var eased = 1d - Math.Pow(1d - t, 3d);
             displayedCurrentTime = t >= 1d
                 ? currentTime
@@ -464,56 +447,11 @@ namespace Netherlands3D.UI.Components
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            if (Application.isPlaying)
-            {
-                /*
-                layersService = App.Layers;
-                
-                foreach (var visualization in layersService.Visualizations)
-                {
-                    HandleLayerVisualizationCreated(visualization);
-                }
-                
-                layersService.VisualizationCreated.AddListener(HandleLayerVisualizationCreated);
-                layersService.LayerRemoved.AddListener(HandleLayerRemoved);
-                */
-            }
-            
             StartSnap();
             markElementsUpdateRequested = true;
             unitGroupsUpdateRequested = true;
         }
-        
-        private void OnTimelinePropertyDataCreated(TimelineStatusStylingLayerPropertyData propertyData)
-        {
-            timelinePropertyDatas.Add(propertyData);
-            UpdateTimelineVisibility();
-        }
-        
-        private void OnTimelinePropertyDataRemoved(TimelineStatusStylingLayerPropertyData propertyData)
-        {
-            timelinePropertyDatas.Remove(propertyData);
-            UpdateTimelineVisibility();
-        }
 
-        private void UpdateTimelineVisibility()
-        {
-            var hasTimeline = timelinePropertyDatas.Count > 0;
-            
-            EnableInClassList(UtilityClassConstants.HIDDEN, !hasTimeline);
-
-            if (hasTimeline)
-            {
-                markElementsUpdateRequested = true;
-                unitGroupsUpdateRequested = true;
-            }
-        }
-
-        private void OnDetachFromPanel(DetachFromPanelEvent evt)
-        {
-            
-        }
-        
         private void UpdateMarks()
         {
             if (!markElementsUpdateRequested) return;
