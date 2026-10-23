@@ -139,7 +139,7 @@ namespace Netherlands3D
         private void UpdateTimelineElementVisibility()
         {
             var hasTimeline = timelinePropertyDatas.Count > 0;
-            SetTimelineElementVisibility(!hasTimeline);
+            SetTimelineElementVisibility(hasTimeline);
         }
 
         private void SetTimelineElementVisibility(bool visible)
