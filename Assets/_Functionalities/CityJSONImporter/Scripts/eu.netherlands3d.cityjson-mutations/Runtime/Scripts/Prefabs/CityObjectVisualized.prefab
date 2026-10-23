@@ -124,7 +124,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activeLOD: 0
-  addMeshCollider: 1
+  addMeshCollider: 0
   materialConverter:
     semanticMaterials:
     - Type: 0

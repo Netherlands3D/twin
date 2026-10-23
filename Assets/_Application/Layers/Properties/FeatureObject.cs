@@ -25,17 +25,19 @@ namespace Netherlands3D.Twin.layers.properties
         private void OnEnable()
         {
             selectorService = ServiceLocator.GetService<SelectionService>();
-            selectorService.SelectFeature.AddListener(ProcessFeatureMappingForLayer);
+            selectorService.SelectGeoJsonFeature.AddListener(ProcessFeatureMappingForLayer);
+            selectorService.SelectCityJsonMapping.AddListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.AddListener(ClearFeatureMappingsForLayer);
         }
 
         private void OnDisable()
         {
-            selectorService.SelectFeature.RemoveListener(ProcessFeatureMappingForLayer);
+            selectorService.SelectGeoJsonFeature.RemoveListener(ProcessFeatureMappingForLayer);
+            selectorService.SelectCityJsonMapping.RemoveListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.RemoveListener(ClearFeatureMappingsForLayer);
         }
 
-        private void ProcessFeatureMappingForLayer(FeatureMapping mapping)
+        private void ProcessFeatureMappingForLayer(IMapping mapping)
         {
             if (mapping == null || visualization.LayerData != mapping.LayerData)
             {
@@ -48,15 +50,13 @@ namespace Netherlands3D.Twin.layers.properties
             SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)
             {
-                if (kv.Value is FeatureMapping map)
-                {
-                    BoundingBox bbox = map.BoundingBox;
-                    Dictionary<string, object> properties = map.Feature.Properties as Dictionary<string, object>;
-                    FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
-                    data.Properties = properties;
-                    data.BoundingBox = bbox;
-                    featureIds.Add(kv.Key, data);
-                }
+                BoundingBox bbox = kv.Value.BoundingBox;
+                Dictionary<string, object> properties = kv.Value.GetProperties();
+                FeaturePropertyData.FeatureData data = new FeaturePropertyData.FeatureData();
+                data.Properties = properties;
+                data.BoundingBox = bbox;
+                data.FeatureMapping = kv.Value;
+                featureIds.Add(kv.Key, data);
             }
             propertyData.FeatureIds = featureIds;
         }
