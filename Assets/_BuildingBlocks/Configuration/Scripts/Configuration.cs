@@ -7,7 +7,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Web;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
