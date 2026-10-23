@@ -20,13 +20,13 @@ namespace Netherlands3D.UI.Components
         private readonly List<(CityJSONLayerGameObject Layer, TimelineCityJson Timeline)> timelineLayers = new();
         
         private readonly int scrollAreaWidthPx = 50;
-        private double scrollAreaWidth = .5f;
+        private double scrollAreaWidth = .1f;
 
-        private double thumbScrollMinPosition = .5d;
-        private double thumbScrollMaxPosition = .5d;
+        private double thumbScrollMinPosition = .1d;
+        private double thumbScrollMaxPosition = .9d;
         
-        private double thumbMinPosition = 0d;
-        private double thumbMaxPosition = 1d;
+        private double thumbMinPosition = 0.1d;
+        private double thumbMaxPosition = 1.9d;
         private double maxScrollSpeed = 1d;
        
         private readonly VisualElement marksContainer;
@@ -399,7 +399,7 @@ namespace Netherlands3D.UI.Components
         {
             if (!isSnapping) return;
 
-            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .2d, 0d, 1d);
+            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .1d, 0d, 1d);
             var eased = 1d - Math.Pow(1d - t, 3d);
             displayedCurrentTime = t >= 1d
                 ? currentTime
