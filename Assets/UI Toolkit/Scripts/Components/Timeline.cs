@@ -13,6 +13,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -23,7 +24,7 @@ namespace Netherlands3D.UI.Components
     public partial class Timeline : VisualElement
     {
         private Layers layersService;
-        private readonly List<(CityJSONLayerGameObject Layer, TimelineCityJson Timeline)> timelineLayers = new();
+        private readonly List<TimelineStatusStylingLayerPropertyData> timelinePropertyDatas = new();
         
         private readonly int scrollAreaWidthPx = 50;
         private double scrollAreaWidth = .5f;
@@ -482,53 +483,30 @@ namespace Netherlands3D.UI.Components
             markElementsUpdateRequested = true;
             unitGroupsUpdateRequested = true;
         }
-
-
-
-        private void HandleLayerVisualizationCreated(LayerGameObject visualization)
+        
+        private void OnTimelinePropertyDataCreated(TimelineStatusStylingLayerPropertyData propertyData)
         {
-            if (visualization is not CityJSONLayerGameObject cityJsonLayerGameObject) return;
-            if (!cityJsonLayerGameObject.TryGetComponent<TimelineCityJson>(out var timelineCityJson)) return;
-            foreach (var entry in timelineLayers)
-            {
-                if (entry.Layer == cityJsonLayerGameObject) return;
-            }
-            timelineLayers.Add((cityJsonLayerGameObject, timelineCityJson));
-            timelineCityJson.TimelineInitialized.AddListener(UpdateTimelineVisibility);
+            timelinePropertyDatas.Add(propertyData);
+            UpdateTimelineVisibility();
+        }
+        
+        private void OnTimelinePropertyDataRemoved(TimelineStatusStylingLayerPropertyData propertyData)
+        {
+            timelinePropertyDatas.Remove(propertyData);
             UpdateTimelineVisibility();
         }
 
         private void UpdateTimelineVisibility()
         {
-            var hasTimeline = false;
-            foreach (var entry in timelineLayers)
-            {
-                if (entry.Layer == null 
-                    || entry.Timeline == null 
-                    || !entry.Layer.HasLayerData 
-                    || entry.Layer.LayerData.IsDisposed 
-                    || !(entry.Timeline.TimestampCollections.Count > 0))
-                {
-                    continue;
-                }
-
-                hasTimeline = true;
-                break;
-
-            }
+            var hasTimeline = timelinePropertyDatas.Count > 0;
             
-            EnableInClassList("hidden", !hasTimeline);
+            EnableInClassList(UtilityClassConstants.HIDDEN, !hasTimeline);
 
             if (hasTimeline)
             {
                 markElementsUpdateRequested = true;
                 unitGroupsUpdateRequested = true;
             }
-        }
-        
-        private void HandleLayerRemoved(LayerData arg0, bool arg1)
-        {
-            
         }
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
