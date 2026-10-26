@@ -33,7 +33,7 @@ namespace Netherlands3D.UI.Panels
         private List<string> objectIds = new();
         private List<string> toggledObjectIds = new();
         private bool showSelection = true;
-        private ObjectSelectorService selector;
+        private SelectionService selector;
         
         
         public HiddenObjectsPropertySection()
@@ -128,7 +128,7 @@ namespace Netherlands3D.UI.Panels
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector = ServiceLocator.GetService<SelectionService>();
             stylingPropertyData = properties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
             if (stylingPropertyData == null) return;
 
@@ -138,7 +138,7 @@ namespace Netherlands3D.UI.Panels
             UpdateVisibility();
             stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
             stylingPropertyData.OnStylingChanged.AddListener(UpdateSelection);
-            ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
+            SelectionService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
         }
 
         private void ClearSelection()
@@ -275,10 +275,10 @@ namespace Netherlands3D.UI.Panels
         {
             //remove previous listener if present
             if(waitForMappingLoaded != null)
-                ObjectSelectorService.MappingTree.OnMappingAdded.RemoveListener(waitForMappingLoaded);
+                SelectionService.MappingTree.OnMappingAdded.RemoveListener(waitForMappingLoaded);
                 
             waitForMappingLoaded = mapping => OnMappingLoaded(mapping, objectId);
-            ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(waitForMappingLoaded);
+            SelectionService.MappingTree.OnMappingAdded.AddListener(waitForMappingLoaded);
         }
 
         private void OnMappingLoaded(IMapping mapping, string objectId)
@@ -326,7 +326,7 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
-            List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<MeshMapping>((Coordinate)coord);
+            List<IMapping> mappings = SelectionService.MappingTree.Query<MeshMapping>((Coordinate)coord);
             foreach (IMapping m in mappings)
             {
                 if (m is not MeshMapping meshMapping) continue;
@@ -360,7 +360,7 @@ namespace Netherlands3D.UI.Panels
             DestroyGhostMesh();
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateVisibility);
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateSelection);
-            ObjectSelectorService.MappingTree.OnMappingRemoved.RemoveListener(OnMappingRemoved);
+            SelectionService.MappingTree.OnMappingRemoved.RemoveListener(OnMappingRemoved);
 
             //remove all visibility data for features that became visible
             List<string> idsToRemove = new List<string>();

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Netherlands3D.SubObjects;
@@ -14,15 +14,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     {      
         
         public bool HasFeatureMapping => featureMappings.Count > 0;
-        public bool HasPolygons
-        {
-            get
-            {
-                return featureMappings
-                    .SelectMany(entry => entry.Value)
-                    .Any(featureMapping => featureMapping.VisualisationLayer.IsPolygon);
-            }
-        }
         
         public List<FeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
 
@@ -70,7 +61,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
         }
 
-        public void FindFeatureByPosition(Vector3 position)
+        public Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> FindFeatureByPosition(Vector3 position)
         {
             featureMappings.Clear();
             if (blockingObjectMapping != null)
@@ -101,11 +92,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     featureMappings[map.VisualisationParent].Add(map);
                 }
             }
+
+            return featureMappings;
         }
 
         public void FindFeatureAtPointerPosition()
         {            
-            Vector3 groundPosition = pointerToWorldPosition.GetWorldPointSync();
+            Vector3 groundPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
             FindFeatureByPosition(groundPosition);            
         }
 

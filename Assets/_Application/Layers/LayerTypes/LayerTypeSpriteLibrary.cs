@@ -22,8 +22,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         public static string GetIconImage(LayerData layer)
         {
-            if (layer.HasProperty<FolderPropertyData>() || layer.HasProperty<ScenarioPropertyData>())
+            var folderPropertyData = layer.GetProperty<FolderPropertyData>();
+            if (folderPropertyData != null)
+            {
+                if(folderPropertyData.IsScenario)
+                    return IconImage.SCENARIO;
                 return IconImage.FOLDER;
+            }
 
             if (layer.HasProperty<PolygonSelectionLayerPropertyData>()) // special cases for polygon layers that have a defined shape type
             {
@@ -62,12 +67,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return IconImage.SCATTER_OBJECT;
                 case CartesianTileSubObjectColorLayerGameObject _:
                     return IconImage.CSV;
-                case GeoJSONPolygonLayer _:
-                    return IconImage.POLYGON;
-                case GeoJSONLineLayer _:
-                    return IconImage.LINE;
-                case GeoJSONPointLayer _:
-                    return IconImage.DOT;
                 case PolygonSelectionLayerGameObject _:
                     return IconImage.POLYGON;
                 default:

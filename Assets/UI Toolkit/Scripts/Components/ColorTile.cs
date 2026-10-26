@@ -66,6 +66,24 @@ namespace Netherlands3D.UI.Components
             }
         }
 
+        private bool visibilityState = true;
+        public bool VisibilityState {
+            get
+            {
+                return visibilityState;
+            }
+            set
+            {
+                visibilityState = value;
+                UpdateVisibilityIcon(value);
+            }
+        }
+
+        private void UpdateVisibilityIcon(bool visibility)
+        {
+            Fill.EnableInClassList("color-tile__fill--visibility-off", !visibility);
+        }
+
         public ColorTile()
         {
             this.CloneComponentTree("Components");

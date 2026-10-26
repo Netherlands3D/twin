@@ -24,14 +24,14 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void OnEnable()
         {
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             selectorService.SelectSubObjectWithBagId.AddListener(ProcessMeshMappingForLayer);
             selectorService.OnDeselect.AddListener(ClearMeshMappingsForLayer);
         }
 
         private void OnDisable()
         {
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             selectorService.SelectSubObjectWithBagId.RemoveListener(ProcessMeshMappingForLayer);
             selectorService.OnDeselect.RemoveListener(ClearMeshMappingsForLayer);
         }
@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.layers.properties
 
             BuildingPropertyData propertyData = visualization.LayerData.GetProperty<BuildingPropertyData>();
             buildingIds.Clear();
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)
             {
                 if (kv.Value is MeshMapping map)

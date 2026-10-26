@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.layers.properties
             
             if(debugFeatures)
             {
-                ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(OnDebugMapping);
+                SelectionService.MappingTree.OnMappingAdded.AddListener(OnDebugMapping);
             }   
             
             if(visualization is not CartesianTileLayerGameObject cartesianTile) return;

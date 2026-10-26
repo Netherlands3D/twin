@@ -13,11 +13,9 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         public bool Supports(LocalFile localFile) => localFile.LocalFilePath.EndsWith($".{SupportedFileExtension}");
 
-        public LayerPresetArgs
-            Execute(LocalFile localFile)
+        public LayerPresetArgs Execute(LocalFile localFile)
         {
             var uri = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
-
             return new ObjPreset.Args(localFile.FileName, uri);
         }
     }

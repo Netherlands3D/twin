@@ -8,7 +8,7 @@
 >
     <ui:VisualElement name="DialFace" class="sun-dial__mask">
         <ui:VisualElement class="sun-dial__track" />
-        <ui:VisualElement name="OrbitContainer" class="sun-dial__orbit">
+        <ui:VisualElement name="OrbitContainer" class="sun-dial__orbit" tooltip="Versleep om simulatie tijd aan te passen">
             <nl3d:Icon image="Moon" color="Blue900" class="sun-dial__moon" />
             <nl3d:Icon image="Sun" color="Blue900" class="sun-dial__sun" />
         </ui:VisualElement>

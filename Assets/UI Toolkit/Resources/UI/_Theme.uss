@@ -83,6 +83,7 @@
     --color-red: rgb(227, 86, 86);
     --color-orange: rgb(227, 172, 86);
     --color-green: rgb(86, 172, 86);
+    --color-tooltip: rgba(47, 53, 80, 0.9);
 
     /* ColorPicker sprites */
     --image-color-wheel: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/ColorWheel.png");
@@ -95,6 +96,7 @@
     --icon-back: url("project://database/Assets/Sprites/UI/Icons/Type=Back,%20Color=white,%20Size=medium.png");
     --icon-backward: url("project://database/Assets/Sprites/UI/Icons/Type=Backward,%20Color=white,%20Size=medium.png");
     --icon-backwardblocked: url("project://database/Assets/Sprites/UI/Icons/Type=BackwardBlocked,%20Color=white,%20Size=medium.png");
+    --icon-bug: url("project://database/Assets/Sprites/UI/Icons/Type=Bug,%20Color=white,%20Size=medium.png");
     --icon-burgermenu: url("project://database/Assets/Sprites/UI/Icons/Type=BurgerMenu,%20Color=white,%20Size=medium.png");
     --icon-camera: url("project://database/Assets/Sprites/UI/Icons/Type=Camera,%20Color=white,%20Size=medium.png");
     --icon-check: url("project://database/Assets/Sprites/UI/Icons/Type=Check,%20Color=white,%20Size=medium.png");
@@ -153,7 +155,7 @@
     --icon-pinned: url("project://database/Assets/Sprites/UI/Icons/Type=Pinned,%20Color=white,%20Size=medium.png");
     --icon-play: url("project://database/Assets/Sprites/UI/Icons/Type=Play,%20Color=white,%20Size=medium.png");
     --icon-plus: url("project://database/Assets/Sprites/UI/Icons/Type=Plus,%20Color=white,%20Size=medium.png");
-    --icon-point: url("project://database/Assets/Sprites/UI/Icons/Type=Point,%20Color=white,%20Size=medium.png");
+    --icon-point: url("project://database/Assets/Sprites/UI/Icons/Type=Point,%20Color=white,%20Size=large.png");
     --icon-polygon: url("project://database/Assets/Sprites/UI/Icons/Type=Polygon,%20Color=white,%20Size=medium.png");
     --icon-presentationchart: url("project://database/Assets/Sprites/UI/Icons/Type=PresentationChartBar,%20Color=white,%20Size=medium.png");
     --icon-raster: url("project://database/Assets/Sprites/UI/Icons/Type=Raster,%20Color=white,%20Size=medium.png");
@@ -164,6 +166,7 @@
     --icon-scalev1: url("project://database/Assets/Sprites/UI/Icons/Type=ScaleV1,%20Color=white,%20Size=medium.png");
     --icon-scalev2: url("project://database/Assets/Sprites/UI/Icons/Type=ScaleV2,%20Color=white,%20Size=medium.png");
     --icon-scatterobject: url("project://database/Assets/Sprites/UI/Icons/Type=ScatterObject,%20Color=white,%20Size=medium.png");
+    --icon-scenario: url("project://database/Assets/Sprites/UI/Icons/Type=Scenario,%20Color=white,%20Size=medium.png");
     --icon-search: url("project://database/Assets/Sprites/UI/Icons/Type=Search,%20Color=white,%20Size=medium.png");
     --icon-section: url("project://database/Assets/Sprites/UI/Icons/Type=Section,%20Color=white,%20Size=medium.png");
     --icon-selectionbox: url("project://database/Assets/Sprites/UI/Icons/Type=SelectionBox,%20Color=white,%20Size=medium.png");
@@ -192,7 +195,6 @@
     --icon-visibilitymixed: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Mixed.png");
     --icon-visibleininvisible: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visible%20in%20Invisible.png");
     --icon-colorfeatures: url("project://database/Assets/Sprites/UI/Icons/Type=ColorFeatures,%20Color=white,%20Size=large.png");
-
     /* Font */
     --unity-font: "Inter";
     --nl3d-default-font: url("project://database/Assets/Fonts/Inter-Regular.ttf?fileID=12800000&guid=37ff50315a0d57a48a81f6f17f30a981&type=3#Inter-Regular");

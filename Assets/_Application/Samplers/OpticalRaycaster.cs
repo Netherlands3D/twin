@@ -1,133 +1,42 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 using UnityEngine.Experimental.Rendering;
-using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.Samplers
 {
     public class OpticalRaycaster : MonoBehaviour
     {
-        private const int MINIMUM_DEPTH_BUFFER_FORMAT = 16; //In the render graph API, the output Render Texture must have a depth buffer, this is the minimum value to keep the render texture light weight.
-        
-        public Camera depthCameraPrefab;
-        public Material depthToWorldMaterial; //capture depth data shader
-        public Material visualizationMaterial; //convert to temp position data
-
-        private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
-        private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
-        private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
-        
-        float totalDepth = 0;
         [SerializeField] private Camera depthCamera;
         private Texture2D samplerTexture;
-
-        [Header("Events")][SerializeField] public UnityEvent<Vector3> OnDepthSampled;
-
-        private const int maxRequests = 3;
-        private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
-
-        public const float MinimumDepth = 0.0001f;
-
-        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
-        {
-            GetWorldPointAsync(screenPoint, callback, Camera.main, cullingMask);
-        }
-
-        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, Camera camera, int cullingMask = defaultRaycastLayers)
-        {
-            if (activeRequests.Count > maxRequests)
-            {
-                callback.Invoke(Vector3.zero, false);
-                return;
-            }
-
-            OpticalRequest opticalRequest = GetRequest();
-            opticalRequest.SetActiveCamera(camera); 
-            opticalRequest.SetCullingMask(cullingMask);
-            opticalRequest.SetScreenPoint(screenPoint);
-            opticalRequest.AlignWithCamera();
-            opticalRequest.UpdateShaders();
-            opticalRequest.SetResultCallback(callback);
-            opticalRequest.framesActive = 0;
-            activeRequests.Add(opticalRequest);
-        }
-
-        public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[], bool> callback, int cullingMask = ~0)
-        {
-            if (activeRequests.Count > maxRequests)
-            {
-                callback.Invoke(null, false);
-                return;
-            }
-
-            MultiPointCallback multipointCallback = GetMultipointCallback();
-            multipointCallback.SetCallbackCompletion(callback);
-
-            for (int i = 0; i < 4; i++)
-            {
-                OpticalRequest opticalRequest = GetRequest();
-                opticalRequest.SetCullingMask(cullingMask);
-                opticalRequest.SetScreenPoint(screenPoints[i]);
-                opticalRequest.AlignWithCamera();
-                opticalRequest.UpdateShaders();
-                opticalRequest.SetResultCallback(multipointCallback.pointCallbacks[i]);
-                opticalRequest.framesActive = 0;
-                activeRequests.Add(opticalRequest);
-            }
-        }
-
-        public void GetWorldPointFromDirectionAsync(Vector3 worldPosition, Vector3 direction, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
-        {
-            if (activeRequests.Count > maxRequests)
-            {
-                callback.Invoke(Vector3.zero, false);
-                return;
-            }
-
-            OpticalRequest opticalRequest = GetRequest();
-            opticalRequest.SetCullingMask(cullingMask);
-            opticalRequest.SetScreenPoint(worldPosition);
-            opticalRequest.AlignCameraFromDirection(direction);
-            opticalRequest.UpdateShaders();
-            opticalRequest.SetResultCallback(callback);
-            opticalRequest.framesActive = 0;
-            activeRequests.Add(opticalRequest);
-        }
-
-        private void Update()
-        {
-            if (activeRequests.Count == 0) return;
-
-
-            for (int i = activeRequests.Count - 1; i >= 0; i--)
-            {
-                activeRequests[i].framesActive++;
-                if (activeRequests[i].framesActive > 1)
-                {
-                    //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
-                    activeRequests[i].onWaitFrameCallback();
-                    activeRequests.RemoveAt(i);
-                }
-            }
-        }
-
+        private RenderTexture renderTexture;
+        public const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
+        private const int MINIMUM_DEPTH_BUFFER_FORMAT = 16; //In the render graph API, the output Render Texture must have a depth buffer, this is the minimum value to keep the render texture light weight.
         
-
-        void Start()
+        void Awake()
         {
-            OpticalRequest request = GetRequest();
-            depthCamera = request.depthCamera;
-            if (depthCamera.targetTexture == null)
-            {
-                Debug.Log("Depth camera has no target texture. Please assign a render texture to the depth camera.", this.gameObject);
-                this.enabled = false;
-                return;
-            }
-
             //We will only render on demand using camera.Render()
             depthCamera.enabled = false;
+        }
+            
+        private void InitializeRenderResources()
+        {
+            if (renderTexture != null)
+                return;
+
+            //because of webgl we cannot create a rendertexture with the prefered format.
+            //the following error will occur in webgl if done so:
+            //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
+            //weirdly enough creating a deptht5exture in project and passing it through a serializefield is ok on webgl
+            //but we cannot do this since we need a pool and create a rendertexture for each request
+            
+            var graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
+            renderTexture = new RenderTexture(1, 1, MINIMUM_DEPTH_BUFFER_FORMAT, RenderTextureFormat.Depth)
+            {
+                graphicsFormat = graphicsFormat,
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            renderTexture.Create();
+            depthCamera.targetTexture = renderTexture;
             
             //Create a red channel texture that we can sample depth from
             samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.RGBAFloat, false);
@@ -135,338 +44,49 @@ namespace Netherlands3D.Twin.Samplers
 
         private void OnDestroy()
         {
+            if (depthCamera != null)
+                depthCamera.targetTexture = null;
+
+            if (samplerTexture != null)
             Destroy(samplerTexture);
-        }
 
-        /// <summary>
-        /// Only use this method if it is used continiously in Update.
-        /// If one sample is needed, use AlignDepthCameraToScreenPoint, and GetSamplerCameraWorldPoint
-        /// in a Coroutine with a WaitForEndOfFrame between every step.
-        /// </summary>
-        /// <returns></returns>
-        public Vector3 GetWorldPointAtCameraScreenPoint(Camera camera, Vector3 screenPoint)
-        {
-            if (depthCamera == null) return Vector3.zero;
-
-            AlignWithCamera(camera, screenPoint);
-            RenderDepthCamera();
-
-            return GetDepthCameraWorldPoint();
-        }
-
-        public Vector3 GetWorldPointFromPosition(Vector3 position, Vector3 direction)
-        {
-            AlignDepthCameraFromPositionToDirection(position, direction);
-            RenderDepthCamera();
-
-            return GetDepthCameraWorldPoint();
-        }
-        
-        public void AlignWithCamera(Camera camera, Vector3 screenPoint)
-        {
-            if (camera == null) camera = Camera.main;
-
-            depthCamera.transform.position = camera.transform.position;
-            if (camera.orthographic)
+            if (renderTexture != null)
             {
-                Vector3 worldPoint = camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)); 
-                depthCamera.transform.position = worldPoint - camera.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
-                depthCamera.transform.LookAt(worldPoint);
-            }
-            else
-            {
-                Vector3 worldPoint = camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane));
-                depthCamera.transform.LookAt(worldPoint);
-            }
+                if (renderTexture.IsCreated())
+            renderTexture.Release();
+
+            Destroy(renderTexture);
+        }
         }
 
-        public void AlignDepthCameraToScreenPoint(Camera camera, Vector3 screenPoint)
+        public bool Raycast(Vector3 origin, Vector3 direction, out Vector3 hitPosition, int cullingMask = defaultRaycastLayers)
         {
-            //Align and rotate sampler camera to look at screenpoint
-            depthCamera.transform.position = camera.transform.position;
-            depthCamera.transform.LookAt(camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)));
+            InitializeRenderResources();
+            
+            AlignDepthCameraFromPositionToDirection(origin, direction);
+
+            depthCamera.cullingMask = cullingMask;
+            RenderDepthCamera();
+            
+            var pixel = samplerTexture.GetPixel(0, 0);
+            hitPosition = new Vector3(pixel.r, pixel.g, pixel.b);
+
+            return pixel.a > 0;
         }
 
-        public void AlignDepthCameraFromPositionToDirection(Vector3 position, Vector3 direction)
+        private void AlignDepthCameraFromPositionToDirection(Vector3 position, Vector3 direction)
         {
             //Align depth camera 
             depthCamera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(direction));
         }
 
-        public Vector3 GetDepthCameraWorldPoint()
-        {
-            var worldPoint = ReadWorldPositionFromPixel();
-            OnDepthSampled.Invoke(worldPoint);
-
-            return worldPoint;
-        }
-
-        public void RenderDepthCamera()
+        private void RenderDepthCamera()
         {
             //Read pixels from the depth texture
             depthCamera.Render();
             RenderTexture.active = depthCamera.targetTexture;
             samplerTexture.ReadPixels(new Rect(0, 0, depthCamera.targetTexture.width, depthCamera.targetTexture.height), 0, 0);
-            samplerTexture.Apply();
             RenderTexture.active = null;
-        }
-
-        private Vector3 ReadWorldPositionFromPixel()
-        {
-            var worldPosition = samplerTexture.GetPixel(0, 0);
-
-            return new Vector3(
-                worldPosition.r,
-                worldPosition.g,
-                worldPosition.b
-            );
-        }
-
-        private void RequestCallback(OpticalRequest opticalRequest)
-        {
-            if (opticalRequest.request.hasError)
-            {
-                Debug.LogError("GPU readback failed!");
-                PoolRequest(opticalRequest);
-                return;
-            }
-
-            try
-            {
-                var worldPosData = opticalRequest.request.GetData<Vector4>();
-                if(worldPosData == null ||  worldPosData.Length == 0)
-                {
-                    opticalRequest.hasHit = false;
-                    opticalRequest.resultCallback.Invoke(Vector3.zero, false);
-                    Debug.LogError("readback has invalid data");
-                    return;
-                }
-                float worldPosX = worldPosData[0].x;
-                float worldPosY = worldPosData[0].y;
-                float worldPosZ = worldPosData[0].z;
-                Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
-                
-                opticalRequest.hasHit = worldPosData[0].w > 0;
-                opticalRequest.resultCallback.Invoke(worldPos, opticalRequest.hasHit);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Exception in optical request: {e.StackTrace}");
-
-                Debug.LogException(e);
-            }
-            finally
-            {
-                //we must always execute this to prevent crazy frame build ups
-                PoolRequest(opticalRequest);
-            }
-        }
-
-        private RenderTexture GetRenderTexture()
-        {
-            //because of webgl we cannot create a rendertexture with the prefered format.
-            //the following error will occur in webgl if done so:
-            //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
-            //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
-            //but we cannot do this since we need a pool and create a rendertexture for each request
-            RenderTexture renderTexture = new RenderTexture(1, 1, MINIMUM_DEPTH_BUFFER_FORMAT, RenderTextureFormat.Depth);
-            renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
-            renderTexture.Create();
-            return renderTexture;
-        }
-
-        private OpticalRequest GetRequest()
-        {
-            OpticalRequest request = null;
-            if (requestPool.Count > 0)
-            {
-                request = requestPool.Pop();
-            }
-            else
-            {
-                request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), depthCameraPrefab);
-                request.depthCamera.transform.SetParent(gameObject.transform, false);
-                request.SetCallback(RequestCallBackMapped(request));
-            }
-
-            request.depthCamera.enabled = true;
-            return request;
-        }
-
-        private Action<AsyncGPUReadbackRequest> RequestCallBackMapped(OpticalRequest requester)
-        {
-            return w => RequestCallback(requester);
-        }
-
-        private void PoolRequest(OpticalRequest request)
-        {
-            if (request.depthCamera != null)
-            {
-                request.depthCamera.enabled = false;
-                requestPool.Push(request);
-            }
-        }
-
-        private MultiPointCallback GetMultipointCallback()
-        {
-            MultiPointCallback callback = null;
-            if (requestMultipointPool.Count > 0)
-            {
-                callback = requestMultipointPool.Pop();
-            }
-            else
-            {
-                callback = new MultiPointCallback(() => { PoolMultipointCallback(callback); });
-            }
-
-            callback.Reset();
-            return callback;
-        }
-
-        private void PoolMultipointCallback(MultiPointCallback callback)
-        {
-            requestMultipointPool.Push(callback);
-        }
-
-        //the following classes are private because they should only be used within optical raycaster
-        private sealed class OpticalRequest
-        {
-            public Camera depthCamera;
-            public Material depthMaterial;
-            public Material positionMaterial;
-            public RenderTexture renderTexture;
-            public Vector3 screenPoint;
-            public AsyncGPUReadbackRequest request;
-            public Action<AsyncGPUReadbackRequest> callback;
-            public Action<Vector3, bool> resultCallback;
-            public Action onWaitFrameCallback;
-            public int framesActive = 0;
-            public int resultCount = 0;
-            public bool hasHit = false;
-
-            private Camera activeCamera; 
-
-            public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
-            {
-                this.depthMaterial = new Material(depthMaterial);
-                this.positionMaterial = new Material(positionMaterial);
-                this.renderTexture = rt;
-                this.depthCamera = Instantiate(prefab);
-                depthCamera.nearClipPlane = MinimumDepth;
-                depthCamera.clearFlags = CameraClearFlags.SolidColor;
-                depthCamera.backgroundColor = Color.clear;
-                depthCamera.depthTextureMode = DepthTextureMode.Depth;
-                depthCamera.targetTexture = rt;
-                depthCamera.forceIntoRenderTexture = true;
-                onWaitFrameCallback = () =>
-                {
-                    AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(renderTexture, 0, callback);
-                    SetRequest(request);
-                };
-            }
-
-            public void SetCallback(Action<AsyncGPUReadbackRequest> callback)
-            {
-                this.callback = callback;
-            }
-
-            public void SetResultCallback(Action<Vector3, bool> resultCallback)
-            {
-                this.resultCallback = resultCallback;
-            }
-
-            public void SetRequest(AsyncGPUReadbackRequest request)
-            {
-                this.request = request;
-            }
-
-            public void SetScreenPoint(Vector3 screenPoint)
-            {
-                this.screenPoint = screenPoint;
-            }
-
-            public void SetCullingMask(int mask)
-            {
-                depthCamera.cullingMask = mask;
-            }
-
-            public void SetActiveCamera(Camera camera)
-            {
-                activeCamera = camera;
-            }
-
-            public void AlignWithCamera()
-            {
-                if (activeCamera == null) activeCamera = Camera.main;
-
-                depthCamera.transform.position = activeCamera.transform.position;
-                if (activeCamera.orthographic)
-                {
-                    Vector3 worldPoint = activeCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, activeCamera.nearClipPlane)); 
-                    depthCamera.transform.position = worldPoint - activeCamera.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
-                    depthCamera.transform.LookAt(worldPoint);
-                }
-                else
-                {
-                    Vector3 worldPoint = activeCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, activeCamera.nearClipPlane));
-                    depthCamera.transform.LookAt(worldPoint);
-                }
-            }
-
-            public void AlignCameraFromDirection(Vector3 direction)
-            {
-                depthCamera.transform.position = screenPoint;
-                depthCamera.transform.LookAt(screenPoint + direction.normalized);
-            }
-
-            public void UpdateShaders()
-            {
-                if (depthMaterial == null) return;
-
-                depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
-                depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
-                positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
-            }
-        }
-
-        //when getting a batch of points async we need to have a callback that can sync all points as one result
-        private sealed class MultiPointCallback
-        {
-            public Action<Vector3, bool>[] pointCallbacks = new Action<Vector3, bool>[4];
-            private int callbackCount = 0;
-            private Vector3[] result = new Vector3[4];
-            private Action<Vector3[], bool> callback;
-            private Action onComplete;
-
-            public MultiPointCallback(Action onComplete)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    int index = i;
-                    pointCallbacks[index] = (p, h) => InvokeCallback(index, p, h);
-                }
-
-                this.onComplete = onComplete;
-            }
-
-            public void InvokeCallback(int index, Vector3 point, bool hit)
-            {
-                callbackCount++;
-                result[index] = point;
-                if (callbackCount >= 4)
-                    this.callback.Invoke(result, hit);
-                onComplete.Invoke();
-            }
-
-            public void SetCallbackCompletion(Action<Vector3[], bool> callback)
-            {
-                this.callback = callback;
-            }
-
-            public void Reset()
-            {
-                callbackCount = 0;
-            }
         }
     }
 }

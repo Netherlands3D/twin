@@ -3,6 +3,7 @@ using System.Linq;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,8 +15,11 @@ namespace Netherlands3D.UI.Panels
         //todo improve flow for specific imapping type?
         public override bool ShouldBeActive()
         {
-            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
+            if(App.UIRoot.IsPointerOverUI())
+                return false;
+            
+            SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+            Dictionary<string, IMapping> selectedMappings = selectionService.SelectedMappings;
             
             IEnumerable<FeatureMapping> featureMappings = selectedMappings.Values.OfType<FeatureMapping>();
             foreach (FeatureMapping featureMapping in featureMappings)
@@ -27,8 +31,8 @@ namespace Netherlands3D.UI.Panels
 
         public override object GetData()
         {
-             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-             Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
+             SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+             Dictionary<string, IMapping> selectedMappings = selectionService.SelectedMappings;
             return selectedMappings;
         }
 
@@ -44,8 +48,8 @@ namespace Netherlands3D.UI.Panels
         private void CloseFloatingPanel()
         {
             floatingPanel.OnClose.Invoke();
-            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            objectSelectorService.Deselect();
+            SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+            selectionService.Deselect();
         }
 
         public override void Dispose()

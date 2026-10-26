@@ -1,6 +1,5 @@
-using UnityEngine.InputSystem;
+﻿using UnityEngine.InputSystem;
 using UnityEngine;
-using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
@@ -8,108 +7,80 @@ using Netherlands3D.Twin.Cameras;
 namespace Netherlands3D.Twin.Samplers
 {
     public class PointerToWorldPosition : MonoBehaviour
-    {       
-        public Coordinate WorldPoint => worldPoint;
-        public Vector3 WorldPointHeightMap => worldPointHeightMap;
+    {      
         public bool debugHeightmapPosition = false;
-        
+
         private OpticalRaycaster opticalRaycaster;
-        private Action<Vector3, bool> worldPointCallback;
-        private Coordinate worldPoint;
         private Vector3 worldPointHeightMap;
-        private Coordinate worldPointSync;
         private float maxDistance = 10000;
 
         private GameObject testPosition;
-        private Camera activeCamera;
+
+        private CachedOpticalWorldPoint cachedOpticalWorldPoint;
+        private CameraService cameraService;
+
+        private struct CachedOpticalWorldPoint
+        {
+            public int FrameCount;
+            public Vector2 PointerPosition;
+            public Vector3 PointerWorldPosition;
+        }
 
         private void Awake()
         {
             opticalRaycaster = GetComponent<OpticalRaycaster>();
+            cameraService = App.Cameras;
         }
 
-        private void Start()
+        void Update()
         {
-            activeCamera = App.Cameras.ActiveCamera;
-            App.Cameras.OnSwitchCamera.AddListener(SetActiveCamera);
-            worldPointCallback = (w,h) =>
+            if (debugHeightmapPosition)
             {
-                if (h)
-                    worldPoint = new Coordinate(w);
-                else
-                {
-                    Vector3 position = GetWorldPoint();
-                    worldPoint = new Coordinate(position);
-                }
-            };
-        }
-
-        private void Update()
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
-            opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, activeCamera);
-            worldPointHeightMap = GetWorldPoint(screenPoint, activeCamera);
-
-           
-
-            if(debugHeightmapPosition)
-            {
-                if(testPosition == null)
+                var screenPoint = Pointer.current.position.ReadValue();
+                if (testPosition == null)
                 {
                     testPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                     testPosition.transform.localScale = Vector3.one * 10;
                     testPosition.GetComponent<Renderer>().material.color = Color.green;
                 }
-                testPosition.transform.position = GetWorldPoint();
+
+                testPosition.transform.position = GetWorldPointUsingHeightMap(screenPoint);;
             }
             else if(testPosition != null)
             {
                 Destroy(testPosition);
             }
         }
-
-        public void GetPointerWorldPointAsync(Action<Vector3> result)
+        
+        public Vector3 GetWorldPointUsingOpticalRaycaster()
         {
-            var screenPoint = Pointer.current.position.ReadValue();
-            opticalRaycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
-            {
-                if (hit)
-                    result.Invoke(point);
-                else
-                {
-                    Vector3 position = GetWorldPoint();
-                    result.Invoke(position);
-                }  
-            });
-        }
-
-        public Vector3 GetWorldPointSync()
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
-            return opticalRaycaster.GetWorldPointAtCameraScreenPoint(App.Cameras.ActiveCamera, screenPoint);
+            return GetOrCalculateOpticalWorldPoint();
         }
         
-        public Vector3 GetWorldPoint()
+        /// <summary>
+        /// Gets worldPoint underneath the pointer using the heightMap texture.
+        /// </summary>
+        public Vector3 GetWorldPointUsingHeightMap()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            return GetWorldPoint(screenPoint, activeCamera);
+            return GetWorldPointUsingHeightMap(screenPoint);
         }
 
-        public Vector3 GetWorldPoint(Vector2 screenPosition)
-        {
-           return GetWorldPoint(screenPosition, activeCamera);
-        }
-
-        public Vector3 GetWorldPointCenterView()
+        public Vector3 GetWorldPointCenterViewUsingHeightMap()
         {
             var screenPoint = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-            return GetWorldPoint(screenPoint, activeCamera);
+            return GetWorldPointUsingHeightMap(screenPoint);
         }
 
-        public Vector3 GetWorldPoint(Vector2 screenPosition, Camera camera)
-        {            
+        /// <summary>
+        /// Gets worldPoint using the heightMap texture.
+        /// </summary>
+        public Vector3 GetWorldPointUsingHeightMap(Vector2 screenPosition)
+        {
+            var activeCamera = cameraService.ActiveCamera;
+            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
-            var screenRay = camera.ScreenPointToRay(screenPosition);
+            var screenRay = activeCamera.ScreenPointToRay(screenPosition);
             worldPlane.Raycast(screenRay, out float distance);
             Vector3 position;
             //when no valid point is found in for the raycast, lets invert the distance so we get a point in the sky
@@ -134,12 +105,42 @@ namespace Netherlands3D.Twin.Samplers
             Vector3 intersection = origin + dir * t;
             return intersection;
         }
-
-        public void SetActiveCamera(Camera camera) => activeCamera = camera;
         
-        private void OnDestroy()
+        private Vector3 GetOrCalculateOpticalWorldPoint()
         {
-            App.Cameras.OnSwitchCamera.RemoveListener(SetActiveCamera);
+            if (Time.frameCount == cachedOpticalWorldPoint.FrameCount 
+                && Pointer.current.position.ReadValue() == cachedOpticalWorldPoint.PointerPosition)
+            {
+                return cachedOpticalWorldPoint.PointerWorldPosition;
+            }
+
+            cachedOpticalWorldPoint = new CachedOpticalWorldPoint()
+            {
+                FrameCount = Time.frameCount,
+                PointerPosition = Pointer.current.position.ReadValue(),
+                PointerWorldPosition = CalculateOpticalWorldPoint()
+            };      
+            return cachedOpticalWorldPoint.PointerWorldPosition;
+        }
+
+        private Vector3 CalculateOpticalWorldPoint()
+        {
+            var activeCamera = cameraService.ActiveCamera;
+            
+            var screenPoint = Pointer.current.position.ReadValue();
+            Vector3 worldPosition = default;
+            var ray = activeCamera.ScreenPointToRay(screenPoint);
+            if (opticalRaycaster.Raycast(ray.origin, ray.direction, out var hitPoint))
+            {
+                worldPosition = hitPoint;
+            }
+            else
+            {
+                var worldPositionHeightMap = GetWorldPointUsingHeightMap(screenPoint);
+                worldPosition = worldPositionHeightMap;
+            }
+           
+            return worldPosition;
         }
     }
 }

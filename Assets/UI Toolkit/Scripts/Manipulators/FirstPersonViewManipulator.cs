@@ -68,7 +68,9 @@ public class FirstPersonViewManipulator : DragManipulator
     {
         OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
         Vector2 screenPoint = Pointer.current.position.ReadValue();
-        raycaster.GetWorldPointAsync(screenPoint, OnRaycastHit, layers);
+        var ray = App.Cameras.ActiveCamera.ScreenPointToRay(screenPoint);
+        var isHit = raycaster.Raycast(ray.origin, ray.direction, out var hitPosition, layers);
+        OnRaycastHit(hitPosition, isHit);
     }
 
     private void OnRaycastHit(Vector3 point, bool hit)

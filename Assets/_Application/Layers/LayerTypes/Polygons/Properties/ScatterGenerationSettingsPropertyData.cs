@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [JsonIgnore] public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
         [JsonIgnore] public UnityEvent ScatterDistributionChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
 
-        public ScatterGenerationSettingsPropertyData(string originalObjectPrefabId) //todo: check if parameterless constructor is needed to avoid errors in the build
+        public ScatterGenerationSettingsPropertyData(string originalObjectPrefabId)
         {
             this.originalObjectPrefabId = originalObjectPrefabId;
         }

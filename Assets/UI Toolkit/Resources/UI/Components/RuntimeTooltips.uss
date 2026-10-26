@@ -5,7 +5,7 @@
     padding-top: 6px;
     padding-bottom: 6px;
     color: white;
-    background-color: rgba(20, 20, 20, 0.95);
+    background-color: var(--color-tooltip);
     border-radius: 4px;
     font-size: 13px;
     white-space: normal;

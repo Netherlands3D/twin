@@ -1,6 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -8,52 +8,10 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ChangePointerStyleElement : VisualElement
     {
-        [DllImport("__Internal")]
-        private static extern string SetCSSCursor(string cursorName = "auto");
-
-        public enum PointerStyle
-        {
-            Auto,
-            Default,
-            None,
-            ContextMenu,
-            Help,
-            Pointer,
-            Progress,
-            Wait,
-            Cell,
-            Crosshair,
-            Text,
-            VerticalText,
-            Alias,
-            Copy,
-            Move,
-            NoDrop,
-            NotAllowed,
-            Grab,
-            Grabbing,
-            AllScroll,
-            ColResize,
-            RowResize,
-            NResize,
-            NeResize,
-            EResize,
-            SeResize,
-            SResize,
-            SwResize,
-            WResize,
-            NwResize,
-            EwResize,
-            NsResize,
-            NeswResize,
-            NwseResize
-        }
-        
-        private PointerStyle styleOnHover = PointerStyle.Pointer;
-        public static PointerStyle pointerType = PointerStyle.Auto;
+        private PointerStyle.Style styleOnHover = PointerStyle.Style.POINTER;
         
         [UxmlAttribute("pointer-style-hover")]
-        public PointerStyle StyleOnHover { get => styleOnHover; set => styleOnHover = value; }
+        public PointerStyle.Style StyleOnHover { get => styleOnHover; set => styleOnHover = value; }
         
         public ChangePointerStyleElement()
         {
@@ -65,22 +23,12 @@ namespace Netherlands3D.UI.Components
 
         private void OnPointerOver(PointerOverEvent evt)
         {
-            ChangeCursor(StyleOnHover);
+            PointerStyle.RequestCursorChange(this, styleOnHover);
         }
 
         private void OnPointerOut(PointerOutEvent evt)
         {
-            ChangeCursor(PointerStyle.Auto);
-        }
-        
-        public static void ChangeCursor(PointerStyle type)
-        {
-            pointerType = type;
-            var cursorString = type.ToString().ToKebabCase();
-
-#if !UNITY_EDITOR && UNITY_WEBGL
-            SetCSSCursor(cursorString);
-#endif
+            PointerStyle.CancelCursorChange(this);
         }
     }
 }

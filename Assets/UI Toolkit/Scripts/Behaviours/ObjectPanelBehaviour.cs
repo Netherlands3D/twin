@@ -1,5 +1,6 @@
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
@@ -14,12 +15,24 @@ namespace Netherlands3D.UI.Panels
         
         public override bool ShouldBeActive()
         {
-            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            if (objectSelectorService.SelectedVisualisation != null)
+            SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
+            if (App.UIRoot.IsPointerOverUI(out VisualElement element))
             {
-                target = objectSelectorService.SelectedVisualisation.LayerData;
+                if (selectionService.SelectedVisualisation != null)
+                {
+                    target = selectionService.SelectedVisualisation.LayerData;
+                    if (selectionService.SelectedVisualisation is IVisualizationWithWorldUI worldUI && element != null)
+                    {
+                        VisualElement parent = worldUI.VisualElement;
+                        if (parent == element || parent.Contains(element))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                if (element != null) return false;
             }
-            return  objectSelectorService.SelectedVisualisation != null;
+            return  selectionService.SelectedVisualisation != null;
         }
 
         public override object GetData()

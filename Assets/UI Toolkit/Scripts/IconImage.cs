@@ -7,6 +7,7 @@
         public const string BACK = "Back";
         public const string BACKWARD = "Backward";
         public const string BACKWARD_BLOCKED = "BackwardBlocked";
+        public const string BUG = "Bug";
         public const string BURGER_MENU = "BurgerMenu";
         public const string CAMERA = "Camera";
         public const string CHECK = "Check";
@@ -76,6 +77,7 @@
         public const string SCALE_V_1 = "ScaleV1";
         public const string SCALE_V_2 = "ScaleV2";
         public const string SCATTER_OBJECT = "ScatterObject";
+        public const string SCENARIO = "Scenario";
         public const string SEARCH = "Search";
         public const string SECTION = "Section";
         public const string SELECTION_BOX = "SelectionBox";
