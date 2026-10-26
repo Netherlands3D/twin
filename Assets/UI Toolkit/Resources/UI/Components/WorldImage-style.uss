@@ -1,0 +1,7 @@
+.world-image {
+    
+    aspect-ratio: 1;
+    position: absolute;    
+    top: var(--foto-spacing);
+    border-radius: var(--border-radius);
+}
