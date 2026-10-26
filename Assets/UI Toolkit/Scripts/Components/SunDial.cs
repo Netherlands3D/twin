@@ -22,6 +22,8 @@ namespace Netherlands3D.UI.Components
         private VisualElement OrbitContainer => orbitContainer ??= this.Q<VisualElement>("OrbitContainer");
         private DragManipulator DragManipulator => dragManipulator ??= new DragManipulator(0);
 
+        private string draggingTooltip;
+
         public SunDial()
         {
             this.CloneComponentTree("Components");
@@ -30,6 +32,9 @@ namespace Netherlands3D.UI.Components
             DialFace.AddManipulator(DragManipulator);
             DragManipulator.DragStarted.AddListener(OnDragStarted);
             DragManipulator.Dragging.AddListener(OnDragging);
+            DragManipulator.DragEnded.AddListener(OnDragEnded);
+            
+            draggingTooltip = OrbitContainer.tooltip;
         }
 
         public void SetTimeWithoutNotify(int hour, int minute)
@@ -50,6 +55,13 @@ namespace Netherlands3D.UI.Components
         {
             pointerPositionWorldSpace = startPosition;
             previousPointerPosition = this.WorldToLocal(pointerPositionWorldSpace);
+            
+            OrbitContainer.tooltip = "";
+        }
+
+        private void OnDragEnded(Vector2 endPosition)
+        {
+            OrbitContainer.tooltip = draggingTooltip;
         }
 
         private void OnDragging(Vector2 delta)

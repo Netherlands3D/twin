@@ -27,17 +27,6 @@ namespace Netherlands3D.UI.Components
         }
 
         [UxmlAttribute]
-        public bool IsPrimary
-        {
-            get => isPrimary;
-            set
-            {
-                isPrimary = value;
-                UpdateLabels();
-            }
-        }
-
-    [UxmlAttribute]
         public DateTimeUnit UnitContext
         {
             get => unitContext;
@@ -83,20 +72,8 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLabels()
         {
-            contextLabel.EnableInClassList("hidden", !isPrimary);
-            precisionLabel.EnableInClassList("hidden", isPrimary || unitContext == unitPrecision);
-            
-            contextLabel.Context = unitContext;
-            contextLabel.Precision = unitContext;
-            contextLabel.Value = time;
-            
-            /*
-            var showContextLabel = unitContext == unitPrecision;
-            contextLabel.EnableInClassList("hidden", showContextLabel);
-            contextLabel.Context = unitContext;
-            contextLabel.Precision = unitContext;
-            contextLabel.Value = time;
-            */
+            contextLabel.EnableInClassList("hidden", false);
+            precisionLabel.EnableInClassList("hidden", true);
             
             precisionLabel.Context = unitPrecision;
             precisionLabel.Precision = unitPrecision;

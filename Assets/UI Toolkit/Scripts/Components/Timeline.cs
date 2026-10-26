@@ -339,8 +339,9 @@ namespace Netherlands3D.UI.Components
                 startTime = startTime.Add(scrollOffset);
                 endTime = endTime.Add(scrollOffset);
                 thumbElementTimeOffset = currentTime - boundTime;
-                markElementsUpdateRequested = true;
+
             }
+            markElementsUpdateRequested = true;
         }
         
         private void OnThumbDragEnded(Vector2 arg0)
