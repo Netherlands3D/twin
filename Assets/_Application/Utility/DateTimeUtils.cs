@@ -170,34 +170,18 @@ namespace Netherlands3D.Twin.Utility
 
         public static DateTime Round(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
         {
-
-            var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(rootTime, time, interval.Amount);
-
+            var rootTimeUnit = interval.Amount >= 1 ? interval.TimeUnit : interval.TimeUnit - 1;
+            var roundedRootTime = rootTime.RoundDown(rootTimeUnit, rootTime);
+            
+            var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(roundedRootTime, time, interval.Amount);
             var previousIntervalIndex = Math.Floor(intervalCount);
-
-            var previous = rootTime.Add(new DateTimeInterval(interval.TimeUnit, previousIntervalIndex * interval.Amount));
-
-            var next = rootTime.Add(new DateTimeInterval(interval.TimeUnit, (previousIntervalIndex + 1) * interval.Amount));
+            var previous = roundedRootTime.Add(new DateTimeInterval(interval.TimeUnit, previousIntervalIndex * interval.Amount));
+            var next = roundedRootTime.Add(new DateTimeInterval(interval.TimeUnit, (previousIntervalIndex + 1) * interval.Amount));
 
             return Math.Abs(time.Ticks - previous.Ticks)
                    < Math.Abs(next.Ticks - time.Ticks)
                 ? previous
                 : next;
-        }
-
-        public static DateTime RoundDown(this DateTime time, DateTimeUnit timeUnit)
-        {
-            return timeUnit switch
-            {
-                DateTimeUnit.Year => new DateTime(time.Year, 1, 1, 0, 0, 0, time.Kind),
-                DateTimeUnit.Month => new DateTime(time.Year, time.Month, 1, 0, 0, 0, time.Kind),
-                DateTimeUnit.Day => time.Date,
-                DateTimeUnit.Hour => new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, 0, time.Kind),
-                DateTimeUnit.Minute => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, 0, time.Kind),
-                DateTimeUnit.Second => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, time.Second, time.Kind),
-
-                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit))
-            };
         }
         
         public static DateTime RoundDown(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
@@ -207,15 +191,28 @@ namespace Netherlands3D.Twin.Utility
                 return time.RoundDown(interval.TimeUnit);
             }
             
-            var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(rootTime, time, interval.Amount);
+            var rootTimeUnit = interval.Amount >= 1 ? interval.TimeUnit : interval.TimeUnit - 1;
+            var roundedRootTime = rootTime.RoundDown(rootTimeUnit, rootTime);
             
-            
+            var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(roundedRootTime, time, interval.Amount);
             var previousIndex = Math.Floor(intervalCount);
-            
-            //Debug.Log($"previousIndex * interval.Amount = {previousIndex} * {interval.Amount} = {previousIndex * interval.Amount}");
-
-            return rootTime.Add(new DateTimeInterval(
+            return roundedRootTime.Add(new DateTimeInterval(
                 interval.TimeUnit, previousIndex * interval.Amount));
+        }
+        
+        public static DateTime RoundDown(this DateTime time, DateTimeUnit timeUnit, DateTime rootTime = default)
+        {
+            return timeUnit switch
+            {
+                DateTimeUnit.Year => new DateTime(time.Year, rootTime.Month, rootTime.Day, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Month => new DateTime(time.Year, time.Month, rootTime.Day, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Day => new DateTime(time.Year, time.Month, time.Day, rootTime.Hour, rootTime.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Hour => new DateTime(time.Year, time.Month, time.Day, time.Hour, rootTime.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Minute => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, rootTime.Second, time.Kind),
+                DateTimeUnit.Second => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, time.Second, time.Kind),
+
+                _ => throw new ArgumentOutOfRangeException(nameof(timeUnit))
+            };
         }
     }
 }
