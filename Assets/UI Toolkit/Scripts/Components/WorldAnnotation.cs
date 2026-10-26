@@ -29,6 +29,21 @@ namespace Netherlands3D.UI.Components
 
         public const float Size = 5;
         
+        private bool isCoordinate = false;
+        [UxmlAttribute("coordinate")]
+        public bool IsCoordinate
+        {
+            get => isCoordinate;
+            set 
+            {
+                isCoordinate = value;
+                SetReadOnly(isCoordinate);
+                if(isCoordinate)
+                    nameField.Label.AddToClassList("editable-name-field-label-coordinates");
+                else
+                    nameField.Label.RemoveFromClassList("editable-name-field-label-coordinates");
+            }
+        }
 
         public WorldAnnotation()
         {
@@ -96,13 +111,14 @@ namespace Netherlands3D.UI.Components
         {
             this.snappingSide = snappingSide;
         }
-
+        
         public void SetLabelOffset(float offset)
         {
-            bool changed = offset != labelOffsetToPosition;
-            labelOffsetToPosition = offset;
-            if(changed)
+            if(offset != labelOffsetToPosition)
+            {
+                labelOffsetToPosition = offset;
                 UpdateSnapping();
+            }
         }
 
         private void UpdateSnapping()
