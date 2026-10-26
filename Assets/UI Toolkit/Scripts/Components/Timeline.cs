@@ -562,7 +562,7 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            var maxMarkElements = (double)width / 10;
+            var maxMarkElements = (double)width / 8;
             var maxLabelElements = (double)width / 80;
 
             var start = startTime;
@@ -573,7 +573,7 @@ namespace Netherlands3D.UI.Components
                 unitGroupsUpdateRequested = false;
                 marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start,
                     end, maxMarkElements);
-                snapInterval = marksInterval.Amount >= 1 ? new DateTimeInterval(marksInterval.TimeUnit, 1) : new DateTimeInterval(marksInterval.TimeUnit + 1, 1) ;
+                snapInterval = marksInterval;//.Amount >= 1 ? new DateTimeInterval(marksInterval.TimeUnit, 1) : new DateTimeInterval(marksInterval.TimeUnit + 1, 1) ;
                 labelsInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision,
                     start, end, maxLabelElements);
             }

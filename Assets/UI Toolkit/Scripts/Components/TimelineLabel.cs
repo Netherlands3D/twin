@@ -72,8 +72,8 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLabels()
         {
-            contextLabel.EnableInClassList("hidden", false);
-            precisionLabel.EnableInClassList("hidden", true);
+            contextLabel.EnableInClassList("hidden", true);
+            precisionLabel.EnableInClassList("hidden", false);
             
             precisionLabel.Context = unitPrecision;
             precisionLabel.Precision = unitPrecision;

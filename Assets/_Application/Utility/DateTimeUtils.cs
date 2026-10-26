@@ -48,10 +48,7 @@ namespace Netherlands3D.Twin.Utility
         {
             var unitCount = timeUnit switch
             {
-                //DateTimeUnit.Century => GetYears() / 100d,
-                //DateTimeUnit.Decade => GetYears() / 10d,
                 DateTimeUnit.Year => GetYears(),
-                //DateTimeUnit.Quarter => GetMonths() / 3d,
                 DateTimeUnit.Month => GetMonths(),
                 DateTimeUnit.Day => (endTime - startTime).TotalDays,
                 DateTimeUnit.Hour => (endTime - startTime).TotalHours,
@@ -95,7 +92,7 @@ namespace Netherlands3D.Twin.Utility
         {
             results.Clear();
 
-            var anchor = startTime.RoundDown(interval);
+            var anchor = interval.Amount < 1 ? startTime.RoundDown(interval.TimeUnit) : startTime.RoundDown(interval);
 
             for (var i = 0; ; i++)
             {
@@ -140,39 +137,35 @@ namespace Netherlands3D.Twin.Utility
 
         public static DateTime Add(this DateTime dateTime, DateTimeInterval interval)
         {
-            var roundedAmount = (long)interval.Amount;
-            dateTime = interval.TimeUnit switch
+            if (interval.TimeUnit is DateTimeUnit.Year or DateTimeUnit.Month)
             {
-                //DateTimeUnit.Century => dateTime.AddYears((int)roundedAmount * 100),
-                //DateTimeUnit.Decade => dateTime.AddYears((int)roundedAmount * 10),
-                DateTimeUnit.Year => dateTime.AddYears((int)roundedAmount),
-                //DateTimeUnit.Quarter => dateTime.AddMonths((int)roundedAmount * 3),
-                DateTimeUnit.Month => dateTime.AddMonths((int)roundedAmount),
-                DateTimeUnit.Day => dateTime.AddDays(roundedAmount),
-                DateTimeUnit.Hour => dateTime.AddHours(roundedAmount),
-                DateTimeUnit.Minute => dateTime.AddMinutes(roundedAmount),
-                DateTimeUnit.Second => dateTime.AddSeconds(roundedAmount),
-                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
-            };
-
-            var fraction = interval.Amount - roundedAmount;
+                var wholeAmount = (int)Math.Floor(interval.Amount);
+                var fraction = interval.Amount - wholeAmount;
+                var previous = (interval.TimeUnit == DateTimeUnit.Year)
+                    ? dateTime.AddYears(wholeAmount)
+                    : dateTime.AddMonths(wholeAmount);
+                var next = (interval.TimeUnit == DateTimeUnit.Year)
+                    ? dateTime.AddYears(wholeAmount + 1)
+                    : dateTime.AddMonths(wholeAmount + 1);
+                var ticks = (long)Math.Round((next.Ticks - previous.Ticks) * fraction);
+                return previous.AddTicks(ticks);
+            }
             
-            dateTime = interval.TimeUnit switch
+            var ticksPerUnit = interval.TimeUnit switch
             {
-                //DateTimeUnit.Century => dateTime.AddMonths((int)Math.Floor(fraction * 12 * 100)),
-                //DateTimeUnit.Decade => dateTime.AddMonths((int)Math.Floor(fraction * 12 * 10)),
-                DateTimeUnit.Year => dateTime.AddMonths((int)Math.Floor(fraction * 12)),
-                //DateTimeUnit.Quarter => dateTime.AddDays((int)Math.Floor(fraction * (dateTime.AddMonths(3) - dateTime).TotalDays)),
-                DateTimeUnit.Month => dateTime.AddDays((int)Math.Floor(fraction * (dateTime.AddMonths(1) - dateTime).TotalDays)),
-                DateTimeUnit.Day => dateTime.AddHours(Math.Floor(fraction * 24d)),
-                DateTimeUnit.Hour => dateTime.AddMinutes(Math.Floor(fraction * 60)),
-                DateTimeUnit.Minute => dateTime.AddSeconds(Math.Floor(fraction * 60)),
-                DateTimeUnit.Second => dateTime.AddMilliseconds(Math.Floor(fraction * 1000)),
-                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit), interval.TimeUnit, null)
+                DateTimeUnit.Day => TimeSpan.TicksPerDay,
+                DateTimeUnit.Hour => TimeSpan.TicksPerHour,
+                DateTimeUnit.Minute => TimeSpan.TicksPerMinute,
+                DateTimeUnit.Second => TimeSpan.TicksPerSecond,
+                DateTimeUnit.Year => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit)),
+                DateTimeUnit.Month => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit)),
+                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit))
             };
 
-            return dateTime;
+            return dateTime.AddTicks(
+                checked((long)Math.Round(interval.Amount * ticksPerUnit)));
         }
+        
         
 
         public static DateTime Round(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
@@ -194,15 +187,9 @@ namespace Netherlands3D.Twin.Utility
 
         public static DateTime RoundDown(this DateTime time, DateTimeUnit timeUnit)
         {
-            var bla = time.Month / 3 * 3;
             return timeUnit switch
             {
-                
-                
-                //DateTimeUnit.Century => new DateTime((time.Year - 1) / 100 * 100 + 1, 1, 1, 0, 0, 0, time.Kind),
-                //DateTimeUnit.Decade => new DateTime((time.Year - 1) / 10 * 10 + 1, 1, 1, 0, 0, 0, time.Kind),
                 DateTimeUnit.Year => new DateTime(time.Year, 1, 1, 0, 0, 0, time.Kind),
-                //DateTimeUnit.Quarter => new DateTime(time.Year, (time.Month - 1) / 3 * 3 + 1 , 1, 0, 0, 0, time.Kind),
                 DateTimeUnit.Month => new DateTime(time.Year, time.Month, 1, 0, 0, 0, time.Kind),
                 DateTimeUnit.Day => time.Date,
                 DateTimeUnit.Hour => new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, 0, time.Kind),
