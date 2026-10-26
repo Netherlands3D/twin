@@ -43,6 +43,7 @@ namespace Netherlands3D.UI.Components
             PlayButton.RegisterCallback<ClickEvent>(OnPlayButtonClicked);
             SpeedUpButton.RegisterCallback<ClickEvent>(OnSpeedUpButtonClicked);
             SlowDownButton.RegisterCallback<ClickEvent>(OnSlowDownButtonClicked);
+            UpdatePlayButton();
         }
 
         private void OnPlayButtonClicked(ClickEvent _) => TogglePlay();
@@ -60,8 +61,14 @@ namespace Netherlands3D.UI.Components
         {
             isPlaying = !isPlaying;
             PlayToggled?.Invoke(isPlaying);
+            UpdatePlayButton();
+        }
+
+        private void UpdatePlayButton()
+        {
             PlayButton.EnableInClassList("simulation-speed-controls__control-button--active", isPlaying);
             PlayButton.Image = isPlaying ? "Pause" : "Play"; //show the state that "will be" when pressed
+            PlayButton.tooltip = isPlaying ? "Pauzeren" : "Afspelen";
         }
         
         public void StepUp()
