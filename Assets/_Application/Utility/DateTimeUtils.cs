@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Utility
 {
     public static class DateTimeUtils
     {
+
         public static DateTime ToDateTime(this Length length, DateTime startTime, DateTime endTime, double ticksPerPixel)
         {
             if (length.unit == LengthUnit.Pixel)
@@ -49,6 +51,7 @@ namespace Netherlands3D.Twin.Utility
                 DateTimeUnit.Century => GetYears() / 100d,
                 DateTimeUnit.Decade => GetYears() / 10d,
                 DateTimeUnit.Year => GetYears(),
+                DateTimeUnit.Quarter => GetMonths() / 4d,
                 DateTimeUnit.Month => GetMonths(),
                 DateTimeUnit.Day => (endTime - startTime).TotalDays,
                 DateTimeUnit.Hour => (endTime - startTime).TotalHours,
@@ -137,13 +140,14 @@ namespace Netherlands3D.Twin.Utility
 
         public static DateTime Add(this DateTime dateTime, DateTimeInterval interval)
         {
-            var roundedAmount = (int)interval.Amount;
+            var roundedAmount = (long)interval.Amount;
             dateTime = interval.TimeUnit switch
             {
-                DateTimeUnit.Century => dateTime.AddYears(roundedAmount * 100),
-                DateTimeUnit.Decade => dateTime.AddYears(roundedAmount * 10),
-                DateTimeUnit.Year => dateTime.AddYears(roundedAmount),
-                DateTimeUnit.Month => dateTime.AddMonths(roundedAmount),
+                DateTimeUnit.Century => dateTime.AddYears((int)roundedAmount * 100),
+                DateTimeUnit.Decade => dateTime.AddYears((int)roundedAmount * 10),
+                DateTimeUnit.Year => dateTime.AddYears((int)roundedAmount),
+                DateTimeUnit.Quarter => dateTime.AddMonths((int)roundedAmount * 3),
+                DateTimeUnit.Month => dateTime.AddMonths((int)roundedAmount),
                 DateTimeUnit.Day => dateTime.AddDays(roundedAmount),
                 DateTimeUnit.Hour => dateTime.AddHours(roundedAmount),
                 DateTimeUnit.Minute => dateTime.AddMinutes(roundedAmount),
@@ -155,10 +159,11 @@ namespace Netherlands3D.Twin.Utility
             
             dateTime = interval.TimeUnit switch
             {
-                DateTimeUnit.Century => dateTime.AddMonths((int)Math.Floor(fraction * 1200)),
-                DateTimeUnit.Decade => dateTime.AddMonths((int)Math.Floor(fraction * 120)),
+                DateTimeUnit.Century => dateTime.AddMonths((int)Math.Floor(fraction * 12 * 100)),
+                DateTimeUnit.Decade => dateTime.AddMonths((int)Math.Floor(fraction * 12 * 10)),
                 DateTimeUnit.Year => dateTime.AddMonths((int)Math.Floor(fraction * 12)),
-                DateTimeUnit.Month => dateTime.AddDays((int)Math.Floor(fraction * DateTime.DaysInMonth(dateTime.Year, dateTime.Month))),
+                DateTimeUnit.Quarter => dateTime.AddDays((int)Math.Floor(fraction * (dateTime.AddMonths(3) - dateTime).TotalDays)),
+                DateTimeUnit.Month => dateTime.AddDays((int)Math.Floor(fraction * (dateTime.AddMonths(1) - dateTime).TotalDays)),
                 DateTimeUnit.Day => dateTime.AddHours(Math.Floor(fraction * 24d)),
                 DateTimeUnit.Hour => dateTime.AddMinutes(Math.Floor(fraction * 60)),
                 DateTimeUnit.Minute => dateTime.AddSeconds(Math.Floor(fraction * 60)),
@@ -171,6 +176,9 @@ namespace Netherlands3D.Twin.Utility
 
         public static DateTime Round(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
         {
+
+            
+            
             var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(rootTime, time, interval.Amount);
 
             var previousIntervalIndex = Math.Floor(intervalCount);
@@ -187,11 +195,15 @@ namespace Netherlands3D.Twin.Utility
 
         public static DateTime RoundDown(this DateTime time, DateTimeUnit timeUnit)
         {
+            var bla = time.Month / 3 * 3;
             return timeUnit switch
             {
+                
+                
                 DateTimeUnit.Century => new DateTime((time.Year - 1) / 100 * 100 + 1, 1, 1, 0, 0, 0, time.Kind),
                 DateTimeUnit.Decade => new DateTime((time.Year - 1) / 10 * 10 + 1, 1, 1, 0, 0, 0, time.Kind),
                 DateTimeUnit.Year => new DateTime(time.Year, 1, 1, 0, 0, 0, time.Kind),
+                DateTimeUnit.Quarter => new DateTime(time.Year, (time.Month - 1) / 3 * 3 + 1 , 1, 0, 0, 0, time.Kind),
                 DateTimeUnit.Month => new DateTime(time.Year, time.Month, 1, 0, 0, 0, time.Kind),
                 DateTimeUnit.Day => time.Date,
                 DateTimeUnit.Hour => new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, 0, time.Kind),
@@ -211,7 +223,10 @@ namespace Netherlands3D.Twin.Utility
             
             var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(rootTime, time, interval.Amount);
             
+            
             var previousIndex = Math.Floor(intervalCount);
+            
+            //Debug.Log($"previousIndex * interval.Amount = {previousIndex} * {interval.Amount} = {previousIndex * interval.Amount}");
 
             return rootTime.Add(new DateTimeInterval(
                 interval.TimeUnit, previousIndex * interval.Amount));

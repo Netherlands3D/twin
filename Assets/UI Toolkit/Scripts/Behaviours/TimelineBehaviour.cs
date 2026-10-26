@@ -14,12 +14,15 @@ namespace Netherlands3D
     public class TimelineBehaviour : MonoBehaviour
     {
         
+        private readonly List<(CityJSONLayerGameObject Layer, TimelineCityJson TimelineLayer)> timelineLayerPairs = new();
+        
         private UI.Components.Timeline timelineElement;
 
-        private readonly List<(CityJSONLayerGameObject Layer, TimelineCityJson TimelineLayer)> timelineLayerPairs = new();
+        void Awake()
+        {
+            timelineElement ??= App.UIRoot.Root.Q<UI.Components.Timeline>();
+        }
 
-
-        
         void OnEnable()
         {
             var layersService = App.Layers;
@@ -104,23 +107,41 @@ namespace Netherlands3D
         private void UpdateTimelineElementVisibility()
         {
             var hasTimeline = false;
+
+            var earliestTicks = DateTime.MaxValue.Ticks;
+            var latestTicks = DateTime.MinValue.Ticks;
             
             foreach (var timelineLayerPair in timelineLayerPairs)
             {
                 var timelineLayer = timelineLayerPair.TimelineLayer;
-                if (timelineLayer.TimestampCollections.Count > 0)
+                if (timelineLayer.Timelines.Count > 0)
                 {
                     hasTimeline = true;
-                    continue;
+
+                    foreach (var timelineKvp in timelineLayer.Timelines)
+                    {
+                        foreach (var timestamp in timelineKvp.Value.Timestamps)
+                        {
+                            var ticks = timestamp.timestamp.Date.Ticks;
+                            earliestTicks = Math.Min(ticks, earliestTicks);
+                            latestTicks = Math.Max(ticks, latestTicks);
+                            
+                            UnityEngine.Debug.Log("TIME="+new DateTime(ticks).ToString());
+                            
+                        }
+                    }
+                    
                 }
             }
+
+            timelineElement.StartValue = new DateTime(earliestTicks);
+            timelineElement.EndValue = new DateTime(latestTicks);
 
             SetTimelineElementVisibility(!hasTimeline);
         }
 
         private void SetTimelineElementVisibility(bool visible)
         {
-            timelineElement ??= App.UIRoot.Root.Q<UI.Components.Timeline>();
             timelineElement.EnableInClassList("hidden", visible);
         }
     }

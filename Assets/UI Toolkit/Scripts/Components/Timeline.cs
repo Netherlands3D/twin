@@ -33,7 +33,7 @@ namespace Netherlands3D.UI.Components
         private readonly List<VisualElement> markElements = new();
         
         private readonly VisualElement labelsContainer;
-        private readonly List<DateTimeLabel> labelElements = new();
+        private readonly List<TimelineLabel> labelElements = new();
         
         private readonly VisualElement thumbElement;
         private readonly DateTimeLabel thumbLabelElement;
@@ -85,7 +85,7 @@ namespace Netherlands3D.UI.Components
             new (DateTimeUnit.Decade, 1),
             new (DateTimeUnit.Year, 2),
             new (DateTimeUnit.Year, 1),
-            new (DateTimeUnit.Month, 3),
+            new (DateTimeUnit.Quarter, 1),
             new (DateTimeUnit.Month, 1),
             new (DateTimeUnit.Month, 1/3f),
             new (DateTimeUnit.Month, 1/6f),
@@ -337,6 +337,7 @@ namespace Netherlands3D.UI.Components
             isThumbDrag = false;
 
             currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
+            Debug.Log($"Round {preciseCurrentTime} {snapInterval} {rootTime}: {currentTime}");
 
             markElementsUpdateRequested = true;
             
@@ -470,8 +471,8 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            var maxMarkElements = (double)width / 10;
-            var maxLabelElements = (double)width / 50;
+            var maxMarkElements = (double)width / 20;
+            var maxLabelElements = (double)width / 80;
 
             var start = startTime;
             var end = endTime;
@@ -497,7 +498,7 @@ namespace Netherlands3D.UI.Components
             var primaryLabelUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Century, (int)labelsInterval.TimeUnit - 1), (int)unitContext, (int)unitPrecision);
 
             thumbLabelElement.Context = unitContext;
-            thumbLabelElement.Precision = primaryMarkUnit + 1;
+            thumbLabelElement.Precision = unitPrecision;
             
             var markIndex = 0;
             foreach (var markTime in markTimes)
@@ -540,9 +541,9 @@ namespace Netherlands3D.UI.Components
             {
                 if (labelIndex == labelElements.Count)
                 {
-                    var newLabel = new DateTimeLabel();
+                    var newLabel = new TimelineLabel();
                     newLabel.pickingMode = PickingMode.Ignore;
-                    newLabel.AddToClassList("timeline__label");
+                    //newLabel.AddToClassList("timeline__label");
                     labelsContainer.Add(newLabel);
                     labelElements.Add(newLabel);
                 }
@@ -561,21 +562,24 @@ namespace Netherlands3D.UI.Components
                 var isSecondary = !isPrimary && labelTime.RoundDown(primaryLabelUnit + 1) == labelTime;
                 var isTertiary = !isPrimary && !isSecondary;
 
-                var labelTimeUnit = primaryLabelUnit;
-                if (isSecondary) labelTimeUnit = primaryLabelUnit + 1;
-                if (isTertiary) labelTimeUnit = primaryLabelUnit + 2;
+                var labelTimeUnit = primaryLabelUnit + 1;
+               // if (isSecondary) labelTimeUnit = primaryLabelUnit + 1;
+                //if (isTertiary) labelTimeUnit = primaryLabelUnit + 2;
 
                 labelElement.EnableInClassList("timeline__label--primary", isPrimary);
                 
-                labelElement.Context = labelTimeUnit;
-                labelElement.Precision = labelTimeUnit;
-                labelElement.Value = labelTime;
+                
+                labelElement.UnitContext = labelTimeUnit;
+                labelElement.UnitPrecision = labelTimeUnit;
+                labelElement.Time = labelTime;
+                
                 labelElement.style.opacity = new StyleFloat(1f);
                 
                 //hide label element when it is behind thumb
                 var pixelOffset = (labelTime - displayedCurrentTime).Ticks / ticksPerPixel;
                 var opacity = Math.Clamp((float)(Math.Abs(pixelOffset) - 45f) / 5f, 0, 1);
                 labelElement.style.opacity = new StyleFloat(opacity);
+                
             }
 
             for (var i = labelIndex; i < labelElements.Count; i++)
@@ -612,7 +616,7 @@ namespace Netherlands3D.UI.Components
             
             var thumbLabelPosition = Math.Clamp(TimeToPosition(displayedCurrentTime, startTime, endTime), 0, 1);
             thumbLabelElement.style.left = Length.Percent((float)(thumbLabelPosition * 100));
-            thumbLabelElement.Value = currentTime;
+            thumbLabelElement.Value = preciseCurrentTime;
 
         }
         

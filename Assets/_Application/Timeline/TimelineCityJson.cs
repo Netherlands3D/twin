@@ -15,7 +15,7 @@ namespace Netherlands3D.Timeline
     [RequireComponent(typeof(CityJSONLayerGameObject))]
     public class TimelineCityJson : MonoBehaviour
     {
-        public IReadOnlyDictionary<CityObject, TimestampCollection> TimestampCollections => timelines;
+        public IReadOnlyDictionary<CityObject, TimestampCollection> Timelines => timelines;
         public UnityEvent TimelineInitialized { get; } = new();
         
         const string TIMELINE_ATTRIBUTE_NAME = "+timestamps"; //in CityJson extensions start with a +

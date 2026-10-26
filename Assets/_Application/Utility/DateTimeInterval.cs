@@ -11,5 +11,12 @@ namespace Netherlands3D.Twin.Utility
 
         public DateTimeUnit TimeUnit { get; private set; }
         public double Amount { get; private set; }
+
+
+        public override string ToString()
+        {
+            return $"{this.TimeUnit}, {this.Amount}";
+        }
+        
     }
 }

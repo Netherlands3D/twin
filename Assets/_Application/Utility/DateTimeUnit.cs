@@ -5,6 +5,7 @@ namespace Netherlands3D.Twin.Utility
         Century,
         Decade,
         Year,
+        Quarter,
         Month,
         Day,
         Hour,
