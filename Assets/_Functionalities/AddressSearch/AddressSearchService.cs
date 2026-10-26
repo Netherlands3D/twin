@@ -3,14 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI.Components;
+using Netherlands3D.UI.Panels;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.AddressSearch
 {
@@ -55,12 +60,72 @@ namespace Netherlands3D.AddressSearch
         private Coroutine suggestionsRoutine;
         private bool autoSelectFirstWhenReady;
         private int searchRequestVersion;
+        
+        private WorldAnnotation locationPointer;
+        private FloatingElement locationElement;
+        private CameraService cameraService;
+        private AppRootBehaviour appRootBehaviour;
+        private WorldUIService worldUIService;
+        private const float MaxPixelPointerOffset = 100;
+        private const float worldSpaceOffset = 10;
+        private Coordinate targetCoordinate;
+        private string targetResidentialObjectId;
 
         private void Start()
         {
             if (!mainCamera) mainCamera = Camera.main;
+            
+            cameraService = App.Cameras;
+            worldUIService  = ServiceLocator.GetService<WorldUIService>();
+            appRootBehaviour = App.UIRoot;
+            locationPointer = CreateCoordinateLabel(ref locationElement);
+            locationPointer.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
+            locationPointer.SetColor(new Color(0.000f, 0.275f, 0.600f, 1f)); //blue 900
+            locationPointer.SetTextColor(Color.white);
+            onCoordinateFound.AddListener(UpdatePointer);
+        }
+
+        private void UpdatePointer(Coordinate coordinate)
+        {
+            locationPointer.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            locationPointer.SetText($"bagid: {targetResidentialObjectId}\nX: {coordinate.easting.ToString("0")}\nY: {coordinate.northing.ToString("0")}".Trim());
         }
         
+        private WorldAnnotation CreateCoordinateLabel(ref FloatingElement floatingElement)
+        {
+            floatingElement = new FloatingElement();
+            worldUIService.AddToFloatingElementsContent(floatingElement);
+            WorldAnnotation annotation = new WorldAnnotation("");
+            annotation.IsCoordinate = true;
+            floatingElement.Add(annotation);
+            return annotation;
+        }
+
+        private void OnDestroy()
+        {
+            worldUIService.RemoveFromFloatingElementsContent(locationElement);
+            locationPointer = null;
+            onCoordinateFound.RemoveListener(UpdatePointer);
+        }
+
+        void Update()
+        {
+            UpdateCoordinateTooltip(targetCoordinate, ref locationElement, ref locationPointer);
+        }
+
+        private void UpdateCoordinateTooltip(Coordinate coordinate, ref FloatingElement element, ref WorldAnnotation label)
+        {
+            var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(coordinate.ToUnity());
+            Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
+            var localPos = worldUIService.FloatingElementsContent.WorldToLocal(panelPos);
+            element.SetPosition(localPos);
+
+            var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(coordinate.ToUnity() + cameraService.ActiveCamera.transform.right * worldSpaceOffset);
+            float dist = Mathf.Abs(offsetScreenPos.x - screenPos.x);
+            float pixelOffset = Mathf.Min(dist, MaxPixelPointerOffset);
+            label.SetLabelOffset(pixelOffset);
+        }
+
         public void FetchSuggestions(string textInput)
         {
             searchRequestVersion++;
@@ -215,8 +280,8 @@ namespace Netherlands3D.AddressSearch
             }
          
             JSONNode properties = feature["properties"];
-            string residentialObjectId = ReadString(properties, "adresseerbaar_object_identificatie");
-            if (string.IsNullOrEmpty(residentialObjectId))
+            targetResidentialObjectId = ReadString(properties, "adresseerbaar_object_identificatie");
+            if (string.IsNullOrEmpty(targetResidentialObjectId))
             {
                 Debug.LogWarning("[AddressSearchService] Geen BAG-identificatie van het " + "adresseerbare object gevonden.");
                 yield break;
@@ -224,7 +289,7 @@ namespace Netherlands3D.AddressSearch
 
             BagDataService bagDataService = ServiceLocator.GetService<BagDataService>();
             List<string> pandIds = new List<string>();
-            yield return bagDataService.GetBAGID(residentialObjectId, result => pandIds = result);
+            yield return bagDataService.GetBAGID(targetResidentialObjectId, result => pandIds = result);
             
             if (pandIds.Count == 0) yield break;
 
@@ -251,7 +316,7 @@ namespace Netherlands3D.AddressSearch
                 Debug.LogWarning("[AddressSearchService] Geen bounding box voor pand " + pandId + " ontvangen.");
                 yield break;
             }
-            Coordinate targetCoordinate = buildingBounds.Center;
+            targetCoordinate = buildingBounds.Center;
             if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
             {
                 targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);

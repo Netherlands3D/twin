@@ -169,6 +169,11 @@ namespace Netherlands3D.UI.Components
                 textContainer.style.height = height;
             });
         }
+
+        public void SetTextColor(Color color)
+        {
+            nameField.color = ColorUtility.ToHtmlStringRGB(color);
+        }
         
         public void SetColor(Color color)
         {
