@@ -69,7 +69,7 @@ namespace Netherlands3D.AddressSearch
         private const float MaxPixelPointerOffset = 100;
         private const float worldSpaceOffset = 10;
         private Coordinate targetCoordinate;
-        private string targetResidentialObjectId;
+        private string targetId;
 
         private void Start()
         {
@@ -82,13 +82,26 @@ namespace Netherlands3D.AddressSearch
             locationPointer.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
             locationPointer.SetColor(new Color(0.000f, 0.275f, 0.600f, 1f)); //blue 900
             locationPointer.SetTextColor(Color.white);
+            HidePointer();
+            
+            ServiceLocator.GetService<ToolService>().GetTool(ToolType.Search).onClose.AddListener(HidePointer);
             onCoordinateFound.AddListener(UpdatePointer);
         }
 
         private void UpdatePointer(Coordinate coordinate)
         {
+            ShowPointer();
+            locationPointer.SetText($"{targetId}"); //\nX: {coordinate.easting.ToString("0")}\nY: {coordinate.northing.ToString("0")}".Trim()
+        }
+
+        private void HidePointer()
+        {
+            locationPointer.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+        }
+
+        private void ShowPointer()
+        {
             locationPointer.EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            locationPointer.SetText($"bagid: {targetResidentialObjectId}\nX: {coordinate.easting.ToString("0")}\nY: {coordinate.northing.ToString("0")}".Trim());
         }
         
         private WorldAnnotation CreateCoordinateLabel(ref FloatingElement floatingElement)
@@ -106,6 +119,7 @@ namespace Netherlands3D.AddressSearch
             worldUIService.RemoveFromFloatingElementsContent(locationElement);
             locationPointer = null;
             onCoordinateFound.RemoveListener(UpdatePointer);
+            ServiceLocator.GetService<ToolService>().GetTool(ToolType.Search).onClose.RemoveListener(HidePointer);
         }
 
         void Update()
@@ -167,6 +181,7 @@ namespace Netherlands3D.AddressSearch
                 Debug.LogWarning("[AddressSearchService] Lege resultaat-ID.");
                 return;
             }
+            targetId = label;
             StartCoroutine(ResolveSelectedSuggestion(id));
         }
 
@@ -280,7 +295,7 @@ namespace Netherlands3D.AddressSearch
             }
          
             JSONNode properties = feature["properties"];
-            targetResidentialObjectId = ReadString(properties, "adresseerbaar_object_identificatie");
+            string targetResidentialObjectId = ReadString(properties, "adresseerbaar_object_identificatie");
             if (string.IsNullOrEmpty(targetResidentialObjectId))
             {
                 Debug.LogWarning("[AddressSearchService] Geen BAG-identificatie van het " + "adresseerbare object gevonden.");
