@@ -17,6 +17,7 @@ namespace Netherlands3D
         private const string addressRequestUrl = "https://service.pdok.nl/lv/bag/wfs/v2_0?service=wfs&request=getFeature&version=2.0.0&outputFormat=geojson&typeName=bag:verblijfsobject&filter=%3CFilter%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3Epandidentificatie%3C/PropertyName%3E%3CLiteral%3E{BagID}%3C/Literal%3E%3C/PropertyIsEqualTo%3E%3C/Filter%3E";
         private const string removeFromID = "NL.IMBAG.Pand.";
         private const string bagWfsEndpoint = "https://service.pdok.nl/lv/bag/wfs/v2_0";
+        private const int requestTimeOut = 15;
         
         private Dictionary<string, RequestState> downloadProcesses = new();
 
@@ -84,16 +85,13 @@ namespace Netherlands3D
             while (reader.GotoNextFeature())
             {
                 var properties = reader.GetProperties();
-
                 var bagData = new BagData
                 {
                     id = bagID,
-                    url = "https://bagviewer.kadaster.nl/lvbag/bag-viewer/?objectId="
-                          + properties["identificatie"],
+                    url = "https://bagviewer.kadaster.nl/lvbag/bag-viewer/?objectId=" + properties["identificatie"],
                     status = properties["status"].ToString(),
                     year = properties["bouwjaar"].ToString()
                 };
-
                 GetHandle(bagID)?.OnBagData?.Invoke(bagData);
             }
         }
@@ -115,12 +113,9 @@ namespace Netherlands3D
             while (reader.GotoNextFeature())
             {
                 var properties = reader.GetProperties();
-                string address = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} " +
-                                 $"{properties["huisletter"]}{properties["toevoeging"]}";
-
+                string address = $"{properties["openbare_ruimte"]} {properties["huisnummer"]} " + $"{properties["huisletter"]}{properties["toevoeging"]}";
                 addresses.Add(address);
             }
-
             GetHandle(bagID)?.OnAddresses?.Invoke(addresses);
         }
 
@@ -131,13 +126,11 @@ namespace Netherlands3D
         
         public void LoadBuildingBounds(string bagId, Action<BoundingBox> onBoundsLoaded)
         {
-            bagId = bagId.Replace("NL.IMBAG.Pand.", "");
+            bagId = bagId.Replace(removeFromID, "");
             StartCoroutine(GetBuildingBounds(bagId, onBoundsLoaded));
         }
 
-        private IEnumerator GetBuildingBounds(
-            string bagId,
-            Action<BoundingBox> onBoundsLoaded)
+        private IEnumerator GetBuildingBounds(string bagId, Action<BoundingBox> onBoundsLoaded)
         {
             string filter =
                 "<Filter><PropertyIsEqualTo>" +
@@ -157,43 +150,31 @@ namespace Netherlands3D
                 "&filter=" + UnityWebRequest.EscapeURL(filter);
 
             using UnityWebRequest request = UnityWebRequest.Get(url);
-            request.timeout = 15;
+            request.timeout = requestTimeOut;
 
             yield return request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning(
-                    "[BagDataService] Pandgeometrie ophalen mislukt: "
-                    + request.error);
-
+                Debug.LogWarning("[BagDataService] Pandgeometrie ophalen mislukt: " + request.error);
                 onBoundsLoaded?.Invoke(null);
                 yield break;
             }
-
             JSONNode root;
-
             try
             {
                 root = JSON.Parse(request.downloadHandler.text);
             }
             catch (Exception exception)
             {
-                Debug.LogWarning(
-                    "[BagDataService] Ongeldige GeoJSON-response: "
-                    + exception.Message);
-
+                Debug.LogWarning("[BagDataService] Ongeldige GeoJSON-response: " + exception.Message);
                 onBoundsLoaded?.Invoke(null);
                 yield break;
             }
-
             JSONNode features = root["features"];
-
             if (features == null || !features.IsArray || features.Count == 0)
             {
-                Debug.LogWarning(
-                    "[BagDataService] Geen pand gevonden voor BAG-ID: " + bagId);
-
+                Debug.LogWarning("[BagDataService] Geen pand gevonden voor BAG-ID: " + bagId);
                 onBoundsLoaded?.Invoke(null);
                 yield break;
             }
@@ -206,79 +187,42 @@ namespace Netherlands3D
             double maxLon = double.NegativeInfinity;
             double maxLat = double.NegativeInfinity;
 
-            if (coordinates == null ||
-                !AccumulateGeoJsonBounds(
-                    coordinates,
-                    ref minLon,
-                    ref minLat,
-                    ref maxLon,
-                    ref maxLat))
+            if (coordinates == null || !AccumulateGeoJsonBounds(coordinates, ref minLon, ref minLat, ref maxLon, ref maxLat))
             {
-                Debug.LogWarning(
-                    "[BagDataService] Geen geldige pandcoördinaten gevonden.");
-
+                Debug.LogWarning("[BagDataService] Geen geldige pandcoördinaten gevonden.");
                 onBoundsLoaded?.Invoke(null);
                 yield break;
             }
 
             var bounds = new BoundingBox(
-                new Coordinate(
-                    CoordinateSystem.WGS84_LatLon,
-                    minLat,
-                    minLon),
-                new Coordinate(
-                    CoordinateSystem.WGS84_LatLon,
-                    maxLat,
-                    maxLon));
-
+                new Coordinate(CoordinateSystem.WGS84_LatLon, minLat, minLon),
+                new Coordinate(CoordinateSystem.WGS84_LatLon, maxLat, maxLon));
             onBoundsLoaded?.Invoke(bounds);
         }
 
-        private static bool AccumulateGeoJsonBounds(
-            JSONNode node,
-            ref double minLon,
-            ref double minLat,
-            ref double maxLon,
-            ref double maxLat)
+        private static bool AccumulateGeoJsonBounds(JSONNode node, ref double minLon, ref double minLat, ref double maxLon, ref double maxLat)
         {
-            if (node == null || node.IsNull)
-                return false;
+            if (node == null || node.IsNull) return false;
 
-            // GeoJSON-posities zijn [longitude, latitude].
-            if (node.IsArray &&
-                node.Count >= 2 &&
-                node[0].IsNumber &&
-                node[1].IsNumber)
+            if (node.IsArray && node.Count >= 2 && node[0].IsNumber && node[1].IsNumber)
             {
                 double lon = node[0].AsDouble;
                 double lat = node[1].AsDouble;
-
                 minLon = Math.Min(minLon, lon);
                 minLat = Math.Min(minLat, lat);
                 maxLon = Math.Max(maxLon, lon);
                 maxLat = Math.Max(maxLat, lat);
-
                 return true;
             }
-
             bool found = false;
-
             if (node.IsArray)
             {
                 for (int i = 0; i < node.Count; i++)
                 {
-                    if (AccumulateGeoJsonBounds(
-                            node[i],
-                            ref minLon,
-                            ref minLat,
-                            ref maxLon,
-                            ref maxLat))
-                    {
+                    if (AccumulateGeoJsonBounds(node[i], ref minLon, ref minLat, ref maxLon, ref maxLat))
                         found = true;
-                    }
                 }
             }
-
             return found;
         }
 
@@ -292,7 +236,7 @@ namespace Netherlands3D
             string filter = "<Filter><PropertyIsEqualTo>" + "<PropertyName>identificatie</PropertyName>" + "<Literal>" + residentialObjectID + "</Literal>" + "</PropertyIsEqualTo></Filter>";
             string url = bagWfsEndpoint.TrimEnd('/') + "?SERVICE=WFS" + "&VERSION=2.0.0" + "&REQUEST=GetFeature" + "&typeNames=bag:verblijfsobject" + "&count=100" + "&outputFormat=application/json" + "&srsName=EPSG:28992" + "&filter=" + UnityWebRequest.EscapeURL(filter);
             using UnityWebRequest request = UnityWebRequest.Get(url);
-            request.timeout = 15;
+            request.timeout = requestTimeOut;
             yield return request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)
@@ -300,7 +244,6 @@ namespace Netherlands3D
                 Debug.LogWarning("[AddressSearchService] BAG WFS-request mislukt: " + request.error);
                 yield break;
             }
-
             JSONNode root;
             try
             {
