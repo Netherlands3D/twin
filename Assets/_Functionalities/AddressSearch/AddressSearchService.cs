@@ -251,10 +251,10 @@ namespace Netherlands3D.AddressSearch
                 Debug.LogWarning("[AddressSearchService] Geen bounding box voor pand " + pandId + " ontvangen.");
                 yield break;
             }
-            buildingBounds.Convert(CoordinateSystems.connectedCoordinateSystem);
             Coordinate targetCoordinate = buildingBounds.Center;
-            if (targetCoordinate.PointsLength == 2)
+            if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
             {
+                targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
                 float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
                 targetCoordinate.height = height;
             }
