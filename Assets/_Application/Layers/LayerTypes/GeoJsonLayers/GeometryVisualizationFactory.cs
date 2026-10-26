@@ -192,7 +192,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return convertedCoordinates;
         }
 
-        private static Coordinate ConvertToCoordinate(
+        public static Coordinate ConvertToCoordinate(
             CoordinateSystem originalCoordinateSystem,
             IPosition point,
             float defaultNAPHeight = 0

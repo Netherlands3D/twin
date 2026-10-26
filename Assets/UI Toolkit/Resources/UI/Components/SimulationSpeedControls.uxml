@@ -14,9 +14,9 @@
 
     <ui:VisualElement class="inspector__section">
         <ui:Label text="Bediening" class="simulation-speed-controls__field-label" />
-        <nl3d:Button name="SlowDownButton" button-style="IconOnly" icon="Backward" class="simulation-speed-controls__control-button" />
-        <nl3d:Button name="PlayButton" button-style="IconOnly" icon="Play" class="simulation-speed-controls__control-button" />
-        <nl3d:Button name="SpeedUpButton" button-style="IconOnly" icon="Forward" class="simulation-speed-controls__control-button" />
+        <nl3d:Button name="SlowDownButton" button-style="IconOnly" icon="Backward" class="simulation-speed-controls__control-button" tooltip="Simulatie snelheid verlagen" />
+        <nl3d:Button name="PlayButton" button-style="IconOnly" icon="Play" class="simulation-speed-controls__control-button"/>
+        <nl3d:Button name="SpeedUpButton" button-style="IconOnly" icon="Forward" class="simulation-speed-controls__control-button" tooltip="Simulatie snelheid verhogen" />
     </ui:VisualElement>
 </ui:UXML>
 
