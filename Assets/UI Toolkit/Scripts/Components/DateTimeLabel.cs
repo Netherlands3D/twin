@@ -89,12 +89,12 @@ namespace Netherlands3D.UI.Components
             var parts = new List<string>();
 
             if (Includes(DateTimeUnit.Day)) parts.Add("%d");
-            if (Includes(DateTimeUnit.Month)) parts.Add("MMMM");
-            if (Includes(DateTimeUnit.Quarter))
+            if (Includes(DateTimeUnit.Month)) parts.Add("MMM");
+            /*if (Includes(DateTimeUnit.Quarter))
             {
                 parts.Add("Q" + (1 + (value.Month / 4)));
-            }
-            if (Includes(DateTimeUnit.Year) || Includes(DateTimeUnit.Decade) || Includes(DateTimeUnit.Century)) parts.Add("yyyy");
+            }*/
+            if (Includes(DateTimeUnit.Year)) parts.Add("yyyy");
 
             string timeFormat = null;
             if ((Includes(DateTimeUnit.Hour) || Includes(DateTimeUnit.Minute)) && !Includes(DateTimeUnit.Second)) timeFormat = "HH:mm";
@@ -102,7 +102,7 @@ namespace Netherlands3D.UI.Components
 
             var dateFormat = string.Join(" ", parts);
 
-            var format = $"{dateFormat}|{timeFormat}".Trim();
+            var format = $"{dateFormat} {timeFormat}".Trim();
 
             displayLabel.text = value.ToString(
                 format,

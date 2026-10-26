@@ -77,23 +77,26 @@ namespace Netherlands3D.UI.Components
 
         private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
-            new (DateTimeUnit.Century, 1),
-            new (DateTimeUnit.Decade, 20),
-            new (DateTimeUnit.Decade, 10),
-            new (DateTimeUnit.Decade, 5),
-            new (DateTimeUnit.Decade, 2),
-            new (DateTimeUnit.Decade, 1),
-            new (DateTimeUnit.Year, 2),
+            //new (DateTimeUnit.Century, 1),
+            //new (DateTimeUnit.Decade, 20),
+            //new (DateTimeUnit.Decade, 10),
+            //new (DateTimeUnit.Decade, 5),
+            //new (DateTimeUnit.Decade, 2),
+            //new (DateTimeUnit.Decade, 1),
+            new (DateTimeUnit.Year, 100),
+            new (DateTimeUnit.Year, 50),
+            new (DateTimeUnit.Year, 20),
+            new (DateTimeUnit.Year, 10),
+            new (DateTimeUnit.Year, 5),
             new (DateTimeUnit.Year, 1),
-            new (DateTimeUnit.Quarter, 1),
+            //new (DateTimeUnit.Quarter, 1),
+            new (DateTimeUnit.Month, 3),
             new (DateTimeUnit.Month, 1),
             new (DateTimeUnit.Month, 1/3f),
             new (DateTimeUnit.Month, 1/6f),
             new (DateTimeUnit.Day, 1),
-            new (DateTimeUnit.Hour, 12),
             new (DateTimeUnit.Hour, 6),
             new (DateTimeUnit.Hour, 3),
-            new (DateTimeUnit.Hour, 2),
             new (DateTimeUnit.Hour, 1),
             new (DateTimeUnit.Minute, 30),
             new (DateTimeUnit.Minute, 20),
@@ -310,8 +313,19 @@ namespace Netherlands3D.UI.Components
                 return;
 
             currentTime = startTime.Add(thumbPosition * duration);
-            markElementsUpdateRequested = true;
+            
 
+
+            SetCurrentTime();
+            
+            
+            preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, 0, 1) * duration);
+            currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
+            displayedCurrentTime = preciseCurrentTime;
+        }
+
+        private void SetCurrentTime()
+        {
             var minCurrentTime = PositionToTime(thumbScrollMinPosition, startTime, endTime);
             var maxCurrentTime = PositionToTime(thumbScrollMaxPosition, startTime, endTime);
             
@@ -325,11 +339,8 @@ namespace Netherlands3D.UI.Components
                 startTime = startTime.Add(scrollOffset);
                 endTime = endTime.Add(scrollOffset);
                 thumbElementTimeOffset = currentTime - boundTime;
+                markElementsUpdateRequested = true;
             }
-            
-            preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, 0, 1) * duration);
-            currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
-            displayedCurrentTime = preciseCurrentTime;
         }
         
         private void OnThumbDragEnded(Vector2 arg0)
@@ -471,7 +482,7 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            var maxMarkElements = (double)width / 20;
+            var maxMarkElements = (double)width / 10;
             var maxLabelElements = (double)width / 80;
 
             var start = startTime;
@@ -482,7 +493,7 @@ namespace Netherlands3D.UI.Components
                 unitGroupsUpdateRequested = false;
                 marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start,
                     end, maxMarkElements);
-                snapInterval = marksInterval;
+                snapInterval = marksInterval.Amount >= 1 ? new DateTimeInterval(marksInterval.TimeUnit, 1) : new DateTimeInterval(marksInterval.TimeUnit + 1, 1) ;
                 labelsInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision,
                     start, end, maxLabelElements);
             }
@@ -494,8 +505,8 @@ namespace Netherlands3D.UI.Components
             var labelTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks),
                 end.AddTicks(paddingTicks), labelsInterval);
             
-            var primaryMarkUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Century, (int)marksInterval.TimeUnit - 2), (int)unitContext, (int)unitPrecision);
-            var primaryLabelUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Century, (int)labelsInterval.TimeUnit - 1), (int)unitContext, (int)unitPrecision);
+            var primaryMarkUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)marksInterval.TimeUnit - 2), (int)unitContext, (int)unitPrecision);
+            var primaryLabelUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)(labelsInterval.Amount >= 1 ? labelsInterval.TimeUnit : labelsInterval.TimeUnit + 1)), (int)unitContext, (int)unitPrecision);
 
             thumbLabelElement.Context = unitContext;
             thumbLabelElement.Precision = unitPrecision;
@@ -558,21 +569,16 @@ namespace Netherlands3D.UI.Components
                 labelElement.style.display = DisplayStyle.Flex;
                 labelElement.style.left = left;
                 
-                var isPrimary = labelTime.RoundDown(primaryLabelUnit) == labelTime;
+                var isPrimary = labelTime.RoundDown((DateTimeUnit)Math.Max(0, (int)primaryLabelUnit-1)) == labelTime;
                 var isSecondary = !isPrimary && labelTime.RoundDown(primaryLabelUnit + 1) == labelTime;
                 var isTertiary = !isPrimary && !isSecondary;
 
-                var labelTimeUnit = primaryLabelUnit + 1;
-               // if (isSecondary) labelTimeUnit = primaryLabelUnit + 1;
-                //if (isTertiary) labelTimeUnit = primaryLabelUnit + 2;
+                var labelTimeUnit = primaryLabelUnit;
 
-                labelElement.EnableInClassList("timeline__label--primary", isPrimary);
-                
-                
-                labelElement.UnitContext = labelTimeUnit;
+                labelElement.UnitContext = (DateTimeUnit)Math.Max(0, (int)labelTimeUnit-1);
                 labelElement.UnitPrecision = labelTimeUnit;
                 labelElement.Time = labelTime;
-                
+
                 labelElement.style.opacity = new StyleFloat(1f);
                 
                 //hide label element when it is behind thumb
@@ -616,7 +622,7 @@ namespace Netherlands3D.UI.Components
             
             var thumbLabelPosition = Math.Clamp(TimeToPosition(displayedCurrentTime, startTime, endTime), 0, 1);
             thumbLabelElement.style.left = Length.Percent((float)(thumbLabelPosition * 100));
-            thumbLabelElement.Value = preciseCurrentTime;
+            thumbLabelElement.Value = currentTime;
 
         }
         

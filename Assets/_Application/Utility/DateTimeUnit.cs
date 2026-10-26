@@ -2,10 +2,10 @@ namespace Netherlands3D.Twin.Utility
 {
     public enum DateTimeUnit
     {
-        Century,
-        Decade,
+        //Century,
+        //Decade,
         Year,
-        Quarter,
+        //Quarter,
         Month,
         Day,
         Hour,
