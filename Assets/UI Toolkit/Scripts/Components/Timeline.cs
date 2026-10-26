@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
-using Netherlands3D.Timeline;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
-using Netherlands3D.Twin.Services;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,17 +14,14 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Timeline : VisualElement
     {
-        private Layers layersService;
-        private readonly List<(CityJSONLayerGameObject Layer, TimelineCityJson Timeline)> timelineLayers = new();
-        
         private readonly int scrollAreaWidthPx = 50;
-        private double scrollAreaWidth = .1f;
+        private double scrollAreaWidth = .5f;
 
-        private double thumbScrollMinPosition = .1d;
-        private double thumbScrollMaxPosition = .9d;
+        private double thumbScrollMinPosition = .2d;
+        private double thumbScrollMaxPosition = .8d;
         
-        private double thumbMinPosition = 0.1d;
-        private double thumbMaxPosition = 1.9d;
+        private double thumbMinPosition = 0d;
+        private double thumbMaxPosition = 1d;
         private double maxScrollSpeed = 1d;
        
         private readonly VisualElement marksContainer;
@@ -133,7 +128,10 @@ namespace Netherlands3D.UI.Components
             set => CurrentValue = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
         }
 
-        public DateTime StartValue
+        private DateTime unpaddedStartValue;
+        private DateTime unpaddedEndValue;
+        
+        private DateTime StartValue
         {
             get => startTime;
             set
@@ -145,7 +143,7 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        public DateTime EndValue
+        private DateTime EndValue
         {
             get => endTime;
             set
@@ -216,6 +214,7 @@ namespace Netherlands3D.UI.Components
             thumbLabelElement = this.Q<DateTimeLabel>("ThumbLabel");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+            RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             
             var viewport = this.Q<VisualElement>("MarksViewport");
@@ -244,6 +243,55 @@ namespace Netherlands3D.UI.Components
             thumbDragUpdateItem = schedule.Execute(Update).Every(0);
         }
 
+        public void SetUnpaddedRange(DateTime min, DateTime max, DateTime current)
+        {
+            CurrentValue = current;
+            unpaddedStartValue = min;
+            unpaddedEndValue = max;
+            SetRange(min, max);
+        }
+        
+        public void SetRange(DateTime addedMin, DateTime addedMax)
+        {
+            var currentTime = CurrentValue;
+            var newMin = Min(Min(unpaddedStartValue, addedMin), currentTime);
+            var newMax = Max(Max(unpaddedEndValue, addedMax), currentTime);
+
+            unpaddedStartValue = newMin;
+            unpaddedEndValue = newMax;
+
+            Debug.Log("setting new unpadded minmax : " + newMin.ToString("F") + " -> " + newMax.ToString("F"));
+            
+            if (thumbScrollMaxPosition == thumbScrollMinPosition)
+            {
+                StartValue = newMin;
+                EndValue = newMax;
+                return;
+            }
+            
+            // We will set min and max at the positions where the timeline starts scrolling.
+            double selectedTicks = (newMax - newMin).Ticks;
+            double fullTicks = selectedTicks / (thumbScrollMaxPosition - thumbScrollMinPosition);
+
+            // Extend the new values by the fraction where the scrolling starts
+            var realStart= newMin.AddTicks(-(long)Math.Round(fullTicks * thumbScrollMinPosition));
+            var realEnd= newMax.AddTicks((long)Math.Round(fullTicks * (1d - thumbScrollMaxPosition)));
+
+            Debug.Log("setting new real range : " + realStart.ToString("F") + " -> " + realEnd.ToString("F"));
+            StartValue = realStart;
+            EndValue = realEnd;
+        }
+        
+        static DateTime Min(DateTime a, DateTime b)
+        {
+            return a <= b ? a : b;
+        }
+
+        static DateTime Max(DateTime a, DateTime b)
+        {
+            return a >= b ? a : b;
+        }
+        
         private void Update()
         {
             UpdateSnap();
@@ -412,7 +460,7 @@ namespace Netherlands3D.UI.Components
         {
             if (!isSnapping) return;
 
-            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .1d, 0d, 1d);
+            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .2d, 0d, 1d);
             var eased = 1d - Math.Pow(1d - t, 3d);
             displayedCurrentTime = t >= 1d
                 ? currentTime
@@ -460,11 +508,42 @@ namespace Netherlands3D.UI.Components
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
+            if (Application.isPlaying)
+            {
+                /*
+                layersService = App.Layers;
+                
+                foreach (var visualization in layersService.Visualizations)
+                {
+                    HandleLayerVisualizationCreated(visualization);
+                }
+                
+                layersService.VisualizationCreated.AddListener(HandleLayerVisualizationCreated);
+                layersService.LayerRemoved.AddListener(HandleLayerRemoved);
+                */
+            }
+            
             StartSnap();
             markElementsUpdateRequested = true;
             unitGroupsUpdateRequested = true;
         }
 
+        public void UpdateTimelineVisibility(bool visible)
+        {
+            EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+        
+            if (visible)
+            {
+                markElementsUpdateRequested = true;
+                unitGroupsUpdateRequested = true;
+            } 
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            
+        }
+        
         private void UpdateMarks()
         {
             if (!markElementsUpdateRequested) return;

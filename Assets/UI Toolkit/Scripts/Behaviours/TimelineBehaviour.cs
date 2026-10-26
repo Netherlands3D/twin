@@ -1,149 +1,131 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Timeline;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
+using Netherlands3D.UI_Toolkit;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D
 {
-    
     public class TimelineBehaviour : MonoBehaviour
     {
-        
-        private readonly List<(CityJSONLayerGameObject Layer, TimelineCityJson TimelineLayer)> timelineLayerPairs = new();
-        
         private UI.Components.Timeline timelineElement;
+        private readonly List<TimelineStatusStylingLayerPropertyData> timelinePropertyDatas = new();
 
-        void Awake()
+        private void OnEnable()
         {
-            timelineElement ??= App.UIRoot.Root.Q<UI.Components.Timeline>();
-        }
+            timelineElement = App.UIRoot.Root.Q<UI.Components.Timeline>();
+            var currentTime = ProjectData.Current.CurrentDateTime;
+            timelineElement.SetUnpaddedRange(currentTime, currentTime, currentTime);
 
-        void OnEnable()
-        {
+            OnProjectDataChanged(ProjectData.Current);
+
             var layersService = App.Layers;
-            foreach (var layer in layersService.Visualizations)
-            {
-                SubscribeToTimelineLayer(layer);
-            }
-            layersService.VisualizationCreated.AddListener(HandleLayerVisualizationAdded);
+            layersService.LayerAdded.AddListener(HandleLayerAdded);
             layersService.LayerRemoved.AddListener(HandleLayerRemoved);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
+
             UpdateTimelineElementVisibility();
         }
         
-        void OnDisable() 
+        private void OnDisable()
         {
-            var layersService = App.Layers;
-            foreach (var layer in layersService.Visualizations)
+            foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
             {
-                UnsubscribeToTimelineLayer(layer);
+                HandleLayerRemoved(layer, false);
             }
-            layersService.VisualizationCreated.RemoveListener(HandleLayerVisualizationAdded);
+
+            var layersService = App.Layers;
+            layersService.LayerAdded.RemoveListener(HandleLayerAdded);
             layersService.LayerRemoved.RemoveListener(HandleLayerRemoved);
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
+
             SetTimelineElementVisibility(false);
         }
 
-        private void HandleLayerVisualizationAdded(LayerGameObject layerGameObject)
+        private void OnProjectDataChanged(ProjectData newProjectData)
         {
-            SubscribeToTimelineLayer(layerGameObject);
+            foreach (var layer in newProjectData.RootLayer.GetFlatHierarchy())
+            {
+                HandleLayerAdded(layer);
+        }
         }
 
-        private void HandleLayerRemoved(LayerData removedLayer, bool isRemovalRoot)
+        private void HandleLayerAdded(LayerData layer)
         {
-            for (var i = timelineLayerPairs.Count - 1; i >= 0; i--)
+            var timelineProperty = layer.GetProperty<TimelineStatusStylingLayerPropertyData>();
+            if (timelineProperty != null)
             {
-                var timelineLayerPair = timelineLayerPairs[i];
-                if (timelineLayerPair.Layer != null && timelineLayerPair.Layer.LayerData != removedLayer)
-                {
-                    continue;
+                SubscribeToTimelineProperty(timelineProperty);
                 }
 
-                if (timelineLayerPair.TimelineLayer != null)
-                {
-                    timelineLayerPair.TimelineLayer.TimelineInitialized.RemoveListener(HandleTimelineLayerInitialized);
+            layer.PropertySet.AddListener(OnLayerPropertyAdded);
+            layer.PropertyRemoved.AddListener(OnLayerPropertyRemoved);
                 }
                 
-                timelineLayerPairs.RemoveAt(i);
+
+        private void OnLayerPropertyAdded(LayerPropertyData newProperty)
+        {
+            if (newProperty is TimelineStatusStylingLayerPropertyData timelineProperty)
+            {
+                SubscribeToTimelineProperty(timelineProperty);
             }
-            UpdateTimelineElementVisibility();
         }
 
-        private void SubscribeToTimelineLayer(LayerGameObject layer)
+        private void OnLayerPropertyRemoved(LayerPropertyData removedProperty)
         {
-            if (layer is not CityJSONLayerGameObject cityJsonLayer) return;
-            if (!cityJsonLayer.TryGetComponent<TimelineCityJson>(out var cityJsonTimelineLayer)) return;
-            foreach (var timelineLayerPair in timelineLayerPairs)
+            if (removedProperty is TimelineStatusStylingLayerPropertyData timelineProperty)
             {
-                if (timelineLayerPair.Layer == cityJsonLayer) return;
+                UnsubscribeToTimelineProperty(timelineProperty);
             }
-            timelineLayerPairs.Add((cityJsonLayer, cityJsonTimelineLayer));
-            cityJsonTimelineLayer.TimelineInitialized.AddListener(HandleTimelineLayerInitialized);
+        }
+        
+        private void HandleLayerRemoved(LayerData removedLayer, bool isRemovalRoot)
+        {
+            var timelineProperty = removedLayer.GetProperty<TimelineStatusStylingLayerPropertyData>();
+            if (timelineProperty != null)
+            {
+                UnsubscribeToTimelineProperty(timelineProperty);
+            }
+
+            removedLayer.PropertySet.RemoveListener(OnLayerPropertyAdded);
+        }
+
+        private void SubscribeToTimelineProperty(TimelineStatusStylingLayerPropertyData timelineProperty)
+        {
+            timelinePropertyDatas.Add(timelineProperty);
+            timelineProperty.TimestampCollectionAddded.AddListener(HandleTimestampCollectionAdded);
             UpdateTimelineElementVisibility();
         }
         
-        private void UnsubscribeToTimelineLayer(LayerGameObject layer)
+        private void UnsubscribeToTimelineProperty(TimelineStatusStylingLayerPropertyData timelineProperty)
         {
-            if (layer is not CityJSONLayerGameObject cityJsonLayer) return;
-            if (!cityJsonLayer.TryGetComponent<TimelineCityJson>(out var cityJsonTimelineLayer)) return;
-            cityJsonTimelineLayer.TimelineInitialized.RemoveListener(HandleTimelineLayerInitialized);
-            var pairsToRemove = timelineLayerPairs.FindAll(e => e.Layer == cityJsonLayer);
-            foreach (var pairToRemove in pairsToRemove)
-            {
-                timelineLayerPairs.Remove(pairToRemove);
+            timelinePropertyDatas.Remove(timelineProperty);
+            timelineProperty.TimestampCollectionAddded.RemoveListener(HandleTimestampCollectionAdded);
+            UpdateTimelineElementVisibility();
+        }
+            
+        private void HandleTimestampCollectionAdded(CityObject co, TimestampCollection timestampCollection)
+        {
+            var addedMin = timestampCollection.LowestTimestamp;
+            var addedMax = timestampCollection.HighestTimestamp;
+            timelineElement.SetRange(addedMin.timestamp, addedMax.timestamp);
             }
 
-            UpdateTimelineElementVisibility();
-        }
-
-        private void HandleTimelineLayerInitialized()
-        {
-            UpdateTimelineElementVisibility();
-        }
-        
         private void UpdateTimelineElementVisibility()
         {
-            var hasTimeline = false;
-
-            var earliestTicks = DateTime.MaxValue.Ticks;
-            var latestTicks = DateTime.MinValue.Ticks;
-            
-            foreach (var timelineLayerPair in timelineLayerPairs)
-            {
-                var timelineLayer = timelineLayerPair.TimelineLayer;
-                if (timelineLayer.Timelines.Count > 0)
-                {
-                    hasTimeline = true;
-
-                    foreach (var timelineKvp in timelineLayer.Timelines)
-                    {
-                        foreach (var timestamp in timelineKvp.Value.Timestamps)
-                        {
-                            var ticks = timestamp.timestamp.Date.Ticks;
-                            earliestTicks = Math.Min(ticks, earliestTicks);
-                            latestTicks = Math.Max(ticks, latestTicks);
-                            
-                            UnityEngine.Debug.Log("TIME="+new DateTime(ticks).ToString());
-                            
-                        }
-                    }
-                    
-                }
-            }
-
-            timelineElement.StartValue = new DateTime(earliestTicks);
-            timelineElement.EndValue = new DateTime(latestTicks);
-
-            SetTimelineElementVisibility(!hasTimeline);
+            var hasTimeline = timelinePropertyDatas.Count > 0;
+            SetTimelineElementVisibility(hasTimeline);
         }
 
         private void SetTimelineElementVisibility(bool visible)
         {
-            timelineElement.EnableInClassList("hidden", visible);
+            timelineElement.UpdateTimelineVisibility(visible);
         }
     }
-    
 }
