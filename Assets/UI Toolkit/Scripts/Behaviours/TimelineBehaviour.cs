@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Timeline;
@@ -29,8 +29,10 @@ namespace Netherlands3D
             layersService.LayerAdded.AddListener(HandleLayerAdded);
             layersService.LayerRemoved.AddListener(HandleLayerRemoved);
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
-        }
 
+            UpdateTimelineElementVisibility();
+        }
+        
         private void OnDisable()
         {
             foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
@@ -51,7 +53,7 @@ namespace Netherlands3D
             foreach (var layer in newProjectData.RootLayer.GetFlatHierarchy())
             {
                 HandleLayerAdded(layer);
-            }
+        }
         }
 
         private void HandleLayerAdded(LayerData layer)
@@ -60,12 +62,12 @@ namespace Netherlands3D
             if (timelineProperty != null)
             {
                 SubscribeToTimelineProperty(timelineProperty);
-            }
+                }
 
             layer.PropertySet.AddListener(OnLayerPropertyAdded);
             layer.PropertyRemoved.AddListener(OnLayerPropertyRemoved);
-        }
-
+                }
+                
 
         private void OnLayerPropertyAdded(LayerPropertyData newProperty)
         {
@@ -74,7 +76,7 @@ namespace Netherlands3D
                 SubscribeToTimelineProperty(timelineProperty);
             }
         }
-        
+
         private void OnLayerPropertyRemoved(LayerPropertyData removedProperty)
         {
             if (removedProperty is TimelineStatusStylingLayerPropertyData timelineProperty)
@@ -82,7 +84,7 @@ namespace Netherlands3D
                 UnsubscribeToTimelineProperty(timelineProperty);
             }
         }
-
+        
         private void HandleLayerRemoved(LayerData removedLayer, bool isRemovalRoot)
         {
             var timelineProperty = removedLayer.GetProperty<TimelineStatusStylingLayerPropertyData>();
@@ -100,20 +102,20 @@ namespace Netherlands3D
             timelineProperty.TimestampCollectionAddded.AddListener(HandleTimestampCollectionAdded);
             UpdateTimelineElementVisibility();
         }
-
+        
         private void UnsubscribeToTimelineProperty(TimelineStatusStylingLayerPropertyData timelineProperty)
         {
             timelinePropertyDatas.Remove(timelineProperty);
             timelineProperty.TimestampCollectionAddded.RemoveListener(HandleTimestampCollectionAdded);
             UpdateTimelineElementVisibility();
         }
-
+            
         private void HandleTimestampCollectionAdded(CityObject co, TimestampCollection timestampCollection)
         {
             var addedMin = timestampCollection.LowestTimestamp;
             var addedMax = timestampCollection.HighestTimestamp;
             timelineElement.SetRange(addedMin.timestamp, addedMax.timestamp);
-        }
+            }
 
         private void UpdateTimelineElementVisibility()
         {

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
@@ -20,7 +20,7 @@ namespace Netherlands3D.Timeline
         private CityJSON cityJson;
 
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
-        
+
         private TimelineLegendBehaviour timelineLegendBehaviour;
 
         private void Awake()
@@ -98,7 +98,7 @@ namespace Netherlands3D.Timeline
         {
             timelineStatusStylingLayerPropertyData.AddTimestampCollection(co, collection);
         }
-
+        
         private void OnTimeChanged(DateTime currentTime)
         {
             foreach (var timeline in timelineStatusStylingLayerPropertyData.TimestampCollections)

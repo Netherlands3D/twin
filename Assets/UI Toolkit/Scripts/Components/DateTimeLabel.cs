@@ -11,14 +11,16 @@ namespace Netherlands3D.UI.Components
     {
 
         private readonly Label displayLabel = new();
-        
+
         private DateTime value = default(DateTime);
         private DateTimeUnit context;
         private DateTimeUnit precision;
 
+        private List<DateTimeUnit> displayedUnits = new();
+
         private CultureInfo culture = CultureInfo.GetCultureInfo("nl-NL");
-        
-        
+
+
         public DateTimeLabel()
         {
             Add(displayLabel);
@@ -34,20 +36,21 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        
+
         [UxmlAttribute("value")]
         public string ValueString
         {
             set
             {
-                if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var dateTime))
+                if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind,
+                        out var dateTime))
                 {
                     this.Value = dateTime;
                 }
             }
         }
-        
-        [UxmlAttribute]         
+
+        [UxmlAttribute]
         public DateTimeUnit Context
         {
             get => context;
@@ -57,8 +60,8 @@ namespace Netherlands3D.UI.Components
                 UpdateLabel();
             }
         }
-        
-        [UxmlAttribute]     
+
+        [UxmlAttribute]
         public DateTimeUnit Precision
         {
             get => precision;
@@ -82,22 +85,24 @@ namespace Netherlands3D.UI.Components
                 displayLabel.text = "-";
                 return;
             }
-            
-            var dateParts = new List<string>(3);
-            var timeParts = new List<string>(3);
-            
-            if (Includes(DateTimeUnit.Day)) dateParts.Add("%d");
-            if (Includes(DateTimeUnit.Month)) dateParts.Add("MMM");
-            if (Includes(DateTimeUnit.Year) || Includes(DateTimeUnit.Decade) || Includes(DateTimeUnit.Century)) dateParts.Add("yyyy");
 
-            if (Includes(DateTimeUnit.Hour)) timeParts.Add("HH");
-            if (Includes(DateTimeUnit.Minute)) timeParts.Add("mm");
-            if (Includes(DateTimeUnit.Second)) timeParts.Add("ss");
+            var parts = new List<string>();
 
-            var dateFormat = string.Join(" ", dateParts);
-            var timeFormat = string.Join(":", timeParts);
+            if (Includes(DateTimeUnit.Day)) parts.Add("%d");
+            if (Includes(DateTimeUnit.Month)) parts.Add("MMMM");
+            if (Includes(DateTimeUnit.Quarter))
+            {
+                parts.Add("Q" + (1 + (value.Month / 4)));
+            }
+            if (Includes(DateTimeUnit.Year) || Includes(DateTimeUnit.Decade) || Includes(DateTimeUnit.Century)) parts.Add("yyyy");
 
-            var format = $"{dateFormat} {timeFormat}".Trim();
+            string timeFormat = null;
+            if ((Includes(DateTimeUnit.Hour) || Includes(DateTimeUnit.Minute)) && !Includes(DateTimeUnit.Second)) timeFormat = "HH:mm";
+            if (Includes(DateTimeUnit.Second)) timeFormat = "HH:mm:ss";
+
+            var dateFormat = string.Join(" ", parts);
+
+            var format = $"{dateFormat}|{timeFormat}".Trim();
 
             displayLabel.text = value.ToString(
                 format,

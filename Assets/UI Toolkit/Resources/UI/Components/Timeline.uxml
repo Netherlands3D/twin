@@ -6,15 +6,14 @@
     editor-extension-mode="False"  
     class="timeline"
 >
-    
     <ui:VisualElement name="LabelsViewport" class="timeline__labels-viewport" picking-mode="Ignore">
         <ui:VisualElement name="LabelsContainer" class="timeline__labels-container" picking-mode="Ignore" />
     </ui:VisualElement>
-
+    
     <ui:VisualElement name="MarksViewport" class="timeline__marks-viewport" picking-mode="Ignore">
         <ui:VisualElement name="MarksContainer" class="timeline__marks-container" picking-mode="Ignore" />
     </ui:VisualElement>
-    
+
     <ui:VisualElement name="ThumbContainer" class="timeline__thumb-container" picking-mode="Ignore">
         <ui:VisualElement name="Thumb" class="timeline__thumb" picking-mode="Ignore" />
         <nl3d:DateTimeLabel name="ThumbLabel" class="timeline__thumb-label" picking-mode="Ignore" value="2020-06-15T00:00:00+02:00"/>
