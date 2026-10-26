@@ -4,6 +4,7 @@ using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -22,6 +23,13 @@ namespace Netherlands3D.Timeline
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
         private Dictionary<CityObject, TimestampCollection> timelines = new();
 
+        private TimelineLegendBehaviour timelineLegendBehaviour;
+
+        private void Awake()
+        {
+            timelineLegendBehaviour = ServiceLocator.GetService<TimelineLegendBehaviour>();
+        }
+
         private void OnEnable()
         {
             sunTime = ServiceLocator.GetService<SunTime>();
@@ -37,8 +45,11 @@ namespace Netherlands3D.Timeline
             sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged);
             timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
             cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes);
+            
+            visualization.LayerData.LayerSelected.RemoveListener(EnableLegend);
+            visualization.LayerData.LayerDeselected.RemoveListener(DisableLegend);
         }
-        
+
         private void InitTimelineStylingProperty()
         {
             if(timelineStatusStylingLayerPropertyData != null)
@@ -48,11 +59,9 @@ namespace Netherlands3D.Timeline
 
             timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
             timelineStatusStylingLayerPropertyData.OnStylingChanged.AddListener(visualization.ApplyStyling);
-        }
-
-        private void OnDestroy()
-        {
-
+            
+            visualization.LayerData.LayerSelected.AddListener(EnableLegend);
+            visualization.LayerData.LayerDeselected.AddListener(DisableLegend);
         }
 
         private void ReadTimeLineFromAttributes()
@@ -111,6 +120,16 @@ namespace Netherlands3D.Timeline
                 layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
                 visualization.ApplyStylingToFeature(layerFeature);
             }
+        }
+        
+        private void EnableLegend(LayerData layer)
+        {
+            timelineLegendBehaviour.ShowLegend(layer, true);
+        }
+        
+        private void DisableLegend(LayerData layer)
+        {
+            timelineLegendBehaviour.ShowLegend(layer, false);
         }
     }
 }

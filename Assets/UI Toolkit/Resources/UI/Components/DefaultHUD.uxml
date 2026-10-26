@@ -14,6 +14,7 @@
                 <nl3d:ToolbarMain picking-mode="Ignore"/>
                 <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal"/>
                 <nl3dP:LegendPanel />
+                <nl3dP:TimelineLegendPanel />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="TopSection" class="default-hud__top-section" picking-mode="Ignore">

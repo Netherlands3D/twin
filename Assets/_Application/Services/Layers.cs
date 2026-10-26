@@ -76,31 +76,40 @@ namespace Netherlands3D.Twin.Services
                 var layer = Add(preset);
                 return new[] { layer };
             }
-            
-            if (result is LayerPresetArgs[] presets)
-            {
-                Layer parent = null;
-                Layer[] layers =  new Layer[presets.Length];
-                for (var i = 0; i < presets.Length; i++)
-                {
-                    var p = presets[i];
-                    var layer = Add(p);
-                    layers[i] = layer;
-                    
-                    // todo: Currently we put presets[0] as the folder parent for wms/wfs. This is not part of the imported data, and once we will have a UI to allow users to select which layers will be imported, this will be removed.
-                    if (i == 0)
-                        parent = layer;
-                    
-                    if (i > 0 && presets[0] is FolderPreset.Args)
-                    {
-                        layer.LayerData.SetParent(parent.LayerData);
-                    }
-                }
 
+            if (result is LayerPresetResult r)
+            {
+                var layers = Add(r);
                 return layers; //NB. An empty array is considered a success
             }
-
             throw new AdapterNotFoundException("Could not determine Layer adapter(s) for the url:  " + uri);
+        }
+
+        public Layer[] Add(LayerPresetResult result)
+        {
+            bool hasParent = result.parent != null;
+            int startIndex = hasParent ? 1 : 0;
+            int childrenCount = result.children == null ? 0 : result.children.Length;
+    
+            int length = startIndex + childrenCount;
+            Layer[] layers =  new Layer[length];
+
+            if (hasParent)
+                layers[0] = Add(result.parent);
+    
+            for (var i = startIndex; i < childrenCount; i++)
+            {
+                var p = result.children[i];
+                var layer = Add(p);
+                layers[i] = layer;
+        
+                if (hasParent)
+                {
+                    layer.LayerData.SetParent(layers[0].LayerData);
+                }
+            }
+
+            return layers;
         }
 
         /// <summary>

@@ -25,14 +25,13 @@ namespace Netherlands3D.UI.Components
         private Button slowDownButton;
         private Button SlowDownButton => slowDownButton ??= this.Q<Button>("SlowDownButton");
 
-        private Button pauseButton;
-        private Button PauseButton => pauseButton ??= this.Q<Button>("PauseButton");
-
         private Button playButton;
         private Button PlayButton => playButton ??= this.Q<Button>("PlayButton");
 
         private Button speedUpButton;
         private Button SpeedUpButton => speedUpButton ??= this.Q<Button>("SpeedUpButton");
+        
+        private bool isPlaying;
 
         public SimulationSpeedControls()
         {
@@ -42,19 +41,15 @@ namespace Netherlands3D.UI.Components
             SpeedField.InputField.RegisterValueChangedCallback(OnSpeedFieldValueChanged);
             SpeedField.RegisterCallback<NavigationSubmitEvent>(OnSpeedFieldSubmit);
             PlayButton.RegisterCallback<ClickEvent>(OnPlayButtonClicked);
-            PauseButton.RegisterCallback<ClickEvent>(OnPauseButtonClicked);
             SpeedUpButton.RegisterCallback<ClickEvent>(OnSpeedUpButtonClicked);
             SlowDownButton.RegisterCallback<ClickEvent>(OnSlowDownButtonClicked);
-            PlayToggled += OnPlayToggled;
+            UpdatePlayButton();
         }
 
-        private void OnPlayButtonClicked(ClickEvent _) => Play();
-        private void OnPauseButtonClicked(ClickEvent _) => Pause();
+        private void OnPlayButtonClicked(ClickEvent _) => TogglePlay();
         private void OnSpeedUpButtonClicked(ClickEvent _) => StepUp();
         private void OnSlowDownButtonClicked(ClickEvent _) => StepDown();
         private void OnSpeedFieldChanged() => SpeedChanged?.Invoke(GetCurrentSpeed());
-        private void OnPlayToggled(bool obj) => SetIsPlayingButtonStates(obj);
-        
         // Needs both because Scrolling of the value doesn't trigger a ValueChanged event
         private void OnSpeedFieldSubmit(NavigationSubmitEvent _) => OnSpeedFieldChanged();
         private void OnSpeedFieldValueChanged(ChangeEvent<string> _) => OnSpeedFieldChanged();
@@ -62,9 +57,20 @@ namespace Netherlands3D.UI.Components
         public float GetCurrentSpeed() => (float)SpeedField.GetValueAsDouble();
         public void SetSpeedWithoutNotify(float speed) => SpeedField.SetValueWithoutNotify(speed);
 
-        public void Play() => PlayToggled?.Invoke(true);
-        public void Pause() => PlayToggled?.Invoke(false);
+        public void TogglePlay()
+        {
+            isPlaying = !isPlaying;
+            PlayToggled?.Invoke(isPlaying);
+            UpdatePlayButton();
+        }
 
+        private void UpdatePlayButton()
+        {
+            PlayButton.EnableInClassList("simulation-speed-controls__control-button--active", isPlaying);
+            PlayButton.Image = isPlaying ? "Pause" : "Play"; //show the state that "will be" when pressed
+            PlayButton.tooltip = isPlaying ? "Pauzeren" : "Afspelen";
+        }
+        
         public void StepUp()
         {
             var current = GetCurrentSpeed();
@@ -85,12 +91,6 @@ namespace Netherlands3D.UI.Components
 
             SetSpeedWithoutNotify(prevSpeed);
             SpeedChanged?.Invoke(prevSpeed);
-        }
-
-        private void SetIsPlayingButtonStates(bool isPlaying)
-        {
-            PauseButton.EnableInClassList("simulation-speed-controls__control-button--active", !isPlaying);
-            PlayButton.EnableInClassList("simulation-speed-controls__control-button--active", isPlaying);
         }
 
         private int FindNearestStepIndex(float value)

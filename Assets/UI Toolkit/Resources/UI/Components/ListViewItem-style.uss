@@ -20,3 +20,8 @@
 .unity-collection-view__item:hover {
     background-color: var(--color-blue-200);
 }
+
+.collection-view--unselectable .unity-collection-view__item:hover,
+.collection-view--unselectable .unity-collection-view__item:checked {
+    background-color: transparent;
+}

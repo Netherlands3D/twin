@@ -69,7 +69,7 @@ namespace Netherlands3D.UI.Panels
             item.RegisterCallback<ClickEvent>(evt =>
             {
                 ColorPicker.SetColorInputComponentsWithoutNotify(item.Tile.Color);
-                ColorPicker.SetTransparentToggleWithoutNotify(item.VisibilityState);
+                ColorPicker.SetTransparentToggleWithoutNotify(item.Tile.VisibilityState);
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
@@ -86,7 +86,7 @@ namespace Netherlands3D.UI.Panels
             
             tile.Tile.ColorHex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : ColorUtility.ToHtmlStringRGB(Color.white);
             tile.Tile.LabelText = status;
-            tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
+            tile.Tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
         }
         
         private void UpdateSwatches()
