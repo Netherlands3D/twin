@@ -52,6 +52,9 @@ namespace Netherlands3D
             bool hasExistingValue,
             JsonSerializer serializer)
         {
+            if (reader.TokenType == JsonToken.Null)
+                return null;
+            
             JObject obj = JObject.Load(reader);
 
             var children = obj["children"];

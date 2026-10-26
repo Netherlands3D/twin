@@ -32,7 +32,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             visualisation = GetComponent<LayerGameObject>();
-            visualisation.InitProperty<ConnectableHierarchicalLayerPropertyData>(properties);
+            visualisation.InitProperty<ConnectableHierarchicalLayerPropertyData>(properties, null, null);
             transformPropertyData = visualisation.LayerData.GetProperty<TransformLayerPropertyData>();
             connectedPropertyData = visualisation.LayerData.GetProperty<ConnectableHierarchicalLayerPropertyData>();
             connectedPropertyData.Connectors = Connectors;

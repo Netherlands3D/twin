@@ -36,5 +36,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 
         [JsonIgnore] public readonly UnityEvent<LayerData> OnTargetChanged = new();
         [JsonIgnore] public readonly UnityEvent<Transform[]> OnConnectorsChanged = new();
+        
+        public ConnectableHierarchicalLayerPropertyData()
+        {
+            
+        }
+
+        [JsonConstructor]
+        public ConnectableHierarchicalLayerPropertyData(LayerData target)
+        {
+            this.target = target;
+        }
     }
 }
