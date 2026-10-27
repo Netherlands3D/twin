@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
@@ -23,256 +25,325 @@ namespace Netherlands3D.AddressSearch
     {
         public readonly string Id;
         public readonly string Label;
+        public readonly string CollectionId;
+        public readonly float Score;
+        public readonly BoundingBox BoundingBox;
+        public readonly bool HasCoordinates;
 
-        public SuggestionResult(string id, string label)
+        public SuggestionResult(string id, string label, string collectionId, float score, BoundingBox boundingBox, bool hasCoordinates)
         {
             Id = id;
             Label = label;
+            CollectionId = collectionId;
+            Score = score;
+            BoundingBox = boundingBox;
+            HasCoordinates = hasCoordinates;
         }
     }
-    
+
     public class AddressSearchService : MonoBehaviour
     {
         [Header("PDOK Location API")]
         [SerializeField] private string locationApiBaseUrl = "https://api.pdok.nl/kadaster/location-api/v1";
-        [Tooltip("Aantal zoekresultaten.")]
-        [SerializeField] private int rows = 5;
-
-        [Tooltip("Aantal karakters voordat een zoekopdracht wordt gestart.")]
-        [SerializeField] private int charactersNeededBeforeSearch = 2;
-        [Tooltip("Optionele plaatsnaam om aan de zoekopdracht toe te voegen.")]
+        [SerializeField, Min(1)] private int rows = 50;
+        [SerializeField, Min(1)] private int maxResultsPerCollection = 5;
+        [SerializeField, Range(0f, 1f)] private float minimumScore = 0.50f;
+        [SerializeField, Min(0)] private int charactersNeededBeforeSearch = 2;
         [SerializeField] private string searchWithinCity = "";
 
         [Header("BAG API")]
-        [Tooltip("Basis-URL van de BAG OGC API.")]
         [SerializeField] private string bagApiBaseUrl = "https://api.pdok.nl/kadaster/bag/ogc/v2";
 
         [Header("Camera Controls")]
-        [SerializeField] private bool easeCamera = false;
+        [SerializeField] private bool easeCamera;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Quaternion targetCameraRotation = Quaternion.Euler(45, 0, 0);
         [SerializeField] public AnimationCurve cameraMoveCurve;
+
         public UnityEvent<Coordinate> onCoordinateFound = new();
         public UnityEvent<List<string>> onSelectedBuildings = new();
         public event Action<List<SuggestionResult>> SuggestionsReady;
         public event Action SuggestionsCleared;
         public event Action<SuggestionResult> SuggestionAutoSelected;
+
+        private static readonly string[] CollectionIds =
+        {
+            "adres", "functioneel_gebied", "gebouw", "gemeentegebied", "geografisch_gebied",
+            "inrichtingselement", "perceel", "plaats", "provinciegebied", "spoorbaandeel",
+            "waterdeel", "wegdeel", "woonplaats"
+        };
+
+        // Volgorde waarin collecties in de lijst verschijnen (eerst grote gebieden en adressen).
+        private static readonly string[] CollectionPriorityOrder =
+        {
+            "woonplaats", "gemeentegebied", "provinciegebied", "plaats", "adres",
+            "geografisch_gebied", "perceel", "gebouw", "wegdeel", "functioneel_gebied",
+            "inrichtingselement", "spoorbaandeel", "waterdeel"
+        };
+
+        // Alle PDOK Location API data is CRS84 (lon, lat), dat is gelijk aan WGS84 maar dan met de volgorde lon/lat.
+        private const string Crs84 = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+        private const float MaxPixelPointerOffset = 100f;
+        private const float WorldSpaceOffset = 10f;
+        private const float DefaultLocationCameraDistance = 100f;
+
+        // Ontdubbelde resultaten, key = "collectie:naam" (lowercase). Zelfde naam binnen een collectie telt als één resultaat.
+        private readonly Dictionary<string, SuggestionResult> cachedSuggestions = new();
+        // Dezelfde resultaten in weergavevolgorde voor de UI.
+        private readonly List<SuggestionResult> orderedSuggestions = new();
+
         private Coroutine suggestionsRoutine;
         private bool autoSelectFirstWhenReady;
         private int searchRequestVersion;
-        
         private WorldAnnotation locationPointer;
         private FloatingElement locationElement;
         private CameraService cameraService;
         private AppRootBehaviour appRootBehaviour;
         private WorldUIService worldUIService;
-        private const float MaxPixelPointerOffset = 100;
-        private const float worldSpaceOffset = 10;
         private Coordinate targetCoordinate;
         private string targetId;
+
+        private static string MakeKey(string collectionId, string label) => collectionId + ":" + label.Trim().ToLowerInvariant();
+
+        private static int GetPriority(string collectionId)
+        {
+            int index = Array.IndexOf(CollectionPriorityOrder, collectionId);
+            return index < 0 ? int.MaxValue : index;
+        }
 
         private void Start()
         {
             if (!mainCamera) mainCamera = Camera.main;
-            
+
             cameraService = App.Cameras;
-            worldUIService  = ServiceLocator.GetService<WorldUIService>();
+            worldUIService = ServiceLocator.GetService<WorldUIService>();
             appRootBehaviour = App.UIRoot;
+
             locationPointer = CreateCoordinateLabel(ref locationElement);
             locationPointer.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
-            locationPointer.SetColor(new Color(0.000f, 0.275f, 0.600f, 1f)); //blue 900
+            locationPointer.SetColor(new Color(0f, 0.275f, 0.6f, 1f));
             locationPointer.SetTextColor(Color.white);
             HidePointer();
-            
+
             ServiceLocator.GetService<ToolService>().GetTool(ToolType.Search).onClose.AddListener(HidePointer);
             onCoordinateFound.AddListener(UpdatePointer);
         }
 
-        private void UpdatePointer(Coordinate coordinate)
-        {
-            ShowPointer();
-            locationPointer.SetText($"{targetId}"); //\nX: {coordinate.easting.ToString("0")}\nY: {coordinate.northing.ToString("0")}".Trim()
-        }
-
-        private void HidePointer()
-        {
-            locationPointer.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-        }
-
-        private void ShowPointer()
-        {
-            locationPointer.EnableInClassList(UtilityClassConstants.HIDDEN, false);
-        }
-        
-        private WorldAnnotation CreateCoordinateLabel(ref FloatingElement floatingElement)
-        {
-            floatingElement = new FloatingElement();
-            worldUIService.AddToFloatingElementsContent(floatingElement);
-            WorldAnnotation annotation = new WorldAnnotation("");
-            annotation.IsCoordinate = true;
-            floatingElement.Add(annotation);
-            return annotation;
-        }
-
-        private void OnDestroy()
-        {
-            worldUIService.RemoveFromFloatingElementsContent(locationElement);
-            locationPointer = null;
-            onCoordinateFound.RemoveListener(UpdatePointer);
-            ServiceLocator.GetService<ToolService>().GetTool(ToolType.Search).onClose.RemoveListener(HidePointer);
-        }
-
-        void Update()
-        {
-            UpdateCoordinateTooltip(targetCoordinate, ref locationElement, ref locationPointer);
-        }
-
-        private void UpdateCoordinateTooltip(Coordinate coordinate, ref FloatingElement element, ref WorldAnnotation label)
-        {
-            var screenPos =  cameraService.ActiveCamera.WorldToScreenPoint(coordinate.ToUnity());
-            Vector2 panelPos = appRootBehaviour.GetUIPositionFromScreenPosition(screenPos);
-            var localPos = worldUIService.FloatingElementsContent.WorldToLocal(panelPos);
-            element.SetPosition(localPos);
-
-            var offsetScreenPos = cameraService.ActiveCamera.WorldToScreenPoint(coordinate.ToUnity() + cameraService.ActiveCamera.transform.right * worldSpaceOffset);
-            float dist = Mathf.Abs(offsetScreenPos.x - screenPos.x);
-            float pixelOffset = Mathf.Min(dist, MaxPixelPointerOffset);
-            label.SetLabelOffset(pixelOffset);
-        }
-
         public void FetchSuggestions(string textInput)
         {
-            searchRequestVersion++;
-            if (suggestionsRoutine != null)
-            {
-                StopCoroutine(suggestionsRoutine);
-                suggestionsRoutine = null;
-            }
-            autoSelectFirstWhenReady = false;
-            if (string.IsNullOrWhiteSpace(textInput) || textInput.Trim().Length <= charactersNeededBeforeSearch)
-            {
-                SuggestionsCleared?.Invoke();
-                return;
-            }
-            suggestionsRoutine = StartCoroutine(FindSearchSuggestions(textInput.Trim()));
+            StartSearch(textInput, false);
         }
-       
+
         public void FetchSuggestionsForced(string textInput)
         {
+            StartSearch(textInput, true);
+        }
+
+        private void StartSearch(string textInput, bool autoSelectFirst)
+        {
             searchRequestVersion++;
-            if (suggestionsRoutine != null)
+            if (suggestionsRoutine != null) StopCoroutine(suggestionsRoutine);
+
+            suggestionsRoutine = null;
+            autoSelectFirstWhenReady = autoSelectFirst;
+
+            if (string.IsNullOrWhiteSpace(textInput) || (!autoSelectFirst && textInput.Trim().Length <= charactersNeededBeforeSearch))
             {
-                StopCoroutine(suggestionsRoutine);
-                suggestionsRoutine = null;
-            }
-            if (string.IsNullOrWhiteSpace(textInput))
-            {
-                SuggestionsCleared?.Invoke();
+                ClearSuggestions();
                 return;
             }
-            autoSelectFirstWhenReady = true;
-            suggestionsRoutine = StartCoroutine(FindSearchSuggestions(textInput.Trim()));
+
+            ClearSuggestions();
+            suggestionsRoutine = StartCoroutine(FindSearchSuggestions(textInput.Trim(), searchRequestVersion));
         }
-     
-        public void SelectSuggestion(string id, string label)
+
+        private IEnumerator FindSearchSuggestions(string searchTerm, int requestVersion)
         {
-            if (string.IsNullOrWhiteSpace(id))
+            string query = searchTerm;
+            if (!string.IsNullOrWhiteSpace(searchWithinCity)) query += " " + searchWithinCity.Trim();
+
+            // Ontdubbelen tijdens het inlezen: per "collectie:naam" blijft alleen het hoogst scorende resultaat over.
+            var uniqueSuggestions = new Dictionary<string, SuggestionResult>();
+
+            // Query each collection separately so every result keeps its correct collection ID.
+            foreach (string collectionId in CollectionIds)
+            {
+                if (requestVersion != searchRequestVersion) yield break;
+
+                string url = locationApiBaseUrl.TrimEnd('/') + "/search?q=" + UnityWebRequest.EscapeURL(query)
+                    + "&" + UnityWebRequest.EscapeURL(collectionId) + "%5Bversion%5D=1"
+                    + "&limit=" + Mathf.Max(maxResultsPerCollection, rows)
+                    + "&crs=" + UnityWebRequest.EscapeURL(Crs84)
+                    + "&f=json";
+
+                using UnityWebRequest request = UnityWebRequest.Get(url);
+                request.timeout = 15;
+                yield return request.SendWebRequest();
+
+                if (requestVersion != searchRequestVersion) yield break;
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogWarning("[AddressSearchService] Zoekopdracht voor collectie '" + collectionId + "' mislukt: " + request.error);
+                    continue;
+                }
+
+                JSONNode root;
+                try
+                {
+                    root = JSON.Parse(request.downloadHandler.text);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogWarning("[AddressSearchService] Ongeldige JSON voor collectie '" + collectionId + "': " + exception.Message);
+                    continue;
+                }
+
+                JSONNode features = root["features"];
+                if (features == null || !features.IsArray) continue;
+
+                for (int i = 0; i < features.Count; i++)
+                {
+                    JSONNode feature = features[i];
+                    JSONNode properties = feature["properties"];
+
+                    string id = ReadString(feature, "id");
+                    if (string.IsNullOrWhiteSpace(id)) id = ReadString(properties, "id");
+                    if (string.IsNullOrWhiteSpace(id)) continue;
+
+                    // Reject results without a score and every result below the configured threshold.
+                    if (!TryReadScore(properties, out float score) || score < minimumScore) continue;
+
+                    string label = ReadString(properties, "display_name");
+                    if (string.IsNullOrWhiteSpace(label)) label = ReadString(properties, "weergavenaam");
+                    if (string.IsNullOrWhiteSpace(label)) label = ReadString(properties, "name");
+                    if (string.IsNullOrWhiteSpace(label)) label = id;
+
+                    Coordinate coordinate = default;
+                    BoundingBox bbox = null;
+                    JSONNode bboxNode = feature["bbox"];
+
+                    bool hasBounds = false;
+                    if (bboxNode != null && bboxNode.IsArray && bboxNode.Count >= 4)
+                    {
+                        double minLon = bboxNode[0].AsDouble;
+                        double minLat = bboxNode[1].AsDouble;
+                        double maxLon = bboxNode[2].AsDouble;
+                        double maxLat = bboxNode[3].AsDouble;
+
+                        bbox = new BoundingBox(new Coordinate(CoordinateSystem.WGS84_LatLon, minLat, minLon), new Coordinate(CoordinateSystem.WGS84_LatLon, maxLat, maxLon));
+                        hasBounds = true;
+                    }
+                    if (hasBounds)
+                    {
+                        coordinate = bbox.Center;
+                    }
+                    var result = new SuggestionResult(id, label, collectionId, score, bbox, hasBounds);
+                    string key = MakeKey(collectionId, label);
+                    if (!uniqueSuggestions.TryGetValue(key, out SuggestionResult existing) || result.Score > existing.Score)
+                    {
+                        uniqueSuggestions[key] = result;
+                    }
+                }
+            }
+
+            if (requestVersion != searchRequestVersion) yield break;
+
+            // Maximaal N per collectie, collecties in prioriteitsvolgorde, binnen een collectie op score.
+            List<SuggestionResult> best = uniqueSuggestions.Values
+                .GroupBy(result => result.CollectionId)
+                .SelectMany(group => group.OrderByDescending(result => result.Score).Take(maxResultsPerCollection))
+                .OrderBy(result => GetPriority(result.CollectionId))
+                .ThenByDescending(result => result.Score)
+                .Take(Mathf.Max(1, rows))
+                .ToList();
+
+            cachedSuggestions.Clear();
+            orderedSuggestions.Clear();
+            foreach (SuggestionResult result in best)
+            {
+                cachedSuggestions[MakeKey(result.CollectionId, result.Label)] = result;
+                orderedSuggestions.Add(result);
+            }
+
+            suggestionsRoutine = null;
+            SuggestionsReady?.Invoke(new List<SuggestionResult>(orderedSuggestions));
+
+            if (autoSelectFirstWhenReady)
+            {
+                autoSelectFirstWhenReady = false;
+                if (orderedSuggestions.Count > 0) SuggestionAutoSelected?.Invoke(orderedSuggestions[0]);
+            }
+        }
+
+        public void SelectSuggestion(SuggestionResult suggestion)
+        {
+            if (string.IsNullOrWhiteSpace(suggestion.Id))
             {
                 Debug.LogWarning("[AddressSearchService] Lege resultaat-ID.");
                 return;
             }
-            targetId = label;
-            StartCoroutine(ResolveSelectedSuggestion(id));
+
+            targetId = suggestion.Label;
+
+            if (string.Equals(suggestion.CollectionId, "adres", StringComparison.OrdinalIgnoreCase))
+            {
+                StartCoroutine(ResolveSelectedSuggestion(suggestion.Id));
+                return;
+            }
+
+            if (!suggestion.HasCoordinates)
+            {
+                Debug.LogWarning("[AddressSearchService] Het geselecteerde resultaat heeft geen coördinaten: " + suggestion.Label);
+                return;
+            }
+
+            targetCoordinate = suggestion.BoundingBox.Center;
+            if (targetCoordinate.PointsLength == 2)
+            {
+                targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                targetCoordinate.height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
+            }
+            
+            MoveCameraToLocation(suggestion.BoundingBox.Center, suggestion.BoundingBox.GetSizeMagnitude());
         }
 
-        private IEnumerator FindSearchSuggestions(string searchTerm)
+        // Compatibility overload for UI code that still passes only ID and label.
+        // Prefer SelectSuggestion(SuggestionResult) so the collection and coordinates are retained.
+        public void SelectSuggestion(string id, string label)
         {
-            int requestVersion = searchRequestVersion;
-            string query = searchTerm;
-            if (!string.IsNullOrWhiteSpace(searchWithinCity))
-                query += " " + searchWithinCity.Trim();
-
-            string url = locationApiBaseUrl.TrimEnd('/') + "/search?q=" + UnityWebRequest.EscapeURL(query) + "&adres%5Bversion%5D=1" + "&limit=" + Mathf.Max(1, rows) + "&f=json";
-            using UnityWebRequest request = UnityWebRequest.Get(url);
-            request.timeout = 15;
-
-            yield return request.SendWebRequest();
-
-            suggestionsRoutine = null;
-            if (requestVersion != searchRequestVersion)
-                yield break;
-
-            if (request.result != UnityWebRequest.Result.Success)
+            SuggestionResult suggestion = orderedSuggestions.FirstOrDefault(result => result.Id == id && result.Label == label);
+            if (!string.IsNullOrEmpty(suggestion.Id))
             {
-                Debug.LogWarning("[AddressSearchService] Zoekopdracht mislukt: " + request.error + "\nURL: " + url);
-                SuggestionsCleared?.Invoke();
-                yield break;
+                SelectSuggestion(suggestion);
+                return;
             }
 
-            JSONNode root;
-            try
-            {
-                root = JSON.Parse(request.downloadHandler.text);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogWarning("[AddressSearchService] Ongeldige JSON-response: " + exception.Message);
-                SuggestionsCleared?.Invoke();
-                yield break;
-            }
-
-            JSONNode features = root["features"];
-            if (features == null || !features.IsArray)
-            {
-                Debug.LogWarning("[AddressSearchService] De zoekresponse bevat " + "geen GeoJSON features-array.\n" + request.downloadHandler.text);
-                SuggestionsCleared?.Invoke();
-                yield break;
-            }
-
-            var suggestions = new List<SuggestionResult>(features.Count);
-            for (int i = 0; i < features.Count; i++)
-            {
-                JSONNode feature = features[i];
-                JSONNode properties = feature["properties"];
-
-                string id = ReadString(feature, "id");
-                if (string.IsNullOrEmpty(id)) 
-                    id = ReadString(properties, "id");
-
-                string label = ReadString(properties, "display_name");
-
-                if (string.IsNullOrEmpty(label))
-                    label = ReadString(properties, "weergavenaam");
-
-                if (string.IsNullOrEmpty(label))
-                    label = ReadString(properties, "name");
-
-                if (string.IsNullOrEmpty(label))
-                    label = id;
-
-                if (string.IsNullOrWhiteSpace(id))
-                {
-                    Debug.LogWarning("[AddressSearchService] Zoekresultaat zonder ID.");
-                    continue;
-                }
-                suggestions.Add(new SuggestionResult(id, label));
-            }
-
-            SuggestionsReady?.Invoke(suggestions);
-            if (autoSelectFirstWhenReady)
-            {
-                autoSelectFirstWhenReady = false;
-                if (suggestions.Count > 0)
-                {
-                    SuggestionAutoSelected?.Invoke(suggestions[0]);
-                }
-            }
+            Debug.LogWarning("[AddressSearchService] Resultaat niet meer in de zoekcache gevonden: " + label);
         }
-        
+       
+
+        private void MoveCameraToLocation(Coordinate coordinate, double distance)
+        {
+            targetCoordinate = coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            targetCoordinate.height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
+
+            MoveCameraToCoordinate moveCamera = (mainCamera ? mainCamera : Camera.main).GetComponent<MoveCameraToCoordinate>();
+            if (moveCamera == null)
+            {
+                Debug.LogWarning("[AddressSearchService] MoveCameraToCoordinate ontbreekt op de Main Camera.");
+                return;
+            }
+
+            onCoordinateFound.Invoke(targetCoordinate);
+            moveCamera.LookAtTarget(targetCoordinate, distance);
+        }
+
         private IEnumerator ResolveSelectedSuggestion(string id)
         {
             string url = bagApiBaseUrl.TrimEnd('/') + "/collections/adres/items/" + UnityWebRequest.EscapeURL(id) + "?f=json";
             JSONNode feature;
+
             using (UnityWebRequest request = UnityWebRequest.Get(url))
             {
                 request.timeout = 15;
@@ -283,6 +354,7 @@ namespace Netherlands3D.AddressSearch
                     Debug.LogWarning("[AddressSearchService] Ophalen van BAG-adres mislukt: " + request.error + "\nURL: " + url);
                     yield break;
                 }
+
                 try
                 {
                     feature = JSON.Parse(request.downloadHandler.text);
@@ -293,72 +365,195 @@ namespace Netherlands3D.AddressSearch
                     yield break;
                 }
             }
-         
-            JSONNode properties = feature["properties"];
-            string targetResidentialObjectId = ReadString(properties, "adresseerbaar_object_identificatie");
-            if (string.IsNullOrEmpty(targetResidentialObjectId))
+
+            string residentialObjectId = ReadString(feature["properties"], "adresseerbaar_object_identificatie");
+            if (string.IsNullOrEmpty(residentialObjectId))
             {
-                Debug.LogWarning("[AddressSearchService] Geen BAG-identificatie van het " + "adresseerbare object gevonden.");
+                Debug.LogWarning("[AddressSearchService] Geen adresseerbaar object gevonden voor BAG-adres " + id);
                 yield break;
             }
 
             BagDataService bagDataService = ServiceLocator.GetService<BagDataService>();
-            List<string> pandIds = new List<string>();
-            yield return bagDataService.GetBAGID(targetResidentialObjectId, result => pandIds = result);
-            
-            if (pandIds.Count == 0) yield break;
+            List<string> buildingIds = new();
+            yield return bagDataService.GetBAGID(residentialObjectId, result => buildingIds = result);
 
-            if (string.IsNullOrEmpty(pandIds[0]))
+            if (buildingIds == null || buildingIds.Count == 0 || string.IsNullOrEmpty(buildingIds[0]))
             {
-                Debug.LogWarning("[AddressSearchService] Geen pand-ID gevonden.");
+                Debug.LogWarning("[AddressSearchService] Geen pand-ID gevonden voor adres " + id);
                 yield break;
             }
-            
-            string pandId = pandIds[0];
+
             BoundingBox buildingBounds = null;
             bool requestFinished = false;
-
-            bagDataService.LoadBuildingBounds(pandId, bounds =>
-            {
-                buildingBounds = bounds;
-                requestFinished = true;
-            });
-
+            bagDataService.LoadBuildingBounds(buildingIds[0], bounds => { buildingBounds = bounds; requestFinished = true; });
             yield return new WaitUntil(() => requestFinished);
 
             if (buildingBounds == null)
             {
-                Debug.LogWarning("[AddressSearchService] Geen bounding box voor pand " + pandId + " ontvangen.");
+                Debug.LogWarning("[AddressSearchService] Geen bounding box ontvangen voor pand " + buildingIds[0]);
                 yield break;
             }
+
             targetCoordinate = buildingBounds.Center;
-            if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
+            if (targetCoordinate.PointsLength == 2)
             {
                 targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
-                targetCoordinate.height = height;
+                targetCoordinate.height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
             }
-            double targetDistance = buildingBounds.GetSizeMagnitude();
-            MoveCameraToCoordinate moveCamera = Camera.main.GetComponent<MoveCameraToCoordinate>();
+
+            MoveCameraToCoordinate moveCamera = (mainCamera ? mainCamera : Camera.main).GetComponent<MoveCameraToCoordinate>();
             if (moveCamera == null)
             {
-                Debug.LogWarning("[AddressSearchService] MoveCameraToCoordinate ontbreekt " + "op de Main Camera.");
+                Debug.LogWarning("[AddressSearchService] MoveCameraToCoordinate ontbreekt op de Main Camera.");
                 yield break;
             }
+
             onCoordinateFound.Invoke(targetCoordinate);
-            moveCamera.LookAtTarget(targetCoordinate, targetDistance);
+            moveCamera.LookAtTarget(targetCoordinate, buildingBounds.GetSizeMagnitude());
+        }
+
+        private static bool TryReadScore(JSONNode properties, out float score)
+        {
+            score = 0f;
+            string value = ReadString(properties, "score");
+            return !string.IsNullOrWhiteSpace(value) && float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out score);
         }
         
+        private static bool TryReadGeometryBounds(JSONNode geometry, out BoundingBox bbox)
+        {
+            bbox = null;
+            if (geometry == null || geometry.IsNull)
+                return false;
+
+            JSONNode coordinates = geometry["coordinates"];
+
+            if (coordinates == null || !coordinates.IsArray) return false;
+
+            double minLon = double.PositiveInfinity;
+            double minLat = double.PositiveInfinity;
+            double maxLon = double.NegativeInfinity;
+            double maxLat = double.NegativeInfinity;
+            bool found = false;
+            CollectBounds(coordinates, ref minLon, ref minLat, ref maxLon, ref maxLat, ref found);
+
+            if (!found) return false;
+
+            bbox = new BoundingBox(new Coordinate(CoordinateSystem.WGS84_LatLon, minLat, minLon), new Coordinate(CoordinateSystem.WGS84_LatLon, maxLat, maxLon));
+            return true;
+        }
+     
+        private static bool TryReadGeometryCenter(JSONNode geometry, out double longitude, out double latitude)
+        {
+            longitude = 0;
+            latitude = 0;
+
+            if (geometry == null || geometry.IsNull) return false;
+
+            JSONNode coordinates = geometry["coordinates"];
+            if (coordinates == null || !coordinates.IsArray) return false;
+
+            double minLon = double.MaxValue, minLat = double.MaxValue;
+            double maxLon = double.MinValue, maxLat = double.MinValue;
+            bool found = false;
+            CollectBounds(coordinates, ref minLon, ref minLat, ref maxLon, ref maxLat, ref found);
+            if (!found) return false;
+
+            longitude = (minLon + maxLon) * 0.5;
+            latitude = (minLat + maxLat) * 0.5;
+            return true;
+        }
+
+        private static void CollectBounds(JSONNode node, ref double minLon, ref double minLat, ref double maxLon, ref double maxLat, ref bool found)
+        {
+            if (node == null || !node.IsArray || node.Count == 0) return;
+
+            // Een positie is een array met getallen: [lon, lat, (hoogte)].
+            if (!node[0].IsArray)
+            {
+                if (node.Count < 2) return;
+                if (!double.TryParse(node[0].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon)) return;
+                if (!double.TryParse(node[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat)) return;
+
+                minLon = Math.Min(minLon, lon);
+                maxLon = Math.Max(maxLon, lon);
+                minLat = Math.Min(minLat, lat);
+                maxLat = Math.Max(maxLat, lat);
+                found = true;
+                return;
+            }
+
+            for (int i = 0; i < node.Count; i++)
+            {
+                CollectBounds(node[i], ref minLon, ref minLat, ref maxLon, ref maxLat, ref found);
+            }
+        }
+
         private static string ReadString(JSONNode node, string key)
         {
-            if (node == null)
-                return string.Empty;
-
+            if (node == null) return string.Empty;
             JSONNode value = node[key];
-            if (value == null || value.IsNull)
-                return string.Empty;
+            return value == null || value.IsNull ? string.Empty : value.Value;
+        }
 
-            return value.Value;
+        private WorldAnnotation CreateCoordinateLabel(ref FloatingElement floatingElement)
+        {
+            floatingElement = new FloatingElement();
+            worldUIService.AddToFloatingElementsContent(floatingElement);
+            WorldAnnotation annotation = new WorldAnnotation("");
+            annotation.IsCoordinate = true;
+            floatingElement.Add(annotation);
+            return annotation;
+        }
+
+        private void UpdatePointer(Coordinate coordinate)
+        {
+            ShowPointer();
+            locationPointer.SetText(targetId);
+        }
+
+        private void HidePointer()
+        {
+            if (locationPointer != null) locationPointer.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+        }
+
+        private void ShowPointer()
+        {
+            if (locationPointer != null) locationPointer.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+        }
+
+        private void Update()
+        {
+            if (locationElement == null || locationPointer == null || cameraService?.ActiveCamera == null) return;
+            UpdateCoordinateTooltip(targetCoordinate, ref locationElement, ref locationPointer);
+        }
+
+        private void UpdateCoordinateTooltip(Coordinate coordinate, ref FloatingElement element, ref WorldAnnotation label)
+        {
+            Vector3 worldPosition = coordinate.ToUnity();
+            Vector3 screenPosition = cameraService.ActiveCamera.WorldToScreenPoint(worldPosition);
+            Vector2 panelPosition = appRootBehaviour.GetUIPositionFromScreenPosition(screenPosition);
+            Vector2 localPosition = worldUIService.FloatingElementsContent.WorldToLocal(panelPosition);
+            element.SetPosition(localPosition);
+
+            Vector3 offsetScreenPosition = cameraService.ActiveCamera.WorldToScreenPoint(worldPosition + cameraService.ActiveCamera.transform.right * WorldSpaceOffset);
+            float distance = Mathf.Abs(offsetScreenPosition.x - screenPosition.x);
+            label.SetLabelOffset(Mathf.Min(distance, MaxPixelPointerOffset));
+        }
+
+        private void OnDestroy()
+        {
+            if (worldUIService != null && locationElement != null) worldUIService.RemoveFromFloatingElementsContent(locationElement);
+            if (onCoordinateFound != null) onCoordinateFound.RemoveListener(UpdatePointer);
+
+            ToolService toolService = ServiceLocator.GetService<ToolService>();
+            if (toolService != null) toolService.GetTool(ToolType.Search).onClose.RemoveListener(HidePointer);
+        }
+
+        private void ClearSuggestions()
+        {
+            cachedSuggestions.Clear();
+            orderedSuggestions.Clear();
+            SuggestionsCleared?.Invoke();
         }
     }
 }
