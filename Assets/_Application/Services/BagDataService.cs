@@ -124,14 +124,10 @@ namespace Netherlands3D
             return downloadProcesses.TryGetValue(bagID, out var state) ? state.handle : null;
         }
         
-        public void LoadBuildingBounds(string bagId, Action<BoundingBox> onBoundsLoaded)
+
+        public IEnumerator GetBuildingBounds(string bagId, Action<BoundingBox> onBoundsLoaded)
         {
             bagId = bagId.Replace(removeFromID, "");
-            StartCoroutine(GetBuildingBounds(bagId, onBoundsLoaded));
-        }
-
-        private IEnumerator GetBuildingBounds(string bagId, Action<BoundingBox> onBoundsLoaded)
-        {
             string filter =
                 "<Filter><PropertyIsEqualTo>" +
                 "<PropertyName>identificatie</PropertyName>" +
@@ -139,7 +135,7 @@ namespace Netherlands3D
                 "</PropertyIsEqualTo></Filter>";
 
             string url =
-                "https://service.pdok.nl/lv/bag/wfs/v2_0" +
+                bagWfsEndpoint +
                 "?SERVICE=WFS" +
                 "&VERSION=2.0.0" +
                 "&REQUEST=GetFeature" +
@@ -200,7 +196,7 @@ namespace Netherlands3D
             onBoundsLoaded?.Invoke(bounds);
         }
 
-        private static bool AccumulateGeoJsonBounds(JSONNode node, ref double minLon, ref double minLat, ref double maxLon, ref double maxLat)
+        private bool AccumulateGeoJsonBounds(JSONNode node, ref double minLon, ref double minLat, ref double maxLon, ref double maxLat)
         {
             if (node == null || node.IsNull) return false;
 
@@ -241,7 +237,7 @@ namespace Netherlands3D
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning("[AddressSearchService] BAG WFS-request mislukt: " + request.error);
+                Debug.LogWarning("[BagDataService] BAG WFS-request mislukt: " + request.error);
                 yield break;
             }
             JSONNode root;
@@ -251,14 +247,14 @@ namespace Netherlands3D
             }
             catch (Exception exception)
             {
-                Debug.LogWarning("[AddressSearchService] Ongeldige BAG WFS-response: " + exception.Message);
+                Debug.LogWarning("[BagDataService] Ongeldige BAG WFS-response: " + exception.Message);
                 yield break;
             }
 
             JSONNode features = root["features"];
             if (features == null || !features.IsArray || features.Count == 0)
             {
-                Debug.LogWarning("[AddressSearchService] Geen BAG-pand gevonden.");
+                Debug.LogWarning("[BagDataService] Geen BAG-pand gevonden.");
                 yield break;
             }
 
@@ -266,10 +262,10 @@ namespace Netherlands3D
             string bagId = ReadString(properties, "pandidentificatie");
             if (string.IsNullOrEmpty(bagId))
             {
-                Debug.LogWarning("[AddressSearchService] De BAG-response bevat " + "geen pandidentificatie.");
+                Debug.LogWarning("[BagDataService] De BAG-response bevat " + "geen pandidentificatie.");
                 yield break;
             }
-            Debug.Log("[AddressSearchService] BAG pand-ID: " + bagId);
+            Debug.Log("[BagDataService] BAG pand-ID: " + bagId);
             onBagIdsLoaded?.Invoke(new List<string> { bagId });
         }
         

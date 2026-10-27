@@ -384,19 +384,17 @@ namespace Netherlands3D.AddressSearch
                 Debug.LogWarning("[AddressSearchService] Geen pand-ID gevonden voor adres " + id);
                 yield break;
             }
+            
+            BoundingBox boundingBox = null;
+            yield return bagDataService.GetBuildingBounds(buildingIds[0],  bounds => boundingBox = bounds);
 
-            BoundingBox buildingBounds = null;
-            bool requestFinished = false;
-            bagDataService.LoadBuildingBounds(buildingIds[0], bounds => { buildingBounds = bounds; requestFinished = true; });
-            yield return new WaitUntil(() => requestFinished);
-
-            if (buildingBounds == null)
+            if (boundingBox == null)
             {
                 Debug.LogWarning("[AddressSearchService] Geen bounding box ontvangen voor pand " + buildingIds[0]);
                 yield break;
             }
 
-            targetCoordinate = buildingBounds.Center;
+            targetCoordinate = boundingBox.Center;
             if (targetCoordinate.PointsLength == 2)
             {
                 targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
@@ -411,7 +409,7 @@ namespace Netherlands3D.AddressSearch
             }
 
             onCoordinateFound.Invoke(targetCoordinate);
-            moveCamera.LookAtTarget(targetCoordinate, buildingBounds.GetSizeMagnitude());
+            moveCamera.LookAtTarget(targetCoordinate, boundingBox.GetSizeMagnitude());
         }
 
         private static bool TryReadScore(JSONNode properties, out float score)
