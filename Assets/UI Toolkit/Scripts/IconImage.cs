@@ -30,6 +30,7 @@
         public const string DOWNLOAD_TILE = "DownloadTile";
         public const string EDIT = "Edit";
         public const string EYEDROPPER_FULL = "EyedropperFull";
+        public const string EXIT = "Exit";
         public const string FILTERS = "Filters";
         public const string FOLDER = "Folder";
         public const string FORWARD = "Forward";

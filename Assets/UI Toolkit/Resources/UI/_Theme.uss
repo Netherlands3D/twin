@@ -119,6 +119,7 @@
     --icon-downloadtile: url("project://database/Assets/Sprites/UI/Icons/Type=DownloadTile,%20Color=white,%20Size=medium.png");
     --icon-edit: url("project://database/Assets/Sprites/UI/Icons/Type=Edit,%20Color=white,%20Size=medium.png");
     --icon-eyedropperfull: url("project://database/Assets/Sprites/UI/Icons/Type=EyedropperFull,%20Color=white,%20Size=medium.png");
+    --icon-exit: url("project://database/Assets/Sprites/UI/Icons/Type=Exit,%20Color=white,%20Size=Large.png");
     --icon-filters: url("project://database/Assets/Sprites/UI/Icons/Type=Filters,%20Color=white,%20Size=medium.png");
     --icon-folder: url("project://database/Assets/Sprites/UI/Icons/Type=Folder,%20Color=white,%20Size=medium.png");
     --icon-forward: url("project://database/Assets/Sprites/UI/Icons/Type=Forward,%20Color=white,%20Size=medium.png");

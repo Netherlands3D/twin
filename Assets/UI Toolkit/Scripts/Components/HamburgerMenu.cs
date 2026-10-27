@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEditor;
 using UnityEngine.Events;
@@ -23,6 +24,7 @@ namespace Netherlands3D.UI.Components
         private Button SaveProjectButton => this.Q<Button>("Save");
         private ToolButton SettingsButton => this.Q<ToolButton>("Settings");
         private Button HelpButton => this.Q<Button>("Help");
+        private Button ExitButton => this.Q<Button>("Exit");
         
         [UxmlAttribute("text")]
         public string ProjectTitle
@@ -54,6 +56,7 @@ namespace Netherlands3D.UI.Components
             SaveProjectButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.SaveProject).Open());
             SettingsButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.Settings).Open());
             HelpButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ToolService>().GetTool(ToolType.Help).Open());
+            ExitButton.RegisterCallback<ClickEvent>(_ => ServiceLocator.GetService<ApplicationHandler>().PromptExitDialog());
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
