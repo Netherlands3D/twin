@@ -24,6 +24,9 @@ namespace Netherlands3D.Twin
 
         public void PromptExitDialog()
         {
+#if !UNITY_EDITOR && UNITY_WEBGL
+            return;
+#endif
             Dialog yesNoDialog = ServiceLocator.GetService<DialogService>().ActiveDialog;
             yesNoDialog.Show(true);
             yesNoDialog.Accept.AddListener(ApplicationQuit);

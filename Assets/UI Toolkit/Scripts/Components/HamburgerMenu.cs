@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEditor;
 using UnityEngine.Events;
@@ -68,6 +69,10 @@ namespace Netherlands3D.UI.Components
                 // Mark last button (for override border radius)
                 schedule.Execute(UpdateLastButtonClass).ExecuteLater(0);
             });
+            
+#if !UNITY_EDITOR && UNITY_WEBGL
+            ExitButton.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+#endif
         }
 
         public void Open()
