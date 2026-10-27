@@ -13,6 +13,8 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Twin.Utility;
 using Unity.Mathematics;
+using Netherlands3D.Twin.Samplers;
+
 
 
 
@@ -95,7 +97,7 @@ namespace Netherlands3D.WMSTiles3D
 #if SUBOBJECT
         public bool parseSubObjects = false;
 #endif
-
+        internal HeightMap heightmap;
         [Tooltip("Limits amount of detail higher resolution would cause to load.")]
         public int maxScreenHeightInPixels = 1080;
         public int maximumScreenSpaceError = 5;
@@ -178,14 +180,37 @@ namespace Netherlands3D.WMSTiles3D
 
         void Start()
         {
-        SetupTestLayer();
+        
+  
             RefreshTiles();
         }
 
         private void SetupTestLayer()
         {
+           setupLufo();
+        }
+        private void setupAHN()
+        {
             wmsLayerProperties = new wmsLayerProperties();
-            
+            Coordinate BottomLeft = new Coordinate(CoordinateSystem.RD,-59188.4,304985);
+            Coordinate Topright = new Coordinate(CoordinateSystem.RD, 308127,858329);
+            wmsLayerProperties.boundingBox = new BoundingBox(BottomLeft,Topright);
+            wmsLayerProperties.coordinateSystem = CoordinateSystem.RD;
+            wmsLayerProperties.maxHeight = 4000;
+            wmsLayerProperties.maxWidth = 4000;
+            wmsLayerProperties.maxScaleDenominator = 150000;
+            wmsLayerProperties.name = "dtm_05m";
+            wmsLayerProperties.style = "default";
+            wmsLayerProperties.version = "1.1.0";
+            wmsLayerProperties.transparent = true;
+            wmsLayerProperties.MinimumScreenSpaceError=0.5f;
+            wmsLayerProperties.MaxTreeDepth=5;
+            wmsLayerProperties.baseUrl = "https://service.pdok.nl/rws/ahn/wms/v1_0";
+            wmsLayerProperties.Format = "image/png";
+        }
+        private void setupLufo()
+        {
+            wmsLayerProperties = new wmsLayerProperties();
             Coordinate BottomLeft = new Coordinate(CoordinateSystem.RD,-2000.0,290000.0);
             Coordinate Topright = new Coordinate(CoordinateSystem.RD, 294000.0,630000.0);
             wmsLayerProperties.boundingBox = new BoundingBox(BottomLeft,Topright);
@@ -202,7 +227,6 @@ namespace Netherlands3D.WMSTiles3D
             wmsLayerProperties.baseUrl = "https://service.pdok.nl/hwh/luchtfotorgb/wms/v1_0";
             wmsLayerProperties.Format = "image/jpg";
         }
-
         private void OnEnable()
         {
             if (root !=null)
@@ -254,6 +278,7 @@ namespace Netherlands3D.WMSTiles3D
 
         void InitializeURLAndLoadTileSet()
         {
+            heightmap = FindFirstObjectByType<HeightMap>();
             currentCamera = Camera.main;
             StartCoroutine(LoadInView());
 

@@ -7,6 +7,7 @@ using static Netherlands3D.WMSTiles3D.TileSetsConfigLoader.Config;
 using Netherlands3D.Coordinates;
 using NetTopologySuite.Index.Quadtree;
 using Unity.Mathematics;
+using PlasticPipe.PlasticProtocol.Messages;
 
 namespace Netherlands3D.WMSTiles3D
 {
@@ -44,10 +45,14 @@ namespace Netherlands3D.WMSTiles3D
             double boxWidth = tileset.wmsLayerProperties.boundingBox.TopRight.easting - tileset.wmsLayerProperties.boundingBox.BottomLeft.easting;
             double boxHeight = tileset.wmsLayerProperties.boundingBox.TopRight.northing - tileset.wmsLayerProperties.boundingBox.BottomLeft.northing;
             double tileSize = math.max(boxWidth,boxHeight);
-            double elevationMax = 10;
-            double elevationMin = -10;
+
+            double centerElevation = tileset.heightmap.GetHeight(center);
+            center.height=centerElevation;
+            double elevationMax = centerElevation+10;
+            double elevationMin = centerElevation-10;
             double averageElevation = (elevationMax + elevationMin)/2;
             double halfElevation = elevationMax - averageElevation;
+
             root.boundingVolume.values = new double[12]{center.easting,center.northing,averageElevation,tileSize/2,0,0,0,tileSize/2,0,0,0,halfElevation};
 
             double[] transformValues = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
@@ -90,6 +95,9 @@ namespace Netherlands3D.WMSTiles3D
             }
             newTile.geometricError = parentTile.geometricError*0.5;
             BoundingVolume newBoundingVolume = parentTile.boundingVolume.GetChildBoundingVolume((int)quadtreeQuadrant,SubdivisionScheme.Quadtree);
+            Coordinate center = new Coordinate(CoordinateSystem.RD,newBoundingVolume.values[0],newBoundingVolume.values[1]);
+            float centerelevation = parentTile.tileSet.heightmap.GetHeight(center);
+            newBoundingVolume.values[2]=centerelevation;
             newTile.boundingVolume = newBoundingVolume;
             if (newTile.tileSet.wmsLayerProperties.maximumZoomlevel==newTile.level) return newTile;
 
