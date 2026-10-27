@@ -11,4 +11,5 @@
     <nl3dP:DefaultHUD picking-mode="Ignore" />
     <nl3dP:FPVHUD class="hidden" picking-mode="Ignore" />
     <nl3dP:SnackbarPanel />
+    <ui:VisualElement name="Dialogs" class="dialogs-anchor"/>
 </ui:UXML>

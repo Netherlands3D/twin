@@ -1,5 +1,14 @@
 .dialog-panel {
     flex-direction: column;
+    
+
+    
+    translate: -50% -50%;
+    width: 380px;
+    height: auto;
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-4);
 }
 
 .dialog-panel__message {
