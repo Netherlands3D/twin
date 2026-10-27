@@ -37,11 +37,8 @@ namespace Netherlands3D.Twin.Cameras
 
         public void LookAtTarget(Coordinate targetLookAt, double targetDistance)
         {
-            if (targetDistance > moveSizeLimit) // if the size of the bounds is larger than 20km, we don't move the camera
-            {
-                Debug.LogWarning("target distance too large, not moving camera");
-                return;
-            }
+            // if the size of the bounds is larger than 20km, clamp it to the maximum size instead of not moving the camera
+            double clampedTargetDistance = Math.Min(targetDistance, moveSizeLimit);
 
             // Keep the current camera orientation
             Vector3 cameraDirection = camera.transform.forward;
@@ -49,28 +46,26 @@ namespace Netherlands3D.Twin.Cameras
 
             //if the object is smaller than 2km in diameter, we will center the object in the view.
             //if the size of the bounds is larger than 2 km, we will center on the object with a fixed distance instead of trying to fit the object in the view
-            if (targetDistance < zoomSizeLimit)
-            {
-                // Compute the necessary distance to fit the entire object in view
-                var fovRadians = camera.fieldOfView * Mathf.Deg2Rad;
-                distance = targetDistance / (2 * Mathf.Tan(fovRadians * 0.5f));
-                var distanceFactor = Math.Exp(-decayRate * distance); //if an object is larger, we move away less.
-                var t = Mathf.Lerp(1, zoomDistanceMultiplier, (float)distanceFactor);
-                distance *= t; //increase distance so that objects don't take up too much screen space
-            }
-            
+            double clampedDistance = Math.Min(clampedTargetDistance, zoomSizeLimit);
+            // Compute the necessary distance to fit the entire object in view
+            var fovRadians = camera.fieldOfView * Mathf.Deg2Rad;
+            distance = clampedDistance / (2 * Math.Tan(fovRadians * 0.5f));
+            var distanceFactor = Math.Exp(-decayRate * distance); //if an object is larger, we move away less.
+            var t = Mathf.Lerp(1, zoomDistanceMultiplier, (float)distanceFactor);
+            distance *= t; //increase distance so that objects don't take up too much screen space
+
             //to avoid floating point issues, we need to calculate the relative offset and add it to the targetLookAt
             // todo: to make this more compatible with different coordinate systems, we need to know the axis indices and add it to the correct one, but these are currently not publicly exposed.
             var offset = cameraDirection * (float)distance;
-            var targetCoordinate = new Coordinate(targetLookAt.CoordinateSystem,  
+            var targetCoordinate = new Coordinate(targetLookAt.CoordinateSystem,
                                                 targetLookAt.value1 - (double)offset.x,
                                                 targetLookAt.value2 - (double)offset.z,
                                                 targetLookAt.value3 - (double)offset.y);
 
-            // Set the coordinate of the worldTransform, and thereby the Camera's unity position.
+            // Set the coordinate of the worldTransform, and thereby the Camera's Unity position.
             // The Camera's Unity position will cause floating point issues, however it is only needed to trigger the Origin shift,
             // and then the correct position will be recalculated from the world transform's coordinate.
-            cameraWorldTransform.MoveToCoordinate(targetCoordinate); //update the coordinate 
+            cameraWorldTransform.MoveToCoordinate(targetCoordinate); //update the coordinate
         }
 
         public void LoadCameraData(CameraPropertyData cameraPropertyData)

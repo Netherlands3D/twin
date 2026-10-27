@@ -129,6 +129,11 @@ namespace Netherlands3D.AddressSearch
             onCoordinateFound.AddListener(UpdatePointer);
         }
 
+        private void OnEnable()
+        {
+            HidePointer();
+        }
+
         public void FetchSuggestions(string textInput)
         {
             StartSearch(textInput, false);
@@ -162,9 +167,7 @@ namespace Netherlands3D.AddressSearch
             string query = searchTerm;
             if (!string.IsNullOrWhiteSpace(searchWithinCity)) query += " " + searchWithinCity.Trim();
 
-            // Ontdubbelen tijdens het inlezen: per "collectie:naam" blijft alleen het hoogst scorende resultaat over.
             var uniqueSuggestions = new Dictionary<string, SuggestionResult>();
-
             // Query each collection separately so every result keeps its correct collection ID.
             foreach (string collectionId in CollectionIds)
             {
@@ -249,7 +252,6 @@ namespace Netherlands3D.AddressSearch
 
             if (requestVersion != searchRequestVersion) yield break;
 
-            // Maximaal N per collectie, collecties in prioriteitsvolgorde, binnen een collectie op score.
             List<SuggestionResult> best = uniqueSuggestions.Values
                 .GroupBy(result => result.CollectionId)
                 .SelectMany(group => group.OrderByDescending(result => result.Score).Take(maxResultsPerCollection))
@@ -418,75 +420,6 @@ namespace Netherlands3D.AddressSearch
             string value = ReadString(properties, "score");
             return !string.IsNullOrWhiteSpace(value) && float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out score);
         }
-        
-        private static bool TryReadGeometryBounds(JSONNode geometry, out BoundingBox bbox)
-        {
-            bbox = null;
-            if (geometry == null || geometry.IsNull)
-                return false;
-
-            JSONNode coordinates = geometry["coordinates"];
-
-            if (coordinates == null || !coordinates.IsArray) return false;
-
-            double minLon = double.PositiveInfinity;
-            double minLat = double.PositiveInfinity;
-            double maxLon = double.NegativeInfinity;
-            double maxLat = double.NegativeInfinity;
-            bool found = false;
-            CollectBounds(coordinates, ref minLon, ref minLat, ref maxLon, ref maxLat, ref found);
-
-            if (!found) return false;
-
-            bbox = new BoundingBox(new Coordinate(CoordinateSystem.WGS84_LatLon, minLat, minLon), new Coordinate(CoordinateSystem.WGS84_LatLon, maxLat, maxLon));
-            return true;
-        }
-     
-        private static bool TryReadGeometryCenter(JSONNode geometry, out double longitude, out double latitude)
-        {
-            longitude = 0;
-            latitude = 0;
-
-            if (geometry == null || geometry.IsNull) return false;
-
-            JSONNode coordinates = geometry["coordinates"];
-            if (coordinates == null || !coordinates.IsArray) return false;
-
-            double minLon = double.MaxValue, minLat = double.MaxValue;
-            double maxLon = double.MinValue, maxLat = double.MinValue;
-            bool found = false;
-            CollectBounds(coordinates, ref minLon, ref minLat, ref maxLon, ref maxLat, ref found);
-            if (!found) return false;
-
-            longitude = (minLon + maxLon) * 0.5;
-            latitude = (minLat + maxLat) * 0.5;
-            return true;
-        }
-
-        private static void CollectBounds(JSONNode node, ref double minLon, ref double minLat, ref double maxLon, ref double maxLat, ref bool found)
-        {
-            if (node == null || !node.IsArray || node.Count == 0) return;
-
-            // Een positie is een array met getallen: [lon, lat, (hoogte)].
-            if (!node[0].IsArray)
-            {
-                if (node.Count < 2) return;
-                if (!double.TryParse(node[0].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lon)) return;
-                if (!double.TryParse(node[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lat)) return;
-
-                minLon = Math.Min(minLon, lon);
-                maxLon = Math.Max(maxLon, lon);
-                minLat = Math.Min(minLat, lat);
-                maxLat = Math.Max(maxLat, lat);
-                found = true;
-                return;
-            }
-
-            for (int i = 0; i < node.Count; i++)
-            {
-                CollectBounds(node[i], ref minLon, ref minLat, ref maxLon, ref maxLat, ref found);
-            }
-        }
 
         private static string ReadString(JSONNode node, string key)
         {
@@ -507,6 +440,8 @@ namespace Netherlands3D.AddressSearch
 
         private void UpdatePointer(Coordinate coordinate)
         {
+            if(string.IsNullOrEmpty(targetId)) return;
+            
             ShowPointer();
             locationPointer.SetText(targetId);
         }
@@ -523,6 +458,8 @@ namespace Netherlands3D.AddressSearch
 
         private void Update()
         {
+            
+            
             if (locationElement == null || locationPointer == null || cameraService?.ActiveCamera == null) return;
             UpdateCoordinateTooltip(targetCoordinate, ref locationElement, ref locationPointer);
         }
@@ -551,6 +488,7 @@ namespace Netherlands3D.AddressSearch
 
         private void ClearSuggestions()
         {
+            targetId = string.Empty;
             cachedSuggestions.Clear();
             orderedSuggestions.Clear();
             SuggestionsCleared?.Invoke();
