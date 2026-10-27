@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Utility
@@ -37,12 +36,6 @@ namespace Netherlands3D.Twin.Utility
             }
             return startTime.Add((endTime - startTime)*length.value*0.01d);
         }
-
-        public static Length ToLength(this DateTime time, DateTime startTime, double ticksPerPixel)
-        {
-            return new Length();
-        }
-        
         
         public static double GetDateTimeUnitCountBetween(this DateTimeUnit timeUnit, DateTime startTime, DateTime endTime, double timeUnitFactor = 1)
         {
@@ -81,22 +74,24 @@ namespace Netherlands3D.Twin.Utility
             }
         }
 
-        public static List<DateTime> GetDateTimesBetween(DateTime startTime, DateTime endTime, DateTimeInterval interval)
+        public static List<DateTime> GetDateTimesBetween(DateTime startTime, DateTime endTime, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime = default)
         {
             var results = new List<DateTime>();
-            GetDateTimesBetweenNonAlloc(results, startTime, endTime, interval);
+            GetDateTimesBetweenNonAlloc(results, startTime, endTime, interval, alignGroupedIntervals, rootTime);
             return results;
         }
 
-        public static void GetDateTimesBetweenNonAlloc(List<DateTime> results, DateTime startTime, DateTime endTime, DateTimeInterval interval)
+        public static void GetDateTimesBetweenNonAlloc(List<DateTime> results, DateTime startTime, DateTime endTime, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime = default)
         {
             results.Clear();
+            if (endTime <= startTime) return;
 
-            var anchor = interval.Amount < 1 ? startTime.RoundDown(interval.TimeUnit) : startTime.RoundDown(interval);
+            var anchor = GetRoundingRoot(startTime, interval, alignGroupedIntervals, rootTime);
+            var previousIndex = GetPreviousIntervalIndex(startTime, interval, anchor);
 
-            for (var i = 0; ; i++)
+            for (var index = previousIndex; ; index++)
             {
-                var time = anchor.Add(new DateTimeInterval(interval.TimeUnit, interval.Amount * i));
+                var time = GetIntervalTime(anchor, interval, index);
                 if (time >= endTime)
                 {
                     break;
@@ -144,6 +139,8 @@ namespace Netherlands3D.Twin.Utility
                 var previous = (interval.TimeUnit == DateTimeUnit.Year)
                     ? dateTime.AddYears(wholeAmount)
                     : dateTime.AddMonths(wholeAmount);
+                if (fraction == 0) return previous;
+
                 var next = (interval.TimeUnit == DateTimeUnit.Year)
                     ? dateTime.AddYears(wholeAmount + 1)
                     : dateTime.AddMonths(wholeAmount + 1);
@@ -168,15 +165,9 @@ namespace Netherlands3D.Twin.Utility
         
         
 
-        public static DateTime Round(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
+        public static DateTime Round(this DateTime time, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime = default)
         {
-            var rootTimeUnit = interval.Amount >= 1 ? interval.TimeUnit : interval.TimeUnit - 1;
-            var roundedRootTime = rootTime.RoundDown(rootTimeUnit, rootTime);
-            
-            var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(roundedRootTime, time, interval.Amount);
-            var previousIntervalIndex = Math.Floor(intervalCount);
-            var previous = roundedRootTime.Add(new DateTimeInterval(interval.TimeUnit, previousIntervalIndex * interval.Amount));
-            var next = roundedRootTime.Add(new DateTimeInterval(interval.TimeUnit, (previousIntervalIndex + 1) * interval.Amount));
+            var (previous, next) = GetIntervalBounds(time, interval, alignGroupedIntervals, rootTime);
 
             return Math.Abs(time.Ticks - previous.Ticks)
                    < Math.Abs(next.Ticks - time.Ticks)
@@ -184,20 +175,16 @@ namespace Netherlands3D.Twin.Utility
                 : next;
         }
         
-        public static DateTime RoundDown(this DateTime time, DateTimeInterval interval, DateTime rootTime = default)
+        public static DateTime RoundDown(this DateTime time, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime = default)
         {
             if (interval.Amount == 1 && rootTime == default)
             {
                 return time.RoundDown(interval.TimeUnit);
             }
             
-            var rootTimeUnit = interval.Amount >= 1 ? interval.TimeUnit : interval.TimeUnit - 1;
-            var roundedRootTime = rootTime.RoundDown(rootTimeUnit, rootTime);
-            
-            var intervalCount = interval.TimeUnit.GetDateTimeUnitCountBetween(roundedRootTime, time, interval.Amount);
-            var previousIndex = Math.Floor(intervalCount);
-            return roundedRootTime.Add(new DateTimeInterval(
-                interval.TimeUnit, previousIndex * interval.Amount));
+            var anchor = GetRoundingRoot(time, interval, alignGroupedIntervals, rootTime);
+            var index = GetPreviousIntervalIndex(time, interval, anchor);
+            return GetIntervalTime(anchor, interval, index);
         }
         
         public static DateTime RoundDown(this DateTime time, DateTimeUnit timeUnit, DateTime rootTime = default)
@@ -213,6 +200,101 @@ namespace Netherlands3D.Twin.Utility
 
                 _ => throw new ArgumentOutOfRangeException(nameof(timeUnit))
             };
+        }
+
+        private static DateTime GetRoundingRoot(DateTime time, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime)
+        {
+            if (interval.Amount < 1)
+            {
+                var lowerTicks = interval.TimeUnit switch
+                {
+                    DateTimeUnit.Year => (rootTime.Day - 1) * TimeSpan.TicksPerDay + rootTime.TimeOfDay.Ticks,
+                    DateTimeUnit.Month => rootTime.TimeOfDay.Ticks,
+                    DateTimeUnit.Day => rootTime.Ticks % TimeSpan.TicksPerHour,
+                    DateTimeUnit.Hour => rootTime.Ticks % TimeSpan.TicksPerMinute,
+                    DateTimeUnit.Minute => rootTime.Ticks % TimeSpan.TicksPerSecond,
+                    DateTimeUnit.Second => rootTime.Ticks % TimeSpan.TicksPerMillisecond,
+                    _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit))
+                };
+
+                return time.RoundDown(interval.TimeUnit).AddTicks(lowerTicks);
+            }
+
+            if (!alignGroupedIntervals || interval.Amount <= 1) return rootTime;
+            
+            
+
+            var offset = interval.TimeUnit switch
+            {
+                DateTimeUnit.Year => 0,
+                DateTimeUnit.Month => rootTime.Month - 1,
+                DateTimeUnit.Day => rootTime.Day - 1,
+                DateTimeUnit.Hour => rootTime.Hour,
+                DateTimeUnit.Minute => rootTime.Minute,
+                DateTimeUnit.Second => rootTime.Second,
+                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit))
+            };
+
+            return offset == 0
+                ? rootTime
+                : rootTime.Add(new DateTimeInterval(interval.TimeUnit, -offset));
+        }
+
+        private static DateTime GetIntervalTime(DateTime anchor, DateTimeInterval interval, double index)
+        {
+            if (interval.Amount >= 1)
+            {
+                return anchor.Add(new DateTimeInterval(interval.TimeUnit, index * interval.Amount));
+            }
+
+            var subdivisions = 1d / interval.Amount;
+            var wholeUnits = Math.Floor(index / subdivisions);
+            var indexInUnit = index - wholeUnits * subdivisions;
+            var unitStart = anchor.Add(new DateTimeInterval(interval.TimeUnit, wholeUnits));
+
+            // Convert each cumulative fraction to whole units of the next smaller scale.
+            // Keeping the index avoids repeatedly adding a rounded interval.
+            return interval.TimeUnit switch
+            {
+                DateTimeUnit.Year => unitStart.AddMonths((int)Math.Floor(indexInUnit * 12 / subdivisions)),
+                DateTimeUnit.Month => unitStart.AddDays(Math.Floor(indexInUnit * DateTime.DaysInMonth(unitStart.Year, unitStart.Month) / subdivisions)),
+                DateTimeUnit.Day => unitStart.AddHours(Math.Floor(indexInUnit * 24 / subdivisions)),
+                DateTimeUnit.Hour => unitStart.AddMinutes(Math.Floor(indexInUnit * 60 / subdivisions)),
+                DateTimeUnit.Minute => unitStart.AddSeconds(Math.Floor(indexInUnit * 60 / subdivisions)),
+                DateTimeUnit.Second => unitStart.AddTicks((long)Math.Floor(indexInUnit * 1000 / subdivisions) * TimeSpan.TicksPerMillisecond),
+                _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit))
+            };
+        }
+
+        private static double GetPreviousIntervalIndex(DateTime time, DateTimeInterval interval, DateTime anchor)
+        {
+            if (interval.Amount <= 0 || double.IsNaN(interval.Amount) || double.IsInfinity(interval.Amount))
+            {
+                throw new ArgumentOutOfRangeException(nameof(interval));
+            }
+
+            var count = interval.TimeUnit.GetDateTimeUnitCountBetween(anchor, time, interval.Amount);
+            var index = Math.Floor(count);
+
+            // The count is an estimate: subdivision boundaries use whole smaller units.
+            while (GetIntervalTime(anchor, interval, index) > time)
+            {
+                index--;
+            }
+
+            while (GetIntervalTime(anchor, interval, index + 1) <= time)
+            {
+                index++;
+            }
+
+            return index;
+        }
+
+        private static (DateTime Previous, DateTime Next) GetIntervalBounds(DateTime time, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime)
+        {
+            var anchor = GetRoundingRoot(time, interval, alignGroupedIntervals, rootTime);
+            var index = GetPreviousIntervalIndex(time, interval, anchor);
+            return (GetIntervalTime(anchor, interval, index), GetIntervalTime(anchor, interval, index + 1));
         }
     }
 }

@@ -14,15 +14,28 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Timeline : VisualElement
     {
+        
+#region config
+        
         private readonly int scrollAreaWidthPx = 50;
-        private double scrollAreaWidth = .5f;
+        private double scrollAreaWidth = .1f;
 
-        private double thumbScrollMinPosition = .2d;
-        private double thumbScrollMaxPosition = .8d;
+        private double thumbScrollMinPosition = .1d;
+        private double thumbScrollMaxPosition = .9d;
         
         private double thumbMinPosition = 0d;
         private double thumbMaxPosition = 1d;
         private double maxScrollSpeed = 1d;
+
+        /// <summary>
+        /// Whether grouped intervals need to be aligned to zero.
+        /// When true: (15:22:38 + 7) seconds with a rounding interval of 10 seconds will be rounded to 15:30:38.
+        /// When false: (15:22:38 + 7) seconds with a roudning interval of 10 seconds will be rounded to 15:32:38.
+        /// </summary>
+        private readonly bool alignGroupedIntervals = true; 
+        
+        
+#endregion
        
         private readonly VisualElement marksContainer;
         private readonly List<VisualElement> markElements = new();
@@ -72,38 +85,36 @@ namespace Netherlands3D.UI.Components
 
         private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
-            //new (DateTimeUnit.Century, 1),
-            //new (DateTimeUnit.Decade, 20),
-            //new (DateTimeUnit.Decade, 10),
-            //new (DateTimeUnit.Decade, 5),
-            //new (DateTimeUnit.Decade, 2),
-            //new (DateTimeUnit.Decade, 1),
             new (DateTimeUnit.Year, 100),
             new (DateTimeUnit.Year, 50),
             new (DateTimeUnit.Year, 20),
             new (DateTimeUnit.Year, 10),
             new (DateTimeUnit.Year, 5),
+            new (DateTimeUnit.Year, 2),
             new (DateTimeUnit.Year, 1),
-            //new (DateTimeUnit.Quarter, 1),
             new (DateTimeUnit.Month, 3),
             new (DateTimeUnit.Month, 1),
-            new (DateTimeUnit.Month, 1/3f),
-            new (DateTimeUnit.Month, 1/6f),
+            new (DateTimeUnit.Month, 1/3d),
+            new (DateTimeUnit.Month, 1/6d),
+            new (DateTimeUnit.Day, 2),
             new (DateTimeUnit.Day, 1),
             new (DateTimeUnit.Hour, 6),
             new (DateTimeUnit.Hour, 3),
+            new (DateTimeUnit.Hour, 2),
             new (DateTimeUnit.Hour, 1),
             new (DateTimeUnit.Minute, 30),
             new (DateTimeUnit.Minute, 20),
             new (DateTimeUnit.Minute, 15),
             new (DateTimeUnit.Minute, 10),
             new (DateTimeUnit.Minute, 5),
+            new (DateTimeUnit.Minute, 2),
             new (DateTimeUnit.Minute, 1),
             new (DateTimeUnit.Second, 30),
             new (DateTimeUnit.Second, 20),
             new (DateTimeUnit.Second, 15),
             new (DateTimeUnit.Second, 10),
             new (DateTimeUnit.Second, 5),
+            new (DateTimeUnit.Second, 2),
             new (DateTimeUnit.Second, 1),
         };
 
@@ -301,7 +312,7 @@ namespace Netherlands3D.UI.Components
         
         private void OnMouseWheelScrolled(WheelEvent evt)
         {
-            const float zoomSensitivity = 0.05f;
+            const float zoomSensitivity = 0.1f;
             var scrollDirection = evt.delta.y;
             var zoomMultiplier = Mathf.Pow(2.0f, zoomSensitivity * scrollDirection);
 
@@ -327,7 +338,7 @@ namespace Netherlands3D.UI.Components
             SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
             var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * thumbScrollMinPosition, startTime.Ticks + duration.Ticks * thumbScrollMaxPosition);
             preciseCurrentTime = new DateTime(currentTicks, displayedCurrentTime.Kind);
-            currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
+            currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
             displayedCurrentTime = preciseCurrentTime;
             markElementsUpdateRequested = true;
         }
@@ -368,7 +379,7 @@ namespace Netherlands3D.UI.Components
             
             
             preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, 0, 1) * duration);
-            currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
+            currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
             displayedCurrentTime = preciseCurrentTime;
         }
 
@@ -396,7 +407,7 @@ namespace Netherlands3D.UI.Components
         {
             isThumbDrag = false;
 
-            currentTime = preciseCurrentTime.Round(snapInterval, rootTime);
+            currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
             Debug.Log($"Round {preciseCurrentTime} {snapInterval} {rootTime}: {currentTime}");
 
             markElementsUpdateRequested = true;
@@ -562,8 +573,8 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            var maxMarkElements = (double)width / 8;
-            var maxLabelElements = (double)width / 80;
+            var maxMarkElements = (double)width / 10;
+            var maxLabelElements = (double)width / 42;
 
             var start = startTime;
             var end = endTime;
@@ -581,11 +592,11 @@ namespace Netherlands3D.UI.Components
             ticksPerPixel = (duration.Ticks) / width;
             var paddingTicks = (long)Math.Round(ticksPerPixel * 50d);
             var markTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks),
-                end.AddTicks(paddingTicks), marksInterval);
+                end.AddTicks(paddingTicks), marksInterval, alignGroupedIntervals);
             var labelTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks),
-                end.AddTicks(paddingTicks), labelsInterval);
+                end.AddTicks(paddingTicks), labelsInterval, alignGroupedIntervals);
             
-            var primaryMarkUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)marksInterval.TimeUnit - 2), (int)unitContext, (int)unitPrecision);
+            var primaryMarkUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)(labelsInterval.Amount >= 1 ? labelsInterval.TimeUnit : labelsInterval.TimeUnit + 1)), (int)unitContext, (int)unitPrecision);
             var primaryLabelUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)(labelsInterval.Amount >= 1 ? labelsInterval.TimeUnit : labelsInterval.TimeUnit + 1)), (int)unitContext, (int)unitPrecision);
 
             thumbLabelElement.Context = unitContext;
@@ -650,7 +661,8 @@ namespace Netherlands3D.UI.Components
                 labelElement.style.left = left;
                 
                 var isPrimary = labelTime.RoundDown((DateTimeUnit)Math.Max(0, (int)primaryLabelUnit-1)) == labelTime;
-                var isSecondary = !isPrimary && labelTime.RoundDown(primaryLabelUnit + 1) == labelTime;
+                var isSecondary = !isPrimary && labelTime.RoundDown(
+                    (DateTimeUnit)Math.Min(Enum.GetValues(typeof(DateTimeUnit)).Length - 1, (int)primaryLabelUnit + 1)) == labelTime;
                 var isTertiary = !isPrimary && !isSecondary;
 
                 var labelTimeUnit = primaryLabelUnit;
