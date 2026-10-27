@@ -7,7 +7,7 @@ using static Netherlands3D.WMSTiles3D.TileSetsConfigLoader.Config;
 using Netherlands3D.Coordinates;
 using NetTopologySuite.Index.Quadtree;
 using Unity.Mathematics;
-using PlasticPipe.PlasticProtocol.Messages;
+
 
 namespace Netherlands3D.WMSTiles3D
 {
