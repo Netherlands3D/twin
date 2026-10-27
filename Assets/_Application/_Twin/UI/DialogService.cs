@@ -9,6 +9,8 @@ namespace Netherlands3D.Twin.Services
 {
     public class DialogService : MonoBehaviour
     {
+        public Dialog ActiveDialog => dialog;
+        
         private Dialog dialog;     
         private VisualElement dialogAnchor;
 
@@ -27,11 +29,11 @@ namespace Netherlands3D.Twin.Services
             RemoveDialog(dialog);
         }
 
+        //todo make generic
         private Dialog CreateYesNoDialog()
         {
             Dialog dialog = new Dialog();
-            
-            
+            dialog.Show(false);
             return dialog;
         }
         

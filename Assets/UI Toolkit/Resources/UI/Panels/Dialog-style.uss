@@ -4,7 +4,7 @@
 
     
     translate: -50% -50%;
-    width: 380px;
+    width: 300px;
     height: auto;
     background-color: var(--color-white);
     border-radius: var(--border-radius-md);
@@ -13,12 +13,28 @@
 
 .dialog-panel__message {
     flex-grow: 1;   
-    margin-bottom: 0;
+    margin-top: var(--spacing-4);
 }
 
 .dialog-panel__buttons
 {
     flex-direction: row;
+    margin-top: var(--spacing-4);
+    justify-content: flex-end;
 }
 
+.dialog-panel .dialog-panel__buttons > *
+{
+    flex-grow: 1;
+    justify-content: center;
+}
 
+.dialog-panel .dialog-panel__accept-button
+{
+    margin-right: var(--spacing-4);
+}
+
+.dialog-panel .dialog-panel__reject-button
+{
+
+}

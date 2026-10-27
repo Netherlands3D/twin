@@ -7,10 +7,12 @@
     name="Dialog" 
     class="dialog-panel"
 >
-    <nl3d:Header/>
-    <ui:VisualElement name="Content" class="dialog-panel__message"/>
+    <nl3d:Header icon="Warning" text="Applicatie afsluiten"/>
+    <ui:VisualElement name="Content" class="dialog-panel__message">
+        <nl3d:TextCallOut text="Weet u zeker dat u de applicatie wilt &lt;color=#E35656&gt;afsluiten&lt;/color&gt;?"/>
+    </ui:VisualElement>
     <ui:VisualElement name="Content" class="dialog-panel__buttons">
-        <nl3d:Button name="Yes" button-style="Normal" LabelText="Ja"/>
-        <nl3d:Button name="No" button-style="Normal" LabelText="Nee"/>
+        <nl3d:Button name="Yes" button-style="Normal" LabelText="Ja" class="dialog-panel__accept-button"/>
+        <nl3d:Button name="No" button-style="Normal" LabelText="Nee" class="dialog-panel__reject-button"/>
     </ui:VisualElement>
 </ui:UXML>

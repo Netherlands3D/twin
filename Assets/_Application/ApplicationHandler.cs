@@ -1,4 +1,6 @@
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Services;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,7 +24,14 @@ namespace Netherlands3D.Twin
 
         public void PromptExitDialog()
         {
-            Debug.Log("Prompt Exit Dialog");
+            Dialog yesNoDialog = ServiceLocator.GetService<DialogService>().ActiveDialog;
+            yesNoDialog.Show(true);
+            yesNoDialog.Accept.AddListener(ApplicationQuit);
+        }
+
+        private void ApplicationQuit()
+        {
+            Application.Quit();
         }
     }
 }
