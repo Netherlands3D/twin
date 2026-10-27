@@ -73,3 +73,8 @@
 .default-hud__bottom-tools {
     flex-shrink: 0;
 }
+
+.default-hud__timeline-container {
+    margin-right: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+}
