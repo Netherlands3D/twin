@@ -24,6 +24,33 @@
     bottom: 0;
 }
 
+.timeline__scroll-area {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.timeline__scroll-area--left {
+    position: absolute;
+    left: 0;
+    width: 10%;
+    top: 0;
+    bottom: 0;
+    background-image: var(--image-transparent-horizontal-linear-gradient);
+    -unity-background-image-tint-color: rgba(1, 1, 1, .7);
+}
+
+.timeline__scroll-area--right {
+    position: absolute;
+    width: 10%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: var(--image-transparent-horizontal-linear-gradient);
+    -unity-background-image-tint-color: rgba(1, 1, 1, .7);
+    scale: -1 1;
+}
+
 .timeline__mark {
     position: absolute;
     top: 50%;
