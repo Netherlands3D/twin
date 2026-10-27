@@ -1,0 +1,16 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="Dialog" 
+    class="dialog-panel"
+>
+    <nl3d:Header/>
+    <ui:VisualElement name="Content" class="dialog-panel__message"/>
+    <ui:VisualElement name="Content" class="dialog-panel__buttons">
+        <nl3d:Button name="Yes" button-style="Normal" LabelText="Ja"/>
+        <nl3d:Button name="No" button-style="Normal" LabelText="Nee"/>
+    </ui:VisualElement>
+</ui:UXML>

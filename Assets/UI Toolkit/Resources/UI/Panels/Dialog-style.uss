@@ -1,0 +1,15 @@
+.dialog-panel {
+    flex-direction: column;
+}
+
+.dialog-panel__message {
+    flex-grow: 1;   
+    margin-bottom: 0;
+}
+
+.dialog-panel__buttons
+{
+    flex-direction: row;
+}
+
+
