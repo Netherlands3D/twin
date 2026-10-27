@@ -15,7 +15,7 @@ namespace Netherlands3D.Functionalities.Wms
         public int height;
         public bool transparent;
         public string title;
-
+        public long maxScaleDenominator;
         public static MapFilters FromUrl(Uri url)
         {
             var queryParameters = QueryString.Decode(url.Query);

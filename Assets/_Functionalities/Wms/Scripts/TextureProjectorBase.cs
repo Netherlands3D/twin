@@ -24,7 +24,7 @@ namespace Netherlands3D.Functionalities.Wms
         protected Texture2D texture;
         protected private Material materialInstance;
 
-        public virtual void Project(Texture2D tex, int size, float height, int renderIndex, float minDepth, bool isEnabled = true)
+        public virtual void Project(Texture2D tex, float size, float height, int renderIndex, float minDepth, bool isEnabled = true)
         {
             SetSize(size, size, size);
             gameObject.SetActive(isEnabled);

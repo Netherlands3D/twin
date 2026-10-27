@@ -12,6 +12,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Legend;
+using Netherlands3D.WMSTiles3D;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -19,12 +20,14 @@ namespace Netherlands3D.Functionalities.Wms
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
     [RequireComponent(typeof(WMSTileDataLayer))]
+    [RequireComponent(typeof(Read3DTileset))]
     [RequireComponent(typeof(ICredentialHandler))]
     public class WMSLayerGameObject : CartesianTileLayerGameObject, IVisualizationWithPropertyData
     {
         private WMSTileDataLayer wmsProjectionLayer;
-
+    private Read3DTileset read3DTileset;
         private ICredentialHandler credentialHandler;
+        
         
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
         public int DefaultEnabledLayersMax = 5; //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
@@ -42,6 +45,7 @@ namespace Netherlands3D.Functionalities.Wms
             base.OnVisualizationInitialize();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
             credentialHandler = GetComponent<ICredentialHandler>();
+            read3DTileset = GetComponent<Read3DTileset>();
         }
 
         protected override void OnVisualizationReady()
@@ -98,6 +102,7 @@ namespace Netherlands3D.Functionalities.Wms
                 (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
                 SetBoundingBox
             );
+           
 
             wmsProjectionLayer.SetAuthorization(auth);
             LayerData.HasValidCredentials = true;           
@@ -116,6 +121,7 @@ namespace Netherlands3D.Functionalities.Wms
             if (urlPropertyData == null) return;
             
             UpdateURL(urlPropertyData.Url);
+            //read3DTileset.wmsCapabilities = new WmsGetCapabilities(urlPropertyData.Url,null);
         }
 
         private void UpdateURL(Uri storedUri)
@@ -127,13 +133,14 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             wmsProjectionLayer.WmsUrl = storedUri.ToString();
-
+            read3DTileset.wmsUri = storedUri.ToString();
             string testUrl = storedUri.ToString().Replace("{0}", testBBox);
             testUrl = WidthRegex.Replace(testUrl, "${1}1");
             testUrl = HeightRegex.Replace(testUrl, "${1}1");
 
             credentialHandler.Uri = new Uri(testUrl);
             credentialHandler.ApplyCredentials();
+            read3DTileset.RefreshTiles();
         }
 
         protected override void RegisterEventListeners()

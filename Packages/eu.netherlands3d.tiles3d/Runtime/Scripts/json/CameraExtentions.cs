@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 
-
+namespace Netherlands3D.Tiles3D
+{
 public static class CameraExtensions
 {
     public static Vector3[] corners = new Vector3[4];
@@ -32,4 +33,5 @@ public static class CameraExtensions
         GeometryUtility.CalculateFrustumPlanes(camera, cameraFrustumPlanes);
         return GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, bounds);
     }
+}
 }
