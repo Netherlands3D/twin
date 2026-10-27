@@ -86,21 +86,23 @@ namespace Netherlands3D.UI.Components
                 return;
             }
 
-            var parts = new List<string>();
+            var dateParts = new List<string>();
 
-            if (Includes(DateTimeUnit.Day)) parts.Add("%d");
-            if (Includes(DateTimeUnit.Month)) parts.Add("MMM");
+            if (Includes(DateTimeUnit.Day)) dateParts.Add("%d");
+            if (Includes(DateTimeUnit.Month)) dateParts.Add("MMM");
             /*if (Includes(DateTimeUnit.Quarter))
             {
                 parts.Add("Q" + (1 + (value.Month / 4)));
             }*/
-            if (Includes(DateTimeUnit.Year)) parts.Add("yyyy");
+            if (Includes(DateTimeUnit.Year)) dateParts.Add("yyyy");
 
-            string timeFormat = null;
-            if ((Includes(DateTimeUnit.Hour) || Includes(DateTimeUnit.Minute)) && !Includes(DateTimeUnit.Second)) timeFormat = "HH:mm";
-            if (Includes(DateTimeUnit.Second)) timeFormat = "HH:mm:ss";
+            var timeParts = new List<string>();
+            
+            if (Includes(DateTimeUnit.Hour) || Includes(DateTimeUnit.Minute)) timeParts.Add("HH:mm");
+            if (Includes(DateTimeUnit.Second)) timeParts.Add(":ss");
 
-            var dateFormat = string.Join(" ", parts);
+            var dateFormat = string.Join(" ", dateParts);
+            var timeFormat = string.Join("", timeParts);
 
             var format = $"{dateFormat} {timeFormat}".Trim();
 
