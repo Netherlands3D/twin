@@ -67,6 +67,8 @@ namespace Netherlands3D.UI.Components
 
         private DateTime timelineDragInitialStartTime;
         private DateTime timelineDragInitialEndTime;
+        private double timelineDragMinPosition;
+        private double timelineDragMaxPosition;
 
         private bool isThumbDrag;
         private double thumbDragInitialThumbElementPosition;
@@ -329,13 +331,20 @@ namespace Netherlands3D.UI.Components
         {
             timelineDragInitialStartTime = startTime;
             timelineDragInitialEndTime = endTime;
+            
+            var position = Math.Clamp(
+                TimeToPosition(displayedCurrentTime, startTime, endTime),
+                0d, 1d);
+
+            timelineDragMinPosition = Math.Min(thumbScrollMinPosition, position);
+            timelineDragMaxPosition = Math.Max(thumbScrollMaxPosition, position);
         }
         
         private void OnTimelineDraggingTotal(Vector2 deltaPointerPosition)
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
             OffsetTimeRange(timelineDragInitialStartTime, timelineDragInitialEndTime, new TimeSpan(-offset));
-            var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * thumbScrollMinPosition, startTime.Ticks + duration.Ticks * thumbScrollMaxPosition);
+            var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * timelineDragMinPosition, startTime.Ticks + duration.Ticks * timelineDragMaxPosition);
             preciseCurrentTime = new DateTime(currentTicks, displayedCurrentTime.Kind);
             currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
             displayedCurrentTime = preciseCurrentTime;
@@ -503,8 +512,7 @@ namespace Netherlands3D.UI.Components
             {
                 var boundTime = (displayedCurrentTime < thumbMinTime) ? thumbMinTime : thumbMaxTime;
                 var offset = displayedCurrentTime - boundTime;
-                startTime = startTime.AddClamped(offset);
-                endTime = endTime.AddClamped(offset);
+                OffsetTimeRange(startTime, endTime, offset);
             }
             
             markElementsUpdateRequested = true;
