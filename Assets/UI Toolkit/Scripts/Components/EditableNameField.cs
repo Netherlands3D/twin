@@ -29,6 +29,12 @@ namespace Netherlands3D.UI.Components
             }
         }
 
+        public bool IsEditable
+        {
+            get => isEditable;
+            set => isEditable = value;
+        }
+
         public TextField InputField => inputField;
 
         private Label label; // we will switch between label and input field
@@ -36,6 +42,7 @@ namespace Netherlands3D.UI.Components
         private bool scrollingTextEnabled = true;
         private bool firstClickDone;
         private bool intervalExpired;
+        private bool isEditable = true;
       
         private IVisualElementScheduledItem clickTimer;
         [UxmlAttribute] public float ClickInterval { get; set; } = 0.5f;
@@ -147,6 +154,8 @@ namespace Netherlands3D.UI.Components
         
         private void OnNameLabelClicked(ClickEvent evt)
         {
+            if(!isEditable) return;
+            
             if (!firstClickDone) 
             {
                 //first click: start timer

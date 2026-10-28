@@ -6,10 +6,11 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class WorldText : VisualElement
+    public partial class WorldAnnotation : VisualElement
     {
         public EditableNameField NameField => nameField;
         public string Text => nameField.value;
+        public bool ReadOnly => isReadOnly;
         
         private VisualElement textContainer;
         private EditableNameField nameField;
@@ -17,12 +18,19 @@ namespace Netherlands3D.UI.Components
         private Icon position;
         private VisualElement background;
         
+        private const int MaxImageDimension = 512;
+        private WorldImage image;
+        
         public enum SnappingSide { Left, Right, Above }
         private SnappingSide snappingSide = SnappingSide.Above;
         private float labelOffsetToPosition = 0;
         private string currentText;
+        private bool isReadOnly = false;
 
-        public WorldText()
+        public const float Size = 5;
+        
+
+        public WorldAnnotation()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
@@ -33,6 +41,8 @@ namespace Netherlands3D.UI.Components
             position = this.Q<Icon>("Position");
             position.pickingMode = PickingMode.Ignore;
             background = this.Q<VisualElement>("Background");
+            image =  this.Q<WorldImage>();
+            image.ImageLoaded.AddListener(UpdateSnapping);
             
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             nameField.RegisterValueChangedCallback(OnNameChanged);
@@ -40,7 +50,7 @@ namespace Netherlands3D.UI.Components
             nameField.ScrollingTextEnabled = false;
         }
         
-        public WorldText(string text) : this()
+        public WorldAnnotation(string text) : this()
         {
             SetText(text);
         }
@@ -63,9 +73,21 @@ namespace Netherlands3D.UI.Components
             bool isEmpty = string.IsNullOrEmpty(currentText);
             placeholder.EnableInClassList(UtilityClassConstants.HIDDEN, !isEmpty);
         }
+
+        public void SetReadOnly(bool isReadOnly)
+        {
+            this.isReadOnly = isReadOnly;
+            nameField.IsEditable = !isReadOnly;
+        }
+
+        public void SetImage(string url)
+        {
+            image.SetImage(url);
+        }
         
         public void SetText(string text)
         {
+            currentText = text;
             nameField.value = text;
             UpdatePlaceholder();
         }
@@ -77,7 +99,10 @@ namespace Netherlands3D.UI.Components
 
         public void SetLabelOffset(float offset)
         {
+            bool changed = offset != labelOffsetToPosition;
             labelOffsetToPosition = offset;
+            if(changed)
+                UpdateSnapping();
         }
 
         private void UpdateSnapping()
@@ -106,6 +131,13 @@ namespace Netherlands3D.UI.Components
                 }
             }
             textContainer.style.translate = new Translate(offsetX, offsetY, 0);
+
+            float backgroundBorderHeight = background.resolvedStyle.height - textContainer.resolvedStyle.height;
+            image.style.translate = new Translate(
+                -image.resolvedStyle.width * 0.5f,
+                -image.resolvedStyle.height - labelOffsetToPosition - backgroundBorderHeight - textContainer.resolvedStyle.height * 0.5f,
+                0
+            );
         }
         
         private void UpdateContainerSize()
@@ -127,6 +159,7 @@ namespace Netherlands3D.UI.Components
             textContainer.style.backgroundColor = color;
             position.style.unityBackgroundImageTintColor = color;
             background.style.backgroundColor = color;
+            image.SetColor(color);
         }
     }
 }
