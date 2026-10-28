@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -72,14 +73,12 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLabels()
         {
-            contextLabel.EnableInClassList("hidden", true);
-            precisionLabel.EnableInClassList("hidden", false);
+            contextLabel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            precisionLabel.EnableInClassList(UtilityClassConstants.HIDDEN, false);
             
             precisionLabel.Context = unitPrecision;
             precisionLabel.Precision = unitPrecision;
             precisionLabel.Value = time;
         }
-        
     }
-
 }
