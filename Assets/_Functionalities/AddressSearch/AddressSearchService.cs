@@ -236,7 +236,7 @@ namespace Netherlands3D.AddressSearch
                     {
                         coordinate = bbox.Center;
                     }
-                    var result = new SuggestionResult(id, label, collectionId, score, bbox, hasBounds);
+                    var result = new SuggestionResult(id, label + $" ({collectionId})", collectionId, score, bbox, hasBounds);
                     string key = MakeKey(collectionId, label);
                     if (!uniqueSuggestions.TryGetValue(key, out SuggestionResult existing) || result.Score > existing.Score)
                     {
