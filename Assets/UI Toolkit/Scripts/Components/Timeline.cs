@@ -33,8 +33,7 @@ namespace Netherlands3D.UI.Components
         /// When false: (15:22:38 + 7) seconds with a roudning interval of 10 seconds will be rounded to 15:32:38.
         /// </summary>
         private readonly bool alignGroupedIntervals = true; 
-        
-        
+
 #endregion
        
         private readonly VisualElement marksContainer;
@@ -319,8 +318,8 @@ namespace Netherlands3D.UI.Components
             var startSpan = (currentTime - startTime);
             var endSpan = (endTime - currentTime);
             
-            startTime = currentTime - startSpan * zoomMultiplier;
-            endTime = currentTime + endSpan * zoomMultiplier;
+            startTime = currentTime.AddClamped(-startSpan * zoomMultiplier);
+            endTime = currentTime.AddClamped(endSpan * zoomMultiplier);
             duration = new TimeSpan(endTime.Ticks - startTime.Ticks);
             markElementsUpdateRequested = true;
             unitGroupsUpdateRequested = true;
@@ -335,7 +334,7 @@ namespace Netherlands3D.UI.Components
         private void OnTimelineDraggingTotal(Vector2 deltaPointerPosition)
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
-            SetTimeRange(timelineDragInitialStartTime.AddTicks(-offset), timelineDragInitialEndTime.AddTicks(-offset));
+            SetTimeRange(timelineDragInitialStartTime.AddTicksClamped(-offset), timelineDragInitialEndTime.AddTicksClamped(-offset));
             var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * thumbScrollMinPosition, startTime.Ticks + duration.Ticks * thumbScrollMaxPosition);
             preciseCurrentTime = new DateTime(currentTicks, displayedCurrentTime.Kind);
             currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
@@ -371,14 +370,14 @@ namespace Netherlands3D.UI.Components
             if (!isThumbDrag)
                 return;
 
-            currentTime = startTime.Add(thumbPosition * duration);
+            currentTime = startTime.AddClamped(thumbPosition * duration);
             
 
 
             SetCurrentTime();
             
             
-            preciseCurrentTime = startTime.Add(Math.Clamp(thumbPosition, 0, 1) * duration);
+            preciseCurrentTime = startTime.AddClamped(Math.Clamp(thumbPosition, 0, 1) * duration);
             currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
             displayedCurrentTime = preciseCurrentTime;
         }
@@ -395,8 +394,8 @@ namespace Netherlands3D.UI.Components
                 var scrollSpeed = exceededPxWidth / scrollAreaWidthPx;
                 scrollSpeed = (currentTime - boundTime) / duration / scrollAreaWidth;
                 var scrollOffset = scrollSpeed * maxScrollSpeed * Time.deltaTime * (endTime - startTime);
-                startTime = startTime.Add(scrollOffset);
-                endTime = endTime.Add(scrollOffset);
+                startTime = startTime.AddClamped(scrollOffset);
+                endTime = endTime.AddClamped(scrollOffset);
                 thumbElementTimeOffset = currentTime - boundTime;
 
             }
@@ -462,8 +461,8 @@ namespace Netherlands3D.UI.Components
             {
                 var boundTime = (currentTime < thumbScrollMinTime) ? thumbScrollMinTime : thumbScrollMaxTime;
                 var offset = currentTime - boundTime;
-                snapStartedTargetStartTime = snapStartedInitialStartTime.Add(offset);
-                snapStartedTargetEndTime = snapStartedInitialEndTime.Add(offset);
+                snapStartedTargetStartTime = snapStartedInitialStartTime.AddClamped(offset);
+                snapStartedTargetEndTime = snapStartedInitialEndTime.AddClamped(offset);
             }
         }
 
@@ -576,26 +575,25 @@ namespace Netherlands3D.UI.Components
             var maxMarkElements = (double)width / 10;
             var maxLabelElements = (double)width / 42;
 
-            var start = startTime;
-            var end = endTime;
+
 
             if (unitGroupsUpdateRequested)
             {
                 unitGroupsUpdateRequested = false;
-                marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, start,
-                    end, maxMarkElements);
+                marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, startTime,
+                    endTime, maxMarkElements);
                 snapInterval = marksInterval;//.Amount >= 1 ? new DateTimeInterval(marksInterval.TimeUnit, 1) : new DateTimeInterval(marksInterval.TimeUnit + 1, 1) ;
                 labelsInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision,
-                    start, end, maxLabelElements);
+                    startTime, endTime, maxLabelElements);
             }
 
             ticksPerPixel = (duration.Ticks) / width;
             var paddingTicks = (long)Math.Round(ticksPerPixel * 50d);
-            var markTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks),
-                end.AddTicks(paddingTicks), marksInterval, alignGroupedIntervals);
-            var labelTimes = DateTimeUtils.GetDateTimesBetween(start.AddTicks(-paddingTicks),
-                end.AddTicks(paddingTicks), labelsInterval, alignGroupedIntervals);
-            
+            var paddedStartTime = startTime.AddTicksClamped(-paddingTicks);
+            var paddedEndTime = endTime.AddTicksClamped(paddingTicks);
+            var markTimes = DateTimeUtils.GetDateTimesBetween(paddedStartTime, paddedEndTime, marksInterval, alignGroupedIntervals);
+            var labelTimes = DateTimeUtils.GetDateTimesBetween(paddedStartTime, paddedEndTime, labelsInterval, alignGroupedIntervals);
+
             var primaryMarkUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)(labelsInterval.Amount >= 1 ? labelsInterval.TimeUnit : labelsInterval.TimeUnit + 1)), (int)unitContext, (int)unitPrecision);
             var primaryLabelUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)(labelsInterval.Amount >= 1 ? labelsInterval.TimeUnit : labelsInterval.TimeUnit + 1)), (int)unitContext, (int)unitPrecision);
 
@@ -696,7 +694,7 @@ namespace Netherlands3D.UI.Components
                 var sunTimeService = ServiceLocator.GetService<SunTime>();
                 if (sunTimeService == null) return;
                 sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
-                sunTimeService.SetTime(currentTime);
+                //sunTimeService.SetTime(currentTime);
                 sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
                 lastCurrentTime = currentTime;
             }

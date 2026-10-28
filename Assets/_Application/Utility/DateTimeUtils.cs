@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Utility
@@ -56,8 +57,8 @@ namespace Netherlands3D.Twin.Utility
                 var count = endTime.Year - startTime.Year;
                 if (startTime.AddYears(count) > endTime) count--;
 
-                var previous = startTime.AddYears(count);
-                var next = startTime.AddYears(count + 1);
+                var previous = startTime.AddYearsClamped(count);
+                var next = startTime.AddYearsClamped(count + 1);
 
                 return count + (endTime - previous).TotalDays / (next - previous).TotalDays;
             }
@@ -67,8 +68,8 @@ namespace Netherlands3D.Twin.Utility
                 var count = (endTime.Year - startTime.Year) * 12 + endTime.Month - startTime.Month;
                 if (startTime.AddMonths(count) > endTime) count--;
 
-                var previous = startTime.AddMonths(count);
-                var next = startTime.AddMonths(count + 1);
+                var previous = startTime.AddMonthsClamped(count);
+                var next = startTime.AddMonthsClamped(count + 1);
 
                 return count + (endTime - previous).TotalDays / (next - previous).TotalDays;
             }
@@ -137,15 +138,15 @@ namespace Netherlands3D.Twin.Utility
                 var wholeAmount = (int)Math.Floor(interval.Amount);
                 var fraction = interval.Amount - wholeAmount;
                 var previous = (interval.TimeUnit == DateTimeUnit.Year)
-                    ? dateTime.AddYears(wholeAmount)
-                    : dateTime.AddMonths(wholeAmount);
+                    ? dateTime.AddYearsClamped(wholeAmount)
+                    : dateTime.AddMonthsClamped(wholeAmount);
                 if (fraction == 0) return previous;
 
                 var next = (interval.TimeUnit == DateTimeUnit.Year)
-                    ? dateTime.AddYears(wholeAmount + 1)
-                    : dateTime.AddMonths(wholeAmount + 1);
+                    ? dateTime.AddYearsClamped(wholeAmount + 1)
+                    : dateTime.AddMonthsClamped(wholeAmount + 1);
                 var ticks = (long)Math.Round((next.Ticks - previous.Ticks) * fraction);
-                return previous.AddTicks(ticks);
+                return previous.AddTicksClamped(ticks);
             }
             
             var ticksPerUnit = interval.TimeUnit switch
@@ -296,5 +297,56 @@ namespace Netherlands3D.Twin.Utility
             var index = GetPreviousIntervalIndex(time, interval, anchor);
             return (GetIntervalTime(anchor, interval, index), GetIntervalTime(anchor, interval, index + 1));
         }
+        
+        /// <summary>
+        /// Add value and clamp the returned result between DateTime.MinValue and DateTime.MaxValue
+        /// </summary>
+        public static DateTime AddClamped(this DateTime time, TimeSpan value)
+        {
+            return time.AddTicksClamped(value.Ticks);
+        }
+
+        public static DateTime AddYearsClamped(this DateTime time, int years)
+        {
+            var targetYear = (long)(time.Year - 1) + years;
+            return targetYear switch
+            {
+                < 0 => new DateTime(DateTime.MinValue.Ticks, time.Kind),
+                >= 9999L => new DateTime(DateTime.MaxValue.Ticks, time.Kind),
+                _ => time.AddYears(years)
+            };
+        }
+
+        public static DateTime AddMonthsClamped(this DateTime time, int months)
+        {
+            var targetMonth = (time.Year - 1) * 12L + (time.Month - 1) + months;
+            return targetMonth switch
+            {
+                < 0 => new DateTime(DateTime.MinValue.Ticks, time.Kind),
+                >= 9999L * 12 => new DateTime(DateTime.MaxValue.Ticks, time.Kind),
+                _ => time.AddMonths(months)
+            };
+        }
+
+        public static DateTime AddTicksClamped(this DateTime time, long value)
+        {
+            var ticks = time.Ticks;
+
+            if (value > DateTime.MaxValue.Ticks - ticks)
+            {
+                ticks = DateTime.MaxValue.Ticks;
+            }
+            else if (value < -ticks)
+            {
+                ticks = DateTime.MinValue.Ticks;
+            }
+            else
+            {
+                ticks += value;
+            }
+
+            return new DateTime(ticks, time.Kind);
+        }
+
     }
 }
