@@ -19,14 +19,24 @@ namespace Netherlands3D
         public string Tooltip { get; }
         public Color Color { get; }
         public Color TextColor { get; }
+        public bool SeparateOverlappingLabels { get; }
+        public float Width { get; }
 
-        public GeoJsonWorldLabel(Vector3 worldPosition, string text, string tooltip, Color color)
+        public GeoJsonWorldLabel(
+            Vector3 worldPosition,
+            string text,
+            string tooltip,
+            Color color,
+            bool separateOverlappingLabels = false,
+            float width = 42f)
         {
             WorldPosition = worldPosition;
             Text = text;
             Tooltip = tooltip;
             Color = color;
             TextColor = color.grayscale > 0.62f ? new Color(0.05f, 0.12f, 0.18f) : Color.white;
+            SeparateOverlappingLabels = separateOverlappingLabels;
+            Width = width;
         }
     }
 
@@ -36,7 +46,8 @@ namespace Netherlands3D
         RoadIntervention,
         RouteReference,
         SafetyObservations,
-        NoiseMeasurements
+        NoiseMeasurements,
+        AirQualityMeasurements
     }
 
     /// <summary>
@@ -83,39 +94,43 @@ namespace Netherlands3D
 
         public string Title => Kind switch
         {
-            GeoJsonPresentationKind.RoadIntervention => "Verkeer voor & na",
-            GeoJsonPresentationKind.RouteReference => "Routegeometrie",
-            GeoJsonPresentationKind.SafetyObservations => "Ervaren verkeersveiligheid",
-            GeoJsonPresentationKind.NoiseMeasurements => "Geluidsbelasting",
-            _ => "GeoJSON-weergave"
+            GeoJsonPresentationKind.RoadIntervention => "Traffic before & after",
+            GeoJsonPresentationKind.RouteReference => "Route geometry",
+            GeoJsonPresentationKind.SafetyObservations => "Perceived road safety",
+            GeoJsonPresentationKind.NoiseMeasurements => "Noise exposure",
+            GeoJsonPresentationKind.AirQualityMeasurements => "NO₂ concentration",
+            _ => "GeoJSON view"
         };
 
         public string ContextLabel => Kind switch
         {
             GeoJsonPresentationKind.RoadIntervention => GetRoadContext(),
-            GeoJsonPresentationKind.RouteReference => "Bronroutes · kleur per route-ID",
-            GeoJsonPresentationKind.SafetyObservations => "Kaleidoscope · antwoorden per kruispunt",
-            GeoJsonPresentationKind.NoiseMeasurements => "Waarneempunten · geluidsniveau per etmaalperiode",
+            GeoJsonPresentationKind.RouteReference => "Source routes · colour by route ID",
+            GeoJsonPresentationKind.SafetyObservations => "Kaleidoscope · responses per intersection",
+            GeoJsonPresentationKind.NoiseMeasurements => "Observation points · noise level by time of day",
+            GeoJsonPresentationKind.AirQualityMeasurements => GetAirQualityContext(),
             _ => string.Empty
         };
 
         public string FeatureCaption => Kind switch
         {
-            GeoJsonPresentationKind.RoadIntervention => "richtingen",
-            GeoJsonPresentationKind.RouteReference => "lijnsegmenten",
-            GeoJsonPresentationKind.SafetyObservations => "kruispunten",
-            GeoJsonPresentationKind.NoiseMeasurements => "meetpunten",
-            _ => "objecten"
+            GeoJsonPresentationKind.RoadIntervention => "directions",
+            GeoJsonPresentationKind.RouteReference => "line segments",
+            GeoJsonPresentationKind.SafetyObservations => "intersections",
+            GeoJsonPresentationKind.NoiseMeasurements => "measurement points",
+            GeoJsonPresentationKind.AirQualityMeasurements => "measurement points",
+            _ => "objects"
         };
 
         public string LegendTitle => SelectedMetric?.Name ?? string.Empty;
 
         public string LegendScaleLabel => Kind switch
         {
-            GeoJsonPresentationKind.RoadIntervention => "voertuigen/dag · vaste scenarioschaal",
-            GeoJsonPresentationKind.RouteReference => "route-ID · 1–9",
-            GeoJsonPresentationKind.SafetyObservations => "gewogen gemiddelde · 1–5",
-            GeoJsonPresentationKind.NoiseMeasurements => "dB · gezamenlijke schaal",
+            GeoJsonPresentationKind.RoadIntervention => "vehicles/day · fixed scenario scale",
+            GeoJsonPresentationKind.RouteReference => "route ID · 1–9",
+            GeoJsonPresentationKind.SafetyObservations => "weighted average · 1–5",
+            GeoJsonPresentationKind.NoiseMeasurements => "dB · shared scale",
+            GeoJsonPresentationKind.AirQualityMeasurements => "µg/m³ · shared 2025–2026 scale",
             _ => string.Empty
         };
 
@@ -124,15 +139,17 @@ namespace Netherlands3D
             get
             {
                 if (Kind == GeoJsonPresentationKind.RoadIntervention)
-                    return "Kleur en lijndikte tonen de intensiteit. Grijs betekent afgesloten of niet gemeten.";
+                    return "Colour and line width show intensity. Grey means closed or not measured.";
                 if (Kind == GeoJsonPresentationKind.RouteReference)
-                    return "Kleur groepeert segmenten met hetzelfde route-ID. Selecteer een lijn voor de brongegevens.";
+                    return "Colour groups segments with the same route ID. Select a line to view the source data.";
                 if (Kind == GeoJsonPresentationKind.NoiseMeasurements)
-                    return "Blauw is stiller, rood is luider. Selecteer een punt voor de exacte waarden.";
+                    return "Blue is quieter and red is louder. Select a point to view the exact values.";
+                if (Kind == GeoJsonPresentationKind.AirQualityMeasurements)
+                    return "Blue indicates a lower and red a higher period-average NO₂ concentration.";
                 if (Kind == GeoJsonPresentationKind.SafetyObservations)
                     return SelectedMetric?.PositiveIsGood == true
-                        ? "Rood is negatief, groen is positief. De kleur gebruikt alle antwoorden op dit kruispunt."
-                        : "Groen is rustiger, rood is drukker. De kleur gebruikt alle antwoorden op dit kruispunt.";
+                        ? "Red is negative and green is positive. The colour uses all responses at this intersection."
+                        : "Green is calmer and red is busier. The colour uses all responses at this intersection.";
                 return string.Empty;
             }
         }
@@ -211,24 +228,27 @@ namespace Netherlands3D
             switch (Kind)
             {
                 case GeoJsonPresentationKind.RoadIntervention:
-                    metrics.Add(new Metric("Motorvoertuigen", "count_motor_vehicles", 0f, 4000f));
-                    metrics.Add(new Metric("Fietsers", "count_bicycles", 0f, 1000f));
+                    metrics.Add(new Metric("Motor vehicles", "count_motor_vehicles", 0f, 4000f));
+                    metrics.Add(new Metric("Bicycles", "count_bicycles", 0f, 1000f));
                     break;
                 case GeoJsonPresentationKind.RouteReference:
-                    metrics.Add(new Metric("Route-ID", "id", 1f, 9f));
+                    metrics.Add(new Metric("Route ID", "id", 1f, 9f));
                     break;
                 case GeoJsonPresentationKind.SafetyObservations:
-                    metrics.Add(new Metric("Dit punt is veilig", "Dit punt is veilig", 1f, 5f, true, true));
-                    metrics.Add(new Metric("Veilig fietsen", "Ik kan hier veilig fietsen", 1f, 5f, true, true));
-                    metrics.Add(new Metric("Veilig wandelen", "Ik kan hier veilig wandelen", 1f, 5f, true, true));
-                    metrics.Add(new Metric("Verkeersdrukte", "Het is hier druk", 1f, 5f, false, true));
-                    metrics.Add(new Metric("Verkeer goed zichtbaar", "Ik zie verkeer goed aankomen", 1f, 5f, true, true));
+                    metrics.Add(new Metric("This location is safe", "Dit punt is veilig", 1f, 5f, true, true));
+                    metrics.Add(new Metric("Safe cycling", "Ik kan hier veilig fietsen", 1f, 5f, true, true));
+                    metrics.Add(new Metric("Safe walking", "Ik kan hier veilig wandelen", 1f, 5f, true, true));
+                    metrics.Add(new Metric("Traffic volume", "Het is hier druk", 1f, 5f, false, true));
+                    metrics.Add(new Metric("Traffic visibility", "Ik zie verkeer goed aankomen", 1f, 5f, true, true));
                     break;
                 case GeoJsonPresentationKind.NoiseMeasurements:
-                    metrics.Add(new Metric("Etmaal (Lden)", "DEN", 35f, 55f));
-                    metrics.Add(new Metric("Dag (Lday)", "DAY", 35f, 55f));
-                    metrics.Add(new Metric("Avond (Levening)", "EVE", 35f, 55f));
-                    metrics.Add(new Metric("Nacht (Lnight)", "NI", 35f, 55f));
+                    metrics.Add(new Metric("Day-evening-night (Lden)", "DEN", 35f, 55f));
+                    metrics.Add(new Metric("Day (Lday)", "DAY", 35f, 55f));
+                    metrics.Add(new Metric("Evening (Levening)", "EVE", 35f, 55f));
+                    metrics.Add(new Metric("Night (Lnight)", "NI", 35f, 55f));
+                    break;
+                case GeoJsonPresentationKind.AirQualityMeasurements:
+                    metrics.Add(new Metric("NO₂ concentration", "concentration_no2_ug_m3", 0f, 20f));
                     break;
             }
         }
@@ -266,35 +286,25 @@ namespace Netherlands3D
         private IReadOnlyList<GeoJsonWorldLabel> GetRoadWorldLabels(Metric metric)
         {
             var labels = new List<GeoJsonWorldLabel>();
-            var totalProperty = metric.PropertyKey.Replace("count_", "cross_section_");
-            foreach (var group in features.GroupBy(feature =>
-                         TryGetString(feature, "site_id", out var siteId)
-                             ? siteId
-                             : feature.Id?.ToString() ?? "feature"))
+            foreach (var feature in features)
             {
-                var first = group.First();
-                if (!TryGetFloat(first, totalProperty, out var value))
+                // Road-intervention files contain one feature and count per carriageway direction. Keep those
+                // directional values separate instead of collapsing the pair into one cross-section total.
+                if (!TryGetMetricValue(feature, metric, out var value)
+                    || !visualization.TryGetFeatureCenter(feature, out var position))
                     continue;
 
-                var positions = group
-                    .Select(feature => visualization.TryGetFeatureCenter(feature, out var center)
-                        ? (Vector3?)center
-                        : null)
-                    .Where(position => position.HasValue)
-                    .Select(position => position.Value)
-                    .ToList();
-                if (positions.Count == 0)
-                    continue;
-
-                var position = positions.Aggregate(Vector3.zero, (sum, current) => sum + current) / positions.Count;
                 var normalized = Mathf.InverseLerp(metric.Minimum, metric.Maximum, value);
                 var color = GetMetricColor(normalized, metric);
-                TryGetString(first, "street", out var street);
+                TryGetString(feature, "street", out var street);
+                TryGetString(feature, "direction", out var direction);
+                var directionLabel = string.IsNullOrWhiteSpace(direction) ? string.Empty : $" · {direction}";
                 labels.Add(new GeoJsonWorldLabel(
                     position,
                     FormatCompactValue(value),
-                    $"{street} · {metric.Name}: {value:0} voertuigen/dag",
-                    color));
+                    $"{street}{directionLabel} · {metric.Name}: {value:0} vehicles/day",
+                    color,
+                    true));
             }
             return labels;
         }
@@ -320,7 +330,7 @@ namespace Netherlands3D
                 labels.Add(new GeoJsonWorldLabel(
                     position,
                     $"R{group.Key}",
-                    $"Route {group.Key} · {group.Count()} segmenten",
+                    $"Route {group.Key} · {group.Count()} segments",
                     GetMetricColor(normalized, metric)));
             }
             return labels;
@@ -337,18 +347,33 @@ namespace Netherlands3D
 
                 var normalized = Mathf.InverseLerp(metric.Minimum, metric.Maximum, value);
                 var color = GetMetricColor(normalized, metric);
-                var text = Kind == GeoJsonPresentationKind.NoiseMeasurements
-                    ? value.ToString("0.0", CultureInfo.InvariantCulture)
-                    : value.ToString("0.0", CultureInfo.InvariantCulture);
-                var unit = Kind == GeoJsonPresentationKind.NoiseMeasurements ? " dB" : " / 5";
+                var valueText = value.ToString("0.0", CultureInfo.InvariantCulture);
+                var unit = Kind switch
+                {
+                    GeoJsonPresentationKind.NoiseMeasurements => " dB",
+                    GeoJsonPresentationKind.AirQualityMeasurements => " µg/m³",
+                    _ => " / 5"
+                };
+                var labelText = Kind is GeoJsonPresentationKind.AirQualityMeasurements
+                    or GeoJsonPresentationKind.NoiseMeasurements
+                    ? valueText + unit
+                    : valueText;
                 TryGetString(feature, "name", out var name);
                 if (string.IsNullOrWhiteSpace(name))
                     TryGetString(feature, "DESC_", out name);
+                if (string.IsNullOrWhiteSpace(name))
+                    TryGetString(feature, "location_name", out name);
                 labels.Add(new GeoJsonWorldLabel(
                     position,
-                    text,
-                    $"{name} · {metric.Name}: {text}{unit}",
-                    color));
+                    labelText,
+                    $"{name} · {metric.Name}: {valueText}{unit}",
+                    color,
+                    width: Kind switch
+                    {
+                        GeoJsonPresentationKind.AirQualityMeasurements => 86f,
+                        GeoJsonPresentationKind.NoiseMeasurements => 62f,
+                        _ => 42f
+                    }));
             }
             return labels;
         }
@@ -447,16 +472,21 @@ namespace Netherlands3D
         {
             var firstFeature = features.FirstOrDefault();
             if (firstFeature == null)
-                return "Voor- en nameting · vaste vergelijkingsschaal";
+                return "Before and after measurement · fixed comparison scale";
 
             TryGetString(firstFeature, "phase", out var phase);
             TryGetString(firstFeature, "measurement_period", out var period);
             var phaseLabel = string.Equals(phase, "before", StringComparison.OrdinalIgnoreCase)
-                ? "Nulmeting"
+                ? "Baseline measurement"
                 : string.Equals(phase, "after", StringComparison.OrdinalIgnoreCase)
-                    ? "Nameting"
-                    : "Meting";
+                    ? "Follow-up measurement"
+                    : "Measurement";
             return string.IsNullOrWhiteSpace(period) ? phaseLabel : $"{phaseLabel} · {FormatPeriod(period)}";
+        }
+
+        private string GetAirQualityContext()
+        {
+            return "28-day integrated average";
         }
 
         private static string FormatPeriod(string period)
@@ -464,13 +494,7 @@ namespace Netherlands3D
             if (!DateTime.TryParseExact(period, "yyyy-MM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
                 return period;
 
-            var month = date.Month switch
-            {
-                1 => "januari", 2 => "februari", 3 => "maart", 4 => "april", 5 => "mei", 6 => "juni",
-                7 => "juli", 8 => "augustus", 9 => "september", 10 => "oktober", 11 => "november",
-                12 => "december", _ => string.Empty
-            };
-            return $"{month} {date.Year}";
+            return date.ToString("MMMM yyyy", CultureInfo.InvariantCulture);
         }
 
         private static GeoJsonPresentationKind DetectKind(Feature feature)
@@ -494,7 +518,19 @@ namespace Netherlands3D
                 && TryGetFloat(feature, "DAY", out _))
                 return GeoJsonPresentationKind.NoiseMeasurements;
 
+            if (IsAirQualityFeature(feature))
+                return GeoJsonPresentationKind.AirQualityMeasurements;
+
             return GeoJsonPresentationKind.None;
+        }
+
+        private static bool IsAirQualityFeature(Feature feature)
+        {
+            return feature?.Geometry != null
+                   && feature.Geometry.Type is GeoJSONObjectType.Point or GeoJSONObjectType.MultiPoint
+                   && TryGetString(feature, "pollutant", out var pollutant)
+                   && string.Equals(pollutant, "NO2", StringComparison.OrdinalIgnoreCase)
+                   && TryGetFloat(feature, "concentration_no2_ug_m3", out _);
         }
 
         private bool MatchesKind(Feature feature)

@@ -8,43 +8,43 @@
     <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/Components/TimelineSlider-style.uss?fileID=7433441132597879392&amp;guid=dab2cfc6cb530482c9c019a075c9c97d&amp;type=3#TimelineSlider-style"/>
 
     <ui:VisualElement name="CollapsedView" class="timeline-slider__collapsed hidden">
-        <nl3d:Button name="OpenButton" icon="Clock" LabelText="Dataweergave tonen" button-style="WithIcon" tooltip="Toon de dataweergave voor de geselecteerde laag" />
+        <nl3d:Button name="OpenButton" icon="Clock" LabelText="Show data view" button-style="WithIcon" tooltip="Show the data view for the selected layer" />
     </ui:VisualElement>
 
     <ui:VisualElement name="ExpandedView" class="timeline-slider__panel">
         <ui:VisualElement class="timeline-slider__header">
             <nl3d:Icon name="HeaderIcon" image="Clock" color="Blue700" class="timeline-slider__header-icon" />
             <ui:VisualElement class="timeline-slider__heading">
-                <ui:Label name="TitleLabel" text="Verkeersintensiteit" class="timeline-slider__title text-header" />
+                <ui:Label name="TitleLabel" text="Traffic intensity" class="timeline-slider__title text-header" />
                 <ui:Label name="LayerLabel" class="timeline-slider__subtitle" />
             </ui:VisualElement>
-            <nl3d:Button name="CloseButton" icon="Close" button-style="IconOnly" tooltip="Tijdlijn verbergen" class="timeline-slider__close" />
+            <nl3d:Button name="CloseButton" icon="Close" button-style="IconOnly" tooltip="Hide timeline" class="timeline-slider__close" />
         </ui:VisualElement>
 
         <ui:VisualElement name="TrafficControls" class="timeline-slider__controls">
             <ui:VisualElement class="timeline-slider__field">
-                <ui:Label text="Voertuigtype" class="timeline-slider__field-label" />
+                <ui:Label text="Vehicle type" class="timeline-slider__field-label" />
                 <nl3d:DropDown name="VehicleDropdown" dropdown-style="Text" class="timeline-slider__dropdown" />
             </ui:VisualElement>
             <ui:VisualElement class="timeline-slider__field">
-                <ui:Label text="Dagprofiel" class="timeline-slider__field-label" />
+                <ui:Label text="Day profile" class="timeline-slider__field-label" />
                 <nl3d:DropDown name="DayTypeDropdown" dropdown-style="Text" class="timeline-slider__dropdown" />
             </ui:VisualElement>
             <ui:VisualElement class="timeline-slider__summary">
                 <ui:Label name="RouteCountLabel" class="timeline-slider__route-count text-header" />
-                <ui:Label text="zichtbare routes" class="timeline-slider__route-caption" />
-                <nl3d:CheckboxToggle name="TrafficWorldLabelsToggle" LabelText="Waarden op kaart" class="timeline-slider__world-label-toggle" />
+                <ui:Label text="visible routes" class="timeline-slider__route-caption" />
+                <nl3d:CheckboxToggle name="TrafficWorldLabelsToggle" LabelText="Values on map" class="timeline-slider__world-label-toggle" />
             </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="DataPresentationControls" class="timeline-slider__controls hidden">
             <ui:VisualElement class="timeline-slider__field">
-                <ui:Label text="Toon op kleur" class="timeline-slider__field-label" />
+                <ui:Label text="Colour by" class="timeline-slider__field-label" />
                 <nl3d:DropDown name="MetricDropdown" dropdown-style="Text" class="timeline-slider__dropdown" />
             </ui:VisualElement>
             <ui:VisualElement class="timeline-slider__presentation-meta">
                 <ui:Label name="PresentationContextLabel" class="timeline-slider__context" />
-                <nl3d:CheckboxToggle name="WorldLabelsToggle" LabelText="Waarden op kaart" class="timeline-slider__world-label-toggle" />
+                <nl3d:CheckboxToggle name="WorldLabelsToggle" LabelText="Values on map" class="timeline-slider__world-label-toggle" />
             </ui:VisualElement>
             <ui:VisualElement class="timeline-slider__summary">
                 <ui:Label name="FeatureCountLabel" class="timeline-slider__route-count text-header" />
@@ -53,13 +53,13 @@
         </ui:VisualElement>
 
         <ui:VisualElement name="TimeControls" class="timeline-slider__time-row">
-            <nl3d:Button name="PreviousHourButton" icon="Backward" button-style="IconOnly" tooltip="Een uur terug" class="timeline-slider__step-button" />
-            <nl3d:Button name="PlaybackButton" icon="Play" button-style="IconOnly" tooltip="Afspelen · 1 uur per 2 seconden" class="timeline-slider__step-button timeline-slider__play-button" />
+            <nl3d:Button name="PreviousHourButton" icon="Backward" button-style="IconOnly" tooltip="Previous hour" class="timeline-slider__step-button" />
+            <nl3d:Button name="PlaybackButton" icon="Play" button-style="IconOnly" tooltip="Play · 1 hour per 2 seconds" class="timeline-slider__step-button timeline-slider__play-button" />
             <ui:VisualElement class="timeline-slider__time-readout">
                 <ui:Label name="CurrentTimeLabel" text="00:00" class="timeline-slider__current-time text-header" />
-                <ui:Label name="PlaybackStatusLabel" text="Data: 00:00 – 00:59 · 1 uur per 2 sec" class="timeline-slider__playback-rate" />
+                <ui:Label name="PlaybackStatusLabel" text="Data: 00:00 – 00:59 · 1 hour per 2 sec" class="timeline-slider__playback-rate" />
             </ui:VisualElement>
-            <nl3d:Button name="NextHourButton" icon="Forward" button-style="IconOnly" tooltip="Een uur vooruit" class="timeline-slider__step-button" />
+            <nl3d:Button name="NextHourButton" icon="Forward" button-style="IconOnly" tooltip="Next hour" class="timeline-slider__step-button" />
         </ui:VisualElement>
 
         <nl3d:Slider name="Timeline" header-type="NoHeader" show-number-field="false" scroll-step="1" class="timeline-slider__slider" low-value="0" high-value="23" />
@@ -73,7 +73,7 @@
 
         <ui:VisualElement name="TrafficLegend" class="timeline-slider__legend">
             <ui:VisualElement class="timeline-slider__legend-header">
-                <ui:Label name="LegendTitleLabel" text="Relatieve verkeersintensiteit" class="timeline-slider__legend-title text-header" />
+                <ui:Label name="LegendTitleLabel" text="Relative traffic intensity" class="timeline-slider__legend-title text-header" />
                 <ui:Label name="LegendScaleLabel" class="timeline-slider__legend-scale" />
             </ui:VisualElement>
             <ui:VisualElement class="timeline-slider__legend-bar">
@@ -90,9 +90,9 @@
                 <ui:Label name="LegendLabel3" />
                 <ui:Label name="LegendLabel4" class="timeline-slider__legend-label--last" />
             </ui:VisualElement>
-            <ui:Label name="LegendExplanation" text="Kleur en lijndikte tonen de intensiteit; selecteer een route voor de exacte waarde." class="timeline-slider__legend-explanation" />
+            <ui:Label name="LegendExplanation" text="Colour and line width show intensity; select a route for the exact value." class="timeline-slider__legend-explanation" />
         </ui:VisualElement>
 
-        <ui:Label name="LoadingLabel" text="Verkeersgegevens worden verwerkt…" class="timeline-slider__loading hidden" />
+        <ui:Label name="LoadingLabel" text="Processing traffic data…" class="timeline-slider__loading hidden" />
     </ui:VisualElement>
 </ui:UXML>

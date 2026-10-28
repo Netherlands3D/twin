@@ -64,7 +64,7 @@ namespace Netherlands3D
         public bool SupportsWorldLabels => HasTrafficData || HasPresentationData;
         public bool HasContextualData => HasTimelineData || HasPresentationData;
         public bool ParsingComplete { get; private set; }
-        public bool WorldLabelsEnabled { get; private set; }
+        public bool WorldLabelsEnabled { get; private set; } = true;
         public IReadOnlyList<string> AvailableVehicleTypes => availableVehicleTypes;
         public IReadOnlyList<string> AvailableDayTypes => availableDayTypes;
         public string SelectedVehicleType { get; private set; }
@@ -73,7 +73,7 @@ namespace Netherlands3D
         public int CurrentHour => currentTime.Hour;
         public int RenderedTrafficHour { get; private set; } = -1;
         public int VisibleRouteCount { get; private set; }
-        public string LayerName => visualization?.LayerData?.Name ?? "Verkeersdata";
+        public string LayerName => visualization?.LayerData?.Name ?? "Traffic data";
         public GeoJsonPresentationKind PresentationKind => presentation?.Kind ?? GeoJsonPresentationKind.None;
         public IReadOnlyList<string> PresentationMetricNames => presentation?.MetricNames ?? Array.Empty<string>();
         public string SelectedPresentationMetric => presentation?.SelectedMetricName ?? string.Empty;
@@ -226,6 +226,7 @@ namespace Netherlands3D
 
             presentation.SelectMetric(index);
             TimelineStateChanged?.Invoke(this);
+            WorldLabelStateChanged?.Invoke();
         }
 
         public void SetWorldLabelsEnabled(bool enabled)
@@ -277,7 +278,7 @@ namespace Netherlands3D
                     position,
                     text,
                     $"{routeName} · {GetVehicleDisplayName(SelectedVehicleType)}, "
-                    + $"{GetDayTypeDisplayName(SelectedDayType)} {RenderedTrafficHour:00}:00: {count:0.#} voertuigen/uur",
+                    + $"{GetDayTypeDisplayName(SelectedDayType)} {RenderedTrafficHour:00}:00: {count:0.#} vehicles/hour",
                     GetTrafficColor(normalized)));
             }
 

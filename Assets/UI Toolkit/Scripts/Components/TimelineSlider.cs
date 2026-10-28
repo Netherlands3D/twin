@@ -20,6 +20,8 @@ namespace Netherlands3D.UI.Components
     public partial class TimelineSlider : VisualElement
     {
         private const float PlaybackSecondsPerSecond = 1800f;
+        private const float WorldLabelHeight = 24f;
+        private const float WorldLabelSpacing = 4f;
         private static readonly float[] LegendStops = { 0f, 0.25f, 0.5f, 0.75f, 1f };
 
         private readonly List<string> vehicleKeys = new();
@@ -291,18 +293,19 @@ namespace Netherlands3D.UI.Components
 
             titleLabel.text = isPresentation
                 ? activeTimeline.PresentationTitle
-                : isTraffic ? "Verkeersintensiteit" : "Tijdlijn";
+                : isTraffic ? "Traffic intensity" : "Timeline";
             layerLabel.text = activeTimeline.LayerName;
             headerIcon.Image = isPresentation ? "PresentationChart" : "Clock";
             openButton.Image = isPresentation ? "PresentationChart" : "Clock";
-            openButton.LabelText = isPresentation ? "Dataweergave tonen" : "Tijdlijn tonen";
+            openButton.LabelText = isPresentation ? "Show data view" : "Show timeline";
             trafficControls.EnableInClassList(UtilityClassConstants.HIDDEN, !isTraffic);
             presentationControls.EnableInClassList(UtilityClassConstants.HIDDEN, !isPresentation);
             timeControls.EnableInClassList(UtilityClassConstants.HIDDEN, isPresentation);
             slider.EnableInClassList(UtilityClassConstants.HIDDEN, isPresentation);
             trafficLegend.EnableInClassList(UtilityClassConstants.HIDDEN, !isTraffic && !isPresentation);
             trafficTicks.EnableInClassList(UtilityClassConstants.HIDDEN, !isTraffic);
-            loadingLabel.text = isPresentation ? "GeoJSON-weergave wordt voorbereid…" : "Verkeersgegevens worden verwerkt…";
+            playbackButton.style.display = DisplayStyle.Flex;
+            loadingLabel.text = isPresentation ? "Preparing GeoJSON view…" : "Processing traffic data…";
             loadingLabel.EnableInClassList(
                 UtilityClassConstants.HIDDEN,
                 activeTimeline.ParsingComplete);
@@ -401,12 +404,12 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLegend()
         {
-            legendTitleLabel.text = "Relatieve verkeersintensiteit";
-            legendExplanationLabel.text = "Kleur en lijndikte tonen de intensiteit; selecteer een route voor de exacte waarde.";
+            legendTitleLabel.text = "Relative traffic intensity";
+            legendExplanationLabel.text = "Colour and line width show intensity; select a route for the exact value.";
             var maximum = activeTimeline.GetScaleMaximumForSelectedVehicle();
             legendScaleLabel.text = maximum > 0f
-                ? $"voertuigen/uur · schaal tot P95 ({FormatCount(maximum)})"
-                : "voertuigen/uur";
+                ? $"vehicles/hour · scale to P95 ({FormatCount(maximum)})"
+                : "vehicles/hour";
 
             for (var i = 0; i < LegendStops.Length; i++)
             {
@@ -548,8 +551,8 @@ namespace Netherlands3D.UI.Components
 
             playbackButton.Image = isPlaying ? "Pause" : "Play";
             playbackButton.tooltip = isPlaying
-                ? "Pauzeren"
-                : "Afspelen · 1 uur per 2 seconden";
+                ? "Pause"
+                : "Play · 1 hour per 2 seconds";
             playbackButton.EnableInClassList("timeline-slider__play-button--active", isPlaying);
         }
 
@@ -565,7 +568,7 @@ namespace Netherlands3D.UI.Components
             slider.SetValueWithoutNotify(GetTrafficSliderValue(selectedTime));
             currentTimeLabel.text = selectedTime.ToString("HH:mm");
             playbackStatusLabel.text =
-                $"Data: {renderedHour:00}:00 – {renderedHour:00}:59 · 1 uur per 2 sec";
+                $"Data: {renderedHour:00}:00 – {renderedHour:00}:59 · 1 hour per 2 sec";
         }
 
         private void SetTrafficTime(float timelineHour)
@@ -602,8 +605,9 @@ namespace Netherlands3D.UI.Components
             var stylesheet = Resources.Load<StyleSheet>("UI/Components/TimelineSlider-style");
             if (stylesheet != null)
                 worldLabelOverlay.styleSheets.Add(stylesheet);
-            uiRoot.Add(worldLabelOverlay);
-            worldLabelOverlay.BringToFront();
+            // The overlay belongs above the 3D viewport but below all regular interface panels and controls.
+            // Inserting it first gives subsequent HUD siblings the correct visual and picking priority.
+            uiRoot.Insert(0, worldLabelOverlay);
 
             ApplyWorldLabelVisibility();
         }
@@ -633,7 +637,7 @@ namespace Netherlands3D.UI.Components
                         label.AddToClassList("geojson-world-label");
                         label.style.backgroundColor = data.Color;
                         label.style.color = data.TextColor;
-                        label.style.width = 42f;
+                        label.style.width = data.Width;
                         worldLabelOverlay.Add(label);
                         worldLabelElements.Add(new WorldLabelElement(label, data));
                     }
@@ -675,6 +679,7 @@ namespace Netherlands3D.UI.Components
 
             var rootBounds = uiRoot.Root.worldBound;
             var overlayOffset = worldLabelOverlay.worldBound.position;
+            var visibleLabels = new List<WorldLabelElement>();
             foreach (var item in worldLabelElements)
             {
                 var screenPosition = activeCamera.WorldToScreenPoint(item.Data.WorldPosition);
@@ -690,9 +695,56 @@ namespace Netherlands3D.UI.Components
                 if (!onScreen)
                     continue;
 
-                var localPosition = panelPosition - overlayOffset;
-                item.Label.style.left = localPosition.x - 21f;
-                item.Label.style.top = localPosition.y - 12f;
+                item.ResolvedPosition = panelPosition - overlayOffset;
+                visibleLabels.Add(item);
+            }
+
+            ResolveWorldLabelOverlaps(visibleLabels
+                .Where(item => item.Data.SeparateOverlappingLabels)
+                .ToList());
+            foreach (var item in visibleLabels)
+            {
+                item.Label.style.left = item.ResolvedPosition.x - item.Data.Width * 0.5f;
+                item.Label.style.top = item.ResolvedPosition.y - WorldLabelHeight * 0.5f;
+            }
+        }
+
+        private static void ResolveWorldLabelOverlaps(IReadOnlyList<WorldLabelElement> labels)
+        {
+            // Directional road geometries are only a few metres apart, while their badges are 42 pixels wide.
+            // Gently separate projected badges so both carriageway values remain legible at ordinary zoom levels.
+            for (var iteration = 0; iteration < 4; iteration++)
+            {
+                for (var leftIndex = 0; leftIndex < labels.Count; leftIndex++)
+                {
+                    for (var rightIndex = leftIndex + 1; rightIndex < labels.Count; rightIndex++)
+                    {
+                        var left = labels[leftIndex];
+                        var right = labels[rightIndex];
+                        var delta = right.ResolvedPosition - left.ResolvedPosition;
+                        var overlapX = (left.Data.Width + right.Data.Width) * 0.5f
+                                       + WorldLabelSpacing
+                                       - Mathf.Abs(delta.x);
+                        var overlapY = WorldLabelHeight + WorldLabelSpacing - Mathf.Abs(delta.y);
+                        if (overlapX <= 0f || overlapY <= 0f)
+                            continue;
+
+                        if (overlapX < overlapY)
+                        {
+                            var direction = Mathf.Approximately(delta.x, 0f) ? 1f : Mathf.Sign(delta.x);
+                            var adjustment = Vector2.right * (direction * overlapX * 0.5f);
+                            left.ResolvedPosition -= adjustment;
+                            right.ResolvedPosition += adjustment;
+                        }
+                        else
+                        {
+                            var direction = Mathf.Approximately(delta.y, 0f) ? 1f : Mathf.Sign(delta.y);
+                            var adjustment = Vector2.up * (direction * overlapY * 0.5f);
+                            left.ResolvedPosition -= adjustment;
+                            right.ResolvedPosition += adjustment;
+                        }
+                    }
+                }
             }
         }
 
@@ -730,6 +782,7 @@ namespace Netherlands3D.UI.Components
         {
             public Label Label { get; }
             public GeoJsonWorldLabel Data { get; }
+            public Vector2 ResolvedPosition { get; set; }
 
             public WorldLabelElement(Label label, GeoJsonWorldLabel data)
             {
