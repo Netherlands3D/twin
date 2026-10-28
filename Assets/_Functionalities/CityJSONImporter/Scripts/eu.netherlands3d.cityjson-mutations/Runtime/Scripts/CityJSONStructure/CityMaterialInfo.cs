@@ -1,4 +1,4 @@
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using UnityEngine;
 
 namespace Netherlands3D.CityJson.Structure
