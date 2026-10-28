@@ -381,6 +381,7 @@ namespace Netherlands3D.UI.Components
         
         private void OnTimelineDragEnded(Vector2 endPointerPosition)
         {
+            rootTime = currentTime;
             StartSnap();
         }
 
@@ -446,7 +447,7 @@ namespace Netherlands3D.UI.Components
             isThumbDrag = false;
 
             currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
-            Debug.Log($"Round {preciseCurrentTime} {snapInterval} {rootTime}: {currentTime}");
+            rootTime = currentTime;
 
             markElementsUpdateRequested = true;
             
