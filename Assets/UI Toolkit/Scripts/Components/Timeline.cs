@@ -477,9 +477,13 @@ namespace Netherlands3D.UI.Components
             if (currentTime < thumbScrollMinTime || currentTime > thumbScrollMaxTime)
             {
                 var boundTime = (currentTime < thumbScrollMinTime) ? thumbScrollMinTime : thumbScrollMaxTime;
-                var offset = currentTime - boundTime;
-                snapStartedTargetStartTime = snapStartedInitialStartTime.AddClamped(offset);
-                snapStartedTargetEndTime = snapStartedInitialEndTime.AddClamped(offset);
+  
+                var offsetTicks = Math.Clamp((currentTime - boundTime).Ticks, 
+                    DateTime.MinValue.Ticks - snapStartedInitialStartTime.Ticks, 
+                    DateTime.MaxValue.Ticks - snapStartedInitialEndTime.Ticks);
+
+                snapStartedTargetStartTime = snapStartedInitialStartTime.AddTicks(offsetTicks);
+                snapStartedTargetEndTime = snapStartedInitialEndTime.AddTicks(offsetTicks);
             }
         }
 

@@ -108,9 +108,6 @@ namespace Netherlands3D.Twin.Utility
                     results.Add(time);
                 }
             }
-            
-            Debug.Log($"GetDateTimesBetween {startTime} {endTime} {interval} {results.Count}");
-            
         }
         
         
