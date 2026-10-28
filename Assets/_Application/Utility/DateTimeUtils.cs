@@ -168,7 +168,7 @@ namespace Netherlands3D.Twin.Utility
                 _ => throw new ArgumentOutOfRangeException(nameof(interval.TimeUnit))
             };
 
-            return dateTime.AddTicks(
+            return dateTime.AddTicksClamped(
                 checked((long)Math.Round(interval.Amount * ticksPerUnit)));
         }
         

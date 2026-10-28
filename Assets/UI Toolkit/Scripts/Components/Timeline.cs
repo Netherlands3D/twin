@@ -334,7 +334,7 @@ namespace Netherlands3D.UI.Components
         private void OnTimelineDraggingTotal(Vector2 deltaPointerPosition)
         {
             var offset = (long)Math.Round(ticksPerPixel * deltaPointerPosition.x);
-            SetTimeRange(timelineDragInitialStartTime.AddTicksClamped(-offset), timelineDragInitialEndTime.AddTicksClamped(-offset));
+            OffsetTimeRange(timelineDragInitialStartTime, timelineDragInitialEndTime, new TimeSpan(-offset));
             var currentTicks  = (long)Math.Clamp(displayedCurrentTime.Ticks, startTime.Ticks + duration.Ticks * thumbScrollMinPosition, startTime.Ticks + duration.Ticks * thumbScrollMaxPosition);
             preciseCurrentTime = new DateTime(currentTicks, displayedCurrentTime.Kind);
             currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
@@ -394,8 +394,10 @@ namespace Netherlands3D.UI.Components
                 var scrollSpeed = exceededPxWidth / scrollAreaWidthPx;
                 scrollSpeed = (currentTime - boundTime) / duration / scrollAreaWidth;
                 var scrollOffset = scrollSpeed * maxScrollSpeed * Time.deltaTime * (endTime - startTime);
-                startTime = startTime.AddClamped(scrollOffset);
-                endTime = endTime.AddClamped(scrollOffset);
+  
+                OffsetTimeRange(startTime, endTime, scrollOffset);
+                
+                duration = endTime - startTime;
                 thumbElementTimeOffset = currentTime - boundTime;
 
             }
@@ -421,6 +423,12 @@ namespace Netherlands3D.UI.Components
                 markElementsUpdateRequested = true;
                 unitGroupsUpdateRequested = true;
             }
+        }
+
+        private void OffsetTimeRange(DateTime start, DateTime end, TimeSpan timespan)
+        {
+            var clampedScrollOffset = TimeSpan.FromTicks(Math.Clamp(timespan.Ticks, DateTime.MinValue.Ticks - start.Ticks, DateTime.MaxValue.Ticks - end.Ticks));
+            SetTimeRange(start.AddClamped(clampedScrollOffset), end.AddClamped(clampedScrollOffset));
         }
 
         private void SetTimeRange(DateTime newStartTime, DateTime newEndTime)
