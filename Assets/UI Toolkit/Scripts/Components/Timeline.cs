@@ -53,6 +53,9 @@ namespace Netherlands3D.UI.Components
         private DateTime startTime;
         private DateTime endTime;
         private TimeSpan duration;
+        private TimeSpan minDuration = new TimeSpan(0, 10, 0);
+        private TimeSpan maxDuration = new TimeSpan(365 * 2000, 0, 0, 0);
+        
         private double thumbPosition;
         
         private double ticksPerPixel;
@@ -320,8 +323,33 @@ namespace Netherlands3D.UI.Components
             var startSpan = (currentTime - startTime);
             var endSpan = (endTime - currentTime);
             
-            startTime = currentTime.AddClamped(-startSpan * zoomMultiplier);
-            endTime = currentTime.AddClamped(endSpan * zoomMultiplier);
+            var newStartTime = currentTime.AddClamped(-startSpan * zoomMultiplier);
+            var newEndTime = currentTime.AddClamped(endSpan * zoomMultiplier);
+
+            var newDuration = newEndTime - newStartTime;
+            
+            if (newDuration.Ticks < minDuration.Ticks)
+            {
+                var diff = minDuration - newDuration;
+                var startFraction = startSpan / (startSpan + endSpan);
+                var diffStart = diff * startFraction;
+                var diffEnd = diff * (1 - startFraction);
+                newStartTime = newStartTime.AddClamped(-diffStart);
+                newEndTime = newEndTime.AddClamped(diffEnd);
+            }
+            
+            if (newDuration.Ticks > maxDuration.Ticks)
+            {
+                var diff = maxDuration - newDuration;
+                var startFraction = startSpan / (startSpan + endSpan);
+                var diffStart = diff * startFraction;
+                var diffEnd = diff * (1 - startFraction);
+                newStartTime = newStartTime.AddClamped(-diffStart);
+                newEndTime = newEndTime.AddClamped(diffEnd);
+            }
+            
+            startTime = newStartTime;
+            endTime = newEndTime;
             duration = new TimeSpan(endTime.Ticks - startTime.Ticks);
             markElementsUpdateRequested = true;
             unitGroupsUpdateRequested = true;
