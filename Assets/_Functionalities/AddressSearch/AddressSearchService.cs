@@ -25,15 +25,17 @@ namespace Netherlands3D.AddressSearch
     {
         public readonly string Id;
         public readonly string Label;
+        public readonly string DisplayLabel;
         public readonly string CollectionId;
         public readonly float Score;
         public readonly BoundingBox BoundingBox;
         public readonly bool HasCoordinates;
 
-        public SuggestionResult(string id, string label, string collectionId, float score, BoundingBox boundingBox, bool hasCoordinates)
+        public SuggestionResult(string id, string label, string displayLabel, string collectionId, float score, BoundingBox boundingBox, bool hasCoordinates)
         {
             Id = id;
             Label = label;
+            DisplayLabel = label + ", " + displayLabel;
             CollectionId = collectionId;
             Score = score;
             BoundingBox = boundingBox;
@@ -98,6 +100,25 @@ namespace Netherlands3D.AddressSearch
         private WorldUIService worldUIService;
         private Coordinate targetCoordinate;
         private string targetId;
+        
+        private static readonly Dictionary<string, string> CollectionDisplayNames = new()
+        {
+            { "adres", "Adres" },
+            { "woonplaats", "Woonplaats" },
+            { "gemeentegebied", "Gemeente" },
+            { "provinciegebied", "Provincie" },
+            { "plaats", "Plaats" },
+            { "perceel", "Perceel" },
+            { "gebouw", "Gebouw" },
+            { "wegdeel", "Weg" },
+            { "waterdeel", "Water" },
+            { "spoorbaandeel", "Spoor" },
+            { "geografisch_gebied", "Gebied" },
+            { "functioneel_gebied", "Functioneel gebied" },
+            { "inrichtingselement", "Inrichtingselement" },
+        };
+
+        public static string GetDisplayName(string collectionId) => CollectionDisplayNames.TryGetValue(collectionId, out var name) ? name : collectionId;
 
         private static string MakeKey(string collectionId, string label) => collectionId + ":" + label.Trim().ToLowerInvariant();
 
@@ -236,7 +257,7 @@ namespace Netherlands3D.AddressSearch
                     {
                         coordinate = bbox.Center;
                     }
-                    var result = new SuggestionResult(id, label + $" ({collectionId})", collectionId, score, bbox, hasBounds);
+                    var result = new SuggestionResult(id, label, GetDisplayName(collectionId), collectionId, score, bbox, hasBounds);
                     string key = MakeKey(collectionId, label);
                     if (!uniqueSuggestions.TryGetValue(key, out SuggestionResult existing) || result.Score > existing.Score)
                     {
@@ -281,7 +302,7 @@ namespace Netherlands3D.AddressSearch
                 return;
             }
 
-            targetId = suggestion.Label;
+            targetId = suggestion.DisplayLabel;
 
             if (string.Equals(suggestion.CollectionId, "adres", StringComparison.OrdinalIgnoreCase))
             {
