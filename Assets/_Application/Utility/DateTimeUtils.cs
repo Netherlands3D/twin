@@ -232,7 +232,7 @@ namespace Netherlands3D.Twin.Utility
 
             var offset = interval.TimeUnit switch
             {
-                DateTimeUnit.Year => 0,
+                DateTimeUnit.Year => rootTime.Year - interval.Amount,
                 DateTimeUnit.Month => rootTime.Month - 1,
                 DateTimeUnit.Day => rootTime.Day - 1,
                 DateTimeUnit.Hour => rootTime.Hour,
