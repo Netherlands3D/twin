@@ -1,3 +1,4 @@
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -118,7 +119,7 @@ namespace Netherlands3D.UI.Components
 
         private void ApplyInputFieldVisibility()
         {
-            inputField?.EnableInClassList("hidden", !showNumberInputField);
+            inputField?.EnableInClassList(UtilityClassConstants.HIDDEN, !showNumberInputField);
         }
 
         private void ApplyInputFieldValue()
