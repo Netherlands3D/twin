@@ -495,8 +495,8 @@ namespace Netherlands3D.UI.Components
             {
                 var boundTime = (displayedCurrentTime < thumbMinTime) ? thumbMinTime : thumbMaxTime;
                 var offset = displayedCurrentTime - boundTime;
-                startTime = startTime.Add(offset);
-                endTime = endTime.Add(offset);
+                startTime = startTime.AddClamped(offset);
+                endTime = endTime.AddClamped(offset);
             }
             
             markElementsUpdateRequested = true;
@@ -513,7 +513,7 @@ namespace Netherlands3D.UI.Components
 
         private DateTime PositionToTime(double position, DateTime start, DateTime end)
         {
-            return start.Add(position * (end - start));
+            return start.AddClamped(position * (end - start));
         }
 
         private void OnAttachToPanel(AttachToPanelEvent evt)

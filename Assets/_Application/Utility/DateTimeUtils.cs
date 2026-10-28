@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Utility
@@ -40,6 +41,8 @@ namespace Netherlands3D.Twin.Utility
         
         public static double GetDateTimeUnitCountBetween(this DateTimeUnit timeUnit, DateTime startTime, DateTime endTime, double timeUnitFactor = 1)
         {
+            if (startTime == endTime) return 0d;
+                
             var unitCount = timeUnit switch
             {
                 DateTimeUnit.Year => GetYears(),
@@ -77,8 +80,10 @@ namespace Netherlands3D.Twin.Utility
 
         public static List<DateTime> GetDateTimesBetween(DateTime startTime, DateTime endTime, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime = default)
         {
+            
             var results = new List<DateTime>();
             GetDateTimesBetweenNonAlloc(results, startTime, endTime, interval, alignGroupedIntervals, rootTime);
+            
             return results;
         }
 
@@ -103,6 +108,9 @@ namespace Netherlands3D.Twin.Utility
                     results.Add(time);
                 }
             }
+            
+            Debug.Log($"GetDateTimesBetween {startTime} {endTime} {interval} {results.Count}");
+            
         }
         
         
@@ -283,8 +291,13 @@ namespace Netherlands3D.Twin.Utility
                 index--;
             }
 
-            while (GetIntervalTime(anchor, interval, index + 1) <= time)
+            while (true)
             {
+                var next = GetIntervalTime(anchor, interval, index + 1);
+
+                if (next > time || next == DateTime.MaxValue)
+                    break;
+
                 index++;
             }
 
