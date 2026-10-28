@@ -48,7 +48,7 @@ namespace Netherlands3D.AddressSearch
         [Header("PDOK Location API")]
         private string locationApiBaseUrl = "https://api.pdok.nl/kadaster/location-api/v1";
         private int rows =1000;
-        private int maxResultsPerCollection = 1000;
+        private int maxResultsPerCollection = 10;
         private float minimumScore = 0;
         private int charactersNeededBeforeSearch = 2;
 
@@ -58,6 +58,7 @@ namespace Netherlands3D.AddressSearch
         [Header("Camera Controls")]
         [SerializeField] private bool easeCamera;
         [SerializeField] private Camera mainCamera;
+        private double minSizeMagnitudeDistance = 20; //inrichtingselementen have no bbox size magnitudes
 
         public UnityEvent<Coordinate> onCoordinateFound = new();
         public event Action<List<SuggestionResult>> SuggestionsReady;
@@ -242,6 +243,7 @@ namespace Netherlands3D.AddressSearch
                     BoundingBox bbox = null;
                     JSONNode bboxNode = feature["bbox"];
 
+                    bool hasCoordinates = false;
                     bool hasBounds = false;
                     if (bboxNode != null && bboxNode.IsArray && bboxNode.Count >= 4)
                     {
@@ -252,12 +254,23 @@ namespace Netherlands3D.AddressSearch
 
                         bbox = new BoundingBox(new Coordinate(CoordinateSystem.WGS84_LatLon, minLat, minLon), new Coordinate(CoordinateSystem.WGS84_LatLon, maxLat, maxLon));
                         hasBounds = true;
+                        hasCoordinates = true;
                     }
-                    if (hasBounds)
+                    
+                    JSONNode geometry = feature["geometry"];
+                    JSONNode coords = geometry != null ? geometry["coordinates"] : null;
+                    
+                    if (geometry != null && string.Equals(ReadString(geometry, "type"), "Point", StringComparison.OrdinalIgnoreCase) && coords != null && coords.IsArray && coords.Count >= 2)
                     {
-                        coordinate = bbox.Center;
+                        double lon = coords[0].AsDouble;
+                        double lat = coords[1].AsDouble;
+
+                        var point = new Coordinate(CoordinateSystem.WGS84_LatLon, lat, lon);
+                        if(!hasBounds)
+                            bbox = new BoundingBox(point, point);
+                        hasCoordinates = true;
                     }
-                    var result = new SuggestionResult(id, label, GetDisplayName(collectionId), collectionId, score, bbox, hasBounds);
+                    var result = new SuggestionResult(id, label, GetDisplayName(collectionId), collectionId, score, bbox, hasCoordinates);
                     string key = MakeKey(collectionId, label);
                     if (!uniqueSuggestions.TryGetValue(key, out SuggestionResult existing) || result.Score > existing.Score)
                     {
@@ -268,13 +281,23 @@ namespace Netherlands3D.AddressSearch
 
             if (requestVersion != searchRequestVersion) yield break;
 
-            List<SuggestionResult> best = uniqueSuggestions.Values
-                .GroupBy(result => result.CollectionId)
-                .SelectMany(group => group.OrderByDescending(result => result.Score).Take(maxResultsPerCollection))
-                .OrderBy(result => GetPriority(result.CollectionId))
-                .ThenByDescending(result => result.Score)
-                .Take(Mathf.Max(1, rows))
-                .ToList();
+            //order by collection then score
+             List<SuggestionResult> best = uniqueSuggestions.Values
+                 .GroupBy(result => result.CollectionId)
+                 .SelectMany(group => group.OrderByDescending(result => result.Score).Take(maxResultsPerCollection))
+                 .OrderBy(result => GetPriority(result.CollectionId))
+                 .ThenByDescending(result => result.Score)
+                 .Take(Mathf.Max(1, rows))
+                 .ToList();
+         
+            //order by score then collection
+            // List<SuggestionResult> best = uniqueSuggestions.Values
+            //     .GroupBy(result => result.CollectionId)
+            //     .SelectMany(group => group.OrderByDescending(result => result.Score).Take(maxResultsPerCollection))
+            //     .OrderByDescending(result => result.Score)
+            //     .ThenBy(result => GetPriority(result.CollectionId))
+            //     .Take(Mathf.Max(1, rows))
+            //     .ToList();
 
             cachedSuggestions.Clear();
             orderedSuggestions.Clear();
@@ -323,7 +346,8 @@ namespace Netherlands3D.AddressSearch
                 targetCoordinate.height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
             }
             
-            MoveCameraToLocation(suggestion.BoundingBox.Center, suggestion.BoundingBox.GetSizeMagnitude());
+            double minimumDistance = Math.Max(suggestion.BoundingBox.GetSizeMagnitude(), minSizeMagnitudeDistance);
+            MoveCameraToLocation(suggestion.BoundingBox.Center, minimumDistance);
         }
 
         // Compatibility overload for UI code that still passes only ID and label.
@@ -354,7 +378,7 @@ namespace Netherlands3D.AddressSearch
             }
 
             onCoordinateFound.Invoke(targetCoordinate);
-            moveCamera.LookAtTarget(targetCoordinate, distance);
+            moveCamera.LookAtTarget(targetCoordinate, distance, true);
         }
 
         private IEnumerator ResolveSelectedSuggestion(string id)
@@ -425,7 +449,7 @@ namespace Netherlands3D.AddressSearch
             }
 
             onCoordinateFound.Invoke(targetCoordinate);
-            moveCamera.LookAtTarget(targetCoordinate, boundingBox.GetSizeMagnitude());
+            moveCamera.LookAtTarget(targetCoordinate, boundingBox.GetSizeMagnitude(), true);
         }
 
         private static bool TryReadScore(JSONNode properties, out float score)
