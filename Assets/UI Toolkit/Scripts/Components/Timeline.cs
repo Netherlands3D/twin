@@ -647,7 +647,7 @@ namespace Netherlands3D.UI.Components
             var primaryLabelUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)(labelsInterval.Amount >= 1 ? labelsInterval.TimeUnit : labelsInterval.TimeUnit + 1)), (int)unitContext, (int)unitPrecision);
 
             thumbLabelElement.Context = unitContext;
-            thumbLabelElement.Precision = unitPrecision;
+            thumbLabelElement.Precision = primaryMarkUnit + 1;
             
             var markIndex = 0;
             foreach (var markTime in markTimes)
@@ -716,6 +716,7 @@ namespace Netherlands3D.UI.Components
 
                 labelElement.UnitContext = (DateTimeUnit)Math.Max(0, (int)labelTimeUnit-1);
                 labelElement.UnitPrecision = labelTimeUnit;
+                labelElement.EnableSubLabel = isPrimary;
                 labelElement.Time = labelTime;
 
                 labelElement.style.opacity = new StyleFloat(1f);
@@ -743,7 +744,7 @@ namespace Netherlands3D.UI.Components
                 var sunTimeService = ServiceLocator.GetService<SunTime>();
                 if (sunTimeService == null) return;
                 sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
-                //sunTimeService.SetTime(currentTime);
+                sunTimeService.SetTime(currentTime);
                 sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
                 lastCurrentTime = currentTime;
             }

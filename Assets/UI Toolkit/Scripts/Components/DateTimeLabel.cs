@@ -89,7 +89,7 @@ namespace Netherlands3D.UI.Components
             var dateParts = new List<string>();
 
             if (Includes(DateTimeUnit.Day)) dateParts.Add("%d");
-            if (Includes(DateTimeUnit.Month)) dateParts.Add("MMM");
+            if (Includes(DateTimeUnit.Month)) dateParts.Add("'"+value.ToString("MMM", culture).TrimEnd('.')+"'"); //remove last characther, which is the "." in "jan."
             /*if (Includes(DateTimeUnit.Quarter))
             {
                 parts.Add("Q" + (1 + (value.Month / 4)));
@@ -98,7 +98,7 @@ namespace Netherlands3D.UI.Components
 
             var timeParts = new List<string>();
             
-            if (Includes(DateTimeUnit.Hour) || Includes(DateTimeUnit.Minute)) timeParts.Add("HH:mm");
+            if (Includes(DateTimeUnit.Hour) || Includes(DateTimeUnit.Minute) && !Includes(DateTimeUnit.Second)) timeParts.Add("HH:mm");
             if (Includes(DateTimeUnit.Second)) timeParts.Add(":ss");
 
             var dateFormat = string.Join(" ", dateParts);

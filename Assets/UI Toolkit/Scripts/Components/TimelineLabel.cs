@@ -11,11 +11,12 @@ namespace Netherlands3D.UI.Components
     public partial class TimelineLabel : VisualElement
     {
         public DateTimeLabel contextLabel;
-        public DateTimeLabel precisionLabel;
+        public DateTimeLabel label;
 
         private bool isPrimary;
         private DateTimeUnit unitContext;
         private DateTimeUnit unitPrecision;
+        private bool enableContextLabel = false;
         private DateTime time;
 
         public TimelineLabel()
@@ -24,7 +25,7 @@ namespace Netherlands3D.UI.Components
             this.AddComponentStylesheet("Components");
 
             contextLabel = this.Q<DateTimeLabel>("ContextLabel");
-            precisionLabel = this.Q<DateTimeLabel>("Label");
+            label = this.Q<DateTimeLabel>("Label");
         }
 
         [UxmlAttribute]
@@ -50,6 +51,16 @@ namespace Netherlands3D.UI.Components
 
         }
 
+        public bool EnableSubLabel
+        {
+            get => enableContextLabel;
+            set
+            {
+                enableContextLabel = value;
+                UpdateLabels();
+            }
+        }
+
         public DateTime Time
         {
             get => time;
@@ -73,12 +84,50 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateLabels()
         {
-            contextLabel.EnableInClassList(UtilityClassConstants.HIDDEN, true);
-            precisionLabel.EnableInClassList(UtilityClassConstants.HIDDEN, false);
             
-            precisionLabel.Context = unitPrecision;
-            precisionLabel.Precision = unitPrecision;
-            precisionLabel.Value = time;
+            label.EnableInClassList(UtilityClassConstants.HIDDEN, false);
+            
+            label.Context = unitPrecision;
+            label.Precision = unitPrecision;
+            label.Value = time;
+            
+            contextLabel.EnableInClassList(UtilityClassConstants.HIDDEN, !enableContextLabel || unitPrecision == DateTimeUnit.Year);
+
+            if (enableContextLabel)
+            {
+                if (unitPrecision == DateTimeUnit.Month)
+                {
+                    contextLabel.Context = DateTimeUnit.Year;
+                    contextLabel.Precision = DateTimeUnit.Year;
+                }
+                
+                else if (unitPrecision == DateTimeUnit.Day)
+                {
+                    contextLabel.Context = DateTimeUnit.Month;
+                    contextLabel.Precision = DateTimeUnit.Month;
+                }
+                
+                else if (unitPrecision == DateTimeUnit.Hour)
+                {
+                    contextLabel.Context = DateTimeUnit.Month;
+                    contextLabel.Precision = DateTimeUnit.Day;
+                }
+                
+                else if (unitPrecision == DateTimeUnit.Minute)
+                {
+                    contextLabel.Context = DateTimeUnit.Month;
+                    contextLabel.Precision = DateTimeUnit.Day;
+                }
+                
+                else if (unitPrecision == DateTimeUnit.Second)
+                {
+                    contextLabel.Context = DateTimeUnit.Hour;
+                    contextLabel.Precision = DateTimeUnit.Minute;
+                }
+
+                contextLabel.Value = time;
+
+            }
         }
     }
 }

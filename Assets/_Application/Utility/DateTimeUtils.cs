@@ -227,8 +227,7 @@ namespace Netherlands3D.Twin.Utility
             }
 
             if (!alignGroupedIntervals || interval.Amount <= 1) return rootTime;
-            
-            
+
 
             var offset = interval.TimeUnit switch
             {
