@@ -236,11 +236,6 @@ namespace Netherlands3D.AddressSearch
                     {
                         coordinate = bbox.Center;
                     }
-
-                    if (label.Contains("gemeente") && label.Contains("Amsterdam"))
-                    {
-                        
-                    }
                     var result = new SuggestionResult(id, label, collectionId, score, bbox, hasBounds);
                     string key = MakeKey(collectionId, label);
                     if (!uniqueSuggestions.TryGetValue(key, out SuggestionResult existing) || result.Score > existing.Score)
