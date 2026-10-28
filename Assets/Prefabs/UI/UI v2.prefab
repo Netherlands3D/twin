@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16727d57680e641888c79ec0ba245979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Timeline.TimelineLegendBehaviour
-  log: 0
 --- !u!114 &304113352920610093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,14 +596,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d999095a8b46476b9de493bb50d17afc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.address-search.Runtime::Netherlands3D.AddressSearch.AddressSearchService
-  bagWfsEndpoint: https://service.pdok.nl/lv/bag/wfs/v2_0
-  locationSuggestionEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest
-  locationLookupEndpoint: https://api.pdok.nl/bzk/locatieserver/search/v3_1/lookup
-  searchWithinCity: 
-  typeFilter: 
-  rows: 5
+  locationApiBaseUrl: https://api.pdok.nl/kadaster/location-api/v1
+  minimumScore: 1
   charactersNeededBeforeSearch: 2
-  moveCamera: 1
+  searchWithinCity: 
+  bagApiBaseUrl: https://api.pdok.nl/kadaster/bag/ogc/v2
   easeCamera: 0
   mainCamera: {fileID: 0}
   targetCameraRotation: {x: 0.38268346, y: 0, z: 0, w: 0.9238795}

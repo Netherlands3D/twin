@@ -44,12 +44,11 @@ namespace Netherlands3D.AddressSearch
     public class AddressSearchService : MonoBehaviour
     {
         [Header("PDOK Location API")]
-        [SerializeField] private string locationApiBaseUrl = "https://api.pdok.nl/kadaster/location-api/v1";
-        [SerializeField, Min(1)] private int rows = 50;
-        [SerializeField, Min(1)] private int maxResultsPerCollection = 5;
-        [SerializeField, Range(0f, 1f)] private float minimumScore = 0.50f;
-        [SerializeField, Min(0)] private int charactersNeededBeforeSearch = 2;
-        [SerializeField] private string searchWithinCity = "";
+        private string locationApiBaseUrl = "https://api.pdok.nl/kadaster/location-api/v1";
+        private int rows =1000;
+        private int maxResultsPerCollection = 1000;
+        private float minimumScore = 0;
+        private int charactersNeededBeforeSearch = 2;
 
         [Header("BAG API")]
         [SerializeField] private string bagApiBaseUrl = "https://api.pdok.nl/kadaster/bag/ogc/v2";
@@ -57,11 +56,8 @@ namespace Netherlands3D.AddressSearch
         [Header("Camera Controls")]
         [SerializeField] private bool easeCamera;
         [SerializeField] private Camera mainCamera;
-        [SerializeField] private Quaternion targetCameraRotation = Quaternion.Euler(45, 0, 0);
-        [SerializeField] public AnimationCurve cameraMoveCurve;
 
         public UnityEvent<Coordinate> onCoordinateFound = new();
-        public UnityEvent<List<string>> onSelectedBuildings = new();
         public event Action<List<SuggestionResult>> SuggestionsReady;
         public event Action SuggestionsCleared;
         public event Action<SuggestionResult> SuggestionAutoSelected;
@@ -165,8 +161,7 @@ namespace Netherlands3D.AddressSearch
         private IEnumerator FindSearchSuggestions(string searchTerm, int requestVersion)
         {
             string query = searchTerm;
-            if (!string.IsNullOrWhiteSpace(searchWithinCity)) query += " " + searchWithinCity.Trim();
-
+            
             var uniqueSuggestions = new Dictionary<string, SuggestionResult>();
             // Query each collection separately so every result keeps its correct collection ID.
             foreach (string collectionId in CollectionIds)
@@ -240,6 +235,11 @@ namespace Netherlands3D.AddressSearch
                     if (hasBounds)
                     {
                         coordinate = bbox.Center;
+                    }
+
+                    if (label.Contains("gemeente") && label.Contains("Amsterdam"))
+                    {
+                        
                     }
                     var result = new SuggestionResult(id, label, collectionId, score, bbox, hasBounds);
                     string key = MakeKey(collectionId, label);
