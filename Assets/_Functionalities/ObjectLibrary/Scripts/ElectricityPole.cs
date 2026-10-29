@@ -156,9 +156,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                 Transform[] targetConnectors = connectedPropertyData.Target.GetProperty<ConnectableHierarchicalLayerPropertyData>().Connectors;
                 for(int i = 0; i < Connectors.Length; i++)
                     Debug.DrawLine(Connectors[i].position, targetConnectors[i].position, Color.green);
-                
             }
-                
         }
 
         private void ConnectToSibling()

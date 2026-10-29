@@ -56,6 +56,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             worldAnnotation.SetReadOnly(annotationPropertyData.ReadOnly);
             worldAnnotation.SetImage(annotationPropertyData.ImageUrl);
             worldAnnotation.SetText(annotationPropertyData.AnnotationText);
+            Color defaultColor = Color.white;
+            GeoJSONPropertyData geoJsonPropertyData =  LayerData.GetProperty<GeoJSONPropertyData>();
+            if (geoJsonPropertyData  != null) //todo this should only happen once as the data is generated, when edited we need to not reposition from geojson coordinate
+            {
+                TransformLayerPropertyData propertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+                propertyData.Position = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                defaultColor = LayerData.Color;
+            }
+            
             ColorPropertyData colorPropertyData = LayerData.GetProperty<ColorPropertyData>();
             Color? color = colorPropertyData.GetDefaultSymbolizerColor();
             if(color.HasValue)
@@ -64,15 +73,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
             else
             {
-                LayerData.Color = Color.white;
-                worldAnnotation.SetColor(LayerData.Color);
-            }
-
-            GeoJSONPropertyData geoJsonPropertyData =  LayerData.GetProperty<GeoJSONPropertyData>();
-            if (geoJsonPropertyData  != null) //todo this should only happen once as the data is generated, when edited we need to not reposition from geojson coordinate
-            {
-                TransformLayerPropertyData propertyData = LayerData.GetProperty<TransformLayerPropertyData>();
-                propertyData.Position = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                worldAnnotation.SetColor(defaultColor);
             }
         }
 

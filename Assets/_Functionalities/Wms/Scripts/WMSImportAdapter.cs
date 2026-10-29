@@ -69,7 +69,8 @@ namespace Netherlands3D.Functionalities.Wms
                     var preset = CreatePreset(map, url, i < layerPrefab.DefaultEnabledLayersMax);
                     presets[i] = preset;
                 }
-                return new LayerPresetResult() { parent = folderPreset, children = presets };
+                //return new LayerPresetResult() { parent = folderPreset, children = presets };
+                return LayerPresetResult.Create(folderPreset, presets);
             }
 
             if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap))
@@ -82,7 +83,8 @@ namespace Netherlands3D.Functionalities.Wms
                     layerPrefab.TransparencyEnabled
                 );
                 var preset = CreatePreset(map, url, true);
-                return new LayerPresetResult() { parent = preset, children = null };
+               // return new LayerPresetResult() { parent = preset, children = null };
+               return LayerPresetResult.Create(folderPreset, new LayerPresetArgs[1]{ preset });
             }
 
             throw new ArgumentException("Unrecognized WMS request type: " + url);

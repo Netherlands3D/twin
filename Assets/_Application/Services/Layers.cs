@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.DataTypeAdapters;
@@ -85,31 +86,70 @@ namespace Netherlands3D.Twin.Services
             throw new AdapterNotFoundException("Could not determine Layer adapter(s) for the url:  " + uri);
         }
 
+        // public Layer[] Add(LayerPresetResult result)
+        // {
+        //     bool hasParent = result.parent != null;
+        //     int startIndex = hasParent ? 1 : 0;
+        //     int childrenCount = result.children == null ? 0 : result.children.Length;
+        //
+        //     int length = startIndex + childrenCount;
+        //     Layer[] layers =  new Layer[length];
+        //
+        //     if (hasParent)
+        //         layers[0] = Add(result.parent);
+        //
+        //     for (var i = startIndex; i < childrenCount; i++)
+        //     {
+        //         var p = result.children[i];
+        //         var layer = Add(p);
+        //         layers[i] = layer;
+        //
+        //         if (hasParent)
+        //         {
+        //             layer.LayerData.SetParent(layers[0].LayerData);
+        //         }
+        //     }
+        //
+        //     return layers;
+        // }
+        
         public Layer[] Add(LayerPresetResult result)
         {
-            bool hasParent = result.parent != null;
-            int startIndex = hasParent ? 1 : 0;
-            int childrenCount = result.children == null ? 0 : result.children.Length;
-    
-            int length = startIndex + childrenCount;
-            Layer[] layers =  new Layer[length];
+            var layers = new List<Layer>();
 
-            if (hasParent)
-                layers[0] = Add(result.parent);
-    
-            for (var i = startIndex; i < childrenCount; i++)
+            if (result?.roots == null)
+                return layers.ToArray();
+
+            foreach (var root in result.roots)
             {
-                var p = result.children[i];
-                var layer = Add(p);
-                layers[i] = layer;
-        
-                if (hasParent)
+                AddNode(root, null, layers);
+            }
+
+            return layers.ToArray();
+        }
+
+        private Layer AddNode(LayerPresetNode node, LayerData parentData, List<Layer> layers)
+        {
+            if (node?.preset == null)
+                return null;
+
+            var layer = Add(node.preset);
+            layers.Add(layer);
+
+            if (parentData != null)
+            {
+                layer.LayerData.SetParent(parentData);
+            }
+
+            if (node.children != null)
+            {
+                foreach (var child in node.children)
                 {
-                    layer.LayerData.SetParent(layers[0].LayerData);
+                    AddNode(child, layer.LayerData, layers);
                 }
             }
 
-            return layers;
+            return layer;
         }
 
         /// <summary>

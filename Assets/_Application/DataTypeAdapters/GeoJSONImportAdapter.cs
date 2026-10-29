@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -35,64 +36,100 @@ namespace Netherlands3D.Twin.DataTypeAdapters
         {
             var layerName = CreateName(localFile);
             var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
-
             var bodyContents = File.ReadAllText(localFile.LocalFilePath);
 
-            Annotation[] annotations = ParseAnnotations(bodyContents);
+            var root = JObject.Parse(bodyContents);
+            var features = root["features"] as JArray;
+
             var geoJsonLayerPreset = new GeoJSONPreset.Args(layerName, url);
-            var presets = new LayerPresetArgs[annotations.Length];
-            for (int i = 0; i < annotations.Length; i++)
+            var presets = new List<LayerPresetArgs>();
+
+            var uniquePresets = new Dictionary<string, List<LayerPresetArgs>>();
+
+            if (features != null)
             {
-                var annotation = annotations[i];
-                Debug.Log("Adding Annotation preset for featureType: " + annotation);
-                ColorUtility.TryParseHtmlString(annotation.Color, out Color color);
-                presets[i] = new GeoJSONAnnotationPreset.Args(annotation.Coordinate, annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption,  color);
+                var serializer = JsonSerializer.CreateDefault();
+
+                foreach (var featureToken in features)
+                {
+                    var properties = featureToken["properties"];
+                    var featureType = properties?["featureType"]?.Value<string>();
+
+                    if (string.IsNullOrEmpty(featureType))
+                        continue;
+
+                    using var reader = featureToken.CreateReader();
+                    var feature = serializer.Deserialize<Feature>(reader);
+
+                    if (feature?.Geometry is not Point point)
+                        continue;
+
+                    var crs = GeoJSONParser.GetCoordinateSystem(feature.CRS);
+                    var coordinate = GeometryVisualizationFactory.ConvertToCoordinate(crs, point.Coordinates);
+
+                    switch (featureType)
+                    {
+                        case "Annotation":
+                        {
+                            var annotation = properties.ToObject<Annotation>();
+                            ColorUtility.TryParseHtmlString(annotation.Color, out Color color);
+
+                            presets.Add(new GeoJSONAnnotationPreset.Args(
+                                coordinate,
+                                annotation.Title,
+                                annotation.AnnotationText,
+                                annotation.ImageUrl,
+                                annotation.ImageCaption,
+                                color));
+
+                            break;
+                        }
+
+                        case "ElectricityPole":
+                        {
+                            var pole = properties.ToObject<ConnectableElectricityPole>();
+
+
+                            string trajectType = pole.OBJECTIDENTIFIER.Split(" ")[0];
+                            
+                            if (!uniquePresets.TryGetValue(trajectType, out var polePresets))
+                            {
+                                polePresets = new List<LayerPresetArgs>();
+                                uniquePresets[trajectType] = polePresets;
+                            }
+
+                            
+                            var folderPreset = new FolderPreset.Args(trajectType);
+                            
+                            polePresets.Add(new GeoJSONElectricityPolePreset.Args(
+                                coordinate,
+                                pole.OBJECTIDENTIFIER,
+                                pole.Type));
+                            break;
+                        }
+
+                        default:
+                            Debug.LogWarning(
+                                $"Unsupported GeoJSON feature type: {featureType}");
+                            break;
+                    }
+                }
             }
-            return new LayerPresetResult() { parent = geoJsonLayerPreset, children = presets };
+            
+            var children = new List<LayerPresetNode>();
+            children.AddRange(presets.Select(preset => new LayerPresetNode { preset = preset }));
+            foreach (var group in uniquePresets)
+            {
+                LayerPresetNode childNode = new LayerPresetNode
+                {
+                    preset = new FolderPreset.Args(group.Key),
+                    children = group.Value.Select(preset => new LayerPresetNode { preset = preset }).ToArray()
+                };
+                children.Add(childNode);
+            }
+            return LayerPresetResult.Create(new LayerPresetNode { preset = geoJsonLayerPreset, children = children.ToArray() });
         }
         
-        private static Annotation[] ParseAnnotations(string bodyContents)
-        {
-            var root = JObject.Parse(bodyContents);
-
-            var features = root["features"] as JArray;
-            if (features == null)
-                return Array.Empty<Annotation>();
-
-            var serializer = JsonSerializer.CreateDefault();
-            var annotations = new List<Annotation>();
-
-            foreach (var featureToken in features)
-            {
-                var annotation = featureToken["properties"]?["annotation"];
-
-                if (annotation is not JObject annotationObject)
-                    continue;
-
-                Coordinate coordinate = new();
-                using var jsonReader = featureToken.CreateReader();
-                var feature = serializer.Deserialize<Feature>(jsonReader);
-                if (feature.Geometry is Point point)
-                {
-                    var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
-                    var convertedPoint = GeometryVisualizationFactory.ConvertToCoordinate(originalCoordinateSystem, point.Coordinates);
-                    coordinate = convertedPoint;
-                }
-
-                annotations.Add(new Annotation
-                {
-                    Title = annotationObject.Value<string>("title"),
-                    AnnotationText = annotationObject.Value<string>("annotationText"),
-                    ImageUrl = annotationObject.Value<string>("imageUrl"),
-                    ImageCaption = annotationObject.Value<string>("imageCaption"),
-                    Color = annotationObject.Value<string>("color"),
-                    Coordinate = coordinate
-                });
-            }
-
-            return annotations.ToArray();
-        }
-
         private static string CreateName(LocalFile localFile)
         {
             var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
@@ -112,6 +149,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             public string ImageCaption { get; set; }
             public string Color { get; set; }
             public Coordinate Coordinate { get; set; }
+        }
+
+        public struct ConnectableElectricityPole
+        {
+            public string OBJECTIDENTIFIER { get; set; }
+            public string Type { get; set; }
+            public string featureType { get; set; }
         }
     }
 }

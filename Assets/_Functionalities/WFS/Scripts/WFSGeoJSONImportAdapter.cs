@@ -104,7 +104,8 @@ namespace Netherlands3D.Functionalities.Wfs
                     Debug.Log("Adding WFS preset for featureType: " + featureType);
                     presets[i] = CreateWFSPreset(featureType.Name, sourceUrl, crs, featureType.Title, geoJsonOutputFormatString);
                 }
-                return new LayerPresetResult() { parent = folderPreset, children = presets };
+                //return new LayerPresetResult() { parent = folderPreset, children = presets };
+                return LayerPresetResult.Create(folderPreset, presets);
             }
 
             var isWfsGetFeature = OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetFeature);
@@ -134,7 +135,8 @@ namespace Netherlands3D.Functionalities.Wfs
                     // Can't deduct a human-readable title at the moment, we should add that we always query for the
                     // capabilities; this also helps with things like outputFormat and CRS
                     var preset = CreateWFSPreset(featureType, sourceUrl, crs, featureType, geoJsonOutputFormatString);
-                    return new LayerPresetResult() { parent = preset, children = null };
+                    //return new LayerPresetResult() { parent = preset, children = null };
+                    return LayerPresetResult.Create(preset);
                 }
             }
             
