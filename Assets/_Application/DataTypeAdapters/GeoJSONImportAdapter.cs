@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -40,6 +41,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
             var root = JObject.Parse(bodyContents);
             var features = root["features"] as JArray;
+            
+            CoordinateSystem usedCRS = CoordinateSystem.Undefined;
+            var crsName = root.SelectToken("crs.properties.name")?.ToString();
+            if (!string.IsNullOrEmpty(crsName))
+            {
+                usedCRS = CoordinateSystems.FindCoordinateSystem(crsName);
+            }
 
             var geoJsonLayerPreset = new GeoJSONPreset.Args(layerName, url);
             var presets = new List<LayerPresetArgs>();
@@ -64,7 +72,10 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     if (feature?.Geometry is not Point point)
                         continue;
 
-                    var crs = GeoJSONParser.GetCoordinateSystem(feature.CRS);
+                    var crs = usedCRS;
+                    if (crs == CoordinateSystem.Undefined)
+                        crs = GeoJSONParser.GetCoordinateSystem(feature.CRS ?? DefaultCRS.Instance);
+
                     var coordinate = GeometryVisualizationFactory.ConvertToCoordinate(crs, point.Coordinates);
 
                     switch (featureType)
@@ -73,44 +84,25 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                         {
                             var annotation = properties.ToObject<Annotation>();
                             ColorUtility.TryParseHtmlString(annotation.Color, out Color color);
-
-                            presets.Add(new GeoJSONAnnotationPreset.Args(
-                                coordinate,
-                                annotation.Title,
-                                annotation.AnnotationText,
-                                annotation.ImageUrl,
-                                annotation.ImageCaption,
-                                color));
-
+                            presets.Add(new GeoJSONAnnotationPreset.Args(coordinate, annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption, color));
                             break;
                         }
 
                         case "ElectricityPole":
                         {
                             var pole = properties.ToObject<ConnectableElectricityPole>();
-
-
                             string trajectType = pole.OBJECTIDENTIFIER.Split(" ")[0];
-                            
                             if (!uniquePresets.TryGetValue(trajectType, out var polePresets))
                             {
                                 polePresets = new List<LayerPresetArgs>();
                                 uniquePresets[trajectType] = polePresets;
                             }
-
-                            
-                            var folderPreset = new FolderPreset.Args(trajectType);
-                            
-                            polePresets.Add(new GeoJSONElectricityPolePreset.Args(
-                                coordinate,
-                                pole.OBJECTIDENTIFIER,
-                                pole.Type));
+                            polePresets.Add(new GeoJSONElectricityPolePreset.Args(coordinate, pole.OBJECTIDENTIFIER, pole.Type));
                             break;
                         }
 
                         default:
-                            Debug.LogWarning(
-                                $"Unsupported GeoJSON feature type: {featureType}");
+                            Debug.LogWarning($"Unsupported GeoJSON feature type: {featureType}");
                             break;
                     }
                 }
@@ -148,14 +140,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             public string ImageUrl { get; set; }
             public string ImageCaption { get; set; }
             public string Color { get; set; }
-            public Coordinate Coordinate { get; set; }
         }
 
         public struct ConnectableElectricityPole
         {
             public string OBJECTIDENTIFIER { get; set; }
             public string Type { get; set; }
-            public string featureType { get; set; }
         }
     }
 }

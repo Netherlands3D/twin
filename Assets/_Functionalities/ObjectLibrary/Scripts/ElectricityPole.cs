@@ -6,6 +6,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private LayerData previousParent;
         private float ropeLengthMp = 1.1f;
+        public bool DebugTarget = false;
 
         [SerializeField] private Material ropeMaterial;
         
@@ -34,8 +36,12 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             visualisation = GetComponent<LayerGameObject>();
             visualisation.InitProperty<ConnectableHierarchicalLayerPropertyData>(properties, null, null);
             transformPropertyData = visualisation.LayerData.GetProperty<TransformLayerPropertyData>();
+            GeoJSONPropertyData geoJsonPropertyData  = visualisation.LayerData.GetProperty<GeoJSONPropertyData>();
+            transformPropertyData.Position = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            
             connectedPropertyData = visualisation.LayerData.GetProperty<ConnectableHierarchicalLayerPropertyData>();
             connectedPropertyData.Connectors = Connectors;
+            
             
             AddListeners();
             ConnectToSibling();
@@ -147,12 +153,14 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private void Update()
         {
+            if(!DebugTarget) return;
+            
             if (transformPropertyData != null && connectedPropertyData != null &&
                 connectedPropertyData.Target != null &&
                 connectedPropertyData.Target.GetProperty<TransformLayerPropertyData>() != null)
             {
                 Debug.DrawLine(transformPropertyData.Position.ToUnity(), connectedPropertyData.Target.GetProperty<TransformLayerPropertyData>().Position.ToUnity(), Color.red);
-
+        
                 Transform[] targetConnectors = connectedPropertyData.Target.GetProperty<ConnectableHierarchicalLayerPropertyData>().Connectors;
                 for(int i = 0; i < Connectors.Length; i++)
                     Debug.DrawLine(Connectors[i].position, targetConnectors[i].position, Color.green);
@@ -182,6 +190,8 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             for (int i = 0; i < children.Count - 1; i++)
             {
                 ConnectableHierarchicalLayerPropertyData current = children[i].GetProperty<ConnectableHierarchicalLayerPropertyData>();
+                if (current == null) break;
+                 
                 current.Target = null;
                 LayerData target = children[i + 1];
                 ConnectableHierarchicalLayerPropertyData connected = target.GetProperty<ConnectableHierarchicalLayerPropertyData>();
