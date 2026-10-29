@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -20,6 +23,12 @@ namespace Netherlands3D.Twin.layers.properties
         {
             visualization = GetComponent<LayerGameObject>();
             visualization.InitProperty<FeaturePropertyData>(properties);
+            visualization.LayerData.LayerSelected.AddListener(OnLayerSelected);
+        }
+
+        private void OnDestroy()
+        {
+            visualization.LayerData.LayerSelected.RemoveListener(OnLayerSelected);
         }
 
         private void OnEnable()
@@ -35,6 +44,17 @@ namespace Netherlands3D.Twin.layers.properties
             selectorService.SelectGeoJsonFeature.RemoveListener(ProcessFeatureMappingForLayer);
             selectorService.SelectCityJsonMapping.RemoveListener(ProcessFeatureMappingForLayer);
             selectorService.OnDeselect.RemoveListener(ClearFeatureMappingsForLayer);
+        }
+        
+        private void OnLayerSelected(LayerData layer)
+        {
+            SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
+            GeoJSONPropertyData geoJsonPropertyData = layer.GetProperty<GeoJSONPropertyData>();
+            //is this a sublayer of geojson? 
+            if (geoJsonPropertyData != null)
+            {
+                selectorService.SelectGeoJsonFeatureAtPositionForLayer(geoJsonPropertyData.GeoJSONCoordinate.ToUnity(), layer);
+            }
         }
 
         private void ProcessFeatureMappingForLayer(IMapping mapping)
