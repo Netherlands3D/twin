@@ -66,16 +66,16 @@
 
 .timeline__labels-viewport {
     flex-grow: 0;
-    height: 30px;
+    height: var(--spacing-8);
     overflow: hidden;
 }
 
 .timeline__labels-container {
     position: absolute;
-    left: 2px;
-    right: 2px;
+    left: var(--spacing-0_5);
+    right: var(--spacing-0_5);
     top: 0;
-    bottom: 0;
+    bottom: var(--spacing-0_5);
 }
 
 
