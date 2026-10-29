@@ -14,6 +14,8 @@ using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Twin.Utility;
 using Unity.Mathematics;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.OgcWebServices.Shared;
+
 
 
 
@@ -67,6 +69,7 @@ namespace Netherlands3D.WMSTiles3D
 
     public class Read3DTileset : MonoBehaviour
     {
+        public Uri getCapabilitiesUrl;
         public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
         public string wmsUri;
         public wmsLayerProperties wmsLayerProperties;
@@ -187,7 +190,22 @@ namespace Netherlands3D.WMSTiles3D
 
         private void SetupTestLayer()
         {
+   //var getCapabilitiesString = OgcWebServices.Shared.OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
+
+    //getCapabilitiesUrl = new Uri(getCapabilitiesString);
+    
+    
+    //BoundingBoxCache.Instance.GetBoundingBoxContainer(getCapabilitiesUrl, auth, GetInfoFormCapababilities, SetBoundingBox);
+        
            setupLufo();
+        }
+
+        private IGetCapabilities  GetInfoFormCapababilities(string responseText)
+        {
+            WmsGetCapabilities capabilities = new WmsGetCapabilities(getCapabilitiesUrl, responseText);
+
+            return capabilities;
+            //hier kunne nwe de info uit de getcapabilities overnemen
         }
         private void setupAHN()
         {
@@ -222,7 +240,7 @@ namespace Netherlands3D.WMSTiles3D
             wmsLayerProperties.style = "default";
             wmsLayerProperties.version = "1.3";
             wmsLayerProperties.transparent = true;
-            wmsLayerProperties.MinimumScreenSpaceError=0.5f;
+            wmsLayerProperties.MinimumScreenSpaceError=2f;
             wmsLayerProperties.MaxTreeDepth=5;
             wmsLayerProperties.baseUrl = "https://service.pdok.nl/hwh/luchtfotorgb/wms/v1_0";
             wmsLayerProperties.Format = "image/jpg";

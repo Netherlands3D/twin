@@ -166,8 +166,6 @@ namespace Netherlands3D.Functionalities.Wms
             var capabilityNode = GetSingleNodeByName(xmlDocument, "Capability");
             var mapNodes = capabilityNode.SelectNodes(".//*[local-name()='Layer']/*[local-name()='Layer']", namespaceManager);
 
-            
-            
             // Create a template that we can use as a basis for individual layers
             var mapTemplate = CreateMapTemplate(width, height, transparent);
 

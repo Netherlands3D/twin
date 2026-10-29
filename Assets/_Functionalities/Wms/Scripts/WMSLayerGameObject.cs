@@ -121,7 +121,7 @@ namespace Netherlands3D.Functionalities.Wms
             if (urlPropertyData == null) return;
             
             UpdateURL(urlPropertyData.Url);
-            //read3DTileset.wmsCapabilities = new WmsGetCapabilities(urlPropertyData.Url,null);
+            
         }
 
         private void UpdateURL(Uri storedUri)
