@@ -22,14 +22,36 @@ namespace Netherlands3D.UI.Components
         private VisualElement OrbitContainer => orbitContainer ??= this.Q<VisualElement>("OrbitContainer");
         private DragManipulator DragManipulator => dragManipulator ??= new DragManipulator(0);
 
+        private string draggingTooltip;
+        private bool isDragging;
+        private bool isOverDial;
+
         public SunDial()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
             DialFace.AddManipulator(DragManipulator);
+            DialFace.RegisterCallback<PointerEnterEvent>(OnDialPointerEnter);
+            DialFace.RegisterCallback<PointerLeaveEvent>(OnDialPointerLeave);
+            
             DragManipulator.DragStarted.AddListener(OnDragStarted);
             DragManipulator.Dragging.AddListener(OnDragging);
+            DragManipulator.DragEnded.AddListener(OnDragEnded);
+            
+            draggingTooltip = OrbitContainer.tooltip;
+        }
+        private void OnDialPointerEnter(PointerEnterEvent evt)
+        {
+            PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
+            isOverDial = true;
+        }
+
+        private void OnDialPointerLeave(PointerLeaveEvent evt)
+        {
+            if(!isDragging) 
+                PointerStyle.CancelCursorChange(this);
+            isOverDial = false;
         }
 
         public void SetTimeWithoutNotify(int hour, int minute)
@@ -50,6 +72,19 @@ namespace Netherlands3D.UI.Components
         {
             pointerPositionWorldSpace = startPosition;
             previousPointerPosition = this.WorldToLocal(pointerPositionWorldSpace);
+            PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRABBING);
+            OrbitContainer.tooltip = "";
+            isDragging = true;
+        }
+
+        private void OnDragEnded(Vector2 endPosition)
+        {
+            OrbitContainer.tooltip = draggingTooltip;
+            if(isOverDial)
+                PointerStyle.RequestCursorChange(this, PointerStyle.Style.GRAB);
+            else
+                PointerStyle.CancelCursorChange(this);
+            isDragging = false;
         }
 
         private void OnDragging(Vector2 delta)

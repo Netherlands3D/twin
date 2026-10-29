@@ -101,6 +101,7 @@ namespace Netherlands3D.UI.Panels
             stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
             ColorPicker.ColorChanged.AddListener(OnPickColor);
 
+            ColorPicker.SetVisibilityToggleEnabled(false); //todo: support visibility off
             ColorPicker.SetVisible(false);
         }
 
