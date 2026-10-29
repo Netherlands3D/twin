@@ -1,44 +1,34 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net.Feature;
 using UnityEngine;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class FeatureSelector : MonoBehaviour, IObjectSelector
-    {      
-        
+    public class GeoJsonFeatureSelector : MonoBehaviour, IObjectSelector
+    { 
         public bool HasFeatureMapping => featureMappings.Count > 0;
         
-        public List<FeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
-
+        public List<GeoJsonFeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
         
         private GameObject testHitPosition;
         private GameObject testGroundPosition;
-        private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
-        private Camera mainCamera;       
+        private Dictionary<GeoJsonLayerGameObject, List<GeoJsonFeatureMapping>> featureMappings = new();
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
         private PointerToWorldPosition pointerToWorldPosition;
-        private MappingTree mappingTreeInstance;
 
         private void Awake()
         {
-            mainCamera = Camera.main;
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
         }
 
-        public void SetMappingTree(MappingTree mappingTree)
-        {
-            mappingTreeInstance = mappingTree;
-        }
-
-        public void Select(FeatureMapping mapping)
+        public void Select(GeoJsonFeatureMapping mapping)
         {
             mapping.Select(null);
         }
@@ -61,14 +51,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
         }
 
-        public Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> FindFeatureByPosition(Vector3 position)
+        public Dictionary<GeoJsonLayerGameObject, List<GeoJsonFeatureMapping>> FindFeatureByPosition(Vector3 position)
         {
             featureMappings.Clear();
             if (blockingObjectMapping != null)
             {
                 Coordinate blockingCoordinate = new Coordinate(blockingObjectMappingHitPoint);
-                List<IMapping> potentialMappingsUnderBlockingObject = mappingTreeInstance.QueryMappingsContainingNode<FeatureMapping>(blockingCoordinate);
-                foreach (FeatureMapping map in potentialMappingsUnderBlockingObject)
+                List<IMapping> potentialMappingsUnderBlockingObject = SelectionService.MappingTree.QueryMappingsContainingNode<GeoJsonFeatureMapping>(blockingCoordinate);
+                foreach (GeoJsonFeatureMapping map in potentialMappingsUnderBlockingObject)
                 {
                     Vector3 hitPoint;
                     if (map.IsPositionHit(blockingCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
@@ -82,13 +72,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //ShowFeatureDebuggingIndicator(groundPosition);
 
             Coordinate targetCoordinate = new Coordinate(position);
-            List<IMapping> foundMappings = mappingTreeInstance.QueryMappingsContainingNode<FeatureMapping>(targetCoordinate);
-            foreach (FeatureMapping map in foundMappings)
+            List<IMapping> foundMappings = SelectionService.MappingTree.QueryMappingsContainingNode<GeoJsonFeatureMapping>(targetCoordinate);
+            foreach (GeoJsonFeatureMapping map in foundMappings)
             {
                 Vector3 hitPoint;
                 if (map.IsPositionHit(targetCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
                 {
-                    featureMappings.TryAdd(map.VisualisationParent, new List<FeatureMapping>());
+                    featureMappings.TryAdd(map.VisualisationParent, new List<GeoJsonFeatureMapping>());
                     featureMappings[map.VisualisationParent].Add(map);
                 }
             }
@@ -100,21 +90,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {            
             Vector3 groundPosition = pointerToWorldPosition.GetWorldPointUsingOpticalRaycaster();
             FindFeatureByPosition(groundPosition);            
-        }
-
-        private void ShowFeatureDebuggingIndicator(Vector3 groundPosition)
-        {
-            if (testHitPosition == null)
-            {
-                testHitPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                testHitPosition.transform.localScale = Vector3.one * 3;
-
-                testGroundPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                testGroundPosition.transform.localScale = Vector3.one * 2.5f;
-                testGroundPosition.GetComponent<MeshRenderer>().material.color = Color.red;
-            }
-
-            testGroundPosition.transform.position = groundPosition + Vector3.up * 5f;
         }
 
         public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Plane[] frustumPlanes, Vector3 worldPoint)
@@ -186,6 +161,28 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             var d = Vector3.Dot(v, line);
             d = Mathf.Clamp(d, 0f, len);
             return start + line * d;
+        }
+
+        public void TryAddMappings(Dictionary<IMapping, int> mappings, bool filterDuplicateFeatures)
+        {
+            if (HasFeatureMapping)
+            {
+                List<Feature> filterDuplicates = new List<Feature>();
+                foreach (GeoJsonFeatureMapping feature in FeatureMappings)
+                {
+                    if (feature.VisualisationParent.LayerData.ActiveInHierarchy)
+                    {
+                        if (filterDuplicateFeatures)
+                        {
+                            if (!filterDuplicates.Contains(feature.Feature))
+                                filterDuplicates.Add(feature.Feature);
+                            else
+                                continue;
+                        }
+                        mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootId);
+                    }
+                }
+            }
         }
     }    
 }
