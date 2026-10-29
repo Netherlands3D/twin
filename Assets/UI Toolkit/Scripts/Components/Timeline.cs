@@ -44,6 +44,7 @@ namespace Netherlands3D.UI.Components
         
         private readonly VisualElement thumbElement;
         private readonly DateTimeLabel thumbLabelElement;
+        private readonly VisualElement currentTimeMarker;
         
         private DateTime currentTime;
         private DateTime lastCurrentTime;
@@ -77,7 +78,6 @@ namespace Netherlands3D.UI.Components
         private double thumbDragInitialThumbElementPosition;
         private DateTime thumbDragInitialStartTime;
         private DateTime thumbDragInitialEndTime;
-        private double thumbElementPosition;
         private readonly IVisualElementScheduledItem thumbDragUpdateItem;
         private TimeSpan thumbElementTimeOffset;
 
@@ -227,6 +227,7 @@ namespace Netherlands3D.UI.Components
             labelsContainer = this.Q<VisualElement>("LabelsContainer");
             thumbElement = this.Q<VisualElement>("Thumb");
             thumbLabelElement = this.Q<DateTimeLabel>("ThumbLabel");
+            currentTimeMarker = this.Q<VisualElement>("CurrentTimeMarker");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
@@ -398,8 +399,6 @@ namespace Netherlands3D.UI.Components
             var containerWidth = marksContainer.contentRect.width;
             var elementPositionOffset = (double)deltaPointerPosition.x / containerWidth;
             thumbPosition = thumbDragInitialThumbElementPosition + elementPositionOffset;
-
-            thumbElementPosition = thumbDragInitialThumbElementPosition + elementPositionOffset;
         }
 
         
@@ -764,6 +763,8 @@ namespace Netherlands3D.UI.Components
             thumbLabelElement.style.left = Length.Percent((float)(thumbLabelPosition * 100));
             thumbLabelElement.Value = currentTime;
 
+            var markerPosition = Math.Clamp(TimeToPosition(currentTime, startTime, endTime), 0, 1);
+            currentTimeMarker.style.left = Length.Percent((float)(markerPosition * 100));
         }
         
     }

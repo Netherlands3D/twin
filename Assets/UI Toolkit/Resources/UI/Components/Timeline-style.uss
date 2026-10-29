@@ -60,10 +60,6 @@
     translate: -50% -50%;
 }
 
-.timeline__mark--labeled {
-    background-color: black;
-}
-
 .timeline__mark--primary   { height: 8px; }
 .timeline__mark--secondary { height: 4px; }
 .timeline__mark--tertiary  { height: 2px; }
@@ -148,3 +144,7 @@
     margin: 4px;
 }
 
+.timeline__current-time-marker{
+    background-color: var(--color-blue-700);
+    height: 100%;
+}

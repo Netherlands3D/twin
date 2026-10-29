@@ -12,6 +12,7 @@
     
     <ui:VisualElement name="MarksViewport" class="timeline__marks-viewport" picking-mode="Ignore">
         <ui:VisualElement name="MarksContainer" class="timeline__marks-container" picking-mode="Ignore" />
+        <ui:VisualElement name="CurrentTimeMarker" class="timeline__current-time-marker timeline__mark" picking-mode="Ignore" />
         <ui:VisualElement name="LeftScrollArea" class="timeline__scroll-area timeline__scroll-area--left" picking-mode="Ignore" />
         <ui:VisualElement name="RightScrollArea" class="timeline__scroll-area timeline__scroll-area--right" picking-mode="Ignore" />
     </ui:VisualElement>
