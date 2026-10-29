@@ -14,9 +14,9 @@
 
 .timeline-label__context > .unity-label {
     -unity-font-style: bold;
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
 }
 
 .timeline-label__label > .unity-label {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
 }

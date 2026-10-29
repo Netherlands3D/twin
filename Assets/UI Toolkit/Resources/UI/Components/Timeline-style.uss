@@ -60,13 +60,13 @@
     translate: -50% -50%;
 }
 
-.timeline__mark--primary   { height: 8px; }
-.timeline__mark--secondary { height: 4px; }
-.timeline__mark--tertiary  { height: 2px; }
+.timeline__mark--primary   { height: var(--spacing-2) }
+.timeline__mark--secondary { height: var(--spacing-1) }
+.timeline__mark--tertiary  { height: var(--spacing-0_5) }
 
 .timeline__labels-viewport {
     flex-grow: 0;
-    height: var(--spacing-8);
+    height: var(--spacing-9);
     overflow: hidden;
 }
 
@@ -116,7 +116,7 @@
     background-size: contain;
     width: 22px;
     height: 29px;
-    translate: -50% -15px;
+    translate: -50% -5px;
 }
 
 .timeline__thumb--dragging {
@@ -125,7 +125,7 @@
 
 .timeline__thumb-label {
     position: absolute;
-    translate: -50% -55px;
+    translate: -50% -45px;
     border-radius: 16px;
     border-width: 2px;
     border-color: #004091;
