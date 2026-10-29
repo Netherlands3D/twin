@@ -66,14 +66,21 @@ namespace Netherlands3D.Twin.Functionalities
                 if (value == Data.IsEnabled) //IsEnabled was not changed
                     return;
 
+                bool previousValue = Data.IsEnabled;
                 Data.IsEnabled = value;
                 
                 InvokeOnEnableChangeEvents();
+                if (previousValue != Data.IsEnabled)
+                    OnFunctionalityChanged.Invoke(this);
             }
         }
 
+        public bool IsExperimental;
+        public string FileExtension;
+
         public UnityEvent OnEnableFunctionality = new();
         public UnityEvent OnDisableFunctionality = new();
+        public UnityEvent<Functionality> OnFunctionalityChanged = new();
 
         private void InvokeOnEnableChangeEvents()
         {

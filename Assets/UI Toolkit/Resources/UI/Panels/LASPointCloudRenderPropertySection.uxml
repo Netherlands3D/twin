@@ -1,0 +1,16 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ui="UnityEngine.UIElements"
+         xmlns:nl3d="Netherlands3D.UI.Components"
+         noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False"
+         name="LASPointCloudRenderPropertySection"
+         class="las-render-property-section">
+    <nl3d:ContentContainer leading-icon="Layers" text="Puntenwolk weergave">
+        <ui:VisualElement class="las-render-property-section__controls">
+            <nl3d:RadioButtonGroup name="Kleurmodus" label="Kleurmodus" value="0" choices="Bestandskleuren,Classificatie" class="las-render-property-section__control"/>
+            <nl3d:Slider name="PuntGrootte" label="Puntgrootte (px)" low-value="0.5" high-value="20" class="las-render-property-section__control las-render-property-section__tight-slider"/>
+            <nl3d:Slider name="ReferentieAfstand" label="Referentieafstand (m)" low-value="25" high-value="1000" class="las-render-property-section__control"/>
+            <nl3d:Slider name="PuntenBudget" label="Punten budget" low-value="1" high-value="2000000" decimal-count="0" scroll-step="1000" class="las-render-property-section__control las-render-property-section__point-budget"/>
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
+</ui:UXML>
