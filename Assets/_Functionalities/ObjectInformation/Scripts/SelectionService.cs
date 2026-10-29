@@ -27,7 +27,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     public class SelectionService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
-        public FeatureSelector FeatureSelector => featureSelector;
+        public GeoJsonFeatureSelector FeatureSelector => geoJsonFeatureSelector;
         public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
         public LayerGameObject SelectedVisualisation => selectedVisualisation;
 
@@ -418,15 +418,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             lastSelectedMappingLayerData = layerData;
             
-            Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> mappings = featureSelector.FindFeatureByPosition(position);
+            Dictionary<GeoJsonLayerGameObject, List<GeoJsonFeatureMapping>> mappings = geoJsonFeatureSelector.FindFeatureByPosition(position);
             foreach(var kvp in mappings)
             {
                 if (kvp.Value.Count > 0)
                 {
-                    FeatureMapping mapping = kvp.Value[0];
-                    SelectFeatureMapping(mapping);
+                    GeoJsonFeatureMapping mapping = kvp.Value[0];
+                    geoJsonFeatureSelector.Select(mapping);
                     selectedMappings.TryAdd(layerData.Id.ToString(), mapping);
-                    SelectFeature?.Invoke(mapping);
+                    SelectGeoJsonFeature?.Invoke(mapping);
                 }
             }
         }

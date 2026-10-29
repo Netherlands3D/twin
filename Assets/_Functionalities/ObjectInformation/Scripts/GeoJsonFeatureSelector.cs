@@ -51,7 +51,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
         }
 
-        public Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> FindFeatureByPosition(Vector3 position)
+        public Dictionary<GeoJsonLayerGameObject, List<GeoJsonFeatureMapping>> FindFeatureByPosition(Vector3 position)
         {
             featureMappings.Clear();
             if (blockingObjectMapping != null)
