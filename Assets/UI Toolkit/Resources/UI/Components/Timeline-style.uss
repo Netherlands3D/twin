@@ -93,16 +93,6 @@
     justify-content: flex-end;
 }
 
-.timeline__label > .unity-label {
-    -unity-text-align: middle-center;
-    color: white;
-    text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.9);
-}
-
-.timeline__label--primary > .unity-label {
-    -unity-font-style: bold;
-}
-
 .timeline__thumb-container {
     position: absolute;
     left: 0;
@@ -110,7 +100,6 @@
     top: 0;
     bottom: 0;
 }
-
 
 .timeline__thumb {
     position: absolute;
