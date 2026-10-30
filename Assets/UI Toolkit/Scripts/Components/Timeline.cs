@@ -33,7 +33,7 @@ namespace Netherlands3D.UI.Components
         /// When true: (15:22:38 + 7) seconds with a rounding interval of 10 seconds will be rounded to 15:30:38.
         /// When false: (15:22:38 + 7) seconds with a roudning interval of 10 seconds will be rounded to 15:32:38.
         /// </summary>
-        private readonly bool alignGroupedIntervals = true; 
+        private readonly bool alignGroupedIntervals = false; 
 
 #endregion
        
