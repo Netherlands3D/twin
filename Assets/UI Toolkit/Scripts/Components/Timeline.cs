@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Netherlands3D.Services;
 using Netherlands3D.Sun;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.ExtensionMethods;
@@ -595,17 +596,7 @@ namespace Netherlands3D.UI.Components
         {
             if (Application.isPlaying)
             {
-                /*
-                layersService = App.Layers;
-                
-                foreach (var visualization in layersService.Visualizations)
-                {
-                    HandleLayerVisualizationCreated(visualization);
-                }
-                
-                layersService.VisualizationCreated.AddListener(HandleLayerVisualizationCreated);
-                layersService.LayerRemoved.AddListener(HandleLayerRemoved);
-                */
+                ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnSunTimeChanged);
             }
             
             StartSnap();
@@ -626,7 +617,10 @@ namespace Netherlands3D.UI.Components
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            
+            if (Application.isPlaying)
+            {
+                ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnSunTimeChanged);
+            }
         }
         
         private void UpdateMarks()
@@ -765,11 +759,8 @@ namespace Netherlands3D.UI.Components
         {
             if (currentTime != lastCurrentTime)
             {
-                var sunTimeService = ServiceLocator.GetService<SunTime>();
-                if (sunTimeService == null) return;
-                sunTimeService.timeOfDayChanged.RemoveListener(OnSunTimeChanged);
-                sunTimeService.SetTime(currentTime);
-                sunTimeService.timeOfDayChanged.AddListener(OnSunTimeChanged);
+                var projectData = ProjectData.Current;
+                projectData.CurrentDateTime = currentTime;
                 lastCurrentTime = currentTime;
             }
         }
