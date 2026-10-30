@@ -8,37 +8,6 @@ namespace Netherlands3D.Twin.Utility
 {
     public static class DateTimeUtils
     {
-
-        public static DateTime ToDateTime(this Length length, DateTime startTime, DateTime endTime, double ticksPerPixel)
-        {
-            if (length.unit == LengthUnit.Pixel)
-            {
-                return length.ToDateTime(startTime, ticksPerPixel);
-            } else if (length.unit == LengthUnit.Percent)
-            {
-                return length.ToDateTime(startTime, endTime);
-            }
-            throw new Exception();
-        }
-
-        public static DateTime ToDateTime(this Length length, DateTime startTime, double ticksPerPixel)
-        {
-            if (length.unit != LengthUnit.Pixel)
-            {
-                throw new Exception();
-            }
-            return startTime.AddTicks((long)Math.Round(length.value * ticksPerPixel));
-        }
-        
-        public static DateTime ToDateTime(this Length length, DateTime startTime, DateTime endTime)
-        {
-            if (length.unit != LengthUnit.Percent)
-            {
-                throw new Exception();
-            }
-            return startTime.Add((endTime - startTime)*length.value*0.01d);
-        }
-        
         public static double GetDateTimeUnitCountBetween(this DateTimeUnit timeUnit, DateTime startTime, DateTime endTime, double timeUnitFactor = 1)
         {
             if (startTime == endTime) return 0d;
