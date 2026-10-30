@@ -94,6 +94,7 @@ namespace Netherlands3D.UI.Components
         
         private bool isSnapping;
         private TimeSpan snapStartedThumbElementTimeOffset;
+        private const double SnappingTweenDuration = 0.2d;
         
         private double snapStartedRealTime;
         private DateTime snapStartedInitialStartTime;
@@ -564,7 +565,7 @@ namespace Netherlands3D.UI.Components
         {
             if (!isSnapping) return;
 
-            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .2d, 0d, 1d);
+            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / SnappingTweenDuration, 0d, 1d);
             var eased = 1d - Math.Pow(1d - t, 3d);
             displayedCurrentTime = t >= 1d
                 ? currentTime
