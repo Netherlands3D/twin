@@ -92,10 +92,6 @@
     --image-color-wheel: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/ColorWheel.png");
     --image-color-slider-color: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/SliderColor.png");
     --image-color-slider-alpha-bg: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/AlphaSliderAlpha.png");
-
-    /* Timeline sprites */
-    --image-timeline-scrubber-inactive: url("project://database/Assets/Sprites/UI/UIElements/Timeline/Scrubber_inactive.png");
-    --image-timeline-scrubber-active: url("project://database/Assets/Sprites/UI/UIElements/Timeline/Scrubber_active.png");
     
     /* List of all known icons */
     --icon-adjustmentshorizontal: url("project://database/Assets/Sprites/UI/Icons/Type=AdjustmentsHorizontal,%20Color=white,%20Size=medium.png");
