@@ -782,13 +782,12 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateTimeService()
         {
-            if (currentTime != lastCurrentTime)
-            {
-                var projectData = ProjectData.Current;
-                projectData.UseCurrentTime = false;
-                projectData.CurrentDateTime = currentTime;
-                lastCurrentTime = currentTime;
-            }
+            if (currentTime == lastCurrentTime) return;
+            var projectData = ProjectData.Current;
+            if (projectData == null) return;
+            projectData.UseCurrentTime = false;
+            projectData.CurrentDateTime = currentTime;
+            lastCurrentTime = currentTime;
         }
 
         private void HandleProjectTimeChanged(DateTime time)
