@@ -62,6 +62,8 @@ namespace Netherlands3D.Twin.Utility
 
                 var previous = startTime.AddYearsClamped(count);
                 var next = startTime.AddYearsClamped(count + 1);
+                
+                if (previous == next) return count;
 
                 return count + (endTime - previous).TotalDays / (next - previous).TotalDays;
             }
@@ -73,6 +75,8 @@ namespace Netherlands3D.Twin.Utility
 
                 var previous = startTime.AddMonthsClamped(count);
                 var next = startTime.AddMonthsClamped(count + 1);
+                
+                if (previous == next) return count;
 
                 return count + (endTime - previous).TotalDays / (next - previous).TotalDays;
             }
