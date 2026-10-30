@@ -91,6 +91,13 @@ namespace Netherlands3D.UI.Components
 
         private bool isSnapping;
         private TimeSpan snapStartedThumbElementTimeOffset;
+        
+        private double snapStartedRealTime;
+        private DateTime snapStartedInitialStartTime;
+        private DateTime snapStartedTargetStartTime;
+        private DateTime snapStartedInitialEndTime;
+        private DateTime snapStartedTargetEndTime;
+
 
         private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
@@ -531,14 +538,6 @@ namespace Netherlands3D.UI.Components
             }
 
         }
-
-        private double snapStartedRealTime;
-        private DateTime snapStartedInitialStartTime;
-        private DateTime snapStartedTargetStartTime;
-        private DateTime snapStartedInitialEndTime;
-        private DateTime snapStartedTargetEndTime;
-        
-        
 
         private void StartSnap()
         {
