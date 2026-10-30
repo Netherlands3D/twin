@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Netherlands3D.Twin.Projects;
@@ -89,6 +89,9 @@ namespace Netherlands3D.UI.Components
         private bool markElementsUpdateRequested = false;
         private bool unitGroupsUpdateRequested = false;
 
+        private DateTime unpaddedStartValue;
+        private DateTime unpaddedEndValue;
+        
         private bool isSnapping;
         private TimeSpan snapStartedThumbElementTimeOffset;
         
@@ -155,9 +158,6 @@ namespace Netherlands3D.UI.Components
             set => CurrentValue = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
         }
 
-        private DateTime unpaddedStartValue;
-        private DateTime unpaddedEndValue;
-        
         private DateTime StartValue
         {
             get => startTime;
@@ -467,8 +467,6 @@ namespace Netherlands3D.UI.Components
 
             currentTime = startTime.AddClamped(thumbPosition * duration);
             
-
-
             var minCurrentTime = PositionToTime(thumbScrollMinPosition, startTime, endTime);
             var maxCurrentTime = PositionToTime(thumbScrollMaxPosition, startTime, endTime);
             
