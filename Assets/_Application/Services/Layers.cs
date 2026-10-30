@@ -16,9 +16,6 @@ namespace Netherlands3D.Twin.Services
         [SerializeField] private PrefabLibrary prefabLibrary;
         [SerializeField] private DataTypeChain fromUrlImporter;
         
-        private readonly Dictionary<LayerData, LayerGameObject> visualizations = new();
-        public IEnumerable<LayerGameObject> Visualizations => visualizations.Values;
-        
         private VisualizationSpawner spawner;
         
         public UnityEvent<LayerData> LayerAdded { get; } = new();
@@ -136,7 +133,6 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public void Remove(LayerData layerData)
         {
-            visualizations.Remove(layerData);
             RemoveRecursive(layerData, true);
         }
 
@@ -170,7 +166,6 @@ namespace Netherlands3D.Twin.Services
                 }
 
                 var visualization = await visualizationTask;
-                visualizations[layer.LayerData] = visualization;
                 VisualizationCreated.Invoke(visualization);
 
                 if (layer.LayerData == null || layer.LayerData.IsDisposed)

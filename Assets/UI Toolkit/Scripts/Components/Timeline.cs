@@ -184,6 +184,7 @@ namespace Netherlands3D.UI.Components
                 displayedCurrentTime = value;
                 rootTime = value;
                 markElementsUpdateRequested = true;
+                AdjustTimeRange(value);
             }
         }
         
@@ -404,6 +405,33 @@ namespace Netherlands3D.UI.Components
             displayedCurrentTime = preciseCurrentTime;
             markElementsUpdateRequested = true;
         }
+
+        /// <summary>
+        /// Adjust the startTime and entTime (if needed) so that currentTime is visible.
+        /// </summary>
+        /// <param name="time"></param>
+        private void AdjustTimeRange(DateTime time)
+        {
+            var position = TimeToPosition(time, startTime, endTime);
+
+            if (position >= thumbScrollMinPosition && position <= thumbScrollMinPosition)
+            {
+                return;
+            }
+
+            var positionOffset = 0d;
+            
+            if (position < thumbScrollMinPosition)
+            {
+                positionOffset = thumbScrollMinPosition - position;
+            } else if (position > thumbScrollMaxPosition)
+            {
+                positionOffset = position - thumbScrollMaxPosition;
+            }
+            
+            OffsetTimeRange(startTime, endTime, positionOffset * (endTime - startTime));
+
+        }
         
         private void OnTimelineDragEnded(Vector2 endPointerPosition)
         {
@@ -436,16 +464,6 @@ namespace Netherlands3D.UI.Components
             
 
 
-            SetCurrentTime();
-            
-            
-            preciseCurrentTime = startTime.AddClamped(Math.Clamp(thumbPosition, 0, 1) * duration);
-            currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
-            displayedCurrentTime = preciseCurrentTime;
-        }
-
-        private void SetCurrentTime()
-        {
             var minCurrentTime = PositionToTime(thumbScrollMinPosition, startTime, endTime);
             var maxCurrentTime = PositionToTime(thumbScrollMaxPosition, startTime, endTime);
             
@@ -464,7 +482,13 @@ namespace Netherlands3D.UI.Components
 
             }
             markElementsUpdateRequested = true;
+            
+            
+            preciseCurrentTime = startTime.AddClamped(Math.Clamp(thumbPosition, 0, 1) * duration);
+            currentTime = preciseCurrentTime.Round(snapInterval, alignGroupedIntervals, rootTime);
+            displayedCurrentTime = preciseCurrentTime;
         }
+        
         
         private void OnThumbDragEnded(Vector2 arg0)
         {
@@ -491,6 +515,7 @@ namespace Netherlands3D.UI.Components
         {
             var clampedScrollOffset = TimeSpan.FromTicks(Math.Clamp(timespan.Ticks, DateTime.MinValue.Ticks - start.Ticks, DateTime.MaxValue.Ticks - end.Ticks));
             SetTimeRange(start.AddClamped(clampedScrollOffset), end.AddClamped(clampedScrollOffset));
+            markElementsUpdateRequested = true;
         }
 
         private void SetTimeRange(DateTime newStartTime, DateTime newEndTime)
