@@ -70,6 +70,8 @@ namespace Netherlands3D.UI.Components
         private DateTimeUnit unitPrecision;
         private DateTimeInterval snapInterval = new DateTimeInterval(DateTimeUnit.Year, 1);
 
+        private readonly List<DateTime> markTimes = new List<DateTime>(256);
+        private readonly List<DateTime> labelTimes = new List<DateTime>(32);
         private DateTimeInterval marksInterval;
         private DateTimeInterval labelsInterval;
 
@@ -673,8 +675,6 @@ namespace Netherlands3D.UI.Components
             var maxMarkElements = (double)width / 10;
             var maxLabelElements = (double)width / 64;
 
-
-
             if (unitGroupsUpdateRequested)
             {
                 unitGroupsUpdateRequested = false;
@@ -689,8 +689,8 @@ namespace Netherlands3D.UI.Components
             var paddingTicks = (long)Math.Round(ticksPerPixel * 50d);
             var paddedStartTime = startTime.AddTicksClamped(-paddingTicks);
             var paddedEndTime = endTime.AddTicksClamped(paddingTicks);
-            var markTimes = DateTimeUtils.GetDateTimesBetween(paddedStartTime, paddedEndTime, marksInterval, alignGroupedIntervals);
-            var labelTimes = DateTimeUtils.GetDateTimesBetween(paddedStartTime, paddedEndTime, labelsInterval, alignGroupedIntervals);
+            DateTimeUtils.GetDateTimesBetweenNonAlloc(markTimes, paddedStartTime, paddedEndTime, marksInterval, alignGroupedIntervals);
+            DateTimeUtils.GetDateTimesBetweenNonAlloc(labelTimes, paddedStartTime, paddedEndTime, labelsInterval, alignGroupedIntervals);
 
             var primaryMarkUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)(labelsInterval.Amount >= 1 ? labelsInterval.TimeUnit : labelsInterval.TimeUnit + 1)), (int)unitContext, (int)unitPrecision);
             var primaryLabelUnit = (DateTimeUnit)Math.Clamp(Math.Max((int)DateTimeUnit.Year, (int)(labelsInterval.Amount >= 1 ? labelsInterval.TimeUnit : labelsInterval.TimeUnit + 1)), (int)unitContext, (int)unitPrecision);
