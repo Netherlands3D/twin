@@ -51,15 +51,6 @@ namespace Netherlands3D.Twin.Utility
             }
         }
 
-        public static List<DateTime> GetDateTimesBetween(DateTime startTime, DateTime endTime, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime = default)
-        {
-            
-            var results = new List<DateTime>();
-            GetDateTimesBetweenNonAlloc(results, startTime, endTime, interval, alignGroupedIntervals, rootTime);
-            
-            return results;
-        }
-
         public static void GetDateTimesBetweenNonAlloc(List<DateTime> results, DateTime startTime, DateTime endTime, DateTimeInterval interval, bool alignGroupedIntervals, DateTime rootTime = default)
         {
             results.Clear();
