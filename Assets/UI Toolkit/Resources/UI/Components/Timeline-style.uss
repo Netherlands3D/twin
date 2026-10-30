@@ -1,6 +1,11 @@
-.timeline {
+.timeline{
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.timeline__timeline-container {
     position: relative;
-    flex-grow: 0;
+    flex-grow: 1;
     flex-shrink: 0;
     align-self: stretch;
     min-width: 0;
@@ -12,7 +17,7 @@
     border-radius: 8px;
     border-width: 2px;
     border-color: #CCD7E4;
-    height: 16px;
+    height: var(--spacing-4);
     overflow: hidden;
 }
 
@@ -147,4 +152,19 @@
 .timeline__current-time-marker{
     background-color: var(--color-blue-700);
     height: 100%;
+}
+
+.timeline__zoom-container{
+    flex-direction: row;
+    align-items: flex-end;
+    flex-shrink: 0;
+    margin-right: var(--spacing-1);
+}
+
+.timeline__zoom-container .button.timeline__zoom-button{
+    min-height: var(--spacing-8);
+    height: var(--spacing-8);
+    width: var(--spacing-8);
+    align-self: flex-end;
+    margin-right: var(--spacing-1);
 }

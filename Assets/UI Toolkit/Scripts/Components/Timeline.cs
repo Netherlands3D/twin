@@ -26,7 +26,9 @@ namespace Netherlands3D.UI.Components
         private double thumbMinPosition = 0d;
         private double thumbMaxPosition = 1d;
         private double maxScrollSpeed = 1d;
-
+        
+        private const float zoomSensitivity = 0.1f;
+        private const float buttonZoomMultiplier = 5f;
         /// <summary>
         /// Whether grouped intervals need to be aligned to zero.
         /// When true: (15:22:38 + 7) seconds with a rounding interval of 10 seconds will be rounded to 15:30:38.
@@ -45,6 +47,8 @@ namespace Netherlands3D.UI.Components
         private readonly VisualElement thumbElement;
         private readonly DateTimeLabel thumbLabelElement;
         private readonly VisualElement currentTimeMarker;
+        private readonly Button zoomInButton;
+        private readonly Button zoomOutButton;
         
         private DateTime currentTime;
         private DateTime lastCurrentTime;
@@ -231,10 +235,15 @@ namespace Netherlands3D.UI.Components
             thumbElement = this.Q<VisualElement>("Thumb");
             thumbLabelElement = this.Q<DateTimeLabel>("ThumbLabel");
             currentTimeMarker = this.Q<VisualElement>("CurrentTimeMarker");
+            zoomInButton =  this.Q<Button>("ZoomInButton");
+            zoomOutButton = this.Q<Button>("ZoomOutButton");
             
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+
+            zoomInButton.RegisterCallback<ClickEvent>(ZoomIn);
+            zoomOutButton.RegisterCallback<ClickEvent>(ZoomOut);
             
             var viewport = this.Q<VisualElement>("MarksViewport");
             
@@ -317,13 +326,29 @@ namespace Netherlands3D.UI.Components
             UpdateThumbDrag();
             UpdateMarks();
         }
+
+        private void ZoomIn(ClickEvent e)
+        {
+            var zoomMultiplier = Mathf.Pow(2.0f, zoomSensitivity * -buttonZoomMultiplier);
+            Zoom(zoomMultiplier);
+        }
+
+        private void ZoomOut(ClickEvent e)
+        {
+            var zoomMultiplier = Mathf.Pow(2.0f, zoomSensitivity * buttonZoomMultiplier);
+            Zoom(zoomMultiplier);
+        }
         
         private void OnMouseWheelScrolled(WheelEvent evt)
         {
-            const float zoomSensitivity = 0.1f;
             var scrollDirection = evt.delta.y;
             var zoomMultiplier = Mathf.Pow(2.0f, zoomSensitivity * scrollDirection);
 
+            Zoom(zoomMultiplier);
+        }
+
+        private void Zoom(float zoomMultiplier)
+        {
             var startSpan = (currentTime - startTime);
             var endSpan = (endTime - currentTime);
             
@@ -358,7 +383,7 @@ namespace Netherlands3D.UI.Components
             markElementsUpdateRequested = true;
             unitGroupsUpdateRequested = true;
         }
-        
+
         private void OnTimelineDragStarted(Vector2 startPointerPosition)
         {
             timelineDragInitialStartTime = startTime;
