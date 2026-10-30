@@ -1,4 +1,7 @@
-.timeline{
+.timeline {
+    --image-timeline-scrubber-inactive: url("project://database/Assets/Sprites/UI/UIElements/Timeline/Scrubber_inactive.png");
+    --image-timeline-scrubber-active: url("project://database/Assets/Sprites/UI/UIElements/Timeline/Scrubber_active.png");
+    
     flex-direction: row;
     align-items: stretch;
 }
