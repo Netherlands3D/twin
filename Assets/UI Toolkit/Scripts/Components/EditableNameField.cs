@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Netherlands3D.UI_Toolkit;
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
@@ -69,6 +70,20 @@ namespace Netherlands3D.UI.Components
                 inputField.SetValueWithoutNotify(newValue);
                 CalculateOverflow();
                 SendEvent(evt);
+            }
+        }
+
+        [UxmlAttribute("color")]
+        public string color
+        {
+            get { return label.style.color.value.ToString(); }
+            set
+            {
+                if (HexColorUtility.ParseHexColor(value, out var parsedColor))
+                {
+                    label.style.color = parsedColor;
+                    inputField.style.color = parsedColor;
+                }
             }
         }
 

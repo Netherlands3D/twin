@@ -154,7 +154,7 @@ namespace Netherlands3D.UI.Behaviours
 
         private void ConfirmSuggestion(SuggestionResult result)
         {
-            panel?.SetQueryText(result.Label);
+            panel?.SetQueryText(result.DisplayLabel);
             panel?.ClearSuggestions();
             addressSearchService?.SelectSuggestion(result.Id, result.Label);
         }
