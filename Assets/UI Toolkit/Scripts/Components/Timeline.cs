@@ -596,7 +596,7 @@ namespace Netherlands3D.UI.Components
         {
             if (Application.isPlaying)
             {
-                ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnSunTimeChanged);
+                ProjectData.Current.OnCurrentDateTimeChanged.AddListener(HandleProjectTimeChanged);
             }
             
             StartSnap();
@@ -619,7 +619,7 @@ namespace Netherlands3D.UI.Components
         {
             if (Application.isPlaying)
             {
-                ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnSunTimeChanged);
+                ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(HandleProjectTimeChanged);
             }
         }
         
@@ -760,14 +760,16 @@ namespace Netherlands3D.UI.Components
             if (currentTime != lastCurrentTime)
             {
                 var projectData = ProjectData.Current;
+                projectData.UseCurrentTime = false;
                 projectData.CurrentDateTime = currentTime;
                 lastCurrentTime = currentTime;
             }
         }
 
-        private void OnSunTimeChanged(DateTime arg0)
+        private void HandleProjectTimeChanged(DateTime time)
         {
-            CurrentValue = arg0;
+            lastCurrentTime = time;
+            CurrentValue = time;
         }
 
         void UpdateThumb()
