@@ -621,7 +621,7 @@ namespace Netherlands3D.UI.Components
             }
 
             var maxMarkElements = (double)width / 10;
-            var maxLabelElements = (double)width / 42;
+            var maxLabelElements = (double)width / 64;
 
 
 
