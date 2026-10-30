@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Netherlands3D.Services;
-using Netherlands3D.Sun;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI_Toolkit;
@@ -735,7 +733,6 @@ namespace Netherlands3D.UI.Components
                 {
                     var newLabel = new TimelineLabel();
                     newLabel.pickingMode = PickingMode.Ignore;
-                    //newLabel.AddToClassList("timeline__label");
                     labelsContainer.Add(newLabel);
                     labelElements.Add(newLabel);
                 }
