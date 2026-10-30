@@ -74,7 +74,7 @@
 
 .timeline__labels-viewport {
     flex-grow: 0;
-    height: var(--spacing-9);
+    height: var(--spacing-10);
     overflow: hidden;
 }
 
