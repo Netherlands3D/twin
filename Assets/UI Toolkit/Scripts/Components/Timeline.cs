@@ -89,9 +89,17 @@ namespace Netherlands3D.UI.Components
         private bool markElementsUpdateRequested = false;
         private bool unitGroupsUpdateRequested = false;
 
+        private DateTime unpaddedStartValue;
+        private DateTime unpaddedEndValue;
+        
         private bool isSnapping;
         private TimeSpan snapStartedThumbElementTimeOffset;
-
+        private double snapStartedRealTime;
+        private DateTime snapStartedInitialStartTime;
+        private DateTime snapStartedTargetStartTime;
+        private DateTime snapStartedInitialEndTime;
+        private DateTime snapStartedTargetEndTime;
+        
         private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
             new (DateTimeUnit.Year, 100),
@@ -147,9 +155,6 @@ namespace Netherlands3D.UI.Components
             get => CurrentValue.ToString("O");
             set => CurrentValue = DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
         }
-
-        private DateTime unpaddedStartValue;
-        private DateTime unpaddedEndValue;
         
         private DateTime StartValue
         {
@@ -460,8 +465,6 @@ namespace Netherlands3D.UI.Components
 
             currentTime = startTime.AddClamped(thumbPosition * duration);
             
-
-
             var minCurrentTime = PositionToTime(thumbScrollMinPosition, startTime, endTime);
             var maxCurrentTime = PositionToTime(thumbScrollMaxPosition, startTime, endTime);
             
@@ -531,14 +534,6 @@ namespace Netherlands3D.UI.Components
             }
 
         }
-
-        private double snapStartedRealTime;
-        private DateTime snapStartedInitialStartTime;
-        private DateTime snapStartedTargetStartTime;
-        private DateTime snapStartedInitialEndTime;
-        private DateTime snapStartedTargetEndTime;
-        
-        
 
         private void StartSnap()
         {
