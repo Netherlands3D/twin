@@ -85,6 +85,9 @@
     --color-green: rgb(86, 172, 86);
     --color-tooltip: rgba(47, 53, 80, 0.9);
 
+    /* Generic sprites */
+    --image-transparent-horizontal-linear-gradient: url("project://database/Assets/Sprites/UI/UIElements/TransparentHorizontalLinearGradient.png");
+
     /* ColorPicker sprites */
     --image-color-wheel: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/ColorWheel.png");
     --image-color-slider-color: url("project://database/Assets/Sprites/UI/UIElements/ColorWheel/SliderColor.png");
