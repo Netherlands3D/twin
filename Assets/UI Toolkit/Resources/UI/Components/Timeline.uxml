@@ -6,20 +6,25 @@
     editor-extension-mode="False"  
     class="timeline"
 >
-    <ui:VisualElement name="LabelsViewport" class="timeline__labels-viewport" picking-mode="Ignore">
-        <ui:VisualElement name="LabelsContainer" class="timeline__labels-container" picking-mode="Ignore" />
+    <ui:VisualElement name="ZoomButtonContainer" class="timeline__zoom-container">
+        <nl3d:Button name="ZoomInButton" class="timeline__zoom-button" button-style="IconOnly" button-type="transparent" icon="plus"/>
+        <nl3d:Button name="ZoomOutButton" class="timeline__zoom-button" button-style="IconOnly" button-type="transparent" icon="minus"/>
     </ui:VisualElement>
-    
-    <ui:VisualElement name="MarksViewport" class="timeline__marks-viewport" picking-mode="Ignore">
-        <ui:VisualElement name="MarksContainer" class="timeline__marks-container" picking-mode="Ignore" />
-        <ui:VisualElement name="CurrentTimeMarker" class="timeline__current-time-marker timeline__mark" picking-mode="Ignore" />
-        <ui:VisualElement name="LeftScrollArea" class="timeline__scroll-area timeline__scroll-area--left" picking-mode="Ignore" />
-        <ui:VisualElement name="RightScrollArea" class="timeline__scroll-area timeline__scroll-area--right" picking-mode="Ignore" />
-    </ui:VisualElement>
+    <ui:VisualElement name="TimelineContainer" class="timeline__timeline-container">
+        <ui:VisualElement name="LabelsViewport" class="timeline__labels-viewport" picking-mode="Ignore">
+            <ui:VisualElement name="LabelsContainer" class="timeline__labels-container" picking-mode="Ignore" />
+        </ui:VisualElement>
+        
+        <ui:VisualElement name="MarksViewport" class="timeline__marks-viewport" picking-mode="Ignore">
+            <ui:VisualElement name="MarksContainer" class="timeline__marks-container" picking-mode="Ignore" />
+            <ui:VisualElement name="CurrentTimeMarker" class="timeline__current-time-marker timeline__mark" picking-mode="Ignore" />
+            <ui:VisualElement name="LeftScrollArea" class="timeline__scroll-area timeline__scroll-area--left" picking-mode="Ignore" />
+            <ui:VisualElement name="RightScrollArea" class="timeline__scroll-area timeline__scroll-area--right" picking-mode="Ignore" />
+        </ui:VisualElement>
 
-    <ui:VisualElement name="ThumbContainer" class="timeline__thumb-container" picking-mode="Ignore">
-        <ui:VisualElement name="Thumb" class="timeline__thumb" picking-mode="Ignore" />
-        <nl3d:DateTimeLabel name="ThumbLabel" class="timeline__thumb-label" picking-mode="Ignore" value="2020-06-15T00:00:00+02:00"/>
+        <ui:VisualElement name="ThumbContainer" class="timeline__thumb-container" picking-mode="Ignore">
+            <ui:VisualElement name="Thumb" class="timeline__thumb" picking-mode="Ignore" />
+            <nl3d:DateTimeLabel name="ThumbLabel" class="timeline__thumb-label" picking-mode="Ignore" value="2020-06-15T00:00:00+02:00"/>
+        </ui:VisualElement>
     </ui:VisualElement>
-
 </ui:UXML>
