@@ -90,10 +90,6 @@ namespace Netherlands3D.UI.Components
 
             if (Includes(DateTimeUnit.Day)) dateParts.Add("%d");
             if (Includes(DateTimeUnit.Month)) dateParts.Add("'"+value.ToString("MMM", culture).TrimEnd('.')+"'"); //remove last characther, which is the "." in "jan."
-            /*if (Includes(DateTimeUnit.Quarter))
-            {
-                parts.Add("Q" + (1 + (value.Month / 4)));
-            }*/
             if (Includes(DateTimeUnit.Year)) dateParts.Add("yyyy");
 
             var timeParts = new List<string>();
