@@ -305,7 +305,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             gameObject.SetActive(isActive);
         }
 
-        private void OnMouseClickNothing()
+        protected virtual void OnMouseClickNothing()
         {
             if (LayerData.IsSelected)
             {

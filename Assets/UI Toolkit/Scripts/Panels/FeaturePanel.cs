@@ -46,7 +46,7 @@ namespace Netherlands3D.UI.Panels
             PolygonCreationService polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             foreach (KeyValuePair<string, IMapping> mapping in mappings)
             {
-                if (mapping.Value is FeatureMapping featureMapping)
+                if (mapping.Value is GeoJsonFeatureMapping featureMapping)
                 {
                     polygonCreationService.ConvertToLayer(featureMapping.Feature);
                     break;
