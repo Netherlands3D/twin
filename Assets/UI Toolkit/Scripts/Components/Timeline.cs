@@ -34,6 +34,9 @@ namespace Netherlands3D.UI.Components
         /// When false: (15:22:38 + 7) seconds with a roudning interval of 10 seconds will be rounded to 15:32:38.
         /// </summary>
         private readonly bool alignGroupedIntervals = false; 
+        
+        private const double SnappingTweenDuration = 0.2d;
+        private const double MarkElementsPaddingPx = 50d;
 
 #endregion
        
@@ -564,7 +567,7 @@ namespace Netherlands3D.UI.Components
         {
             if (!isSnapping) return;
 
-            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / .2d, 0d, 1d);
+            var t = Math.Clamp((Time.realtimeSinceStartupAsDouble - snapStartedRealTime) / SnappingTweenDuration, 0d, 1d);
             var eased = 1d - Math.Pow(1d - t, 3d);
             displayedCurrentTime = t >= 1d
                 ? currentTime
@@ -672,7 +675,7 @@ namespace Netherlands3D.UI.Components
             }
 
             ticksPerPixel = (duration.Ticks) / width;
-            var paddingTicks = (long)Math.Round(ticksPerPixel * 50d);
+            var paddingTicks = (long)Math.Round(ticksPerPixel * MarkElementsPaddingPx);
             var paddedStartTime = startTime.AddTicksClamped(-paddingTicks);
             var paddedEndTime = endTime.AddTicksClamped(paddingTicks);
             DateTimeUtils.GetDateTimesBetweenNonAlloc(markTimes, paddedStartTime, paddedEndTime, marksInterval, alignGroupedIntervals);
