@@ -97,7 +97,6 @@ namespace Netherlands3D.UI.Components
         
         private bool isSnapping;
         private TimeSpan snapStartedThumbElementTimeOffset;
-        private const double SnappingTweenDuration = 0.2d;
         
         private double snapStartedRealTime;
         private DateTime snapStartedInitialStartTime;
