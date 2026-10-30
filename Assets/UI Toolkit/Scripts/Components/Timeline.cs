@@ -286,8 +286,6 @@ namespace Netherlands3D.UI.Components
 
             unpaddedStartValue = newMin;
             unpaddedEndValue = newMax;
-
-            Debug.Log("setting new unpadded minmax : " + newMin.ToString("F") + " -> " + newMax.ToString("F"));
             
             if (thumbScrollMaxPosition == thumbScrollMinPosition)
             {
@@ -304,7 +302,6 @@ namespace Netherlands3D.UI.Components
             var realStart= newMin.AddTicks(-(long)Math.Round(fullTicks * thumbScrollMinPosition));
             var realEnd= newMax.AddTicks((long)Math.Round(fullTicks * (1d - thumbScrollMaxPosition)));
 
-            Debug.Log("setting new real range : " + realStart.ToString("F") + " -> " + realEnd.ToString("F"));
             StartValue = realStart;
             EndValue = realEnd;
         }
