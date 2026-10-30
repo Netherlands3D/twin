@@ -669,7 +669,7 @@ namespace Netherlands3D.UI.Components
                 unitGroupsUpdateRequested = false;
                 marksInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision, startTime,
                     endTime, maxMarkElements);
-                snapInterval = marksInterval;//.Amount >= 1 ? new DateTimeInterval(marksInterval.TimeUnit, 1) : new DateTimeInterval(marksInterval.TimeUnit + 1, 1) ;
+                snapInterval = marksInterval;
                 labelsInterval = DateTimeUtils.SelectDateTimeUnitGroup(unitGroups, unitContext, unitPrecision,
                     startTime, endTime, maxLabelElements);
             }
