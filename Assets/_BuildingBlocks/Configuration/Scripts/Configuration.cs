@@ -304,7 +304,6 @@ namespace Netherlands3D.Twin.Configuration
             foreach (var functionality in Functionalities)
             {
                 functionality.ResetDataToDefaults();
-                
             }
             
             foreach (var savedData in changedData.functionalities)
@@ -316,6 +315,8 @@ namespace Netherlands3D.Twin.Configuration
                     matchingFunctionality.Data = savedData;
                     matchingFunctionality.IsEnabled = savedData.IsEnabled;
                     UpdateFunctionalityExtention(matchingFunctionality);
+                    //remove any previous existing listener
+                    matchingFunctionality.OnFunctionalityChanged.RemoveListener(UpdateFunctionalityExtention);
                     matchingFunctionality.OnFunctionalityChanged.AddListener(UpdateFunctionalityExtention);
                 }
             }
