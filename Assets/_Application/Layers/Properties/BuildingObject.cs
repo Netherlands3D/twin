@@ -36,7 +36,7 @@ namespace Netherlands3D.Twin.layers.properties
             selectorService.OnDeselect.RemoveListener(ClearMeshMappingsForLayer);
         }
 
-        private void ProcessMeshMappingForLayer(MeshMapping mapping, string bagId)
+        private void ProcessMeshMappingForLayer(BagMeshMapping mapping, string bagId)
         {
             if (visualization == null || mapping == null || visualization.LayerData != mapping.LayerData)
             {
@@ -49,7 +49,7 @@ namespace Netherlands3D.Twin.layers.properties
             SelectionService selectorService = ServiceLocator.GetService<SelectionService>();
             foreach (KeyValuePair<string, IMapping> kv in selectorService.SelectedMappings)
             {
-                if (kv.Value is MeshMapping map)
+                if (kv.Value is BagMeshMapping map)
                 {
                     Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, map.ObjectMapping.items[kv.Key]);
                     buildingIds.Add(kv.Key, coord);

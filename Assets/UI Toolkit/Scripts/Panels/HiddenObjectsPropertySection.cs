@@ -289,8 +289,8 @@ namespace Netherlands3D.UI.Panels
                 return; //object got destroyed in the meantime
             }
 
-            if (mapping is not MeshMapping meshMapping) return;
-            MeshMappingItem item = meshMapping.FindItemById(objectId);
+            if (mapping is not BagMeshMapping meshMapping) return;
+            BagMeshMappingItem item = meshMapping.FindItemById(objectId);
             if (item == null) return;
 
             //dont remove the listener yet, we want to be able to refresh the ghost mesh when a new lod is loaded
@@ -300,7 +300,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnMappingRemoved(IMapping mapping)
         {
-            if (mapping is not MeshMapping meshMapping) return;
+            if (mapping is not BagMeshMapping meshMapping) return;
             if(selectedGhostObject == null) return;
 
             string objectId = selectedGhostObject.name;
@@ -326,17 +326,17 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
-            List<IMapping> mappings = SelectionService.MappingTree.Query<MeshMapping>((Coordinate)coord);
+            List<IMapping> mappings = SelectionService.MappingTree.Query<BagMeshMapping>((Coordinate)coord);
             foreach (IMapping m in mappings)
             {
-                if (m is not MeshMapping meshMapping) continue;
+                if (m is not BagMeshMapping meshMapping) continue;
 
-                MeshMappingItem item = meshMapping.FindItemById(objectId);
+                BagMeshMappingItem item = meshMapping.FindItemById(objectId);
                 if (item == null) continue;
 
                 DestroyGhostMesh();
                 selectedGhostObject = new GameObject(objectId);
-                Mesh mesh = MeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, item.ObjectMappingItem, out Vector3 localCentroid);
+                Mesh mesh = BagMeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, item.ObjectMappingItem, out Vector3 localCentroid);
                 MeshFilter mFilter = selectedGhostObject.AddComponent<MeshFilter>();
                 mFilter.mesh = mesh;
                 MeshRenderer mRenderer = selectedGhostObject.AddComponent<MeshRenderer>();

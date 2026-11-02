@@ -74,6 +74,7 @@ namespace Netherlands3D.Sun
             get => useCurrentTime;
             set
             {
+                if (useCurrentTime == value) return;
                 useCurrentTime = value;
                 if (value)
                     ResetToNow();

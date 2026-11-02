@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class FeatureMapping : IMapping
+    public class GeoJsonFeatureMapping : IMapping
     {
         public string DebugID;
 
@@ -33,6 +33,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private IGeoJsonVisualisationLayer visualisationLayer;
         private GeoJsonLayerGameObject geoJsonLayerParent;
         private BoundingBox boundingBox;
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            return Feature.Properties as Dictionary<string, object>;
+        }
 
         public void SetGeoJsonLayerParent(GeoJsonLayerGameObject parentLayer)
         {
@@ -79,7 +84,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     {
                         Vector3 xzStart = new Vector3(vertices[j].x, unityPos.y, vertices[j].z);
                         Vector3 xzEnd = new Vector3(vertices[j + 1].x, unityPos.y, vertices[j + 1].z);
-                        Vector3 nearest = FeatureSelector.NearestPointOnFiniteLine(xzStart, xzEnd, unityPos);
+                        Vector3 nearest = GeoJsonFeatureSelector.NearestPointOnFiniteLine(xzStart, xzEnd, unityPos);
                         float dist = Vector2.SqrMagnitude(xzPos - new Vector2(nearest.x, nearest.z));
                         if (dist < range * range)
                         {
@@ -93,7 +98,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
                     GeoJSONPolygonLayer polygonLayer = visualisationLayer as GeoJSONPolygonLayer;
                     PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes[i]);
-                    bool isSelected = FeatureSelector.ProcessPolygonSelection(meshes[i], pv.transform, frustumPlanes, unityPos);
+                    bool isSelected = GeoJsonFeatureSelector.ProcessPolygonSelection(meshes[i], pv.transform, frustumPlanes, unityPos);
                     if (isSelected)
                     {
                         hitPoint = unityPos;
@@ -142,13 +147,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             Coordinate topRight = new Coordinate(featureBounds.max);
             BoundingBox boundingBox = new BoundingBox(bottomLeft, topRight);
             return boundingBox;
-        }
-        
-        public Coordinate GetCoordinateForFeatureMapping()
-        {
-            if(boundingBox == null)
-                UpdateBoundingBox();
-            return boundingBox.Center;
         }
 
         //these gameobjects can represent selected features or thumbnail meshes
@@ -275,6 +273,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             selectedGameObjects.Clear();
 
             visualisationLayer.SetVisualisationDeselected();
+        }
+
+        public void SetMappingProjected(bool projected)
+        {
+            //todo the subobject can be changed here to be projected in the future
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
@@ -9,6 +10,7 @@ using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Newtonsoft.Json.Linq;
+using SimpleJSON; //todo when cityjson attributes will not use simplejson, convert also the parsing methods to flatten arrays also to newtonsoft
 using UnityEngine;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -70,19 +72,113 @@ namespace Netherlands3D.UI.Panels
         public void PopulateAddresses(Dictionary<string, object> properties)
         {
             var list = new List<KeyValue>();
+
             foreach (var kv in properties)
             {
-                if (kv.Value is JObject nested)
+                FlattenValue(kv.Key, kv.Value, list);
+            }
+
+            propertiesListView.itemsSource = list;
+            propertiesListView.Rebuild();
+        }
+
+        private void FlattenValue(string key, object value, List<KeyValue> list)
+        {
+            if (value == null)
+            {
+                list.Add(new KeyValue { Key = key, Value = "" });
+                return;
+            }
+
+            // Handle Newtonsoft JSON objects
+            if (value is JObject jObject)
+            {
+                foreach (var property in jObject.Properties())
                 {
-                    foreach (var nestedKv in nested)
-                        list.Add(new KeyValue { Key = nestedKv.Key, Value = nestedKv.Value?.ToString() });
+                    FlattenValue($"{key}.{property.Name}", property.Value, list);
                 }
-                else
+                return;
+            }
+
+            // Handle Newtonsoft JSON arrays
+            if (value is JArray jArray)
+            {
+                for (int i = 0; i < jArray.Count; i++)
                 {
-                    list.Add(new KeyValue { Key = kv.Key, Value = kv.Value?.ToString() });
+                    FlattenArrayValue(key, i, jArray[i], list);
+                }
+                return;
+            }
+
+            // Handle SimpleJSON
+            if (value is JSONNode jsonNode)
+            {
+                if (jsonNode.IsObject)
+                {
+                    foreach (var child in jsonNode.AsObject)
+                    {
+                        FlattenValue($"{key}.{child.Key}", child.Value, list);
+                    }
+                    return;
+                }
+
+                if (jsonNode.IsArray)
+                {
+                    for (int i = 0; i < jsonNode.AsArray.Count; i++)
+                    {
+                        FlattenArrayValue(key, i, jsonNode.AsArray[i], list);
+                    }
+                    return;
+                }
+
+                list.Add(new KeyValue
+                {
+                    Key = key,
+                    Value = jsonNode.IsNull ? "" : jsonNode.Value
+                });
+                return;
+            }
+
+            // Handle regular dictionaries
+            if (value is IDictionary<string, object> dictionary)
+            {
+                foreach (var child in dictionary)
+                {
+                    FlattenValue($"{key}.{child.Key}", child.Value, list);
+                }
+                return;
+            }
+
+            // Handle regular C# values
+            list.Add(new KeyValue
+            {
+                Key = key,
+                Value = value.ToString()
+            });
+        }
+
+        private void FlattenArrayValue(string key, int index, object value, List<KeyValue> list)
+        {
+            string arrayKey = $"{key} {index}";
+
+            if (value is JObject jObject)
+            {
+                foreach (var property in jObject.Properties())
+                {
+                    FlattenValue($"{arrayKey} : {property.Name}", property.Value, list);
                 }
             }
-            propertiesListView.itemsSource = list;
+            else if (value is JSONNode jsonNode && jsonNode.IsObject)
+            {
+                foreach (var child in jsonNode.AsObject)
+                {
+                    FlattenValue($"{arrayKey} : {child.Key}", child.Value, list);
+                }
+            }
+            else
+            {
+                FlattenValue(arrayKey, value, list);
+            }
         }
         
         private VisualElement MakeListViewItem()
@@ -109,13 +205,14 @@ namespace Netherlands3D.UI.Panels
             {
                 Dictionary<string, object> featureProperties = kv.Value.Properties;
                 BoundingBox bbox = kv.Value.BoundingBox;
-                GetFeatureThumbnail(bbox);
+                IMapping mapping = kv.Value.FeatureMapping;
+                GetFeatureThumbnail(bbox, mapping);
                 PopulateAddresses(featureProperties);
                 break;
             }
         }
 
-        private void GetFeatureThumbnail(BoundingBox bbox)
+        private void GetFeatureThumbnail(BoundingBox bbox, IMapping mapping)
         {
             //schedule for next frame so the style is resolved
             thumbnailContainer.schedule.Execute(_ => 
@@ -129,7 +226,10 @@ namespace Netherlands3D.UI.Panels
                 }
                 if(currentObjectBounds.size.magnitude < ThumbnailService.MIN_THUMBNAIL_BOUNDS_SIZE)
                     currentObjectBounds.size = Vector3.Max(currentObjectBounds.size, Vector3.one * ThumbnailService.MIN_THUMBNAIL_BOUNDS_SIZE);
+                
+                mapping.SetMappingProjected(true);
                 Texture2D tex = thumbnailService.RenderThumbnail(currentObjectBounds);
+                mapping.SetMappingProjected(false);
                 thumbnailContainer.style.backgroundImage = new StyleBackground(tex);
                 float aspect = (float)tex.height / tex.width;
                 float newHeight = thumbnailContainer.resolvedStyle.width * aspect;
