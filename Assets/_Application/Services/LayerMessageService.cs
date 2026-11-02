@@ -61,6 +61,7 @@ namespace Netherlands3D.Twin.Services
             layers.LayerRemoved.RemoveListener(OnLayerRemoved);
             layers.VisualizationCreated.RemoveListener(OnVisualizationCreated);
             layerSourceAttributionEvent.RemoveListenerStarted(OnAttributionReceived.Invoke);
+            fileImportService.onFilesNotSupported.RemoveListener(ImportFilesNotSupported);
             
             foreach (var chain in chains)
             {

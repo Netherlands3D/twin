@@ -57,6 +57,9 @@ mergeInto(LibraryManager.library, {
 	    event.preventDefault();
 
 	    var files = Array.from(event.dataTransfer.files);
+	     if (files.length === 0) {
+		return;
+	    }
 
 	    var validFiles = files.filter(function (file) {
 		var fileName = file.name.toLowerCase();
@@ -203,13 +206,8 @@ mergeInto(LibraryManager.library, {
 	
 SetFileImporterCallbackObject: function (objectNamePtr) {
     window.fileImporterCallbackObject = UTF8ToString(objectNamePtr);
-	},
+	},   
     
-    SetAllowedDropExtensions: function (extensionsPtr) {
-        var extensions = UTF8ToString(extensionsPtr);
-        window.SetAllowedDropExtensions(extensions);
-    },
-
     SetAllowedDropExtensions: function (extensions) {
         window.allowedDropExtensions = UTF8ToString(extensions).split(",").map(function (ext) {
             ext = ext.trim().toLowerCase();

@@ -85,9 +85,15 @@ namespace Netherlands3D.Twin.Configuration
         public bool ExperimentalFunctionalityHasFileExtension(string extension)
         {
             foreach (var functionality in Functionalities)
-                if(functionality.IsExperimental)
-                    if(functionality.FileExtension.Contains(extension)) //should work for "ext" & ".ext"
-                        return  true;
+            {
+                if (functionality.IsExperimental)
+                {
+                    var normalizedExtension = extension.Trim().TrimStart('.');
+                    if (string.Equals(functionality.FileExtension.Trim().TrimStart('.'), normalizedExtension, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+            }
+
             return false;
         }
 
