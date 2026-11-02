@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Projects
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
+            ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnProjectTimeChanged);
             sunTime.timeOfDayChanged.AddListener(SaveCurrentDateTime);
             sunTime.useCurrentTimeChanged.AddListener(SaveUseCurrentTime);
         }
@@ -25,6 +26,7 @@ namespace Netherlands3D.Twin.Projects
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
+            ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnProjectTimeChanged);
             sunTime.timeOfDayChanged.RemoveListener(SaveCurrentDateTime);
             sunTime.useCurrentTimeChanged.RemoveListener(SaveUseCurrentTime);
         }
@@ -36,6 +38,18 @@ namespace Netherlands3D.Twin.Projects
         
         private void OnProjectDataChanged(ProjectData project)
         {
+            sunTime.UseCurrentTime = project.UseCurrentTime;
+            
+            if (!project.UseCurrentTime)
+            {
+                lastSavedDateTime = project.CurrentDateTime;
+                sunTime.SetTime(project.CurrentDateTime);
+            }
+        }
+
+        private void OnProjectTimeChanged(DateTime time)
+        {
+            var project = ProjectData.Current;
             sunTime.UseCurrentTime = project.UseCurrentTime;
             
             if (!project.UseCurrentTime)
