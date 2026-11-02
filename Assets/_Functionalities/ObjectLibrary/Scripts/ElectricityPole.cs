@@ -37,7 +37,8 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             visualisation.InitProperty<ConnectableHierarchicalLayerPropertyData>(properties, null, null);
             transformPropertyData = visualisation.LayerData.GetProperty<TransformLayerPropertyData>();
             GeoJSONPropertyData geoJsonPropertyData  = visualisation.LayerData.GetProperty<GeoJSONPropertyData>();
-            transformPropertyData.Position = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            if(geoJsonPropertyData != null)
+                transformPropertyData.Position = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
             
             connectedPropertyData = visualisation.LayerData.GetProperty<ConnectableHierarchicalLayerPropertyData>();
             connectedPropertyData.Connectors = Connectors;
