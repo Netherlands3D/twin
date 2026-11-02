@@ -61,6 +61,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
   multiSelect: 0
   onFilesSelected:
     m_PersistentCalls:
@@ -77,6 +78,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onFilesNotSupported:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8779175394998946664
 MonoBehaviour:
   m_ObjectHideFlags: 0

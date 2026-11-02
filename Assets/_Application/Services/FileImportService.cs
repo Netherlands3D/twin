@@ -111,7 +111,7 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
 
     public void OpenFileBrowser()
     {
-        OpenFile(string.Join(",", configuration.SupportedFileTypes));
+        OpenFile(string.Join(",", allowedDragAndDropFileTypes));
     }
 
     /// <summary>
