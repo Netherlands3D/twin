@@ -43,8 +43,7 @@ namespace Netherlands3D.UI.Panels
         private VisualElement mainSection;
         private SelectionAreaPanel selectionAreaSection;
         
-        public List<string> SupportedFileTypes => supportedFileTypes;
-        private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" }; //todo populate from a const?
+        
         private List<Functionality> optionalFunctionalities = new();
 
         private FileImportService importService;
@@ -59,11 +58,6 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
             this.optionalFunctionalities = configuration.Functionalities.Where(f => !string.IsNullOrEmpty(f.FileExtension)).ToList();
-            
-            importService = ServiceLocator.GetService<FileImportService>();
-
-            foreach (string extension in supportedFileTypes)
-                importService.AddSupportedDragAndDropExtention(extension);
             uploadButton = this.Q<ListViewItem>("FileUploadButton");
             goToAssetLibraryButton = this.Q<ListViewItem>("GoToAssetLibraryButton");
             selectionAreaButton = this.Q<ListViewItem>("SelectionAreaButton");
@@ -163,7 +157,7 @@ namespace Netherlands3D.UI.Panels
         private void OnUploadStarted(ClickEvent evt)
         {
             FileImportService importService = ServiceLocator.GetService<FileImportService>();
-            importService.OpenFile(string.Join(",", supportedFileTypes));
+            importService.OpenFileBrowser();
         }
 
         private void OnInportUriButtonClicked(ClickEvent evt)

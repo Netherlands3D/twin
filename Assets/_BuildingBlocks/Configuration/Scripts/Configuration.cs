@@ -23,7 +23,10 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207, 462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
         [SerializeField] private string corsProxyUrl = null;
+        [SerializeField] private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" };
 
+        public List<string> SupportedFileTypes => supportedFileTypes;
+        
         public string Title
         {
             get => title;

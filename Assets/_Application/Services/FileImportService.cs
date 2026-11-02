@@ -5,7 +5,12 @@ using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 using UnityEngine;
 using SFB;
+using UnityEngine.Audio;
 using UnityEngine.Events;
+using Netherlands3D.Services;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.Functionalities;
 
 #if !UNITY_EDITOR && UNITY_WEBGL
 using Netherlands3D.JavascriptConnection;
@@ -41,6 +46,7 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
     private int numberOfFilesToLoad = 0;
     private int fileCount = 0;
     
+    [SerializeField] private Configuration configuration;
 
     [Tooltip("Allowed selection multiple files")] [SerializeField]
     private bool multiSelect = false;
@@ -66,6 +72,9 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
     
     private void Start()
     {
+        foreach (string extension in configuration.SupportedFileTypes)
+            AddSupportedDragAndDropExtention(extension);
+        
 #if !UNITY_EDITOR && UNITY_WEBGL
         CreateJavaScriptImporter();
 #endif
@@ -97,6 +106,12 @@ public class FileImportService : MonoBehaviour //todo: the FileOpener prefab sho
     public void UnsupportedFileDropped(string fileNames)
     {
         onFilesNotSupported.Invoke(fileNames);
+    }
+
+
+    public void OpenFileBrowser()
+    {
+        OpenFile(string.Join(",", configuration.SupportedFileTypes));
     }
 
     /// <summary>

@@ -106,6 +106,9 @@ namespace Netherlands3D.Twin.Projects
 
         private void OnEnable()
         {
+            FileImportService importService = ServiceLocator.GetService<FileImportService>();
+            importService.AddSupportedDragAndDropExtention("nl3d");
+            
             credentialHandler.OnAuthorizationHandled.AddListener(fileImporter.DetermineAdapter);
             
             ToolService tools = ServiceLocator.GetService<ToolService>();
