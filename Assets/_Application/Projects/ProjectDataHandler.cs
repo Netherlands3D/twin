@@ -236,6 +236,29 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.LoadVisualizations();
         }
 
+        // public void SaveAsFile()
+        // {
+        //     ProjectData.Current.RefreshUUID();
+        //
+        //     // Set the timestamp when the data was saved
+        //     ProjectData.Current.SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+        //     var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
+        //
+        //     // Start the zip output stream
+        //     var lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}";
+        //     zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
+        //     zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
+        //     
+        //     var projectData = ProjectData.Current;
+        //     WriteProjectToZip(projectData, zipOutputStream);
+        //     WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+        //
+        //     zipOutputStream.Finish();
+        //     zipOutputStream.Close();
+        //     Debug.Log("SAVING PROJECT DATA path " + lastSavePath);
+        //     SaveFile(lastSavePath);
+        // }
+        
         public void SaveAsFile()
         {
             ProjectData.Current.RefreshUUID();
@@ -244,18 +267,35 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
 
-            // Start the zip output stream
-            var lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}";
-            zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
-            zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
-            
-            var projectData = ProjectData.Current;
-            WriteProjectToZip(projectData, zipOutputStream);
-            WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+            string saveDirectory;
 
-            zipOutputStream.Finish();
-            zipOutputStream.Close();
+//#if (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX) && !UNITY_EDITOR
+            // Windows and Linux standalone builds: save to Downloads
+            saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
+//#else
+            // Unity Editor and WebGL: preserve the existing behavior
+  //          saveDirectory = Application.persistentDataPath;
+//#endif
+            if (!Directory.Exists(saveDirectory))
+                throw new DirectoryNotFoundException($"Save directory does not exist: {saveDirectory}");
+            
+            var lastSavePath = Path.Combine(saveDirectory, $"{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}");
+
+            // Start the ZIP output stream
+            using (zipOutputStream = new ZipOutputStream(File.Create(lastSavePath)))
+            {
+                zipOutputStream.SetLevel(9); // 0-9, where 9 means best compression
+
+                var projectData = ProjectData.Current;
+
+                WriteProjectToZip(projectData, zipOutputStream);
+                WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+
+                zipOutputStream.Finish();
+            }
+
             Debug.Log("SAVING PROJECT DATA path " + lastSavePath);
+
             SaveFile(lastSavePath);
         }
 
