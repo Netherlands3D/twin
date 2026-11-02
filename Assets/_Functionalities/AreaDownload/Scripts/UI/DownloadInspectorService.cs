@@ -99,6 +99,8 @@ namespace Netherlands3D.Functionalities
             northEastTooltip.SetSnappingSide(WorldAnnotation.SnappingSide.Right);
             southWestTooltip = CreateCoordinateLabel(ref southWestFloatingElement);
             southWestTooltip.SetSnappingSide(WorldAnnotation.SnappingSide.Left);
+            southWestTooltip.EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            northEastTooltip.EnableInClassList(UtilityClassConstants.HIDDEN, true);
         }
        
         private void OnDestroy()
