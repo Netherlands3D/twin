@@ -66,20 +66,25 @@ mergeInto(LibraryManager.library, {
 		});
 	    });
 
-		if (validFiles.length === 0) {
-		    var filenames = files.map(function (file) {
-			return file.name;
-		    }).join(",");
+	    var invalidFiles = files.filter(function (file) {
+		return !validFiles.includes(file);
+	    });
 
-		    SendMessage(
-			window.fileImporterCallbackObject,
-			"UnsupportedFileDropped",
-			filenames
-		    );
-		    return;
-		}
+	    if (invalidFiles.length > 0) {
+		var filenames = invalidFiles.map(function (file) {
+		    return file.name;
+		}).join(",");
 
-	    window.ReadFiles(validFiles);
+		SendMessage(
+		    window.fileImporterCallbackObject,
+		    "UnsupportedFileDropped",
+		    filenames
+		);
+	    }
+
+	    if (validFiles.length > 0) {
+		window.ReadFiles(validFiles);
+	    }
 	});
 
         window.FileSaved = function FileSaved() {
