@@ -5,7 +5,6 @@ using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using System;
 using Unity.Mathematics;
-using PlasticGui.Help.Conditions;
 using Netherlands3D.Functionalities.Wms;
 
 namespace Netherlands3D.WMSTiles3D
