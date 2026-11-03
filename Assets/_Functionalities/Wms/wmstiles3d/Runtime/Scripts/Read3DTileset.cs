@@ -29,50 +29,15 @@ namespace Netherlands3D.WMSTiles3D
 {
 
 [System.Serializable]
-    public struct wmsLayerProperties
-    {
-        public string name;
-        public string version;
-        public string spatialReferenceType;
-        public CoordinateSystem coordinateSystem;
-        public string style;
-        public int maxWidth;
-        public int maxHeight;
-        public bool transparent;
-        public long maxScaleDenominator;
-        public BoundingBox boundingBox;
-        private int _maximumZoomLevel;
-        public int maximumZoomlevel{ 
-            get{
-                if(_maximumZoomLevel ==0)
-                {
-                    double maximumScreenspaceError = maxScaleDenominator*0.00028*maxWidth;
-                    double maxZoom = maximumScreenspaceError/MinimumScreenSpaceError;
-                    double maxzoomlevel = math.log2(maxZoom);
-                    _maximumZoomLevel= (int)math.floor(maxzoomlevel);
-                }
-                return _maximumZoomLevel;
-                }
-        }
-        public float MinimumScreenSpaceError;
-        public int MaxTreeDepth;
-        public string baseUrl;
-
-        public string Format;
-
-        public string getMapRequestUrl(Coordinate BottomLeft,Coordinate Topright)
-        {
-            string result  = $"{baseUrl}?service=WMS&request=GetMap&version={version}&srs=EPSG:28992&crs=EPSG:28992&Style={style}&Layers={name}&Width={maxWidth}&Height={maxHeight}&format={Format}&BBox={BottomLeft.easting},{BottomLeft.northing},{Topright.easting},{Topright.northing}";
-            return result;
-        }
-    }
+    
 
     public class Read3DTileset : MonoBehaviour
     {
+        public TileFunctions tileFunctions;
         public Uri getCapabilitiesUrl;
         public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
         public string wmsUri;
-        public wmsLayerProperties wmsLayerProperties;
+        public wmsServerProperties wmsLayerProperties;
         public GameObject projectorPrefab;
         public CoordinateSystem contentCoordinateSystem = CoordinateSystem.WGS84_ECEF;
        
@@ -209,7 +174,7 @@ namespace Netherlands3D.WMSTiles3D
         }
         private void setupAHN()
         {
-            wmsLayerProperties = new wmsLayerProperties();
+            wmsLayerProperties = new wmsServerProperties();
             Coordinate BottomLeft = new Coordinate(CoordinateSystem.RD,-59188.4,304985);
             Coordinate Topright = new Coordinate(CoordinateSystem.RD, 308127,858329);
             wmsLayerProperties.boundingBox = new BoundingBox(BottomLeft,Topright);
@@ -228,7 +193,7 @@ namespace Netherlands3D.WMSTiles3D
         }
         private void setupLufo()
         {
-            wmsLayerProperties = new wmsLayerProperties();
+            wmsLayerProperties = new wmsServerProperties();
             Coordinate BottomLeft = new Coordinate(CoordinateSystem.RD,-2000.0,290000.0);
             Coordinate Topright = new Coordinate(CoordinateSystem.RD, 294000.0,630000.0);
             wmsLayerProperties.boundingBox = new BoundingBox(BottomLeft,Topright);
@@ -296,7 +261,7 @@ namespace Netherlands3D.WMSTiles3D
 
         void InitializeURLAndLoadTileSet()
         {
-            heightmap = FindFirstObjectByType<HeightMap>();
+            //heightmap = FindFirstObjectByType<HeightMap>();
             currentCamera = Camera.main;
             StartCoroutine(LoadInView());
 
@@ -309,7 +274,7 @@ namespace Netherlands3D.WMSTiles3D
 
             if(debugLog)
                 print("loading tilset from : " + tilesetUrl);
-            StartCoroutine(LoadTileset());
+            
         }
 
         private void ExtractDatasetPaths()
@@ -458,21 +423,8 @@ namespace Netherlands3D.WMSTiles3D
             }
         }
 
-        /// <summary>
-        /// IEnumerator to load tileset.json from url
-        /// </summary>
-        IEnumerator LoadTileset()
+          private void RequestContentUpdate(Tile tile)
         {
-            SetupTestLayer();
-            root = ParseTileset.ReadTileset(this);
-            yield return null;
-            
-        }
-
-        private void RequestContentUpdate(Tile tile)
-        {
-
-
             if (tile.content!=null)
             {
                 return;
@@ -502,7 +454,7 @@ namespace Netherlands3D.WMSTiles3D
                 }
                 else
                 {
-                    tile.content.Load(materialOverride, verbose:debugLog);
+                    tile.content.Load();
                 }
             }
         }
@@ -549,7 +501,7 @@ namespace Netherlands3D.WMSTiles3D
             }
         }
 
-private void destroyOutOfViewTilesets(Camera currentCamera)
+        private void destroyOutOfViewTilesets(Camera currentCamera)
         {
             foreach (Tile child in root.children)
             {

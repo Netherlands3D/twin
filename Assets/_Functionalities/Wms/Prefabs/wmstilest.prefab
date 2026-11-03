@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7949312705708875878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8100103230560582921}
+  - component: {fileID: 3905203175201735400}
+  m_Layer: 0
+  m_Name: wmstilest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8100103230560582921
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7949312705708875878}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3905203175201735400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7949312705708875878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d97cd020b0a60c48808cb373cf93c67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.WMSTiles3D.Read3DTileset
+  tilesetUrl: https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json
+  wmsUri: 
+  wmsLayerProperties:
+    name: 
+    version: 
+    spatialReferenceType: 
+    coordinateSystem: 0
+    style: 
+    maxWidth: 0
+    maxHeight: 0
+    transparent: 0
+    maxScaleDenominator: 0
+    MinimumScreenSpaceError: 0
+    MaxTreeDepth: 0
+    baseUrl: 
+    Format: 
+  projectorPrefab: {fileID: 0}
+  contentCoordinateSystem: 4978
+  publicKey: 
+  personalKey: 
+  queryKeyName: key
+  root:
+    level: 0
+    X: 0
+    Y: 0
+    hascontent: 0
+    hasSubtree: 0
+    contentType: 0
+    tileSet: {fileID: 0}
+    priority: 0
+    childrenCountDelayingDispose: 0
+    loadingChildren: 0
+    boundingVolume:
+      boundingVolumeType: 0
+      values: []
+    BottomLeft:
+      coordinateSystem: 0
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      value1: 0
+      value2: 0
+      value3: 0
+    TopRight:
+      coordinateSystem: 0
+      extraLongitudeRotation: 0
+      extraLattitudeRotation: 0
+      value1: 0
+      value2: 0
+      value3: 0
+    inView: 0
+    requestedDispose: 0
+    requestedUpdate: 0
+    isLoading: 0
+    children: []
+    tileTransform:
+      m00: 1
+      m01: 0
+      m02: 0
+      m03: 0
+      m10: 0
+      m11: 1
+      m12: 0
+      m13: 0
+      m20: 0
+      m21: 0
+      m22: 1
+      m23: 0
+      m30: 0
+      m31: 0
+      m32: 0
+      m33: 1
+    geometricError: 0
+    screenSpaceError: 3.4028235e+38
+    refine: 
+    contentUri: 
+    content: {fileID: 0}
+    loadedChildren: 0
+  transformValues: []
+  implicitTilingSettings:
+    refinementType: 0
+    subdivisionScheme: 0
+    availableLevels: 0
+    subtreeLevels: 0
+    subtreeUri: 
+    contentUri: 
+    geometricError: 0
+    boundingVolume:
+      boundingVolumeType: 0
+      values: []
+    boundingRegion: []
+  tileCount: 0
+  nestingDepth: 0
+  parseAssetMetadata: 0
+  maxScreenHeightInPixels: 1080
+  maximumScreenSpaceError: 5
+  sseComponent: -1
+  tilePrioritiser: {fileID: 0}
+  materialOverride: {fileID: 0}
+  debugLog: 0
+  unsupportedExtensionsParsed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerResponseReceived:
+    m_PersistentCalls:
+      m_Calls: []
+  OnServerRequestFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadAssetMetadata:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTileLoaded:
+    m_PersistentCalls:
+      m_Calls: []

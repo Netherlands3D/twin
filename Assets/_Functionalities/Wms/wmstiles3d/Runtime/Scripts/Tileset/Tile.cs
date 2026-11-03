@@ -26,7 +26,7 @@ namespace Netherlands3D.WMSTiles3D
         public bool hascontent;
         public bool hasSubtree = false;
         public TileContentType contentType;
-        public Read3DTileset tileSet;
+        public Tileset3DHandler tileSet;
         //webtileprioritizer properties
         public int priority = 0;
         public int childrenCountDelayingDispose = 0;
@@ -258,7 +258,12 @@ namespace Netherlands3D.WMSTiles3D
 
         public void CalculateUnitBounds()
         {
-            if (boundingVolume == null || boundingVolume.values.Length == 0)
+            if (boundingVolume == null )
+            {
+                boundsAreValid = false;
+                return;
+            }
+            if (boundingVolume.values.Length == 0)
             {
                 boundsAreValid = false;
                 return;
@@ -302,6 +307,7 @@ namespace Netherlands3D.WMSTiles3D
 
                     break;
                 case BoundingVolumeType.Sphere:
+                    unityBounds = new Bounds();
                     var sphereRadius = boundingVolume.values[0];
                     var sphereCentre = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]).ToUnity();
                     var sphereMin = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[0]- sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius).ToUnity();
@@ -383,7 +389,7 @@ namespace Netherlands3D.WMSTiles3D
 
                     var unityMin = mincoord.ToUnity();
                     var unityMax = maxcoord.ToUnity();
-
+                    unityBounds = new Bounds();
                     unityBounds.size = Vector3.zero;
                     unityBounds.center = unityMin;
                     unityBounds.Encapsulate(unityMax);
@@ -442,7 +448,7 @@ namespace Netherlands3D.WMSTiles3D
                 return;
             }
             //todo use inverse of method that needs be created for this
-            if (contentUri.Contains(".json") || contentUri.Contains(".subtree"))
+            if (hasSubtree)
             {
                 if(IsInViewFrustrum(ofCamera)==false)
                     {

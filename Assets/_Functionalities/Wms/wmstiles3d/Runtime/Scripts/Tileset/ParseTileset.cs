@@ -36,81 +36,34 @@ namespace Netherlands3D.WMSTiles3D
         internal static ReadSubtree subtreeReader;
         internal static Tile ReadTileset( Read3DTileset tileset)
         {
-            Tile root = new Tile();
-            root.tileSet = tileset;
-            root.boundingVolume = new BoundingVolume();
-            root.boundingVolume.boundingVolumeType = BoundingVolumeType.Box;
-            root.refine="REPLACE";
-            Coordinate center = tileset.wmsLayerProperties.boundingBox.Center;
-            double boxWidth = tileset.wmsLayerProperties.boundingBox.TopRight.easting - tileset.wmsLayerProperties.boundingBox.BottomLeft.easting;
-            double boxHeight = tileset.wmsLayerProperties.boundingBox.TopRight.northing - tileset.wmsLayerProperties.boundingBox.BottomLeft.northing;
-            double tileSize = math.max(boxWidth,boxHeight);
+            //Tile root = new Tile();
+           // root.tileSet = tileset;
+            //root.boundingVolume = new BoundingVolume();
+            //root.boundingVolume.boundingVolumeType = BoundingVolumeType.Box;
+            //root.refine="REPLACE";
+            //Coordinate center = tileset.wmsLayerProperties.boundingBox.Center;
+            //double boxWidth = tileset.wmsLayerProperties.boundingBox.TopRight.easting - tileset.wmsLayerProperties.boundingBox.BottomLeft.easting;
+            ////double boxHeight = tileset.wmsLayerProperties.boundingBox.TopRight.northing - tileset.wmsLayerProperties.boundingBox.BottomLeft.northing;
+            //double tileSize = math.max(boxWidth,boxHeight);
 
-            double centerElevation = tileset.heightmap.GetHeight(center);
-            center.height=centerElevation;
-            double elevationMax = centerElevation+10;
-            double elevationMin = centerElevation-10;
-            double averageElevation = (elevationMax + elevationMin)/2;
-            double halfElevation = elevationMax - averageElevation;
+           // double centerElevation = tileset.heightmap.GetHeight(center);
+            //center.height=centerElevation;
+           // double elevationMax = centerElevation+10;
+           // double elevationMin = centerElevation-10;
+           // double averageElevation = (elevationMax + elevationMin)/2;
+           // double halfElevation = elevationMax - averageElevation;
 
-            root.boundingVolume.values = new double[12]{center.easting,center.northing,averageElevation,tileSize/2,0,0,0,tileSize/2,0,0,0,halfElevation};
+           // root.boundingVolume.values = new double[12]{center.easting,center.northing,averageElevation,tileSize/2,0,0,0,tileSize/2,0,0,0,halfElevation};
 
-            double[] transformValues = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
-            root.tileTransform = new TileTransform(transformValues);
-            root.level = 0;
-            root.X=0;
-            root.Y=0;
-            root.contentType = TileContentType.WMS;
-            root.geometricError = tileSize / tileset.wmsLayerProperties.maxWidth;
-            double maximumBoxWidth = tileset.wmsLayerProperties.maxScaleDenominator*0.00028d*tileset.wmsLayerProperties.maxWidth;
-            if (maximumBoxWidth<tileSize)
-            {
-                root.contentType = TileContentType.None;
-            }
-            root.children.Add(CreateChildTile(root,QuadtreeQuadrant.Topleft));
-            root.children.Add(CreateChildTile(root,QuadtreeQuadrant.Topright));
-            root.children.Add(CreateChildTile(root,QuadtreeQuadrant.BottomLeft));
-            root.children.Add(CreateChildTile(root,QuadtreeQuadrant.BottomRight));
-            return root;
+           // double[] transformValues = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
+
+            return new Tile();
         }
 
         internal static Tile CreateChildTile(Tile parentTile, QuadtreeQuadrant quadtreeQuadrant)
         {
             Tile newTile = new Tile();
-            newTile.parent = parentTile;
-            newTile.level = parentTile.level+1;
-            newTile.tileSet = parentTile.tileSet;
-            newTile.X = 2*parentTile.X + ((int)quadtreeQuadrant%2);
-            newTile.Y = 2*parentTile.Y + (int)math.floor((int)quadtreeQuadrant/2);
-            newTile.refine = "REPLACE";
-            double boxWidth = parentTile.boundingVolume.values[3];
-            newTile.contentType = parentTile.contentType;
-            if(parentTile.contentType != TileContentType.WMS)
-            {
-                double maximumBoxWidth = parentTile.tileSet.wmsLayerProperties.maxScaleDenominator*0.00028d*parentTile.tileSet.wmsLayerProperties.maxWidth;
-                if (maximumBoxWidth>boxWidth)
-                {
-                    newTile.contentType = TileContentType.WMS;
-                }
-            }
-            newTile.geometricError = parentTile.geometricError*0.5;
-            BoundingVolume newBoundingVolume = parentTile.boundingVolume.GetChildBoundingVolume((int)quadtreeQuadrant,SubdivisionScheme.Quadtree);
-            Coordinate center = new Coordinate(CoordinateSystem.RD,newBoundingVolume.values[0],newBoundingVolume.values[1]);
-            float centerelevation = parentTile.tileSet.heightmap.GetHeight(center);
-            newBoundingVolume.values[2]=centerelevation;
-            newTile.boundingVolume = newBoundingVolume;
-            if (newTile.tileSet.wmsLayerProperties.maximumZoomlevel==newTile.level) return newTile;
-
-            if(newTile.level%newTile.tileSet.wmsLayerProperties.MaxTreeDepth==0)
-                {
-                newTile.hasSubtree=true;
-                return newTile;
-                }
-            newTile.children.Add(CreateChildTile(newTile,QuadtreeQuadrant.Topleft));
-            newTile.children.Add(CreateChildTile(newTile,QuadtreeQuadrant.Topright));
-            newTile.children.Add(CreateChildTile(newTile,QuadtreeQuadrant.BottomLeft));
-            newTile.children.Add(CreateChildTile(newTile,QuadtreeQuadrant.BottomRight));
-
+        
            return newTile; 
         }
 

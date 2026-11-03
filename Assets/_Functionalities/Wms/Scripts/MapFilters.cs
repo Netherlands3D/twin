@@ -37,7 +37,7 @@ namespace Netherlands3D.Functionalities.Wms
                 version = version,
                 spatialReferenceType = spatialReferenceType,
                 spatialReference = queryParameters.Single(spatialReferenceType),
-                style = queryParameters.Single("style"),
+                style = queryParameters.Single("styles"),
                 width = parsedWidth,
                 height = parsedHeight,
                 transparent = parsedTransparent,
