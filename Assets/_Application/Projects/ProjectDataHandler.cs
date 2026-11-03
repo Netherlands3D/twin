@@ -235,29 +235,6 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             ProjectData.Current.LoadVisualizations();
         }
-
-        // public void SaveAsFile()
-        // {
-        //     ProjectData.Current.RefreshUUID();
-        //
-        //     // Set the timestamp when the data was saved
-        //     ProjectData.Current.SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-        //     var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
-        //
-        //     // Start the zip output stream
-        //     var lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}";
-        //     zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
-        //     zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
-        //     
-        //     var projectData = ProjectData.Current;
-        //     WriteProjectToZip(projectData, zipOutputStream);
-        //     WriteProjectAssetsToZipfile(projectData, zipOutputStream);
-        //
-        //     zipOutputStream.Finish();
-        //     zipOutputStream.Close();
-        //     Debug.Log("SAVING PROJECT DATA path " + lastSavePath);
-        //     SaveFile(lastSavePath);
-        // }
         
         public void SaveAsFile()
         {
