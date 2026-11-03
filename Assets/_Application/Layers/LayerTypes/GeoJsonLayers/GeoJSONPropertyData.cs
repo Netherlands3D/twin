@@ -9,15 +9,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
     public class GeoJSONPropertyData : LayerPropertyData
     {
         [DataMember] public Coordinate geojsonCoordinate;
+        [DataMember] public bool renderingGeometryEnabled;
         
         //this needs to be saved in case the annotation is moved but connected to a geojson,
         //we need its start position as a key to find the corresponding geojson data
         public Coordinate GeoJSONCoordinate => geojsonCoordinate;
        
         [JsonConstructor]
-        public GeoJSONPropertyData(Coordinate geojsonCoordinate)
+        public GeoJSONPropertyData(Coordinate geojsonCoordinate, bool renderingGeometryEnabled = true)
         {
             this.geojsonCoordinate = geojsonCoordinate;
+            this.renderingGeometryEnabled = renderingGeometryEnabled;
         }
     }
 }

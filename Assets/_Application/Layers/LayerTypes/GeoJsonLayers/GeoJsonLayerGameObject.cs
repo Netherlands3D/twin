@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
@@ -16,7 +17,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [RequireComponent(typeof(ICredentialHandler))]
-    public class GeoJsonLayerGameObject : LayerGameObject
+    public class GeoJsonLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds
         {
@@ -42,6 +43,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public IGeoJsonVisualisationLayer[] VisualisationLayers => visualisationLayers;
 
         private IGeoJsonVisualisationLayer[] visualisationLayers;
+
+        private bool renderingEnabled = true;
+
+        public void SetRenderingEnabled(bool enabled)
+        {
+            if(renderingEnabled == enabled) return;
+            
+            foreach (var visualisationLayer in visualisationLayers)
+            {
+                visualisationLayer.SetRenderingEnabled(enabled);
+            }
+        }
         
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
@@ -56,6 +69,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
+        }
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            GeoJSONPropertyData propertyData = LayerData.GetProperty<GeoJSONPropertyData>();
+            if (propertyData != null) //if is given by preset
+            {
+                SetRenderingEnabled(propertyData.renderingGeometryEnabled);
+            }
         }
 
         protected virtual void UpdateURL(Uri storedUri)

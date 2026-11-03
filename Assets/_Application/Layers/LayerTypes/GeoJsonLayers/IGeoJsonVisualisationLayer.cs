@@ -26,5 +26,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         void RemoveFeaturesOutOfView();
         delegate void GeoJsonHandler(Feature feature);
         event GeoJsonHandler FeatureRemoved;
+        
+        void SetRenderingEnabled(bool enabled);
     }
 }

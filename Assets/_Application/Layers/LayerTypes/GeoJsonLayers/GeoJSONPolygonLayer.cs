@@ -33,6 +33,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
+        public void SetRenderingEnabled(bool enabled)
+        {
+            foreach (var visualisation in spawnedVisualisations)
+            {
+                visualisation.Value.ShowVisualisations(enabled);
+            }
+        }
 
         private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();
 

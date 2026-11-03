@@ -31,6 +31,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public Transform Transform => transform;
 
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
+        public void SetRenderingEnabled(bool enabled)
+        {
+            PointRenderer3D.enabled = enabled;
+        }
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         

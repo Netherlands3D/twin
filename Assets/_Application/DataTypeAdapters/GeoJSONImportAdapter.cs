@@ -82,6 +82,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     {
                         case "Annotation":
                         {
+                            geoJsonLayerPreset.RenderingGeometryEnabled = false;
                             var annotation = properties.ToObject<Annotation>();
                             ColorUtility.TryParseHtmlString(annotation.Color, out Color color);
                             presets.Add(new GeoJSONAnnotationPreset.Args(coordinate, annotation.Title, annotation.AnnotationText, annotation.ImageUrl, annotation.ImageCaption, color));
@@ -90,6 +91,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
                         case "ElectricityPole":
                         {
+                            geoJsonLayerPreset.RenderingGeometryEnabled = false;
                             var pole = properties.ToObject<ConnectableElectricityPole>();
                             string trajectType = pole.OBJECTIDENTIFIER.Split(" ")[0];
                             if (!uniquePresets.TryGetValue(trajectType, out var polePresets))
