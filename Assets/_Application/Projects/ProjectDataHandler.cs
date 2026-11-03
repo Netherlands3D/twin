@@ -269,13 +269,12 @@ namespace Netherlands3D.Twin.Projects
 
             string saveDirectory;
 
-//#if (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX) && !UNITY_EDITOR
+#if (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX) && !UNITY_EDITOR
             // Windows and Linux standalone builds: save to Downloads
             saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
-//#else
-            // Unity Editor and WebGL: preserve the existing behavior
-  //          saveDirectory = Application.persistentDataPath;
-//#endif
+#else
+            saveDirectory = Application.persistentDataPath;
+#endif
             if (!Directory.Exists(saveDirectory))
                 throw new DirectoryNotFoundException($"Save directory does not exist: {saveDirectory}");
             
