@@ -116,9 +116,31 @@ namespace Netherlands3D.Functionalities.WMS
                 wmsLayerSettings server = layerDictionary[layerData];
                 layerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
                 layerData.LayerOrderChanged.RemoveListener(OnLayerOrderChanged);
-                
+
                 layerDictionary.Remove(layerData);
                 ChangeActiveLayers(server.wmsServer);
+                RemoveServerIfNoLayers(server);
+            }
+        }
+
+        void RemoveServerIfNoLayers(wmsLayerSettings server)
+        {
+            
+            foreach(KeyValuePair<LayerData,wmsLayerSettings>kvp in layerDictionary)
+            {
+                if(kvp.Value.wmsServer == server.wmsServer)
+                {
+                    return;
+                }
+
+            }
+            for (int i=0;i<wmsServers.Count;i++)
+            {
+                if (wmsServers[i] == server.wmsServer)
+                {
+                    Destroy(wmsServers[i].transform.gameObject);
+                    wmsServers.RemoveAt(i);
+                }
             }
         }
         bool IsWMSLayerData(LayerData layerData)
