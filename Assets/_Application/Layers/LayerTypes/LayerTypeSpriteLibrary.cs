@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.LASImporter;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
@@ -67,6 +68,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return IconImage.SCATTER_OBJECT;
                 case CartesianTileSubObjectColorLayerGameObject _:
                     return IconImage.CSV;
+                case LASPointCloudLayer _:
+                    return IconImage.POINT;
                 case PolygonSelectionLayerGameObject _:
                     return IconImage.POLYGON;
                 default:

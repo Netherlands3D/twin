@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KindMen.Uxios;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Web;
@@ -22,7 +23,10 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207, 462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
         [SerializeField] private string corsProxyUrl = null;
+        [SerializeField] private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" };
 
+        public List<string> SupportedFileTypes => supportedFileTypes;
+        
         public string Title
         {
             get => title;
@@ -76,6 +80,21 @@ namespace Netherlands3D.Twin.Configuration
                 shouldStartSetup = value;
                 OnShouldStartSetupChanged.Invoke(shouldStartSetup);
             }
+        }
+
+        public bool ExperimentalFunctionalityHasFileExtension(string extension)
+        {
+            foreach (var functionality in Functionalities)
+            {
+                if (functionality.IsExperimental)
+                {
+                    var normalizedExtension = extension.Trim().TrimStart('.');
+                    if (string.Equals(functionality.FileExtension.Trim().TrimStart('.'), normalizedExtension, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         public UnityEvent<bool> OnAllowUserSettingsChanged = new();
@@ -291,6 +310,10 @@ namespace Netherlands3D.Twin.Configuration
             foreach (var functionality in Functionalities)
             {
                 functionality.ResetDataToDefaults();
+                //remove any previous existing listener
+                functionality.OnFunctionalityChanged.RemoveListener(UpdateFunctionalityExtention);
+                functionality.OnFunctionalityChanged.AddListener(UpdateFunctionalityExtention);
+                UpdateFunctionalityExtention(functionality);
             }
             
             foreach (var savedData in changedData.functionalities)
@@ -301,12 +324,26 @@ namespace Netherlands3D.Twin.Configuration
                 {
                     matchingFunctionality.Data = savedData;
                     matchingFunctionality.IsEnabled = savedData.IsEnabled;
+                    UpdateFunctionalityExtention(matchingFunctionality);
                 }
             }
-
             AddFunctionalityDataToProject(); //re add missing functionalities to project, in case the project did not have a specific functionalityData
         }
 
+        private FileImportService fileImportService;
+        private void UpdateFunctionalityExtention(Functionality functionality)
+        {
+            if(fileImportService == null)
+                fileImportService = ServiceLocator.GetService<FileImportService>();
+            if (!string.IsNullOrEmpty(functionality.FileExtension))
+            {
+                if (functionality.IsEnabled)
+                    fileImportService.AddSupportedDragAndDropExtention(functionality.FileExtension);
+                else
+                    fileImportService.RemoveSupportedDragAndDropExtention(functionality.FileExtension);
+            }
+        }
+        
         public void AddFunctionalityDataToProject()
         {
             foreach (var functionality in Functionalities)
