@@ -160,13 +160,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             parser.OnParseError.AddListener(VisualisationError.Invoke);
             
             credentialHandler?.OnAuthorizationHandled.AddListener(HandleCredentials);
+            
+          
+            
 
             foreach (var layer in visualisationLayers)
             {
                 layer.FeatureRemoved += OnFeatureRemoved;
             }
         }
-
+        
         protected override void UnregisterEventListeners()
         {
             base.UnregisterEventListeners();
@@ -237,7 +240,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 objectMapping.SetGeoJsonLayerParent(this);
                 objectMapping.UpdateBoundingBox();
                 SelectionService.MappingTree.RootInsert(objectMapping);
+                mappings.Add(objectMapping);
             }
+        }
+        
+        private List<FeatureMapping> mappings = new List<FeatureMapping>();
+
+        private void Update()
+        {
+            foreach (var map in mappings)
+                map.DebugMapping();
         }
     }
 }

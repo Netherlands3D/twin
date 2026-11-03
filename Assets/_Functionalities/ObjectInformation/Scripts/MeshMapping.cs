@@ -203,6 +203,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+        public void SetVisiblity(bool visible)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Select(string subId)
         {
             

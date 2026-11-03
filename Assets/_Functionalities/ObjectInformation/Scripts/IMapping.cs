@@ -10,6 +10,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public object MappingObject { get; }
         public BoundingBox BoundingBox { get; }
         public LayerData LayerData { get; }
+
+        public void SetVisiblity(bool visible);
         
         public void Select(string subId = null);
         public void Deselect();

@@ -203,7 +203,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (!node.Bounds.Intersects(area)) return;
 
             foreach (IMapping map in node.Mappings)
-                if (map is T)
+                if (map is T && area.Intersects(map.BoundingBox))
                     results.Add(map);
 
             if (!node.IsLeaf)

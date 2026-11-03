@@ -97,6 +97,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             OnSelectLayer.AddListener(OpenLayerPanel);
             OnNoLayerSelected.AddListener(CloseLayerPanel);
+            
+            App.Cameras.OnPositionChanged.AddListener(OnUpdateMappingVisibility);
         }
 
         private void OnDisable()
@@ -105,6 +107,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
        
             OnSelectLayer.RemoveListener(OpenLayerPanel);
             OnNoLayerSelected.RemoveListener(CloseLayerPanel);
+            
+            App.Cameras.OnPositionChanged.RemoveListener(OnUpdateMappingVisibility);
         }
 
         private void OnProjectChanged(ProjectData data)
@@ -612,7 +616,75 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (debugMappingTree)
                 MappingTree.DebugTree();
+            
+            frustumBoundingBox.Debug(Color.chocolate);
         }
 #endif
+        
+        //temporary place
+        private Vector3[] cameraCorners = new Vector3[4];
+        private static BoundingBox frustumBoundingBox;
+        private List<IMapping> visibileMappings = new List<IMapping>();
+
+        private void OnUpdateMappingVisibility(Vector3 arg0)
+        {
+            Camera camera = App.Cameras.ActiveCamera;
+
+            Vector2[] viewportCorners =
+            {
+                new Vector2(0, 0),
+                new Vector2(0, 1),
+                new Vector2(1, 0),
+                new Vector2(1, 1)
+            };
+
+            Vector3[] groundCorners = new Vector3[4];
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+
+            for (int i = 0; i < 4; i++)
+            {
+                Ray ray = camera.ViewportPointToRay(viewportCorners[i]);
+
+                if (!groundPlane.Raycast(ray, out float distance))
+                    return;
+
+                groundCorners[i] = ray.GetPoint(distance);
+            }
+
+            float minX = groundCorners.Min(c => c.x);
+            float maxX = groundCorners.Max(c => c.x);
+            float minZ = groundCorners.Min(c => c.z);
+            float maxZ = groundCorners.Max(c => c.z);
+
+            Coordinate bottomLeft = new Coordinate(new Vector3(minX, 0, minZ))
+                .Convert(CoordinateSystems.connectedCoordinateSystem)
+                .Convert(CoordinateSystem.WGS84_LatLon);
+
+            Coordinate topRight = new Coordinate(new Vector3(maxX, 0, maxZ))
+                .Convert(CoordinateSystems.connectedCoordinateSystem)
+                .Convert(CoordinateSystem.WGS84_LatLon);
+
+            frustumBoundingBox = new BoundingBox(bottomLeft, topRight);
+
+            List<IMapping> mappings =
+                MappingTree.Query<HierarchicalObjectMapping>(frustumBoundingBox);
+
+            foreach (IMapping oldMapping in visibileMappings)
+                oldMapping.SetVisiblity(false);
+
+            visibileMappings.Clear();
+
+            foreach (IMapping mapping in mappings)
+            {
+                mapping.SetVisiblity(true);
+                visibileMappings.Add(mapping);
+            }
+        }
+
+        public static bool IsMappingInFrustum<T>(T mapping) where T : IMapping
+        {
+            List<IMapping> mappings = MappingTree.Query<T>(frustumBoundingBox);
+            return mappings.Contains(mapping);
+        }
     }
 }

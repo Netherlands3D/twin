@@ -128,4 +128,12 @@ public static class CameraExtensions
         GeometryUtility.CalculateFrustumPlanes(camera, cameraFrustumPlanes);
         return GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, bounds);
     }
+    
+    public static Vector3[] GetFrustumCorners(this Camera camera, Vector3[] corners)
+    {
+        camera.CalculateFrustumCorners(new Rect(0, 0, 1, 1), camera.farClipPlane, Camera.MonoOrStereoscopicEye.Mono, corners);
+        for (int i = 0; i < 4; i++)
+            corners[i] = camera.transform.TransformPoint(corners[i]);
+        return corners;
+    }
 }

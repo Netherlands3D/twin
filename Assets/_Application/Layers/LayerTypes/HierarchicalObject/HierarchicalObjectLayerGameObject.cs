@@ -30,10 +30,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private int snappingCullingMask = 0;
         private bool meshIsScatterable = true;
         private IImportedObject iImportedObject;
+        public IMapping Mapping => mapping;
             
         private BoundingBox CalculateWorldBoundsFromRenderers()
         {
-            var renderers = GetComponentsInChildren<Renderer>(); //needs to be optimized if we call this function every frame.
+            var renderers = GetComponentsInChildren<Renderer>(true); //needs to be optimized if we call this function every frame.
             if (renderers.Length == 0)
             {
                 return null;
@@ -106,6 +107,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 CreateStylingFeaturesFromMeshRenderers();
             }
 
+            CreateMapping();
+            
             objectCreated.Invoke(gameObject);       
         }
 
@@ -241,6 +244,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             {
                 iImportedObject.ObjectVisualized.AddListener(OnImportedObjectVisualized);
             }
+            
+            OnVisibilityChanged.AddListener(UpdateVisibility);
         }
 
         protected override void UnregisterEventListeners()
@@ -257,6 +262,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (iImportedObject != null)
             {
                 iImportedObject.ObjectVisualized.RemoveListener(OnImportedObjectVisualized);
+            }
+            
+            OnVisibilityChanged.RemoveListener(UpdateVisibility);
+        }
+
+        private void UpdateVisibility(bool arg0)
+        {
+            foreach (Transform child in transform.GetComponentsInChildren<Transform>(true))
+            {
+                if(transform == child) continue;
+                
+                child.gameObject.SetActive(arg0);
             }
         }
 
@@ -442,6 +459,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
 
             return true;
+        }
+
+        
+        private IMapping mapping;
+        
+        private void CreateMapping()
+        {
+            HierarchicalObjectMapping objectMapping = new HierarchicalObjectMapping();
+            objectMapping.SetFeature(this);
+            SelectionService.MappingTree.RootInsert(objectMapping);
+            mapping = objectMapping;
+            if (!SelectionService.IsMappingInFrustum(mapping))
+            {
+                SetVisualisationVisible(false);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            SelectionService.MappingTree.Remove(mapping);
         }
     }
 }

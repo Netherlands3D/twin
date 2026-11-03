@@ -254,7 +254,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             return subObjects;
         }
-        
+
+        public void SetVisiblity(bool visible)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Select(string subId = null)
         {
             //transform for mesh world matrix
@@ -276,5 +281,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             visualisationLayer.SetVisualisationDeselected();
         }
+        
+#if UNITY_EDITOR
+        public void DebugMapping()
+        {
+            boundingBox.Debug(Color.blueViolet);
+            //UnityEngine.Debug.DrawLine(feature.gameObject.transform.position, boundingBox.Center.ToUnity(), Color.blueViolet);
+        }
+#endif
     }
 }

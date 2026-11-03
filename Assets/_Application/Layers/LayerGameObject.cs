@@ -51,6 +51,20 @@ namespace Netherlands3D.Twin.Layers
         
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         public Func<LayerFeature, LayerFeature> OnFeatureCreated;
+        public UnityEvent<bool> OnVisibilityChanged;
+        private bool isVisible = true; //not the visiblity of the layer but the culling visibility not for the user to see
+
+        /// <summary>
+        /// not layer visiblity but culling visibility
+        /// </summary>
+        /// <param name="visible"></param>
+        public void SetVisualisationVisible(bool visible)
+        {
+            bool wasVisible = isVisible;
+            isVisible = visible;
+            //if(wasVisible != visible)
+                OnVisibilityChanged.Invoke(isVisible);
+        }
         
         public LayerFeature GetLayerFeatureByGeometry(object geometry)
         {

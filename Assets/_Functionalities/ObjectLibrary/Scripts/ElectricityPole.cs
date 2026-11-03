@@ -3,11 +3,13 @@ using System.Linq;
 using GG.Extensions;
 using GogoGaga.OptimizedRopesAndCables;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -44,7 +46,6 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             connectedPropertyData = visualisation.LayerData.GetProperty<ConnectableHierarchicalLayerPropertyData>();
             connectedPropertyData.Connectors = Connectors;
             
-            
             AddListeners();
             ConnectToSibling();
         }
@@ -54,6 +55,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
            connectedPropertyData.OnTargetChanged.AddListener(UpdateCables);
            visualisation.LayerData.ParentOrSiblingIndexChanged.AddListener(ConnectToSibling);
            transformPropertyData.OnPositionChanged.AddListener(UpdateCableLengths);
+           visualisation.OnVisibilityChanged.AddListener(UpdateVisiblity);
         }
 
         private void RemoveListeners()
@@ -61,6 +63,18 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             connectedPropertyData.OnTargetChanged.RemoveListener(UpdateCables);
             visualisation.LayerData.ParentOrSiblingIndexChanged.RemoveListener(ConnectToSibling);
             transformPropertyData.OnPositionChanged.RemoveListener(UpdateCableLengths);
+            visualisation.OnVisibilityChanged.RemoveListener(UpdateVisiblity);
+        }
+
+        private void UpdateVisiblity(bool visible)
+        {
+            if (ropes != null)
+            {
+                for (int i = 0; i < Connectors.Length; i++)
+                {
+                    ropes[i].enabled = visible;
+                }
+            }
         }
 
         private void UpdateCableLengths(Coordinate coord)
