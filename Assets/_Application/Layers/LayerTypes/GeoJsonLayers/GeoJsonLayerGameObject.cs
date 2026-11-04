@@ -246,10 +246,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         private List<FeatureMapping> mappings = new List<FeatureMapping>();
 
-        private void Update()
-        {
-            foreach (var map in mappings)
-                map.DebugMapping();
-        }
+        // private void Update()
+        // {
+        //     foreach (var map in mappings)
+        //         map.DebugMapping();
+        // }
     }
 }

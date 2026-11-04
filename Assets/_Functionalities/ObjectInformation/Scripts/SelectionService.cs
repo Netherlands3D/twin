@@ -611,15 +611,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             OnDeselect.Invoke();
         }
 
-#if UNITY_EDITOR
-        public void OnDrawGizmos()
-        {
-            if (debugMappingTree)
-                MappingTree.DebugTree();
-            
-            frustumBoundingBox.Debug(Color.chocolate);
-        }
-#endif
+// #if UNITY_EDITOR
+//         public void OnDrawGizmos()
+//         {
+//             if (debugMappingTree)
+//                 MappingTree.DebugTree();
+//             
+//             frustumBoundingBox.Debug(Color.chocolate);
+//         }
+// #endif
         
         //temporary place
         private Vector3[] cameraCorners = new Vector3[4];
