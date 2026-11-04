@@ -95,7 +95,7 @@ namespace Netherlands3D.Twin.layers.properties
             if (debugFeatures)
             {
                 HiddenObjectsPropertyData hiddenPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
-                if (mapping is MeshMapping map)
+                if (mapping is BagMeshMapping map)
                 {
                     for(int i = 0; i < 10; i++)
                     {

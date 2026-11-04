@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using Newtonsoft.Json;
@@ -13,7 +14,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
     public class FeaturePropertyData : LayerPropertyData
     {
         [JsonIgnore] private Dictionary<string, FeatureData> featureIds = new();
-        
         [JsonIgnore] public readonly UnityEvent<Dictionary<string, FeatureData>> OnIdsChanged = new();
 
         [JsonIgnore]
@@ -31,6 +31,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
         {
             public BoundingBox BoundingBox;
             public Dictionary<string, object> Properties;
+            public IMapping FeatureMapping;
         }
     }
 }

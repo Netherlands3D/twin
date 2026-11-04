@@ -7,7 +7,10 @@ namespace Netherlands3D.Timeline
     public class TimestampCollection
     {
         public List<Timestamp> Timestamps = new List<Timestamp>();
-
+        
+        public Timestamp LowestTimestamp => Timestamps[0];
+        public Timestamp HighestTimestamp => Timestamps[^1];
+        
         public TimestampCollection(string timestampsJsonArray)
         {
             var settings = new JsonSerializerSettings
@@ -44,5 +47,7 @@ namespace Netherlands3D.Timeline
 
             return current;
         }
+
+        public Timestamp this[int i] => Timestamps[i];
     }
 }

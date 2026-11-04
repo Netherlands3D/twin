@@ -1,4 +1,5 @@
-﻿using Netherlands3D.Coordinates;
+﻿using System;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     /// <summary>
     /// in the future/when production ready, this should probably be renamed to a feature mapping type, as it contains geometry and a boundingbox
     /// </summary>
-    public class MeshMapping : IMapping
+    public class BagMeshMapping : IMapping
     {
         public string Id => id;
         public object MappingObject => objectMapping;
@@ -19,13 +20,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public BoundingBox BoundingBox => boundingBox;
         
         public LayerData LayerData => layerData;
-        public List<MeshMappingItem> Items => items;
+        public List<BagMeshMappingItem> Items => items;
 
         private ObjectMapping objectMapping;
         private BoundingBox boundingBox;
         private MeshRenderer meshRenderer;
         private MeshFilter meshFilter;
-        private List<MeshMappingItem> items = null;
+        private List<BagMeshMappingItem> items = null;
 
         private Vector3[] vertices;
         private int[] triangles;
@@ -35,9 +36,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private LayerData layerData;
         private Material selectionMaterial;
 
-        public MeshMapping(string id)
+        public BagMeshMapping(string id)
         {
             this.id = id;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            throw new NotImplementedException();
         }
 
         public void SetMeshObject(ObjectMapping mapping)
@@ -54,11 +60,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.selectionMaterial = material;
         }
 
-        public MeshMappingItem FindItemForPosition(Vector3 position)
+        public BagMeshMappingItem FindItemForPosition(Vector3 position)
         {
             Coordinate target = new Coordinate(position).Convert(CoordinateSystem.WGS84_LatLon);          
             CacheItems();
-            foreach (MeshMappingItem item in items)
+            foreach (BagMeshMappingItem item in items)
             {
                 if (item.BoundingBox.Contains(target) && item.IsPositionHit(position, vertices, triangles, mTransform))
                 {
@@ -68,10 +74,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return null;
         }
 
-        public MeshMappingItem FindItemById(string id)
+        public BagMeshMappingItem FindItemById(string id)
         {
             CacheItems();
-            foreach (MeshMappingItem item in items)
+            foreach (BagMeshMappingItem item in items)
             {
                 if (item.ObjectMappingItem.objectID == id)
                     return item;
@@ -91,10 +97,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 vertices = meshFilter.sharedMesh.vertices;
                 triangles = meshFilter.sharedMesh.triangles;
                 mTransform = meshFilter.gameObject.transform;
-                items = new List<MeshMappingItem>();
+                items = new List<BagMeshMappingItem>();
                 foreach (ObjectMappingItem item in objectMapping.items.Values)
                 {
-                    MeshMappingItem mapItem = new MeshMappingItem(item, vertices, mTransform);
+                    BagMeshMappingItem mapItem = new BagMeshMappingItem(item, vertices, mTransform);
                     items.Add(mapItem);
                 }
             }
@@ -196,7 +202,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (items != null)
             {
-                foreach (MeshMappingItem item in items)
+                foreach (BagMeshMappingItem item in items)
                 {
                     item.BoundingBox.Debug(color);
                 }
@@ -212,9 +218,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
            
         }
+
+        public void SetMappingProjected(bool projected)
+        {
+            
+        }
     }
 
-    public class MeshMappingItem 
+    public class BagMeshMappingItem 
     {
         public BoundingBox BoundingBox => boundingBox;
         public ObjectMappingItem ObjectMappingItem => item;
@@ -222,7 +233,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private ObjectMappingItem item;
         private const float kEpsilon = 0.000001f;
 
-        public MeshMappingItem(ObjectMappingItem item, Vector3[] vertices, Transform meshTransform)
+        public BagMeshMappingItem(ObjectMappingItem item, Vector3[] vertices, Transform meshTransform)
         {
             this.item = item;
             UpdateBoundingBox(vertices, meshTransform);
