@@ -15,6 +15,7 @@ using Netherlands3D.SubObjects;
 namespace Netherlands3D.CartesianTiles
 {
     [AddComponentMenu("Netherlands3D/CartesianTiles/BinaryMeshLayer")]
+    
     public class BinaryMeshLayer : Layer
     {
         public Dictionary<Vector2Int, ObjectMapping> Mappings = new Dictionary<Vector2Int, ObjectMapping>();
