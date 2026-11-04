@@ -46,31 +46,22 @@ namespace Netherlands3D.AddressSearch
     public class AddressSearchService : MonoBehaviour
     {
         [Header("PDOK Location API")]
-        private string locationApiBaseUrl = "https://api.pdok.nl/kadaster/location-api/v1";
-        private int rows =1000;
-        private int maxResultsPerCollection = 10;
-        private float minimumScore = 0;
-        private int charactersNeededBeforeSearch = 2;
+        private const string locationApiBaseUrl = "https://api.pdok.nl/kadaster/location-api/v1";
+        private const int rows =1000;
+        private const int maxResultsPerCollection = 10;
+        private const float minimumScore = 0;
+        private const int charactersNeededBeforeSearch = 2;
 
         [Header("BAG API")]
-        [SerializeField] private string bagApiBaseUrl = "https://api.pdok.nl/kadaster/bag/ogc/v2";
-
-        [Header("Camera Controls")]
-        [SerializeField] private bool easeCamera;
+        [SerializeField] private const string bagApiBaseUrl = "https://api.pdok.nl/kadaster/bag/ogc/v2";
+      
         [SerializeField] private Camera mainCamera;
-        private double minSizeMagnitudeDistance = 20; //inrichtingselementen have no bbox size magnitudes
+        private const double minSizeMagnitudeDistance = 20; //inrichtingselementen have no bbox size magnitudes
 
         public UnityEvent<Coordinate> onCoordinateFound = new();
         public event Action<List<SuggestionResult>> SuggestionsReady;
         public event Action SuggestionsCleared;
         public event Action<SuggestionResult> SuggestionAutoSelected;
-
-        private static readonly string[] CollectionIds =
-        {
-            "adres", "functioneel_gebied", "gebouw", "gemeentegebied", "geografisch_gebied",
-            "inrichtingselement", "perceel", "plaats", "provinciegebied", "spoorbaandeel",
-            "waterdeel", "wegdeel", "woonplaats"
-        };
 
         // Volgorde waarin collecties in de lijst verschijnen (eerst grote gebieden en adressen).
         private static readonly string[] CollectionPriorityOrder =
@@ -84,10 +75,7 @@ namespace Netherlands3D.AddressSearch
         private const string Crs84 = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
         private const float MaxPixelPointerOffset = 100f;
         private const float WorldSpaceOffset = 10f;
-        private const float DefaultLocationCameraDistance = 100f;
-
-        // Ontdubbelde resultaten, key = "collectie:naam" (lowercase). Zelfde naam binnen een collectie telt als één resultaat.
-        private readonly Dictionary<string, SuggestionResult> cachedSuggestions = new();
+       
         // Dezelfde resultaten in weergavevolgorde voor de UI.
         private readonly List<SuggestionResult> orderedSuggestions = new();
 
@@ -100,7 +88,7 @@ namespace Netherlands3D.AddressSearch
         private AppRootBehaviour appRootBehaviour;
         private WorldUIService worldUIService;
         private Coordinate targetCoordinate;
-        private string targetId;
+        private string selectedLocationLabel;
         
         private static readonly Dictionary<string, string> CollectionDisplayNames = new()
         {
@@ -119,7 +107,7 @@ namespace Netherlands3D.AddressSearch
             { "inrichtingselement", "Inrichtingselement" },
         };
 
-        public static string GetDisplayName(string collectionId) => CollectionDisplayNames.TryGetValue(collectionId, out var name) ? name : collectionId;
+        public static string GetCollectionDisplayName(string collectionId) => CollectionDisplayNames.TryGetValue(collectionId, out var name) ? name : collectionId;
 
         private static string MakeKey(string collectionId, string label) => collectionId + ":" + label.Trim().ToLowerInvariant();
 
@@ -170,7 +158,7 @@ namespace Netherlands3D.AddressSearch
             suggestionsRoutine = null;
             autoSelectFirstWhenReady = autoSelectFirst;
 
-            if (string.IsNullOrWhiteSpace(textInput) || (!autoSelectFirst && textInput.Trim().Length <= charactersNeededBeforeSearch))
+            if (string.IsNullOrWhiteSpace(textInput) || (!autoSelectFirst && textInput.Trim().Length < charactersNeededBeforeSearch))
             {
                 ClearSuggestions();
                 return;
@@ -186,7 +174,7 @@ namespace Netherlands3D.AddressSearch
             
             var uniqueSuggestions = new Dictionary<string, SuggestionResult>();
             // Query each collection separately so every result keeps its correct collection ID.
-            foreach (string collectionId in CollectionIds)
+            foreach (string collectionId in CollectionPriorityOrder)
             {
                 if (requestVersion != searchRequestVersion) yield break;
 
@@ -270,7 +258,7 @@ namespace Netherlands3D.AddressSearch
                             bbox = new BoundingBox(point, point);
                         hasCoordinates = true;
                     }
-                    var result = new SuggestionResult(id, label, GetDisplayName(collectionId), collectionId, score, bbox, hasCoordinates);
+                    var result = new SuggestionResult(id, label, GetCollectionDisplayName(collectionId), collectionId, score, bbox, hasCoordinates);
                     string key = MakeKey(collectionId, label);
                     if (!uniqueSuggestions.TryGetValue(key, out SuggestionResult existing) || result.Score > existing.Score)
                     {
@@ -299,11 +287,9 @@ namespace Netherlands3D.AddressSearch
             //     .Take(Mathf.Max(1, rows))
             //     .ToList();
 
-            cachedSuggestions.Clear();
             orderedSuggestions.Clear();
             foreach (SuggestionResult result in best)
             {
-                cachedSuggestions[MakeKey(result.CollectionId, result.Label)] = result;
                 orderedSuggestions.Add(result);
             }
 
@@ -325,7 +311,7 @@ namespace Netherlands3D.AddressSearch
                 return;
             }
 
-            targetId = suggestion.DisplayLabel;
+            selectedLocationLabel = suggestion.DisplayLabel;
 
             if (string.Equals(suggestion.CollectionId, "adres", StringComparison.OrdinalIgnoreCase))
             {
@@ -478,10 +464,10 @@ namespace Netherlands3D.AddressSearch
 
         private void UpdatePointer(Coordinate coordinate)
         {
-            if(string.IsNullOrEmpty(targetId)) return;
+            if(string.IsNullOrEmpty(selectedLocationLabel)) return;
             
             ShowPointer();
-            locationPointer.SetText(targetId);
+            locationPointer.SetText(selectedLocationLabel);
         }
 
         private void HidePointer()
@@ -526,8 +512,7 @@ namespace Netherlands3D.AddressSearch
 
         private void ClearSuggestions()
         {
-            targetId = string.Empty;
-            cachedSuggestions.Clear();
+            selectedLocationLabel = string.Empty;
             orderedSuggestions.Clear();
             SuggestionsCleared?.Invoke();
         }

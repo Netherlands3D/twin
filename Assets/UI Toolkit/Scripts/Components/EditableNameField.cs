@@ -76,7 +76,10 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("color")]
         public string color
         {
-            get { return label.style.color.value.ToString(); }
+            get
+            {
+                return ColorUtility.ToHtmlStringRGB(label.style.color.value);
+            }
             set
             {
                 if (HexColorUtility.ParseHexColor(value, out var parsedColor))
