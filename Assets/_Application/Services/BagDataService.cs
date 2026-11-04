@@ -221,11 +221,7 @@ namespace Netherlands3D
             }
             return found;
         }
-
-        public void GetBAGIDFromResidentialID(string residentialObjectId, Action<List<string>> onBagIdsLoaded)
-        {
-            StartCoroutine(GetBAGID(residentialObjectId, onBagIdsLoaded));
-        }
+        
         
         public IEnumerator GetBAGID(string residentialObjectID, Action<List<string>> onBagIdsLoaded)
         {
@@ -258,6 +254,7 @@ namespace Netherlands3D
                 yield break;
             }
 
+            //there will only be one feature so here we get the first
             JSONNode properties = features[0]["properties"];
             string bagId = ReadString(properties, "pandidentificatie");
             if (string.IsNullOrEmpty(bagId))

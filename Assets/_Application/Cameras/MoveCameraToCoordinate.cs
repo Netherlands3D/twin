@@ -11,10 +11,10 @@ namespace Netherlands3D.Twin.Cameras
     [RequireComponent(typeof(WorldTransform))]
     public class MoveCameraToCoordinate : MonoBehaviour
     {
-        [Tooltip("if the bounds are larger than this number, the camera won't move.")] 
+        [Tooltip("if the bounds are larger than this number, the camera won't move or will be clamped at this distance.")] 
         [SerializeField] private float moveSizeLimit = 20000f;
 
-        [Tooltip("if the bounds are larger than this number, the camera won't zoom to fit the bounds on the screen, but will use the default distance.")] 
+        [Tooltip("if the bounds are larger than this number, the camera won't zoom to fit the bounds on the screen, but will use the default distance. Or will be clamped at the maximum zoom distance")] 
         [SerializeField] private float zoomSizeLimit = 2000f;
 
         [Tooltip("default distance of the camera when zooming to the extents is not possible. ")] 
