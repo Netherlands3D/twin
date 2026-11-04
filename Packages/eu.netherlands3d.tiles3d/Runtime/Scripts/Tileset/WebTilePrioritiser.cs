@@ -85,20 +85,9 @@ namespace Netherlands3D.Tiles3D
         {
             PrioritisedTiles.Remove(tile);
             requirePriorityCheck = true;
-
-            bool anyChildLoading = false;
             tile.requestedDispose = true;
             tile.childrenCountDelayingDispose = 0;
-
-            if (tile.loadingChildren+tile.loadedChildren>0) // there are active children
-            {
-                if (tile.loadingChildren > 0)
-                {
-                    anyChildLoading = true;
-                }
-            }
-
-            if(anyChildLoading && immediately==false)
+            if(tile.loadingChildren > 0 && immediately==false)
             {
                 delayedDisposeList.Add(tile);
             }
@@ -106,7 +95,7 @@ namespace Netherlands3D.Tiles3D
             {
                 if(tile.content.State == Content.ContentLoadState.DOWNLOADED)
                 {
-                Dispose(tile);
+                    Dispose(tile);
                 }
                 else{delayedDisposeList.Add(tile);}
             }
@@ -133,22 +122,18 @@ namespace Netherlands3D.Tiles3D
                     int loadingchildcount = tile.CountLoadingChildren();
                     if (loadingchildcount==0)
                     {
+                        Dispose(tile);
                         delayedDisposeList.RemoveAt(i);
                     }
-
-                    
                 }
             }
         }
-        
 
         /// <summary>
         /// Directly dispose this tile content
         /// </summary>
         public void Dispose(Tile tile)
         {
-            
-           
             tile.Dispose();
             tile.requestedUpdate = false;
             tile.requestedDispose = false;

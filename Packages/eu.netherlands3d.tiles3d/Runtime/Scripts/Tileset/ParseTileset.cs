@@ -65,7 +65,7 @@ namespace Netherlands3D.Tiles3D
                         childTile.parent = rootTile;
                         rootTile.geometricError += 10;
                         childTile.parent.contentUri = "";
-                        rootTile.children.Add(childTile);
+                        rootTile.AddChild(childTile);
                         
                     }
                     break;
@@ -139,7 +139,7 @@ namespace Netherlands3D.Tiles3D
                     var childTile = new Tile();
                     childTile.tileSet = tile.tileSet;
                     childTile.parent = tile;
-                    tile.children.Add(ReadExplicitNode(childrenNode[i], childTile));
+                    tile.AddChild(ReadExplicitNode(childrenNode[i], childTile));
                 }
             }
             JSONNode contentNode = node["content"];
