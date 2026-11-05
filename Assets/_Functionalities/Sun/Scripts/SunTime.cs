@@ -18,6 +18,7 @@
 
 using System;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -53,6 +54,7 @@ namespace Netherlands3D.Sun
         private float longitude;
         private float latitude;
         private DateTime time;
+        private DateTime lastSavedDateTime = new();
 
         public DateTime Time
         {
@@ -101,7 +103,61 @@ namespace Netherlands3D.Sun
             }
 
             RecalculateOrigin();
+            OnProjectDataChanged(ProjectData.Current); //set initial value based on the current project
         }
+        
+        private void OnEnable()
+        {
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
+            ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnProjectTimeChanged);
+            timeOfDayChanged.AddListener(SaveCurrentDateTime);
+            useCurrentTimeChanged.AddListener(SaveUseCurrentTime);
+        }
+
+        private void OnDisable()
+        {
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
+            ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnProjectTimeChanged);
+            timeOfDayChanged.RemoveListener(SaveCurrentDateTime);
+            useCurrentTimeChanged.RemoveListener(SaveUseCurrentTime);
+        }
+        
+        private void OnProjectDataChanged(ProjectData project)
+        {
+            UseCurrentTime = project.UseCurrentTime;
+            
+            if (!project.UseCurrentTime)
+            {
+                lastSavedDateTime = project.CurrentDateTime;
+                SetTime(project.CurrentDateTime);
+            }
+        }
+
+        private void OnProjectTimeChanged(DateTime time)
+        {
+            var project = ProjectData.Current;
+            UseCurrentTime = project.UseCurrentTime;
+            
+            if (!project.UseCurrentTime)
+            {
+                lastSavedDateTime = project.CurrentDateTime;
+                SetTime(project.CurrentDateTime);
+            }
+        }
+
+        private void SaveCurrentDateTime(DateTime newDateTime)
+        {
+            if (lastSavedDateTime == newDateTime)
+                return;
+
+            lastSavedDateTime = newDateTime;
+            ProjectData.Current.CurrentDateTime = newDateTime;
+        }
+        
+        private void SaveUseCurrentTime(bool useCurrentTime)
+        {
+            ProjectData.Current.UseCurrentTime = useCurrentTime;
+        }        
 
         private void Update()
         {
