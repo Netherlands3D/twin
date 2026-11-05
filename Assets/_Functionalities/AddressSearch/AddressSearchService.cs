@@ -73,7 +73,7 @@ namespace Netherlands3D.AddressSearch
         // Volgorde waarin collecties in de lijst verschijnen (eerst grote gebieden en adressen).
         private static readonly Dictionary<string, string> CollectionPriorityOrder = new Dictionary<string, string>
             {
-                { "plaats", "1" },
+                { "plaats", "0.75" },
                 { "gemeentegebied", "1" },
                 { "woonplaats", "1" },
                 { "provinciegebied", "1" },
