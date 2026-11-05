@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin
     public static class App
     {
         public static Services.Layers Layers => ServiceLocator.GetService<Services.Layers>();
-        public static FileImportService FileImport => ServiceLocator.GetService<FileImportService>();
+        public static FileOpenService FileOpen => ServiceLocator.GetService<FileOpenService>();
         public static Cameras.CameraService Cameras => ServiceLocator.GetService<Cameras.CameraService>();
         public static ToolService Tools => ServiceLocator.GetService<ToolService>();
         public static AppRootBehaviour UIRoot => ServiceLocator.GetService<AppRootBehaviour>();

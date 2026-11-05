@@ -76,7 +76,7 @@ namespace Netherlands3D.Twin.Functionalities
         }
 
         public bool IsExperimental;
-        public string FileExtension;
+        
 
         public UnityEvent OnEnableFunctionality = new();
         public UnityEvent OnDisableFunctionality = new();

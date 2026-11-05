@@ -24,6 +24,8 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] public List<Functionality> Functionalities = new();
         [SerializeField] private string corsProxyUrl = null;
         [SerializeField] private List<string> supportedFileTypes = new List<string>() { "obj", "csv", "json", "geojson", "glb" };
+        
+        private FileOpenService fileOpenService;
 
         public List<string> SupportedFileTypes => supportedFileTypes;
         
@@ -84,12 +86,17 @@ namespace Netherlands3D.Twin.Configuration
 
         public bool ExperimentalFunctionalityHasFileExtension(string extension)
         {
+            var normalizedExtension = extension.Trim().TrimStart('.');
+
             foreach (var functionality in Functionalities)
             {
-                if (functionality.IsExperimental)
+                if (!functionality.IsExperimental)
+                    continue;
+
+                if (functionality.Data is FileExtensionFunctionalityData data)
                 {
-                    var normalizedExtension = extension.Trim().TrimStart('.');
-                    if (string.Equals(functionality.FileExtension.Trim().TrimStart('.'), normalizedExtension, StringComparison.OrdinalIgnoreCase))
+                    var fileExtension = data.FileExtention.Trim().TrimStart('.');
+                    if (string.Equals(fileExtension, normalizedExtension, StringComparison.OrdinalIgnoreCase))
                         return true;
                 }
             }
@@ -330,18 +337,22 @@ namespace Netherlands3D.Twin.Configuration
             AddFunctionalityDataToProject(); //re add missing functionalities to project, in case the project did not have a specific functionalityData
         }
 
-        private FileImportService fileImportService;
+        
         private void UpdateFunctionalityExtention(Functionality functionality)
         {
-            if(fileImportService == null)
-                fileImportService = ServiceLocator.GetService<FileImportService>();
-            if (!string.IsNullOrEmpty(functionality.FileExtension))
-            {
-                if (functionality.IsEnabled)
-                    fileImportService.AddSupportedDragAndDropExtention(functionality.FileExtension);
-                else
-                    fileImportService.RemoveSupportedDragAndDropExtention(functionality.FileExtension);
-            }
+            if (fileOpenService == null)
+                fileOpenService = ServiceLocator.GetService<FileOpenService>();
+
+            if (functionality.Data is not FileExtensionFunctionalityData data)
+                return;
+
+            if (string.IsNullOrEmpty(data.FileExtention))
+                return;
+
+            if (functionality.IsEnabled)
+                fileOpenService.AddSupportedDragAndDropExtention(data.FileExtention);
+            else
+                fileOpenService.RemoveSupportedDragAndDropExtention(data.FileExtention);
         }
         
         public void AddFunctionalityDataToProject()
