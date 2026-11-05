@@ -25,8 +25,7 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Sun
 {
-    [ExecuteInEditMode]
-    public class SunTime : MonoBehaviour
+    public class TimeService : MonoBehaviour
     {
         [Header("Time")] [SerializeField] private DateTimeKind dateTimeKind = DateTimeKind.Local;
 
@@ -108,16 +107,16 @@ namespace Netherlands3D.Sun
         
         private void OnEnable()
         {
-            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
-            ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnProjectTimeChanged);
+            ProjectData.Current?.OnDataChanged.AddListener(OnProjectDataChanged);
+            ProjectData.Current?.OnCurrentDateTimeChanged.AddListener(OnProjectTimeChanged);
             timeOfDayChanged.AddListener(SaveCurrentDateTime);
             useCurrentTimeChanged.AddListener(SaveUseCurrentTime);
         }
 
         private void OnDisable()
         {
-            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
-            ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnProjectTimeChanged);
+            ProjectData.Current?.OnDataChanged.RemoveListener(OnProjectDataChanged);
+            ProjectData.Current?.OnCurrentDateTimeChanged.RemoveListener(OnProjectTimeChanged);
             timeOfDayChanged.RemoveListener(SaveCurrentDateTime);
             useCurrentTimeChanged.RemoveListener(SaveUseCurrentTime);
         }

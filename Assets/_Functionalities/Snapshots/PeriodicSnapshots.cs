@@ -56,7 +56,7 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private bool useViewSize = true;
         [SerializeField] private int width = 1024;
         [SerializeField] private int height = 768;
-        [SerializeField] private SunTime sunTime;
+        [SerializeField] private TimeService timeService;
         [SerializeField] private Texture2D timeStampLabelBackground;
         [SerializeField] private int labelPaddingWidth = 10;
         [SerializeField] private int labelPaddingHeight = 10;
@@ -143,14 +143,14 @@ namespace Netherlands3D.Snapshots
             
             onStartGenerating.Invoke();
 
-            var cachedTimeOfDay = sunTime.GetTime();
+            var cachedTimeOfDay = timeService.GetTime();
             for (var index = 0; index < moments.Count; index++)
             {
                 onProgress.Invoke(1f / moments.Count * (index + 1));
                 yield return TakeSnapshot(moments[index], path);
                 
             }
-            sunTime.SetTime(cachedTimeOfDay);
+            timeService.SetTime(cachedTimeOfDay);
 
             var archiveFilePath = FetchArchivePath(timestamp);
             if (File.Exists(archiveFilePath)) File.Delete(archiveFilePath);
@@ -196,11 +196,11 @@ namespace Netherlands3D.Snapshots
 
         private IEnumerator TakeSnapshot(Moment moment, string path)
         {
-            sunTime.SetDay(moment.day);
-            sunTime.SetMonth(moment.month);
-            sunTime.SetHour(moment.hour);
-            sunTime.SetMinutes(0);
-            sunTime.SetSeconds(0);
+            timeService.SetDay(moment.day);
+            timeService.SetMonth(moment.month);
+            timeService.SetHour(moment.hour);
+            timeService.SetMinutes(0);
+            timeService.SetSeconds(0);
             
             yield return null; //wait frame
             

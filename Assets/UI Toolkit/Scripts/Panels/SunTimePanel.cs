@@ -23,7 +23,7 @@ namespace Netherlands3D.UI.Panels
         // The UI shows speed in hours/second so we apply this factor.
         private const float SecondsPerHour = 3600f;
 
-        private SunTime sunTime;
+        private TimeService timeService;
 
         private DateField dateField;
         private DateField DateField => dateField ??= this.Q<DateField>("DateField");
@@ -56,7 +56,7 @@ namespace Netherlands3D.UI.Panels
         //todo it would be nicer to have the scriptableobject support moments and images combined so we dont have to get them from periodicsnapshots
         public SunTimePanel(ScriptableObject imageContainer) : this()
         {
-            sunTime = Services.ServiceLocator.GetService<SunTime>();
+            timeService = Services.ServiceLocator.GetService<TimeService>();
             periodicSnapshotsService = Services.ServiceLocator.GetService<PeriodicSnapshots>();
 
             this.CloneComponentTree("Panels");
@@ -74,14 +74,14 @@ namespace Netherlands3D.UI.Panels
             
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
-                sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
-                sunTime.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
-                OnTimeOfDayChanged(sunTime.Time); 
+                timeService.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
+                timeService.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
+                OnTimeOfDayChanged(timeService.Time); 
             });
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {
-                sunTime.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
-                sunTime.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
+                timeService.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
+                timeService.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
             });
 
 
@@ -168,7 +168,7 @@ namespace Netherlands3D.UI.Panels
 
         void OnNowButtonClicked(ClickEvent _)
         {
-            sunTime?.ResetToNow();
+            timeService?.ResetToNow();
             SimulationSpeedControls.TogglePlay();
         }
 
@@ -181,7 +181,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnSunDialTimeChanged(int hour, int minute)
         {
-            sunTime?.SetTime(hour, minute, 0);
+            timeService?.SetTime(hour, minute, 0);
         }
 
         private void OnTimeSpeedChanged(float speedSecondsPerSecond)
@@ -191,25 +191,25 @@ namespace Netherlands3D.UI.Panels
 
         private void OnSimulationSpeedChanged(float hoursPerSecond)
         {
-            sunTime?.SetTimeSpeed(hoursPerSecond * SecondsPerHour);
+            timeService?.SetTimeSpeed(hoursPerSecond * SecondsPerHour);
         }
 
         private void OnPlayToggled(bool isPlaying)
         {
-            sunTime?.ToggleAnimation(isPlaying);
+            timeService?.ToggleAnimation(isPlaying);
         }
 
         private void OnTimeChanged()
         {
-            var dt = timeField.GetValueAsTime(sunTime.Time);
-            sunTime?.SetTime(dt.Hour, dt.Minute, 0);
+            var dt = timeField.GetValueAsTime(timeService.Time);
+            timeService?.SetTime(dt.Hour, dt.Minute, 0);
         }
 
         private void OnDateChanged(int day, int month, int year)
         {
-            sunTime?.SetDay(day);
-            sunTime?.SetMonth(month);
-            sunTime?.SetYear(year);
+            timeService?.SetDay(day);
+            timeService?.SetMonth(month);
+            timeService?.SetYear(year);
         }
     }
 }
