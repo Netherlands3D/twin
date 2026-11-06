@@ -86,10 +86,7 @@ namespace Netherlands3D.Twin.Projects
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
-            //LoadDefaultProject();
-            //TODO this is a quite dirty solution to postpone the loading flow of the application, but now its needed to preload assets 
-            //for when a default project contains assetbundle assets from start, needing a solid preloader in the future
-            FindObjectOfType<AssetBundleLoader>().OnAssetsLoaded.AddListener(OnPreloadedAssets);
+            OnPreloadedAssets();
         }
 
         private void OnPreloadedAssets()
@@ -234,7 +231,7 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             ProjectData.Current.LoadVisualizations();
         }
-
+        
         public void SaveAsFile()
         {
             ProjectData.Current.RefreshUUID();
@@ -243,18 +240,34 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
 
-            // Start the zip output stream
-            var lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}";
-            zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
-            zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
-            
-            var projectData = ProjectData.Current;
-            WriteProjectToZip(projectData, zipOutputStream);
-            WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+            string saveDirectory;
 
-            zipOutputStream.Finish();
-            zipOutputStream.Close();
+#if (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX) && !UNITY_EDITOR
+            // Windows and Linux standalone builds: save to Downloads
+            saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
+#else
+            saveDirectory = Application.persistentDataPath;
+#endif
+            if (!Directory.Exists(saveDirectory))
+                throw new DirectoryNotFoundException($"Save directory does not exist: {saveDirectory}");
+            
+            var lastSavePath = Path.Combine(saveDirectory, $"{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}");
+
+            // Start the ZIP output stream
+            using (zipOutputStream = new ZipOutputStream(File.Create(lastSavePath)))
+            {
+                zipOutputStream.SetLevel(9); // 0-9, where 9 means best compression
+
+                var projectData = ProjectData.Current;
+
+                WriteProjectToZip(projectData, zipOutputStream);
+                WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+
+                zipOutputStream.Finish();
+            }
+
             Debug.Log("SAVING PROJECT DATA path " + lastSavePath);
+
             SaveFile(lastSavePath);
         }
 
