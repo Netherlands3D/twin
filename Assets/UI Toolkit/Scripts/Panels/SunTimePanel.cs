@@ -45,7 +45,11 @@ namespace Netherlands3D.UI.Panels
         private Button downloadButton;
         private List<Moment> moments;
         
-        public UnityEvent TimeChanged;
+        public UnityEvent TimeChanged = new();
+        
+        private const string dayMonthSeperator = "-";
+        private const string aboutString = " om ";
+        private const string timeSuffix = ":00";
 
         public SunTimePanel()
         {
@@ -56,15 +60,10 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            
            
             TimeField.InputField.RegisterCallback<BlurEvent>(_ => TimeChanged.Invoke());
             TimeField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>TimeChanged.Invoke());
-
             NowButton.RegisterCallback<ClickEvent>(OnNowButtonClicked);
-
-            
-
             downloadButton = this.Q<Button>("DownloadButton");
 
             if (imageContainer is not ScreenshotContainer screenshots)
@@ -84,7 +83,6 @@ namespace Netherlands3D.UI.Panels
         {
             float containerWidth = imagesContainer.resolvedStyle.width;
             if (containerWidth == 0) return;
-
             
             imagesRow1 = imagesContainer.Q<VisualElement>("ImagesRow1");
             AddImagesToRow(0, 4, containerWidth, imagesRow1);
@@ -99,12 +97,7 @@ namespace Netherlands3D.UI.Panels
             textRow2.text = GetMomentsText(4, 5);
             textRow3 = this.Q<Label>("TextRow3");
             textRow3.text = GetMomentsText(9, 3);
-
         }
-
-        private const string dayMonthSeperator = "-";
-        private const string aboutString = " om ";
-        private const string timeSuffix = ":00";
 
         public void SetMoments(List<Moment> moments)
         {
