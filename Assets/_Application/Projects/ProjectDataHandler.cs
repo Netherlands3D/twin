@@ -106,6 +106,9 @@ namespace Netherlands3D.Twin.Projects
 
         private void OnEnable()
         {
+            FileOpenService fileOpenService = ServiceLocator.GetService<FileOpenService>();
+            fileOpenService.AddSupportedDragAndDropExtention("nl3d");
+            
             credentialHandler.OnAuthorizationHandled.AddListener(fileImporter.DetermineAdapter);
             
             ToolService tools = ServiceLocator.GetService<ToolService>();
@@ -135,8 +138,8 @@ namespace Netherlands3D.Twin.Projects
 
         private void OpenProject()
         {
-            FileOpen fileOpenerService = ServiceLocator.GetService<FileOpen>();
-            fileOpenerService.OpenFile("nl3d");
+            FileOpenService fileOpenService = ServiceLocator.GetService<FileOpenService>();
+            fileOpenService.OpenFile("nl3d");
             ToolService tools = ServiceLocator.GetService<ToolService>();
             tools.GetTool(ToolType.OpenProject).Close();
         }
