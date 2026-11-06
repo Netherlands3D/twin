@@ -11,6 +11,7 @@ using Netherlands3D.Functionalities.GeoJSON.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.UI.Panels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -20,6 +21,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
     public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetResult>
     {
+        [SerializeField] private GeoJSONPresetPrefabMapper electricityPolePresetPrefabMapper;
+        
+        
         public bool Supports(LocalFile localFile)
         {
             using var reader = new StreamReader(localFile.LocalFilePath);
@@ -58,6 +62,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             {
                 var serializer = JsonSerializer.CreateDefault();
 
+                int featureIndex = 0;
                 foreach (var featureToken in features)
                 {
                     var properties = featureToken["properties"];
@@ -77,6 +82,8 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                         crs = GeoJSONParser.GetCoordinateSystem(feature.CRS ?? DefaultCRS.Instance);
 
                     var coordinate = GeometryVisualizationFactory.ConvertToCoordinate(crs, point.Coordinates);
+
+                    featureIndex++;
 
                     switch (featureType)
                     {
@@ -99,7 +106,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                                 polePresets = new List<LayerPresetArgs>();
                                 uniquePresets[trajectType] = polePresets;
                             }
-                            polePresets.Add(new GeoJSONElectricityPolePreset.Args(coordinate, pole.OBJECTIDENTIFIER, pole.Type));
+                            polePresets.Add(new GeoJSONElectricityPolePreset.Args(electricityPolePresetPrefabMapper, coordinate, pole.OBJECTIDENTIFIER + " id:" + featureIndex, pole.Type));
                             break;
                         }
 
