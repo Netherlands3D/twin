@@ -41,7 +41,7 @@
  * * * * */
 using System;
 
-namespace SimpleJSON
+namespace Netherlands3D.SimpleJSON
 {
 #if !SimpleJSON_ExcludeBinary
     public abstract partial class JSONNode
