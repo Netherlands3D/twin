@@ -39,9 +39,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
         
-        public IGeoJsonVisualisationLayer[] VisualisationLayers => visualisationLayers;
+        public IGeoJsonGeometryTypeVisualizer[] VisualisationLayers => visualisationLayers;
 
-        private IGeoJsonVisualisationLayer[] visualisationLayers;
+        private IGeoJsonGeometryTypeVisualizer[] visualisationLayers;
         
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
@@ -49,7 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
-            visualisationLayers = GetComponentsInChildren<IGeoJsonVisualisationLayer>();
+            visualisationLayers = GetComponentsInChildren<IGeoJsonGeometryTypeVisualizer>();
         }
 
         protected override void OnVisualizationReady()
@@ -178,7 +178,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             OnFeatureRemove.Invoke(feature);
             //we have to query first to find the corresponding featuremappings, cant do a remove right away
             //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
-            IGeoJsonVisualisationLayer layer = visualisationLayers.FirstOrDefault(layer => layer.SupportsGeometryType(feature));
+            IGeoJsonGeometryTypeVisualizer layer = visualisationLayers.FirstOrDefault(layer => layer.SupportsGeometryType(feature));
             BoundingBox queryBoundingBox = GeoJsonFeatureMapping.CreateBoundingBoxForFeature(feature, layer);
             List<IMapping> mappings = SelectionService.MappingTree.Query<GeoJsonFeatureMapping>(queryBoundingBox);
             foreach (GeoJsonFeatureMapping mapping in mappings)
@@ -204,7 +204,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void CreateFeatureMappingsForFeature(Feature feature)
         {
-            IGeoJsonVisualisationLayer layer = visualisationLayers.FirstOrDefault(layer => layer.SupportsGeometryType(feature));
+            IGeoJsonGeometryTypeVisualizer layer = visualisationLayers.FirstOrDefault(layer => layer.SupportsGeometryType(feature));
             var meshData = layer?.GetMeshData(feature);
             if (meshData != null)
             {

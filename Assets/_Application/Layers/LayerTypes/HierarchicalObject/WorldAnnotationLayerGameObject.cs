@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-            LayerFeature feature = CreateFeature(worldAnnotation);
+            StylingFeature feature = CreateFeature(worldAnnotation);
             Symbolizer styling = GetStyling(feature);
             var fillColor = styling.GetFillColor();
             if (fillColor.HasValue)

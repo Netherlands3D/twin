@@ -100,7 +100,7 @@ namespace Netherlands3D.Timeline
             stylingFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
             
             GetComponent<GeoJSONLayerFeatureColoring>().OnApplyStyling(); //todo: this needs to be done to apply the default styling to features that no longer have a status. but this dependency is undesirable.
-            visualization.ApplyStylingToFeature(feature);
+            // visualization.ApplyStylingToFeature(feature);
         }
     }
 }

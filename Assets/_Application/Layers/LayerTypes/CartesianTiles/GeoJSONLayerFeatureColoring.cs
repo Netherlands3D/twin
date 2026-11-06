@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.layers.properties
     [RequireComponent(typeof(GeoJsonLayerGameObject))]
     public class GeoJSONLayerFeatureColoring : MonoBehaviour, IVisualizationWithPropertyData
     {
-        private List<IGeoJsonVisualisationLayer> layers = new List<IGeoJsonVisualisationLayer>();
+        private List<IGeoJsonGeometryTypeVisualizer> layers = new List<IGeoJsonGeometryTypeVisualizer>();
         private GeoJsonLayerGameObject visualization;
         
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void UpdateStyling(Feature feature)
         {
-            IGeoJsonVisualisationLayer layer = null;
+            IGeoJsonGeometryTypeVisualizer layer = null;
             for (int i = 0; i < layers.Count; i++)
             {
                 if (layers[i].SupportsGeometryType(feature))
@@ -53,7 +53,7 @@ namespace Netherlands3D.Twin.layers.properties
                 }
             }
 
-            var layerFeature = visualization.GetLayerFeatureByGeometry(layer.RenderMaterial);
+            var layerFeature = visualization.GetStylingFeatureByGeometry(layer.RenderMaterial);
             if (layerFeature == null)
             {
                 layerFeature = visualization.CreateFeature(layer.RenderMaterial);
@@ -74,7 +74,7 @@ namespace Netherlands3D.Twin.layers.properties
             }
         }
         
-        private void OnApplyStyling()
+        public void OnApplyStyling()
         {
             foreach (var (_, feature) in visualization.LayerFeatures)
             {
@@ -115,7 +115,7 @@ namespace Netherlands3D.Twin.layers.properties
             return null;
         }
         
-        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             if (feature.Geometry is not Material mat) return feature;
 
