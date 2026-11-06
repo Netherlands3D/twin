@@ -611,15 +611,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             OnDeselect.Invoke();
         }
 
-// #if UNITY_EDITOR
-//         public void OnDrawGizmos()
-//         {
-//             if (debugMappingTree)
-//                 MappingTree.DebugTree();
-//             
-//             frustumBoundingBox.Debug(Color.chocolate);
-//         }
-// #endif
+#if UNITY_EDITOR
+        public void OnDrawGizmos()
+        {
+            if (debugMappingTree)
+                MappingTree.DebugTree();
+            
+            frustumBoundingBox?.Debug(Color.chocolate);
+        }
+#endif
         
         //temporary place
         private Vector3[] cameraCorners = new Vector3[4];
@@ -638,31 +638,40 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 new Vector2(1, 1)
             };
 
-            Vector3[] groundCorners = new Vector3[4];
             Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
-            for (int i = 0; i < 4; i++)
+            List<Coordinate> geographicCorners = new List<Coordinate>();
+
+            foreach (Vector2 viewportCorner in viewportCorners)
             {
-                Ray ray = camera.ViewportPointToRay(viewportCorners[i]);
+                Ray ray = camera.ViewportPointToRay(viewportCorner);
 
                 if (!groundPlane.Raycast(ray, out float distance))
                     return;
 
-                groundCorners[i] = ray.GetPoint(distance);
+                Vector3 groundPoint = ray.GetPoint(distance);
+
+                Coordinate coordinate = new Coordinate(
+                        new Vector3(groundPoint.x, 0, groundPoint.z)
+                    )
+                    .Convert(CoordinateSystems.connectedCoordinateSystem)
+                    .Convert(CoordinateSystem.WGS84_LatLon);
+
+                geographicCorners.Add(coordinate);
             }
 
-            float minX = groundCorners.Min(c => c.x);
-            float maxX = groundCorners.Max(c => c.x);
-            float minZ = groundCorners.Min(c => c.z);
-            float maxZ = groundCorners.Max(c => c.z);
+            // Calculate bounds using the actual coordinate values.
+            double min1 = geographicCorners.Min(c => c.value1);
+            double max1 = geographicCorners.Max(c => c.value1);
 
-            Coordinate bottomLeft = new Coordinate(new Vector3(minX, 0, minZ))
-                .Convert(CoordinateSystems.connectedCoordinateSystem)
-                .Convert(CoordinateSystem.WGS84_LatLon);
+            double min2 = geographicCorners.Min(c => c.value2);
+            double max2 = geographicCorners.Max(c => c.value2);
 
-            Coordinate topRight = new Coordinate(new Vector3(maxX, 0, maxZ))
-                .Convert(CoordinateSystems.connectedCoordinateSystem)
-                .Convert(CoordinateSystem.WGS84_LatLon);
+            CoordinateSystem crs =
+                (CoordinateSystem)geographicCorners[0].CoordinateSystem;
+
+            Coordinate bottomLeft = new Coordinate(crs, min1, min2);
+            Coordinate topRight = new Coordinate(crs, max1, max2);
 
             frustumBoundingBox = new BoundingBox(bottomLeft, topRight);
 

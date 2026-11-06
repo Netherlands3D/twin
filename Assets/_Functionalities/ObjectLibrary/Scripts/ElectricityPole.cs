@@ -4,6 +4,7 @@ using GG.Extensions;
 using GogoGaga.OptimizedRopesAndCables;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
@@ -12,6 +13,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
@@ -24,6 +26,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         private ConnectableHierarchicalLayerPropertyData connectedPropertyData;
 
         private LayerData previousParent;
+        private int previousSiblingIndex = -1;
         private float ropeLengthMp = 1.1f;
         public bool DebugTarget = false;
 
@@ -34,6 +37,8 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         [SerializeField] private Transform[] Connectors;
         private Rope[] ropes;
         
+        private HeightMap heightMap;
+        
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             visualisation = GetComponent<LayerGameObject>();
@@ -41,13 +46,21 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             transformPropertyData = visualisation.LayerData.GetProperty<TransformLayerPropertyData>();
             GeoJSONPropertyData geoJsonPropertyData  = visualisation.LayerData.GetProperty<GeoJSONPropertyData>();
             if(geoJsonPropertyData != null)
-                transformPropertyData.Position = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            {
+                Coordinate targetCoordinate = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
+                targetCoordinate.height = height;
+                transformPropertyData.Position = targetCoordinate;
+            }
             
             connectedPropertyData = visualisation.LayerData.GetProperty<ConnectableHierarchicalLayerPropertyData>();
             connectedPropertyData.Connectors = Connectors;
             
             AddListeners();
             ConnectToSibling();
+            
+            heightMap = ServiceLocator.GetService<HeightMap>();
         }
 
         private void AddListeners()
@@ -87,10 +100,15 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                     {
                         if (ropes[i].StartPoint != null && ropes[i].EndPoint != null)
                         {
-                            float dist = Vector3.Distance(ropes[i].StartPoint.position, ropes[i].EndPoint.position);
                             float prevDist = ropes[i].ropeLength;
-                            ropes[i].ropeLength = dist * ropeLengthMp;
-                            if (prevDist != dist)
+                            float dist = Vector3.Distance(ropes[i].StartPoint.position, ropes[i].EndPoint.position);
+                            float groundY = heightMap.GetHeight(transformPropertyData.Position);
+                            float poleY = (ropes[i].StartPoint.position.y + ropes[i].EndPoint.position.y) * 0.5f;
+                            float maxSag = poleY - groundY - 0.75f;
+                            float sag = Mathf.Min(dist * 0.1f, maxSag);
+                            float newLength = dist + sag;
+                            ropes[i].ropeLength = newLength;
+                            if (prevDist != newLength)
                                 ropes[i].RecalculateRope();
                         }
                         else
@@ -183,22 +201,87 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             }
         }
 
+        
         private void ConnectToSibling()
         {
-            if (visualisation.LayerData.ParentLayer is not RootLayer)
+            LayerData currentParent = visualisation.LayerData.ParentLayer;
+
+            int currentIndex = currentParent is RootLayer
+                ? -1
+                : currentParent.ChildrenLayers.IndexOf(visualisation.LayerData);
+
+            // Nothing changed.
+            if (previousParent == currentParent &&
+                previousSiblingIndex == currentIndex)
+                return;
+
+            // Same parent: only update connections around the old
+            // and new positions.
+            if (previousParent == currentParent &&
+                currentParent is not RootLayer)
             {
-                OrderAllChildrenOfParent(visualisation.LayerData.ParentLayer);
-                previousParent = visualisation.LayerData.ParentLayer;
+                UpdateConnectionAt(currentParent, previousSiblingIndex - 1);
+                UpdateConnectionAt(currentParent, previousSiblingIndex);
+
+                UpdateConnectionAt(currentParent, currentIndex - 1);
+                UpdateConnectionAt(currentParent, currentIndex);
             }
             else
             {
-                if (previousParent != null)
+                // Update the old parent's connection.
+                if (previousParent != null &&
+                    previousParent is not RootLayer)
                 {
-                    OrderAllChildrenOfParent(previousParent);
-                    previousParent = null;
+                    UpdateConnectionAt(previousParent, previousSiblingIndex - 1);
+                }
+
+                // Update the new parent's connections.
+                if (currentParent is not RootLayer)
+                {
+                    UpdateConnectionAt(currentParent, currentIndex - 1);
+                    UpdateConnectionAt(currentParent, currentIndex);
                 }
             }
+
+            previousParent = currentParent is RootLayer ? null : currentParent;
+            previousSiblingIndex = currentIndex;
         }
+
+        private void UpdateConnectionAt(LayerData parent, int index)
+        {
+            if (parent == null || parent is RootLayer)
+                return;
+
+            List<LayerData> children = parent.ChildrenLayers;
+
+            // Include the last child: it must have no target.
+            if (index < 0 || index >= children.Count)
+                return;
+
+            ConnectableHierarchicalLayerPropertyData current =
+                children[index].GetProperty<ConnectableHierarchicalLayerPropertyData>();
+
+            if (current == null)
+                return;
+
+            LayerData desiredTarget = null;
+
+            // Only connect to the next child if one exists and is connectable.
+            if (index < children.Count - 1)
+            {
+                LayerData nextChild = children[index + 1];
+
+                if (nextChild.GetProperty<ConnectableHierarchicalLayerPropertyData>() != null)
+                    desiredTarget = nextChild;
+            }
+
+            // Avoid triggering OnTargetChanged unnecessarily.
+            if (current.Target == desiredTarget)
+                return;
+
+            current.Target = desiredTarget;
+        }
+
 
         private void OrderAllChildrenOfParent(LayerData parent)
         {
