@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8822905259358557482}
   - component: {fileID: 1678572183742351570}
   m_Layer: 0
-  m_Name: PeriodicSnapshots
+  m_Name: PeriodicSnapshotsBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
