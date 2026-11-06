@@ -39,7 +39,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             
             var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
             transformPropertyData.OnPositionChanged.AddListener(UpdateCityObjectTransforms);
-            
+
+            LayerData.LayerDestroyed.AddListener(OnRemoveFeatures);
         }
 
         protected override void UnregisterEventListeners()
@@ -52,6 +53,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
             transformPropertyData.OnPositionChanged.RemoveListener(UpdateCityObjectTransforms);
             
+            LayerData.LayerDestroyed.RemoveListener(OnRemoveFeatures);
         }
 
         private void UpdateCityObjectTransforms(Coordinate coordinate)
@@ -121,9 +123,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 AddStylingFeatureForCityObject(co);
                 CreateFeatureMappings(co);
             }
-
         }
 
+       
+
+        private void OnRemoveFeatures()
+        {
+            foreach (var co in cityJson.CityObjects)
+            {
+                RemoveFeatureMapping(co);
+            }
+            mappings.Clear();
+        }
+        
         public void AddStylingFeatureForCityObject(CityObject co)
         {
             var visualizers = co.GetComponents<CityObjectVisualizer>();
@@ -153,6 +165,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             objectMapping.UpdateBoundingBox();
             SelectionService.MappingTree.RootInsert(objectMapping);
             mappings.Add(objectMapping);
+        }
+
+        private void RemoveFeatureMapping(CityObject feature)
+        {
+            foreach (CityJSONMapping mapping in mappings)
+            {
+                if (mapping.Feature == feature)
+                {
+                    //destroy featuremapping object, there should be no references anywhere else to this object!
+                    SelectionService.MappingTree.Remove(mapping);
+                }
+            }
         }
         
         protected override void OnMouseClickNothing()
