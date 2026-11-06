@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using GeoJSON.Net.Feature;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.CityJSON;
+using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private CityJSON cityJson;
         public CityJSON CityJson => cityJson;
+        private List<CityJSONMapping> mappings = new();
 
         protected override void OnVisualizationInitialize()
         {
@@ -32,6 +37,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             propertydata.OnCRSChanged.AddListener(UpdateCRS);
             cityJson.onAllCityObjectsProcessed.AddListener(InitializeStylingFeatures);
             
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformPropertyData.OnPositionChanged.AddListener(UpdateCityObjectTransforms);
+
+            LayerData.LayerDestroyed.AddListener(OnRemoveFeatures);
         }
 
         protected override void UnregisterEventListeners()
@@ -41,6 +50,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             propertydata.OnCRSChanged.RemoveListener(UpdateCRS);
             cityJson.onAllCityObjectsProcessed.RemoveListener(InitializeStylingFeatures);
             
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformPropertyData.OnPositionChanged.RemoveListener(UpdateCityObjectTransforms);
+            
+            LayerData.LayerDestroyed.RemoveListener(OnRemoveFeatures);
+        }
+
+        private void UpdateCityObjectTransforms(Coordinate coordinate)
+        {
+            foreach (var m in mappings)
+            {
+                m.UpdateBoundingBox();
+            }
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
@@ -80,13 +101,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 return;
             
             var symbolizer = GetStyling(feature);
+            
+            var isVisibleStyling = symbolizer.GetVisibility();
+            var isVisible = isVisibleStyling.HasValue ?  isVisibleStyling.Value : true;
+
+            visualizer.gameObject.SetActive(isVisible);
+            if(!isVisible)
+                return;
+            
             var fillColor = symbolizer.GetFillColor();
-            if (fillColor.HasValue)
-                visualizer.SetFillColor(fillColor.Value);
+            visualizer.SetFillColor(fillColor);
             
             var strokeColor = symbolizer.GetStrokeColor();
-            if (strokeColor.HasValue)
-                visualizer.SetLineColor(strokeColor.Value);
+            visualizer.SetLineColor(strokeColor);
         }
         
         private void InitializeStylingFeatures()
@@ -94,10 +121,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             foreach (var co in cityJson.CityObjects)
             {
                 AddStylingFeatureForCityObject(co);
+                CreateFeatureMappings(co);
             }
-
         }
 
+       
+
+        private void OnRemoveFeatures()
+        {
+            foreach (var co in cityJson.CityObjects)
+            {
+                RemoveFeatureMapping(co);
+            }
+            mappings.Clear();
+        }
+        
         public void AddStylingFeatureForCityObject(CityObject co)
         {
             var visualizers = co.GetComponents<CityObjectVisualizer>();
@@ -116,6 +154,34 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);
+        }
+        
+        private void CreateFeatureMappings(CityObject feature)
+        {
+            CityJSONMapping objectMapping = new CityJSONMapping();
+            objectMapping.SetFeature(feature);
+            objectMapping.SetLocalPosition(feature.AbsoluteCenter - cityJson.AbsoluteCenter);
+            objectMapping.SetCityJsonLayerParent(this);
+            objectMapping.UpdateBoundingBox();
+            SelectionService.MappingTree.RootInsert(objectMapping);
+            mappings.Add(objectMapping);
+        }
+
+        private void RemoveFeatureMapping(CityObject feature)
+        {
+            foreach (CityJSONMapping mapping in mappings)
+            {
+                if (mapping.Feature == feature)
+                {
+                    //destroy featuremapping object, there should be no references anywhere else to this object!
+                    SelectionService.MappingTree.Remove(mapping);
+                }
+            }
+        }
+        
+        protected override void OnMouseClickNothing()
+        {
+           //override base because we want no deselection while selecting
         }
     }
 }

@@ -51,6 +51,8 @@ namespace Netherlands3D.CityJson.Visualisation
     [RequireComponent(typeof(MeshRenderer))]
     public class CityObjectMeshVisualizer : CityObjectVisualizer
     {
+      
+        
         private static int meshesCreatedThisFrame = 0;
         private const int maxMeshesPerFrame = 20;
         private static int lastFrameCount = -1;
@@ -64,7 +66,8 @@ namespace Netherlands3D.CityJson.Visualisation
         public int ActiveLod => activeLOD;
         public Mesh ActiveMesh { get; private set; }
 
-        [SerializeField] private bool addMeshCollider = true;
+        //enabling the meshcollider will cause the cityjson to not be selectable with the quadtree
+        [SerializeField] private bool addMeshCollider = false;
         [SerializeField] private CityMaterialConverter materialConverter;
 
         public override Material[] Materials => meshRenderer.materials;
@@ -149,6 +152,13 @@ namespace Netherlands3D.CityJson.Visualisation
 
             SetMesh(null);
             return false;
+        }
+
+        public List<Mesh> GetAllMeshes()
+        {
+            return meshes.Values
+                .Select(m => m.Mesh)
+                .ToList();
         }
 
         private void SetMesh(MeshWithMaterials mesh)
@@ -441,21 +451,32 @@ namespace Netherlands3D.CityJson.Visualisation
             return convertedPolygon;
         }
 
-        public override void SetFillColor(Color color)
+        public override void SetFillColor(Color? color)
         {
             var block = new MaterialPropertyBlock();
+
+            var hasValue = color.HasValue;
+            Color colorValue = default;
+            if (hasValue)
+                colorValue = color.Value;
             
             for (int m = 0; m < activeMaterialCount; m++)
             {
-                meshRenderer.GetPropertyBlock(block, m);
-                block.SetColor(baseColorID, color);
-                meshRenderer.SetPropertyBlock(block, m);
+                if (hasValue)
+                {
+                    meshRenderer.GetPropertyBlock(block, m);
+                    block.SetColor(baseColorID, colorValue);
+                    meshRenderer.SetPropertyBlock(block, m);
+                }
+                else
+                {
+                    meshRenderer.SetPropertyBlock(null, m);
+                }
             }
         }
 
-        public override void SetLineColor(Color color)
+        public override void SetLineColor(Color? color)
         {
-            
         }
     }
 }

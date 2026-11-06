@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Netherlands3D.CityJson.Structure;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.Timeline;
+using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
@@ -13,37 +16,21 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         public const string TimelineStatusAttributeIdentifier = "data-timeline-status-color";
         private const string TimelineStatusColorIdentifier = "timeline-status-color";
-        
+
+        [JsonIgnore] public Dictionary<CityObject, TimestampCollection> TimestampCollections = new();
+        [JsonIgnore] public UnityEvent<CityObject, TimestampCollection> TimestampCollectionAddded = new();
+
         public TimelineStatusStylingLayerPropertyData()
         {
             StylingRules.Remove(DefaultRuleName); //we do not need this here
         }
-
-        private string GetStylingRuleKey(Timestamp timestamp)
-        {
-            return GetStylingRuleKey(timestamp.value);
-        }
         
-        private string GetStylingRuleKey(string status)
+        private string GetStatusStylingRuleKey(string status)
         {
             return $"feature.{status}.{TimelineStatusColorIdentifier}";
         }
-
-        public Color? GetColorForTimestamp(Timestamp timestamp)
-        {
-            if (timestamp == null)
-                return null;
-
-            var stylingRuleKey = GetStylingRuleKey(timestamp);
-            if (StylingRules.TryGetValue(stylingRuleKey, out var rule))
-            {
-                return rule.Symbolizer.GetColor(colorType);
-            }
-
-            return null;
-        }
-
-        public IList GetStylingRuleNames()
+        
+        public List<string> GetStylingRuleNames()
         {
             var list = new List<string>(StylingRules.Count);
             foreach (var kvp in StylingRules)
@@ -55,13 +42,19 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public Color? GetColorForStatus(string status)
         {
-            var stylingRuleKey = GetStylingRuleKey(status);
+            var stylingRuleKey = GetStatusStylingRuleKey(status);
             return StylingRules[stylingRuleKey].Symbolizer.GetColor(colorType);
+        }
+        
+        public bool? GetVisibilityForStatus(string status)
+        {
+            var stylingRuleKey = GetStatusStylingRuleKey(status);
+            return StylingRules[stylingRuleKey].Symbolizer.GetVisibility();
         }
 
         public void SetColorForStatus(string status, Color color)
         {
-            var stylingRuleKey = GetStylingRuleKey(status);
+            var stylingRuleKey = GetStatusStylingRuleKey(status);
             StylingRules[stylingRuleKey].Symbolizer.SetColor(Symbolizer.FillColorProperty, color);
             StylingRules[stylingRuleKey].Symbolizer.SetColor(Symbolizer.StrokeColorProperty, color);
             OnStylingChanged.Invoke();
@@ -71,7 +64,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             foreach (var kvp in stateColors)
             {
-                var stylingRuleKey = GetStylingRuleKey(kvp.Key);
+                var stylingRuleKey = GetStatusStylingRuleKey(kvp.Key);
                 if (StylingRules.TryGetValue(stylingRuleKey, out var rule))
                 {
                     rule.Symbolizer.SetColor(Symbolizer.FillColorProperty, kvp.Value);
@@ -86,7 +79,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             var rules = new Dictionary<string, StylingRule>();
             foreach (var kvp in stateColors)
             {
-                var stylingRuleKey = GetStylingRuleKey(kvp.Key);
+                var stylingRuleKey = GetStatusStylingRuleKey(kvp.Key);
                 if(StylingRules.ContainsKey(stylingRuleKey))
                     continue; //rule already exists, do not overwrite the saved color
                 
@@ -99,10 +92,30 @@ namespace Netherlands3D.Twin.Layers.Properties
                 );
                 stylingRule.Symbolizer.SetColor(Symbolizer.FillColorProperty, kvp.Value);
                 stylingRule.Symbolizer.SetColor(Symbolizer.StrokeColorProperty, kvp.Value);
+                stylingRule.Symbolizer.SetVisibility(true);
                 rules.Add(stylingRuleKey, stylingRule);
             }
 
             SetStylingRules(rules);
+        }
+
+        public void SetVisibilityForStatuses(Dictionary<string, bool> changedStateVisibility)
+        {
+            foreach (var kvp in changedStateVisibility)
+            {
+                var stylingRuleKey = GetStatusStylingRuleKey(kvp.Key);
+                if (StylingRules.TryGetValue(stylingRuleKey, out var rule))
+                {
+                    rule.Symbolizer.SetVisibility(kvp.Value);
+                }
+            }
+            OnStylingChanged.Invoke();
+        }
+        
+        public void AddTimestampCollection(CityObject co, TimestampCollection collection)
+        {
+            TimestampCollections.Add(co, collection);
+            TimestampCollectionAddded.Invoke(co, collection);
         }
     }
 }

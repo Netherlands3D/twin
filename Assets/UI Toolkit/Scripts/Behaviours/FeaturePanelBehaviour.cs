@@ -21,8 +21,8 @@ namespace Netherlands3D.UI.Panels
             SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
             Dictionary<string, IMapping> selectedMappings = selectionService.SelectedMappings;
             
-            IEnumerable<FeatureMapping> featureMappings = selectedMappings.Values.OfType<FeatureMapping>();
-            foreach (FeatureMapping featureMapping in featureMappings)
+            IEnumerable<GeoJsonFeatureMapping> featureMappings = selectedMappings.Values.OfType<GeoJsonFeatureMapping>();
+            foreach (GeoJsonFeatureMapping featureMapping in featureMappings)
                 if (featureMapping.Feature != null && (featureMapping.Feature.Geometry is Polygon || featureMapping.Feature.Geometry is MultiPolygon))
                     return true;
             

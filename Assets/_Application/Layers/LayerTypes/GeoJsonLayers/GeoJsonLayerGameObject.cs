@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using GeoJSON.Net;
 using GeoJSON.Net.Feature;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
-using Netherlands3D.Twin.layers.properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -24,24 +22,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             get
             {
-                var pointBounds = pointFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
-                var lineBounds = lineFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
-                var polygonBounds = polygonFeaturesLayer.GetBoundingBoxOfVisibleFeatures();
-
-                if (pointBounds != null)
+                BoundingBox box = null;
+                foreach (var layer in visualisationLayers)
                 {
-                    pointBounds.Encapsulate(lineBounds);
-                    pointBounds.Encapsulate(polygonBounds);
-                    return pointBounds;
+                    if (box == null)
+                        box = layer.GetBoundingBoxOfVisibleFeatures();
+                    else
+                        box.Encapsulate(layer.GetBoundingBoxOfVisibleFeatures());
                 }
-
-                if (lineBounds != null)
-                {
-                    lineBounds.Encapsulate(polygonBounds);
-                    return lineBounds;
-                }
-
-                return polygonBounds;
+                return box;
             }
         }
 
@@ -49,25 +38,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public UnityEvent<Feature> OnFeatureRemove = new();
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
+        
+        public IGeoJsonVisualisationLayer[] VisualisationLayers => visualisationLayers;
 
-        public GeoJSONPointLayer PointLayer => pointFeaturesLayer;
-        public GeoJSONLineLayer LineLayer => lineFeaturesLayer;
-        public GeoJSONPolygonLayer PolygonLayer => polygonFeaturesLayer;
-
-        [Header("Visualizer settings")]
-        [SerializeField] private GeoJSONPolygonLayer polygonFeaturesLayer;
-        [SerializeField] private GeoJSONLineLayer lineFeaturesLayer;
-        [SerializeField] private GeoJSONPointLayer pointFeaturesLayer;
-
+        private IGeoJsonVisualisationLayer[] visualisationLayers;
+        
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
-
-        public List<Feature> GeoJsonFeatures { get; private set; } = new();
-
         
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
+            visualisationLayers = GetComponentsInChildren<IGeoJsonVisualisationLayer>();
         }
 
         protected override void OnVisualizationReady()
@@ -75,7 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
         }
-        
+
         protected virtual void UpdateURL(Uri storedUri)
         {
             if (storedUri == credentialHandler.Uri && credentialHandler.Authorization != null)
@@ -143,9 +125,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 startLoadingDataWhenLayerBecomesActive = false;
             }
 
-            polygonFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
-            lineFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
-            pointFeaturesLayer.OnLayerActiveInHierarchyChanged(isActive);
+            foreach (var layer in visualisationLayers)
+            {
+                layer.OnLayerActiveInHierarchyChanged(isActive);
+            }
         }
 
         protected override void RegisterEventListeners()
@@ -155,10 +138,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             parser.OnParseError.AddListener(VisualisationError.Invoke);
             
             credentialHandler?.OnAuthorizationHandled.AddListener(HandleCredentials);
-            
-            polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
-            lineFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
-            polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
+
+            foreach (var layer in visualisationLayers)
+            {
+                layer.FeatureRemoved += OnFeatureRemoved;
+            }
         }
 
         protected override void UnregisterEventListeners()
@@ -169,75 +153,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             credentialHandler?.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             
-            polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
-            lineFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
-            polygonFeaturesLayer.FeatureRemoved -= OnFeatureRemoved;
+            foreach (var layer in visualisationLayers)
+            {
+                layer.FeatureRemoved -= OnFeatureRemoved;
+            }
         }
 
         public void AddFeatureVisualisation(Feature feature)
         {
             var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
-            VisualizeFeature(feature, originalCoordinateSystem);
-            AddStylingFeature(feature);
+            
+            foreach (var layer in visualisationLayers)
+            {
+                if(layer.SupportsGeometryType(feature))
+                    layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
+            }
+            
+            CreateFeatureMappingsForFeature(feature);
             OnFeatureAdd.Invoke(feature);
-        }
-
-        /// <summary>
-        /// Removes features based on the bounds of their visualisations
-        /// </summary>
-        public void RemoveFeaturesOutOfView()
-        {
-            polygonFeaturesLayer?.RemoveFeaturesOutOfView();
-            lineFeaturesLayer?.RemoveFeaturesOutOfView();
-            pointFeaturesLayer?.RemoveFeaturesOutOfView();
-        }
-
-        private void CreateFeatureMappingsForFeature(Feature feature, IGeoJsonGeometryTypeVisualizer layer)
-        {
-            var meshData = layer?.GetMeshData(feature);
-            if (meshData != null)
-            {
-                CreateFeatureMappings(layer, feature, meshData);
-            }
-        }
-
-        private void CreateFeatureMappings(IGeoJsonGeometryTypeVisualizer layer, Feature feature, List<Mesh> meshes)
-        {
-            FeatureMapping objectMapping = new FeatureMapping();
-            objectMapping.SetFeature(feature);
-            objectMapping.SetMeshes(meshes);
-            objectMapping.SetVisualisationLayer(layer);
-            objectMapping.SetGeoJsonLayerParent(this);
-            objectMapping.UpdateBoundingBox();
-            SelectionService.MappingTree.RootInsert(objectMapping);
-        }
-
-        private void VisualizeFeature(Feature feature, CoordinateSystem crs)
-        {
-            switch (feature.Geometry.Type)
-            {
-                case GeoJSONObjectType.MultiPolygon:
-                case GeoJSONObjectType.Polygon:
-                    AddFeature(feature, crs, polygonFeaturesLayer);
-                    return;
-                case GeoJSONObjectType.MultiLineString:
-                case GeoJSONObjectType.LineString:
-                    AddFeature(feature, crs, lineFeaturesLayer);
-                    return;
-                case GeoJSONObjectType.MultiPoint:
-                case GeoJSONObjectType.Point:
-                    AddFeature(feature, crs, pointFeaturesLayer);
-                    return;
-                default:
-                    throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
-            }
-        }
-
-        private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonGeometryTypeVisualizer layer)
-        {
-            GeoJsonFeatures.Add(feature);
-            layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
-            CreateFeatureMappingsForFeature(feature, layer);
         }
 
         protected void OnFeatureRemoved(Feature feature)
@@ -245,10 +178,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             OnFeatureRemove.Invoke(feature);
             //we have to query first to find the corresponding featuremappings, cant do a remove right away
             //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
-            IGeoJsonGeometryTypeVisualizer layer = GetTypeVisualizerForFeature(feature);
-            BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
-            List<IMapping> mappings = SelectionService.MappingTree.Query<FeatureMapping>(queryBoundingBox);
-            foreach (FeatureMapping mapping in mappings)
+            IGeoJsonVisualisationLayer layer = visualisationLayers.FirstOrDefault(layer => layer.SupportsGeometryType(feature));
+            BoundingBox queryBoundingBox = GeoJsonFeatureMapping.CreateBoundingBoxForFeature(feature, layer);
+            List<IMapping> mappings = SelectionService.MappingTree.Query<GeoJsonFeatureMapping>(queryBoundingBox);
+            foreach (GeoJsonFeatureMapping mapping in mappings)
             {
                 if (mapping.Feature == feature)
                 {
@@ -257,54 +190,32 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 }
             }
         }
+        
+        /// <summary>
+        /// Removes features based on the bounds of their visualisations
+        /// </summary>
+        public void RemoveFeaturesOutOfView()
+        {
+            foreach (var layer in visualisationLayers)
+            {
+                layer.RemoveFeaturesOutOfView();
+            }
+        }
 
-        public IGeoJsonGeometryTypeVisualizer GetTypeVisualizerForFeature(Feature feature)
+        private void CreateFeatureMappingsForFeature(Feature feature)
         {
-            switch (feature.Geometry.Type)
+            IGeoJsonVisualisationLayer layer = visualisationLayers.FirstOrDefault(layer => layer.SupportsGeometryType(feature));
+            var meshData = layer?.GetMeshData(feature);
+            if (meshData != null)
             {
-                case GeoJSONObjectType.MultiPolygon:
-                case GeoJSONObjectType.Polygon:
-                    return polygonFeaturesLayer;
-                case GeoJSONObjectType.MultiLineString:
-                case GeoJSONObjectType.LineString:
-                    return lineFeaturesLayer;
-                case GeoJSONObjectType.MultiPoint:
-                case GeoJSONObjectType.Point:
-                    return pointFeaturesLayer;
-                default:
-                    throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
+                GeoJsonFeatureMapping objectMapping = new GeoJsonFeatureMapping();
+                objectMapping.SetFeature(feature);
+                objectMapping.SetMeshes(meshData);
+                objectMapping.SetVisualisationLayer(layer);
+                objectMapping.SetGeoJsonLayerParent(this);
+                objectMapping.UpdateBoundingBox();
+                SelectionService.MappingTree.RootInsert(objectMapping);
             }
-        }
-        
-        public void ApplyStylingToFeature(Feature geoJsonFeature)
-        {
-            var stylingFeature = LayerFeatures[geoJsonFeature];
-            
-            var visualizer = GetTypeVisualizerForFeature(geoJsonFeature);
-            var symbolizer = GetStyling(stylingFeature);
-        
-            if (visualizer is GeoJSONLineLayer)
-            {
-                var strokeColor = symbolizer.GetStrokeColor();
-                if(strokeColor.HasValue)
-                    visualizer.SetColorForFeature(geoJsonFeature, strokeColor.Value);
-            }
-            else //if (fillColor.HasValue && (visualizer is GeoJSONPolygonLayer polygonVisualizer ||  visualizer is GeoJSONPointLayer lineVisualizer))
-            {
-                var fillColor = symbolizer.GetFillColor();
-                if(fillColor.HasValue)
-                    visualizer.SetColorForFeature(geoJsonFeature, fillColor.Value);
-            }
-        }
-        
-        private void AddStylingFeature(Feature geojsonFeature)
-        {
-            if(LayerFeatures.ContainsKey(geojsonFeature))
-                return;
-            
-            var stylingFeature = CreateFeature(geojsonFeature);
-            LayerFeatures.Add(stylingFeature.Geometry, stylingFeature);
-            ApplyStylingToFeature(geojsonFeature);
         }
     }
 }

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -12,64 +14,46 @@ namespace Netherlands3D.Twin.layers.properties
     [RequireComponent(typeof(GeoJsonLayerGameObject))]
     public class GeoJSONLayerFeatureColoring : MonoBehaviour, IVisualizationWithPropertyData
     {
-        private List<IGeoJsonGeometryTypeVisualizer> layers = new List<IGeoJsonGeometryTypeVisualizer>();
+        private List<IGeoJsonVisualisationLayer> layers = new List<IGeoJsonVisualisationLayer>();
         private GeoJsonLayerGameObject visualization;
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             visualization = GetComponent<GeoJsonLayerGameObject>();
             visualization.InitProperty<CartesianTileLayerFeatureColorPropertyData>(properties);
-            SetupFeatures();
             
+            SetupFeatures();
         }
-
-        private void OnPropertyAdded(LayerPropertyData property)
-        {
-            if (property is StylingPropertyData stylingPropertyData)
-            {
-                Debug.Log("listening to new prop " + stylingPropertyData.GetType());
-                stylingPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
-            }
-        }
-
+       
         private void SetupFeatures()
         {
-            // CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
-            foreach (var stylingPropertyData in visualization.LayerData.GetProperties<StylingPropertyData>())
-            {
-                stylingPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
-                Debug.Log("listening to prop " + stylingPropertyData.GetType());
-            }
-            visualization.LayerData.PropertySet.AddListener(OnPropertyAdded);
+            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
+            featureColorPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             visualization.OnFeatureAdd.AddListener(UpdateStyling);
             visualization.OnFeatureRemove.AddListener(UpdateStyling);
             
             layers.Clear();
-            layers.Add(visualization.PolygonLayer);
-            layers.Add(visualization.LineLayer);
-            layers.Add(visualization.PointLayer);
-            
-            visualization.PolygonLayer.RenderColor = visualization.LayerData.Color;
-            visualization.LineLayer.RenderColor = visualization.LayerData.Color;
-            visualization.PointLayer.RenderColor = visualization.LayerData.Color;
+            layers.AddRange(visualization.VisualisationLayers);
+            foreach (var layer in layers)
+                layer.RenderColor = visualization.LayerData.Color;
         }
 
         private void UpdateStyling(Feature feature)
         {
-            IGeoJsonGeometryTypeVisualizer layer = null;
+            IGeoJsonVisualisationLayer layer = null;
             for (int i = 0; i < layers.Count; i++)
             {
-                if (layers[i].SupportsGeometryType(feature.Geometry.Type))
+                if (layers[i].SupportsGeometryType(feature))
                 {
                     layer = layers[i];
                     break;
                 }
             }
 
-            var layerFeature = visualization.GetStylingFeatureByGeometry(layer.RenderMaterial);
+            var layerFeature = visualization.GetLayerFeatureByGeometry(layer.RenderMaterial);
             if (layerFeature == null)
             {
                 layerFeature = visualization.CreateFeature(layer.RenderMaterial);
@@ -80,9 +64,8 @@ namespace Netherlands3D.Twin.layers.properties
                 CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
                 if (layer.FeatureCount > 0)
                 {
-                    string colorProperty = GetColorPropertyTypeForLayer(layer);
-                    var color = featureColorPropertyData.GetColor(layerFeature, colorProperty);
-                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(visualization.LayerData.Color), colorProperty);
+                    var color = featureColorPropertyData.GetColor(layerFeature, layer.StylingColorProperty);
+                    featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(visualization.LayerData.Color), layer.StylingColorProperty);
                 }
                 else
                 {
@@ -91,15 +74,15 @@ namespace Netherlands3D.Twin.layers.properties
             }
         }
         
-        public void OnApplyStyling()
+        private void OnApplyStyling()
         {
             foreach (var (_, feature) in visualization.LayerFeatures)
             {
                 //do cascading to get css result styling
+                Symbolizer symbolizer = visualization.GetStyling(feature);
 
                 if (feature.Geometry is Material material)
                 {
-                    Symbolizer symbolizer = visualization.GetStyling(feature);
                     Color? color = symbolizer.GetFillColor();
                     if (color.HasValue)
                     {
@@ -126,30 +109,13 @@ namespace Netherlands3D.Twin.layers.properties
             for(int i = 0; i < layers.Count; i++)
                 if(layers[i].RenderMaterial == material)
                 {
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.Point) || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiPoint))
-                        return "punten";
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.LineString) || layers[i].SupportsGeometryType(GeoJSONObjectType.MultiLineString))
-                        return "lijnen";
-                    if (layers[i].SupportsGeometryType(GeoJSONObjectType.Polygon) ||  layers[i].SupportsGeometryType(GeoJSONObjectType.MultiPolygon))
-                        return "polygonen";
+                    return layers[i].DisplayName;
                 }
             
             return null;
         }
-
-        public string GetColorPropertyTypeForLayer(IGeoJsonGeometryTypeVisualizer layer)
-        {
-            if (layer.SupportsGeometryType(GeoJSONObjectType.Point) || layer.SupportsGeometryType(GeoJSONObjectType.MultiPoint))
-                return Symbolizer.FillColorProperty;
-            if (layer.SupportsGeometryType(GeoJSONObjectType.LineString) || layer.SupportsGeometryType(GeoJSONObjectType.MultiLineString))
-                return Symbolizer.StrokeColorProperty;
-            if (layer.SupportsGeometryType(GeoJSONObjectType.Polygon) ||  layer.SupportsGeometryType(GeoJSONObjectType.MultiPolygon))
-                return Symbolizer.FillColorProperty;
-            
-            return Symbolizer.FillColorProperty;
-        }
         
-        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
+        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
             if (feature.Geometry is not Material mat) return feature;
 
@@ -162,13 +128,10 @@ namespace Netherlands3D.Twin.layers.properties
         
         private void OnDestroyLayer()
         {
-            foreach (var stylingPropertyData in visualization.LayerData.GetProperties<StylingPropertyData>())
-            {
-                stylingPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
-            }
-            visualization.LayerData.PropertySet.RemoveListener(OnPropertyAdded);
+            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
+            featureColorPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
             visualization.OnFeatureAdd.RemoveListener(UpdateStyling);
             visualization.OnFeatureRemove.RemoveListener(UpdateStyling);

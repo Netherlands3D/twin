@@ -1,3 +1,4 @@
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Services;
 
@@ -14,6 +15,7 @@ namespace Netherlands3D.Twin
         public static Cameras.CameraService Cameras => ServiceLocator.GetService<Cameras.CameraService>();
         public static ToolService Tools => ServiceLocator.GetService<ToolService>();
         public static AppRootBehaviour UIRoot => ServiceLocator.GetService<AppRootBehaviour>();
+        public static SelectionService Selection => ServiceLocator.GetService<SelectionService>();
         public static SnackbarService Snackbar => ServiceLocator.GetService<SnackbarService>();
         public static LayerMessageService LayerMessages => ServiceLocator.GetService<LayerMessageService>();
         public static DebugMessageService Debug => ServiceLocator.GetService<DebugMessageService>();

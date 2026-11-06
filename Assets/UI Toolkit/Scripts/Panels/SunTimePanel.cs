@@ -76,15 +76,12 @@ namespace Netherlands3D.UI.Panels
             {
                 sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
                 sunTime.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
-                sunTime.isAnimatingChanged.AddListener(OnIsAnimatingChanged);
-                OnTimeOfDayChanged(sunTime.Time);
-                OnIsAnimatingChanged(sunTime.IsAnimating);    
+                OnTimeOfDayChanged(sunTime.Time); 
             });
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {
                 sunTime.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
                 sunTime.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
-                sunTime.isAnimatingChanged.RemoveListener(OnIsAnimatingChanged);
             });
 
 
@@ -172,7 +169,7 @@ namespace Netherlands3D.UI.Panels
         void OnNowButtonClicked(ClickEvent _)
         {
             sunTime?.ResetToNow();
-            SimulationSpeedControls.Pause();
+            SimulationSpeedControls.TogglePlay();
         }
 
         private void OnTimeOfDayChanged(DateTime dt)
@@ -185,12 +182,6 @@ namespace Netherlands3D.UI.Panels
         private void OnSunDialTimeChanged(int hour, int minute)
         {
             sunTime?.SetTime(hour, minute, 0);
-        }
-
-        private void OnIsAnimatingChanged(bool animating)
-        {
-            if (animating) SimulationSpeedControls.Play();
-            else SimulationSpeedControls.Pause();
         }
 
         private void OnTimeSpeedChanged(float speedSecondsPerSecond)

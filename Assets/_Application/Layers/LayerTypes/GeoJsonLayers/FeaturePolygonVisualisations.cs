@@ -27,11 +27,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 Origin.current.onPostShift.AddListener(OnOriginShifted);
             }
 
-            ~FeaturePolygonVisualisations()
-            {
-                Origin.current.onPostShift.RemoveListener(OnOriginShifted);
-            }
-
             private void OnOriginShifted(Coordinate from, Coordinate to)
             {
                 CalculateBounds();
@@ -96,8 +91,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             /// <summary>
             /// Destroy all polygon visualisations gameobjects inside this feature visualisation
             /// </summary>
-            public void DestroyAllVisualisations()
+            public void Dispose()
             {
+                Origin.current.onPostShift.RemoveListener(OnOriginShifted);
                 foreach (var visualisation in visualisations)
                 {
                     if (!visualisation) continue;

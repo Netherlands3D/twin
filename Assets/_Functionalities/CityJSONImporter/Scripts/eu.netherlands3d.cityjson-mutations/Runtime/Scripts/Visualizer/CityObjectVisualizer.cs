@@ -29,7 +29,7 @@ namespace Netherlands3D.CityJson.Visualisation
         }
         
         protected abstract void Visualize();
-        public abstract void SetFillColor(Color color);
-        public abstract void SetLineColor(Color color);
+        public abstract void SetFillColor(Color? color);
+        public abstract void SetLineColor(Color? color);
     }
 }

@@ -126,6 +126,7 @@ namespace Netherlands3D.UI.Panels
             UpdateMaximumColor(propertyData.MaxColor);
             
             ColorPicker.ColorChanged.AddListener(OnColorPicked);
+            ColorPicker.SetVisibilityToggleEnabled(false);//todo: support visibility off
         }
 
         private void OnColorPicked(Color newColor)

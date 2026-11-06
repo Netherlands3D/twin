@@ -305,7 +305,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             gameObject.SetActive(isActive);
         }
 
-        private void OnMouseClickNothing()
+        protected virtual void OnMouseClickNothing()
         {
             if (LayerData.IsSelected)
             {
@@ -323,7 +323,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             ClearTransformHandles();
         }
         
-        private void AttachToTransformHandles()
+        protected void AttachToTransformHandles()
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
@@ -390,6 +390,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (feature.Geometry is not MeshRenderer meshRenderer) return;
             
             Symbolizer styling = GetStyling(feature);
+            var visibilityStyling = styling.GetVisibility();
+            var isVisible = visibilityStyling.HasValue ?  visibilityStyling.Value : true;
+            meshRenderer.enabled = isVisible;
+            if(!isVisible)
+                return;
+            
             var fillColor = styling.GetFillColor();
             
             if (fillColor.HasValue)

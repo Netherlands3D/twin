@@ -37,7 +37,14 @@ namespace Netherlands3D.UI.Panels
             contentContainer = this.Q<ContentContainer>();
             contentContainer.CloseButtonClicked.AddListener(() => SetVisible(false));
             
-            this.Q<ColorPicker>().ColorPickerVisibilityChanged.AddListener(SetVisible);
+            this.Q<ColorPicker>().ColorPickerEnabled.AddListener(SetVisible);
+            
+            this.RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
+        }
+
+        private void OnDetachFromPanel(DetachFromPanelEvent evt)
+        {
+            this.Q<ColorPicker>().ColorPickerEnabled.RemoveListener(SetVisible);
         }
 
         public void SetVisible(bool visible)

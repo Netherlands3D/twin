@@ -11,7 +11,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.Wms
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WMSImportAdapter", fileName = "WMSImportAdapter", order = 0)]
-    public class WMSImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs[]>
+    public class WMSImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetResult>
     {
         [SerializeField] private WMSLayerGameObject layerPrefab;
 
@@ -39,8 +39,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             return true;
         }
-
-        public LayerPresetArgs[] Execute(LocalFile localFile)
+        public LayerPresetResult Execute(LocalFile localFile)
         {
             var url = OgcWebServicesUtility.NormalizeUrl(localFile.SourceUrl);
             var folderPreset = new FolderPreset.Args(url.AbsoluteUri); //todo: this folder should not be here, because it is not part of the imported data. This will be removed in a future ticket when selecting individual maps will be made possible
@@ -63,16 +62,14 @@ namespace Netherlands3D.Functionalities.Wms
                     layerPrefab.TransparencyEnabled
                 );
 
-                var presets = new LayerPresetArgs[maps.Count + 1];
-                presets[0] = folderPreset;
+                var presets = new LayerPresetArgs[maps.Count];
                 for (var i = 0; i < maps.Count; i++) //todo test if this is now performant due to async visualisations
                 {
                     var map = maps[i];
                     var preset = CreatePreset(map, url, i < layerPrefab.DefaultEnabledLayersMax);
-                    presets[i + 1] = preset;
+                    presets[i] = preset;
                 }
-
-                return presets;
+                return new LayerPresetResult() { parent = folderPreset, children = presets };
             }
 
             if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap))
@@ -85,7 +82,7 @@ namespace Netherlands3D.Functionalities.Wms
                     layerPrefab.TransparencyEnabled
                 );
                 var preset = CreatePreset(map, url, true);
-                return new[] { preset };
+                return new LayerPresetResult() { parent = preset, children = null };
             }
 
             throw new ArgumentException("Unrecognized WMS request type: " + url);
