@@ -1,5 +1,5 @@
 ﻿using Netherlands3D.Snapshots;
-using Netherlands3D.Sun;
+using Netherlands3D.ProjectTime;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 using static Netherlands3D.Snapshots.PeriodicSnapshots;
 using Button = Netherlands3D.UI.Components.Button;
@@ -18,36 +19,37 @@ namespace Netherlands3D.UI.Panels
     public partial class SunTimePanel : BaseInspectorContentPanel
     {
         public override string Title => "Zonnestand";
-
-        // SunTime stores speed as seconds/second internally.
-        // The UI shows speed in hours/second so we apply this factor.
-        private const float SecondsPerHour = 3600f;
-
-        private SunTime sunTime;
-
+        
         private DateField dateField;
-        private DateField DateField => dateField ??= this.Q<DateField>("DateField");
+        public DateField DateField => dateField ??= this.Q<DateField>("DateField");
 
         private SunDial sunDial;
-        private SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
+        public SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
 
         private NumberField timeField;
-        private NumberField TimeField => timeField ??= this.Q<NumberField>("TimeField");
+        public NumberField TimeField => timeField ??= this.Q<NumberField>("TimeField");
 
         private Button nowButton;
-        private Button NowButton => nowButton ??= this.Q<Button>("NowButton");
+        public Button NowButton => nowButton ??= this.Q<Button>("NowButton");
 
         private SimulationSpeedControls simulationSpeedControls;
-        private SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
+        public SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
 
         private ScreenshotContainer images;
         private VisualElement imagesContainer;
         private VisualElement imagesRow1, imagesRow2, imagesRow3;
         private Label textRow1, textRow2, textRow3;
         private const int maxRowCount = 5;
-        
+
+        public Button DownloadButton => downloadButton;
         private Button downloadButton;
-        private PeriodicSnapshots periodicSnapshotsService;
+        private List<Moment> moments;
+        
+        public UnityEvent TimeChanged = new();
+        
+        private const string dayMonthSeperator = "-";
+        private const string aboutString = " om ";
+        private const string timeSuffix = ":00";
 
         public SunTimePanel()
         {
@@ -56,37 +58,13 @@ namespace Netherlands3D.UI.Panels
         //todo it would be nicer to have the scriptableobject support moments and images combined so we dont have to get them from periodicsnapshots
         public SunTimePanel(ScriptableObject imageContainer) : this()
         {
-            sunTime = Services.ServiceLocator.GetService<SunTime>();
-            periodicSnapshotsService = Services.ServiceLocator.GetService<PeriodicSnapshots>();
-
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            
-            SunDial.TimeChanged += OnSunDialTimeChanged;
-            DateField.SubmitEvent += OnDateChanged;
-            TimeField.InputField.RegisterCallback<BlurEvent>(_ =>OnTimeChanged());
-            TimeField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>OnTimeChanged());
-
+           
+            TimeField.InputField.RegisterCallback<BlurEvent>(_ => TimeChanged.Invoke());
+            TimeField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>TimeChanged.Invoke());
             NowButton.RegisterCallback<ClickEvent>(OnNowButtonClicked);
-
-            SimulationSpeedControls.SpeedChanged += OnSimulationSpeedChanged;
-            SimulationSpeedControls.PlayToggled += OnPlayToggled;
-            
-            RegisterCallback<AttachToPanelEvent>(evt =>
-            {
-                sunTime.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
-                sunTime.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
-                OnTimeOfDayChanged(sunTime.Time); 
-            });
-            RegisterCallback<DetachFromPanelEvent>(evt =>
-            {
-                sunTime.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
-                sunTime.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
-            });
-
-
             downloadButton = this.Q<Button>("DownloadButton");
-            downloadButton.clicked += periodicSnapshotsService.DownloadSnapshots;
 
             if (imageContainer is not ScreenshotContainer screenshots)
             {
@@ -105,7 +83,6 @@ namespace Netherlands3D.UI.Panels
         {
             float containerWidth = imagesContainer.resolvedStyle.width;
             if (containerWidth == 0) return;
-
             
             imagesRow1 = imagesContainer.Q<VisualElement>("ImagesRow1");
             AddImagesToRow(0, 4, containerWidth, imagesRow1);
@@ -120,17 +97,16 @@ namespace Netherlands3D.UI.Panels
             textRow2.text = GetMomentsText(4, 5);
             textRow3 = this.Q<Label>("TextRow3");
             textRow3.text = GetMomentsText(9, 3);
-
         }
 
-        private const string dayMonthSeperator = "-";
-        private const string aboutString = " om ";
-        private const string timeSuffix = ":00";
+        public void SetMoments(List<Moment> moments)
+        {
+            this.moments = moments;
+        }
 
         public string GetMomentsText(int startIndex, int count)
         {
             StringBuilder builder = new StringBuilder();
-            List<Moment> moments = periodicSnapshotsService.Moments;
             moments.Sort((a, b) => a.ToDateTime().CompareTo(b.ToDateTime()));
             for(int i = startIndex; i < startIndex + count; i++)
             {
@@ -168,48 +144,14 @@ namespace Netherlands3D.UI.Panels
 
         void OnNowButtonClicked(ClickEvent _)
         {
-            sunTime?.ResetToNow();
             SimulationSpeedControls.TogglePlay();
         }
 
-        private void OnTimeOfDayChanged(DateTime dt)
+        public void OnTimeOfDayChanged(DateTime dt)
         {
             SunDial.SetTimeWithoutNotify(dt.Hour, dt.Minute);
             DateField.SetValueWithoutNotify(dt.Day, dt.Month, dt.Year);
             TimeField.SetValueWithoutNotify(dt);
-        }
-
-        private void OnSunDialTimeChanged(int hour, int minute)
-        {
-            sunTime?.SetTime(hour, minute, 0);
-        }
-
-        private void OnTimeSpeedChanged(float speedSecondsPerSecond)
-        {
-            SimulationSpeedControls.SetSpeedWithoutNotify(speedSecondsPerSecond / SecondsPerHour);
-        }
-
-        private void OnSimulationSpeedChanged(float hoursPerSecond)
-        {
-            sunTime?.SetTimeSpeed(hoursPerSecond * SecondsPerHour);
-        }
-
-        private void OnPlayToggled(bool isPlaying)
-        {
-            sunTime?.ToggleAnimation(isPlaying);
-        }
-
-        private void OnTimeChanged()
-        {
-            var dt = timeField.GetValueAsTime(sunTime.Time);
-            sunTime?.SetTime(dt.Hour, dt.Minute, 0);
-        }
-
-        private void OnDateChanged(int day, int month, int year)
-        {
-            sunTime?.SetDay(day);
-            sunTime?.SetMonth(month);
-            sunTime?.SetYear(year);
         }
     }
 }
