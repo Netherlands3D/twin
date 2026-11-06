@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Cameras
             cameraWorldTransform = GetComponent<WorldTransform>();
         }
 
-        public void LookAtTarget(Coordinate targetLookAt, double targetDistance, bool clampToLimits = false)
+        public void LookAtTarget(Coordinate targetLookAt, double targetSizeDistance, bool clampToLimits = false)
         {
             // Keep the current camera orientation
             Vector3 cameraDirection = camera.transform.forward;
@@ -44,14 +44,14 @@ namespace Netherlands3D.Twin.Cameras
             if (clampToLimits)
             {
                 // New behavior: clamp the size to the limits instead of skipping or using the default distance.
-                double clampedTargetDistance = Math.Min(targetDistance, moveSizeLimit);
+                double clampedTargetDistance = Math.Min(targetSizeDistance, moveSizeLimit);
                 double clampedDistance = Math.Min(clampedTargetDistance, zoomSizeLimit);
                 distance = CalculateFitDistance(clampedDistance);
             }
             else
             {
                 // Old behavior: don't move at all if the target is larger than the move limit.
-                if (targetDistance > moveSizeLimit)
+                if (targetSizeDistance > moveSizeLimit)
                 {
                     Debug.LogWarning("target distance too large, not moving camera");
                     return;
@@ -59,9 +59,9 @@ namespace Netherlands3D.Twin.Cameras
 
                 // Only fit the object in view if it is smaller than zoomSizeLimit,
                 // otherwise keep the default camera distance.
-                if (targetDistance < zoomSizeLimit)
+                if (targetSizeDistance < zoomSizeLimit)
                 {
-                    distance = CalculateFitDistance(targetDistance);
+                    distance = CalculateFitDistance(targetSizeDistance);
                 }
             }
 

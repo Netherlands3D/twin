@@ -223,7 +223,7 @@ namespace Netherlands3D
         }
         
         
-        public IEnumerator GetBAGID(string residentialObjectID, Action<List<string>> onBagIdsLoaded)
+        public IEnumerator GetBuildingIdsForResidentialObject(string residentialObjectID, Action<List<string>> onBagIdsLoaded)
         {
             string filter = "<Filter><PropertyIsEqualTo>" + "<PropertyName>identificatie</PropertyName>" + "<Literal>" + residentialObjectID + "</Literal>" + "</PropertyIsEqualTo></Filter>";
             string url = bagWfsEndpoint.TrimEnd('/') + "?SERVICE=WFS" + "&VERSION=2.0.0" + "&REQUEST=GetFeature" + "&typeNames=bag:verblijfsobject" + "&count=100" + "&outputFormat=application/json" + "&srsName=EPSG:28992" + "&filter=" + UnityWebRequest.EscapeURL(filter);
@@ -254,7 +254,7 @@ namespace Netherlands3D
                 yield break;
             }
 
-            //there will only be one feature so here we get the first
+            //The WFS endpoint returns only one building per residential object, even though a residential object can be associated with multiple buildings.
             JSONNode properties = features[0]["properties"];
             string bagId = ReadString(properties, "pandidentificatie");
             if (string.IsNullOrEmpty(bagId))

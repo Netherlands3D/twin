@@ -78,7 +78,7 @@ namespace Netherlands3D.UI.Components
         {
             get
             {
-                return ColorUtility.ToHtmlStringRGB(label.style.color.value);
+                return ColorUtility.ToHtmlStringRGBA(label.style.color.value);
             }
             set
             {

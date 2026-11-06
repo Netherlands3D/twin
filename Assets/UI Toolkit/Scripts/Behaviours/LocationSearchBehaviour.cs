@@ -39,6 +39,15 @@ namespace Netherlands3D.UI.Behaviours
         private const float WorldSpaceOffset = 10f;
         private bool pointerVisible = false;
 
+        private void Start()
+        {
+            locationPointer = CreateCoordinateLabel();
+            locationPointer.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
+            locationPointer.SetColor(new Color(0f, 0.275f, 0.6f, 1f));
+            locationPointer.SetTextColor(Color.white);
+            HidePointer();
+        }
+
         private void OnEnable()
         {
             if (!addressSearchService) addressSearchService = GetComponent<AddressSearchService>();
@@ -55,17 +64,6 @@ namespace Netherlands3D.UI.Behaviours
             
             toolService.GetTool(ToolType.Search).onOpen.AddListener(OnOpen);
             toolService.GetTool(ToolType.Search).onClose.AddListener(OnClose);
-
-            if (locationPointer == null)
-            {
-                locationPointer = CreateCoordinateLabel();
-                locationPointer.SetSnappingSide(WorldAnnotation.SnappingSide.Above);
-                locationPointer.SetColor(new Color(0f, 0.275f, 0.6f, 1f));
-                locationPointer.SetTextColor(Color.white);
-            }
-            
-            HidePointer();
-
             toolService.GetTool(ToolType.Search).onClose.AddListener(HidePointer);
             onCoordinateFound.AddListener(UpdatePointer);
         }
@@ -82,7 +80,6 @@ namespace Netherlands3D.UI.Behaviours
             toolService.GetTool(ToolType.Search).onOpen.RemoveListener(OnOpen);
             toolService.GetTool(ToolType.Search).onClose.RemoveListener(OnClose);
             
-            if (worldUIService != null && locationElement != null) worldUIService.RemoveFromFloatingElementsContent(locationElement);
             if (onCoordinateFound != null) onCoordinateFound.RemoveListener(UpdatePointer);
             
             toolService.GetTool(ToolType.Search).onClose.RemoveListener(HidePointer);

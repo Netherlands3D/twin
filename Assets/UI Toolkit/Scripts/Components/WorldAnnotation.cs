@@ -172,7 +172,7 @@ namespace Netherlands3D.UI.Components
 
         public void SetTextColor(Color color)
         {
-            nameField.color = ColorUtility.ToHtmlStringRGB(color);
+            nameField.color = ColorUtility.ToHtmlStringRGBA(color);
         }
         
         public void SetColor(Color color)

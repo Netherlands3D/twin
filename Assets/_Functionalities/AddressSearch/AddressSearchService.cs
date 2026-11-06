@@ -29,9 +29,10 @@ namespace Netherlands3D.AddressSearch
         public readonly string CollectionId;
         public readonly float Score;
         public readonly BoundingBox BoundingBox;
+        public readonly Coordinate Coordinate;
         public readonly bool HasCoordinates;
 
-        public SuggestionResult(string id, string label, string displayLabel, string collectionId, float score, BoundingBox boundingBox, bool hasCoordinates)
+        public SuggestionResult(string id, string label, string displayLabel, string collectionId, float score, Coordinate coordinate, BoundingBox boundingBox, bool hasCoordinates)
         {
             Id = id;
             Label = label;
@@ -39,23 +40,20 @@ namespace Netherlands3D.AddressSearch
             CollectionId = collectionId;
             Score = score;
             BoundingBox = boundingBox;
+            Coordinate = coordinate;
             HasCoordinates = hasCoordinates;
         }
     }
 
     public class AddressSearchService : MonoBehaviour
     {
-        [Header("PDOK Location API")]
         private const string locationApiBaseUrl = "https://api.pdok.nl/kadaster/location-api/v1";
         private const int rows =50;
         private const int maxResults = 10;
         private const float minimumScore = 0;
         private const int charactersNeededBeforeSearch = 2;
-
-        [Header("BAG API")]
-        [SerializeField] private const string bagApiBaseUrl = "https://api.pdok.nl/kadaster/bag/ogc/v2";
-      
-        [SerializeField] private Camera mainCamera;
+        
+        [SerializeField] private string bagApiBaseUrl = "https://api.pdok.nl/kadaster/bag/ogc/v2";
         private const double minSizeMagnitudeDistance = 20; //inrichtingselementen have no bbox size magnitudes
 
         public UnityEvent<Coordinate> onCoordinateFound = new();
@@ -70,8 +68,8 @@ namespace Netherlands3D.AddressSearch
         private Coordinate selectedCoordinate;
         private Coroutine resolveSelectedSuggestionCoroutine;
 
-        // Volgorde waarin collecties in de lijst verschijnen (eerst grote gebieden en adressen).
-        private static readonly Dictionary<string, string> CollectionPriorityOrder = new Dictionary<string, string>
+        //Collection relevance weights determine how frequently results from each collection appear in search results.
+        private static readonly Dictionary<string, string> Collections = new Dictionary<string, string>
             {
                 { "plaats", "0.75" },
                 { "gemeentegebied", "1" },
@@ -120,7 +118,7 @@ namespace Netherlands3D.AddressSearch
 
         private static float GetCollectionRelevance(string collectionId)
         {
-            if (!CollectionPriorityOrder.TryGetValue(collectionId, out string relevance))
+            if (!Collections.TryGetValue(collectionId, out string relevance))
                 return 0f;
 
             if (float.TryParse(relevance, NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
@@ -140,12 +138,6 @@ namespace Netherlands3D.AddressSearch
                    $"{min.northing.ToString(CultureInfo.InvariantCulture)}," +
                    $"{max.easting.ToString(CultureInfo.InvariantCulture)}," +
                    $"{max.northing.ToString(CultureInfo.InvariantCulture)}";
-        }
-
-        private void Start()
-        {
-            if (!mainCamera) mainCamera = Camera.main;
-            
         }
         
         public void FetchSuggestions(string textInput)
@@ -185,7 +177,7 @@ namespace Netherlands3D.AddressSearch
             // Build one request containing all collections and their relevance weights.
             string url = locationApiBaseUrl.TrimEnd('/') + "/search?q=" + UnityWebRequest.EscapeURL(query);
 
-            foreach (string collectionId in CollectionPriorityOrder.Keys)
+            foreach (string collectionId in Collections.Keys)
             {
                 float relevance = GetCollectionRelevance(collectionId);
 
@@ -278,17 +270,17 @@ namespace Netherlands3D.AddressSearch
 
                     JSONNode geometry = feature["geometry"];
                     JSONNode coords = geometry != null ? geometry["coordinates"] : null;
-
+                    Coordinate coordinate = default;
                     if (geometry != null && string.Equals(ReadString(geometry, "type"), "Point", StringComparison.OrdinalIgnoreCase) &&
                         coords != null && coords.IsArray && coords.Count >= 2)
                     {
                         double lon = coords[0].AsDouble;
                         double lat = coords[1].AsDouble;
 
-                        var point = new Coordinate(CoordinateSystem.WGS84_LatLon, lat, lon);
+                        coordinate = new Coordinate(CoordinateSystem.WGS84_LatLon, lat, lon);
 
                         if (!hasBounds)
-                            bbox = new BoundingBox(point, point);
+                            bbox = new BoundingBox(coordinate, coordinate);
 
                         hasCoordinates = true;
                     }
@@ -299,6 +291,7 @@ namespace Netherlands3D.AddressSearch
                         GetCollectionDisplayName(collectionId),
                         collectionId,
                         score,
+                        coordinate,
                         bbox,
                         hasCoordinates
                     );
@@ -354,7 +347,7 @@ namespace Netherlands3D.AddressSearch
                 return;
             }
             double minimumDistance = Math.Max(suggestion.BoundingBox.GetSizeMagnitude(), minSizeMagnitudeDistance);
-            MoveCameraToLocation(suggestion.BoundingBox.Center, minimumDistance);
+            MoveCameraToLocation(suggestion.Coordinate, minimumDistance);
         }
 
         // Compatibility overload for UI code that still passes only ID and label.
@@ -371,13 +364,14 @@ namespace Netherlands3D.AddressSearch
             Debug.LogWarning("[AddressSearchService] Resultaat niet meer in de zoekcache gevonden: " + label);
         }
        
-         private IEnumerator ResolveSelectedSuggestion(SuggestionResult suggestion)
+        private IEnumerator ResolveSelectedSuggestion(SuggestionResult suggestion)
         {
             string url = bagApiBaseUrl.TrimEnd('/') + "/collections/adres/items/" + UnityWebRequest.EscapeURL(suggestion.Id) + "?f=json";
+
             JSONNode feature;
-            
-            //before trying to receive all results we could move to the location until its ready
-            MoveCameraToLocation(suggestion.BoundingBox.Center, minSizeMagnitudeDistance);
+
+            // Move camera to the address while waiting for the BAG response.
+            MoveCameraToLocation(suggestion.Coordinate, minSizeMagnitudeDistance);
 
             using (UnityWebRequest request = UnityWebRequest.Get(url))
             {
@@ -396,38 +390,59 @@ namespace Netherlands3D.AddressSearch
                 }
                 catch (Exception exception)
                 {
-                    Debug.LogWarning("[AddressSearchService] Ongeldige BAG-response: " + exception.Message);
+                    Debug.LogWarning(
+                        "[AddressSearchService] Ongeldige BAG-response: " +
+                        exception.Message
+                    );
                     yield break;
                 }
             }
 
-            string residentialObjectId = ReadString(feature["properties"], "adresseerbaar_object_identificatie");
-            if (string.IsNullOrEmpty(residentialObjectId))
+            string objectType = ReadString(feature["properties"], "adresseerbaar_object_type");
+            string addressableObjectId = ReadString(feature["properties"], "adresseerbaar_object_identificatie");
+
+            if (string.IsNullOrEmpty(addressableObjectId))
             {
                 Debug.LogWarning("[AddressSearchService] Geen adresseerbaar object gevonden voor BAG-adres " + suggestion.Id);
                 yield break;
             }
 
-            BagDataService bagDataService = ServiceLocator.GetService<BagDataService>();
-            List<string> buildingIds = new();
-            yield return bagDataService.GetBAGID(residentialObjectId, result => buildingIds = result);
-
-            if (buildingIds == null || buildingIds.Count == 0 || string.IsNullOrEmpty(buildingIds[0]))
+            // Only residential objects have associated building IDs to retrieve.
+            if (string.Equals(objectType, "Verblijfsobject", StringComparison.OrdinalIgnoreCase))
             {
-                Debug.LogWarning("[AddressSearchService] Geen pand-ID gevonden voor adres " + suggestion.Id);
-                yield break;
-            }
-            
-            BoundingBox boundingBox = null;
-            yield return bagDataService.GetBuildingBounds(buildingIds[0],  bounds => boundingBox = bounds);
+                BagDataService bagDataService = ServiceLocator.GetService<BagDataService>();
+                List<string> buildingIds = new();
 
-            if (boundingBox == null)
-            {
-                Debug.LogWarning("[AddressSearchService] Geen bounding box ontvangen voor pand " + buildingIds[0]);
-                MoveCameraToLocation(suggestion.BoundingBox.Center, minSizeMagnitudeDistance);
-                yield break;
+                yield return bagDataService.GetBuildingIdsForResidentialObject(addressableObjectId, result => buildingIds = result);
+
+                if (buildingIds == null || buildingIds.Count == 0 || string.IsNullOrEmpty(buildingIds[0]))
+                {
+                    Debug.LogWarning("[AddressSearchService] Geen pand-ID gevonden voor verblijfsobject " + addressableObjectId);
+                    yield break;
+                }
+
+                BoundingBox boundingBox = null;
+                yield return bagDataService.GetBuildingBounds(buildingIds[0], bounds => boundingBox = bounds);
+
+                if (boundingBox == null)
+                {
+                    Debug.LogWarning("[AddressSearchService] Geen bounding box ontvangen voor pand " + buildingIds[0]);
+                    MoveCameraToLocation(suggestion.Coordinate, minSizeMagnitudeDistance);
+                    yield break;
+                }
+
+                MoveCameraToLocation(suggestion.Coordinate, boundingBox.GetSizeMagnitude());
             }
-            MoveCameraToLocation(boundingBox.Center, boundingBox.GetSizeMagnitude());
+            else if (string.Equals(objectType, "Ligplaats", StringComparison.OrdinalIgnoreCase) || string.Equals(objectType, "Standplaats", StringComparison.OrdinalIgnoreCase))
+            {
+                // These object types do not have associated building IDs.
+                MoveCameraToLocation(suggestion.Coordinate, minSizeMagnitudeDistance);
+            }
+            else
+            {
+                Debug.LogWarning($"[AddressSearchService] Onbekend BAG-objecttype '{objectType}' " + $"voor BAG-adres {suggestion.Id}. Camera wordt naar de adreslocatie verplaatst.");
+                MoveCameraToLocation(suggestion.Coordinate, minSizeMagnitudeDistance);
+            }
             onCoordinateFound.Invoke(selectedCoordinate);
         }
 
@@ -436,7 +451,7 @@ namespace Netherlands3D.AddressSearch
             selectedCoordinate = coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
             selectedCoordinate.height = ServiceLocator.GetService<HeightMap>().GetHeight(selectedCoordinate);
 
-            MoveCameraToCoordinate moveCamera = (mainCamera ? mainCamera : Camera.main).GetComponent<MoveCameraToCoordinate>();
+            MoveCameraToCoordinate moveCamera = App.Cameras.ActiveCamera.GetComponent<MoveCameraToCoordinate>();
             if (moveCamera == null)
             {
                 Debug.LogWarning("[AddressSearchService] MoveCameraToCoordinate ontbreekt op de Main Camera.");
