@@ -24,6 +24,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             movementIcons.ForEach(i => i.sprite = preset.viewIcon);
 
+            //keep this for future reference to know what tooltip should be used when feature fpv is fully implemented again
             //GetComponent<TooltipTrigger>().TooltipText = preset.viewName;
         }
 

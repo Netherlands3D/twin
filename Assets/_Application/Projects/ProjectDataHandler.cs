@@ -86,10 +86,6 @@ namespace Netherlands3D.Twin.Projects
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
-            //LoadDefaultProject();
-            //TODO this is a quite dirty solution to postpone the loading flow of the application, but now its needed to preload assets 
-            //for when a default project contains assetbundle assets from start, needing a solid preloader in the future
-            //FindObjectOfType<AssetBundleLoader>().OnAssetsLoaded.AddListener(OnPreloadedAssets);
             OnPreloadedAssets();
         }
 
