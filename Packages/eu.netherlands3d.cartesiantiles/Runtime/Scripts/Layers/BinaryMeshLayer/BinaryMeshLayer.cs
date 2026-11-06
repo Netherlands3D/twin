@@ -147,8 +147,6 @@ namespace Netherlands3D.CartesianTiles
                 yield break;
             }
 
-            //byte[] results = webRequest.downloadHandler.data;
-
             var results = webRequest.downloadHandler.nativeData;
 
             yield return new WaitUntil(() => pauseLoading == false);
