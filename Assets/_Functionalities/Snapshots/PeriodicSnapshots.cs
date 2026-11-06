@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using Netherlands3D.Services;
-using Netherlands3D.Sun;
 using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,6 +21,7 @@ namespace Netherlands3D.Snapshots
         private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
 
         public UnityEvent<string> DownloadSnapshotComplete = new();
+        public UnityEvent<DateTime> SetTimeForSnapshot = new();
 
         public Font font;
 
@@ -56,7 +56,6 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private bool useViewSize = true;
         [SerializeField] private int width = 1024;
         [SerializeField] private int height = 768;
-        [SerializeField] private TimeService timeService;
         [SerializeField] private Texture2D timeStampLabelBackground;
         [SerializeField] private int labelPaddingWidth = 10;
         [SerializeField] private int labelPaddingHeight = 10;
@@ -142,15 +141,12 @@ namespace Netherlands3D.Snapshots
             yield return null;
             
             onStartGenerating.Invoke();
-
-            var cachedTimeOfDay = timeService.GetTime();
             for (var index = 0; index < moments.Count; index++)
             {
                 onProgress.Invoke(1f / moments.Count * (index + 1));
                 yield return TakeSnapshot(moments[index], path);
                 
             }
-            timeService.SetTime(cachedTimeOfDay);
 
             var archiveFilePath = FetchArchivePath(timestamp);
             if (File.Exists(archiveFilePath)) File.Delete(archiveFilePath);
@@ -196,12 +192,6 @@ namespace Netherlands3D.Snapshots
 
         private IEnumerator TakeSnapshot(Moment moment, string path)
         {
-            timeService.SetDay(moment.day);
-            timeService.SetMonth(moment.month);
-            timeService.SetHour(moment.hour);
-            timeService.SetMinutes(0);
-            timeService.SetSeconds(0);
-            
             yield return null; //wait frame
             
             Texture2D snapshotTexture = null;
@@ -209,8 +199,6 @@ namespace Netherlands3D.Snapshots
             {
                 renderTexture.Create();
                 sourceCamera.Render();
-
-               
                 
                 RenderTexture.active = renderTexture;
 
@@ -226,6 +214,7 @@ namespace Netherlands3D.Snapshots
                     0);
               
                 DateTime dateTime = moment.ToDateTime();
+                SetTimeForSnapshot.Invoke(dateTime);
 
                 Texture2D texture = CreateTimestampTexture(
                     snapshotTexture.EncodeToPNG(),

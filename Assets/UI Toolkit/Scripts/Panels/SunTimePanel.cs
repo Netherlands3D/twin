@@ -48,6 +48,7 @@ namespace Netherlands3D.UI.Panels
         
         private Button downloadButton;
         private PeriodicSnapshots periodicSnapshotsService;
+        private DateTime cachedTime;
 
         public SunTimePanel()
         {
@@ -58,6 +59,7 @@ namespace Netherlands3D.UI.Panels
         {
             timeService = Services.ServiceLocator.GetService<TimeService>();
             periodicSnapshotsService = Services.ServiceLocator.GetService<PeriodicSnapshots>();
+           
 
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -77,11 +79,18 @@ namespace Netherlands3D.UI.Panels
                 timeService.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
                 timeService.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
                 OnTimeOfDayChanged(timeService.Time); 
+                
+                periodicSnapshotsService.onStartGenerating.AddListener(CacheTime);
+                periodicSnapshotsService.SetTimeForSnapshot.AddListener(SetTimeForSnapshot);
+                periodicSnapshotsService.onFinishedGenerating.AddListener(ResetTimeAfterSnapshots);
             });
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {
                 timeService.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
                 timeService.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
+                periodicSnapshotsService.onStartGenerating.RemoveListener(CacheTime);
+                periodicSnapshotsService.SetTimeForSnapshot.RemoveListener(SetTimeForSnapshot);
+                periodicSnapshotsService.onFinishedGenerating.RemoveListener(ResetTimeAfterSnapshots);
             });
 
 
@@ -210,6 +219,21 @@ namespace Netherlands3D.UI.Panels
             timeService?.SetDay(day);
             timeService?.SetMonth(month);
             timeService?.SetYear(year);
+        }
+        
+        private void CacheTime()
+        {
+            cachedTime = timeService.Time;
+        }
+
+        private void SetTimeForSnapshot(DateTime dt)
+        {
+            timeService.SetTime(dt);
+        }
+
+        private void ResetTimeAfterSnapshots()
+        {
+            timeService.SetTime(cachedTime);
         }
     }
 }

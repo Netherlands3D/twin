@@ -48,12 +48,13 @@ namespace Netherlands3D.Sun
         [Header("Events")] public UnityEvent<DateTime> timeOfDayChanged = new();
         public UnityEvent<float> timeSpeedChanged = new();
         public UnityEvent<bool> useCurrentTimeChanged = new();
-        public UnityEvent<bool> isAnimatingChanged = new();
 
         private float longitude;
         private float latitude;
         private DateTime time;
         private DateTime lastSavedDateTime = new();
+        private int frameStep;
+        private const int gizmoRayLength = 10000;
 
         public DateTime Time
         {
@@ -83,11 +84,6 @@ namespace Netherlands3D.Sun
                 useCurrentTimeChanged.Invoke(value);
             }
         }
-
-        public bool IsAnimating => animate;
-
-        private int frameStep;
-        private const int gizmoRayLength = 10000;
 
         private void Start()
         {
@@ -177,17 +173,7 @@ namespace Netherlands3D.Sun
 
         public void ToggleAnimation(bool animate)
         {
-            // Only do something if the state changed - otherwise you may get an infinite loop
-            if (this.animate == animate) return;
-            
             this.animate = animate;
-            isAnimatingChanged.Invoke(animate);
-        }
-
-        [Obsolete("Use the Time property instead")]
-        public DateTime GetTime()
-        {
-            return time;
         }
 
         //function for in the inspector
@@ -265,26 +251,7 @@ namespace Netherlands3D.Sun
         {
             SetDate(Time.Day, Time.Month, year);
         }
-
-        public void SetLocation(float longitude, float latitude)
-        {
-            this.longitude = longitude;
-            this.latitude = latitude;
-
-            SetDirection();
-        }
-
-        public void SetUpdateSteps(int i)
-        {
-            frameSteps = i;
-        }
-
-        public void MultiplyTimeSpeed(float multiplicationFactor)
-        {
-            timeSpeed = Math.Clamp(timeSpeed * multiplicationFactor, 1, maxSpeed);
-            timeSpeedChanged.Invoke(timeSpeed);
-        }
-
+        
         public void SetTimeSpeed(float speed)
         {
             timeSpeed = Math.Clamp(speed, 1, maxSpeed);
