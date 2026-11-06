@@ -1460,6 +1460,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.34353065
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.22532919
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7623473
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.5000401
+      objectReference: {fileID: 0}
     - target: {fileID: 5593048648800678674, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1520,6 +1540,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00b6e5ce09fbf1a4784c2207f271bcdc, type: 3}
+--- !u!114 &1819484326 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4808096051801747105, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+    type: 3}
+  m_PrefabInstance: {fileID: 1819484325}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713a30b12e4a47e4595f7a546c9c4440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Sun.TimeService
 --- !u!4 &2037948123 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5416903671490076247, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
@@ -3817,7 +3849,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onPostShift.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1819484326}
     - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}
       propertyPath: onPostShift.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -3831,7 +3863,7 @@ PrefabInstance:
     - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}
       propertyPath: onPostShift.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Sun.SunTime, eu.netherlands3d.sun.Runtime
+      value: Netherlands3D.Sun.TimeService, eu.netherlands3d.twin
       objectReference: {fileID: 0}
     - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}

@@ -197,6 +197,9 @@ namespace Netherlands3D.Snapshots
             Texture2D snapshotTexture = null;
             try
             {
+                DateTime dateTime = moment.ToDateTime();
+                SetTimeForSnapshot.Invoke(dateTime);
+                
                 renderTexture.Create();
                 sourceCamera.Render();
                 
@@ -213,8 +216,7 @@ namespace Netherlands3D.Snapshots
                     0,
                     0);
               
-                DateTime dateTime = moment.ToDateTime();
-                SetTimeForSnapshot.Invoke(dateTime);
+               
 
                 Texture2D texture = CreateTimestampTexture(
                     snapshotTexture.EncodeToPNG(),

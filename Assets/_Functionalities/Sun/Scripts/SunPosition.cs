@@ -5,7 +5,7 @@
 using System;
 using GeoTimeZone;
 
-namespace Netherlands3D.Sun
+namespace Netherlands3D.ProjectTime
 {
     public static class SunPosition
     {

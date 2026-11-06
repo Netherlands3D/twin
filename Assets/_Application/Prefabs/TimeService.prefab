@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 5533657842810257867}
   - component: {fileID: 4808096051801747105}
   m_Layer: 0
-  m_Name: Sun
+  m_Name: TimeService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

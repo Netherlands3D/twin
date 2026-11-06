@@ -23,7 +23,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-namespace Netherlands3D.Sun
+namespace Netherlands3D.ProjectTime
 {
     public class TimeService : MonoBehaviour
     {

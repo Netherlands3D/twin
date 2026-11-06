@@ -1,5 +1,5 @@
 ﻿using Netherlands3D.Snapshots;
-using Netherlands3D.Sun;
+using Netherlands3D.ProjectTime;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
@@ -23,7 +23,7 @@ namespace Netherlands3D.UI.Panels
         // The UI shows speed in hours/second so we apply this factor.
         private const float SecondsPerHour = 3600f;
 
-        private TimeService timeService;
+       
 
         private DateField dateField;
         private DateField DateField => dateField ??= this.Q<DateField>("DateField");
@@ -47,8 +47,8 @@ namespace Netherlands3D.UI.Panels
         private const int maxRowCount = 5;
         
         private Button downloadButton;
-        private PeriodicSnapshots periodicSnapshotsService;
-        private DateTime cachedTime;
+       
+        
 
         public SunTimePanel()
         {
@@ -57,9 +57,6 @@ namespace Netherlands3D.UI.Panels
         //todo it would be nicer to have the scriptableobject support moments and images combined so we dont have to get them from periodicsnapshots
         public SunTimePanel(ScriptableObject imageContainer) : this()
         {
-            timeService = Services.ServiceLocator.GetService<TimeService>();
-            periodicSnapshotsService = Services.ServiceLocator.GetService<PeriodicSnapshots>();
-           
 
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
@@ -76,21 +73,15 @@ namespace Netherlands3D.UI.Panels
             
             RegisterCallback<AttachToPanelEvent>(evt =>
             {
-                timeService.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
-                timeService.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
+                
                 OnTimeOfDayChanged(timeService.Time); 
                 
-                periodicSnapshotsService.onStartGenerating.AddListener(CacheTime);
-                periodicSnapshotsService.SetTimeForSnapshot.AddListener(SetTimeForSnapshot);
-                periodicSnapshotsService.onFinishedGenerating.AddListener(ResetTimeAfterSnapshots);
+               
             });
             RegisterCallback<DetachFromPanelEvent>(evt =>
             {
-                timeService.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
-                timeService.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
-                periodicSnapshotsService.onStartGenerating.RemoveListener(CacheTime);
-                periodicSnapshotsService.SetTimeForSnapshot.RemoveListener(SetTimeForSnapshot);
-                periodicSnapshotsService.onFinishedGenerating.RemoveListener(ResetTimeAfterSnapshots);
+               
+                
             });
 
 
@@ -221,19 +212,6 @@ namespace Netherlands3D.UI.Panels
             timeService?.SetYear(year);
         }
         
-        private void CacheTime()
-        {
-            cachedTime = timeService.Time;
-        }
-
-        private void SetTimeForSnapshot(DateTime dt)
-        {
-            timeService.SetTime(dt);
-        }
-
-        private void ResetTimeAfterSnapshots()
-        {
-            timeService.SetTime(cachedTime);
-        }
+        
     }
 }
