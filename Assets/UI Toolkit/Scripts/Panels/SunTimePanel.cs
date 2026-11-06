@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 using static Netherlands3D.Snapshots.PeriodicSnapshots;
 using Button = Netherlands3D.UI.Components.Button;
@@ -18,37 +19,33 @@ namespace Netherlands3D.UI.Panels
     public partial class SunTimePanel : BaseInspectorContentPanel
     {
         public override string Title => "Zonnestand";
-
-        // SunTime stores speed as seconds/second internally.
-        // The UI shows speed in hours/second so we apply this factor.
-        private const float SecondsPerHour = 3600f;
-
-       
-
+        
         private DateField dateField;
-        private DateField DateField => dateField ??= this.Q<DateField>("DateField");
+        public DateField DateField => dateField ??= this.Q<DateField>("DateField");
 
         private SunDial sunDial;
-        private SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
+        public SunDial SunDial => sunDial ??= this.Q<SunDial>("SunDial");
 
         private NumberField timeField;
-        private NumberField TimeField => timeField ??= this.Q<NumberField>("TimeField");
+        public NumberField TimeField => timeField ??= this.Q<NumberField>("TimeField");
 
         private Button nowButton;
-        private Button NowButton => nowButton ??= this.Q<Button>("NowButton");
+        public Button NowButton => nowButton ??= this.Q<Button>("NowButton");
 
         private SimulationSpeedControls simulationSpeedControls;
-        private SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
+        public SimulationSpeedControls SimulationSpeedControls => simulationSpeedControls ??= this.Q<SimulationSpeedControls>("SimulationSpeedControls");
 
         private ScreenshotContainer images;
         private VisualElement imagesContainer;
         private VisualElement imagesRow1, imagesRow2, imagesRow3;
         private Label textRow1, textRow2, textRow3;
         private const int maxRowCount = 5;
-        
+
+        public Button DownloadButton => downloadButton;
         private Button downloadButton;
-       
+        private List<Moment> moments;
         
+        public UnityEvent TimeChanged;
 
         public SunTimePanel()
         {
@@ -57,36 +54,18 @@ namespace Netherlands3D.UI.Panels
         //todo it would be nicer to have the scriptableobject support moments and images combined so we dont have to get them from periodicsnapshots
         public SunTimePanel(ScriptableObject imageContainer) : this()
         {
-
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
             
-            SunDial.TimeChanged += OnSunDialTimeChanged;
-            DateField.SubmitEvent += OnDateChanged;
-            TimeField.InputField.RegisterCallback<BlurEvent>(_ =>OnTimeChanged());
-            TimeField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>OnTimeChanged());
+           
+            TimeField.InputField.RegisterCallback<BlurEvent>(_ => TimeChanged.Invoke());
+            TimeField.InputField.RegisterCallback<NavigationSubmitEvent>(_ =>TimeChanged.Invoke());
 
             NowButton.RegisterCallback<ClickEvent>(OnNowButtonClicked);
 
-            SimulationSpeedControls.SpeedChanged += OnSimulationSpeedChanged;
-            SimulationSpeedControls.PlayToggled += OnPlayToggled;
             
-            RegisterCallback<AttachToPanelEvent>(evt =>
-            {
-                
-                OnTimeOfDayChanged(timeService.Time); 
-                
-               
-            });
-            RegisterCallback<DetachFromPanelEvent>(evt =>
-            {
-               
-                
-            });
-
 
             downloadButton = this.Q<Button>("DownloadButton");
-            downloadButton.clicked += periodicSnapshotsService.DownloadSnapshots;
 
             if (imageContainer is not ScreenshotContainer screenshots)
             {
@@ -127,10 +106,14 @@ namespace Netherlands3D.UI.Panels
         private const string aboutString = " om ";
         private const string timeSuffix = ":00";
 
+        public void SetMoments(List<Moment> moments)
+        {
+            this.moments = moments;
+        }
+
         public string GetMomentsText(int startIndex, int count)
         {
             StringBuilder builder = new StringBuilder();
-            List<Moment> moments = periodicSnapshotsService.Moments;
             moments.Sort((a, b) => a.ToDateTime().CompareTo(b.ToDateTime()));
             for(int i = startIndex; i < startIndex + count; i++)
             {
@@ -168,50 +151,14 @@ namespace Netherlands3D.UI.Panels
 
         void OnNowButtonClicked(ClickEvent _)
         {
-            timeService?.ResetToNow();
             SimulationSpeedControls.TogglePlay();
         }
 
-        private void OnTimeOfDayChanged(DateTime dt)
+        public void OnTimeOfDayChanged(DateTime dt)
         {
             SunDial.SetTimeWithoutNotify(dt.Hour, dt.Minute);
             DateField.SetValueWithoutNotify(dt.Day, dt.Month, dt.Year);
             TimeField.SetValueWithoutNotify(dt);
         }
-
-        private void OnSunDialTimeChanged(int hour, int minute)
-        {
-            timeService?.SetTime(hour, minute, 0);
-        }
-
-        private void OnTimeSpeedChanged(float speedSecondsPerSecond)
-        {
-            SimulationSpeedControls.SetSpeedWithoutNotify(speedSecondsPerSecond / SecondsPerHour);
-        }
-
-        private void OnSimulationSpeedChanged(float hoursPerSecond)
-        {
-            timeService?.SetTimeSpeed(hoursPerSecond * SecondsPerHour);
-        }
-
-        private void OnPlayToggled(bool isPlaying)
-        {
-            timeService?.ToggleAnimation(isPlaying);
-        }
-
-        private void OnTimeChanged()
-        {
-            var dt = timeField.GetValueAsTime(timeService.Time);
-            timeService?.SetTime(dt.Hour, dt.Minute, 0);
-        }
-
-        private void OnDateChanged(int day, int month, int year)
-        {
-            timeService?.SetDay(day);
-            timeService?.SetMonth(month);
-            timeService?.SetYear(year);
-        }
-        
-        
     }
 }

@@ -15,6 +15,9 @@ namespace Netherlands3D
         private TimeService timeService;
         private PeriodicSnapshots periodicSnapshotsService;
         private DateTime cachedTime;
+        // SunTime stores speed as seconds/second internally.
+        // The UI shows speed in hours/second so we apply this factor.
+        private const float SecondsPerHour = 3600f;
         
         private void Awake()
         {
@@ -25,25 +28,31 @@ namespace Netherlands3D
         {
             timeService = Services.ServiceLocator.GetService<TimeService>();
             periodicSnapshotsService = Services.ServiceLocator.GetService<PeriodicSnapshots>();
-        }
-
-        private void OnEnable()
-        {
+            sunTimePanel.OnTimeOfDayChanged(timeService.Time); 
+            sunTimePanel.SetMoments(periodicSnapshotsService.Moments);
+            sunTimePanel.DownloadButton.clicked += periodicSnapshotsService.DownloadSnapshots;
+            sunTimePanel.NowButton.clicked += timeService.ResetToNow;
+            sunTimePanel.SunDial.TimeChanged += (h,m) => timeService.SetTime(h, m, 0);
+            sunTimePanel.SimulationSpeedControls.SpeedChanged += (hps) => timeService?.SetTimeSpeed(hps * SecondsPerHour);;
+            sunTimePanel.SimulationSpeedControls.PlayToggled += timeService.ToggleAnimation;
+            sunTimePanel.DateField.SubmitEvent += OnDateChanged;
+            sunTimePanel.TimeChanged.AddListener(OnTimeChanged);
+            
             periodicSnapshotsService.onStartGenerating.AddListener(CacheTime);
             periodicSnapshotsService.SetTimeForSnapshot.AddListener(SetTimeForSnapshot);
             periodicSnapshotsService.onFinishedGenerating.AddListener(ResetTimeAfterSnapshots);
             
-            timeService.timeOfDayChanged.AddListener(OnTimeOfDayChanged);
+            timeService.timeOfDayChanged.AddListener(sunTimePanel.OnTimeOfDayChanged);
             timeService.timeSpeedChanged.AddListener(OnTimeSpeedChanged);
         }
-
-        private void OnDisable()
+       
+        private void OnDestroy()
         {
             periodicSnapshotsService.onStartGenerating.RemoveListener(CacheTime);
             periodicSnapshotsService.SetTimeForSnapshot.RemoveListener(SetTimeForSnapshot);
             periodicSnapshotsService.onFinishedGenerating.RemoveListener(ResetTimeAfterSnapshots);
             
-            timeService.timeOfDayChanged.RemoveListener(OnTimeOfDayChanged);
+            timeService.timeOfDayChanged.RemoveListener(sunTimePanel.OnTimeOfDayChanged);
             timeService.timeSpeedChanged.RemoveListener(OnTimeSpeedChanged);
         }
 
@@ -60,6 +69,24 @@ namespace Netherlands3D
         private void ResetTimeAfterSnapshots()
         {
             timeService.SetTime(cachedTime);
+        }
+        
+        public void OnTimeSpeedChanged(float speedSecondsPerSecond)
+        {
+            sunTimePanel.SimulationSpeedControls.SetSpeedWithoutNotify(speedSecondsPerSecond / SecondsPerHour);
+        }
+        
+        private void OnDateChanged(int day, int month, int year)
+        {
+            timeService?.SetDay(day);
+            timeService?.SetMonth(month);
+            timeService?.SetYear(year);
+        }
+        
+        private void OnTimeChanged()
+        {
+            var dt = sunTimePanel.TimeField.GetValueAsTime(timeService.Time);
+            timeService?.SetTime(dt.Hour, dt.Minute, 0);
         }
     }
 }
