@@ -110,7 +110,7 @@ namespace Netherlands3D.Twin.layers.properties
             var layerId = visualization.LayerData.Id.ToString();
             if (!Interaction.TryGetLayerColor(layerId, id, out _)) return;
             
-            Interaction.RemoveLayerColor(visualization.LayerData.Id.ToString(), id);
+            Interaction.RemoveLayerColor(layerId, id);
             
             if (visualization is not CartesianTileLayerGameObject cartesianTile) return;
             if (cartesianTile.Layer is not BinaryMeshLayer binaryMeshLayer) return;
