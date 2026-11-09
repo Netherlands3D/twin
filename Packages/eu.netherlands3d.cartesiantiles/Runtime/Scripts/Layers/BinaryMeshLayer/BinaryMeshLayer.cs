@@ -126,30 +126,34 @@ namespace Netherlands3D.CartesianTiles
                 url = Datasets[index].url;
             }
             url = url.ReplaceXY(tileChange.X, tileChange.Y);
+            
+            GameObject newGameobject;
 
-            var webRequest = UnityWebRequest.Get(url);
-#if !UNITY_EDITOR && UNITY_WEBGL && ADD_BROTLI_ACCEPT_ENCODING_HEADER
-			webRequest.SetRequestHeader("Accept-Encoding", "br");
-#endif
-
-            tile.runningWebRequest = webRequest;
-            yield return webRequest.SendWebRequest();
-
-            if (!tiles.ContainsKey(tileKey)) yield break;
-
-            tile.runningWebRequest = null;
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            using (var webRequest = UnityWebRequest.Get(url)) 
             {
-                RemoveGameObject(tileKey);
-                callback?.Invoke(tileChange);
-                yield break;
+    #if !UNITY_EDITOR && UNITY_WEBGL && ADD_BROTLI_ACCEPT_ENCODING_HEADER
+			    webRequest.SetRequestHeader("Accept-Encoding", "br");
+    #endif
+
+                tile.runningWebRequest = webRequest;
+                yield return webRequest.SendWebRequest();
+
+                if (!tiles.ContainsKey(tileKey)) yield break;
+
+                tile.runningWebRequest = null;
+
+                if (webRequest.result != UnityWebRequest.Result.Success)
+                {
+                    RemoveGameObject(tileKey);
+                    callback?.Invoke(tileChange);
+                    yield break;
+                }
+
+                byte[] results = webRequest.downloadHandler.data;
+
+                yield return new WaitUntil(() => pauseLoading == false);
+                newGameobject = CreateNewGameObject(url, results, tileChange);
             }
-
-            byte[] results = webRequest.downloadHandler.data;
-
-            yield return new WaitUntil(() => pauseLoading == false);
-            GameObject newGameobject = CreateNewGameObject(url, results, tileChange);
 
             if (!newGameobject)
             {
