@@ -57,6 +57,8 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void OnApplyStyling()
         {
+            bool changed = false;
+            
             foreach (var (_, feature) in visualization.LayerFeatures)
             {
                 //do cascading to get css result styling
@@ -70,9 +72,22 @@ namespace Netherlands3D.Twin.layers.properties
                         string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                         Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                         var visibilityColor = visiblity == true ? storedColor : Color.clear;
-                        Interaction.AddLayerColor(visualization.LayerData.Id.ToString(), id, visibilityColor);
+                        
+                        var layerId = visualization.LayerData.Id.ToString();
+                        if (Interaction.TryGetLayerColor(layerId, id, out var currentColor) && currentColor.Equals(visibilityColor))
+                        {
+                            continue;
+                        }
+                        
+                        Interaction.AddLayerColor(layerId, id, visibilityColor);
+                        changed = true;
                     }
                 }
+            }
+
+            if (!changed)
+            {
+                return;
             }
             
             if(visualization is not CartesianTileLayerGameObject cartesianTile) return;
@@ -130,6 +145,7 @@ namespace Netherlands3D.Twin.layers.properties
             }
             OnApplyStyling();
         }
+        
 
         private void OnRemovedMapping(ObjectMapping mapping)
         {
