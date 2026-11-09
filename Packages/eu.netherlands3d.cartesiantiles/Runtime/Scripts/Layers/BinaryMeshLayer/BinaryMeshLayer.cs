@@ -140,10 +140,9 @@ namespace Netherlands3D.CartesianTiles
 
                 if (!tiles.ContainsKey(tileKey)) yield break;
 
-                tile.runningWebRequest = null;
-
                 if (webRequest.result != UnityWebRequest.Result.Success)
                 {
+                    tile.runningWebRequest = null;
                     RemoveGameObject(tileKey);
                     callback?.Invoke(tileChange);
                     yield break;
@@ -152,6 +151,8 @@ namespace Netherlands3D.CartesianTiles
                 byte[] results = webRequest.downloadHandler.data;
 
                 yield return new WaitUntil(() => pauseLoading == false);
+                
+                tile.runningWebRequest = null;
                 newGameobject = CreateNewGameObject(url, results, tileChange);
             }
 
@@ -172,7 +173,7 @@ namespace Netherlands3D.CartesianTiles
 #if SUBOBJECT
                 if (hasMetaData)
                 {
-                    yield return StartCoroutine(LoadMetaData(newGameobject, url, tileChange));
+                    yield return LoadMetaData(newGameobject, url, tileChange);
                 }
 #endif
             }
@@ -188,26 +189,26 @@ namespace Netherlands3D.CartesianTiles
 #if SUBOBJECT
         private IEnumerator LoadMetaData(GameObject gameObject, string geometryUrl, TileChange tileChange)
         {
+            var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
+            if (!tiles.TryGetValue(tileKey, out var tile)) yield break;
 
             var metaDataName = geometryUrl.Replace(".bin", "-data.bin");
 
-            using var webRequest = UnityWebRequest.Get(metaDataName);
-
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            using (var webRequest = UnityWebRequest.Get(metaDataName))
             {
-                
-                
-            }
-            else
-            {
-                if (gameObject == null) yield return null;
+                tile.runningWebRequest = webRequest;
 
-                byte[] results = webRequest.downloadHandler.data;
-                ReadMetaDataFile(results, gameObject, tileChange);
-                yield return null;
+                yield return webRequest.SendWebRequest();
+
+                tile.runningWebRequest = null;
+
+                if (webRequest.result == UnityWebRequest.Result.Success && gameObject != null)
+                {
+                    byte[] results = webRequest.downloadHandler.data;
+                    ReadMetaDataFile(results, gameObject, tileChange);
+                }
             }
+
             yield return null;
         }
 
