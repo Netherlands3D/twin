@@ -13,6 +13,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SFB;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -305,21 +306,40 @@ namespace Netherlands3D.Twin.Projects
 
         private void SaveFile(string lastSavePath)
         {
-            // Make sure indexedDB is synced
 #if !UNITY_EDITOR && UNITY_WEBGL
-            this.lastSavePath = lastSavePath; 
+            this.lastSavePath = lastSavePath;
             SyncFilesToIndexedDB(gameObject.name, "ProjectSavedToIndexedDB");
+#elif (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX) && !UNITY_EDITOR
+            //request using native file save dialog where to copy the file from lastSavePath path
+            var fileName = Path.GetFileName(lastSavePath);
+            var extensions = new[]{new ExtensionFilter("Netherlands3D Project", ProjectFileExtension)};
+            var downloadsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
+            var fileTargetPath = StandaloneFileBrowser.SaveFilePanel("Save project", downloadsDirectory, fileName, extensions);
+            if (!string.IsNullOrEmpty(fileTargetPath))
+            {
+                try
+                {
+                    File.Copy(lastSavePath, fileTargetPath, true);
+                    File.Delete(lastSavePath);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Could not save project file: " + e.Message);
+                }
+            }
 #elif UNITY_EDITOR
-            //Request using file write dialog of unity editor where to copy the file from lastSavePath path
+            // Request using file write dialog of unity editor where to copy the file from lastSavePath path
             var fileName = Path.GetFileName(lastSavePath);
             var fileTargetPath = EditorUtility.SaveFilePanel("Save project", Application.persistentDataPath, fileName, ProjectFileExtension);
             if (fileTargetPath.Length > 0)
             {
                 File.Copy(lastSavePath, fileTargetPath, true);
             }
-
-            //Open the folder where the file is saved
-            EditorUtility.RevealInFinder(fileTargetPath);
+            // Open the folder where the file is saved
+            if (!string.IsNullOrEmpty(fileTargetPath))
+            {
+                EditorUtility.RevealInFinder(fileTargetPath);
+            }
 #endif
         }
 
