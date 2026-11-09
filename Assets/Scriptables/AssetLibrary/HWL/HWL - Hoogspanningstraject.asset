@@ -16,8 +16,12 @@ MonoBehaviour:
   title: Hoogspanningstraject
   description: 
   children:
-  - {fileID: 11400000, guid: c515af8476cd3304bad7fb65d2220222, type: 2}
   - {fileID: 11400000, guid: fbfe2e3e8657a2c44b20b0d9dfd06c16, type: 2}
+  - {fileID: 11400000, guid: ff2068f935b8c344eb2134ab66371bab, type: 2}
+  - {fileID: 11400000, guid: b8cd66850e24adf47b1fc3adecf78536, type: 2}
+  - {fileID: 11400000, guid: 9598a7e19e442c7458dfc69f2aa41c77, type: 2}
+  - {fileID: 11400000, guid: 17666bb98232b14439ff56fd53493581, type: 2}
+  - {fileID: 11400000, guid: c515af8476cd3304bad7fb65d2220222, type: 2}
   - {fileID: 11400000, guid: 72d2dfae3791ca44381b7c044938de93, type: 2}
   - {fileID: 11400000, guid: 2c2a35a602b453744a0b5f8568782f18, type: 2}
   - {fileID: 11400000, guid: 6dfe52da5b2d6ca4eb07d868b33b794f, type: 2}
