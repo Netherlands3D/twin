@@ -41,6 +41,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
+            heightMap = ServiceLocator.GetService<HeightMap>();
             visualisation = GetComponent<LayerGameObject>();
             visualisation.InitProperty<ConnectableHierarchicalLayerPropertyData>(properties, null, null);
             transformPropertyData = visualisation.LayerData.GetProperty<TransformLayerPropertyData>();
@@ -49,7 +50,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             {
                 Coordinate targetCoordinate = geoJsonPropertyData.geojsonCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
                 targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
+                float height = heightMap.GetHeight(targetCoordinate);
                 targetCoordinate.height = height;
                 transformPropertyData.Position = targetCoordinate;
             }
@@ -59,8 +60,6 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             
             AddListeners();
             ConnectToSibling();
-            
-            heightMap = ServiceLocator.GetService<HeightMap>();
         }
 
         private void AddListeners()
@@ -144,6 +143,8 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                     if (i > 0 && children[i] == visualisation.LayerData)
                     {
                         TransformLayerPropertyData fromTargetPropertyData = children[i - 1].GetProperty<TransformLayerPropertyData>();
+                        if(fromTargetPropertyData == null)
+                            return;
                         fromTargetPropertyData.OnPositionChanged.Invoke(fromTargetPropertyData.Position);
                         return;
                     }
