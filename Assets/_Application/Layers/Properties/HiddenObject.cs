@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.layers.properties
             hiddenObjectsPropertyData.OnHiddenObjectDataStylingRuleRemoved.AddListener(OnHiddenObjectRemoved);
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
-            hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
+            hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnStylingChanged);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             
             if(debugFeatures)
@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.layers.properties
             binaryMeshLayer.OnMappingRemoved.AddListener(OnRemovedMapping);
         }
         
-        private bool OnApplyStyling(LayerFeature feature)
+        private bool UpdateFeatureColor(LayerFeature feature)
         {
             //do cascading to get css result styling
             Symbolizer symbolizer = visualization.GetStyling(feature);
@@ -82,13 +82,13 @@ namespace Netherlands3D.Twin.layers.properties
             return false;
         }
         
-        private void OnApplyStyling()
+        private void OnStylingChanged()
         {
             bool changed = false;
 
             foreach (var (_, feature) in visualization.LayerFeatures)
             {
-                changed |= OnApplyStyling(feature);
+                changed |= UpdateFeatureColor(feature);
             }
             
             if (!changed)
@@ -162,7 +162,7 @@ namespace Netherlands3D.Twin.layers.properties
                     {
                         var layerFeature = visualization.CreateFeature(item);
                         visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-                        OnApplyStyling(layerFeature);
+                        UpdateFeatureColor(layerFeature);
                         hasStyledObjects = true;
                     }
                 }
@@ -220,7 +220,7 @@ namespace Netherlands3D.Twin.layers.properties
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
-            hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
+            hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnStylingChanged);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
             
             if(visualization is not CartesianTileLayerGameObject cartesianTile) return;
