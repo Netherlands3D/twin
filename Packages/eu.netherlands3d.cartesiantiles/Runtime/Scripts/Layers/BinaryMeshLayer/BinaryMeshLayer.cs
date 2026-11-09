@@ -191,7 +191,7 @@ namespace Netherlands3D.CartesianTiles
 
             var metaDataName = geometryUrl.Replace(".bin", "-data.bin");
 
-            var webRequest = UnityWebRequest.Get(metaDataName);
+            using var webRequest = UnityWebRequest.Get(metaDataName);
 
             yield return webRequest.SendWebRequest();
 
