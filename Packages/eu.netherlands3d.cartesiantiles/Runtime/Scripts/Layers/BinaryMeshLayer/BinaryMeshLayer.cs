@@ -37,6 +37,8 @@ namespace Netherlands3D.CartesianTiles
         [System.Obsolete("This field is obsolete, use the CreateMeshColliders property instead.")]
         public bool createMeshcollider = false;
 
+        [SerializeField] private bool logErrors = false;
+        
         public bool CreateMeshColliders
         {
             get => createMeshcollider;
@@ -152,7 +154,7 @@ namespace Netherlands3D.CartesianTiles
             int index = tile.unityLOD;
             if (index < 0 || index >= Datasets.Count)
             {
-                Debug.LogError($"Invalid LOD index {index} for tile {tileKey}.");
+                if(logErrors) Debug.LogError($"Invalid LOD index {index} for tile {tileKey}.");
                 callback?.Invoke(tileChange);
                 yield break;
             }
@@ -181,7 +183,7 @@ namespace Netherlands3D.CartesianTiles
             tile.runningWebRequest = null;
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"Failed to download tile {tileKey} from {url}: {webRequest.error}");
+                if(logErrors) Debug.LogError($"Failed to download tile {tileKey} from {url}: {webRequest.error}");
                 webRequest.Dispose();
                 RemoveGameObject(tileKey);
                 callback?.Invoke(tileChange);
@@ -194,7 +196,7 @@ namespace Netherlands3D.CartesianTiles
 
             if (results == null || results.Length == 0)
             {
-                Debug.LogError($"Downloaded empty mesh for tile {tileKey} from {url}");
+                if(logErrors) Debug.LogError($"Downloaded empty mesh for tile {tileKey} from {url}");
                 RemoveGameObject(tileKey);
                 callback?.Invoke(tileChange);
                 yield break;
@@ -350,14 +352,14 @@ namespace Netherlands3D.CartesianTiles
             }
             catch (System.Exception exception)
             {
-                Debug.LogError($"Failed to read binary mesh for tile " + $"{tileChange.X}-{tileChange.Y}: {exception}");
+                if(logErrors) Debug.LogError($"Failed to read binary mesh for tile " + $"{tileChange.X}-{tileChange.Y}: {exception}");
                 Destroy(container);
                 return null;
             }
 
             if (mesh == null)
             {
-                Debug.LogError($"BinaryMeshConversion returned null for tile " + $"{tileChange.X}-{tileChange.Y}");
+                if(logErrors) Debug.LogError($"BinaryMeshConversion returned null for tile " + $"{tileChange.X}-{tileChange.Y}");
                 Destroy(container);
                 return null;
             }
