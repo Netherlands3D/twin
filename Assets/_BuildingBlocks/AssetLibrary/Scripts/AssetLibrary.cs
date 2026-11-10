@@ -108,10 +108,16 @@ namespace Netherlands3D.AssetLibrary
                 App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url)); //todo: Exceptions should still be handled
             else if (recordItem.Url.IsAssetBundle())
             {
-                string bundleName = Uri.UnescapeDataString(recordItem.Url.AbsolutePath.TrimStart('/'));
-                string path = Path.Combine(Application.streamingAssetsPath, bundleName);
+                var pathParts = recordItem.Url.AbsolutePath.TrimStart('/').Split('/');
+                if (pathParts.Length != 2)
+                {
+                    Debug.LogError($"Invalid AssetBundle URI: {recordItem.Url}");
+                    return;
+                }
 
-                string prefabName = "prefab name needs to but here and parsed from the path or recorditem";
+                string bundleName = Uri.UnescapeDataString(pathParts[0]);
+                string prefabName = Uri.UnescapeDataString(pathParts[1]);
+                string bundlePath = Path.Combine(Application.streamingAssetsPath, bundleName);
                 AssetBundleLoader assetBundleService = ServiceLocator.GetService<AssetBundleLoader>();
                 assetBundleService.LoadAssetFromAssetBundle(
                     bundleName,
