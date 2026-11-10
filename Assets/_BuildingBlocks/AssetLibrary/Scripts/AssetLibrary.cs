@@ -45,7 +45,22 @@ namespace Netherlands3D.AssetLibrary
 
         [field: NonSerialized] public InMemoryCatalog Catalog { get; private set; }
 
-        public async Task Initialize()
+        public void InitializePrefabs()
+        {
+            foreach (var entry in hiddenItems)
+            {
+                prefabs[entry.PrefabIdentifier] = entry;
+            }
+            foreach (var entry in items)
+            {
+                foreach (var prefab in entry.CollectPrefabs())
+                {
+                    prefabs[prefab.PrefabIdentifier] = prefab;
+                }
+            }
+        }
+        
+        public async Task InitializeCatalogs()
         {
             Catalog = new InMemoryCatalog(
                 "application",
@@ -57,10 +72,6 @@ namespace Netherlands3D.AssetLibrary
             foreach (var entry in items)
             {
                 RegisterEntry(entry);
-            }
-            foreach (var entry in hiddenItems)
-            {
-                prefabs[entry.PrefabIdentifier] = entry;
             }
 
             // Register extra catalogs as OGC API catalogs
@@ -82,11 +93,6 @@ namespace Netherlands3D.AssetLibrary
 
         private void RegisterEntry(AssetLibraryEntry entry)
         {
-            foreach (var prefab in entry.CollectPrefabs())
-            {
-                prefabs[prefab.PrefabIdentifier] = prefab;
-            }
-
             foreach (var @event in entry.CollectEvents())
             {
                 scriptableObjectEvents[@event.GetInstanceID()] = @event;

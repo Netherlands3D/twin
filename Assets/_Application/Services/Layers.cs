@@ -38,9 +38,11 @@ namespace Netherlands3D.Twin.Services
         public UnityEvent<LayerData, bool> LayerRemoved { get; } = new();
         public UnityEvent<LayerGameObject> VisualizationCreated = new();
 
-        private void Awake()
+        private async void Awake()
         {
+            assetLibrary.InitializePrefabs();
             spawner = new VisualizationSpawner(assetLibrary);
+            await assetLibrary.InitializeCatalogs();
         }
 
         /// <summary>
