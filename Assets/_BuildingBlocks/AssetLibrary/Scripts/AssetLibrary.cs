@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Netherlands3D.AssetLibrary.Entries;
 using Netherlands3D.Catalogs;
@@ -7,6 +8,8 @@ using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Catalogs.Catalogs;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
+using Netherlands3D.Functionalities.AssetBundles;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
@@ -103,6 +106,30 @@ namespace Netherlands3D.AssetLibrary
         {
             if (recordItem.Url.IsRemoteAsset())
                 App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url)); //todo: Exceptions should still be handled
+            else if (recordItem.Url.IsAssetBundle())
+            {
+                string bundleName = Uri.UnescapeDataString(recordItem.Url.AbsolutePath.TrimStart('/'));
+                string path = Path.Combine(Application.streamingAssetsPath, bundleName);
+
+                string prefabName = "prefab name needs to but here and parsed from the path or recorditem";
+                AssetBundleLoader assetBundleService = ServiceLocator.GetService<AssetBundleLoader>();
+                assetBundleService.LoadAssetFromAssetBundle(
+                    bundleName,
+                    prefabName,
+                    asset =>
+                    {
+                        if (asset == null)
+                        {
+                            Debug.LogError($"Could not load prefab {prefabName}");
+                            return;
+                        }
+
+                        Debug.Log($"Successfully loaded {prefabName}");
+
+                        // TODO: Spawn or add the loaded asset to the appropriate layer.
+                    }
+                );
+            }
             else
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }
