@@ -1,5 +1,5 @@
 using Netherlands3D.Coordinates;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using System;
 using System.Collections;
 using System.Collections.Generic;
