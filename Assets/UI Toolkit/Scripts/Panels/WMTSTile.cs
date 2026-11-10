@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using KindMen.Uxios;
 using Netherlands3D.Minimap;
 using Netherlands3D.UI.ExtensionMethods;
@@ -22,6 +23,10 @@ namespace Netherlands3D.UI.Components
 
         private const float tileOverlap = 1f; // to fix seams
 
+        private Config requestConfig;
+        private bool isDisposed;
+        private CancellationTokenSource cancellationTokenSource;
+
         public WMTSTile()
         {
             this.CloneComponentTree("Components");
@@ -34,6 +39,7 @@ namespace Netherlands3D.UI.Components
 
         public void Initialize(VisualElement container, int zoom, float size, float xPosition, float yPosition, Vector2 key, MinimapConfig config)
         {
+            isDisposed = false;
             zoomLevel = zoom;
             tileKey = key;
             minimapConfig = config;
@@ -62,19 +68,33 @@ namespace Netherlands3D.UI.Components
         {
             var tileImageUrl = minimapConfig.ServiceUrl.Replace("{zoom}", zoom.ToString()).Replace("{x}", x.ToString()).Replace("{y}", y.ToString());
 
-            var config = new Config();
-            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(tileImageUrl), config);
+            requestConfig = new Config();
+            cancellationTokenSource = new CancellationTokenSource();
+            requestConfig.CancelUsing(cancellationTokenSource);
+            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(tileImageUrl), requestConfig);
             promise.Then(response =>
                 {
-                    texture = response.Data as Texture2D;
+                    var downloaded = response.Data as Texture2D;
+
+                    // Tile is already disposed: nobody will clean this texture up later, so do it now.
+                    if (isDisposed)
+                    {
+                        if (downloaded != null)
+                            Object.Destroy(downloaded);
+                        return;
+                    }
+
+                    texture = downloaded;
                     texture.wrapMode = TextureWrapMode.Clamp;
                     visual.style.backgroundImage = new StyleBackground(texture);
                     StartFadeIn();
                 }
             );
             promise.Catch(response =>
-                Debug.Log("Could not find minimap tile :" + tileImageUrl)
-            );
+            {
+                if (isDisposed) return; // cancelled on purpose, not an error
+                Debug.Log("Could not find minimap tile :" + tileImageUrl);
+            });
         }
 
         private void StartFadeIn()
@@ -84,6 +104,12 @@ namespace Netherlands3D.UI.Components
 
         public void Dispose()
         {
+            isDisposed = true;
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource?.Dispose();
+            cancellationTokenSource = null;
+            requestConfig = null;
+
             if (texture != null)
             {
                 Object.Destroy(texture);
@@ -91,6 +117,7 @@ namespace Netherlands3D.UI.Components
             }
 
             visual.style.backgroundImage = StyleKeyword.None;
+            visual.RemoveFromClassList("visible");
 
             RemoveFromHierarchy();
         }
