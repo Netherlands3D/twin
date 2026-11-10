@@ -219,7 +219,7 @@ namespace Netherlands3D.CartesianTiles
 #if SUBOBJECT
                 if (hasMetaData)
                 {
-                    yield return StartCoroutine(LoadMetaData(newGameobject, url, tileChange));
+                    yield return LoadMetaData(newGameobject, url, tileChange);
                 }
 #endif
             }
@@ -249,8 +249,16 @@ namespace Netherlands3D.CartesianTiles
                 metaDataName += brotliCompressedExtention;
             }
 #endif
+            
+            var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
+            if (!tiles.TryGetValue(tileKey, out var tile)) yield break;
+
             var webRequest = UnityWebRequest.Get(metaDataName);
+            tile.runningWebRequest = webRequest;
+            
             yield return webRequest.SendWebRequest();
+
+            tile.runningWebRequest = null;
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
