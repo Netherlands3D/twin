@@ -9,7 +9,7 @@ using KindMen.Uxios;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Newtonsoft.Json;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 

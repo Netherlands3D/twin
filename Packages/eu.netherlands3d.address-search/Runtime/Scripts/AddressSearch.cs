@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Netherlands3D.Coordinates;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
