@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using static Netherlands3D.Tiles3D.TileSetsConfigLoader.Config;
 
 namespace Netherlands3D.Tiles3D

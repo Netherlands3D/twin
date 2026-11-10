@@ -25,34 +25,43 @@ namespace Netherlands3D.CartesianTiles
         public bool hasMetaData = false;
         public string removeFromID;
 #endif
+
         public List<Material> DefaultMaterialList = new List<Material>();
         public ShadowCastingMode tileShadowCastingMode = ShadowCastingMode.On;
 
         public string brotliCompressedExtention = ".br";
 
         private GameObject container;
-
         private MeshRenderer meshRenderer;
 
         [System.Obsolete("This field is obsolete, use the CreateMeshColliders property instead.")]
         public bool createMeshcollider = false;
-        public bool CreateMeshColliders { get => createMeshcollider; set => createMeshcollider = value; }
+
+        public bool CreateMeshColliders
+        {
+            get => createMeshcollider;
+            set => createMeshcollider = value;
+        }
 
         public override void HandleTile(TileChange tileChange, System.Action<TileChange> callback = null)
         {
             TileAction action = tileChange.action;
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
+
             switch (action)
             {
                 case TileAction.Create:
                     tiles.Add(tileKey, CreateNewTile(tileKey));
                     break;
+
                 case TileAction.Upgrade:
                     tiles[tileKey].unityLOD++;
                     break;
+
                 case TileAction.Downgrade:
                     tiles[tileKey].unityLOD--;
                     break;
+
                 case TileAction.Remove:
                     InteruptRunningProcesses(tileKey);
                     RemoveGameObject(tileKey);
@@ -60,6 +69,7 @@ namespace Netherlands3D.CartesianTiles
                     callback?.Invoke(tileChange);
                     return;
             }
+
             if (action != TileAction.Remove)
             {
                 tiles[tileKey].runningCoroutine = StartCoroutine(DownloadBinaryMesh(tileChange, callback));
@@ -84,9 +94,11 @@ namespace Netherlands3D.CartesianTiles
 
         private void RemoveVisualisation(Vector2Int tileKey)
         {
-            if (!tiles.TryGetValue(tileKey, out var tile)) return;
+            if (!tiles.TryGetValue(tileKey, out var tile))
+                return;
 
             GameObject tileObject = tile.gameObject;
+
             if (tileObject == null) return;
 
             MeshFilter[] meshFilters = tileObject.GetComponentsInChildren<MeshFilter>();
@@ -94,9 +106,9 @@ namespace Netherlands3D.CartesianTiles
             {
                 if (meshFilter.sharedMesh == null) continue;
 
-                Mesh sharedmesh = meshFilter.sharedMesh;
-                meshFilter.sharedMesh.Clear();
-                Destroy(sharedmesh);
+                Mesh sharedMesh = meshFilter.sharedMesh;
+                meshFilter.sharedMesh = null;
+                Destroy(sharedMesh);
             }
             Destroy(tileObject);
         }
@@ -109,53 +121,88 @@ namespace Netherlands3D.CartesianTiles
             Mappings.Remove(tileKey);
             OnMappingRemoved.Invoke(mapping);
         }
+       
+        private string GetPlatformDatasetPath(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return path;
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+            if (!string.IsNullOrEmpty(brotliCompressedExtention) && !path.EndsWith(brotliCompressedExtention,System.StringComparison.OrdinalIgnoreCase))
+            {
+                path += brotliCompressedExtention;
+            }
+#else
+            if (!string.IsNullOrEmpty(brotliCompressedExtention) && path.EndsWith(brotliCompressedExtention, System.StringComparison.OrdinalIgnoreCase))
+            {
+                path = path.Substring(0, path.Length - brotliCompressedExtention.Length);
+            }
+#endif
+            return path;
+        }
 
         private IEnumerator DownloadBinaryMesh(TileChange tileChange, System.Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
-            var tile = tiles[tileKey];
-            int index = tile.unityLOD;
-            string url = Datasets[index].path;
-            if (Datasets[index].path.StartsWith("https://") || Datasets[index].path.StartsWith("file://"))
+            if (!tiles.TryGetValue(tileKey, out var tile))
             {
-                //On WebGL we request brotli encoded files instead. We might want to base this on browser support.
-#if !UNITY_EDITOR && UNITY_WEBGL
-		        if(brotliCompressedExtention.Length>0 && !Datasets[index].path.EndsWith(brotliCompressedExtention))
-    				Datasets[index].path += brotliCompressedExtention;
-#endif
+                callback?.Invoke(tileChange);
+                yield break;
+            }
+
+            int index = tile.unityLOD;
+            if (index < 0 || index >= Datasets.Count)
+            {
+                Debug.LogError($"Invalid LOD index {index} for tile {tileKey}.");
+                callback?.Invoke(tileChange);
+                yield break;
+            }
+            string url = Datasets[index].path;
+            if (!string.IsNullOrEmpty(Datasets[index].url))
+            {
                 url = Datasets[index].url;
             }
+            url = GetPlatformDatasetPath(url);
             url = url.ReplaceXY(tileChange.X, tileChange.Y);
+
+            var webRequest = UnityWebRequest.Get(url);
+
+#if !UNITY_EDITOR && UNITY_WEBGL && ADD_BROTLI_ACCEPT_ENCODING_HEADER
+            webRequest.SetRequestHeader("Accept-Encoding", "br");
+#endif
+            tile.runningWebRequest = webRequest;
+            yield return webRequest.SendWebRequest();
             
-            GameObject newGameobject;
-
-            using (var webRequest = UnityWebRequest.Get(url)) 
+            if (!tiles.ContainsKey(tileKey))
             {
-    #if !UNITY_EDITOR && UNITY_WEBGL && ADD_BROTLI_ACCEPT_ENCODING_HEADER
-			    webRequest.SetRequestHeader("Accept-Encoding", "br");
-    #endif
-
-                tile.runningWebRequest = webRequest;
-                yield return webRequest.SendWebRequest();
-
-                if (!tiles.ContainsKey(tileKey)) yield break;
-
-                if (webRequest.result != UnityWebRequest.Result.Success)
-                {
-                    tile.runningWebRequest = null;
-                    RemoveGameObject(tileKey);
-                    callback?.Invoke(tileChange);
-                    yield break;
-                }
-
-                byte[] results = webRequest.downloadHandler.data;
-
-                yield return new WaitUntil(() => pauseLoading == false);
-                
-                tile.runningWebRequest = null;
-                newGameobject = CreateNewGameObject(url, results, tileChange);
+                webRequest.Dispose();
+                yield break;
             }
 
+            tile.runningWebRequest = null;
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Failed to download tile {tileKey} from {url}: {webRequest.error}");
+                webRequest.Dispose();
+                RemoveGameObject(tileKey);
+                callback?.Invoke(tileChange);
+                yield break;
+            }
+
+            byte[] results = webRequest.downloadHandler.data;
+
+            webRequest.Dispose();
+
+            if (results == null || results.Length == 0)
+            {
+                Debug.LogError($"Downloaded empty mesh for tile {tileKey} from {url}");
+                RemoveGameObject(tileKey);
+                callback?.Invoke(tileChange);
+                yield break;
+            }
+
+            yield return new WaitUntil(() => pauseLoading == false);
+
+            GameObject newGameobject = CreateNewGameObject(url, results, tileChange);
             if (!newGameobject)
             {
                 callback?.Invoke(tileChange);
@@ -164,57 +211,67 @@ namespace Netherlands3D.CartesianTiles
 
             if (tiles.TryGetValue(tileKey, out tile))
             {
-                if (tile.gameObject) RemoveGameObject(tileKey);
+                if (tile.gameObject)
+                    RemoveGameObject(tileKey);
 
                 tile.gameObject = newGameobject;
-
                 OnTileObjectCreated.Invoke(tile);
-
 #if SUBOBJECT
                 if (hasMetaData)
                 {
-                    yield return LoadMetaData(newGameobject, url, tileChange);
+                    yield return StartCoroutine(LoadMetaData(newGameobject, url, tileChange));
                 }
 #endif
             }
             else
             {
-                // Tile was destroyed in the mean time.. destroy this game object too then.
-                RemoveGameObject(tileKey);
+                Destroy(newGameobject);
             }
-
             callback?.Invoke(tileChange);
         }
 
 #if SUBOBJECT
+
         private IEnumerator LoadMetaData(GameObject gameObject, string geometryUrl, TileChange tileChange)
         {
-            var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
-            if (!tiles.TryGetValue(tileKey, out var tile)) yield break;
-
-            var metaDataName = geometryUrl.Replace(".bin", "-data.bin");
-
-            using (var webRequest = UnityWebRequest.Get(metaDataName))
+            if (gameObject == null)
+                yield break;
+            string metaDataName = geometryUrl;
+            if (!string.IsNullOrEmpty(brotliCompressedExtention) && metaDataName.EndsWith(brotliCompressedExtention, System.StringComparison.OrdinalIgnoreCase))
             {
-                tile.runningWebRequest = webRequest;
+                metaDataName = metaDataName.Substring(0, metaDataName.Length - brotliCompressedExtention.Length);
+            }
+            metaDataName = metaDataName.Replace(".bin", "-data.bin");
 
-                yield return webRequest.SendWebRequest();
+#if !UNITY_EDITOR && UNITY_WEBGL
+            if (!string.IsNullOrEmpty(brotliCompressedExtention) && !metaDataName.EndsWith(brotliCompressedExtention,System.StringComparison.OrdinalIgnoreCase))
+            {
+                metaDataName += brotliCompressedExtention;
+            }
+#endif
+            var webRequest = UnityWebRequest.Get(metaDataName);
+            yield return webRequest.SendWebRequest();
 
-                tile.runningWebRequest = null;
-
-                if (webRequest.result == UnityWebRequest.Result.Success && gameObject != null)
-                {
-                    byte[] results = webRequest.downloadHandler.data;
-                    ReadMetaDataFile(results, gameObject, tileChange);
-                }
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning($"Failed to download metadata from {metaDataName}: " + webRequest.error);
+                webRequest.Dispose();
+                yield break;
             }
 
-            yield return null;
+            if (gameObject == null)
+            {
+                webRequest.Dispose();
+                yield break;
+            }
+
+            byte[] results = webRequest.downloadHandler.data;
+            webRequest.Dispose();
+            ReadMetaDataFile(results, gameObject, tileChange);
         }
 
         private void ReadMetaDataFile(byte[] results, GameObject gameobject, TileChange tileChange)
         {
-            // The gameobject could be destroyed in the mean time
             if (!gameobject) return;
 
             Vector2Int tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -223,12 +280,14 @@ namespace Netherlands3D.CartesianTiles
 
             ObjectMapping objectMapping = gameobject.AddComponent<ObjectMapping>();
             objectMapping.items = new();
+
             using (var stream = new MemoryStream(results))
             {
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
                     var version = reader.ReadInt32();
                     var subObjects = reader.ReadInt32();
+
                     for (int i = 0; i < subObjects; i++)
                     {
                         var id = reader.ReadString();
@@ -238,16 +297,18 @@ namespace Netherlands3D.CartesianTiles
                         var vertexCount = reader.ReadInt32();
                         var subMeshID = reader.ReadInt32();
 
-                        if (removeFromID.Length > 0)
+                        if (!string.IsNullOrEmpty(removeFromID))
+                        {
                             id = id.Replace(removeFromID, "");
+                        }
 
-                        ObjectMappingItem item = new ObjectMappingItem(){
+                        ObjectMappingItem item = new ObjectMappingItem()
+                        {
                             objectID = id,
                             firstVertex = firstVertex,
-                            verticesLength = vertexCount,
+                            verticesLength = vertexCount
                         };
-                        objectMapping.items.Add(id,  item);
-                        
+                        objectMapping.items.Add(id, item);
                     }
                 }
             }
@@ -255,10 +316,10 @@ namespace Netherlands3D.CartesianTiles
             OnMappingCreated.Invoke(objectMapping);
         }
 #endif
+
         public void EnableShadows(bool enabled)
         {
-            tileShadowCastingMode = (enabled) ? ShadowCastingMode.On : ShadowCastingMode.Off;
-
+            tileShadowCastingMode = enabled ? ShadowCastingMode.On : ShadowCastingMode.Off;
             MeshRenderer[] existingTiles = GetComponentsInChildren<MeshRenderer>();
             foreach (var renderer in existingTiles)
             {
@@ -269,57 +330,80 @@ namespace Netherlands3D.CartesianTiles
         private GameObject CreateNewGameObject(string source, byte[] binaryMeshData, TileChange tileChange)
         {
             container = new GameObject();
-
             container.name = tileChange.X.ToString() + "-" + tileChange.Y.ToString();
             container.transform.position = new Coordinate(CoordinateSystem.RD, tileChange.X + (tileSize / 2), tileChange.Y + (tileSize / 2)).ToUnity();
-
             container.SetActive(isEnabled);
 
-            Mesh mesh = BinaryMeshConversion.ReadBinaryMesh(binaryMeshData, out int[] submeshIndices);
+            Mesh mesh;
+            int[] submeshIndices;
+            try
+            {
+                mesh = BinaryMeshConversion.ReadBinaryMesh(binaryMeshData, out submeshIndices);
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogError($"Failed to read binary mesh for tile " + $"{tileChange.X}-{tileChange.Y}: {exception}");
+                Destroy(container);
+                return null;
+            }
 
-#if !UNITY_EDITOR && UNITY_WEBGL
-		    if(brotliCompressedExtention.Length>0 && source.EndsWith(brotliCompressedExtention))
-				source = source.Replace(brotliCompressedExtention,"");
-#endif
+            if (mesh == null)
+            {
+                Debug.LogError($"BinaryMeshConversion returned null for tile " + $"{tileChange.X}-{tileChange.Y}");
+                Destroy(container);
+                return null;
+            }
+            if (!string.IsNullOrEmpty(brotliCompressedExtention) && source.EndsWith(brotliCompressedExtention, System.StringComparison.OrdinalIgnoreCase))
+            {
+                source = source.Substring(0, source.Length - brotliCompressedExtention.Length);
+            }
             mesh.name = source;
-            container.AddComponent<MeshFilter>().mesh = mesh;
-
-            container.transform.parent = transform.gameObject.transform; //set parent after adding meshFilter to not cause SubObjects to give a missing component exception
+            MeshFilter meshFilter = container.AddComponent<MeshFilter>();
+            meshFilter.mesh = mesh;
+            container.transform.parent = transform.gameObject.transform;
             container.layer = container.transform.parent.gameObject.layer;
-
             meshRenderer = container.AddComponent<MeshRenderer>();
             List<Material> materialList = new List<Material>();
             for (int i = 0; i < submeshIndices.Length; i++)
             {
-                materialList.Add(DefaultMaterialList[submeshIndices[i]]);
+                int materialIndex = submeshIndices[i];
+                if (materialIndex >= 0 && materialIndex < DefaultMaterialList.Count)
+                {
+                    materialList.Add(DefaultMaterialList[materialIndex]);
+                }
+                else
+                {
+                    Debug.LogWarning($"Invalid material index {materialIndex} " + $"for tile {tileChange.X}-{tileChange.Y}");
+                    materialList.Add(null);
+                }
             }
             meshRenderer.sharedMaterials = materialList.ToArray();
             meshRenderer.shadowCastingMode = tileShadowCastingMode;
-
             if (CreateMeshColliders)
             {
                 container.AddComponent<MeshCollider>().sharedMesh = mesh;
             }
-
             return container;
         }
 
         /// <summary>
-        /// Adds mesh colliders to the meshes found within this layer
+        /// Adds mesh colliders to the meshes found within this layer.
         /// </summary>
-        /// <param name="onlyTileUnderPosition">Optional world position where this tile should be close to</param>
+        /// <param name="onlyTileUnderPosition">
+        /// Optional world position where this tile should be close to.
+        /// </param>
         public void AddMeshColliders(Vector3 onlyTileUnderPosition = default)
         {
             MeshCollider meshCollider;
             MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
-
             if (meshFilters != null)
             {
                 if (onlyTileUnderPosition != default)
                 {
                     foreach (MeshFilter meshFilter in meshFilters)
                     {
-                        if (Mathf.Abs(onlyTileUnderPosition.x - meshFilter.gameObject.transform.position.x) < tileSize && Mathf.Abs(onlyTileUnderPosition.z - meshFilter.gameObject.transform.position.z) < tileSize)
+                        if (Mathf.Abs(onlyTileUnderPosition.x - meshFilter.gameObject.transform.position.x) < tileSize &&
+                            Mathf.Abs(onlyTileUnderPosition.z - meshFilter.gameObject.transform.position.z) < tileSize)
                         {
                             meshCollider = meshFilter.gameObject.GetComponent<MeshCollider>();
                             if (meshCollider == null)
@@ -330,8 +414,6 @@ namespace Netherlands3D.CartesianTiles
                     }
                     return;
                 }
-
-                //Just add all MeshColliders if no specific area was supplied
                 foreach (MeshFilter meshFilter in meshFilters)
                 {
                     meshCollider = meshFilter.gameObject.GetComponent<MeshCollider>();
