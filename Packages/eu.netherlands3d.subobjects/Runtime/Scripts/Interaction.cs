@@ -18,7 +18,6 @@ namespace Netherlands3D.SubObjects
         private static readonly Dictionary<string, Color32> overrideColors = new(); 
         private static readonly Dictionary<string, Dictionary<string, Color32>> layerColors = new();
         private static readonly Dictionary<string, Dictionary<string, Color32>> selectionColors = new();
-        private static readonly Dictionary<string, Dictionary<string, Color32>> resolvedCache = new();
 
         internal static void CheckIn(ObjectMapping mapping)
         {
@@ -51,38 +50,19 @@ namespace Netherlands3D.SubObjects
             if (!store.TryGetValue(layerId, out var dict))
                 store[layerId] = dict = new Dictionary<string, Color32>();
             dict[objectId] = color;
-            resolvedCache.Remove(layerId);
         }
 
         private static void Remove(Dictionary<string, Dictionary<string, Color32>> store, string layerId, string objectId)
         {
-            if (store.TryGetValue(layerId, out var dict) && dict.Remove(objectId))
-                resolvedCache.Remove(layerId);
+            if (store.TryGetValue(layerId, out var dict))
+                dict.Remove(objectId);
         }
 
         public static void AddLayerColor(string layerId, string objectId, Color color) => Set(layerColors, layerId, objectId, color);
         public static void RemoveLayerColor(string layerId, string objectId) => Remove(layerColors, layerId, objectId);
         public static void AddSelectionColor(string layerId, string objectId, Color color) => Set(selectionColors, layerId, objectId, color);
         public static void RemoveSelectionColor(string layerId, string objectId) => Remove(selectionColors, layerId, objectId);
-
-        private static Dictionary<string, Color32> GetResolved(string layerId)
-        {
-            if (resolvedCache.TryGetValue(layerId, out var resolved))
-                return resolved;
-
-            layerColors.TryGetValue(layerId, out var layer);
-            selectionColors.TryGetValue(layerId, out var selection);
-
-            resolved = new Dictionary<string, Color32>((layer?.Count ?? 0) + (selection?.Count ?? 0));
-            if (layer != null)
-                foreach (var kv in layer) resolved[kv.Key] = kv.Value;
-            if (selection != null)
-                foreach (var kv in selection) resolved[kv.Key] = kv.Value; 
-
-            resolvedCache[layerId] = resolved;
-            return resolved;
-        }
-
+        
         //TODO we will need a cascading coloring system to apply colors, when multiple colors are registered to one bagid, is this still needed?
         /// <summary>
         /// This will color the final result from styling, by its objectmapping it will find the corresponding bagids in the override color dictionary and apply mesh vertex coloring.
@@ -102,8 +82,8 @@ namespace Netherlands3D.SubObjects
             if (colorBuffer.Length < vertexCount)
                 colorBuffer = new Color32[Mathf.NextPowerOfTwo(vertexCount)];
 
-            Dictionary<string, Color32> resolved = layerId != null ? GetResolved(layerId) : null;
-            bool hasResolved = resolved != null;
+            layerColors.TryGetValue(layerId, out var layer);
+            selectionColors.TryGetValue(layerId, out var selection);
 
             bool anyColor = false;
             int offset = 0;
@@ -115,11 +95,21 @@ namespace Netherlands3D.SubObjects
                 Color32 color;
 
                 if (hasOverrides && overrideColors.TryGetValue(key, out color))
+                {
                     anyColor = true;
-                else if (hasResolved && resolved.TryGetValue(key, out color))
+                }
+                else if (selection != null && selection.TryGetValue(key, out color))
+                {
                     anyColor = true;
+                }
+                else if (layer != null && layer.TryGetValue(key, out color))
+                {
+                    anyColor = true;
+                }
                 else
+                {
                     color = NO_OVERRIDE_COLOR32;
+                }
 
                 int end = offset + item.Value.verticesLength;
                 for (int j = offset; j < end; j++)
