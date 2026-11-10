@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.layers.properties
             hiddenObjectsPropertyData.OnHiddenObjectDataStylingRuleRemoved.AddListener(OnHiddenObjectRemoved);
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
-            hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
+            hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnStylingChanged);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             
             if(debugFeatures)
@@ -54,25 +54,46 @@ namespace Netherlands3D.Twin.layers.properties
             binaryMeshLayer.OnMappingCreated.AddListener(OnAddedMapping);         
             binaryMeshLayer.OnMappingRemoved.AddListener(OnRemovedMapping);
         }
-
-        private void OnApplyStyling()
+        
+        private bool UpdateFeatureColor(LayerFeature feature)
         {
+            //do cascading to get css result styling
+            Symbolizer symbolizer = visualization.GetStyling(feature);
+        
+            if (feature.Geometry is ObjectMappingItem item)
+            {
+                bool? visiblity = symbolizer.GetVisibility();
+                if (visiblity.HasValue)
+                {
+                    string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
+                    Color storedColor = symbolizer.GetFillColor() ?? Color.white;
+                    var visibilityColor = visiblity == true ? storedColor : Color.clear;
+                    
+                    var layerId = visualization.LayerData.Id.ToString();
+                    if (Interaction.TryGetLayerColor(layerId, id, out var currentColor) && currentColor.Equals(visibilityColor))
+                    {
+                        return false;
+                    }
+                    
+                    Interaction.AddLayerColor(layerId, id, visibilityColor);
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        private void OnStylingChanged()
+        {
+            bool changed = false;
+
             foreach (var (_, feature) in visualization.LayerFeatures)
             {
-                //do cascading to get css result styling
-                Symbolizer symbolizer = visualization.GetStyling(feature);
+                changed |= UpdateFeatureColor(feature);
+            }
             
-                if (feature.Geometry is ObjectMappingItem item)
-                {
-                    bool? visiblity = symbolizer.GetVisibility();
-                    if (visiblity.HasValue)
-                    {
-                        string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
-                        Color storedColor = symbolizer.GetFillColor() ?? Color.white;
-                        var visibilityColor = visiblity == true ? storedColor : Color.clear;
-                        Interaction.AddLayerColor(visualization.LayerData.Id.ToString(), id, visibilityColor);
-                    }
-                }
+            if (!changed)
+            {
+                return;
             }
             
             if(visualization is not CartesianTileLayerGameObject cartesianTile) return;
@@ -86,7 +107,21 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void OnHiddenObjectRemoved(string id)
         {
-            Interaction.RemoveLayerColor(visualization.LayerData.Id.ToString(), id);
+            var layerId = visualization.LayerData.Id.ToString();
+            if (!Interaction.TryGetLayerColor(layerId, id, out _)) return;
+            
+            Interaction.RemoveLayerColor(layerId, id);
+            
+            if (visualization is not CartesianTileLayerGameObject cartesianTile) return;
+            if (cartesianTile.Layer is not BinaryMeshLayer binaryMeshLayer) return;
+
+            foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
+            {
+                if (kv.Value.items.ContainsKey(id))
+                {
+                    Interaction.ApplyColors(kv.Value, layerId);
+                }
+            }
         }
         
          //a simple debugging method to have x items hidden on startup in the hiddenobjects property panel
@@ -114,6 +149,8 @@ namespace Netherlands3D.Twin.layers.properties
         {  
             HiddenObjectsPropertyData stylingPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             if (stylingPropertyData == null) return;
+            
+            var hasStyledObjects = false;
 
             //only create features and add them for existing data in styling rules
             foreach (KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
@@ -125,11 +162,18 @@ namespace Netherlands3D.Twin.layers.properties
                     {
                         var layerFeature = visualization.CreateFeature(item);
                         visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                        UpdateFeatureColor(layerFeature);
+                        hasStyledObjects = true;
                     }
                 }
             }
-            OnApplyStyling();
+
+            if (hasStyledObjects)
+            {
+                Interaction.ApplyColors(mapping, visualization.LayerData.Id.ToString());
+            }
         }
+        
 
         private void OnRemovedMapping(ObjectMapping mapping)
         {
@@ -176,7 +220,7 @@ namespace Netherlands3D.Twin.layers.properties
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
-            hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
+            hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnStylingChanged);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
             
             if(visualization is not CartesianTileLayerGameObject cartesianTile) return;
