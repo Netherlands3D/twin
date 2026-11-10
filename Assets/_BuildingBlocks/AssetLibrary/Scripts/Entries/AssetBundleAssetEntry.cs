@@ -23,7 +23,7 @@ namespace Netherlands3D.AssetLibrary.Entries
             if (string.IsNullOrEmpty(bundleName)) return null;
 
             var resolved = $"assetbundle:///{Uri.EscapeDataString(bundleName)}/{Uri.EscapeDataString(prefabName)}";
-
+            
             var uri = string.IsNullOrWhiteSpace(resolved) ? null : new Uri(resolved, UriKind.Absolute);
             return InMemoryCatalog.CreateRecord(Id, Title, Description, uri);
         }

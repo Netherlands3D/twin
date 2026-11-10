@@ -183,5 +183,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
            //override base because we want no deselection while selecting
         }
+
+        protected override void Update()
+        {
+            base.Update();
+            foreach (var m in mappings)
+                m.BoundingBox.Debug(Color.blueViolet);
+        }
     }
 }

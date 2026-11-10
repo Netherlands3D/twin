@@ -48,7 +48,7 @@ MonoBehaviour:
     - {fileID: 4142489338678956943, guid: 2823e5ec82fe248febd620a0b025bcca, type: 3}
     - {fileID: 4142489338678956943, guid: 71fff5c85650fcd4d9f59e4e182b5e95, type: 3}
   - groupName: CustomLayers
-    autoPopulateUI: 0
+    autoPopulateUI: 1
     prefabs:
     - {fileID: 2578961074007820944, guid: 0dd48855510674827b667fa4abd5cf60, type: 3}
     - {fileID: 3749709991008444548, guid: acb0d28ce2b674042ba63bf1d7789bfd, type: 3}

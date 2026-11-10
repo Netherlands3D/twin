@@ -33,8 +33,8 @@ namespace Netherlands3D.Functionalities.AssetBundles
 
         private void Awake()
         {
-            ProjectData.Current.PrefabLibrary.AddPrefabRuntimeGroup(GroupName);
-            LoadAssetFromAssetBundle(bundleName, prefabName, AddAssetToObjectLibrary);
+            //ProjectData.Current.PrefabLibrary.AddPrefabRuntimeGroup(GroupName);
+            //LoadAssetFromAssetBundle(bundleName, prefabName, AddAssetToObjectLibrary);
         }
 
         public void LoadAssetFromAssetBundle(string bundleName, string fileName, Action<GameObject> onAssetLoaded)
@@ -129,15 +129,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 Debug.LogError("File does not exist at path: " + path);
             }
 #endif
-        }
-
-        private void AddAssetToObjectLibrary(GameObject asset)
-        {
-            // we want only the original asset here and not an instantiation
-            HierarchicalObjectLayerGameObject layerObject = asset.GetComponent<HierarchicalObjectLayerGameObject>();
-            if (!layerObject) return;
-
-            ProjectData.Current.PrefabLibrary.AddObjectToPrefabRuntimeGroup(GroupName, layerObject);
         }
     }
 }

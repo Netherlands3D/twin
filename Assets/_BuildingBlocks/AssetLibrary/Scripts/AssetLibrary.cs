@@ -6,6 +6,7 @@ using Netherlands3D.AssetLibrary.Entries;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Catalogs.Catalogs;
+using Netherlands3D.Catalogs.Catalogs.Strategies;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
 using Netherlands3D.Functionalities.AssetBundles;
@@ -34,7 +35,9 @@ namespace Netherlands3D.AssetLibrary
         public const string PREFAB_IDENTIFIER = "prefab-library";
 
         [SerializeField] private List<AssetLibraryEntry> items = new();
+        [SerializeField] private List<LayerGameObject> hiddenItems = new();
         [SerializeField] private List<string> extraCatalogs = new();
+        [SerializeField] private LayerGameObject fallbackPrefab;
 
         // Cached list of scriptable object events that have been registered
         private readonly Dictionary<int, ScriptableObject> scriptableObjectEvents = new();
@@ -55,6 +58,10 @@ namespace Netherlands3D.AssetLibrary
             {
                 RegisterEntry(entry);
             }
+            foreach (var entry in hiddenItems)
+            {
+                prefabs[entry.PrefabIdentifier] = entry;
+            }
 
             // Register extra catalogs as OGC API catalogs
             // TODO: when we introduce extra types of remote Catalogs - make a service that detects the type of catalog
@@ -63,6 +70,14 @@ namespace Netherlands3D.AssetLibrary
             {
                 Import(await OgcApiCatalog.CreateAsync(extraCatalog));
             }
+        }
+
+        public LayerGameObject GetPrefabById(string identifier)
+        {
+            if (!prefabs.TryGetValue(identifier, out var prefab))
+                return fallbackPrefab;
+            
+            return prefab;
         }
 
         private void RegisterEntry(AssetLibraryEntry entry)
@@ -106,39 +121,40 @@ namespace Netherlands3D.AssetLibrary
         {
             if (recordItem.Url.IsRemoteAsset())
                 App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url)); //todo: Exceptions should still be handled
-            else if (recordItem.Url.IsAssetBundle())
-            {
-                var pathParts = recordItem.Url.AbsolutePath.TrimStart('/').Split('/');
-                if (pathParts.Length != 2)
-                {
-                    Debug.LogError($"Invalid AssetBundle URI: {recordItem.Url}");
-                    return;
-                }
-
-                string bundleName = Uri.UnescapeDataString(pathParts[0]);
-                string prefabName = Uri.UnescapeDataString(pathParts[1]);
-                string bundlePath = Path.Combine(Application.streamingAssetsPath, bundleName);
-                AssetBundleLoader assetBundleService = ServiceLocator.GetService<AssetBundleLoader>();
-                assetBundleService.LoadAssetFromAssetBundle(
-                    bundleName,
-                    prefabName,
-                    asset =>
-                    {
-                        if (asset == null)
-                        {
-                            Debug.LogError($"Could not load prefab {prefabName}");
-                            return;
-                        }
-
-                        Debug.Log($"Successfully loaded {prefabName}");
-
-                        // TODO: Spawn or add the loaded asset to the appropriate layer.
-                    }
-                );
-            }
             else
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }
+        
+        // else if (recordItem.Url.IsAssetBundle())
+        // {
+        //     var pathParts = recordItem.Url.AbsolutePath.TrimStart('/').Split('/');
+        //     if (pathParts.Length != 2)
+        //     {
+        //         Debug.LogError($"Invalid AssetBundle URI: {recordItem.Url}");
+        //         return;
+        //     }
+        //
+        //     string bundleName = Uri.UnescapeDataString(pathParts[0]);
+        //     string prefabName = Uri.UnescapeDataString(pathParts[1]);
+        //     string bundlePath = Path.Combine(Application.streamingAssetsPath, bundleName);
+        //     AssetBundleLoader assetBundleService = ServiceLocator.GetService<AssetBundleLoader>();
+        //     assetBundleService.LoadAssetFromAssetBundle(
+        //         bundleName,
+        //         prefabName,
+        //         asset =>
+        //         {
+        //             if (asset == null)
+        //             {
+        //                 Debug.LogError($"Could not load prefab {prefabName}");
+        //                 return;
+        //             }
+        //
+        //             Debug.Log($"Successfully loaded {prefabName}");
+        //
+        //             // TODO: Spawn or add the loaded asset to the appropriate layer.
+        //         }
+        //     );
+        // }
 
         public void Trigger(DataService dataService)
         {
