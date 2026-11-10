@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using Netherlands3D.Coordinates;
+using Unity.Collections;
 using UnityEngine.Events;
 
 #if SUBOBJECT
@@ -188,7 +189,7 @@ namespace Netherlands3D.CartesianTiles
                 yield break;
             }
 
-            byte[] results = webRequest.downloadHandler.data;
+            var results = webRequest.downloadHandler.nativeData;
 
             webRequest.Dispose();
 
@@ -327,7 +328,7 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
-        private GameObject CreateNewGameObject(string source, byte[] binaryMeshData, TileChange tileChange)
+        private GameObject CreateNewGameObject(string source, NativeArray<byte>.ReadOnly binaryMeshData, TileChange tileChange)
         {
             container = new GameObject();
             container.name = tileChange.X.ToString() + "-" + tileChange.Y.ToString();
