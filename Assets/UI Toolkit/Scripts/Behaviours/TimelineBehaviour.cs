@@ -110,7 +110,7 @@ namespace Netherlands3D
             UpdateTimelineElementVisibility();
         }
             
-        private void HandleTimestampCollectionAdded(CityObject co, TimestampCollection timestampCollection)
+        private void HandleTimestampCollectionAdded(object co, TimestampCollection timestampCollection)
         {
             var addedMin = timestampCollection.LowestTimestamp;
             var addedMax = timestampCollection.HighestTimestamp;

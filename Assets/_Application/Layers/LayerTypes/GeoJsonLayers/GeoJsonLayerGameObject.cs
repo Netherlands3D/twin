@@ -217,5 +217,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 SelectionService.MappingTree.RootInsert(objectMapping);
             }
         }
+
+        public void AddStylingFeatureForGeoJsonFeature(Feature feature)
+        {
+            var layerFeature = GetStylingFeatureByGeometry(feature);
+            if (layerFeature == null)
+            {
+                layerFeature = CreateFeature(feature);
+                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            }
+        }
+
+        public void RemoveStylingFeatureForGeoJsonFeature(Feature feature)
+        {
+            LayerFeatures.Remove(feature);
+        }
     }
 }

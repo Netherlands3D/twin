@@ -278,6 +278,11 @@ namespace Netherlands3D.Twin.Layers
         {
             //called when the Styling of the visualization changes
         }
+        
+        public virtual void ApplyStylingToFeature(StylingFeature feature)
+        {
+            //called when the Styling of a single feature of the visualization changes
+        }
 
         #endregion
 

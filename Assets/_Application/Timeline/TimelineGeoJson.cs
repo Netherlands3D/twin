@@ -1,106 +1,75 @@
 using System;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
-using Netherlands3D.Services;
-using Netherlands3D.Sun;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.layers.properties;
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Timeline
 {
     [RequireComponent(typeof(GeoJsonLayerGameObject))]
-    public class TimelineGeoJson : MonoBehaviour
+    public class TimelineGeoJson : TimelineObject
     {
-        const string TIMELINE_ATTRIBUTE_NAME = "timestamps";
+        protected override string TIMELINE_ATTRIBUTE_NAME => "timestamps";
+        GeoJsonLayerGameObject geoJson => visualization as GeoJsonLayerGameObject;
 
-        private SunTime sunTime;
-        private GeoJsonLayerGameObject visualization;
-
-        private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
-        private Dictionary<Feature, TimestampCollection> timelines = new();
-
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            sunTime = ServiceLocator.GetService<SunTime>();
-            sunTime.timeOfDayChanged.AddListener(OnTimeChanged);
-
-            visualization = GetComponent<GeoJsonLayerGameObject>();
-            visualization.OnFeatureAdd.AddListener(OnFeatureAdded);
+            base.OnEnable();
+            // ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
+            geoJson.OnFeatureAdd.AddListener(OnAddFeature);
+            geoJson.OnFeatureRemove.AddListener(OnRemoveFeature);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
-            sunTime.timeOfDayChanged.RemoveListener(OnTimeChanged);
-            timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
-            visualization.OnFeatureAdd.RemoveListener(OnFeatureAdded);
+            base.OnDisable();
+            geoJson.OnFeatureAdd.RemoveListener(OnAddFeature);
+            geoJson.OnFeatureRemove.RemoveListener(OnRemoveFeature);
         }
 
-        private void InitTimelineStylingProperty()
-        {
-            if (timelineStatusStylingLayerPropertyData != null)
-                return; //already initialized
-
-            visualization.InitProperty<TimelineStatusStylingLayerPropertyData>(visualization.LayerData.LayerProperties);
-
-            timelineStatusStylingLayerPropertyData = visualization.LayerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
-            timelineStatusStylingLayerPropertyData.OnStylingChanged.AddListener(visualization.ApplyStyling);
-        }
-
-        private void OnFeatureAdded(Feature feature)
+        private void OnAddFeature(Feature feature)
         {
             Dictionary<string, Color> newStates = new Dictionary<string, Color>();
-
-            if (feature.Properties.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var timestampObject))
-            {
-                InitTimelineStylingProperty();
-
-                var collection = new TimestampCollection(timestampObject.ToString());
-                timelines.Add(feature, collection);
-
-                foreach (var timestamp in collection.Timestamps)
+            // foreach (var feature in geoJson.Features)
+            // {
+                if (feature.Properties.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var attribute))
                 {
-                    newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
+                    InitTimelineStylingProperty();
+                    geoJson.AddStylingFeatureForGeoJsonFeature(feature);
+                    // stylingFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, null);
+
+                    var collection = new TimestampCollection(attribute.ToString()); //todo make overload to accept json array directly
+                    timelineStatusStylingLayerPropertyData.AddTimestampCollection(feature, collection);
+
+                    foreach (var timestamp in collection.Timestamps)
+                    {
+                        newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
+                    }
+
+                    SetFeatureAttributeForTime(ProjectData.Current.CurrentDateTime, feature, collection);
                 }
-                SetFeatureAttribute(sunTime.Time, feature, collection);
+            // }
+
+            if (timelineStatusStylingLayerPropertyData == null)
+            {
+                Destroy(this); //this CityJSON does not have timeline attributes, InitTimelineStylingProperty is never called, and we do not need this component anymore
+                return;
             }
-            
+
+            // todo: if rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat (maxValue is tbd)
             timelineStatusStylingLayerPropertyData.AddNewRulesForStatuses(newStates);
         }
 
-        private void OnTimeChanged(DateTime currentTime)
+        protected override void SetFeatureAttribute(object feature, Timestamp currentTimestampForFeature)
         {
-            foreach (var timeline in timelines)
-            {
-                SetFeatureAttribute(currentTime, timeline.Key, timeline.Value);
-            }
+            var geoJsonFeature = (Feature)feature;
+            throw new NotImplementedException();
         }
 
-        private void SetFeatureAttribute(DateTime currentTime, Feature feature, TimestampCollection timeline)
+        private void OnRemoveFeature(Feature feature)
         {
-            var currentTimestampForFeature = timeline.GetCurrentTimestamp(currentTime);
-
-            var stylingFeature = visualization.LayerFeatures[feature];
-            var status = currentTimestampForFeature?.value;
-
-            if(stylingFeature.Attributes.TryGetValue(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, out var savedStatus))
-                if(savedStatus == status)
-                    return;
-
-            if(!string.IsNullOrEmpty(status))
-            {
-                var c = timelineStatusStylingLayerPropertyData.GetColorForStatus(status);
-                Debug.Log("setting status of " + feature.Id + " to " + status + " with color " + c.Value);
-            }
-            else
-            {
-                Debug.Log("setting status of " + feature.Id + " to " + status );
-            }
-            stylingFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
-            
-            GetComponent<GeoJSONLayerFeatureColoring>().OnApplyStyling(); //todo: this needs to be done to apply the default styling to features that no longer have a status. but this dependency is undesirable.
-            // visualization.ApplyStylingToFeature(feature);
+            geoJson.RemoveStylingFeatureForGeoJsonFeature(feature);
         }
     }
 }
