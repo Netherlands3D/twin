@@ -55,7 +55,11 @@ namespace Netherlands3D.SubObjects
         private static void Remove(Dictionary<string, Dictionary<string, Color32>> store, string layerId, string objectId)
         {
             if (store.TryGetValue(layerId, out var dict))
+            {
                 dict.Remove(objectId);
+                if (dict.Count == 0)
+                    store.Remove(layerId);
+            }
         }
 
         public static void AddLayerColor(string layerId, string objectId, Color color) => Set(layerColors, layerId, objectId, color);
@@ -82,8 +86,13 @@ namespace Netherlands3D.SubObjects
             if (colorBuffer.Length < vertexCount)
                 colorBuffer = new Color32[Mathf.NextPowerOfTwo(vertexCount)];
 
-            layerColors.TryGetValue(layerId, out var layer);
-            selectionColors.TryGetValue(layerId, out var selection);
+            Dictionary<string, Color32> layer = null;
+            Dictionary<string, Color32> selection = null;
+            if (layerId != null)
+            {
+                layerColors.TryGetValue(layerId, out layer);
+                selectionColors.TryGetValue(layerId, out selection);
+            }
 
             bool anyColor = false;
             int offset = 0;
