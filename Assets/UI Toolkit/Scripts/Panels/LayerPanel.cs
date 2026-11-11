@@ -39,6 +39,7 @@ namespace Netherlands3D.UI.Panels
 
         private Button scenarioButton;
         private Button folderButton;
+        private Button copyButton;
         private Button deleteButton;
         
         private bool doRefresh;
@@ -84,6 +85,9 @@ namespace Netherlands3D.UI.Panels
 
             folderButton = this.Q<Button>("FolderButton");
             folderButton.RegisterCallback<ClickEvent>(OnFolderButtonClicked);
+
+            copyButton = this.Q<Button>("CopyButton");
+            copyButton.RegisterCallback<ClickEvent>(OnCopyButtonClicked);
 
             deleteButton = this.Q<Button>("DeleteButton");
             deleteButton.RegisterCallback<ClickEvent>(OnDeleteButtonClicked);
@@ -276,6 +280,19 @@ namespace Netherlands3D.UI.Panels
             }
             
             treeView.SetSelection(indicesToSelect);
+        }
+
+        private void OnCopyButtonClicked(ClickEvent evt)
+        {
+            CopySelectedLayers();
+        }
+        
+        private void CopySelectedLayers()
+        {
+            foreach (LayerData layer in treeView.selectedItems.ToList()) //to list makes a copy and avoids a collectionmodified error
+            {
+                App.Layers.Copy(layer);
+            }
         }
 
         private void OnDeleteButtonClicked(ClickEvent evt)

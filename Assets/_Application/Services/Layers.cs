@@ -128,6 +128,11 @@ namespace Netherlands3D.Twin.Services
             return layer;
         }
 
+        public void Copy(LayerData layerData)
+        {
+            //todo: make a copy of the layer and it's children.
+        }
+
         /// <summary>
         /// Removes the layer from the current project and ensures the visualisation is removed as well.
         /// </summary>
