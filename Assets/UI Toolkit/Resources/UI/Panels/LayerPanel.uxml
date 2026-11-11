@@ -3,7 +3,8 @@
     <ui:VisualElement class="layer-panel__bottom-button-container">
         <nl3d:Button name="ScenarioButton" button-style="IconOnly" icon="Scenario" tooltip="Nieuw scenario toevoegen"/>
         <nl3d:Button name="FolderButton" button-style="IconOnly" icon="Folder" tooltip="Voeg folder toe"/>
+        <nl3d:Button name="CopyButton" button-style="IconOnly" icon="CopyPaste" tooltip="Laag kopieëren"/>
         <nl3d:Button name="DeleteButton" button-style="IconOnly" icon="Trash" tooltip="Verwijder geselecteerde laag"/>
     </ui:VisualElement>
-    <nl3d:LayerDragGhost/>
+    <nl3d:LayerDragGhost/>-
 </ui:UXML>
