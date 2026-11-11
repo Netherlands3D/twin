@@ -31,12 +31,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
 
         public UnityEvent OnAssetsLoaded;
 
-        private void Awake()
-        {
-            //ProjectData.Current.PrefabLibrary.AddPrefabRuntimeGroup(GroupName);
-            //LoadAssetFromAssetBundle(bundleName, prefabName, AddAssetToObjectLibrary);
-        }
-
         public void LoadAssetFromAssetBundle(string bundleName, string fileName, Action<GameObject> onAssetLoaded)
         {
             string path = Path.Combine(Application.streamingAssetsPath, bundleName);
