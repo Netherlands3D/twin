@@ -14,8 +14,6 @@ namespace Netherlands3D.Twin.Services
     public class Layers : MonoBehaviour
     {
         public AssetLibrary.AssetLibrary AssetLibrary => assetLibrary;
-        
-        //[SerializeField] private PrefabLibrary prefabLibrary;
         [SerializeField] private DataTypeChain fromUrlImporter;
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
         private VisualizationSpawner spawner;
