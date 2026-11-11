@@ -105,7 +105,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void InitializeScatterMesh(string prefabId)
         {
-            var scatterObjectPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            var scatterObjectPrefab = App.Layers.AssetLibrary.GetPrefabById(prefabId);
             this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
             var sharedMaterial = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
             this.material = new Material(sharedMaterial);

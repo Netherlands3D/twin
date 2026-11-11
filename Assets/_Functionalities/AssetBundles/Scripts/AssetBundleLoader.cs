@@ -24,28 +24,16 @@ namespace Netherlands3D.Functionalities.AssetBundles
 
     public class AssetBundleLoader : MonoBehaviour
     {
-        [SerializeField] private UI_ProgressIndicator loadingScreenPrefab;
-        [SerializeField] private RectTransform loadingScreenCanvas;
         private const string GroupName = "ObjectenBibliotheek";
 
         public string bundleName;
         public string prefabName;
 
-        private UI_ProgressIndicator loadingScreen;
-
         public UnityEvent OnAssetsLoaded;
-
-        private void Awake()
-        {
-            ProjectData.Current.PrefabLibrary.AddPrefabRuntimeGroup(GroupName);
-            LoadAssetFromAssetBundle(bundleName, prefabName, AddAssetToObjectLibrary);
-        }
 
         public void LoadAssetFromAssetBundle(string bundleName, string fileName, Action<GameObject> onAssetLoaded)
         {
             string path = Path.Combine(Application.streamingAssetsPath, bundleName);
-            loadingScreen = Instantiate(loadingScreenPrefab, loadingScreenCanvas.transform);
-            loadingScreen.ShowProgress(0.1f);
             StartCoroutine(GetAssetBundle(path, bundle => OnAssetBundleLoaded(bundle, fileName, onAssetLoaded)));
         }
 
@@ -67,15 +55,7 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 bundle.Unload(false);
                 break;
             }
-
-            loadingScreen.ShowProgress(0.99f);
-            loadingScreen.GetComponent<CanvasGroup>()
-                .DOFade(0, .4f)
-                .OnComplete(() =>
-                {
-                    GameObject.Destroy(loadingScreen.gameObject);
-                    OnAssetsLoaded.Invoke();
-                });
+            OnAssetsLoaded.Invoke();
         }
 
         private void FixShaders(GameObject asset)
@@ -107,8 +87,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
             request.SendWebRequest();
             while (!request.isDone)
             {
-                loadingScreen.ShowProgress(request.downloadProgress);
-
                 yield return null;
             }
 
@@ -126,8 +104,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
             // Use AssetBundle.LoadFromFile for the Editor, this fixes a "Cannot connect to destination host" error on the Mac editor
             if (File.Exists(path))
             {
-                // Show some progress (fake, as LoadFromFile doesn't provide progress)
-                loadingScreen.ShowProgress(0.5f);
                 yield return null;
                 
                 AssetBundle bundle = AssetBundle.LoadFromFile(path);
@@ -145,15 +121,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 Debug.LogError("File does not exist at path: " + path);
             }
 #endif
-        }
-
-        private void AddAssetToObjectLibrary(GameObject asset)
-        {
-            // we want only the original asset here and not an instantiation
-            HierarchicalObjectLayerGameObject layerObject = asset.GetComponent<HierarchicalObjectLayerGameObject>();
-            if (!layerObject) return;
-
-            ProjectData.Current.PrefabLibrary.AddObjectToPrefabRuntimeGroup(GroupName, layerObject);
         }
     }
 }
