@@ -93,8 +93,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
             request.SendWebRequest();
             while (!request.isDone)
             {
-                loadingScreen.ShowProgress(request.downloadProgress);
-
                 yield return null;
             }
 

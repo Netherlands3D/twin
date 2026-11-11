@@ -9,9 +9,8 @@ using UnityEngine;
 namespace Netherlands3D.AssetLibrary.Entries
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Asset Library/Asset Bundle Entry")]
-    public class AssetBundleAssetEntry : AssetLibraryEntry
+    public class AssetBundleAssetEntry : UrlAssetEntry
     {
-        //[Tooltip("If set, we export prefab-library:///[PrefabIdentifier].")]
         [SerializeField] private string bundleName;
         [SerializeField] private string prefabName;
 
@@ -20,12 +19,11 @@ namespace Netherlands3D.AssetLibrary.Entries
 
         public override ICatalogItem ToCatalogItem()
         {
-            if (string.IsNullOrEmpty(bundleName)) return null;
+            if (string.IsNullOrWhiteSpace(bundleName) || string.IsNullOrWhiteSpace(prefabName))
+                return null;
 
-            var resolved = $"assetbundle:///{Uri.EscapeDataString(bundleName)}/{Uri.EscapeDataString(prefabName)}";
-            
-            var uri = string.IsNullOrWhiteSpace(resolved) ? null : new Uri(resolved, UriKind.Absolute);
-            return InMemoryCatalog.CreateRecord(Id, Title, Description, uri);
+            var resolved = $"streamingassets:///{Uri.EscapeDataString(bundleName)}/{Uri.EscapeDataString(prefabName)}";
+            return InMemoryCatalog.CreateRecord(Id, Title, Description, new Uri(resolved, UriKind.Absolute));
         }
         
         public override IEnumerable<LayerGameObject> CollectPrefabs()

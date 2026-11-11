@@ -50,8 +50,7 @@ namespace Netherlands3D.Twin.Projects
         public bool UseCurrentTime = false;
         [SerializeField, JsonProperty] public List<FunctionalityData> functionalities = new();
         [SerializeField, JsonProperty] private RootLayer rootLayer;
-       // [JsonIgnore] public PrefabLibrary PrefabLibrary; //for some reason this cannot be a field backed property because it will still try to serialize it even with the correct tags applied
-
+       
         [JsonIgnore]
         public RootLayer RootLayer
         {

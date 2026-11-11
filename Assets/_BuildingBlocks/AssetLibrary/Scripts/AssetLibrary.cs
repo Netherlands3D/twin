@@ -130,37 +130,6 @@ namespace Netherlands3D.AssetLibrary
             else
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }
-        
-        // else if (recordItem.Url.IsAssetBundle())
-        // {
-        //     var pathParts = recordItem.Url.AbsolutePath.TrimStart('/').Split('/');
-        //     if (pathParts.Length != 2)
-        //     {
-        //         Debug.LogError($"Invalid AssetBundle URI: {recordItem.Url}");
-        //         return;
-        //     }
-        //
-        //     string bundleName = Uri.UnescapeDataString(pathParts[0]);
-        //     string prefabName = Uri.UnescapeDataString(pathParts[1]);
-        //     string bundlePath = Path.Combine(Application.streamingAssetsPath, bundleName);
-        //     AssetBundleLoader assetBundleService = ServiceLocator.GetService<AssetBundleLoader>();
-        //     assetBundleService.LoadAssetFromAssetBundle(
-        //         bundleName,
-        //         prefabName,
-        //         asset =>
-        //         {
-        //             if (asset == null)
-        //             {
-        //                 Debug.LogError($"Could not load prefab {prefabName}");
-        //                 return;
-        //             }
-        //
-        //             Debug.Log($"Successfully loaded {prefabName}");
-        //
-        //             // TODO: Spawn or add the loaded asset to the appropriate layer.
-        //         }
-        //     );
-        // }
 
         public void Trigger(DataService dataService)
         {
