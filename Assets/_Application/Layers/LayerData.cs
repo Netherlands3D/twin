@@ -258,6 +258,15 @@ namespace Netherlands3D.Twin.Layers
             copy.color = color;
             copy.IsExpanded = IsExpanded;
             copy.LayerProperties = LayerProperties.Select(lp => lp.Clone()).ToList();
+
+            foreach (var child in children)
+            {
+                var childCopy = child.Clone();
+                childCopy.parent = copy;
+                copy.children.Add(childCopy);
+            }
+            
+            
             return copy;
         }
         
