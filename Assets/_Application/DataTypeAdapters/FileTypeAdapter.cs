@@ -51,13 +51,14 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 LocalFilePath = path
             };
 
-            AdapterChain(localFile, possibleFileTypeEvents);
+            var matched = AdapterChain(localFile, possibleFileTypeEvents);
+            if (!matched && fileExtension == "csv")
+                App.Snackbar.DisplayError("Dit CSV-bestand kan niet worden ingeladen. Controleer de kolommen en het bestandsformaat.");
         }
 
-        private void AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
+        private bool AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents)
         {
-            if (possibleFileTypeEvents == null)
-                possibleFileTypeEvents = fileTypeEvents;
+            var matched = false;
 
             // Get our interface references
             foreach (var fte in possibleFileTypeEvents)
@@ -65,6 +66,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 var adapter = fte.DataTypeAdapter;
                 if (adapter.Supports(localFile))
                 {
+                    matched = true;
                     var preset = adapter.Execute(localFile);
                     
                     if (preset is LayerPresetResult result)
@@ -77,6 +79,8 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     }
                 }
             }
+
+            return matched;
         }
     }
 }

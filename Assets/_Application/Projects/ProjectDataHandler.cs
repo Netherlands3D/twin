@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using CsvHelper;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
@@ -11,6 +12,7 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.AssetBundles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SFB;
@@ -199,12 +201,39 @@ namespace Netherlands3D.Twin.Projects
                     zipStream.CopyTo(streamWriter);
                 }
                 var project = ProjectData.Current;
+                LoadDashboardCsvAssets(project, zf);
                 OnLoadCompleted.Invoke(project);
                 return project;
             }
 
             OnLoadFailed.Invoke();
             return null;
+        }
+
+        private static void LoadDashboardCsvAssets(ProjectData project, ZipFile archive)
+        {
+            foreach (var layer in project.RootLayer.GetFlatHierarchy())
+            {
+                var csv = layer.GetProperty<DashboardCsvPropertyData>();
+                if (csv == null || layer.IsDisposed)
+                    continue;
+
+                var uri = csv.Url;
+                if (uri == null || !uri.IsStoredInProject() || archive.GetEntry(uri.LocalPath.TrimStart('/', '\\')) is not { IsFile: true })
+                {
+                    Debug.LogWarning($"Dashboard-CSV voor laag '{layer.Name}' ontbreekt in het projectbestand.");
+                    continue;
+                }
+
+                try
+                {
+                    csv.LoadFromProjectAsset();
+                }
+                catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException or FormatException)
+                {
+                    Debug.LogWarning($"Dashboard-CSV voor laag '{layer.Name}' kon niet worden ingelezen ({exception.GetType().Name}).");
+                }
+            }
         }
 
         private readonly JsonSerializerSettings serializerSettings = new()
