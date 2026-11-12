@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using netDxf.Tables;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -133,6 +134,7 @@ namespace Netherlands3D.Twin.Layers
 
                 return layerProperties;
             }
+            set => layerProperties = value;
         }
 
         [JsonIgnore]
@@ -248,6 +250,17 @@ namespace Netherlands3D.Twin.Layers
             this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
         }
 
+        public LayerData Clone()
+        {
+            var copy = new LayerData(name);
+            copy.prefabId = prefabId;
+            copy.activeSelf = activeSelf;
+            copy.color = color;
+            copy.IsExpanded = IsExpanded;
+            copy.LayerProperties = LayerProperties.Select(lp => lp.Clone()).ToList();
+            return copy;
+        }
+        
         public void SetParent(LayerData newParent, int siblingIndex = -1)
         {
             if (newParent == null)
