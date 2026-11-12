@@ -22,7 +22,6 @@ namespace Netherlands3D.UI.Panels
         public override string Title => "Instellingen";
         private ContentContainer settingsSection;
         private RadioButtonGroup qualityRadioButtonGroup;
-        private ListView functionalitiesListView;
         
         public SettingsPanel()
         {
@@ -37,13 +36,14 @@ namespace Netherlands3D.UI.Panels
 
         public SettingsPanel(Configuration configuration) : this()
         {
-            functionalitiesListView = settingsSection.Q<ListView>("Functionalities");
+            var optionalFunctionalities = configuration.Functionalities.Where(f => f.Type == FunctionalityType.Optional).ToList();
+            var functionalitiesListView = settingsSection.Q<ListView>("Functionalities");
             functionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             functionalitiesListView.makeItem = MakeFunctionalityItem;
-            functionalitiesListView.bindItem = BindFunctionalityItem;
-            functionalitiesListView.itemsSource = configuration.Functionalities;
+            functionalitiesListView.bindItem = (item, index) => BindFunctionalityItem(item, optionalFunctionalities[index]);
+            functionalitiesListView.itemsSource = optionalFunctionalities;
             
-            var fpvFunctionality = configuration.Functionalities.FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
+            var fpvFunctionality = optionalFunctionalities.FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
             if (fpvFunctionality != null)
             {
                 var fpvSection = new FPVSettingsPanel(fpvFunctionality);
@@ -54,24 +54,25 @@ namespace Netherlands3D.UI.Panels
         private VisualElement MakeFunctionalityItem()
         {
             var toggle = new CheckboxToggle();
-            var listViewItem = new ListViewItem(toggle);
-            return listViewItem;
+            // ListView reuses items, so register the callback once and update the functionality when binding.
+            toggle.RegisterValueChangedCallback(evt =>
+            {
+                if (toggle.userData is not Functionality functionality) return;
+
+                functionality.IsEnabled = evt.newValue;
+                App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
+            });
+            return new ListViewItem(toggle);
         }
 
-        private void BindFunctionalityItem(VisualElement item, int index)
+        private void BindFunctionalityItem(VisualElement item, Functionality functionality)
         {
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<CheckboxToggle>() is not CheckboxToggle toggle) return;
 
-            Functionality functionality = functionalitiesListView.itemsSource[index] as Functionality;
+            toggle.userData = functionality;
             toggle.LabelText = functionality.Title;
             toggle.SetValueWithoutNotify(functionality.IsEnabled);
-
-            toggle.RegisterValueChangedCallback(evt =>
-            { 
-                functionality.IsEnabled = evt.newValue;
-                App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
-            });
         }
 
         private void OnQualitySettingsChanged(ChangeEvent<int> evt)
