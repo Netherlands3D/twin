@@ -67,5 +67,12 @@ namespace Netherlands3D.LayerStyles
             Name = name;
             Selector = selector;
         }
+
+        public StylingRule Clone()
+        {
+            var json = JsonConvert.SerializeObject(this);
+            return JsonConvert.DeserializeObject<StylingRule>(json);
+        }
+        
     }
 }

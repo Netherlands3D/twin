@@ -41,5 +41,13 @@ namespace Netherlands3D.Twin.Layers.Properties
                 new (this, url != null ? url : null)
             };
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new LayerURLPropertyData(url)
+            {
+                isEditable = isEditable
+            };
+        }
     }
 }

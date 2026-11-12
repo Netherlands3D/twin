@@ -25,5 +25,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
                 OnIdsChanged.Invoke(buildingIds);
             }
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new BuildingPropertyData()
+            {
+                buildingIds = new Dictionary<string, Coordinate>(buildingIds),
+                isEditable = isEditable
+            };
+        }
     }
 }
