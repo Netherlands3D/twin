@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6b0aa719bec47ca8ce315e36c5b5c3c, type: 3}
+  m_Script: {fileID: 11500000, guid: fb707c81ddee193e6986cd4895808ccd, type: 3}
   m_Name: Ontwikkeling Zuidoost
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.AssetLibrary.Entries.AssetBundleAssetEntry
   id: objects-amsterdam-zuidoost
   title: Ontwikkeling Zuidoost
   description: 
-  prefab: {fileID: -1108649698955553808, guid: 96d778a591e307e48b3f896321843660, type: 3}
+  bundleName: zuidoostbundle
+  prefabName: Ontwikkeling Zuidoost.prefab
