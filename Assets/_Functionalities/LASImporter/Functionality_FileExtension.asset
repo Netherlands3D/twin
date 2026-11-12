@@ -38,4 +38,4 @@ MonoBehaviour:
       data:
         Id: las-bestanden-importeren
         IsEnabled: 0
-        FileExtention: .las
+        FileExtention: las
