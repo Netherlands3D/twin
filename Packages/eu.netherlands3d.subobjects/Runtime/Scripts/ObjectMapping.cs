@@ -6,6 +6,7 @@ namespace Netherlands3D.SubObjects
     public class ObjectMapping : MonoBehaviour
     {
         public Dictionary<string, ObjectMappingItem> items = new();
+        internal string StylingLayerId { get; set; }
         
         private void Start()
         {

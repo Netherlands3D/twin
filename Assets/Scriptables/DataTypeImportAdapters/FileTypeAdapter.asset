@@ -25,3 +25,7 @@ MonoBehaviour:
     Adapter: {fileID: 11400000, guid: d5040145c2c0c440fa6e9c5a760263fa, type: 2}
   - Extension: json
     Adapter: {fileID: 11400000, guid: 6e1704cdf27264f12b6666fa18971ba2, type: 2}
+  - Extension: csv
+    Adapter: {fileID: 11400000, guid: c3281b49c9d74dc28d8b35845007bc1d, type: 2}
+  - Extension: csv
+    Adapter: {fileID: 11400000, guid: 1ce9afcbf38aa49ed86909b54a357f70, type: 2}

@@ -1,12 +1,12 @@
+using System;
 using System.IO;
+using CsvHelper;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.Services;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,41 +17,59 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     {
         [SerializeField] private CartesianTileSubObjectColorLayerGameObject layerGameObjectPrefab;
         [SerializeField] private UnityEvent<float> progressEvent = new();
-        private static CartesianTileSubObjectColorLayerGameObject activeCartesianTileSubObjectColorLayer; //todo: allow multiple datasets to exist
-
         public bool Supports(LocalFile localFile)
         {
-            return new CartesianTileSubObjectColorCsv(localFile.LocalFilePath).IsValid();
+            try
+            {
+                return new CartesianTileSubObjectColorCsv(localFile.LocalFilePath).IsValid();
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException)
+            {
+                return false;
+            }
         }
 
         public LayerPresetArgs Execute(LocalFile localFile)
         {
-            //todo: temp fix to allow only 1 dataset layer
-            if (activeCartesianTileSubObjectColorLayer != null)
+            if (!FileTypeAdapter.CanImportCsv())
+                return null;
+
+            var prefabIdentifier = layerGameObjectPrefab ? layerGameObjectPrefab.PrefabIdentifier : null;
+            if (string.IsNullOrEmpty(prefabIdentifier))
             {
-                RemovePreviousColoring();
+                App.Snackbar.DisplayError("De laag voor gebouwkleuren kan niet worden toegevoegd.");
+                return null;
             }
 
-            var fileName = Path.GetFileName(localFile.LocalFilePath);
-            
-            activeCartesianTileSubObjectColorLayer = Instantiate(layerGameObjectPrefab); //todo: replace this with App.Layers.Add
-            activeCartesianTileSubObjectColorLayer.gameObject.name = fileName;
-            var propertyData = activeCartesianTileSubObjectColorLayer.LayerData.GetProperty<CartesianTileSubObjectColorPropertyData>();
-            propertyData.Data = AssetUriFactory.CreateProjectAssetUri(localFile.LocalFilePath);
-            
-            // TODO: Temporary proxying during refactoring, it would be better to simplify this.
-            activeCartesianTileSubObjectColorLayer
-                .progressEvent.AddListener(value => progressEvent.Invoke(value));
-            return null; //todo this is now broken, should be fixed
-        }
+            var propertyData = new CartesianTileSubObjectColorPropertyData
+            {
+                Data = AssetUriFactory.CreateProjectAssetUri(localFile.LocalFilePath)
+            };
 
-        private void RemovePreviousColoring()
-        {
-            //activeCartesianTileSubObjectColorLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
-            // TODO: Replace this direct message with a proper layer replacement flow,
-            // for example activeCartesianTileSubObjectColorLayer.ReplaceLayer(layer).
-            activeCartesianTileSubObjectColorLayer.DestroyLayer();
-            App.LayerMessages.DisplayCsvReplacedMessage("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");          
+            try
+            {
+                propertyData.LoadFromProjectAsset();
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException or FormatException)
+            {
+                App.Snackbar.DisplayError("Dit CSV-bestand met gebouwkleuren kan niet worden ingeladen.");
+                return null;
+            }
+
+            if (propertyData.Colors.Count == 0)
+            {
+                App.Snackbar.DisplayError("Dit CSV-bestand bevat geen geldige gebouwkleuren.");
+                return null;
+            }
+
+            foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
+            {
+                if (!layer.IsDisposed && layer.GetProperty<CartesianTileSubObjectColorPropertyData>() != null)
+                    App.Layers.Remove(layer);
+            }
+
+            progressEvent.Invoke(1f);
+            return new BuildingColorCsvPreset.Args(localFile.FileName, prefabIdentifier, propertyData);
         }
     }
 }
