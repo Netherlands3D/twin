@@ -11,6 +11,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.AssetBundles;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Newtonsoft.Json;
@@ -201,7 +202,7 @@ namespace Netherlands3D.Twin.Projects
                     zipStream.CopyTo(streamWriter);
                 }
                 var project = ProjectData.Current;
-                LoadDashboardCsvAssets(project, zf);
+                LoadCsvAssets(project, zf);
                 OnLoadCompleted.Invoke(project);
                 return project;
             }
@@ -210,29 +211,38 @@ namespace Netherlands3D.Twin.Projects
             return null;
         }
 
-        private static void LoadDashboardCsvAssets(ProjectData project, ZipFile archive)
+        private static void LoadCsvAssets(ProjectData project, ZipFile archive)
         {
             foreach (var layer in project.RootLayer.GetFlatHierarchy())
             {
-                var csv = layer.GetProperty<DashboardCsvPropertyData>();
-                if (csv == null || layer.IsDisposed)
+                if (layer.IsDisposed)
                     continue;
 
-                var uri = csv.Url;
-                if (uri == null || !uri.IsStoredInProject() || archive.GetEntry(uri.LocalPath.TrimStart('/', '\\')) is not { IsFile: true })
-                {
-                    Debug.LogWarning($"Dashboard-CSV voor laag '{layer.Name}' ontbreekt in het projectbestand.");
-                    continue;
-                }
+                var dashboardCsv = layer.GetProperty<DashboardCsvPropertyData>();
+                if (dashboardCsv != null)
+                    LoadCsvAsset(archive, layer.Name, "Dashboard-CSV", dashboardCsv.Url, dashboardCsv.LoadFromProjectAsset);
 
-                try
-                {
-                    csv.LoadFromProjectAsset();
-                }
-                catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException or FormatException)
-                {
-                    Debug.LogWarning($"Dashboard-CSV voor laag '{layer.Name}' kon niet worden ingelezen ({exception.GetType().Name}).");
-                }
+                var buildingColorCsv = layer.GetProperty<CartesianTileSubObjectColorPropertyData>();
+                if (buildingColorCsv != null)
+                    LoadCsvAsset(archive, layer.Name, "Gebouwkleuren-CSV", buildingColorCsv.Data, buildingColorCsv.LoadFromProjectAsset);
+            }
+        }
+
+        private static void LoadCsvAsset(ZipFile archive, string layerName, string sourceType, Uri uri, Action load)
+        {
+            if (uri == null || !uri.IsStoredInProject() || archive.GetEntry(uri.LocalPath.TrimStart('/', '\\')) is not { IsFile: true })
+            {
+                Debug.LogWarning($"{sourceType} voor laag '{layerName}' ontbreekt in het projectbestand.");
+                return;
+            }
+
+            try
+            {
+                load();
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException or FormatException)
+            {
+                Debug.LogWarning($"{sourceType} voor laag '{layerName}' kon niet worden ingelezen ({exception.GetType().Name}).");
             }
         }
 
