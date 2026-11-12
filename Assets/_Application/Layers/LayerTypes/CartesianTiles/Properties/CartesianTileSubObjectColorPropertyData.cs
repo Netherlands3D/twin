@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
         internal event Action ColorsChanged;
 
         [JsonIgnore] internal IReadOnlyDictionary<string, Color> Colors { get; private set; }
+        [JsonIgnore] internal bool HasLocalSource { get; set; }
         
         [JsonIgnore]
         public Uri Data
@@ -41,6 +42,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
         internal void LoadFromProjectAsset()
         {
             Colors = new CartesianTileSubObjectColorCsv(Data).Read();
+            HasLocalSource = true;
+            ColorsChanged?.Invoke();
+        }
+
+        internal void ClearLoadedColors()
+        {
+            if (Colors == null)
+                return;
+
+            Colors = null;
             ColorsChanged?.Invoke();
         }
     }

@@ -11,6 +11,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     public sealed class DashboardCsvPropertyData : LayerURLPropertyData
     {
         [JsonIgnore] public DashboardData Data { get; private set; }
+        [JsonIgnore] internal bool HasLocalSource { get; set; }
 
         public DashboardCsvPropertyData()
         {
@@ -18,6 +19,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public DashboardCsvPropertyData(Uri url, DashboardData data) : base(url)
         {
+            HasLocalSource = data != null;
             SetData(data);
         }
 
@@ -26,6 +28,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             using var reader = File.OpenText(AssetUriFactory.GetLocalPath(Url));
             SetData(DashboardCsv.Read(reader));
         }
+
+        internal void ClearLoadedData() => Data = null;
 
         private void SetData(DashboardData data)
         {

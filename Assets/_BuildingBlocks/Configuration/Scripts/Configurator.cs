@@ -32,6 +32,8 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] 
         private Configuration configuration;
         public Configuration Configuration { get => configuration; }
+        internal static Functionality Dashboarding { get; private set; }
+        internal static bool IsDashboardingEnabled => Dashboarding?.IsEnabled == true;
 
         private Uri uri;
 
@@ -107,6 +109,8 @@ namespace Netherlands3D.Twin.Configuration
             
             //add any missing functionalities to the projectData (e.g. when a project was saved before the functionality was added to the application)
             configuration.AddFunctionalityDataToProject();
+
+            Dashboarding = configuration.Functionalities.Find(functionality => functionality.Id == "dashboarding");
 
             ConfigureCorsProxy();
 

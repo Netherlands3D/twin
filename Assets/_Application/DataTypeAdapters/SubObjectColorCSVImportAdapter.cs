@@ -31,6 +31,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public LayerPresetArgs Execute(LocalFile localFile)
         {
+            if (!FileTypeAdapter.CanImportCsv())
+                return null;
+
             var prefabIdentifier = layerGameObjectPrefab ? layerGameObjectPrefab.PrefabIdentifier : null;
             if (string.IsNullOrEmpty(prefabIdentifier))
             {

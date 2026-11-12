@@ -58,7 +58,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private void OnColorsChanged()
         {
             UpdateColors(LayerData.ActiveInHierarchy);
-            progressEvent.Invoke(1f);
+            if (propertyData.Colors != null)
+                progressEvent.Invoke(1f);
         }
 
         private void UpdateColors(bool isActive)

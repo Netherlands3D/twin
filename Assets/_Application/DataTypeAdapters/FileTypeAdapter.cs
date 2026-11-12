@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
@@ -42,6 +43,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             if (fileExtension.StartsWith('.'))
                 fileExtension = fileExtension.Substring(1);
 
+            if (fileExtension == "csv" && !CanImportCsv())
+                return;
+
             var possibleFileTypeEvents = fileTypeEvents.Where(fte => fte.Extension == fileExtension);
 
             var path = Path.Combine(Application.persistentDataPath, file);
@@ -54,6 +58,15 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             var matched = AdapterChain(localFile, possibleFileTypeEvents);
             if (!matched && fileExtension == "csv")
                 App.Snackbar.DisplayError("Dit CSV-bestand kan niet worden ingeladen. Controleer de kolommen en het bestandsformaat.");
+        }
+
+        internal static bool CanImportCsv()
+        {
+            if (Configurator.IsDashboardingEnabled)
+                return true;
+
+            App.Snackbar.DisplayError("CSV-import is niet beschikbaar.");
+            return false;
         }
 
         private bool AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents)
