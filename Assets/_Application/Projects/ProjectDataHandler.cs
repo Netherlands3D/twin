@@ -13,6 +13,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SFB;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -86,10 +87,7 @@ namespace Netherlands3D.Twin.Projects
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
-            //LoadDefaultProject();
-            //TODO this is a quite dirty solution to postpone the loading flow of the application, but now its needed to preload assets 
-            //for when a default project contains assetbundle assets from start, needing a solid preloader in the future
-            FindObjectOfType<AssetBundleLoader>().OnAssetsLoaded.AddListener(OnPreloadedAssets);
+            OnPreloadedAssets();
         }
 
         private void OnPreloadedAssets()
@@ -237,7 +235,7 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             ProjectData.Current.LoadVisualizations();
         }
-
+        
         public void SaveAsFile()
         {
             ProjectData.Current.RefreshUUID();
@@ -246,18 +244,34 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.SavedTimestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             var readableTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HHmm");
 
-            // Start the zip output stream
-            var lastSavePath = Application.persistentDataPath + $"/{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}";
-            zipOutputStream = new ZipOutputStream(File.Create(lastSavePath));
-            zipOutputStream.SetLevel(9); // 0-9 where 9 means best compression
-            
-            var projectData = ProjectData.Current;
-            WriteProjectToZip(projectData, zipOutputStream);
-            WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+            string saveDirectory;
 
-            zipOutputStream.Finish();
-            zipOutputStream.Close();
+#if (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX) && !UNITY_EDITOR
+            // Windows and Linux standalone builds: save to Downloads
+            saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
+#else
+            saveDirectory = Application.persistentDataPath;
+#endif
+            if (!Directory.Exists(saveDirectory))
+                throw new DirectoryNotFoundException($"Save directory does not exist: {saveDirectory}");
+            
+            var lastSavePath = Path.Combine(saveDirectory, $"{DefaultFileName}{readableTimeStamp}.{ProjectFileExtension}");
+
+            // Start the ZIP output stream
+            using (zipOutputStream = new ZipOutputStream(File.Create(lastSavePath)))
+            {
+                zipOutputStream.SetLevel(9); // 0-9, where 9 means best compression
+
+                var projectData = ProjectData.Current;
+
+                WriteProjectToZip(projectData, zipOutputStream);
+                WriteProjectAssetsToZipfile(projectData, zipOutputStream);
+
+                zipOutputStream.Finish();
+            }
+
             Debug.Log("SAVING PROJECT DATA path " + lastSavePath);
+
             SaveFile(lastSavePath);
         }
 
@@ -295,21 +309,40 @@ namespace Netherlands3D.Twin.Projects
 
         private void SaveFile(string lastSavePath)
         {
-            // Make sure indexedDB is synced
 #if !UNITY_EDITOR && UNITY_WEBGL
-            this.lastSavePath = lastSavePath; 
+            this.lastSavePath = lastSavePath;
             SyncFilesToIndexedDB(gameObject.name, "ProjectSavedToIndexedDB");
+#elif (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX) && !UNITY_EDITOR
+            //request using native file save dialog where to copy the file from lastSavePath path
+            var fileName = Path.GetFileName(lastSavePath);
+            var extensions = new[]{new ExtensionFilter("Netherlands3D Project", ProjectFileExtension)};
+            var downloadsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
+            var fileTargetPath = StandaloneFileBrowser.SaveFilePanel("Save project", downloadsDirectory, fileName, extensions);
+            if (!string.IsNullOrEmpty(fileTargetPath))
+            {
+                try
+                {
+                    File.Copy(lastSavePath, fileTargetPath, true);
+                    File.Delete(lastSavePath);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Could not save project file: " + e.Message);
+                }
+            }
 #elif UNITY_EDITOR
-            //Request using file write dialog of unity editor where to copy the file from lastSavePath path
+            // Request using file write dialog of unity editor where to copy the file from lastSavePath path
             var fileName = Path.GetFileName(lastSavePath);
             var fileTargetPath = EditorUtility.SaveFilePanel("Save project", Application.persistentDataPath, fileName, ProjectFileExtension);
             if (fileTargetPath.Length > 0)
             {
                 File.Copy(lastSavePath, fileTargetPath, true);
             }
-
-            //Open the folder where the file is saved
-            EditorUtility.RevealInFinder(fileTargetPath);
+            // Open the folder where the file is saved
+            if (!string.IsNullOrEmpty(fileTargetPath))
+            {
+                EditorUtility.RevealInFinder(fileTargetPath);
+            }
 #endif
         }
 
