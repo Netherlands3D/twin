@@ -10,6 +10,7 @@ using Netherlands3D.Catalogs.Catalogs.Strategies;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
 using Netherlands3D.Functionalities.AssetBundles;
+using Netherlands3D.Functionalities.LayerPresets;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
@@ -127,6 +128,8 @@ namespace Netherlands3D.AssetLibrary
         {
             if (recordItem.Url.IsRemoteAsset())
                 App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url)); //todo: Exceptions should still be handled
+            else if (recordItem.Url.IsStreamingAssets())
+                App.Layers.Add(new AssetBundleLayerPreset.Args(recordItem.Url, recordItem.Title));
             else
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }

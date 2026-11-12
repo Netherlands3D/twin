@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
@@ -6,7 +7,7 @@ using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    public class HierarchicalStaticObjectLayerGameObject : HierarchicalObjectLayerGameObject
+    public class AssetBundleLayerGameObject : HierarchicalObjectLayerGameObject
     {
         public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;
@@ -29,5 +30,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             //this is to prevent executing base class functionality
         }
+        
+        // public virtual void LoadProperties(List<LayerPropertyData> properties)
+        // {
+        //     InitProperty<LayerURLPropertyData>(properties, null, new Coordinate(transform.position),
+        //         transform.eulerAngles,
+        //         transform.localScale,
+        //         scaleUnitCharacter);
+        //     
+        // }
     }
 }

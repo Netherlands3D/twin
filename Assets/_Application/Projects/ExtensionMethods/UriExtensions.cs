@@ -14,9 +14,9 @@ namespace Netherlands3D.Twin.Projects.ExtensionMethods
             return uri.Scheme is "http" or "https";
         }
         
-        public static bool IsAssetBundle(this Uri uri)
+        public static bool IsStreamingAssets(this Uri uri)
         {
-            return uri.Scheme == "assetbundle";
+            return uri.Scheme == "streamingassets";
         }
     }
 }
