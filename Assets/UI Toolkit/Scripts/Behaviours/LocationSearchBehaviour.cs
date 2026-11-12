@@ -79,10 +79,8 @@ namespace Netherlands3D.UI.Behaviours
             
             toolService.GetTool(ToolType.Search).onOpen.RemoveListener(OnOpen);
             toolService.GetTool(ToolType.Search).onClose.RemoveListener(OnClose);
-            
-            if (onCoordinateFound != null) onCoordinateFound.RemoveListener(UpdatePointer);
-            
             toolService.GetTool(ToolType.Search).onClose.RemoveListener(HidePointer);
+            onCoordinateFound.RemoveListener(UpdatePointer);
         }
 
         public void OnOpen()

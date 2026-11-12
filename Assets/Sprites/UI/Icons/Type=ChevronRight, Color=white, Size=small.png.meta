@@ -1,7 +1,10 @@
 fileFormatVersion: 2
 guid: f1a1f38dddb402e4e91ff90ef1f6f366
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -3451409246480722083
+    second: Type=ChevronRight, Color=white, Size=small_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -160,7 +163,29 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Type=ChevronRight, Color=white, Size=small_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d579401a3912a10d0800000000000000
+      internalID: -3451409246480722083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []

@@ -302,7 +302,12 @@ namespace Netherlands3D.AddressSearch
 
             if (requestVersion != searchRequestVersion) yield break;
 
-            List<SuggestionResult> best = results.Take(maxResults).ToList();
+            List<SuggestionResult> best = results
+                .GroupBy(result => result.CollectionId)
+                .SelectMany(group => group
+                .OrderBy(result => result.Label, StringComparer.CurrentCultureIgnoreCase))
+                .Take(maxResults)
+                .ToList();
 
             orderedSuggestions.Clear();
 
