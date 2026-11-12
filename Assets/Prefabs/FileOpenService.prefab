@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1748615501916967598}
   - component: {fileID: 8779175394998946664}
   m_Layer: 0
-  m_Name: FileImportService
+  m_Name: FileOpenService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -124,32 +125,38 @@ public class FileOpenService : MonoBehaviour //todo: the FileOpener prefab shoul
         SetJavaScriptFileExtensions(fileExtentions);
         BrowseForFile(fileInputName);
 #else
-        string[] fileExtentionNames = fileExtentions.Split(',');
+        string[] fileExtentionNames = fileExtentions
+            .Split(',')
+            .Select(ext => ext.Trim().ToLowerInvariant())
+            .ToArray();
+
         ExtensionFilter[] extentionfilters = new ExtensionFilter[1];
-
-        extentionfilters[0] = new ExtensionFilter(fileExtentionNames[0], fileExtentionNames);
-
+        extentionfilters[0] = new ExtensionFilter("Allowed files", fileExtentionNames);
         string[] filenames = SFB.StandaloneFileBrowser.OpenFilePanel("select file(s)", "", extentionfilters, multiSelect);
         string resultingFiles = "";
         for (int i = 0; i < filenames.Length; i++)
         {
+            if (string.IsNullOrEmpty(filenames[i])) continue;
+
+            string extension = System.IO.Path.GetExtension(filenames[i]).TrimStart('.').ToLowerInvariant();
+            if (!fileExtentionNames.Contains(extension))
+            {
+                Debug.LogWarning("Unsupported file type: " + filenames[i]);
+                continue;
+            }
             string destinationFolder = Application.persistentDataPath;
             string originalFileName = System.IO.Path.GetFileName(filenames[i]);
             string destinationPath = System.IO.Path.Combine(destinationFolder, originalFileName);
-
             int counter = 1;
             string fileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(originalFileName);
             string fileExtension = System.IO.Path.GetExtension(originalFileName);
-
             while (System.IO.File.Exists(destinationPath))
             {
-                // Create a new filename with a counter appended
                 string newFileName = $"{fileNameWithoutExtension}({counter}){fileExtension}";
                 destinationPath = System.IO.Path.Combine(destinationFolder, newFileName);
                 counter++;
             }
-
-            System.IO.File.Copy(filenames[i], destinationPath, true);
+            System.IO.File.Copy(filenames[i], destinationPath, false);
             resultingFiles += System.IO.Path.GetFileName(destinationPath) + ",";
         }
 
