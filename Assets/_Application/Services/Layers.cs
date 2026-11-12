@@ -36,11 +36,6 @@ namespace Netherlands3D.Twin.Services
         public UnityEvent<LayerData, bool> LayerRemoved { get; } = new();
         public UnityEvent<LayerGameObject> VisualizationCreated = new();
 
-        private void Awake()
-        {
-            spawner = new VisualizationSpawner(prefabLibrary);
-        }
-
         /// <summary>
         /// Adds a new layer to the current project using the given preset.
         /// </summary>
@@ -65,7 +60,7 @@ namespace Netherlands3D.Twin.Services
             ProjectData.Current.RootLayer.AddChild(layerData, 0);
             
             var layer = new Layer(layerData);
-            Visualize(layer, spawner, callback);
+            Visualize(layer, callback);
 
             LayerAdded.Invoke(layerData);
             return layer;
@@ -124,7 +119,7 @@ namespace Netherlands3D.Twin.Services
         {
             layerData.PrefabIdentifier = prefabIdentifier;
             var layer = new Layer(layerData);
-            Visualize(layer, spawner, callback);
+            Visualize(layer, callback);
             return layer;
         }
 
@@ -150,17 +145,19 @@ namespace Netherlands3D.Twin.Services
         public Layer VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
         {
             Layer layer = new Layer(layerData);
-            Visualize(layer, spawner, callback);
+            Visualize(layer, callback);
             return layer;
         }
         
-        private async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
+        private async void Visualize(Layer layer, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
         {
             try
             {
                 Task<LayerGameObject> visualizationTask = layer.LayerGameObjectTask;
                 if (layer.LayerGameObjectTask == null)
                 {
+                    // The default project can request layer visualizations during Awake.
+                    spawner ??= new VisualizationSpawner(prefabLibrary);
                     visualizationTask = spawner.Spawn(layer.LayerData);
                     layer.SetVisualizationTask(visualizationTask);
                 }

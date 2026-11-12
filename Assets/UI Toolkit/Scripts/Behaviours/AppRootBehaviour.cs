@@ -4,22 +4,63 @@ using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using EditableNameField = Netherlands3D.UI.Components.EditableNameField;
 
 namespace Netherlands3D
 {
     [RequireComponent(typeof(UIDocument))]
     public class AppRootBehaviour : MonoBehaviour
     {
+        private const string DashboardFunctionalityClass = "app--functionality-dashboarding";
+        private const string DashboardOpenClass = "app--dashboard-open";
+
         public VisualElement Root => appRoot;
 
         private UIDocument appDocument;
         private VisualElement appRoot;
+        private Button closeDashboardButton;
+        private VisualElement previousFocus;
+        private InputAction dashboardShortcut;
 
         //the excuted order of this script should be executed very early to ensure the presence of the approot. 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
             appRoot = appDocument?.rootVisualElement;
+
+            var dashboardOverlay = appRoot?.Q("DashboardOverlay");
+            closeDashboardButton = dashboardOverlay?.Q<Button>("CloseDashboard");
+            if (closeDashboardButton == null) return;
+
+            closeDashboardButton.clicked += CloseDashboard;
+            dashboardShortcut = new InputAction("Toggle Dashboard", InputActionType.Button);
+            dashboardShortcut.AddCompositeBinding("OneModifier")
+                .With("modifier", "<Keyboard>/shift")
+                .With("binding", "<Keyboard>/f8");
+            dashboardShortcut.performed += OnDashboardShortcut;
+        }
+
+        private void OnEnable()
+        {
+            dashboardShortcut?.Enable();
+        }
+
+        private void OnDisable()
+        {
+            dashboardShortcut?.Disable();
+            CloseDashboard();
+        }
+
+        private void OnDestroy()
+        {
+            if (closeDashboardButton != null)
+                closeDashboardButton.clicked -= CloseDashboard;
+
+            if (dashboardShortcut != null)
+            {
+                dashboardShortcut.performed -= OnDashboardShortcut;
+                dashboardShortcut.Dispose();
+            }
         }
 
         private void Start()
@@ -56,7 +97,80 @@ namespace Netherlands3D
         /// </summary>
         public void DisableFunctionality(Functionality functionality)
         {
-            appRoot.RemoveFromClassList("app--functionality-" + functionality.Id);
+            var functionalityClass = "app--functionality-" + functionality.Id;
+            appRoot.RemoveFromClassList(functionalityClass);
+            if (functionalityClass == DashboardFunctionalityClass)
+                CloseDashboard();
+        }
+
+        private void OnDashboardShortcut(InputAction.CallbackContext _)
+        {
+            if (!appRoot.ClassListContains(DashboardFunctionalityClass)) return;
+
+            var focusedElement = appRoot.focusController?.focusedElement as VisualElement;
+            if (IsTextInputFieldFocused(focusedElement)) return;
+
+            if (appRoot.ClassListContains(DashboardOpenClass))
+            {
+                CloseDashboard();
+                return;
+            }
+
+            if (appRoot.Query<EditableNameField>().ToList().Exists(IsVisibleNameFieldBeingEdited)) return;
+
+            previousFocus = focusedElement;
+            appRoot.AddToClassList(DashboardOpenClass);
+            // Wait for the close button to become visible before moving focus.
+            closeDashboardButton.schedule.Execute(() =>
+            {
+                if (appRoot.ClassListContains(DashboardOpenClass))
+                    closeDashboardButton.Focus();
+            });
+        }
+
+        private static bool IsVisibleNameFieldBeingEdited(EditableNameField field)
+        {
+            // Inline name fields can stay in edit mode after losing focus while Shift is held.
+            if (!field.IsEditing || !field.visible) return false;
+
+            for (VisualElement element = field; element != null; element = element.parent)
+            {
+                if (element.resolvedStyle.display == DisplayStyle.None)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsTextInputFieldFocused(VisualElement element)
+        {
+            for (var current = element; current != null; current = current.parent)
+            {
+                for (var type = current.GetType(); type != null; type = type.BaseType)
+                {
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(TextInputBaseField<>))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void CloseDashboard()
+        {
+            if (appRoot?.ClassListContains(DashboardOpenClass) != true) return;
+
+            appRoot.RemoveFromClassList(DashboardOpenClass);
+            var elementToFocus = previousFocus;
+            previousFocus = null;
+            if (elementToFocus?.panel == null) return;
+
+            // Wait for the viewer UI to become visible again before restoring focus.
+            appRoot.schedule.Execute(() =>
+            {
+                if (!appRoot.ClassListContains(DashboardOpenClass) && elementToFocus.panel == appRoot.panel)
+                    elementToFocus.Focus();
+            });
         }
 
         public Vector2 GetPanelClickPosition()

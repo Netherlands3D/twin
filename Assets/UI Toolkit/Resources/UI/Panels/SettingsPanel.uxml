@@ -15,6 +15,12 @@
                 <ui:Label text="Optionele functionaliteiten" class="text-header"/>
                 <nl3d:ListView name="Functionalities"/>
             </ui:VisualElement>
+            <ui:VisualElement name="ExperimentalSection" class="hidden">
+                <ui:VisualElement class="settings-panel__spacer"/>
+                <ui:Label text="Experimentele functionaliteiten" class="text-header"/>
+                <nl3d:TextCallOut text="Let op! Deze functies zijn nog in ontwikkeling. De applicatie kan hierdoor vastlopen."/>
+                <nl3d:ListView name="ExperimentalFunctionalities"/>
+            </ui:VisualElement>
         </nl3d:ContentContainer>
     </nl3d:ScrollView>
 </ui:UXML>

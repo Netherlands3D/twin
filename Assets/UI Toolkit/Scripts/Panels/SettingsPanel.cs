@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Quality;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -37,13 +39,21 @@ namespace Netherlands3D.UI.Panels
         public SettingsPanel(Configuration configuration) : this()
         {
             var optionalFunctionalities = configuration.Functionalities.Where(f => f.Type == FunctionalityType.Optional).ToList();
-            var functionalitiesListView = settingsSection.Q<ListView>("Functionalities");
-            functionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            functionalitiesListView.makeItem = MakeFunctionalityItem;
-            functionalitiesListView.bindItem = (item, index) => BindFunctionalityItem(item, optionalFunctionalities[index]);
-            functionalitiesListView.itemsSource = optionalFunctionalities;
+            var experimentalFunctionalities = configuration.Functionalities.Where(f => f.Type == FunctionalityType.Experimental).ToList();
+            ConfigureFunctionalityList(settingsSection.Q<ListView>("Functionalities"), optionalFunctionalities);
+
+            if (experimentalFunctionalities.Count > 0)
+            {
+                var experimentalSection = settingsSection.Q<VisualElement>("ExperimentalSection");
+                var experimentalList = experimentalSection?.Q<ListView>("ExperimentalFunctionalities");
+                if (experimentalList != null)
+                {
+                    ConfigureFunctionalityList(experimentalList, experimentalFunctionalities);
+                    experimentalSection.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+                }
+            }
             
-            var fpvFunctionality = optionalFunctionalities.FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
+            var fpvFunctionality = optionalFunctionalities.Concat(experimentalFunctionalities).FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
             if (fpvFunctionality != null)
             {
                 var fpvSection = new FPVSettingsPanel(fpvFunctionality);
@@ -51,6 +61,14 @@ namespace Netherlands3D.UI.Panels
             }
         }
         
+        private void ConfigureFunctionalityList(ListView listView, List<Functionality> functionalities)
+        {
+            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            listView.makeItem = MakeFunctionalityItem;
+            listView.bindItem = (item, index) => BindFunctionalityItem(item, functionalities[index]);
+            listView.itemsSource = functionalities;
+        }
+
         private VisualElement MakeFunctionalityItem()
         {
             var toggle = new CheckboxToggle();

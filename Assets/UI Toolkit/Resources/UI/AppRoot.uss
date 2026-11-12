@@ -10,3 +10,32 @@
     top: 50%;
     left: 50%;
 }
+
+.dashboard-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.app--dashboard-open .dashboard-overlay {
+    display: flex;
+}
+
+.app--dashboard-open .app__viewer-ui {
+    display: none;
+}
+
+.dashboard-overlay__panel {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-4);
+}
+
+.dashboard-overlay__panel > .text-header {
+    margin-bottom: var(--spacing-4);
+}
