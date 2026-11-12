@@ -22,13 +22,8 @@ namespace Netherlands3D.Functionalities.AssetBundles
 
     //step 6, for any change in any prefab within an assetbundle you need to rebuild the assetbundles
 
-    public class AssetBundleLoader : MonoBehaviour
+    public class AssetBundleService : MonoBehaviour
     {
-        private const string GroupName = "ObjectenBibliotheek";
-
-        public string bundleName;
-        public string prefabName;
-
         public UnityEvent OnAssetsLoaded;
 
         public void LoadAssetFromAssetBundle(string bundleName, string fileName, Action<GameObject> onAssetLoaded)
@@ -55,7 +50,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 bundle.Unload(false);
                 break;
             }
-            OnAssetsLoaded.Invoke();
         }
 
         private void FixShaders(GameObject asset)
@@ -121,6 +115,115 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 Debug.LogError("File does not exist at path: " + path);
             }
 #endif
+        }
+        
+        public void InstantiatePrefab(
+            string bundleName,
+            string prefabName,
+            Transform parent,
+            Action<GameObject> onInstantiated)
+        {
+            StartCoroutine(InstantiatePrefabRoutine(
+                bundleName,
+                prefabName,
+                parent,
+                onInstantiated
+            ));
+        }
+
+        private IEnumerator InstantiatePrefabRoutine(
+            string bundleName,
+            string prefabName,
+            Transform parent,
+            Action<GameObject> onInstantiated)
+        {
+            string path = Path.Combine(
+                Application.streamingAssetsPath,
+                bundleName
+            );
+
+            AssetBundle bundle = null;
+
+            yield return GetAssetBundle(path, loadedBundle =>
+            {
+                bundle = loadedBundle;
+            });
+
+            if (bundle == null)
+            {
+                Debug.LogError($"Failed to load AssetBundle: {bundleName}");
+                onInstantiated?.Invoke(null);
+                OnAssetsLoaded?.Invoke();
+                yield break;
+            }
+
+            GameObject instance = null;
+
+            try
+            {
+                string[] assetNames = bundle.GetAllAssetNames();
+
+                string targetName = Path.GetFileNameWithoutExtension(
+                    prefabName
+                );
+
+                foreach (string assetName in assetNames)
+                {
+                    string assetFileName = Path.GetFileNameWithoutExtension(
+                        assetName
+                    );
+
+                    if (!string.Equals(
+                        assetFileName,
+                        targetName,
+                        StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    GameObject prefab = bundle.LoadAsset<GameObject>(assetName);
+
+                    if (prefab == null)
+                    {
+                        Debug.LogError($"Could not load prefab: {prefabName}");
+                        break;
+                    }
+
+                    instance = Instantiate(prefab, parent, false);
+                    break;
+                }
+
+                if (instance == null)
+                {
+                    Debug.LogError(
+                        $"Prefab '{prefabName}' not found in bundle '{bundleName}'"
+                    );
+                }
+            }
+            finally
+            {
+                // Release the bundle container, but preserve loaded assets.
+                bundle.Unload(false);
+            }
+
+            onInstantiated?.Invoke(instance);
+            OnAssetsLoaded?.Invoke();
+        }
+        
+        public (string bundleName, string prefabName) ParseAssetBundleUri(Uri uri)
+        {
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+
+            if (uri.Scheme != "streamingassets")
+                throw new ArgumentException("Not a StreamingAssets URI.", nameof(uri));
+
+            string[] segments = uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            if (segments.Length != 2)
+                throw new FormatException($"Invalid AssetBundle URI: {uri}");
+
+            string bundleName = Uri.UnescapeDataString(segments[0]);
+            string prefabName = Uri.UnescapeDataString(segments[1]);
+
+            return (bundleName, prefabName);
         }
     }
 }

@@ -15,5 +15,6 @@ MonoBehaviour:
   id: objects-amsterdam-zuidoost
   title: Ontwikkeling Zuidoost
   description: 
+  url: 
   bundleName: zuidoostbundle
-  prefabName: Ontwikkeling Zuidoost.prefab
+  prefabName: zuidoostprefab.prefab

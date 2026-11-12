@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
-UnityVersion: 6000.0.44f1
-CRC: 3782715857
+UnityVersion: 6000.3.28f1
+CRC: 3641809029
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d3ad1a1576091512c5ea6ec8579ee550
+    Hash: d70fc15deb0a314af091fced520fe3fd
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 5e1ca3cb347737d51fc3f424debac804
+    Hash: 2e3d30ebc32e8e0e8146effdaf0930d6
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b0eab926fb877ccd8c541b2be2111300
+    Hash: ae4a950336428340f38cca95d50fb259
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -30,26 +30,14 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 1d5e400e5b4826d40b5e6a971c8ea425, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 725deca56fed1b24da6faceaf7e8828a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d6401780aae41881f9befb67adcd53b0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c12702bc992978b43b2e53562d173b5c, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
-- AssemblyName: UnityEngine.CoreModule
-  ClassName: UnityEngine.Events.PersistentCallGroup
-- AssemblyName: UnityEngine.CoreModule
-  ClassName: UnityEngine.Events.UnityEvent
-- AssemblyName: UnityEngine.CoreModule
-  ClassName: UnityEngine.Events.UnityEvent`1
-- AssemblyName: UnityEngine.CoreModule
-  ClassName: UnityEngine.Events.UnityEvent`2
-- AssemblyName: eu.netherlands3d.coordinates.Runtime
-  ClassName: Netherlands3D.Coordinates.Coordinate
 - AssemblyName: eu.netherlands3d.coordinates.Runtime
   ClassName: Netherlands3D.Coordinates.CoordinateSystem
 Assets:
@@ -59,7 +47,6 @@ Assets:
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_CF.001.mat
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_6.mat
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_2.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Ontwikkeling Zuidoost.prefab
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_0.jpg
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_16.mat
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_19.jpg
@@ -74,6 +61,7 @@ Assets:
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_15.jpg
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_18.jpg
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/RubyGardens.001.mat
+- Assets/_Functionalities/AssetBundles/AssetBundleAssets/zuidoostprefab.prefab
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_13.jpg
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/04_-_Default.001.mat
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_A1.001.mat
