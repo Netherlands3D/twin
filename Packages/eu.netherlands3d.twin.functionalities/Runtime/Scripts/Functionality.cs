@@ -6,6 +6,14 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {
+    public enum FunctionalityType
+    {
+        Optional = 0, // Existing assets without a type are optional.
+        Experimental,
+        Hidden,
+        Unsaved
+    }
+
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality/Generic", fileName = "Functionality", order = 0)]
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
@@ -30,12 +38,20 @@ namespace Netherlands3D.Twin.Functionalities
 
         public void ResetDataToDefaults()
         {
-            Data = CreateDefaultData();
+            var data = CreateDefaultData();
+            if (Type == FunctionalityType.Hidden)
+                data.IsEnabled = IsEnabled;
+
+            Data = data;
         }
 
         private FunctionalityData CreateDefaultData()
         {
-            return defaultData.CreateCopy();
+            var data = defaultData.CreateCopy();
+            if (Type == FunctionalityType.Hidden)
+                data.IsEnabled = false;
+
+            return data;
         }
 
         [Tooltip("Functionality button title")]
@@ -49,6 +65,7 @@ namespace Netherlands3D.Twin.Functionalities
 
         [TextArea(5, 10)] public string Description;
         public ScriptableObject configuration;
+        public FunctionalityType Type = FunctionalityType.Optional;
 
         public string Id => defaultData.Id;
 

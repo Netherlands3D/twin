@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Quality;
+using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -22,7 +24,6 @@ namespace Netherlands3D.UI.Panels
         public override string Title => "Instellingen";
         private ContentContainer settingsSection;
         private RadioButtonGroup qualityRadioButtonGroup;
-        private ListView functionalitiesListView;
         
         public SettingsPanel()
         {
@@ -37,13 +38,22 @@ namespace Netherlands3D.UI.Panels
 
         public SettingsPanel(Configuration configuration) : this()
         {
-            functionalitiesListView = settingsSection.Q<ListView>("Functionalities");
-            functionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            functionalitiesListView.makeItem = MakeFunctionalityItem;
-            functionalitiesListView.bindItem = BindFunctionalityItem;
-            functionalitiesListView.itemsSource = configuration.Functionalities;
+            var optionalFunctionalities = configuration.Functionalities.Where(f => f.Type == FunctionalityType.Optional).ToList();
+            var experimentalFunctionalities = configuration.Functionalities.Where(f => f.Type == FunctionalityType.Experimental).ToList();
+            ConfigureFunctionalityList(settingsSection.Q<ListView>("Functionalities"), optionalFunctionalities);
+
+            if (experimentalFunctionalities.Count > 0)
+            {
+                var experimentalSection = settingsSection.Q<VisualElement>("ExperimentalSection");
+                var experimentalList = experimentalSection?.Q<ListView>("ExperimentalFunctionalities");
+                if (experimentalList != null)
+                {
+                    ConfigureFunctionalityList(experimentalList, experimentalFunctionalities);
+                    experimentalSection.RemoveFromClassList(UtilityClassConstants.HIDDEN);
+                }
+            }
             
-            var fpvFunctionality = configuration.Functionalities.FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
+            var fpvFunctionality = optionalFunctionalities.Concat(experimentalFunctionalities).FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
             if (fpvFunctionality != null)
             {
                 var fpvSection = new FPVSettingsPanel(fpvFunctionality);
@@ -51,27 +61,36 @@ namespace Netherlands3D.UI.Panels
             }
         }
         
+        private void ConfigureFunctionalityList(ListView listView, List<Functionality> functionalities)
+        {
+            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            listView.makeItem = MakeFunctionalityItem;
+            listView.bindItem = (item, index) => BindFunctionalityItem(item, functionalities[index]);
+            listView.itemsSource = functionalities;
+        }
+
         private VisualElement MakeFunctionalityItem()
         {
             var toggle = new CheckboxToggle();
-            var listViewItem = new ListViewItem(toggle);
-            return listViewItem;
+            // ListView reuses items, so register the callback once and update the functionality when binding.
+            toggle.RegisterValueChangedCallback(evt =>
+            {
+                if (toggle.userData is not Functionality functionality) return;
+
+                functionality.IsEnabled = evt.newValue;
+                App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
+            });
+            return new ListViewItem(toggle);
         }
 
-        private void BindFunctionalityItem(VisualElement item, int index)
+        private void BindFunctionalityItem(VisualElement item, Functionality functionality)
         {
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<CheckboxToggle>() is not CheckboxToggle toggle) return;
 
-            Functionality functionality = functionalitiesListView.itemsSource[index] as Functionality;
+            toggle.userData = functionality;
             toggle.LabelText = functionality.Title;
             toggle.SetValueWithoutNotify(functionality.IsEnabled);
-
-            toggle.RegisterValueChangedCallback(evt =>
-            { 
-                functionality.IsEnabled = evt.newValue;
-                App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
-            });
         }
 
         private void OnQualitySettingsChanged(ChangeEvent<int> evt)

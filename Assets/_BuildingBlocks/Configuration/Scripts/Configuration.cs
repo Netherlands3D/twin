@@ -290,15 +290,20 @@ namespace Netherlands3D.Twin.Configuration
         {
             foreach (var functionality in Functionalities)
             {
-                functionality.ResetDataToDefaults();
+                if (functionality.Type != FunctionalityType.Unsaved)
+                    functionality.ResetDataToDefaults();
             }
             
             foreach (var savedData in changedData.functionalities)
             {
                 var savedId = savedData.Id;
-                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.Data.Id == savedId);
+                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.Type != FunctionalityType.Unsaved && f.Data.Id == savedId);
                 if (matchingFunctionality != null)
                 {
+                    // Keep the activation state from the application or the current session when loading project data.
+                    if (matchingFunctionality.Type == FunctionalityType.Hidden)
+                        savedData.IsEnabled = matchingFunctionality.IsEnabled;
+
                     matchingFunctionality.Data = savedData;
                     matchingFunctionality.IsEnabled = savedData.IsEnabled;
                 }
@@ -311,6 +316,13 @@ namespace Netherlands3D.Twin.Configuration
         {
             foreach (var functionality in Functionalities)
             {
+                if (functionality.Type == FunctionalityType.Unsaved)
+                {
+                    // Older project files may still contain data for this functionality.
+                    ProjectData.Current.functionalities.RemoveAll(data => data.Id == functionality.Id);
+                    continue;
+                }
+
                 ProjectData.Current.AddFunctionality(functionality.Data);
             }
         }
