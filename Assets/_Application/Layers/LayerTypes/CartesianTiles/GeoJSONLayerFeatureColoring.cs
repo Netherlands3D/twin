@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.layers.properties
     [RequireComponent(typeof(GeoJsonLayerGameObject))]
     public class GeoJSONLayerFeatureColoring : MonoBehaviour, IVisualizationWithPropertyData
     {
-        private List<IGeoJsonGeometryTypeVisualizer> layers = new List<IGeoJsonGeometryTypeVisualizer>();
+        private IGeoJsonGeometryTypeVisualizer[] layers => visualization.VisualisationLayers;
         private GeoJsonLayerGameObject visualization;
         
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -35,8 +35,6 @@ namespace Netherlands3D.Twin.layers.properties
             visualization.OnFeatureAdd.AddListener(UpdateStyling);
             visualization.OnFeatureRemove.AddListener(UpdateStyling);
             
-            layers.Clear();
-            layers.AddRange(visualization.VisualisationLayers);
             foreach (var layer in layers)
                 layer.RenderColor = visualization.LayerData.Color;
         }
@@ -44,7 +42,7 @@ namespace Netherlands3D.Twin.layers.properties
         private void UpdateStyling(Feature feature)
         {
             IGeoJsonGeometryTypeVisualizer layer = null;
-            for (int i = 0; i < layers.Count; i++)
+            for (int i = 0; i < layers.Length; i++)
             {
                 if (layers[i].SupportsGeometryType(feature))
                 {
@@ -76,28 +74,29 @@ namespace Netherlands3D.Twin.layers.properties
         
         public void OnApplyStyling()
         {
-            foreach (var (_, feature) in visualization.LayerFeatures)
+            foreach (var (_, stylingFeature) in visualization.LayerFeatures)
             {
+                visualization.ApplyStylingToFeature(stylingFeature);
                 //do cascading to get css result styling
-                Symbolizer symbolizer = visualization.GetStyling(feature);
-
-                if (feature.Geometry is Material material)
-                {
-                    Color? color = symbolizer.GetFillColor();
-                    if (color.HasValue)
-                    {
-                        if (int.TryParse(feature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
-                        {
-                            layers[materialIndex].RenderColor = color.Value;
-                        }
-                    }
-                }
+                // Symbolizer symbolizer = visualization.GetStyling(feature);
+                //
+                // if (feature.Geometry is Material material)
+                // {
+                //     Color? color = symbolizer.GetFillColor();
+                //     if (color.HasValue)
+                //     {
+                //         if (int.TryParse(feature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
+                //         {
+                //             layers[materialIndex].RenderColor = color.Value;
+                //         }
+                //     }
+                // }
             }
         }
         
         private int GetRenderLayerIndex(Material material)
         {
-            for(int i = 0; i < layers.Count; i++)
+            for(int i = 0; i < layers.Length; i++)
                 if(layers[i].RenderMaterial == material)
                     return i;
             
@@ -106,7 +105,7 @@ namespace Netherlands3D.Twin.layers.properties
 
         private string GetRenderLayerName(Material material)
         {
-            for(int i = 0; i < layers.Count; i++)
+            for(int i = 0; i < layers.Length; i++)
                 if(layers[i].RenderMaterial == material)
                 {
                     return layers[i].DisplayName;

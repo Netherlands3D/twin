@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Netherlands3D.Timeline
     [RequireComponent(typeof(GeoJsonLayerGameObject))]
     public class TimelineGeoJson : TimelineObject
     {
-        protected override string TIMELINE_ATTRIBUTE_NAME => "timestamps";
+        protected override string timelineAttributeName => "timestamps";
         GeoJsonLayerGameObject geoJson => visualization as GeoJsonLayerGameObject;
 
         protected override void OnEnable()
@@ -33,22 +34,22 @@ namespace Netherlands3D.Timeline
             Dictionary<string, Color> newStates = new Dictionary<string, Color>();
             // foreach (var feature in geoJson.Features)
             // {
-                if (feature.Properties.TryGetValue(TIMELINE_ATTRIBUTE_NAME, out var attribute))
+            if (feature.Properties.TryGetValue(timelineAttributeName, out var attribute))
+            {
+                InitTimelineStylingProperty();
+                geoJson.AddStylingFeatureForGeoJsonFeature(feature);
+                // stylingFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, null);
+
+                var collection = new TimestampCollection(attribute.ToString()); //todo make overload to accept json array directly
+                timelineStatusStylingLayerPropertyData.AddTimestampCollection(feature, collection);
+
+                foreach (var timestamp in collection.Timestamps)
                 {
-                    InitTimelineStylingProperty();
-                    geoJson.AddStylingFeatureForGeoJsonFeature(feature);
-                    // stylingFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, null);
-
-                    var collection = new TimestampCollection(attribute.ToString()); //todo make overload to accept json array directly
-                    timelineStatusStylingLayerPropertyData.AddTimestampCollection(feature, collection);
-
-                    foreach (var timestamp in collection.Timestamps)
-                    {
-                        newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
-                    }
-
-                    SetFeatureAttributeForTime(ProjectData.Current.CurrentDateTime, feature, collection);
+                    newStates.TryAdd(timestamp.value, visualization.LayerData.Color);
                 }
+
+                SetFeatureAttributeForTime(ProjectData.Current.CurrentDateTime, feature, collection);
+            }
             // }
 
             if (timelineStatusStylingLayerPropertyData == null)
@@ -64,7 +65,19 @@ namespace Netherlands3D.Timeline
         protected override void SetFeatureAttribute(object feature, Timestamp currentTimestampForFeature)
         {
             var geoJsonFeature = (Feature)feature;
-            throw new NotImplementedException();
+
+            var layerFeature = visualization.LayerFeatures[geoJsonFeature];
+            var status = currentTimestampForFeature?.value;
+
+            if (layerFeature.Attributes.TryGetValue(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, out var savedStatus))
+                if (savedStatus == status)
+                    return;
+
+            layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
+            
+            visualization.ApplyStyling();
+            // visualization.ApplyStylingToFeature(layerFeature);
+            
         }
 
         private void OnRemoveFeature(Feature feature)

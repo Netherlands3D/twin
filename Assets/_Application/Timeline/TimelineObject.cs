@@ -9,7 +9,7 @@ namespace Netherlands3D.Timeline
 {
     public abstract class TimelineObject : MonoBehaviour
     {
-        protected abstract string TIMELINE_ATTRIBUTE_NAME { get; }
+        protected abstract string timelineAttributeName { get; }
 
         protected LayerGameObject visualization;
         // private CityJSONLayerGameObject visualization;

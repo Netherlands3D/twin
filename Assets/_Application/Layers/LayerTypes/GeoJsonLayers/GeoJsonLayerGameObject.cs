@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
@@ -30,6 +31,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     else
                         box.Encapsulate(layer.GetBoundingBoxOfVisibleFeatures());
                 }
+
                 return box;
             }
         }
@@ -38,14 +40,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public UnityEvent<Feature> OnFeatureRemove = new();
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
-        
+
         public IGeoJsonGeometryTypeVisualizer[] VisualisationLayers => visualisationLayers;
 
         private IGeoJsonGeometryTypeVisualizer[] visualisationLayers;
-        
+
         private ICredentialHandler credentialHandler;
         private bool startLoadingDataWhenLayerBecomesActive = false;
-        
+
+        public List<Feature> Features = new List<Feature>();
+
         protected override void OnVisualizationInitialize()
         {
             credentialHandler = GetComponent<ICredentialHandler>();
@@ -136,7 +140,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             base.RegisterEventListeners();
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
             parser.OnParseError.AddListener(VisualisationError.Invoke);
-            
+
             credentialHandler?.OnAuthorizationHandled.AddListener(HandleCredentials);
 
             foreach (var layer in visualisationLayers)
@@ -150,9 +154,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             base.UnregisterEventListeners();
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
             parser.OnParseError.RemoveListener(VisualisationError.Invoke);
-            
+
             credentialHandler?.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            
+
             foreach (var layer in visualisationLayers)
             {
                 layer.FeatureRemoved -= OnFeatureRemoved;
@@ -162,14 +166,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void AddFeatureVisualisation(Feature feature)
         {
             var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
-            
+
             foreach (var layer in visualisationLayers)
             {
-                if(layer.SupportsGeometryType(feature))
+                if (layer.SupportsGeometryType(feature))
                     layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
             }
-            
+
             CreateFeatureMappingsForFeature(feature);
+            Features.Add(feature);
             OnFeatureAdd.Invoke(feature);
         }
 
@@ -189,8 +194,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     SelectionService.MappingTree.Remove(mapping);
                 }
             }
+
+            Features.Remove(feature);
         }
-        
+
         /// <summary>
         /// Removes features based on the bounds of their visualisations
         /// </summary>
@@ -231,6 +238,63 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void RemoveStylingFeatureForGeoJsonFeature(Feature feature)
         {
             LayerFeatures.Remove(feature);
+        }
+
+        public override void ApplyStyling()
+        {
+            foreach (var (_, stylingFeature) in LayerFeatures)
+            {
+                ApplyStylingToFeature(stylingFeature);
+            }
+        }
+
+        public override void ApplyStylingToFeature(StylingFeature stylingFeature)
+        {
+            if (stylingFeature.Geometry is Material material)
+            {
+                Symbolizer symbolizer = GetStyling(stylingFeature);
+                Color? color = symbolizer.GetFillColor();
+                if (color.HasValue)
+                {
+                    if (int.TryParse(stylingFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
+                    {
+                        VisualisationLayers[materialIndex].RenderColor = color.Value;
+                        Debug.Log("Setting global render color for material index: "+ materialIndex +"\t"+  color.Value);
+                    }
+                }
+            }
+            
+            if(stylingFeature.Geometry is not Feature geoJsonFeature)
+                return;
+            
+            foreach (var typeVisualizer in VisualisationLayers)
+            {
+                if (!typeVisualizer.SupportsGeometryType(geoJsonFeature))
+                    continue;
+
+                var symbolizer = GetStyling(stylingFeature);
+
+                var isVisibleStyling = symbolizer.GetVisibility();
+                var isVisible = isVisibleStyling.HasValue ? isVisibleStyling.Value : true;
+
+                typeVisualizer.SetColorForFeature(geoJsonFeature, Color.clear);
+                // visualizer.gameObject.SetActive(isVisible);
+                if (!isVisible)
+                    return;
+
+                if (typeVisualizer.StylingColorProperty == Symbolizer.FillColorProperty)
+                {
+                    var fillColor = symbolizer.GetFillColor();
+                    if(fillColor.HasValue)
+                        typeVisualizer.SetColorForFeature(geoJsonFeature, fillColor.Value);
+                }
+                else if (typeVisualizer.StylingColorProperty == Symbolizer.StrokeColorProperty)
+                {
+                    var strokeColor = symbolizer.GetStrokeColor();
+                    if(strokeColor.HasValue)
+                        typeVisualizer.SetColorForFeature(geoJsonFeature, strokeColor.Value);
+                }
+            }
         }
     }
 }
