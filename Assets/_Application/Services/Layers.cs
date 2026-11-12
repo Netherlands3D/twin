@@ -135,10 +135,13 @@ namespace Netherlands3D.Twin.Services
             return layer;
         }
 
-        public void Copy(LayerData layerData)
+        public LayerData Copy(LayerData source)
         {
-            var copy = layerData.Clone();
+            var copy = source.Clone();
             Add(copy);
+            copy.Name = $"kopie van {source.Name}";
+            copy.SetParent(source.ParentLayer, source.SiblingIndex);
+            return copy;
         }
 
         /// <summary>
