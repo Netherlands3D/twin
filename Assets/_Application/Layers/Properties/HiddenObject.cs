@@ -140,7 +140,7 @@ namespace Netherlands3D.Twin.layers.properties
         }
 
         //todo check if this method probably needs a refactor since the between step of a layerfeature is not needed to store hiddenobject data
-        public static LayerFeature GetLayerFeatureFromBagId(string bagId)
+        public static StylingFeature GetLayerFeatureFromBagId(string bagId)
         {
             CartesianTileLayerGameObject[] cartesianTileLayerGameObjects = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None);
             foreach(CartesianTileLayerGameObject cartesian in cartesianTileLayerGameObjects)
@@ -162,7 +162,7 @@ namespace Netherlands3D.Twin.layers.properties
             return null;
         }
         
-        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             if(feature.Geometry is ObjectMappingItem item)
             {

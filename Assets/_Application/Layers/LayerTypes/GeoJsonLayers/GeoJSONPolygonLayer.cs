@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : MonoBehaviour, IGeoJsonVisualisationLayer
+    public partial class GeoJSONPolygonLayer : MonoBehaviour, IGeoJsonGeometryTypeVisualizer
     {
         private GeoJsonLayerGameObject parentLayerVisualization;
         
@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             get => transform;
         }
 
-        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
+        public event IGeoJsonGeometryTypeVisualizer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();
 
@@ -58,7 +58,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     visualisation.SetMaterial(polygonVisualizationMaterialInstance);
             }
         }
-        
+
+        public void SetColorForFeature(Feature feature, Color color)
+        {
+            var pv = spawnedVisualisations[feature];
+            foreach (var polygon in pv.Data)
+            {
+                polygon.VisualisationMaterial.color = color;
+            }
+        }
+
         public Material RenderMaterial
         {
             get
@@ -222,7 +231,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// Copy the feature attributes onto the layer feature so that the styling system can
         /// use that as input to pick the correct style.
         /// </summary>
-        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             // it should be a FeaturePolygonVisualisations, just do a sanity check here
             if (feature.Geometry is not FeaturePolygonVisualisations visualisations) return feature;

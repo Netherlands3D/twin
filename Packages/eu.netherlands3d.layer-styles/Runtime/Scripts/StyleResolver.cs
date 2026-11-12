@@ -6,7 +6,7 @@ using Netherlands3D.Twin.Layers.Properties;
 namespace Netherlands3D.LayerStyles
 {
     /// <summary>
-    /// Resolves and applies styling rules (selectors → symbolizers) for a given <see cref="LayerFeature"/>,
+    /// Resolves and applies styling rules (selectors → symbolizers) for a given <see cref="StylingFeature"/>,
     /// merging all matching <see cref="LayerStyle"/> rules much like a CSS style resolver.
     /// </summary>
     public class StyleResolver
@@ -35,7 +35,7 @@ namespace Netherlands3D.LayerStyles
         /// <returns>
         /// A <see cref="Symbolizer"/> representing the combined styling of all matching rules.
         /// </returns>
-        public Symbolizer GetStyling(LayerFeature feature, IEnumerable<StylingPropertyData> styles)
+        public Symbolizer GetStyling(StylingFeature feature, IEnumerable<StylingPropertyData> styles)
         {
             var symbolizer = new Symbolizer();
             var context = new ExpressionContext(feature);

@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonVisualisationLayer
+    public partial class GeoJSONLineLayer : MonoBehaviour, IGeoJsonGeometryTypeVisualizer
     {
         public string DisplayName => "Lijnen";
         public string StylingColorProperty => Symbolizer.StrokeColorProperty;
@@ -25,9 +25,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public int FeatureCount => spawnedVisualisations.Count;
         public Transform Transform => transform;
 
-        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
+        public event IGeoJsonGeometryTypeVisualizer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
+        public Dictionary<Feature, FeatureLineVisualisations> SpawnedVisualisations => spawnedVisualisations;
         private List<List<Coordinate>> visualisationsToRemove = new();
         private List<List<Coordinate>> selectionList = new();
         
@@ -60,6 +61,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
         
         public Material RenderMaterial => LineRenderer3D.LineMaterial;
+
+        public void SetColorForFeature(Feature feature, Color color)
+        {
+            var data = spawnedVisualisations[feature];
+            foreach (var pointList in data.Data)
+            {
+                LineRenderer3D.SetColor(pointList, color);
+            }
+        }
         
         public List<Mesh> GetMeshData(Feature feature)
         {

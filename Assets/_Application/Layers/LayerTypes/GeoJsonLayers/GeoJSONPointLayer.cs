@@ -14,7 +14,7 @@ using UnityEngine.Rendering.Universal;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonVisualisationLayer
+    public partial class GeoJSONPointLayer : MonoBehaviour, IGeoJsonGeometryTypeVisualizer
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Transform Transform => transform;
 
-        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
+        public event IGeoJsonGeometryTypeVisualizer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         
@@ -54,6 +54,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
+        public void SetColorForFeature(Feature feature, Color color)
+        {
+            var data = spawnedVisualisations[feature];
+            foreach (var pointList in data.Data)
+            {
+                PointRenderer3D.SetColor(pointList, color);
+            }
+        }
+        
         public Material RenderMaterial => PointRenderer3D.PointMaterial;
 
         public List<Mesh> GetMeshData(Feature feature)

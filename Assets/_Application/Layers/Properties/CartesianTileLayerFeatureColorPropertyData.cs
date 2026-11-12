@@ -23,12 +23,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             public Color color;
         }
         
-        public void SetColor(LayerFeature layerFeature, Color color, string colorPropertyType)
+        public void SetColor(StylingFeature stylingFeature, Color color, string colorPropertyType)
         {
-            if (layerFeature.Geometry is not Material mat) return;
+            if (stylingFeature.Geometry is not Material mat) return;
             
-            int.TryParse(layerFeature.Attributes[MaterialIndexKey], out int materialIndexIdentifier);
-            layerFeature.Attributes.TryGetValue(MaterialNameIdentifier, out string materialName);
+            int.TryParse(stylingFeature.Attributes[MaterialIndexKey], out int materialIndexIdentifier);
+            stylingFeature.Attributes.TryGetValue(MaterialNameIdentifier, out string materialName);
 
             SetColorByMaterialIndex(materialIndexIdentifier, materialName, color, colorPropertyType);
         }
@@ -73,11 +73,11 @@ namespace Netherlands3D.Twin.Layers.Properties
             SetStylingRules(stylingRuleKeys);
         }
         
-        public Color? GetColor(LayerFeature layerFeature, string colorPropertyType)
+        public Color? GetColor(StylingFeature stylingFeature, string colorPropertyType)
         {
-            if (layerFeature.Geometry is not Material mat) return null;
+            if (stylingFeature.Geometry is not Material mat) return null;
 
-            int.TryParse(layerFeature.GetAttribute(MaterialIndexKey), out int materialIndexIdentifier);
+            int.TryParse(stylingFeature.GetAttribute(MaterialIndexKey), out int materialIndexIdentifier);
             var stylingRuleKey = ColorizationStyleRuleKey(materialIndexIdentifier);
             if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
             {

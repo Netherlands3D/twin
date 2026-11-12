@@ -32,6 +32,12 @@ namespace Netherlands3D.Twin.Rendering
             Array.Fill(Colors, color);
             MaterialPropertyBlock.SetVectorArray("_SegmentColors", Colors);
         }
+        
+        public void SetColorForRange(Color color, int startIndex, int count)
+        {
+            Array.Fill(Colors, color, startIndex, count);
+            MaterialPropertyBlock.SetVectorArray("_SegmentColors", Colors);
+        }
     }
 
     public abstract class BatchedMeshInstanceRenderer : MonoBehaviour
@@ -369,6 +375,36 @@ namespace Netherlands3D.Twin.Rendering
             }
 
             UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
+        }
+        
+        public void SetColor(List<Coordinate> collection, Color color)
+        {
+            int index = positionCollections.IndexOf(collection);
+            SetCollectionColor(index, color);
+        }
+        
+        public virtual void SetCollectionColor(int collectionIndex, Color color)
+        {
+            UpdateColorBuffers();
+
+            var startIndex = GetFlattenedStartIndex(collectionIndex);
+            var count = positionCollections[collectionIndex].Count;
+            SetInstanceColorRange(pointBatchColors, startIndex, count, color);
+        }
+       
+        protected void SetInstanceColorRange(List<BatchColor> batchColors, int flattenedStart, int count, Color color)
+        {
+            var (batchIndex, matrixIndex) = GetMatrixIndices(flattenedStart);
+
+            while (count > 0 && batchIndex < batchColors.Count)
+            {
+                int rangeCount = Mathf.Min(count, 1023 - matrixIndex);
+                batchColors[batchIndex].SetColorForRange(color, matrixIndex, rangeCount);
+
+                count -= rangeCount;
+                batchIndex++;
+                matrixIndex = 0;
+            }
         }
     }
 }

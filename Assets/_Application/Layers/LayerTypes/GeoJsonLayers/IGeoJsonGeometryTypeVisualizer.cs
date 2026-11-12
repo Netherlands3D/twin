@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
-    public interface IGeoJsonVisualisationLayer
+    public interface IGeoJsonGeometryTypeVisualizer
     {
         public string DisplayName { get; }
         public string StylingColorProperty { get; }
@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         int FeatureCount { get; }
         Transform Transform { get; }
         Color RenderColor { get; set; }
+        void SetColorForFeature(Feature feature, Color color);
         Material RenderMaterial { get; }
         List<Mesh> GetMeshData(Feature feature);
         void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color);
