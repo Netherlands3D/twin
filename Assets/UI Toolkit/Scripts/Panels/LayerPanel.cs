@@ -310,12 +310,6 @@ namespace Netherlands3D.UI.Panels
             
         }
 
-        private static void HasSelectedParent()
-        {
-            
-        }
-        
-
         private void OnDeleteButtonClicked(ClickEvent evt)
         {
             DeleteSelectedLayers();
