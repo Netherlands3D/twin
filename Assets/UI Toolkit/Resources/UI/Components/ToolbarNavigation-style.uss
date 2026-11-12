@@ -19,3 +19,11 @@
 .app--functionality-first-person-viewer .toolbar-navigation__button.toolbar-navigation__fpv {
     display: flex;
 }
+
+.toolbar-navigation__button.toolbar-navigation__dashboard {
+    display: none;
+}
+
+.app--functionality-dashboarding .toolbar-navigation__button.toolbar-navigation__dashboard {
+    display: flex;
+}

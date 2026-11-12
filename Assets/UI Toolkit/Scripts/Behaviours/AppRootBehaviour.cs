@@ -20,6 +20,7 @@ namespace Netherlands3D
         private VisualElement appRoot;
         private Button closeDashboardButton;
         private VisualElement previousFocus;
+        private Functionality dashboardFunctionality;
         private InputAction dashboardShortcut;
 
         //the excuted order of this script should be executed very early to ensure the presence of the approot. 
@@ -33,7 +34,7 @@ namespace Netherlands3D
             if (closeDashboardButton == null) return;
 
             closeDashboardButton.clicked += CloseDashboard;
-            dashboardShortcut = new InputAction("Toggle Dashboard", InputActionType.Button);
+            dashboardShortcut = new InputAction("Toggle Dashboard Functionality", InputActionType.Button);
             dashboardShortcut.AddCompositeBinding("OneModifier")
                 .With("modifier", "<Keyboard>/shift")
                 .With("binding", "<Keyboard>/f8");
@@ -88,7 +89,10 @@ namespace Netherlands3D
         /// </summary>
         public void EnableFunctionality(Functionality functionality)
         {
-            appRoot.AddToClassList("app--functionality-" + functionality.Id);
+            var functionalityClass = "app--functionality-" + functionality.Id;
+            appRoot.AddToClassList(functionalityClass);
+            if (functionalityClass == DashboardFunctionalityClass)
+                dashboardFunctionality = functionality;
         }
 
         /// <summary>
@@ -100,25 +104,30 @@ namespace Netherlands3D
             var functionalityClass = "app--functionality-" + functionality.Id;
             appRoot.RemoveFromClassList(functionalityClass);
             if (functionalityClass == DashboardFunctionalityClass)
+            {
+                dashboardFunctionality = functionality;
                 CloseDashboard();
+            }
         }
 
         private void OnDashboardShortcut(InputAction.CallbackContext _)
         {
-            if (!appRoot.ClassListContains(DashboardFunctionalityClass)) return;
+            if (dashboardFunctionality == null) return;
 
             var focusedElement = appRoot.focusController?.focusedElement as VisualElement;
             if (IsTextInputFieldFocused(focusedElement)) return;
 
-            if (appRoot.ClassListContains(DashboardOpenClass))
-            {
-                CloseDashboard();
-                return;
-            }
-
             if (appRoot.Query<EditableNameField>().ToList().Exists(IsVisibleNameFieldBeingEdited)) return;
 
-            previousFocus = focusedElement;
+            dashboardFunctionality.IsEnabled = !dashboardFunctionality.IsEnabled;
+        }
+
+        internal void OpenDashboard(VisualElement focusOnClose)
+        {
+            if (closeDashboardButton == null || !isActiveAndEnabled) return;
+            if (!appRoot.ClassListContains(DashboardFunctionalityClass) || appRoot.ClassListContains(DashboardOpenClass)) return;
+
+            previousFocus = focusOnClose;
             appRoot.AddToClassList(DashboardOpenClass);
             // Wait for the close button to become visible before moving focus.
             closeDashboardButton.schedule.Execute(() =>

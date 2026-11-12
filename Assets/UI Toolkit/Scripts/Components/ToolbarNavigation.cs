@@ -1,5 +1,6 @@
 using System;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
@@ -30,6 +31,10 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
             North.RegisterCallback<ClickEvent>(OnNorthClick);
             Perspective.RegisterValueChangedCallback(OnToggleOrthographicView);
+
+            var dashboardButton = this.Q<Button>("Dashboard");
+            if (dashboardButton != null)
+                dashboardButton.clicked += () => App.UIRoot?.OpenDashboard(dashboardButton);
             
             FPV.RegisterCallback<PointerEnterEvent>(OnFPVPointerEnter);
             FPV.RegisterCallback<PointerLeaveEvent>(OnFPVPointerLeave);
