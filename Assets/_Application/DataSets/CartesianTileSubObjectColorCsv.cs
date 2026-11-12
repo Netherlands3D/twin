@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.DataSets
     {
         private readonly string path;
         private readonly int maxParsesPerFrame;
-        private readonly string[] requiredHeaders = { "BagId", "HexColor" };
+        private static readonly string[] RequiredHeaders = { "BagId", "HexColor" };
 
         private readonly CsvConfiguration config = new(CultureInfo.CurrentCulture)
         {
@@ -98,9 +98,14 @@ namespace Netherlands3D.Twin.DataSets
             onProgress(1f);
         }
 
-        private bool ReadHeader(CsvReader csv)
+        internal static bool HasColorColumns(string[] headers)
         {
-            return csv.Read() && csv.ReadHeader() && requiredHeaders.All(header => csv.Context.HeaderRecord.Contains(header));
+            return RequiredHeaders.All(header => headers.Contains(header));
+        }
+
+        private static bool ReadHeader(CsvReader csv)
+        {
+            return csv.Read() && csv.ReadHeader() && HasColorColumns(csv.Context.HeaderRecord);
         }
 
         private static void ParseRecord(IReaderRow csvReader, IDictionary<string, Color> dictionary)

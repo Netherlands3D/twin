@@ -18,13 +18,27 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public DashboardCsvPropertyData(Uri url, DashboardData data) : base(url)
         {
-            Data = data;
+            SetData(data);
         }
 
         internal void LoadFromProjectAsset()
         {
             using var reader = File.OpenText(AssetUriFactory.GetLocalPath(Url));
-            Data = DashboardCsv.Read(reader);
+            SetData(DashboardCsv.Read(reader));
+        }
+
+        private void SetData(DashboardData data)
+        {
+            Data = data;
+#if UNITY_EDITOR
+            if (data == null || Url == null)
+                return;
+
+            var skippedLines = data.SkippedRowCount > 0 ? $" (regels {string.Join(", ", data.SkippedLineNumbers)})" : string.Empty;
+            UnityEngine.Debug.Log($"Dashboard-CSV '{Path.GetFileName(Url.LocalPath)}' bevat {data.SourceRowCount} bronrijen, " +
+                $"{data.Housing.Count} woonrijen, {data.NonHousing.Count} niet-woonrijen, {data.ProgramChanges.Count} programmawijzigingen " +
+                $"en {data.SkippedRowCount} overgeslagen rijen{skippedLines}.");
+#endif
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.DataSets
                 return false;
 
             var headers = csv.Context.HeaderRecord;
-            return headers.Contains("Blok") || headers.Contains("Planproduct");
+            return !CartesianTileSubObjectColorCsv.HasColorColumns(headers) && RequiredHeaders.All(header => headers.Contains(header));
         }
 
         public static DashboardData Read(TextReader reader)
