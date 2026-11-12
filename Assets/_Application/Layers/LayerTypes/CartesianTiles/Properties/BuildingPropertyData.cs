@@ -30,7 +30,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
         {
             return new BuildingPropertyData()
             {
-                buildingIds = new Dictionary<string, Coordinate>(buildingIds),
                 isEditable = isEditable
             };
         }
