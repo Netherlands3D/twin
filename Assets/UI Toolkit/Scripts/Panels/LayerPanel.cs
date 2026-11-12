@@ -289,11 +289,32 @@ namespace Netherlands3D.UI.Panels
         
         private void CopySelectedLayers()
         {
+            var newSelection = new List<LayerData>();
             foreach (LayerData layer in treeView.selectedItems.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
-                App.Layers.Copy(layer);
+                if (layer.HasSelectedAncestor())
+                {
+                    newSelection.Add(layer);
+                }
+                else
+                {
+                    newSelection.Add(App.Layers.Copy(layer));
+                }
             }
+            
+            ProjectData.Current.RootLayer.DeselectAllLayers();
+            foreach (var layerToSelect in newSelection)
+            {
+                layerToSelect.SelectLayer(false);
+            }  
+            
         }
+
+        private static void HasSelectedParent()
+        {
+            
+        }
+        
 
         private void OnDeleteButtonClicked(ClickEvent evt)
         {
@@ -307,7 +328,7 @@ namespace Netherlands3D.UI.Panels
                 DeleteSelectedLayers();
             }
         }
-
+        
         private void DeleteSelectedLayers()
         {
             foreach (LayerData layer in treeView.selectedItems.ToList()) //to list makes a copy and avoids a collectionmodified error

@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public bool IsNew { get; private set; } = true;
         [SerializeField, DataMember] protected string name;
         [SerializeField, DataMember] protected bool activeSelf = true;
-        
+
         /// <summary>
         /// The default color of a layer.
         /// 
@@ -42,7 +42,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
         [JsonIgnore] protected int rootId = -1;
-        [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();        
+        [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
 
         [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
@@ -123,6 +123,17 @@ namespace Netherlands3D.Twin.Layers
 
                 return ParentLayer.ActiveInHierarchy && activeSelf;
             }
+        }
+        
+        public bool HasSelectedAncestor() 
+        {
+            var parentLayer = this.ParentLayer;
+            while (parentLayer != null)
+            {
+                if (parentLayer.IsSelected)  return true;
+                parentLayer = parentLayer.ParentLayer;
+            }
+            return false;
         }
 
         [JsonIgnore] public List<LayerPropertyData> LayerProperties
