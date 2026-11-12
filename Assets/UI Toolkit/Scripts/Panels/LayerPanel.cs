@@ -39,6 +39,7 @@ namespace Netherlands3D.UI.Panels
 
         private Button scenarioButton;
         private Button folderButton;
+        private Button copyButton;
         private Button deleteButton;
         
         private bool doRefresh;
@@ -84,6 +85,9 @@ namespace Netherlands3D.UI.Panels
 
             folderButton = this.Q<Button>("FolderButton");
             folderButton.RegisterCallback<ClickEvent>(OnFolderButtonClicked);
+
+            copyButton = this.Q<Button>("CopyButton");
+            copyButton.RegisterCallback<ClickEvent>(OnCopyButtonClicked);
 
             deleteButton = this.Q<Button>("DeleteButton");
             deleteButton.RegisterCallback<ClickEvent>(OnDeleteButtonClicked);
@@ -278,6 +282,34 @@ namespace Netherlands3D.UI.Panels
             treeView.SetSelection(indicesToSelect);
         }
 
+        private void OnCopyButtonClicked(ClickEvent evt)
+        {
+            CopySelectedLayers();
+        }
+        
+        private void CopySelectedLayers()
+        {
+            var newSelection = new List<LayerData>();
+            foreach (LayerData layer in treeView.selectedItems.ToList()) //to list makes a copy and avoids a collectionmodified error
+            {
+                if (layer.HasSelectedAncestor())
+                {
+                    newSelection.Add(layer);
+                }
+                else
+                {
+                    newSelection.Add(App.Layers.Copy(layer));
+                }
+            }
+            
+            ProjectData.Current.RootLayer.DeselectAllLayers();
+            foreach (var layerToSelect in newSelection)
+            {
+                layerToSelect.SelectLayer(false);
+            }  
+            
+        }
+
         private void OnDeleteButtonClicked(ClickEvent evt)
         {
             DeleteSelectedLayers();
@@ -290,7 +322,7 @@ namespace Netherlands3D.UI.Panels
                 DeleteSelectedLayers();
             }
         }
-
+        
         private void DeleteSelectedLayers()
         {
             foreach (LayerData layer in treeView.selectedItems.ToList()) //to list makes a copy and avoids a collectionmodified error

@@ -6,5 +6,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
     {
         //todo: save the typeof(StoredAuthorization) so we don't have to guess anymore?
         // [DataMember] private string TypeOfAuthorization { get; set; }
+
+
+        public override LayerPropertyData Clone()
+        {
+            return new CredentialsRequiredPropertyData()
+            {
+                isEditable = isEditable
+            };
+        }
     }
 }

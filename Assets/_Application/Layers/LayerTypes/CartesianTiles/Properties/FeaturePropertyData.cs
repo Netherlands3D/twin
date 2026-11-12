@@ -33,5 +33,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
             public Dictionary<string, object> Properties;
             public IMapping FeatureMapping;
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new FeaturePropertyData()
+            {
+                //featureId's should not copied; this is something about current selection.
+                //TODO @wytze please check
+                isEditable = isEditable
+            };
+        }
     }
 }

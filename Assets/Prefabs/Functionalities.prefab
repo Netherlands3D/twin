@@ -107,7 +107,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4559778117034336251}
-  - {fileID: 5416903671490076247}
   - {fileID: 8027559627503466897}
   - {fileID: 8655083008812607972}
   - {fileID: 7029589100306083130}
@@ -258,57 +257,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
---- !u!1 &8584105182119254496
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5416903671490076247}
-  - component: {fileID: 39599883149469642}
-  m_Layer: 0
-  m_Name: ZuidOostAssetBundle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5416903671490076247
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8584105182119254496}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.558289, y: 105.47519, z: -333.44604}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3919916255551741050}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &39599883149469642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8584105182119254496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8d7e62293860340a75d954d53c22bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loadingScreenPrefab: {fileID: 0}
-  loadingScreenCanvas: {fileID: 0}
-  bundleName: zuidoostbundle
-  prefabName: Ontwikkeling Zuidoost.prefab
-  OnAssetsLoaded:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &1871376974672866099
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1016,47 +964,47 @@ PrefabInstance:
     - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.40146938
+      value: -0.4126724
       objectReference: {fileID: 0}
     - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.17099836
+      value: -0.23292944
       objectReference: {fileID: 0}
     - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.82780623
+      value: 0.766867
       objectReference: {fileID: 0}
     - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.3525886
+      value: -0.43285158
       objectReference: {fileID: 0}
     - target: {fileID: 1832797565794202596, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: day
-      value: 30
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1832797565794202596, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: hour
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 1832797565794202596, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: month
-      value: 7
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 1832797565794202596, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: minutes
-      value: 25
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1832797565794202596, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: seconds
-      value: 30
+      value: 53
       objectReference: {fileID: 0}
     - target: {fileID: 5593048648800678674, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
