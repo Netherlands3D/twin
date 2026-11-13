@@ -1,0 +1,70 @@
+.toggle-switch {
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+}
+
+.toggle-switch > .unity-toggle__label {
+    flex-grow: 1;
+    margin-right: var(--spacing-2);
+}
+
+.toggle-switch > .unity-toggle__input {
+    display: none;
+}
+
+.toggle-switch__track {
+    flex-shrink: 0;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: var(--spacing-15);
+    height: var(--spacing-8);
+    min-width: var(--spacing-15);
+    min-height: var(--spacing-8);
+    max-width: var(--spacing-15);
+    max-height: var(--spacing-8);
+    padding: 0 var(--spacing-1);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-200);
+    border-radius: var(--spacing-4);
+    background-color: var(--color-white);
+}
+
+.toggle-switch__thumb {
+    width: var(--spacing-5);
+    height: var(--spacing-5);
+    min-width: var(--spacing-5);
+    min-height: var(--spacing-5);
+    max-width: var(--spacing-5);
+    max-height: var(--spacing-5);
+    margin: 0;
+    border-width: 0;
+    border-radius: var(--spacing-3);
+    background-color: var(--color-blue-700);
+    background-image: none;
+}
+
+.toggle-switch:checked .toggle-switch__track {
+    justify-content: flex-end;
+    border-color: var(--color-blue-700);
+    background-color: var(--color-blue-700);
+}
+
+.toggle-switch:checked .toggle-switch__thumb {
+    background-color: var(--color-white);
+}
+
+.toggle-switch:hover .toggle-switch__track {
+}
+
+.toggle-switch:focus .toggle-switch__track {
+}
+
+.toggle-switch:disabled .toggle-switch__track {
+}
+
+.toggle-switch:disabled .toggle-switch__thumb {
+    background-color: var(--color-blue-200);
+}

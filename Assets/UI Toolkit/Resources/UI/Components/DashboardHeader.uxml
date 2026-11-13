@@ -1,0 +1,23 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="dashboard-hud__header">
+    <ui:VisualElement class="dashboard-hud__header-content">
+        <ui:Label text="Dashboard" class="inspector-header-title dashboard-hud__title"/>
+        <ui:VisualElement class="dashboard-hud__toolbar">
+            <ui:Label text="Bouwblokken" class="text-header dashboard-hud__toolbar-label"/>
+            <ui:ToggleButtonGroup name="BuildingBlocks" value="0" allow-empty-selection="false" class="dashboard-hud__button-group">
+                <nl3d:Button button-style="Normal" LabelText="Totaal"/>
+                <nl3d:Button button-style="Normal" LabelText="Blok 1"/>
+                <nl3d:Button button-style="Normal" LabelText="Blok 2"/>
+                <nl3d:Button button-style="Normal" LabelText="Blok 3"/>
+                <nl3d:Button button-style="Normal" LabelText="Blok 4"/>
+            </ui:ToggleButtonGroup>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-hud__toolbar">
+            <ui:Label text="Woontype" class="text-header dashboard-hud__toolbar-label"/>
+            <ui:ToggleButtonGroup name="HousingTypes" value="0" allow-empty-selection="false" class="dashboard-hud__button-group">
+                <nl3d:Button button-style="Normal" LabelText="Wonen"/>
+                <nl3d:Button button-style="Normal" LabelText="Niet-wonen"/>
+            </ui:ToggleButtonGroup>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <nl3d:CloseButton name="CloseDashboard" tooltip="Dashboard sluiten"/>
+</ui:UXML>

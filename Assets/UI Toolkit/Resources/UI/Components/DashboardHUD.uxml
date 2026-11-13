@@ -1,0 +1,16 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="DashboardRoot" picking-mode="Ignore" class="dashboard-hud__body">
+        <ui:VisualElement name="Sidebar" class="dashboard-hud__sidebar">
+            <nl3d:ToggleSwitch name="DashboardViewSwitch" toggle-on-label-click="false" label="Faseweergave" class="dashboard-hud__phase-toggle"/>
+            <nl3d:ScrollView name="Scrollview">
+                <ui:VisualElement name="ProgramOverviewContent"/>
+                <ui:VisualElement name="PhaseProgressContent" class="hidden"/>
+            </nl3d:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="HudMain" picking-mode="Ignore" class="dashboard-hud__main">
+            <nl3d:DashboardHeader name="DashboardHeader"/>
+            <ui:VisualElement name="DashboardMapArea" picking-mode="Ignore" class="dashboard-hud__map-area"/>
+            <ui:VisualElement name="PhaseChangesPanel" class="dashboard-hud__phase-changes hidden"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
