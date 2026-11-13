@@ -2,20 +2,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ui="UnityEngine.UIElements"
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
-    xmlns:nl3d="Netherlands3D.UI.Components"
     xmlns:nl3dP="Netherlands3D.UI.Panels"
     editor-extension-mode="False"
     name="App"
+    picking-mode="Ignore"
     class="app">
     <ui:Style src="./AppRoot.uss" />
     <nl3dP:DefaultHUD class="app__viewer-ui" picking-mode="Ignore" />
     <nl3dP:FPVHUD class="app__viewer-ui hidden" picking-mode="Ignore" />
-    <ui:VisualElement name="DashboardOverlay" class="dashboard-overlay">
-        <ui:VisualElement class="dashboard-overlay__panel">
-            <ui:Label text="Dashboard" class="text-header" />
-            <nl3d:Button name="CloseDashboard" button-style="Normal" LabelText="Sluiten" />
-        </ui:VisualElement>
-    </ui:VisualElement>
+    <nl3dP:DashboardHUD name="DashboardOverlay" class="dashboard-overlay" picking-mode="Ignore" />
     <nl3dP:SnackbarPanel class="app__viewer-ui" />
     <ui:VisualElement name="Dialogs" class="dialogs-anchor app__viewer-ui"/>
 </ui:UXML>

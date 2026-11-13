@@ -1,0 +1,12 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"
+    class="toggle-switch text-header unity-toggle"
+>
+    <ui:VisualElement name="Track" class="toggle-switch__track" picking-mode="Ignore">
+        <ui:VisualElement name="Thumb" class="toggle-switch__thumb" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>
