@@ -55,7 +55,22 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
 
             var source = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
-            return new DashboardCsvPreset.Args(localFile.FileName, new DashboardCsvPropertyData(source, data));
+            var preset = new DashboardCsvPreset.Args(localFile.FileName, new DashboardCsvPropertyData(source, data));
+
+            foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
+            {
+                if (layer.IsDisposed || !layer.HasProperty<DashboardCsvPropertyData>())
+                    continue;
+
+                var parent = layer.ParentLayer;
+                var siblingIndex = layer.SiblingIndex;
+                foreach (var child in layer.ChildrenLayers.ToArray())
+                    child.SetParent(parent, siblingIndex++);
+
+                App.Layers.Remove(layer);
+            }
+
+            return preset;
         }
 
         private static string GetSkippedLinesMessage(DashboardData data)
