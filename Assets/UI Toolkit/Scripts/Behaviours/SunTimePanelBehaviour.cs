@@ -38,8 +38,7 @@ namespace Netherlands3D
             periodicSnapshotsService.SetTimeForSnapshot.AddListener(SetTimeForSnapshot);
             periodicSnapshotsService.onFinishedGenerating.AddListener(ResetTimeAfterSnapshots);
             
-            timeService.timeOfDayChanged.AddListener(SetDirection);
-            RecalculateOrigin(timeService.Time);
+            timeService.timeOfDayChanged.AddListener(RecalculateOrigin);
         }
        
         private void OnDestroy()
@@ -51,7 +50,7 @@ namespace Netherlands3D
             periodicSnapshotsService.SetTimeForSnapshot.RemoveListener(SetTimeForSnapshot);
             periodicSnapshotsService.onFinishedGenerating.RemoveListener(ResetTimeAfterSnapshots);
             
-            timeService.timeOfDayChanged.RemoveListener(SetDirection);
+            timeService.timeOfDayChanged.RemoveListener(RecalculateOrigin);
             
             OnClosePanel();
         }

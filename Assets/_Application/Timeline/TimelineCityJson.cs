@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
+using Netherlands3D.ProjectTime;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
@@ -22,6 +23,7 @@ namespace Netherlands3D.Timeline
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
 
         private TimelineLegendBehaviour timelineLegendBehaviour;
+        private TimeService timeService;
 
         private void Awake()
         {
@@ -30,7 +32,8 @@ namespace Netherlands3D.Timeline
 
         private void OnEnable()
         {
-            ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
+            timeService = ServiceLocator.GetService<TimeService>();
+            timeService.timeOfDayChanged.AddListener(OnTimeChanged);
 
             visualization = GetComponent<CityJSONLayerGameObject>();
             cityJson = GetComponent<CityJSON>();
@@ -39,7 +42,7 @@ namespace Netherlands3D.Timeline
 
         private void OnDisable()
         {
-            ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnTimeChanged);
+            timeService.timeOfDayChanged.RemoveListener(OnTimeChanged);
             timelineStatusStylingLayerPropertyData?.OnStylingChanged.RemoveListener(visualization.ApplyStyling);
             cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes);
             

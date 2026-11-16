@@ -100,7 +100,7 @@ namespace Netherlands3D.ProjectTime
         private void OnEnable()
         {
             ProjectData.Current?.OnDataChanged.AddListener(OnProjectDataChanged);
-            ProjectData.Current?.OnCurrentDateTimeChanged.AddListener(OnProjectTimeChanged);
+            
             timeOfDayChanged.AddListener(SaveCurrentDateTime);
             useCurrentTimeChanged.AddListener(SaveUseCurrentTime);
         }
@@ -108,25 +108,12 @@ namespace Netherlands3D.ProjectTime
         private void OnDisable()
         {
             ProjectData.Current?.OnDataChanged.RemoveListener(OnProjectDataChanged);
-            ProjectData.Current?.OnCurrentDateTimeChanged.RemoveListener(OnProjectTimeChanged);
             timeOfDayChanged.RemoveListener(SaveCurrentDateTime);
             useCurrentTimeChanged.RemoveListener(SaveUseCurrentTime);
         }
         
         private void OnProjectDataChanged(ProjectData project)
         {
-            UseCurrentTime = project.UseCurrentTime;
-            
-            if (!project.UseCurrentTime)
-            {
-                lastSavedDateTime = project.CurrentDateTime;
-                SetTime(project.CurrentDateTime);
-            }
-        }
-
-        private void OnProjectTimeChanged(DateTime time)
-        {
-            var project = ProjectData.Current;
             UseCurrentTime = project.UseCurrentTime;
             
             if (!project.UseCurrentTime)
