@@ -127,11 +127,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 }
             }
 
-            public void SetColor(Color? color)
-            {
-                visualisation.meshRenderer.SetColorPropertyBlock();
-            }
-
             /// <summary>
             /// A nice addition/optimisation would be to cache this inside the PolygonVisualisation class (needs change in package)
             /// </summary>
