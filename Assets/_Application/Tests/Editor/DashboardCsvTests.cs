@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataSets;
@@ -17,26 +16,34 @@ namespace Netherlands3D.Twin.Tests
             using var reader = File.OpenText(GetFixturePath("DashboardCsvSample.csv"));
             var data = DashboardCsv.Read(reader);
 
-            Assert.That(data.SourceRowCount, Is.EqualTo(5));
-            Assert.That(data.SkippedLineNumbers, Is.EqualTo(new[] { 6 }));
-            Assert.That(data.Housing.Count, Is.EqualTo(1));
-            Assert.That(data.NonHousing.Count, Is.EqualTo(1));
+            Assert.That(data.SourceRowCount, Is.EqualTo(11));
+            Assert.That(data.SkippedLineNumbers, Is.EqualTo(new[] { 6, 12, 13 }));
+            Assert.That(data.Housing.Count, Is.EqualTo(4));
+            Assert.That(data.NonHousing.Count, Is.EqualTo(3));
             Assert.That(data.ProgramChanges.Count, Is.EqualTo(1));
 
             var housing = data.Housing[0];
             Assert.That(housing.Block, Is.EqualTo("01"));
             Assert.That(housing.Phase, Is.EqualTo("SO"));
-            Assert.That(housing.SubmissionDate, Is.EqualTo(new DateTime(2026, 1, 15)));
             Assert.That(housing.Segment, Is.EqualTo("Sociaal"));
             Assert.That(housing.Rooms, Is.EqualTo(2));
             Assert.That(housing.MinimumUsableFloorArea, Is.EqualTo(42.5m));
             Assert.That(housing.DwellingCount, Is.EqualTo(12));
+
+            var housingWithoutRoomType = data.Housing[2];
+            Assert.That(housingWithoutRoomType.Phase, Is.EqualTo("BBP"));
+            Assert.That(housingWithoutRoomType.Rooms, Is.Null);
+            Assert.That(housingWithoutRoomType.DwellingCount, Is.EqualTo(20));
+            Assert.That(data.Housing[3].DwellingCount, Is.Zero);
 
             var nonHousing = data.NonHousing[0];
             Assert.That(nonHousing.Block, Is.EqualTo("01"));
             Assert.That(nonHousing.Phase, Is.EqualTo("VO"));
             Assert.That(nonHousing.Category, Is.EqualTo("Maatschappelijk"));
             Assert.That(nonHousing.GrossFloorArea, Is.EqualTo(320.5m));
+            Assert.That(data.NonHousing[1].GrossFloorArea, Is.EqualTo(450m));
+            Assert.That(data.NonHousing[2].Phase, Is.EqualTo("SO"));
+            Assert.That(data.NonHousing[2].GrossFloorArea, Is.Zero);
 
             var change = data.ProgramChanges[0];
             Assert.That(change.Block, Is.EqualTo("01"));

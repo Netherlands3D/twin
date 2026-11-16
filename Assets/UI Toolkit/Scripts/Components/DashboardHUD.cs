@@ -38,8 +38,25 @@ namespace Netherlands3D.UI.Panels
             blockOverview = programOverview.Q<DashboardBlockOverview>();
             phaseComparison = phaseChanges.Q<DashboardPhaseComparisonPanel>();
 
+            var housingTypes = this.Q<ToggleButtonGroup>("HousingTypes");
+            var nonHousingButton = housingTypes.Q("NonHousingType");
+            housingTypes.RegisterValueChangedCallback(evt => ShowHousingType(evt.newValue));
+            ShowHousingType(housingTypes.value);
+
             phaseView.RegisterValueChangedCallback(evt => ShowPhaseView(evt.newValue));
             ShowPhaseView(phaseView.value);
+
+            void ShowHousingType(ToggleButtonGroupState selection)
+            {
+                for (var i = 0; i < selection.length; i++)
+                {
+                    if (housingTypes.GetButton(i) != nonHousingButton)
+                        continue;
+
+                    phaseComparison.NonHousing = selection[i];
+                    return;
+                }
+            }
 
             void ShowPhaseView(bool showPhaseProgress)
             {
@@ -103,20 +120,19 @@ namespace Netherlands3D.UI.Panels
             var phases = DashboardSummary.CalculatePhases(data);
 
             phaseComparison.SetKeyFigureData(
-                string.Join(" | ", phases.Select(phase => FormatNumber(phase.Dwellings))),
-                FormatChanges(phases, phase => phase.Dwellings, "", true),
-                string.Join(" | ", phases.Select(phase => FormatNumber(phase.AverageMinimumFloorArea, SquareMetres))),
+                phases.Select(phase => FormatNumber(phase.Dwellings)).ToArray(),
+                FormatChanges(phases, phase => phase.Dwellings, ""),
+                phases.Select(phase => FormatNumber(phase.AverageMinimumFloorArea, SquareMetres)).ToArray(),
                 FormatChanges(phases, phase => phase.AverageMinimumFloorArea, SquareMetres),
-                string.Join(" | ", phases.Select(phase => FormatNumber(phase.GrossFloorArea, SquareMetres))),
-                FormatChanges(phases, phase => phase.GrossFloorArea, SquareMetres, true));
+                phases.Select(phase => FormatNumber(phase.GrossFloorArea, SquareMetres)).ToArray(),
+                FormatChanges(phases, phase => phase.GrossFloorArea, SquareMetres));
 
             var breakdowns = DashboardSummary.CalculateBreakdowns(data);
             phaseComparison.SetBreakdownData(
                 breakdowns.Segments.Select(row => (row.Label, row.Values.Select((value, i) => FormatSegment(value, phases[i].Dwellings)).ToArray())).ToArray(),
                 FormatBreakdown(breakdowns.Rooms),
                 FormatBreakdown(breakdowns.Categories, SquareMetres),
-                FormatBreakdown(breakdowns.HousingBlocks),
-                FormatBreakdown(breakdowns.NonHousingBlocks, SquareMetres));
+                FormatBreakdown(breakdowns.SocialFacilities, SquareMetres));
 
             var block = DashboardSummary.FirstBlockWithData(data);
             var blockPhases = block == null ? Array.Empty<DashboardSummary.PhaseTotals>() : DashboardSummary.CalculatePhases(data, block);
@@ -150,20 +166,20 @@ namespace Netherlands3D.UI.Panels
             return value.HasValue ? value.Value.ToString("#,0.##", NumberCulture) + unit : string.Empty;
         }
 
-        private static string FormatChanges(DashboardSummary.PhaseTotals[] phases, Func<DashboardSummary.PhaseTotals, decimal?> selectValue,
-            string unit, bool includePercentage = false)
+        private static string[] FormatChanges(DashboardSummary.PhaseTotals[] phases, Func<DashboardSummary.PhaseTotals, decimal?> selectValue,
+            string unit)
         {
             var changes = DashboardSummary.CalculateChanges(phases, selectValue);
-            return string.Join(" | ", changes.Select(change =>
+            return changes.Select(change =>
             {
                 if (!change.Difference.HasValue)
                     return string.Empty;
 
                 var difference = change.Difference.Value.ToString("+#,0.##;-#,0.##;0", NumberCulture) + unit;
-                return includePercentage && change.RelativeChange.HasValue
+                return change.RelativeChange.HasValue
                     ? $"{difference} ({change.RelativeChange.Value.ToString("+0%;-0%;0%", NumberCulture)})"
                     : difference;
-            }));
+            }).ToArray();
         }
     }
 }

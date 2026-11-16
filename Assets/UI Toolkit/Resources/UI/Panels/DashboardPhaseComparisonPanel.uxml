@@ -3,9 +3,10 @@
         <nl3d:Header name="ComparisonHeader" icon="Tile" text="Fasevergelijking &#8211; Wonen"/>
         <ui:ToggleButtonGroup name="ComparisonTabs" allow-empty-selection="false" class="dashboard-phase-comparison__tabs">
             <nl3d:Button name="KeyFiguresTab" button-style="Normal" LabelText="Kerncijfers"/>
+            <nl3d:Button name="CategoriesTab" button-style="Normal" LabelText="Categorie&#235;n" class="hidden"/>
+            <nl3d:Button name="SocialFacilitiesTab" button-style="Normal" LabelText="Maatschappelijk" class="hidden"/>
             <nl3d:Button name="ProgramBreakdownTab" button-style="Normal" LabelText="Segmenten"/>
-            <nl3d:Button name="BlockTotalsTab" button-style="Normal" LabelText="Woningen"/>
-            <nl3d:Button name="RoomsTab" button-style="Normal" LabelText="Kamers"/> 
+            <nl3d:Button name="RoomsTab" button-style="Normal" LabelText="Kamers"/>
         </ui:ToggleButtonGroup>
     </ui:VisualElement>
     <nl3d:ScrollView name="ComparisonScrollView" mode="VerticalAndHorizontal" item-gap="0" class="dashboard-phase-comparison__scroll">

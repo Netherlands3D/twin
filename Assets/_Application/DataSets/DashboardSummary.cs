@@ -6,8 +6,6 @@ namespace Netherlands3D.Twin.DataSets
 {
     internal static class DashboardSummary
     {
-        private static readonly string[] Phases = { "BBP", "SO", "VO", "DO" };
-
         public static PhaseTotals[] CalculatePhases(DashboardData data, string block = null)
         {
             if (data == null)
@@ -16,7 +14,7 @@ namespace Netherlands3D.Twin.DataSets
             var housing = data.Housing.Where(row => block == null || Equal(row.Block, block)).ToArray();
             var nonHousing = data.NonHousing.Where(row => block == null || Equal(row.Block, block)).ToArray();
 
-            return Phases.Select(phase => CalculatePhase(phase, housing.Where(row => Equal(row.Phase, phase)).ToArray(),
+            return DashboardData.Phases.Select(phase => CalculatePhase(phase, housing.Where(row => Equal(row.Phase, phase)).ToArray(),
                 nonHousing.Where(row => Equal(row.Phase, phase)).ToArray())).ToArray();
         }
 
@@ -47,50 +45,80 @@ namespace Netherlands3D.Twin.DataSets
             if (data == null)
                 return null;
 
-            return data.Housing.Where(row => IsKnownPhase(row.Phase)).Select(row => row.Block)
-                .Concat(data.NonHousing.Where(row => IsKnownPhase(row.Phase)).Select(row => row.Block))
+            return data.Housing.Select(row => row.Block)
+                .Concat(data.NonHousing.Select(row => row.Block))
                 .OrderBy(block => block, StringComparer.OrdinalIgnoreCase)
                 .FirstOrDefault();
         }
 
-        public static (BreakdownRow[] Segments, BreakdownRow[] Rooms, BreakdownRow[] Categories, BreakdownRow[] HousingBlocks, BreakdownRow[] NonHousingBlocks)
-            CalculateBreakdowns(DashboardData data)
+        public static (BreakdownRow[] Segments, BreakdownRow[] Rooms, BreakdownRow[] Categories, BreakdownRow[] SocialFacilities) CalculateBreakdowns(DashboardData data)
         {
             if (data == null)
             {
                 var empty = Array.Empty<BreakdownRow>();
-                return (empty, empty, empty, empty, empty);
+                return (empty, empty, empty, empty);
             }
 
-            var housing = data.Housing.Where(row => IsKnownPhase(row.Phase)).ToArray();
-            var nonHousing = data.NonHousing.Where(row => IsKnownPhase(row.Phase)).ToArray();
+            var housing = data.Housing;
+            var nonHousing = data.NonHousing;
 
             var segments = housing.GroupBy(row => SegmentName(row.Segment), StringComparer.OrdinalIgnoreCase)
                 .OrderBy(group => group.Key switch { "Sociaal" => 0, "Middenhuur" => 1, "Vrije sector" => 2, _ => 3 })
                 .ThenBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
                 .Select(group => SummarizeBreakdown(group.Key, group, row => row.Phase, row => row.DwellingCount.Value)).ToArray();
-            var rooms = housing.GroupBy(row => row.Rooms.Value).OrderBy(group => group.Key)
+            var rooms = housing.Where(row => row.Rooms.HasValue).GroupBy(row => row.Rooms.Value).OrderBy(group => group.Key)
                 .Select(group => SummarizeBreakdown(group.Key == 1 ? "1 kamer" : $"{group.Key} kamers", group, row => row.Phase, row => row.DwellingCount.Value)).ToArray();
-            var categories = nonHousing.GroupBy(row => row.Category, StringComparer.OrdinalIgnoreCase)
-                .OrderBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
-                .Select(group => SummarizeBreakdown(group.Key, group, row => row.Phase, row => row.GrossFloorArea.Value)).ToArray();
-            var housingBlocks = housing.GroupBy(row => row.Block, StringComparer.OrdinalIgnoreCase)
-                .OrderBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
-                .Select(group => SummarizeBreakdown(BlockName(group.Key), group, row => row.Phase, row => row.DwellingCount.Value)).ToArray();
-            var nonHousingBlocks = nonHousing.GroupBy(row => row.Block, StringComparer.OrdinalIgnoreCase)
-                .OrderBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
-                .Select(group => SummarizeBreakdown(BlockName(group.Key), group, row => row.Phase, row => row.GrossFloorArea.Value)).ToArray();
-
-            return (segments, rooms, categories, housingBlocks, nonHousingBlocks);
+            var (categories, socialFacilities) = SummarizeCategories(nonHousing);
+            return (segments, rooms, categories, socialFacilities);
         }
 
         public static string BlockName(string block) => block.StartsWith("Blok ", StringComparison.OrdinalIgnoreCase) ? block : $"Blok {block}";
+
+        private static (BreakdownRow[] Categories, BreakdownRow[] SocialFacilities) SummarizeCategories(IReadOnlyList<DashboardData.NonHousingRow> rows)
+        {
+            var groups = rows.Select(row => (Row: row, Category: SplitCategory(row.Category)))
+                .GroupBy(entry => entry.Category.Main, StringComparer.OrdinalIgnoreCase)
+                .OrderBy(group => group.Key, StringComparer.OrdinalIgnoreCase).ToArray();
+            var categories = groups.Select(group => SummarizeBreakdown(
+                group.Key, group, entry => entry.Row.Phase, entry => entry.Row.GrossFloorArea.Value)).ToArray();
+
+            var socialGroup = groups.FirstOrDefault(group => Equal(group.Key, "Maatschappelijk"));
+            if (socialGroup == null)
+                return (categories, Array.Empty<BreakdownRow>());
+
+            var socialFacilities = socialGroup.Where(entry => !string.IsNullOrEmpty(entry.Category.Subcategory))
+                .GroupBy(entry => entry.Category.Subcategory, StringComparer.OrdinalIgnoreCase)
+                .OrderBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
+                .Select(group => SummarizeBreakdown(group.Key, group, entry => entry.Row.Phase, entry => entry.Row.GrossFloorArea.Value)).ToArray();
+            return (categories, socialFacilities);
+        }
+
+        private static (string Main, string Subcategory) SplitCategory(string value)
+        {
+            var category = value.Trim();
+            var openingBracket = category.IndexOf('(');
+            var subcategory = string.Empty;
+
+            if (openingBracket > 0 && category.EndsWith(")", StringComparison.Ordinal))
+            {
+                subcategory = category.Substring(openingBracket + 1, category.Length - openingBracket - 2).Trim();
+                if (subcategory.Length > 0)
+                    category = category.Substring(0, openingBracket).TrimEnd();
+            }
+
+            if (Equal(category, "Maatschappelijk") || Equal(category, "Maatschappelijke"))
+                category = "Maatschappelijk";
+            else if (Equal(category, "Commercieel") || Equal(category, "Horeca"))
+                category = "Horeca";
+
+            return (category, subcategory);
+        }
 
         private static BreakdownRow SummarizeBreakdown<T>(string label, IEnumerable<T> rows, Func<T, string> getPhase, Func<T, decimal> getValue)
         {
             var totals = rows.GroupBy(getPhase, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(group => group.Key, group => group.Sum(getValue), StringComparer.OrdinalIgnoreCase);
-            return new BreakdownRow(label, Phases.Select(phase => totals.TryGetValue(phase, out var total) ? (decimal?)total : null).ToArray());
+            return new BreakdownRow(label, DashboardData.Phases.Select(phase => totals.TryGetValue(phase, out var total) ? (decimal?)total : null).ToArray());
         }
 
         private static string SegmentName(string segment)
@@ -106,7 +134,7 @@ namespace Netherlands3D.Twin.DataSets
         {
             long? dwellings = housing.Length > 0 ? housing.Sum(row => (long)row.DwellingCount.Value) : null;
             decimal? grossFloorArea = nonHousing.Length > 0 ? nonHousing.Sum(row => row.GrossFloorArea.Value) : null;
-            var housingWithArea = housing.Where(row => row.MinimumUsableFloorArea.HasValue).ToArray();
+            var housingWithArea = housing.Where(row => row.MinimumUsableFloorArea.HasValue && row.DwellingCount > 0).ToArray();
 
             decimal? averageMinimumFloorArea = null;
             if (housingWithArea.Length > 0)
@@ -131,8 +159,6 @@ namespace Netherlands3D.Twin.DataSets
             var matchingRows = housing.Where(row => Equal(SegmentName(row.Segment), segment)).ToArray();
             return matchingRows.Length > 0 ? matchingRows.Sum(row => (long)row.DwellingCount.Value) : null;
         }
-
-        private static bool IsKnownPhase(string phase) => Phases.Any(knownPhase => Equal(phase, knownPhase));
 
         private static bool Equal(string first, string second) => string.Equals(first, second, StringComparison.OrdinalIgnoreCase);
 

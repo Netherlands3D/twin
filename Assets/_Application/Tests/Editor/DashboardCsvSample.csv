@@ -1,7 +1,13 @@
-Type;Blok;Planproduct;Datum indiening;Segment;Kamers;Min GBO;Aantal woningen;Categorie;BVO;Programma;Afwijking
-Wonen;01;SO;2026-01-15;Sociaal;2;42.5;12;;;;
-Niet-wonen;01;VO;;;;;;Maatschappelijk;320.5;;
-Programmawijziging;01;VO;;;;;;;;Wonen;"Meer woningen;
+Type;Blok;Planproduct;Segment;Kamers;Min GBO;Aantal woningen;Categorie;BVO;Programma;Afwijking
+Wonen;01;SO;Sociaal;2;42.5;12;;;;
+Niet-wonen;01;VO;;;;;Maatschappelijk;320.5;;
+Programmawijziging;01;VO;;;;;;;Wonen;"Meer woningen;
 uitwerking volgt"
-Wonen;01;SO;;Sociaal;ongeldig;42.5;3;;;;
-Wonen;01;SO;;Sociaal;2;42.5;0;;;;
+Wonen;01;SO;Sociaal;ongeldig;42.5;3;;;;
+Wonen;01;SO;Sociaal;2;42.5;0;;;;
+Wonen;01;BBP;Sociaal;;45.5;20;;;;
+Wonen;01;VO;Sociaal;2;42.5;0;;;;
+Niet-wonen;01;BBP;;;;;Maatschappelijk;450;;
+Niet-wonen;01;SO;;;;;Maatschappelijk;0;;
+Niet-wonen;01;DO;;;;;Maatschappelijk;;;
+Wonen;01;ONBEKEND;Sociaal;2;42.5;9;;;;

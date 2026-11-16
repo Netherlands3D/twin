@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.DataSets
     {
         private static readonly string[] RequiredHeaders =
         {
-            "Type", "Blok", "Planproduct", "Datum indiening", "Segment", "Kamers", "Min GBO",
+            "Type", "Blok", "Planproduct", "Segment", "Kamers", "Min GBO",
             "Aantal woningen", "Categorie", "BVO", "Programma", "Afwijking"
         };
 
@@ -55,22 +55,19 @@ namespace Netherlands3D.Twin.DataSets
                     var block = ReadText(csv, "Blok");
                     var phase = ReadText(csv, "Planproduct");
 
-                    switch (ReadText(csv, "Type"))
+                    var accepted = ReadText(csv, "Type") switch
                     {
-                        case "Wonen":
-                            housing.Add(new DashboardData.HousingRow(block, phase, ReadDate(csv, "Datum indiening"), ReadText(csv, "Segment"),
-                                ReadInteger(csv, "Kamers"), ReadDecimal(csv, "Min GBO"), ReadInteger(csv, "Aantal woningen")));
-                            break;
-                        case "Niet-wonen":
-                            nonHousing.Add(new DashboardData.NonHousingRow(block, phase, ReadText(csv, "Categorie"), ReadDecimal(csv, "BVO")));
-                            break;
-                        case "Programmawijziging":
-                            programChanges.Add(new DashboardData.ProgramChangeRow(block, phase, ReadText(csv, "Programma"), ReadText(csv, "Afwijking")));
-                            break;
-                        default:
-                            skippedLineNumbers.Add(lineNumber);
-                            break;
-                    }
+                        "Wonen" => TryAddRow(housing, new DashboardData.HousingRow(block, phase, ReadText(csv, "Segment"),
+                            ReadInteger(csv, "Kamers"), ReadDecimal(csv, "Min GBO"), ReadInteger(csv, "Aantal woningen")), DashboardData.IsValid),
+                        "Niet-wonen" => TryAddRow(nonHousing, new DashboardData.NonHousingRow(block, phase, ReadText(csv, "Categorie"), ReadDecimal(csv, "BVO")),
+                            DashboardData.IsValid),
+                        "Programmawijziging" => TryAddRow(programChanges, new DashboardData.ProgramChangeRow(block, phase, ReadText(csv, "Programma"),
+                            ReadText(csv, "Afwijking")), DashboardData.IsValid),
+                        _ => false
+                    };
+
+                    if (!accepted)
+                        skippedLineNumbers.Add(lineNumber);
                 }
                 catch (Exception exception) when (exception is FormatException or OverflowException)
                 {
@@ -79,6 +76,15 @@ namespace Netherlands3D.Twin.DataSets
             }
 
             return new DashboardData(housing, nonHousing, programChanges, skippedLineNumbers);
+        }
+
+        private static bool TryAddRow<T>(List<T> rows, T row, Func<T, bool> isValid)
+        {
+            if (!isValid(row))
+                return false;
+
+            rows.Add(row);
+            return true;
         }
 
         private static CsvReader Open(TextReader reader)
@@ -108,12 +114,6 @@ namespace Netherlands3D.Twin.DataSets
         }
 
         private static string ReadText(IReaderRow csv, string header) => csv.GetField<string>(header)?.Trim();
-
-        private static DateTime? ReadDate(IReaderRow csv, string header)
-        {
-            var value = ReadText(csv, header);
-            return string.IsNullOrEmpty(value) ? null : DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-        }
 
         private static int? ReadInteger(IReaderRow csv, string header)
         {

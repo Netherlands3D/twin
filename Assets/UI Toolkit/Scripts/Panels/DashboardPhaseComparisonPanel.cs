@@ -21,17 +21,19 @@ namespace Netherlands3D.UI.Panels
         private enum ComparisonTab
         {
             KeyFigures,
-            ProgramBreakdown,
-            Rooms,
-            Blocks
+            Segments,
+            Categories,
+            SocialFacilities,
+            Rooms
         }
 
         private readonly Header header;
         private readonly ToggleButtonGroup tabs;
         private readonly Button keyFiguresButton;
-        private readonly Button programBreakdownButton;
+        private readonly Button segmentsButton;
+        private readonly Button categoriesButton;
+        private readonly Button socialFacilitiesButton;
         private readonly Button roomsButton;
-        private readonly Button blockTotalsButton;
         private readonly UnityEngine.UIElements.ScrollView scrollView;
         private readonly VisualElement columnHeadings;
         private readonly Label rowHeading;
@@ -48,11 +50,8 @@ namespace Netherlands3D.UI.Panels
         private string segmentBreakdown;
         private string categoryBreakdown;
         private string roomBreakdown;
-        private string blockBreakdown;
-        private string nonHousingBlockBreakdown;
         private (IReadOnlyList<(string Label, string[] Cells)> Segments, IReadOnlyList<(string Label, string[] Cells)> Rooms,
-            IReadOnlyList<(string Label, string[] Cells)> Categories, IReadOnlyList<(string Label, string[] Cells)> HousingBlocks,
-            IReadOnlyList<(string Label, string[] Cells)> NonHousingBlocks) loadedBreakdowns;
+            IReadOnlyList<(string Label, string[] Cells)> Categories, IReadOnlyList<(string Label, string[] Cells)> SocialFacilities) loadedBreakdowns;
 
         [UxmlAttribute("non-housing")]
         public bool NonHousing
@@ -60,15 +59,25 @@ namespace Netherlands3D.UI.Panels
             get => nonHousing;
             set
             {
+                var selectedTab = GetSelectedTab(tabs.value);
                 nonHousing = value;
                 header.LabelText = value ? "Fasevergelijking \u2013 Niet-wonen" : "Fasevergelijking \u2013 Wonen";
-                programBreakdownButton.LabelText = value ? "Categorieën" : "Segmenten";
-                roomsButton.EnableInClassList(UtilityClassConstants.HIDDEN, value);
-                roomsButton.SetEnabled(!value);
-                blockTotalsButton.LabelText = value ? "BVO" : "Woningen";
+                SetTabVisible(segmentsButton, !value);
+                SetTabVisible(roomsButton, !value);
+                SetTabVisible(categoriesButton, value);
+                SetTabVisible(socialFacilitiesButton, value);
 
-                if (value && GetSelectedTab(tabs.value) == ComparisonTab.Rooms)
-                    SelectKeyFigures();
+                var replacement = selectedTab switch
+                {
+                    ComparisonTab.Segments when value => categoriesButton,
+                    ComparisonTab.Categories when !value => segmentsButton,
+                    ComparisonTab.Rooms when value => keyFiguresButton,
+                    ComparisonTab.SocialFacilities when !value => keyFiguresButton,
+                    _ => null
+                };
+
+                if (replacement != null)
+                    SelectTab(replacement);
 
                 ShowTab(GetSelectedTab(tabs.value));
             }
@@ -120,14 +129,14 @@ namespace Netherlands3D.UI.Panels
         public string SegmentBreakdown
         {
             get => segmentBreakdown;
-            set => SetBreakdown(ref segmentBreakdown, value, ComparisonTab.ProgramBreakdown);
+            set => SetBreakdown(ref segmentBreakdown, value, ComparisonTab.Segments);
         }
 
         [UxmlAttribute("category-breakdown")]
         public string CategoryBreakdown
         {
             get => categoryBreakdown;
-            set => SetBreakdown(ref categoryBreakdown, value, ComparisonTab.ProgramBreakdown);
+            set => SetBreakdown(ref categoryBreakdown, value, ComparisonTab.Categories);
         }
 
         [UxmlAttribute("room-breakdown")]
@@ -135,20 +144,6 @@ namespace Netherlands3D.UI.Panels
         {
             get => roomBreakdown;
             set => SetBreakdown(ref roomBreakdown, value, ComparisonTab.Rooms);
-        }
-
-        [UxmlAttribute("block-breakdown")]
-        public string BlockBreakdown
-        {
-            get => blockBreakdown;
-            set => SetBreakdown(ref blockBreakdown, value, ComparisonTab.Blocks);
-        }
-
-        [UxmlAttribute("non-housing-block-breakdown")]
-        public string NonHousingBlockBreakdown
-        {
-            get => nonHousingBlockBreakdown;
-            set => SetBreakdown(ref nonHousingBlockBreakdown, value, ComparisonTab.Blocks);
         }
 
         public DashboardPhaseComparisonPanel()
@@ -159,16 +154,17 @@ namespace Netherlands3D.UI.Panels
             header = this.Q<Header>("ComparisonHeader");
             tabs = this.Q<ToggleButtonGroup>("ComparisonTabs");
             keyFiguresButton = tabs.Q<Button>("KeyFiguresTab");
-            programBreakdownButton = tabs.Q<Button>("ProgramBreakdownTab");
+            segmentsButton = tabs.Q<Button>("ProgramBreakdownTab");
+            categoriesButton = tabs.Q<Button>("CategoriesTab");
+            socialFacilitiesButton = tabs.Q<Button>("SocialFacilitiesTab");
             roomsButton = tabs.Q<Button>("RoomsTab");
-            blockTotalsButton = tabs.Q<Button>("BlockTotalsTab");
             scrollView = this.Q<UnityEngine.UIElements.ScrollView>("ComparisonScrollView");
             columnHeadings = this.Q("ColumnHeadings");
             rowHeading = this.Q<Label>("RowHeading");
             tableRows = this.Q("BreakdownRows");
             emptyBreakdown = this.Q<Label>("EmptyBreakdown");
 
-            SelectKeyFigures();
+            SelectTab(keyFiguresButton);
 
             scrollView.verticalScroller.valueChanged += offset => columnHeadings.style.translate = new Translate(0, offset);
 
@@ -178,37 +174,43 @@ namespace Netherlands3D.UI.Panels
                 scrollView.verticalScroller.value = 0;
             });
 
-            ShowTab(GetSelectedTab(tabs.value));
+            NonHousing = false;
         }
 
-        internal void SetKeyFigureData(string dwellings, string dwellingDifferences, string minimumFloorArea, string floorAreaDifferences, string grossFloorArea, string grossFloorAreaDifferences)
+        internal void SetKeyFigureData(string[] dwellings, string[] dwellingDifferences, string[] minimumFloorArea, string[] floorAreaDifferences, string[] grossFloorArea, string[] grossFloorAreaDifferences)
         {
-            totalDwellingsCells = dwellings?.Split('|');
-            dwellingChangesCells = dwellingDifferences?.Split('|');
-            averageMinimumFloorAreaCells = minimumFloorArea?.Split('|');
-            minimumFloorAreaChangesCells = floorAreaDifferences?.Split('|');
-            totalGrossFloorAreaCells = grossFloorArea?.Split('|');
-            grossFloorAreaChangesCells = grossFloorAreaDifferences?.Split('|');
+            totalDwellingsCells = dwellings;
+            dwellingChangesCells = dwellingDifferences;
+            averageMinimumFloorAreaCells = minimumFloorArea;
+            minimumFloorAreaChangesCells = floorAreaDifferences;
+            totalGrossFloorAreaCells = grossFloorArea;
+            grossFloorAreaChangesCells = grossFloorAreaDifferences;
 
             if (GetSelectedTab(tabs.value) == ComparisonTab.KeyFigures)
                 ShowTab(ComparisonTab.KeyFigures);
         }
 
         internal void SetBreakdownData((string Label, string[] Cells)[] segments, (string Label, string[] Cells)[] rooms,
-            (string Label, string[] Cells)[] categories, (string Label, string[] Cells)[] housingBlocks, (string Label, string[] Cells)[] nonHousingBlocks)
+            (string Label, string[] Cells)[] categories, (string Label, string[] Cells)[] socialFacilities)
         {
-            loadedBreakdowns = (segments, rooms, categories, housingBlocks, nonHousingBlocks);
+            loadedBreakdowns = (segments, rooms, categories, socialFacilities);
             var selectedTab = GetSelectedTab(tabs.value);
             if (selectedTab != ComparisonTab.KeyFigures)
                 ShowTab(selectedTab);
         }
 
-        private void SelectKeyFigures()
+        private static void SetTabVisible(Button button, bool visible)
+        {
+            button.EnableInClassList(UtilityClassConstants.HIDDEN, !visible);
+            button.SetEnabled(visible);
+        }
+
+        private void SelectTab(Button button)
         {
             var selection = new ToggleButtonGroupState(0, tabs.childCount);
             for (var i = 0; i < selection.length; i++)
             {
-                if (tabs.GetButton(i) != keyFiguresButton)
+                if (tabs.GetButton(i) != button)
                     continue;
 
                 selection[i] = true;
@@ -225,12 +227,14 @@ namespace Netherlands3D.UI.Panels
                     continue;
 
                 var button = tabs.GetButton(i);
-                if (button == programBreakdownButton)
-                    return ComparisonTab.ProgramBreakdown;
+                if (button == segmentsButton)
+                    return ComparisonTab.Segments;
+                if (button == categoriesButton)
+                    return ComparisonTab.Categories;
+                if (button == socialFacilitiesButton)
+                    return ComparisonTab.SocialFacilities;
                 if (button == roomsButton)
                     return ComparisonTab.Rooms;
-                if (button == blockTotalsButton)
-                    return ComparisonTab.Blocks;
 
                 break;
             }
@@ -242,13 +246,10 @@ namespace Netherlands3D.UI.Panels
         {
             var (heading, previewRows, loadedRows) = tab switch
             {
-                ComparisonTab.ProgramBreakdown => nonHousing
-                    ? ("BVO per categorie (m\u00b2)", categoryBreakdown, loadedBreakdowns.Categories)
-                    : ("Woningen per segment", segmentBreakdown, loadedBreakdowns.Segments),
+                ComparisonTab.Segments => ("Woningen per segment", segmentBreakdown, loadedBreakdowns.Segments),
+                ComparisonTab.Categories => ("BVO per categorie (m\u00b2)", categoryBreakdown, loadedBreakdowns.Categories),
+                ComparisonTab.SocialFacilities => ("BVO per subcategorie", null, loadedBreakdowns.SocialFacilities),
                 ComparisonTab.Rooms => ("Woningen per kamertype", roomBreakdown, loadedBreakdowns.Rooms),
-                ComparisonTab.Blocks => nonHousing
-                    ? ("BVO per bouwblok (m\u00b2)", nonHousingBlockBreakdown, loadedBreakdowns.NonHousingBlocks)
-                    : ("Woningen per bouwblok", blockBreakdown, loadedBreakdowns.HousingBlocks),
                 _ => ("Vergelijking", null, GetKeyFigureRows())
             };
 

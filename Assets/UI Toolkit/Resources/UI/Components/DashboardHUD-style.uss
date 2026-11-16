@@ -25,6 +25,7 @@
 }
 
 .dashboard-hud__sidebar > .panel-divider {
+    background-color: var(--color-blue-100);
     flex-grow: 0;
     margin-top: var(--spacing-3);
     margin-bottom: var(--spacing-3);
@@ -41,7 +42,7 @@
 }
 
 .dashboard-hud__phase-changes {
-    height: 240px;
+    height: 232px;
     max-height: 40%;
     flex-shrink: 0;
     background-color: var(--color-white);

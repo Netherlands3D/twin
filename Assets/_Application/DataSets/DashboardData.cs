@@ -6,6 +6,7 @@ namespace Netherlands3D.Twin.DataSets
 {
     public sealed class DashboardData
     {
+        internal static IReadOnlyList<string> Phases { get; } = Array.AsReadOnly(new[] { "BBP", "SO", "VO", "DO" });
         public int SourceRowCount { get; }
         public int SkippedRowCount => SkippedLineNumbers.Count;
         public IReadOnlyList<int> SkippedLineNumbers { get; }
@@ -22,29 +23,36 @@ namespace Netherlands3D.Twin.DataSets
         {
             SkippedLineNumbers = skippedLineNumbers.ToArray();
             SourceRowCount = housing.Count + nonHousing.Count + programChanges.Count + SkippedRowCount;
-            Housing = housing.Where(row => !string.IsNullOrWhiteSpace(row.Block) && !string.IsNullOrWhiteSpace(row.Phase) &&
-                !string.IsNullOrWhiteSpace(row.Segment) && row.Rooms.HasValue && row.DwellingCount > 0).ToArray();
-            NonHousing = nonHousing.Where(row => !string.IsNullOrWhiteSpace(row.Block) && !string.IsNullOrWhiteSpace(row.Phase) &&
-                !string.IsNullOrWhiteSpace(row.Category) && row.GrossFloorArea > 0).ToArray();
-            ProgramChanges = programChanges.Where(row => !string.IsNullOrWhiteSpace(row.Block) && !string.IsNullOrWhiteSpace(row.Phase) &&
-                !string.IsNullOrWhiteSpace(row.Deviation)).ToArray();
+            Housing = housing.Where(IsValid).ToArray();
+            NonHousing = nonHousing.Where(IsValid).ToArray();
+            ProgramChanges = programChanges.Where(IsValid).ToArray();
         }
+
+        internal static bool IsValid(HousingRow row) =>
+            HasBlockAndPhase(row.Block, row.Phase) && !string.IsNullOrWhiteSpace(row.Segment) && row.DwellingCount >= 0;
+
+        internal static bool IsValid(NonHousingRow row) =>
+            HasBlockAndPhase(row.Block, row.Phase) && !string.IsNullOrWhiteSpace(row.Category) && row.GrossFloorArea >= 0;
+
+        internal static bool IsValid(ProgramChangeRow row) =>
+            HasBlockAndPhase(row.Block, row.Phase) && !string.IsNullOrWhiteSpace(row.Deviation);
+
+        private static bool HasBlockAndPhase(string block, string phase) =>
+            !string.IsNullOrWhiteSpace(block) && Phases.Contains(phase, StringComparer.OrdinalIgnoreCase);
 
         public sealed class HousingRow
         {
             public string Block { get; }
             public string Phase { get; }
-            public DateTime? SubmissionDate { get; }
             public string Segment { get; }
             public int? Rooms { get; }
             public decimal? MinimumUsableFloorArea { get; }
             public int? DwellingCount { get; }
 
-            public HousingRow(string block, string phase, DateTime? submissionDate, string segment, int? rooms, decimal? minimumUsableFloorArea, int? dwellingCount)
+            public HousingRow(string block, string phase, string segment, int? rooms, decimal? minimumUsableFloorArea, int? dwellingCount)
             {
                 Block = block;
                 Phase = phase;
-                SubmissionDate = submissionDate;
                 Segment = segment;
                 Rooms = rooms;
                 MinimumUsableFloorArea = minimumUsableFloorArea;
