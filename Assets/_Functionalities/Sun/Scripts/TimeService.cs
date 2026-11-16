@@ -39,7 +39,7 @@ namespace Netherlands3D.ProjectTime
         [SerializeField] [Range(1, 12)] private int month = 8;
         [SerializeField] [Range(1, 9999)] private int year = 2022;
 
-        [Header("Settings")] [SerializeField] private Light sunDirectionalLight;
+       
         [SerializeField] private bool animate = true;
         [SerializeField] private float timeSpeed = 1;
         [SerializeField] private float maxSpeed = 43200;
@@ -48,13 +48,11 @@ namespace Netherlands3D.ProjectTime
         [Header("Events")] public UnityEvent<DateTime> timeOfDayChanged = new();
         public UnityEvent<float> timeSpeedChanged = new();
         public UnityEvent<bool> useCurrentTimeChanged = new();
-
-        private float longitude;
-        private float latitude;
+        
         private DateTime time;
         private DateTime lastSavedDateTime = new();
         private int frameStep;
-        private const int gizmoRayLength = 10000;
+       
 
         public DateTime Time
         {
@@ -66,7 +64,6 @@ namespace Netherlands3D.ProjectTime
 
                 time = value;
                 UpdateTimeOfDayPartsFromTime();
-                SetDirection();
                 timeOfDayChanged.Invoke(time);
             }
         }
@@ -96,8 +93,7 @@ namespace Netherlands3D.ProjectTime
                 var newTime = new DateTime(year, month, day, hour, minutes, seconds, dateTimeKind);
                 Time = newTime;
             }
-
-            RecalculateOrigin();
+           
             OnProjectDataChanged(ProjectData.Current); //set initial value based on the current project
         }
         
@@ -162,15 +158,6 @@ namespace Netherlands3D.ProjectTime
             frameStep = (frameStep + 1) % frameSteps;
         }
 
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            var position = this.transform.position;
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawRay(position, position - sunDirectionalLight.transform.forward * gizmoRayLength);
-        }
-#endif
-
         public void ToggleAnimation(bool animate)
         {
             this.animate = animate;
@@ -200,21 +187,6 @@ namespace Netherlands3D.ProjectTime
                 second,
                 Time.Millisecond,
                 Time.Kind);
-        }
-
-        public void SetHour(int hour)
-        {
-            SetTime(hour, Time.Minute, Time.Second);
-        }
-
-        public void SetMinutes(int minute)
-        {
-            SetTime(Time.Hour, minute, Time.Second);
-        }
-
-        public void SetSeconds(int second)
-        {
-            SetTime(Time.Hour, Time.Minute, second);
         }
 
         public void SetDate(int day, int month, int year)
@@ -252,6 +224,21 @@ namespace Netherlands3D.ProjectTime
             SetDate(Time.Day, Time.Month, year);
         }
         
+        public void SetHour(int hour)
+        {
+            SetTime(hour, Time.Minute, Time.Second);
+        }
+
+        public void SetMinutes(int minute)
+        {
+            SetTime(Time.Hour, minute, Time.Second);
+        }
+
+        public void SetSeconds(int second)
+        {
+            SetTime(Time.Hour, Time.Minute, second);
+        }
+        
         public void SetTimeSpeed(float speed)
         {
             timeSpeed = Math.Clamp(speed, 1, maxSpeed);
@@ -273,30 +260,6 @@ namespace Netherlands3D.ProjectTime
             day = time.Day;
             month = time.Month;
             year = time.Year;
-        }
-
-        private void DetermineCurrentLocationFromOrigin()
-        {
-            var wgs84SceneCenter = CoordinateSystems.CoordinateAtUnityOrigin.Convert(CoordinateSystem.WGS84_LatLon);
-            longitude = (float)wgs84SceneCenter.easting;
-            latitude = (float)wgs84SceneCenter.northing;
-        }
-
-        private void SetDirection()
-        {
-            Vector3 angles = new Vector3();
-            SunPosition.CalculateSunPosition(time, (double)latitude, (double)longitude, out double azi, out double alt);
-            angles.x = (float)alt * Mathf.Rad2Deg;
-            angles.y = (float)azi * Mathf.Rad2Deg;
-
-            sunDirectionalLight.transform.localRotation = Quaternion.Euler(angles);
-        }
-
-        //call this when the origin changes to recalculate the origin and set the sun position without calling the time change event
-        public void RecalculateOrigin()
-        {
-            DetermineCurrentLocationFromOrigin();
-            SetDirection();
         }
     }
 }

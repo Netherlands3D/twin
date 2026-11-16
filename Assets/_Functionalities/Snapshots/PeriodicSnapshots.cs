@@ -130,44 +130,49 @@ namespace Netherlands3D.Snapshots
             previousTarget = sourceCamera.targetTexture;
             previousMask = sourceCamera.cullingMask;
             previousActive = RenderTexture.active;
-            
-            sourceCamera.cullingMask = snapshotLayers;
-            snapshotWidth = useViewSize ? Screen.width : width;
-            snapshotHeight = useViewSize ? Screen.height : height;
-            renderTexture = new RenderTexture(snapshotWidth, snapshotHeight, 24, RenderTextureFormat.ARGB32);
-            renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
-            sourceCamera.targetTexture = renderTexture;
-            
-            yield return null;
-            
-            onStartGenerating.Invoke();
-            for (var index = 0; index < moments.Count; index++)
+
+            try
             {
-                onProgress.Invoke(1f / moments.Count * (index + 1));
-                yield return TakeSnapshot(moments[index], path);
-                
+
+                sourceCamera.cullingMask = snapshotLayers;
+                snapshotWidth = useViewSize ? Screen.width : width;
+                snapshotHeight = useViewSize ? Screen.height : height;
+                renderTexture = new RenderTexture(snapshotWidth, snapshotHeight, 24, RenderTextureFormat.ARGB32);
+                renderTexture.antiAliasing = Mathf.Max(1, QualitySettings.antiAliasing);
+                sourceCamera.targetTexture = renderTexture;
+
+                yield return null;
+
+                onStartGenerating.Invoke();
+                for (var index = 0; index < moments.Count; index++)
+                {
+                    onProgress.Invoke(1f / moments.Count * (index + 1));
+                    yield return TakeSnapshot(moments[index], path);
+                }
+
+                var archiveFilePath = FetchArchivePath(timestamp);
+                if (File.Exists(archiveFilePath)) File.Delete(archiveFilePath);
+
+                ZipFile.CreateFromDirectory(path, archiveFilePath);
+                Directory.Delete(path, true);
+
+                // Make sure no rounding errors occur and set it to 1f
+                onProgress.Invoke(1f);
             }
-
-            var archiveFilePath = FetchArchivePath(timestamp);
-            if (File.Exists(archiveFilePath)) File.Delete(archiveFilePath);
-
-            ZipFile.CreateFromDirectory(path, archiveFilePath);
-            Directory.Delete(path, true);
-
-            // Make sure no rounding errors occur and set it to 1f
-            onProgress.Invoke(1f);
-            
-            sourceCamera.targetTexture = previousTarget;
-            sourceCamera.cullingMask = previousMask;
-            RenderTexture.active = previousActive;
-            
-            if (renderTexture != null)
+            finally
             {
+                sourceCamera.targetTexture = previousTarget;
+                sourceCamera.cullingMask = previousMask;
+                RenderTexture.active = previousActive;
+            
+                if (renderTexture != null)
+                {
                
-                Destroy(renderTexture);
-            }
+                    Destroy(renderTexture);
+                }
 
-            onFinishedGenerating.Invoke();
+                onFinishedGenerating.Invoke();
+            }
         }
 
         private string FetchArchivePath(string timestamp)

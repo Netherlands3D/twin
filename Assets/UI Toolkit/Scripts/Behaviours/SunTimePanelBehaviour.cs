@@ -1,4 +1,5 @@
 using System;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials;
 using Netherlands3D.ProjectTime;
 using Netherlands3D.Snapshots;
@@ -19,6 +20,11 @@ namespace Netherlands3D
         // SunTime stores speed as seconds/second internally.
         // The UI shows speed in hours/second so we apply this factor.
         private const float SecondsPerHour = 3600f;
+        private float longitude;
+        private float latitude;
+        
+        [Header("Settings")] [SerializeField] private Light sunDirectionalLight;
+        private const int gizmoRayLength = 10000;
 
         private void Start()
         {
@@ -31,6 +37,9 @@ namespace Netherlands3D
             periodicSnapshotsService.onStartGenerating.AddListener(CacheTime);
             periodicSnapshotsService.SetTimeForSnapshot.AddListener(SetTimeForSnapshot);
             periodicSnapshotsService.onFinishedGenerating.AddListener(ResetTimeAfterSnapshots);
+            
+            timeService.timeOfDayChanged.AddListener(SetDirection);
+            RecalculateOrigin(timeService.Time);
         }
        
         private void OnDestroy()
@@ -41,6 +50,10 @@ namespace Netherlands3D
             periodicSnapshotsService.onStartGenerating.RemoveListener(CacheTime);
             periodicSnapshotsService.SetTimeForSnapshot.RemoveListener(SetTimeForSnapshot);
             periodicSnapshotsService.onFinishedGenerating.RemoveListener(ResetTimeAfterSnapshots);
+            
+            timeService.timeOfDayChanged.RemoveListener(SetDirection);
+            
+            OnClosePanel();
         }
        
         private void OnOpenPanel()
@@ -98,5 +111,38 @@ namespace Netherlands3D
             var dt = sunTimePanel.TimeField.GetValueAsTime(timeService.Time);
             timeService?.SetTime(dt.Hour, dt.Minute, 0);
         }
+        
+        private void DetermineCurrentLocationFromOrigin()
+        {
+            var wgs84SceneCenter = CoordinateSystems.CoordinateAtUnityOrigin.Convert(CoordinateSystem.WGS84_LatLon);
+            longitude = (float)wgs84SceneCenter.easting;
+            latitude = (float)wgs84SceneCenter.northing;
+        }
+
+        private void SetDirection(DateTime time)
+        {
+            Vector3 angles = new Vector3();
+            SunPosition.CalculateSunPosition(time, (double)latitude, (double)longitude, out double azi, out double alt);
+            angles.x = (float)alt * Mathf.Rad2Deg;
+            angles.y = (float)azi * Mathf.Rad2Deg;
+
+            sunDirectionalLight.transform.localRotation = Quaternion.Euler(angles);
+        }
+
+        //call this when the origin changes to recalculate the origin and set the sun position without calling the time change event
+        public void RecalculateOrigin(DateTime time)
+        {
+            DetermineCurrentLocationFromOrigin();
+            SetDirection(time);
+        }
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            var position = this.transform.position;
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(position, position - sunDirectionalLight.transform.forward * gizmoRayLength);
+        }
+#endif
     }
 }
