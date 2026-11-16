@@ -18,6 +18,7 @@ namespace Netherlands3D
 
         private UIDocument appDocument;
         private VisualElement appRoot;
+        private DashboardHUD dashboardOverlay;
         private Button closeDashboardButton;
         private VisualElement previousFocus;
         private Functionality dashboardFunctionality;
@@ -29,7 +30,7 @@ namespace Netherlands3D
             appDocument = GetComponent<UIDocument>();
             appRoot = appDocument?.rootVisualElement;
 
-            var dashboardOverlay = appRoot?.Q("DashboardOverlay");
+            dashboardOverlay = appRoot?.Q<DashboardHUD>("DashboardOverlay");
             closeDashboardButton = dashboardOverlay?.Q<Button>("CloseDashboard");
             if (closeDashboardButton == null) return;
 
@@ -129,6 +130,7 @@ namespace Netherlands3D
 
             previousFocus = focusOnClose;
             appRoot.AddToClassList(DashboardOpenClass);
+            dashboardOverlay.StartDataBinding();
             // Wait for the close button to become visible before moving focus.
             closeDashboardButton.schedule.Execute(() =>
             {
@@ -170,6 +172,7 @@ namespace Netherlands3D
             if (appRoot?.ClassListContains(DashboardOpenClass) != true) return;
 
             appRoot.RemoveFromClassList(DashboardOpenClass);
+            dashboardOverlay.StopDataBinding();
             var elementToFocus = previousFocus;
             previousFocus = null;
             if (elementToFocus?.panel == null) return;

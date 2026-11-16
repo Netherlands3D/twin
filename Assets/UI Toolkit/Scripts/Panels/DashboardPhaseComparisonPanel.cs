@@ -13,6 +13,7 @@ namespace Netherlands3D.UI.Panels
     {
         private const string EmptyValue = "\u2014";
         private const string ValueClass = "dashboard-phase-comparison__value";
+        private const string PhaseCellClass = "dashboard-phase-comparison__phase-cell";
         private const string LabelClass = "dashboard-phase-comparison__label";
         private const string RowClass = "dashboard-phase-comparison__row";
         private const int PhaseCount = 4;
@@ -27,22 +28,21 @@ namespace Netherlands3D.UI.Panels
 
         private readonly Header header;
         private readonly ToggleButtonGroup tabs;
+        private readonly Button keyFiguresButton;
         private readonly Button programBreakdownButton;
         private readonly Button roomsButton;
         private readonly Button blockTotalsButton;
         private readonly UnityEngine.UIElements.ScrollView scrollView;
         private readonly VisualElement columnHeadings;
         private readonly Label rowHeading;
-        private readonly VisualElement breakdownRows;
+        private readonly VisualElement tableRows;
         private readonly Label emptyBreakdown;
-        private readonly VisualElement housingRows;
-        private readonly VisualElement nonHousingRows;
-        private readonly List<Label> totalDwellingsCells;
-        private readonly List<Label> dwellingChangesCells;
-        private readonly List<Label> averageMinimumFloorAreaCells;
-        private readonly List<Label> minimumFloorAreaChangesCells;
-        private readonly List<Label> totalGrossFloorAreaCells;
-        private readonly List<Label> grossFloorAreaChangesCells;
+        private string[] totalDwellingsCells;
+        private string[] dwellingChangesCells;
+        private string[] averageMinimumFloorAreaCells;
+        private string[] minimumFloorAreaChangesCells;
+        private string[] totalGrossFloorAreaCells;
+        private string[] grossFloorAreaChangesCells;
 
         private bool nonHousing;
         private string segmentBreakdown;
@@ -50,6 +50,9 @@ namespace Netherlands3D.UI.Panels
         private string roomBreakdown;
         private string blockBreakdown;
         private string nonHousingBlockBreakdown;
+        private (IReadOnlyList<(string Label, string[] Cells)> Segments, IReadOnlyList<(string Label, string[] Cells)> Rooms,
+            IReadOnlyList<(string Label, string[] Cells)> Categories, IReadOnlyList<(string Label, string[] Cells)> HousingBlocks,
+            IReadOnlyList<(string Label, string[] Cells)> NonHousingBlocks) loadedBreakdowns;
 
         [UxmlAttribute("non-housing")]
         public bool NonHousing
@@ -58,7 +61,7 @@ namespace Netherlands3D.UI.Panels
             set
             {
                 nonHousing = value;
-                header.LabelText = value ? "Fasevergelijking niet-wonen" : "Fasevergelijking wonen";
+                header.LabelText = value ? "Fasevergelijking \u2013 Niet-wonen" : "Fasevergelijking \u2013 Wonen";
                 programBreakdownButton.LabelText = value ? "Categorieën" : "Segmenten";
                 roomsButton.EnableInClassList(UtilityClassConstants.HIDDEN, value);
                 roomsButton.SetEnabled(!value);
@@ -75,42 +78,42 @@ namespace Netherlands3D.UI.Panels
         public string TotalDwellings
         {
             get => GetPhaseValues(totalDwellingsCells);
-            set => SetPhaseValues(totalDwellingsCells, value);
+            set => SetPhaseValues(ref totalDwellingsCells, value);
         }
 
         [UxmlAttribute("dwelling-changes")]
         public string DwellingChanges
         {
             get => GetPhaseValues(dwellingChangesCells);
-            set => SetPhaseValues(dwellingChangesCells, value);
+            set => SetPhaseValues(ref dwellingChangesCells, value);
         }
 
         [UxmlAttribute("average-minimum-floor-area")]
         public string AverageMinimumFloorArea
         {
             get => GetPhaseValues(averageMinimumFloorAreaCells);
-            set => SetPhaseValues(averageMinimumFloorAreaCells, value);
+            set => SetPhaseValues(ref averageMinimumFloorAreaCells, value);
         }
 
         [UxmlAttribute("minimum-floor-area-changes")]
         public string MinimumFloorAreaChanges
         {
             get => GetPhaseValues(minimumFloorAreaChangesCells);
-            set => SetPhaseValues(minimumFloorAreaChangesCells, value);
+            set => SetPhaseValues(ref minimumFloorAreaChangesCells, value);
         }
 
         [UxmlAttribute("total-gross-floor-area")]
         public string TotalGrossFloorArea
         {
             get => GetPhaseValues(totalGrossFloorAreaCells);
-            set => SetPhaseValues(totalGrossFloorAreaCells, value);
+            set => SetPhaseValues(ref totalGrossFloorAreaCells, value);
         }
 
         [UxmlAttribute("gross-floor-area-changes")]
         public string GrossFloorAreaChanges
         {
             get => GetPhaseValues(grossFloorAreaChangesCells);
-            set => SetPhaseValues(grossFloorAreaChangesCells, value);
+            set => SetPhaseValues(ref grossFloorAreaChangesCells, value);
         }
 
         [UxmlAttribute("segment-breakdown")]
@@ -155,25 +158,17 @@ namespace Netherlands3D.UI.Panels
 
             header = this.Q<Header>("ComparisonHeader");
             tabs = this.Q<ToggleButtonGroup>("ComparisonTabs");
-            programBreakdownButton = this.Q<Button>("ProgramBreakdownTab");
-            roomsButton = this.Q<Button>("RoomsTab");
-            blockTotalsButton = this.Q<Button>("BlockTotalsTab");
+            keyFiguresButton = tabs.Q<Button>("KeyFiguresTab");
+            programBreakdownButton = tabs.Q<Button>("ProgramBreakdownTab");
+            roomsButton = tabs.Q<Button>("RoomsTab");
+            blockTotalsButton = tabs.Q<Button>("BlockTotalsTab");
             scrollView = this.Q<UnityEngine.UIElements.ScrollView>("ComparisonScrollView");
             columnHeadings = this.Q("ColumnHeadings");
             rowHeading = this.Q<Label>("RowHeading");
-            breakdownRows = this.Q("BreakdownRows");
+            tableRows = this.Q("BreakdownRows");
             emptyBreakdown = this.Q<Label>("EmptyBreakdown");
-            housingRows = this.Q("HousingRows");
-            nonHousingRows = this.Q("NonHousingRows");
-            totalDwellingsCells = GetValueCells("TotalDwellingsRow");
-            dwellingChangesCells = GetValueCells("DwellingChangesRow");
-            averageMinimumFloorAreaCells = GetValueCells("AverageMinimumFloorAreaRow");
-            minimumFloorAreaChangesCells = GetValueCells("MinimumFloorAreaChangesRow");
-            totalGrossFloorAreaCells = GetValueCells("TotalGrossFloorAreaRow");
-            grossFloorAreaChangesCells = GetValueCells("GrossFloorAreaChangesRow");
 
-            if (tabs.value.length == 0 || !tabs.value[(int)ComparisonTab.KeyFigures])
-                SelectKeyFigures();
+            SelectKeyFigures();
 
             scrollView.verticalScroller.valueChanged += offset => columnHeadings.style.translate = new Translate(0, offset);
 
@@ -186,19 +181,58 @@ namespace Netherlands3D.UI.Panels
             ShowTab(GetSelectedTab(tabs.value));
         }
 
+        internal void SetKeyFigureData(string dwellings, string dwellingDifferences, string minimumFloorArea, string floorAreaDifferences, string grossFloorArea, string grossFloorAreaDifferences)
+        {
+            totalDwellingsCells = dwellings?.Split('|');
+            dwellingChangesCells = dwellingDifferences?.Split('|');
+            averageMinimumFloorAreaCells = minimumFloorArea?.Split('|');
+            minimumFloorAreaChangesCells = floorAreaDifferences?.Split('|');
+            totalGrossFloorAreaCells = grossFloorArea?.Split('|');
+            grossFloorAreaChangesCells = grossFloorAreaDifferences?.Split('|');
+
+            if (GetSelectedTab(tabs.value) == ComparisonTab.KeyFigures)
+                ShowTab(ComparisonTab.KeyFigures);
+        }
+
+        internal void SetBreakdownData((string Label, string[] Cells)[] segments, (string Label, string[] Cells)[] rooms,
+            (string Label, string[] Cells)[] categories, (string Label, string[] Cells)[] housingBlocks, (string Label, string[] Cells)[] nonHousingBlocks)
+        {
+            loadedBreakdowns = (segments, rooms, categories, housingBlocks, nonHousingBlocks);
+            var selectedTab = GetSelectedTab(tabs.value);
+            if (selectedTab != ComparisonTab.KeyFigures)
+                ShowTab(selectedTab);
+        }
+
         private void SelectKeyFigures()
         {
             var selection = new ToggleButtonGroupState(0, tabs.childCount);
-            selection[(int)ComparisonTab.KeyFigures] = true;
-            tabs.SetValueWithoutNotify(selection);
+            for (var i = 0; i < selection.length; i++)
+            {
+                if (tabs.GetButton(i) != keyFiguresButton)
+                    continue;
+
+                selection[i] = true;
+                tabs.SetValueWithoutNotify(selection);
+                return;
+            }
         }
 
-        private static ComparisonTab GetSelectedTab(ToggleButtonGroupState selection)
+        private ComparisonTab GetSelectedTab(ToggleButtonGroupState selection)
         {
             for (var i = 0; i < selection.length; i++)
             {
-                if (selection[i])
-                    return (ComparisonTab)i;
+                if (!selection[i])
+                    continue;
+
+                var button = tabs.GetButton(i);
+                if (button == programBreakdownButton)
+                    return ComparisonTab.ProgramBreakdown;
+                if (button == roomsButton)
+                    return ComparisonTab.Rooms;
+                if (button == blockTotalsButton)
+                    return ComparisonTab.Blocks;
+
+                break;
             }
 
             return ComparisonTab.KeyFigures;
@@ -206,27 +240,42 @@ namespace Netherlands3D.UI.Panels
 
         private void ShowTab(ComparisonTab tab)
         {
-            var showKeyFigures = tab == ComparisonTab.KeyFigures;
-            housingRows.EnableInClassList(UtilityClassConstants.HIDDEN, !showKeyFigures || nonHousing);
-            nonHousingRows.EnableInClassList(UtilityClassConstants.HIDDEN, !showKeyFigures || !nonHousing);
-            breakdownRows.EnableInClassList(UtilityClassConstants.HIDDEN, showKeyFigures);
-
-            var (heading, rows) = tab switch
+            var (heading, previewRows, loadedRows) = tab switch
             {
-                ComparisonTab.ProgramBreakdown => nonHousing ? ("Categorie", categoryBreakdown) : ("Woonsegment", segmentBreakdown),
-                ComparisonTab.Rooms => ("Kamertype", roomBreakdown),
-                ComparisonTab.Blocks => ("Bouwblok", nonHousing ? nonHousingBlockBreakdown : blockBreakdown),
-                _ => ("Indicator", null)
+                ComparisonTab.ProgramBreakdown => nonHousing
+                    ? ("BVO per categorie (m\u00b2)", categoryBreakdown, loadedBreakdowns.Categories)
+                    : ("Woningen per segment", segmentBreakdown, loadedBreakdowns.Segments),
+                ComparisonTab.Rooms => ("Woningen per kamertype", roomBreakdown, loadedBreakdowns.Rooms),
+                ComparisonTab.Blocks => nonHousing
+                    ? ("BVO per bouwblok (m\u00b2)", nonHousingBlockBreakdown, loadedBreakdowns.NonHousingBlocks)
+                    : ("Woningen per bouwblok", blockBreakdown, loadedBreakdowns.HousingBlocks),
+                _ => ("Vergelijking", null, GetKeyFigureRows())
             };
 
             rowHeading.text = heading;
-            if (!showKeyFigures)
-                PopulateBreakdown(rows);
-
-            var visibleRows = showKeyFigures ? (nonHousing ? nonHousingRows : housingRows) : breakdownRows;
-            var hasData = visibleRows.Query<Label>(className: ValueClass).ToList().Any(cell => cell.text != EmptyValue);
+            var hasData = RenderRows(loadedRows ?? ParsePreviewRows(previewRows));
             scrollView.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
             emptyBreakdown.EnableInClassList(UtilityClassConstants.HIDDEN, hasData);
+        }
+
+        private IReadOnlyList<(string Label, string[] Cells)> GetKeyFigureRows()
+        {
+            if (nonHousing)
+            {
+                return new (string Label, string[] Cells)[]
+                {
+                    ("Totaal BVO", totalGrossFloorAreaCells),
+                    ("Verschil in BVO (t.o.v. de vorige fase)", grossFloorAreaChangesCells)
+                };
+            }
+
+            return new (string Label, string[] Cells)[]
+            {
+                ("Totaal woningen", totalDwellingsCells),
+                ("Verschil in woningen (t.o.v. de vorige fase)", dwellingChangesCells),
+                ("Gemiddelde minimale woonoppervlakte", averageMinimumFloorAreaCells),
+                ("Verschil in woonoppervlakte (t.o.v. de vorige fase)", minimumFloorAreaChangesCells)
+            };
         }
 
         private void SetBreakdown(ref string destination, string value, ComparisonTab tab)
@@ -236,49 +285,56 @@ namespace Netherlands3D.UI.Panels
                 ShowTab(tab);
         }
 
-        // A breakdown has one row per semicolon and one phase value per pipe after the label.
-        private void PopulateBreakdown(string rows)
+        private static (string Label, string[] Cells)[] ParsePreviewRows(string rows)
         {
-            breakdownRows.Clear();
+            if (string.IsNullOrWhiteSpace(rows))
+                return System.Array.Empty<(string Label, string[] Cells)>();
 
-            if (!string.IsNullOrWhiteSpace(rows))
-            {
-                foreach (var rowText in rows.Split(';'))
-                {
-                    if (string.IsNullOrWhiteSpace(rowText))
-                        continue;
-
-                    var columns = rowText.Split('|');
-                    var row = new VisualElement();
-                    row.AddToClassList(RowClass);
-
-                    var label = new Label(columns[0].Trim());
-                    label.AddToClassList(LabelClass);
-                    row.Add(label);
-
-                    for (var i = 0; i < PhaseCount; i++)
-                    {
-                        var value = new Label(GetPhaseValue(columns, i + 1));
-                        value.AddToClassList(ValueClass);
-                        value.AddToClassList("text-header");
-                        row.Add(value);
-                    }
-
-                    breakdownRows.Add(row);
-                }
-            }
-
+            return rows.Split(';').Where(row => !string.IsNullOrWhiteSpace(row))
+                .Select(row => row.Split('|'))
+                .Select(columns => (columns[0].Trim(), columns.Skip(1).ToArray())).ToArray();
         }
 
-        private List<Label> GetValueCells(string rowName) => this.Q(rowName).Query<Label>(className: ValueClass).ToList();
-
-        private static string GetPhaseValues(List<Label> cells) => string.Join(" | ", cells.Select(cell => cell.text));
-
-        private void SetPhaseValues(List<Label> cells, string values)
+        private bool RenderRows(IEnumerable<(string Label, string[] Cells)> rows)
         {
-            var phaseValues = values?.Split('|');
-            for (var i = 0; i < cells.Count; i++)
-                cells[i].text = GetPhaseValue(phaseValues, i);
+            tableRows.Clear();
+            var hasData = false;
+
+            foreach (var (rowTitle, cells) in rows)
+            {
+                var row = new VisualElement();
+                row.AddToClassList(RowClass);
+
+                var label = new Label(rowTitle);
+                label.AddToClassList(LabelClass);
+                row.Add(label);
+
+                for (var i = 0; i < PhaseCount; i++)
+                {
+                    var phaseValue = GetPhaseValue(cells, i);
+                    hasData |= phaseValue != EmptyValue;
+
+                    var cell = new VisualElement();
+                    cell.AddToClassList(ValueClass);
+                    cell.AddToClassList(PhaseCellClass);
+
+                    var value = new Label(phaseValue);
+                    value.AddToClassList("text-header");
+                    cell.Add(value);
+                    row.Add(cell);
+                }
+
+                tableRows.Add(row);
+            }
+
+            return hasData;
+        }
+
+        private static string GetPhaseValues(string[] cells) => string.Join(" | ", Enumerable.Range(0, PhaseCount).Select(i => GetPhaseValue(cells, i)));
+
+        private void SetPhaseValues(ref string[] cells, string values)
+        {
+            cells = values?.Split('|');
 
             if (GetSelectedTab(tabs.value) == ComparisonTab.KeyFigures)
                 ShowTab(ComparisonTab.KeyFigures);

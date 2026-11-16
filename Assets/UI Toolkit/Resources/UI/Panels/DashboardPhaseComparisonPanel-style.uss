@@ -1,4 +1,7 @@
+@import url("../_DashboardTheme.uss");
+
 .dashboard-phase-comparison {
+    --phase-comparison-heading-height: var(--spacing-8);
     flex-grow: 1;
     min-height: 0;
     min-width: 0;
@@ -13,6 +16,7 @@
 }
 
 .dashboard-phase-comparison__toolbar > .header {
+    flex-grow: 1;
     margin-right: var(--spacing-4);
 }
 
@@ -52,8 +56,8 @@
 
 .dashboard-phase-comparison__table {
     flex-shrink: 0;
-    min-width: 808px;
-    padding-top: var(--spacing-6);
+    min-width: 848px;
+    padding-top: var(--phase-comparison-heading-height);
 }
 
 .dashboard-phase-comparison__row {
@@ -69,14 +73,58 @@
     top: 0;
     left: 0;
     right: 0;
-    height: var(--spacing-6);
-    align-items: center;
+    height: var(--phase-comparison-heading-height);
+    align-items: stretch;
     background-color: var(--color-white);
+}
+
+.dashboard-phase-comparison__column-headings > .dashboard-phase-comparison__row-heading {
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+}
+
+.dashboard-phase-comparison__phase-cell {
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-phase-comparison__phase-cell > .unity-label {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    white-space: nowrap;
+    -unity-text-align: middle-center;
+}
+
+.dashboard-phase-comparison__phase-cell > .dashboard-phase-comparison__phase-badge {
+    min-width: var(--spacing-12);
+    height: var(--spacing-6);
+    margin: 0;
+    padding: 0 var(--spacing-2);
+    border-radius: var(--spacing-3);
+    color: var(--color-white);
+}
+
+.dashboard-phase-comparison__phase-badge--bbp {
+    background-color: var(--color-dashboard-phase-bbp);
+}
+
+.dashboard-phase-comparison__phase-badge--so {
+    background-color: var(--color-dashboard-phase-so);
+}
+
+.dashboard-phase-comparison__phase-badge--vo {
+    background-color: var(--color-dashboard-phase-vo);
+}
+
+.dashboard-phase-comparison__phase-badge--do {
+    background-color: var(--color-dashboard-phase-do);
 }
 
 .dashboard-phase-comparison__label {
     flex-grow: 2;
-    flex-basis: var(--spacing-40);
+    flex-basis: var(--spacing-50);
     flex-shrink: 0;
     margin-right: var(--spacing-2);
 }
@@ -85,6 +133,6 @@
     flex-grow: 1;
     flex-basis: var(--spacing-40);
     flex-shrink: 0;
-    white-space: nowrap;
-    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
 }

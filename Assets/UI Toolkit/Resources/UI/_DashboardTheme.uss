@@ -1,0 +1,6 @@
+.dashboard-theme {
+    --color-dashboard-phase-bbp: #1a56a0;
+    --color-dashboard-phase-so: #c05000;
+    --color-dashboard-phase-vo: #1060a0;
+    --color-dashboard-phase-do: #7030b0;
+}

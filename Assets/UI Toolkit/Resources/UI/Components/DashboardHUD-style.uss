@@ -41,7 +41,7 @@
 }
 
 .dashboard-hud__phase-changes {
-    height: var(--spacing-40);
+    height: 240px;
     max-height: 40%;
     flex-shrink: 0;
     background-color: var(--color-white);
