@@ -191,12 +191,11 @@ namespace Netherlands3D.CartesianTiles
 
             var results = webRequest.downloadHandler.nativeData;
 
-            webRequest.Dispose();
-
-            if (results == null || results.Length == 0)
+            if (results.IsCreated || results.Length == 0)
             {
                 Debug.LogError($"Downloaded empty mesh for tile {tileKey} from {url}");
                 RemoveGameObject(tileKey);
+                webRequest.Dispose();
                 callback?.Invoke(tileChange);
                 yield break;
             }
@@ -204,6 +203,9 @@ namespace Netherlands3D.CartesianTiles
             yield return new WaitUntil(() => pauseLoading == false);
 
             GameObject newGameobject = CreateNewGameObject(url, results, tileChange);
+            
+            webRequest.Dispose();
+            
             if (!newGameobject)
             {
                 callback?.Invoke(tileChange);
