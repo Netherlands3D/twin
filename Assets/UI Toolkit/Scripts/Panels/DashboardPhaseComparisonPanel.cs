@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
@@ -47,13 +47,9 @@ namespace Netherlands3D.UI.Panels
         private string[] grossFloorAreaChangesCells;
 
         private bool nonHousing;
-        private string segmentBreakdown;
-        private string categoryBreakdown;
-        private string roomBreakdown;
         private (IReadOnlyList<(string Label, string[] Cells)> Segments, IReadOnlyList<(string Label, string[] Cells)> Rooms,
             IReadOnlyList<(string Label, string[] Cells)> Categories, IReadOnlyList<(string Label, string[] Cells)> SocialFacilities) loadedBreakdowns;
 
-        [UxmlAttribute("non-housing")]
         public bool NonHousing
         {
             get => nonHousing;
@@ -81,69 +77,6 @@ namespace Netherlands3D.UI.Panels
 
                 ShowTab(GetSelectedTab(tabs.value));
             }
-        }
-
-        [UxmlAttribute("total-dwellings")]
-        public string TotalDwellings
-        {
-            get => GetPhaseValues(totalDwellingsCells);
-            set => SetPhaseValues(ref totalDwellingsCells, value);
-        }
-
-        [UxmlAttribute("dwelling-changes")]
-        public string DwellingChanges
-        {
-            get => GetPhaseValues(dwellingChangesCells);
-            set => SetPhaseValues(ref dwellingChangesCells, value);
-        }
-
-        [UxmlAttribute("average-minimum-floor-area")]
-        public string AverageMinimumFloorArea
-        {
-            get => GetPhaseValues(averageMinimumFloorAreaCells);
-            set => SetPhaseValues(ref averageMinimumFloorAreaCells, value);
-        }
-
-        [UxmlAttribute("minimum-floor-area-changes")]
-        public string MinimumFloorAreaChanges
-        {
-            get => GetPhaseValues(minimumFloorAreaChangesCells);
-            set => SetPhaseValues(ref minimumFloorAreaChangesCells, value);
-        }
-
-        [UxmlAttribute("total-gross-floor-area")]
-        public string TotalGrossFloorArea
-        {
-            get => GetPhaseValues(totalGrossFloorAreaCells);
-            set => SetPhaseValues(ref totalGrossFloorAreaCells, value);
-        }
-
-        [UxmlAttribute("gross-floor-area-changes")]
-        public string GrossFloorAreaChanges
-        {
-            get => GetPhaseValues(grossFloorAreaChangesCells);
-            set => SetPhaseValues(ref grossFloorAreaChangesCells, value);
-        }
-
-        [UxmlAttribute("segment-breakdown")]
-        public string SegmentBreakdown
-        {
-            get => segmentBreakdown;
-            set => SetBreakdown(ref segmentBreakdown, value, ComparisonTab.Segments);
-        }
-
-        [UxmlAttribute("category-breakdown")]
-        public string CategoryBreakdown
-        {
-            get => categoryBreakdown;
-            set => SetBreakdown(ref categoryBreakdown, value, ComparisonTab.Categories);
-        }
-
-        [UxmlAttribute("room-breakdown")]
-        public string RoomBreakdown
-        {
-            get => roomBreakdown;
-            set => SetBreakdown(ref roomBreakdown, value, ComparisonTab.Rooms);
         }
 
         public DashboardPhaseComparisonPanel()
@@ -244,17 +177,17 @@ namespace Netherlands3D.UI.Panels
 
         private void ShowTab(ComparisonTab tab)
         {
-            var (heading, previewRows, loadedRows) = tab switch
+            var (heading, rows) = tab switch
             {
-                ComparisonTab.Segments => ("Woningen per segment", segmentBreakdown, loadedBreakdowns.Segments),
-                ComparisonTab.Categories => ("BVO per categorie (m\u00b2)", categoryBreakdown, loadedBreakdowns.Categories),
-                ComparisonTab.SocialFacilities => ("BVO per subcategorie", null, loadedBreakdowns.SocialFacilities),
-                ComparisonTab.Rooms => ("Woningen per kamertype", roomBreakdown, loadedBreakdowns.Rooms),
-                _ => ("Vergelijking", null, GetKeyFigureRows())
+                ComparisonTab.Segments => ("Woningen per segment", loadedBreakdowns.Segments),
+                ComparisonTab.Categories => ("BVO per categorie (m\u00b2)", loadedBreakdowns.Categories),
+                ComparisonTab.SocialFacilities => ("BVO per subcategorie", loadedBreakdowns.SocialFacilities),
+                ComparisonTab.Rooms => ("Woningen per kamertype", loadedBreakdowns.Rooms),
+                _ => ("Vergelijking", GetKeyFigureRows())
             };
 
             rowHeading.text = heading;
-            var hasData = RenderRows(loadedRows ?? ParsePreviewRows(previewRows));
+            var hasData = RenderRows(rows ?? Array.Empty<(string Label, string[] Cells)>());
             scrollView.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
             emptyBreakdown.EnableInClassList(UtilityClassConstants.HIDDEN, hasData);
         }
@@ -277,23 +210,6 @@ namespace Netherlands3D.UI.Panels
                 ("Gemiddelde minimale woonoppervlakte", averageMinimumFloorAreaCells),
                 ("Verschil in woonoppervlakte (t.o.v. de vorige fase)", minimumFloorAreaChangesCells)
             };
-        }
-
-        private void SetBreakdown(ref string destination, string value, ComparisonTab tab)
-        {
-            destination = value;
-            if (GetSelectedTab(tabs.value) == tab)
-                ShowTab(tab);
-        }
-
-        private static (string Label, string[] Cells)[] ParsePreviewRows(string rows)
-        {
-            if (string.IsNullOrWhiteSpace(rows))
-                return System.Array.Empty<(string Label, string[] Cells)>();
-
-            return rows.Split(';').Where(row => !string.IsNullOrWhiteSpace(row))
-                .Select(row => row.Split('|'))
-                .Select(columns => (columns[0].Trim(), columns.Skip(1).ToArray())).ToArray();
         }
 
         private bool RenderRows(IEnumerable<(string Label, string[] Cells)> rows)
@@ -329,16 +245,6 @@ namespace Netherlands3D.UI.Panels
             }
 
             return hasData;
-        }
-
-        private static string GetPhaseValues(string[] cells) => string.Join(" | ", Enumerable.Range(0, PhaseCount).Select(i => GetPhaseValue(cells, i)));
-
-        private void SetPhaseValues(ref string[] cells, string values)
-        {
-            cells = values?.Split('|');
-
-            if (GetSelectedTab(tabs.value) == ComparisonTab.KeyFigures)
-                ShowTab(ComparisonTab.KeyFigures);
         }
 
         private static string GetPhaseValue(string[] values, int index)

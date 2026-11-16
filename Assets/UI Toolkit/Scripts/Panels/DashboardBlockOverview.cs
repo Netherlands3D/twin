@@ -24,56 +24,48 @@ namespace Netherlands3D.UI.Panels
         private readonly Label availablePhasesValue;
         private readonly Label nonHousingGrossFloorAreaValue;
 
-        [UxmlAttribute("header-text")]
         public string HeaderText
         {
             get => header.LabelText;
             set => header.LabelText = value;
         }
 
-        [UxmlAttribute("total-dwellings")]
         public string TotalDwellings
         {
             get => totalDwellingsValue.text;
             set => SetValue(totalDwellingsValue, value);
         }
 
-        [UxmlAttribute("social-dwellings")]
         public string SocialDwellings
         {
             get => socialDwellingsValue.text;
             set => SetValue(socialDwellingsValue, value);
         }
 
-        [UxmlAttribute("mid-rent-dwellings")]
         public string MidRentDwellings
         {
             get => midRentDwellingsValue.text;
             set => SetValue(midRentDwellingsValue, value);
         }
 
-        [UxmlAttribute("free-sector-dwellings")]
         public string FreeSectorDwellings
         {
             get => freeSectorDwellingsValue.text;
             set => SetValue(freeSectorDwellingsValue, value);
         }
 
-        [UxmlAttribute("average-minimum-floor-area")]
         public string AverageMinimumFloorArea
         {
             get => averageMinimumFloorAreaValue.text;
             set => SetValue(averageMinimumFloorAreaValue, value);
         }
 
-        [UxmlAttribute("available-phases")]
         public string AvailablePhases
         {
             get => availablePhasesValue.text;
             set => SetValue(availablePhasesValue, value);
         }
 
-        [UxmlAttribute("non-housing-gross-floor-area")]
         public string NonHousingGrossFloorArea
         {
             get => nonHousingGrossFloorAreaValue.text;
