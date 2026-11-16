@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using GeoJSON.Net.Feature;
+using netDxf.Collections;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
@@ -250,26 +251,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStylingToFeature(StylingFeature stylingFeature)
         {
-            ApplyBaseColor(); //todo: this is currently inefficient but necessary since the base color comes from a different StylingFeature than the individual color. This was a workaround to avoid having to create StylingFeatures for each GeoJsonFeature as that would have even more performance impact.
+            ApplyBaseColor(stylingFeature);
             ApplyFeatureColor(stylingFeature);
         }
 
-        private void ApplyBaseColor()
+        private void ApplyBaseColor(StylingFeature stylingFeature)
         {
-            foreach (var stylingFeature in LayerFeatures.Values)
-            {
-                if (stylingFeature.Geometry is not Material material)
-                    return;
+            if (stylingFeature.Geometry is not Material material)
+                return;
 
-                Symbolizer symbolizer = GetStyling(stylingFeature);
-                Color? color = symbolizer.GetFillColor();
-                if (color.HasValue)
+            Symbolizer symbolizer = GetStyling(stylingFeature);
+            
+            Color? color = symbolizer.GetFillColor();
+            if (color.HasValue)
+            {
+                if (int.TryParse(stylingFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
                 {
-                    if (int.TryParse(stylingFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
-                    {
-                        VisualisationLayers[materialIndex].RenderColor = color.Value;
-                        Debug.Log("Setting global render color for material index: " + materialIndex + "\t" + color.Value);
-                    }
+                    visualisationLayers[materialIndex].RenderColor = color.Value;
                 }
             }
         }
@@ -278,31 +276,35 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             if (stylingFeature.Geometry is not Feature geoJsonFeature)
                 return;
-
+            
             foreach (var typeVisualizer in VisualisationLayers)
             {
                 if (!typeVisualizer.SupportsGeometryType(geoJsonFeature))
                     continue;
 
-                var symbolizer = GetStyling(stylingFeature);
-
-                var isVisibleStyling = symbolizer.GetVisibility();
+                var featureSymbolizer = GetStyling(stylingFeature);
+                var baseColorSymbolizer = GetStyling(GetStylingFeatureByGeometry(typeVisualizer.RenderMaterial));
+                
+                //todo: this is currently inefficient but necessary since the base color comes from a different StylingFeature than the individual color. This was a workaround to avoid having to create StylingFeatures for each GeoJsonFeature as that would have even more performance impact.
+                var combinedSymbolizer = Symbolizer.Merge(baseColorSymbolizer, featureSymbolizer);
+                
+                var isVisibleStyling = combinedSymbolizer.GetVisibility();
                 var isVisible = isVisibleStyling.HasValue ? isVisibleStyling.Value : true;
 
                 typeVisualizer.SetColorForFeature(geoJsonFeature, Color.clear);
-                // visualizer.gameObject.SetActive(isVisible);
+
                 if (!isVisible)
                     return;
 
                 if (typeVisualizer.StylingColorProperty == Symbolizer.FillColorProperty)
                 {
-                    var fillColor = symbolizer.GetFillColor();
+                    var fillColor = combinedSymbolizer.GetFillColor();
                     if (fillColor.HasValue)
                         typeVisualizer.SetColorForFeature(geoJsonFeature, fillColor.Value);
                 }
                 else if (typeVisualizer.StylingColorProperty == Symbolizer.StrokeColorProperty)
                 {
-                    var strokeColor = symbolizer.GetStrokeColor();
+                    var strokeColor = combinedSymbolizer.GetStrokeColor();
                     if (strokeColor.HasValue)
                         typeVisualizer.SetColorForFeature(geoJsonFeature, strokeColor.Value);
                 }

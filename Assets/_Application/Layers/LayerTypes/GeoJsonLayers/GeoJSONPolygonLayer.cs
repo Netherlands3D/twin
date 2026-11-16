@@ -61,10 +61,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void SetColorForFeature(Feature feature, Color color)
         {
+            var newColor = new Color(color.r, color.g, color.b, polygonVisualizationMaterial.color.a); //todo: we don't support alpha yet in the color picker
+
             var pv = spawnedVisualisations[feature];
             foreach (var polygon in pv.Data)
             {
-                polygon.VisualisationMaterial.color = color;
+                polygon.VisualisationMaterial.color = newColor;
             }
         }
 
