@@ -1,0 +1,71 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="dashboard-phase-comparison">
+    <ui:VisualElement class="dashboard-phase-comparison__toolbar">
+        <nl3d:Header name="ComparisonHeader" icon="Object" text="Fasevergelijking wonen"/>
+        <ui:ToggleButtonGroup name="ComparisonTabs" value="0" allow-empty-selection="false" class="dashboard-phase-comparison__tabs">
+            <nl3d:Button button-style="Normal" LabelText="Kerncijfers"/>
+            <nl3d:Button name="ProgramBreakdownTab" button-style="Normal" LabelText="Segmenten"/>
+            <nl3d:Button name="RoomsTab" button-style="Normal" LabelText="Kamers"/>
+            <nl3d:Button name="BlockTotalsTab" button-style="Normal" LabelText="Woningen"/>
+        </ui:ToggleButtonGroup>
+    </ui:VisualElement>
+    <ui:VisualElement class="panel-divider" picking-mode="Ignore"/>
+    <nl3d:ScrollView name="ComparisonScrollView" mode="VerticalAndHorizontal" item-gap="0" class="dashboard-phase-comparison__scroll">
+        <ui:VisualElement class="dashboard-phase-comparison__table">
+            <ui:VisualElement name="HousingRows">
+                <ui:VisualElement name="TotalDwellingsRow" class="dashboard-phase-comparison__row">
+                    <ui:Label text="Totaal woningen" class="dashboard-phase-comparison__label"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="DwellingChangesRow" class="dashboard-phase-comparison__row">
+                    <ui:Label text="Verschil in woningen" class="dashboard-phase-comparison__label"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="AverageMinimumFloorAreaRow" class="dashboard-phase-comparison__row">
+                    <ui:Label text="Gemiddelde minimale woonoppervlakte" class="dashboard-phase-comparison__label"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="MinimumFloorAreaChangesRow" class="dashboard-phase-comparison__row">
+                    <ui:Label text="Verschil in woonoppervlakte" class="dashboard-phase-comparison__label"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="NonHousingRows" class="hidden">
+                <ui:VisualElement name="TotalGrossFloorAreaRow" class="dashboard-phase-comparison__row">
+                    <ui:Label text="Totaal BVO" class="dashboard-phase-comparison__label"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="GrossFloorAreaChangesRow" class="dashboard-phase-comparison__row">
+                    <ui:Label text="Verschil in BVO" class="dashboard-phase-comparison__label"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                    <ui:Label text="&#8212;" class="dashboard-phase-comparison__value text-header"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="BreakdownRows" class="hidden"/>
+            <ui:VisualElement name="ColumnHeadings" picking-mode="Ignore" class="dashboard-phase-comparison__row dashboard-phase-comparison__column-headings">
+                <ui:Label name="RowHeading" text="Indicator" class="dashboard-phase-comparison__label text-header"/>
+                <ui:Label text="BBP" class="dashboard-phase-comparison__value text-header"/>
+                <ui:Label text="SO" class="dashboard-phase-comparison__value text-header"/>
+                <ui:Label text="VO" class="dashboard-phase-comparison__value text-header"/>
+                <ui:Label text="DO" class="dashboard-phase-comparison__value text-header"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </nl3d:ScrollView>
+    <ui:Label name="EmptyBreakdown" text="Geen gegevens beschikbaar" class="dashboard-phase-comparison__empty"/>
+</ui:UXML>

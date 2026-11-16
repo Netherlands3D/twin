@@ -24,6 +24,13 @@
     border-width: 0;
 }
 
+.dashboard-hud__sidebar > .panel-divider {
+    flex-grow: 0;
+    margin-top: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+    height: var(--spacing-0_5);
+}
+
 /* Map area */
 
 .dashboard-hud__main,

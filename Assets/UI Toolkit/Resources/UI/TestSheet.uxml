@@ -3,8 +3,10 @@
     <Netherlands3D.UI.Components.InspectorPanel style="height: 455px; width: 395px; display: flex;">
         <Netherlands3D.UI.Components.ContentContainer>
             <Netherlands3D.UI.Components.ScrollView>
-                <Netherlands3D.UI.Components.DropDown/>
                 <Netherlands3D.UI.Components.ToggleSwitch label="Switch label" value="true"/>
+                <Netherlands3D.UI.Panels.DashboardBlockOverview header-text="Overzicht blok 3" total-dwellings="1.255" social-dwellings="406" mid-rent-dwellings="495" free-sector-dwellings="354" average-minimum-floor-area="55 m²" available-phases="BBP / SO / VO" non-housing-gross-floor-area="27.887 m²"/>
+                <Netherlands3D.UI.Panels.DashboardPhaseComparisonPanel/>
+                <Netherlands3D.UI.Components.DropDown/>
                 <Netherlands3D.UI.Components.ChangePointerStyleElement pointer-style-hover="Pointer">
                     <ui:Label text="Hover over dit element om je cursor te veranderen"/>
                 </Netherlands3D.UI.Components.ChangePointerStyleElement>
@@ -38,5 +40,7 @@
     <Netherlands3D.UI.Components.DebugInfo style="display: flex;"/>
     <Netherlands3D.UI.Components.Footer/>
     <Netherlands3D.UI.Panels.SnackbarPanel/>
+    <Netherlands3D.UI.Panels.DashboardPhaseComparisonPanel total-dwellings="4.580 | 3.150 | 1.957 | 241" dwelling-changes=" | -1.430 (-31%) | -1.193 (-38%) | -1.716 (-88%)" average-minimum-floor-area="58 m² | 53 m² | 56 m² | 58 m²" minimum-floor-area-changes=" | -5 m² | +3 m² | +2 m²" segment-breakdown="Sociaal | 1.750 (38%) | 945 (30%) | 587 (30%) | 72 (30%); Middenhuur | 1.845 (40%) | 1.260 (40%) | 783 (40%) | 97 (40%); Vrije sector | 985 (22%) | 945 (30%) | 587 (30%) | 72 (30%)" room-breakdown="1 kamer | 265 | 101 | 74 | 10; 2 kamers | 1.601 | 1.399 | 647 | 84; 3 kamers | 1.671 | 1.160 | 862 | 86; 4 kamers | 1.043 | 490 | 374 | 61" block-breakdown="Blok 1 | 1.400 | 1.050 | 650 | 80; Blok 2 | 1.500 | 950 | 600 | 76; Blok 3 | 1.680 | 1.150 | 707 | 85" style="height: 160px;"/>
+    <Netherlands3D.UI.Panels.DashboardPhaseComparisonPanel non-housing="true" total-gross-floor-area="73.428 m² | 67.913 m² | 47.413 m² | 4.777 m²" gross-floor-area-changes=" | -5.515 m² (-8%) | -20.500 m² (-30%) | -42.636 m² (-90%)" category-breakdown="Bedrijf | 40.024 m² | 24.187 m² | 20.288 m² | 2.497 m²; Kantoor | 12.184 m² | 13.226 m² | 6.686 m² | 1.761 m²; Horeca | 1.100 m² | 2.164 m² | 1.414 m² | 379 m²; Maatschappelijk | 14.155 m² | 21.066 m² | 12.842 m² | 140 m²; Detailhandel | 5.965 m² | 1.995 m² | 1.720 m² | 0 m²; Supermarkt | 0 m² | 4.775 m² | 4.463 m² | 0 m²; Sport | 0 m² | 500 m² | 0 m² | 0 m²" non-housing-block-breakdown="Blok 1 | 40.000 m² | 30.000 m² | 21.000 m² | 2.000 m²; Blok 2 | 20.000 m² | 25.000 m² | 16.000 m² | 1.500 m²; Blok 3 | 13.428 m² | 12.913 m² | 10.413 m² | 1.277 m²" style="height: 160px;"/>
     <Netherlands3D.UI.Panels.DefaultHUD/>
 </ui:UXML>

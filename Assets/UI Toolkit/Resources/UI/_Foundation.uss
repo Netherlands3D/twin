@@ -43,7 +43,7 @@
 }
 
 .panel-divider {
-    --divider-bg-color: var(--color-blue-200);
+    --divider-bg-color: var(--color-blue-100);
     display: flex;
     flex-grow: 1;
     height: 1px;
