@@ -250,8 +250,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStylingToFeature(StylingFeature stylingFeature)
         {
-            if (stylingFeature.Geometry is Material material)
+            ApplyBaseColor(); //todo: this is currently inefficient but necessary since the base color comes from a different StylingFeature than the individual color. This was a workaround to avoid having to create StylingFeatures for each GeoJsonFeature as that would have even more performance impact.
+            ApplyFeatureColor(stylingFeature);
+        }
+
+        private void ApplyBaseColor()
+        {
+            foreach (var stylingFeature in LayerFeatures.Values)
             {
+                if (stylingFeature.Geometry is not Material material)
+                    return;
+
                 Symbolizer symbolizer = GetStyling(stylingFeature);
                 Color? color = symbolizer.GetFillColor();
                 if (color.HasValue)
@@ -259,14 +268,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     if (int.TryParse(stylingFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
                     {
                         VisualisationLayers[materialIndex].RenderColor = color.Value;
-                        Debug.Log("Setting global render color for material index: "+ materialIndex +"\t"+  color.Value);
+                        Debug.Log("Setting global render color for material index: " + materialIndex + "\t" + color.Value);
                     }
                 }
             }
-            
-            if(stylingFeature.Geometry is not Feature geoJsonFeature)
+        }
+
+        private void ApplyFeatureColor(StylingFeature stylingFeature)
+        {
+            if (stylingFeature.Geometry is not Feature geoJsonFeature)
                 return;
-            
+
             foreach (var typeVisualizer in VisualisationLayers)
             {
                 if (!typeVisualizer.SupportsGeometryType(geoJsonFeature))
@@ -285,13 +297,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if (typeVisualizer.StylingColorProperty == Symbolizer.FillColorProperty)
                 {
                     var fillColor = symbolizer.GetFillColor();
-                    if(fillColor.HasValue)
+                    if (fillColor.HasValue)
                         typeVisualizer.SetColorForFeature(geoJsonFeature, fillColor.Value);
                 }
                 else if (typeVisualizer.StylingColorProperty == Symbolizer.StrokeColorProperty)
                 {
                     var strokeColor = symbolizer.GetStrokeColor();
-                    if(strokeColor.HasValue)
+                    if (strokeColor.HasValue)
                         typeVisualizer.SetColorForFeature(geoJsonFeature, strokeColor.Value);
                 }
             }
