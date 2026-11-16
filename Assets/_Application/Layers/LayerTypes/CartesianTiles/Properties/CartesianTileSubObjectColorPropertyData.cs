@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
@@ -13,6 +15,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
         [DataMember] private Uri data;
         
         [JsonIgnore] public readonly UnityEvent<Uri> OnDataChanged = new();
+        internal event Action ColorsChanged;
+
+        [JsonIgnore] internal IReadOnlyDictionary<string, Color> Colors { get; private set; }
+        [JsonIgnore] internal bool HasLocalSource { get; set; }
         
         [JsonIgnore]
         public Uri Data
@@ -31,6 +37,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
             {
                 new (this, data != null ? data : null)
             };
+        }
+
+        internal void LoadFromProjectAsset()
+        {
+            Colors = new CartesianTileSubObjectColorCsv(Data).Read();
+            HasLocalSource = true;
+            ColorsChanged?.Invoke();
+        }
+
+        internal void ClearLoadedColors()
+        {
+            if (Colors == null)
+                return;
+
+            Colors = null;
+            ColorsChanged?.Invoke();
         }
     }
 }
