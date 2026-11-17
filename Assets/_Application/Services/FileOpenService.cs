@@ -17,7 +17,6 @@ using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.JavascriptConnection;
 #endif
 
-//todo shouldnt this be like a importerservice from now on?
 public class FileOpenService : MonoBehaviour //todo: the FileOpener prefab should no longer rely on the scriptable event after transition to UI Toolkit
 {
     [DllImport("__Internal")]

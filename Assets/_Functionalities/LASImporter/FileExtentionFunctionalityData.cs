@@ -1,16 +1,15 @@
 using System;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin.Functionalities
 {
     [Serializable]
-    [DataContract(
-        Namespace = "https://netherlands3d.eu/schemas/projects/functionalities",
-        Name = "FileExtension"
-    )]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/functionalities", Name = "FileExtension")]
     public sealed class FileExtensionFunctionalityData : TypedFunctionalityData<FileExtensionFunctionalityData>
     {
-        [DataMember] public string FileExtention;
+        //todo in the future this should be seperated when tools and functionalities will be unified
+        public string FileExtention;
 
         protected override FileExtensionFunctionalityData CreateTypedCopy()
         {
