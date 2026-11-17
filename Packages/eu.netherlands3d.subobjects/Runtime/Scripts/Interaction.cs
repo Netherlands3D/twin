@@ -66,6 +66,11 @@ namespace Netherlands3D.SubObjects
         public static void RemoveLayerColor(string layerId, string objectId) => Remove(layerColors, layerId, objectId);
         public static void AddSelectionColor(string layerId, string objectId, Color color) => Set(selectionColors, layerId, objectId, color);
         public static void RemoveSelectionColor(string layerId, string objectId) => Remove(selectionColors, layerId, objectId);
+        public static bool TryGetLayerColor(string layerId, string objectId, out Color32 color)
+        {
+            color = default;
+            return layerColors.TryGetValue(layerId, out var dict) && dict.TryGetValue(objectId, out color);
+        }
         
         //TODO we will need a cascading coloring system to apply colors, when multiple colors are registered to one bagid, is this still needed?
         /// <summary>
