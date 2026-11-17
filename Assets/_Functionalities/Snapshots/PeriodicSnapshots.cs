@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
+using Netherlands3D.ProjectTime;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Netherlands3D.Snapshots
 
         public UnityEvent<string> DownloadSnapshotComplete = new();
         public UnityEvent<DateTime> SetTimeForSnapshot = new();
-
+        private TimeService timeService;
         public Font font;
 
         [Serializable]
@@ -83,6 +84,13 @@ namespace Netherlands3D.Snapshots
         private int snapshotWidth;
         private int snapshotHeight;
         
+        private DateTime cachedTime;
+
+        private void Start()
+        {
+            timeService = ServiceLocator.GetService<TimeService>();
+        }
+
         private void OnValidate()
         {
             foreach (var moment in moments)
@@ -143,7 +151,7 @@ namespace Netherlands3D.Snapshots
 
                 yield return null;
 
-                onStartGenerating.Invoke();
+                cachedTime = timeService.Time;
                 for (var index = 0; index < moments.Count; index++)
                 {
                     onProgress.Invoke(1f / moments.Count * (index + 1));
@@ -167,10 +175,9 @@ namespace Netherlands3D.Snapshots
             
                 if (renderTexture != null)
                 {
-               
                     Destroy(renderTexture);
                 }
-
+                timeService.SetTime(cachedTime);
                 onFinishedGenerating.Invoke();
             }
         }
@@ -203,7 +210,7 @@ namespace Netherlands3D.Snapshots
             try
             {
                 DateTime dateTime = moment.ToDateTime();
-                SetTimeForSnapshot.Invoke(dateTime);
+                timeService.SetTime(dateTime);
                 
                 renderTexture.Create();
                 sourceCamera.Render();
