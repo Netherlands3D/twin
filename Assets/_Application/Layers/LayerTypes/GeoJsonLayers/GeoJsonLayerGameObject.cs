@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using GeoJSON.Net.Feature;
-using netDxf.Collections;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
@@ -171,7 +170,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             foreach (var layer in visualisationLayers)
             {
                 if (layer.SupportsGeometryType(feature))
+                {
                     layer.AddAndVisualizeFeature(feature, originalCoordinateSystem, LayerData.ActiveInHierarchy);
+                }
             }
 
             CreateFeatureMappingsForFeature(feature);
@@ -243,7 +244,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            foreach (var (_, stylingFeature) in LayerFeatures)
+            foreach (var stylingFeature in LayerFeatures.Values)
             {
                 ApplyStylingToFeature(stylingFeature);
             }
@@ -267,7 +268,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 if (int.TryParse(stylingFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
                 {
-                    visualisationLayers[materialIndex].RenderColor = color.Value;
+                    visualisationLayers[materialIndex].SetColorForAllFeatures(color.Value);
                 }
             }
         }

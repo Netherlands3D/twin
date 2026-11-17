@@ -18,12 +18,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
-        
+
         public string DisplayName => "Punten";
         public string StylingColorProperty => Symbolizer.FillColorProperty;
+
         public bool SupportsGeometryType(Feature feature)
         {
-            return  feature.Geometry.Type == GeoJSONObjectType.MultiPoint || feature.Geometry.Type == GeoJSONObjectType.Point;
+            return feature.Geometry.Type == GeoJSONObjectType.MultiPoint || feature.Geometry.Type == GeoJSONObjectType.Point;
         }
 
         public int FeatureCount => spawnedVisualisations.Count;
@@ -33,36 +34,29 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event IGeoJsonGeometryTypeVisualizer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
-        
+
         private List<List<Coordinate>> visualisationsToRemove = new();
 
-        public Color RenderColor
+        public void SetColorForAllFeatures(Color color)
         {
-            get
-            {
-                return PointRenderer3D.PointMaterial.color;
-            }
-            set
-            {
-                // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
-                // of a material asset when replacing the material - no destroy of the old material must be done because
-                // that is an asset and not an instance
-                PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
-                var newColor = new Color(value.r, value.g, value.b, PointRenderer3D.PointMaterial.color.a); //todo: we don't support alpha yet in the color picker
-                //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
-                PointRenderer3D.SetAllColors(newColor);
-            }
+            // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
+            // of a material asset when replacing the material - no destroy of the old material must be done because
+            // that is an asset and not an instance
+            PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
+            var newColor = new Color(color.r, color.g, color.b, PointRenderer3D.PointMaterial.color.a); //todo: we don't support alpha yet in the color picker
+            PointRenderer3D.SetAllColors(newColor);
         }
+
 
         public void SetColorForFeature(Feature feature, Color color)
         {
             var data = spawnedVisualisations[feature];
             foreach (var pointList in data.Data)
             {
-                PointRenderer3D.SetColor(pointList, color);
+                PointRenderer3D.SetColor(pointList, color); //todo
             }
         }
-        
+
         public Material RenderMaterial => PointRenderer3D.PointMaterial;
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -112,7 +106,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void SetVisualisationDeselected() 
+        public void SetVisualisationDeselected(List<Mesh> meshes)
         {
             selectionPointRenderer3D.Clear();
         }
@@ -141,7 +135,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
-            
+
             if (feature.Geometry is MultiPoint multiPoint)
             {
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualisation(multiPoint, originalCoordinateSystem, PointRenderer3D);
@@ -165,7 +159,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void RemoveFeaturesOutOfView()
         {
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            
+
             visualisationsToRemove.Clear();
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
@@ -175,6 +169,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 visualisationsToRemove.AddRange(kvp.Value.Data);
                 RemoveFeature(kvp.Value);
             }
+
             PointRenderer3D.RemovePointCollections(visualisationsToRemove);
         }
 
@@ -208,6 +203,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 else
                     bbox.Encapsulate(vis.trueBounds);
             }
+
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;

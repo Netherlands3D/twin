@@ -13,12 +13,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         bool SupportsGeometryType(Feature feature);
         int FeatureCount { get; }
         Transform Transform { get; }
-        Color RenderColor { get; set; }
+        void SetColorForAllFeatures(Color color);
         void SetColorForFeature(Feature feature, Color color);
         Material RenderMaterial { get; }
         List<Mesh> GetMeshData(Feature feature);
         void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color);
-        void SetVisualisationDeselected();
+        void SetVisualisationDeselected(List<Mesh> meshes);
         void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy);
         void OnLayerActiveInHierarchyChanged(bool activeInHierarchy);
         public BoundingBox GetBoundingBoxOfVisibleFeatures();

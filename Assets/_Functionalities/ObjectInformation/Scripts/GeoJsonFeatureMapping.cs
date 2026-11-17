@@ -97,7 +97,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 {
                     Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
                     GeoJSONPolygonLayer polygonLayer = visualisationLayer as GeoJSONPolygonLayer;
-                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes[i]);
+                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationsByMesh(meshes[i]).pv;
                     bool isSelected = GeoJsonFeatureSelector.ProcessPolygonSelection(meshes[i], pv.transform, frustumPlanes, unityPos);
                     if (isSelected)
                     {
@@ -272,7 +272,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             selectedGameObjects.Clear();
 
-            visualisationLayer.SetVisualisationDeselected();
+            visualisationLayer.SetVisualisationDeselected(meshes);
+            var stylingFeature = geoJsonLayerParent.GetStylingFeatureByGeometry(feature);
+            geoJsonLayerParent.ApplyStylingToFeature(stylingFeature);
         }
 
         public void SetMappingProjected(bool projected)

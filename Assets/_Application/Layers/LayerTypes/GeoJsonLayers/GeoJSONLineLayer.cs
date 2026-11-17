@@ -17,9 +17,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         public string DisplayName => "Lijnen";
         public string StylingColorProperty => Symbolizer.StrokeColorProperty;
+
         public bool SupportsGeometryType(Feature feature)
         {
-            return  feature.Geometry.Type == GeoJSONObjectType.MultiLineString || feature.Geometry.Type == GeoJSONObjectType.LineString;
+            return feature.Geometry.Type == GeoJSONObjectType.MultiLineString || feature.Geometry.Type == GeoJSONObjectType.LineString;
         }
 
         public int FeatureCount => spawnedVisualisations.Count;
@@ -31,35 +32,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public Dictionary<Feature, FeatureLineVisualisations> SpawnedVisualisations => spawnedVisualisations;
         private List<List<Coordinate>> visualisationsToRemove = new();
         private List<List<Coordinate>> selectionList = new();
-        
+
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private LineRenderer3D selectionLineRenderer3D;
-        
+
         public LineRenderer3D LineRenderer3D
         {
             get => lineRenderer3D;
             //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
             set => lineRenderer3D = value;
         }
-        
-        public Color RenderColor
+
+        public void SetColorForAllFeatures(Color color)
         {
-            get
-            {
-                return LineRenderer3D.LineMaterial.color;
-            }
-            set
-            {
-                // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
-                // of a material asset when replacing the material - no destroy of the old material must be done because
-                // that is an asset and not an instance
-                LineRenderer3D.LineMaterial = new Material(LineRenderer3D.LineMaterial);
-                var newColor = new Color(value.r, value.g, value.b, LineRenderer3D.LineMaterial.color.a); //todo: we don't support alpha yet in the color picker
-                //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
-                LineRenderer3D.SetAllColors(newColor);
-            }
+            // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
+            // of a material asset when replacing the material - no destroy of the old material must be done because
+            // that is an asset and not an instance
+            LineRenderer3D.LineMaterial = new Material(LineRenderer3D.LineMaterial);
+            var newColor = new Color(color.r, color.g, color.b, LineRenderer3D.LineMaterial.color.a); //todo: we don't support alpha yet in the color picker
+            LineRenderer3D.SetAllColors(newColor);
         }
-        
+
         public Material RenderMaterial => LineRenderer3D.LineMaterial;
 
         public void SetColorForFeature(Feature feature, Color color)
@@ -67,10 +60,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var data = spawnedVisualisations[feature];
             foreach (var pointList in data.Data)
             {
-                LineRenderer3D.SetColor(pointList, color);
+                LineRenderer3D.SetColor(pointList, color); //todo:
             }
         }
-        
+
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeatureLineVisualisations data = spawnedVisualisations[feature];
@@ -130,7 +123,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionLineRenderer3D.SetPositionCollections(selectionList);
         }
 
-        public void SetVisualisationDeselected() //todo rename this?
+        public void SetVisualisationDeselected(List<Mesh> meshes) //todo rename this?
         {
             selectionLineRenderer3D.Clear();
         }
@@ -146,7 +139,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             if (spawnedVisualisations.ContainsKey(feature)) return;
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
-            
+
             if (feature.Geometry is MultiLineString multiLineString)
             {
                 var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
