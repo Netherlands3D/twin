@@ -120,7 +120,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             ApplyStyling();
         }
 
-        protected virtual void UpdatePosition(Coordinate newPosition)
+        private void UpdatePosition(Coordinate newPosition)
         {
             WorldTransform.MoveToCoordinate(newPosition);
         }

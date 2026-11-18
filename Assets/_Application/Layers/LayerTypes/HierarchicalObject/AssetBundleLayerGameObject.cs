@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.AssetBundles;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
@@ -15,7 +16,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private AssetBundleService assetBundleService;
         private string bundleName;
         private string prefabName;
-
+        private GameObject instantiatedPrefab;
+        private int loadVersion;
         private SpawnFromCoordinate fromCoordinate;
 
         protected override void OnVisualizationInitialize()
@@ -44,9 +46,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             //this is to prevent executing base class functionality
         }
-        
-        private GameObject instantiatedPrefab;
-        private int loadVersion;
 
         private void Load()
         {
@@ -54,26 +53,29 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 return;
 
             assetBundleService.InstantiatePrefab(bundleName, prefabName, transform, instance =>
-                {
-                    instantiatedPrefab = instance;
-                    instantiatedPrefab.transform.localPosition = Vector3.zero;
-                    fromCoordinate = instance.GetComponent<SpawnFromCoordinate>();
-                });
-        }
-        
-        protected override void UpdatePosition(Coordinate newPosition)
-        {
-            if (fromCoordinate == null)
             {
-                base.UpdatePosition(newPosition);
-                return;
-            }
-            
-            var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
-            transformProperty.Position = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-            transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
-            transformProperty.LocalScale = transform.localScale;
-            base.UpdatePosition(newPosition);
+                instantiatedPrefab = instance;
+                instantiatedPrefab.transform.localPosition = Vector3.zero;
+                fromCoordinate = instance.GetComponent<SpawnFromCoordinate>();
+                var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+                Coordinate coordinate = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
+                transformProperty.LocalScale = transform.localScale;
+                //transformProperty.Position = coordinate;
+                GetComponent<WorldTransform>().MoveToCoordinate(coordinate);
+            });
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            // if (fromCoordinate != null)
+            // {
+            //     var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            //     transformProperty.Position = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            //     transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
+            //     transformProperty.LocalScale = transform.localScale;
+            // }
         }
 
         private void Unload()

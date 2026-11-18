@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7869798834202986242}
   - component: {fileID: 6820785696303367138}
   - component: {fileID: 3601708233759149156}
+  - component: {fileID: 5360974513496991805}
+  - component: {fileID: 1817888783441370521}
   m_Layer: 0
   m_Name: AssetBundleLayer
   m_TagString: Untagged
@@ -76,8 +78,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scaleUnitCharacter: '%'
-  Coordinates: {x: 0, y: 0, z: 0}
-  coordinateSystem: 4979
 --- !u!114 &3601708233759149156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,10 +90,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.floating-origin.Runtime::Netherlands3D.Twin.FloatingOrigin.WorldTransform
-  worldTransformShifter: {fileID: 0}
+  worldTransformShifter: {fileID: 1817888783441370521}
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5360974513496991805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066321498204891594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4d878bc3b3f47745960e6be7203cfc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.TransformAxes
+  PositionLocked: 1
+  RotationLocked: 1
+  ScaleLocked: 1
+  positionAxes: 7
+  rotationAxes: 7
+  scaleAxes: 7
+--- !u!114 &1817888783441370521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066321498204891594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.floating-origin.Runtime::Netherlands3D.Twin.FloatingOrigin.GameObjectWorldTransformShifter
