@@ -1,43 +1,24 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace Netherlands3D.SubObjects
 {
-    public struct Color24
-    {
-        public byte r, g, b;
-
-        public Color24(Color color)
-        {
-            r = (byte)Mathf.RoundToInt(color.r * 255f);
-            g = (byte)Mathf.RoundToInt(color.g * 255f);
-            b = (byte)Mathf.RoundToInt(color.b * 255f);
-        }
-
-        public static implicit operator Color24(Color color) => new(color);
-        public bool Equals(Color24 other) => r == other.r && g == other.g && b == other.b;
-        public override bool Equals(object obj) => obj is Color24 other && Equals(other);
-        public override int GetHashCode() => HashCode.Combine(r, g, b);
-        public static bool operator ==(Color24 left, Color24 right) => left.Equals(right);
-        public static bool operator !=(Color24 left, Color24 right) => !left.Equals(right);
-    }
-
     public static class Interaction
     {
         public static readonly Color NO_OVERRIDE_COLOR = new Color(0, 0, 1, 0);
-        private static readonly Color24 NO_OVERRIDE_COLOR24 = NO_OVERRIDE_COLOR;
+        private static readonly Color32 NO_OVERRIDE_COLOR32 = NO_OVERRIDE_COLOR;
 
         public delegate void ObjectMappingHandler(ObjectMapping mapping);
+
         public static event ObjectMappingHandler ObjectMappingCheckIn;
         public static event ObjectMappingHandler ObjectMappingCheckOut;
 
         private static List<ObjectMapping> mappings;
-        private static Color24[] colorBuffer = new Color24[0];
-        private static readonly Dictionary<string, Color24> overrideColors = new();
-        private static readonly Dictionary<string, Dictionary<string, Color24>> layerColors = new();
-        private static readonly Dictionary<string, Dictionary<string, Color24>> selectionColors = new();
+        private static Color32[] colorBuffer = new Color32[0];
+        private static readonly Dictionary<string, Color32> overrideColors = new();
+        private static readonly Dictionary<string, Dictionary<string, Color32>> layerColors = new();
+        private static readonly Dictionary<string, Dictionary<string, Color32>> selectionColors = new();
 
         internal static void CheckIn(ObjectMapping mapping)
         {
@@ -65,14 +46,16 @@ namespace Netherlands3D.SubObjects
             foreach (var kv in colorMap) overrideColors.Remove(kv.Key);
         }
 
-        private static void Set(Dictionary<string, Dictionary<string, Color24>> store, string layerId, string objectId, Color24 color)
+        private static void Set(Dictionary<string, Dictionary<string, Color32>> store, string layerId, string objectId,
+            Color32 color)
         {
             if (!store.TryGetValue(layerId, out var dict))
-                store[layerId] = dict = new Dictionary<string, Color24>();
+                store[layerId] = dict = new Dictionary<string, Color32>();
             dict[objectId] = color;
         }
 
-        private static void Remove(Dictionary<string, Dictionary<string, Color24>> store, string layerId, string objectId)
+        private static void Remove(Dictionary<string, Dictionary<string, Color32>> store, string layerId,
+            string objectId)
         {
             if (store.TryGetValue(layerId, out var dict))
             {
@@ -82,20 +65,25 @@ namespace Netherlands3D.SubObjects
             }
         }
 
-        public static void AddLayerColor(string layerId, string objectId, Color color) => Set(layerColors, layerId, objectId, color);
-        public static void RemoveLayerColor(string layerId, string objectId) => Remove(layerColors, layerId, objectId);
-        public static void AddSelectionColor(string layerId, string objectId, Color color) => Set(selectionColors, layerId, objectId, color);
-        public static void RemoveSelectionColor(string layerId, string objectId) => Remove(selectionColors, layerId, objectId);
+        public static void AddLayerColor(string layerId, string objectId, Color color) =>
+            Set(layerColors, layerId, objectId, color);
 
-        public static bool TryGetLayerColor(string layerId, string objectId, out Color24 color)
+        public static void RemoveLayerColor(string layerId, string objectId) => Remove(layerColors, layerId, objectId);
+
+        public static void AddSelectionColor(string layerId, string objectId, Color color) =>
+            Set(selectionColors, layerId, objectId, color);
+
+        public static void RemoveSelectionColor(string layerId, string objectId) =>
+            Remove(selectionColors, layerId, objectId);
+
+        public static bool TryGetLayerColor(string layerId, string objectId, out Color32 color)
         {
             color = default;
-
-            if (layerColors.TryGetValue(layerId, out var dict))
+            if (layerColors.TryGetValue(layerId, out var dict) && dict.TryGetValue(objectId, out Color32 color32))
             {
-                return dict.TryGetValue(objectId, out color);
+                color = color32;
+                return true;
             }
-
             return false;
         }
 
@@ -116,10 +104,10 @@ namespace Netherlands3D.SubObjects
 
             int vertexCount = mesh.vertexCount;
             if (colorBuffer.Length < vertexCount)
-                colorBuffer = new Color24[Mathf.NextPowerOfTwo(vertexCount)];
+                colorBuffer = new Color32[Mathf.NextPowerOfTwo(vertexCount)];
 
-            Dictionary<string, Color24> layer = null;
-            Dictionary<string, Color24> selection = null;
+            Dictionary<string, Color32> layer = null;
+            Dictionary<string, Color32> selection = null;
             if (layerId != null)
             {
                 layerColors.TryGetValue(layerId, out layer);
@@ -133,7 +121,7 @@ namespace Netherlands3D.SubObjects
             foreach (var item in mapping.items)
             {
                 string key = item.Key;
-                Color24 color;
+                Color32 color;
 
                 if (hasOverrides && overrideColors.TryGetValue(key, out color))
                 {
@@ -149,7 +137,7 @@ namespace Netherlands3D.SubObjects
                 }
                 else
                 {
-                    color = NO_OVERRIDE_COLOR24;
+                    color = NO_OVERRIDE_COLOR32;
                 }
 
                 int end = offset + item.Value.verticesLength;
@@ -160,12 +148,7 @@ namespace Netherlands3D.SubObjects
 
             if (anyColor)
             {
-                // Color24 is converted to Color32 for Unity's mesh API
-                var color32Buffer = new Color32[offset];
-                for (int i = 0; i < offset; i++)
-                    color32Buffer[i] = new Color32(buffer[i].r, buffer[i].g, buffer[i].b, 0);
-
-                mesh.SetColors(color32Buffer, 0, offset);
+                mesh.SetColors(buffer, 0, offset);
             }
             else if (mesh.HasVertexAttribute(VertexAttribute.Color))
             {
