@@ -33,7 +33,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             (string bundleName, string prefabName) = assetBundleService.ParseAssetBundleUri(streamingAssetsUrl.Url);
             this.bundleName = bundleName;
             this.prefabName = prefabName;
-            
             Load();
         }
 
@@ -61,21 +60,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 Coordinate coordinate = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
                 transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
                 transformProperty.LocalScale = transform.localScale;
-                //transformProperty.Position = coordinate;
+                transformProperty.Position = coordinate;
                 GetComponent<WorldTransform>().MoveToCoordinate(coordinate);
+                
             });
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-            // if (fromCoordinate != null)
-            // {
-            //     var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
-            //     transformProperty.Position = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-            //     transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
-            //     transformProperty.LocalScale = transform.localScale;
-            // }
         }
 
         private void Unload()
