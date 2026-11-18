@@ -100,14 +100,12 @@ namespace Netherlands3D.Twin.layers.properties
             return null;
         }
         
-        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
+        private void AddAttributesToLayerFeature(StylingFeature feature)
         {
-            if (feature.Geometry is not Material mat) return feature;
+            if (feature.Geometry is not Material mat) return;
 
             feature.Attributes.Add(CartesianTileLayerFeatureColorPropertyData.MaterialNameIdentifier, GetRenderLayerName(mat));
             feature.Attributes.Add(CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey, GetRenderLayerIndex(mat).ToString());
-            
-            return feature;
         }
 
         

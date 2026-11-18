@@ -35,6 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private LineRenderer3D selectionLineRenderer3D;
+        public Material RenderMaterial => LineRenderer3D.LineMaterial;
 
         public LineRenderer3D LineRenderer3D
         {
@@ -53,7 +54,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LineRenderer3D.SetAllColors(newColor);
         }
 
-        public Material RenderMaterial => LineRenderer3D.LineMaterial;
 
         public void SetColorForFeature(Feature feature, Color color)
         {
