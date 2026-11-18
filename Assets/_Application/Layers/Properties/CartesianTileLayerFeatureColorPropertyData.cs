@@ -25,8 +25,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         public void SetColor(StylingFeature stylingFeature, Color color, string colorPropertyType)
         {
-            if (stylingFeature.Geometry is not Material mat) return;
-            
             int.TryParse(stylingFeature.Attributes[MaterialIndexKey], out int materialIndexIdentifier);
             stylingFeature.Attributes.TryGetValue(MaterialNameIdentifier, out string materialName);
 
@@ -71,22 +69,6 @@ namespace Netherlands3D.Twin.Layers.Properties
                 stylingRuleKeys.Add(stylingRuleKey, stylingRule);
             }
             SetStylingRules(stylingRuleKeys);
-        }
-        
-        public Color? GetColor(StylingFeature stylingFeature, string colorPropertyType)
-        {
-            if (stylingFeature.Geometry is not Material mat) return null;
-
-            int.TryParse(stylingFeature.GetAttribute(MaterialIndexKey), out int materialIndexIdentifier);
-            var stylingRuleKey = ColorizationStyleRuleKey(materialIndexIdentifier);
-            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
-            {
-                if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
-                    return mat.color;
-                else
-                    return null;
-            }
-            return GetColorByColorPropertyType(stylingRule, colorPropertyType);
         }
         
         public Color? GetColorByStylingRuleKey(string stylingRuleKey, string colorPropertyType)

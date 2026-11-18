@@ -252,13 +252,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStylingToFeature(StylingFeature stylingFeature)
         {
-            ApplyBaseColor(stylingFeature);
+            ApplyBaseColor(stylingFeature); 
             ApplyFeatureColor(stylingFeature);
         }
 
         private void ApplyBaseColor(StylingFeature stylingFeature)
         {
-            if (stylingFeature.Geometry is not Material material)
+            if (stylingFeature.Geometry is not IGeoJsonGeometryTypeVisualizer)
                 return;
 
             Symbolizer symbolizer = GetStyling(stylingFeature);
@@ -284,7 +284,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     continue;
 
                 var featureSymbolizer = GetStyling(stylingFeature);
-                var baseColorSymbolizer = GetStyling(GetStylingFeatureByGeometry(typeVisualizer.RenderMaterial));
+                var baseFeature = GetStylingFeatureByGeometry(typeVisualizer);
+                var baseColorSymbolizer = GetStyling(baseFeature);
                 
                 //todo: this is currently inefficient but necessary since the base color comes from a different StylingFeature than the individual color. This was a workaround to avoid having to create StylingFeatures for each GeoJsonFeature as that would have even more performance impact.
                 var combinedSymbolizer = Symbolizer.Merge(baseColorSymbolizer, featureSymbolizer);
@@ -292,10 +293,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var isVisibleStyling = combinedSymbolizer.GetVisibility();
                 var isVisible = isVisibleStyling.HasValue ? isVisibleStyling.Value : true;
 
-                typeVisualizer.SetColorForFeature(geoJsonFeature, Color.clear);
-
                 if (!isVisible)
+                {
+                    typeVisualizer.SetColorForFeature(geoJsonFeature, Color.clear);
                     return;
+                }
 
                 if (typeVisualizer.StylingColorProperty == Symbolizer.FillColorProperty)
                 {

@@ -32,13 +32,11 @@ namespace Netherlands3D.Timeline
         private void OnAddFeature(Feature feature)
         {
             Dictionary<string, Color> newStates = new Dictionary<string, Color>();
-            // foreach (var feature in geoJson.Features)
-            // {
+
             if (feature.Properties.TryGetValue(timelineAttributeName, out var attribute))
             {
                 InitTimelineStylingProperty();
                 geoJson.AddStylingFeatureForGeoJsonFeature(feature);
-                // stylingFeature.Attributes.Add(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, null);
 
                 var collection = new TimestampCollection(attribute.ToString()); //todo make overload to accept json array directly
                 timelineStatusStylingLayerPropertyData.AddTimestampCollection(feature, collection);
@@ -50,7 +48,6 @@ namespace Netherlands3D.Timeline
 
                 SetFeatureAttributeForTime(ProjectData.Current.CurrentDateTime, feature, collection);
             }
-            // }
 
             if (timelineStatusStylingLayerPropertyData == null)
             {
