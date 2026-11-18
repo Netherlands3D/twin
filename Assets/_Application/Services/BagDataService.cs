@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.Twin.Utility;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using UnityEngine;
 using UnityEngine.Networking;
 
