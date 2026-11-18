@@ -10,7 +10,7 @@ namespace Netherlands3D.Functionalities.LayerPresets
     [LayerPreset("asset-bundle-layer")]
     public sealed class AssetBundleLayerPreset : ILayerPreset<AssetBundleLayerPreset.Args>
     {
-        private const string PrefabIdentifier = "0d964eb16008d99d29aac9278ac67bae";
+        private const string PrefabIdentifier = "96d778a591e307e48b3f896321843660";
 
         public sealed class Args : LayerPresetArgs<AssetBundleLayerPreset>
         {

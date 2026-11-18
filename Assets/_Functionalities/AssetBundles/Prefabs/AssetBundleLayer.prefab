@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d5e400e5b4826d40b5e6a971c8ea425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.AssetBundleLayerGameObject
-  prefabIdentifier: 0d964eb16008d99d29aac9278ac67bae
+  prefabIdentifier: 96d778a591e307e48b3f896321843660
   thumbnail: {fileID: 0}
   spawnLocation: 0
   VisualisationError:
