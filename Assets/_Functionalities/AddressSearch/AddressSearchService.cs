@@ -270,7 +270,7 @@ namespace Netherlands3D.AddressSearch
 
                     JSONNode geometry = feature["geometry"];
                     JSONNode coords = geometry != null ? geometry["coordinates"] : null;
-                    Coordinate coordinate = default;
+                    Coordinate coordinate = hasBounds ? bbox.Center : default;
                     if (geometry != null && string.Equals(ReadString(geometry, "type"), "Point", StringComparison.OrdinalIgnoreCase) &&
                         coords != null && coords.IsArray && coords.Count >= 2)
                     {

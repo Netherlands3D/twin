@@ -39,14 +39,14 @@ namespace Netherlands3D.Twin.Cameras
         {
             // Keep the current camera orientation
             Vector3 cameraDirection = camera.transform.forward;
-            double distance = defaultCameraDistance;
+            double targetSize = defaultCameraDistance;
 
             if (clampToLimits)
             {
                 // New behavior: clamp the size to the limits instead of skipping or using the default distance.
                 double clampedTargetDistance = Math.Min(targetSizeDistance, moveSizeLimit);
                 double clampedDistance = Math.Min(clampedTargetDistance, zoomSizeLimit);
-                distance = CalculateFitDistance(clampedDistance);
+                targetSize = CalculateFitDistance(clampedDistance);
             }
             else
             {
@@ -61,13 +61,13 @@ namespace Netherlands3D.Twin.Cameras
                 // otherwise keep the default camera distance.
                 if (targetSizeDistance < zoomSizeLimit)
                 {
-                    distance = CalculateFitDistance(targetSizeDistance);
+                    targetSize = CalculateFitDistance(targetSizeDistance);
                 }
             }
 
             // To avoid floating point issues, calculate the relative offset and add it to targetLookAt.
             // todo: to make this more compatible with different coordinate systems, we need to know the axis indices and add it to the correct one, but these are currently not publicly exposed.
-            var offset = cameraDirection * (float)distance;
+            var offset = cameraDirection * (float)targetSize;
             var targetCoordinate = new Coordinate(targetLookAt.CoordinateSystem,
                                                 targetLookAt.value1 - (double)offset.x,
                                                 targetLookAt.value2 - (double)offset.z,

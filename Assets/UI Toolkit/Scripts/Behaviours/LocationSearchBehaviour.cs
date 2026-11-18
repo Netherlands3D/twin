@@ -66,6 +66,8 @@ namespace Netherlands3D.UI.Behaviours
             toolService.GetTool(ToolType.Search).onClose.AddListener(OnClose);
             toolService.GetTool(ToolType.Search).onClose.AddListener(HidePointer);
             onCoordinateFound.AddListener(UpdatePointer);
+            
+            UpdatePointer(addressSearchService.SelectedCoordinate);
         }
 
         private void OnDisable()
@@ -81,6 +83,8 @@ namespace Netherlands3D.UI.Behaviours
             toolService.GetTool(ToolType.Search).onClose.RemoveListener(OnClose);
             toolService.GetTool(ToolType.Search).onClose.RemoveListener(HidePointer);
             onCoordinateFound.RemoveListener(UpdatePointer);
+            
+            HidePointer();
         }
 
         public void OnOpen()
