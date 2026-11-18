@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.layers.properties
             binaryMeshLayer.OnMappingRemoved.AddListener(OnRemovedMapping);
         }
         
-        private bool UpdateFeatureColor(LayerFeature feature)
+        private bool UpdateFeatureColor(StylingFeature feature)
         {
             //do cascading to get css result styling
             Symbolizer symbolizer = visualization.GetStyling(feature);
