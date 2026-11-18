@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Functionalities
     public sealed class FileExtensionFunctionalityData : TypedFunctionalityData<FileExtensionFunctionalityData>
     {
         //todo in the future this should be seperated when tools and functionalities will be unified
-        public string FileExtention;
+        [DataMember] public string FileExtention;
 
         protected override FileExtensionFunctionalityData CreateTypedCopy()
         {

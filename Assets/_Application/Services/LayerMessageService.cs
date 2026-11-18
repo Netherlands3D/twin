@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.Services
     {
         private Layers layers;
         private SnackbarService snackbarService;
-        private FileOpenService _fileOpenService;
+        private FileOpenService fileOpenService;
         private string activeAddedMessage;
         private string activeRemovalMessage;
         private int activeAddedCounter;
@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin.Services
         {
             layers = App.Layers;
             snackbarService = App.Snackbar;
-            _fileOpenService = App.FileOpen;
+            fileOpenService = App.FileOpen;
             chains = FindObjectsByType<DataTypeChain>(FindObjectsSortMode.None);
         }
 
@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.Services
             layers.LayerRemoved.AddListener(OnLayerRemoved);
             layers.VisualizationCreated.AddListener(OnVisualizationCreated); // when the visualisation is created, we want to listen to potential error messages (eg. parse errors) to display
             layerSourceAttributionEvent.AddListenerStarted(OnAttributionReceived.Invoke);
-            _fileOpenService.onFilesNotSupported.AddListener(ImportFilesNotSupported);
+            fileOpenService.onFilesNotSupported.AddListener(ImportFilesNotSupported);
 
             foreach (var chain in chains)
             {
@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin.Services
             layers.LayerRemoved.RemoveListener(OnLayerRemoved);
             layers.VisualizationCreated.RemoveListener(OnVisualizationCreated);
             layerSourceAttributionEvent.RemoveListenerStarted(OnAttributionReceived.Invoke);
-            _fileOpenService.onFilesNotSupported.RemoveListener(ImportFilesNotSupported);
+            fileOpenService.onFilesNotSupported.RemoveListener(ImportFilesNotSupported);
             
             foreach (var chain in chains)
             {
