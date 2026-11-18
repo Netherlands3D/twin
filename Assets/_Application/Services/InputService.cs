@@ -68,14 +68,14 @@ namespace Netherlands3D.Services
         {
             OpenProjectAction.Enable();
             SaveProjectAction.Enable();
-            exitAction.Enable();
+            ExitAction.Enable();
         }
 
         private void OnDisable()
         {
             OpenProjectAction.Disable();
             SaveProjectAction.Disable();
-            exitAction.Disable();
+            ExitAction.Disable();
         }
 
         public void SetCameraActionsEnabled(bool enable)

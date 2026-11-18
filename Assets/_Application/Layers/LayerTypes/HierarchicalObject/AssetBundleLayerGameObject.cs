@@ -9,6 +9,7 @@ using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
+    //on how to make an assetbundle go to the assetbundleservice for info
     public class AssetBundleLayerGameObject : HierarchicalObjectLayerGameObject
     {
         private AssetBundleService assetBundleService;
@@ -30,18 +31,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             this.prefabName = prefabName;
             
             Load();
-        }
-        
-        protected override void RegisterEventListeners()
-        {
-            base.RegisterEventListeners();
-           
-        }
-
-        protected override void UnregisterEventListeners()
-        {
-            base.UnregisterEventListeners();
-           
         }
 
         public override void OnSelect(LayerData layer)
@@ -71,10 +60,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     {
                         var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
                         transformProperty.Position = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                        transformProperty.EulerRotation = transform.rotation.eulerAngles;
+                        transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
                         transformProperty.LocalScale = transform.localScale;
                     }
                 });
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            if (instantiatedPrefab == null)
+                return;
+            
+            SpawnFromCoordinate fromCoordinate = instantiatedPrefab.GetComponent<SpawnFromCoordinate>();
+            if (fromCoordinate != null)
+            {
+                var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+                transformProperty.Position = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
+                transformProperty.LocalScale = transform.localScale;
+            }
         }
 
         private void Unload()

@@ -11,47 +11,13 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.AssetBundles
 {
-    //for now this is a test scenario loading script for the zuidoostbundle 
-    //this could be written as a controller to load assetbundles    
-
-    //step 1, put all  your assets in the assetbundleassets folder
-    //step 2, give all your assets a unified tag (create for the first asset the new tag)
-    //step 3, in the menu -> assets -> click Build assetbundles
-    //step 4, your assetbundle will be put in streamingassets
-    //step 5, use LoadAssetFromAssetBundle from any script to instantiate your prefab from the bundle
-
-    //step 6, for any change in any prefab within an assetbundle you need to rebuild the assetbundles
+    //making assetbundle:
+    //give all assets in the assetbundle the right tag
+    //apply spawnfromcoordinate script to your prefab to spawn it at a coordinate with rotation
+    //in menu press: Netherlands3d -> Build AssetBundles
 
     public class AssetBundleService : MonoBehaviour
     {
-        public UnityEvent OnAssetsLoaded;
-
-        public void LoadAssetFromAssetBundle(string bundleName, string fileName, Action<GameObject> onAssetLoaded)
-        {
-            string path = Path.Combine(Application.streamingAssetsPath, bundleName);
-            StartCoroutine(GetAssetBundle(path, bundle => OnAssetBundleLoaded(bundle, fileName, onAssetLoaded)));
-        }
-
-        void OnAssetBundleLoaded(AssetBundle bundle, string fileName, Action<GameObject> onAssetLoaded)
-        {
-            string[] names = bundle.GetAllAssetNames();
-            foreach (string name in names)
-            {
-                // if the file is not a match, move on
-                if (Path.GetFileName(name) != fileName.ToLower()) continue;
-
-                GameObject asset = bundle.LoadAsset<GameObject>(name);
-                if (asset != null)
-                {
-                    FixShaders(asset);
-                    onAssetLoaded(asset);
-                }
-
-                bundle.Unload(false);
-                break;
-            }
-        }
-
         private void FixShaders(GameObject asset)
         {
             //the following fixes the pink bug in editor shaders                     
@@ -63,7 +29,6 @@ namespace Netherlands3D.Functionalities.AssetBundles
                     renderer.material.shader = Shader.Find(renderer.material.shader.name);
                     continue;
                 }
-
                 renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
             }
         }
@@ -117,43 +82,22 @@ namespace Netherlands3D.Functionalities.AssetBundles
 #endif
         }
         
-        public void InstantiatePrefab(
-            string bundleName,
-            string prefabName,
-            Transform parent,
-            Action<GameObject> onInstantiated)
+        public void InstantiatePrefab(string bundleName, string prefabName, Transform parent, Action<GameObject> onInstantiated)
         {
-            StartCoroutine(InstantiatePrefabRoutine(
-                bundleName,
-                prefabName,
-                parent,
-                onInstantiated
-            ));
+            StartCoroutine(InstantiatePrefabRoutine(bundleName, prefabName, parent, onInstantiated));
         }
 
-        private IEnumerator InstantiatePrefabRoutine(
-            string bundleName,
-            string prefabName,
-            Transform parent,
-            Action<GameObject> onInstantiated)
+        private IEnumerator InstantiatePrefabRoutine(string bundleName, string prefabName, Transform parent, Action<GameObject> onInstantiated)
         {
-            string path = Path.Combine(
-                Application.streamingAssetsPath,
-                bundleName
-            );
-
+            string path = Path.Combine(Application.streamingAssetsPath, bundleName);
             AssetBundle bundle = null;
 
-            yield return GetAssetBundle(path, loadedBundle =>
-            {
-                bundle = loadedBundle;
-            });
+            yield return GetAssetBundle(path, loadedBundle => { bundle = loadedBundle; });
 
             if (bundle == null)
             {
                 Debug.LogError($"Failed to load AssetBundle: {bundleName}");
                 onInstantiated?.Invoke(null);
-                OnAssetsLoaded?.Invoke();
                 yield break;
             }
 
@@ -162,50 +106,36 @@ namespace Netherlands3D.Functionalities.AssetBundles
             try
             {
                 string[] assetNames = bundle.GetAllAssetNames();
-
-                string targetName = Path.GetFileNameWithoutExtension(
-                    prefabName
-                );
-
+                string targetName = Path.GetFileNameWithoutExtension(prefabName);
                 foreach (string assetName in assetNames)
                 {
-                    string assetFileName = Path.GetFileNameWithoutExtension(
-                        assetName
-                    );
-
-                    if (!string.Equals(
-                        assetFileName,
-                        targetName,
-                        StringComparison.OrdinalIgnoreCase))
+                    string assetFileName = Path.GetFileNameWithoutExtension(assetName);
+                    if (!string.Equals(assetFileName, targetName, StringComparison.OrdinalIgnoreCase))
                         continue;
 
                     GameObject prefab = bundle.LoadAsset<GameObject>(assetName);
-
                     if (prefab == null)
                     {
                         Debug.LogError($"Could not load prefab: {prefabName}");
                         break;
                     }
 
+                    FixShaders(prefab);
                     instance = Instantiate(prefab, parent, false);
                     break;
                 }
-
                 if (instance == null)
                 {
-                    Debug.LogError(
-                        $"Prefab '{prefabName}' not found in bundle '{bundleName}'"
-                    );
+                    Debug.LogError($"Prefab '{prefabName}' not found in bundle '{bundleName}'");
                 }
             }
             finally
             {
-                // Release the bundle container, but preserve loaded assets.
+                //release the bundle container, but preserve loaded assets.
                 bundle.Unload(false);
             }
 
             onInstantiated?.Invoke(instance);
-            OnAssetsLoaded?.Invoke();
         }
         
         public (string bundleName, string prefabName) ParseAssetBundleUri(Uri uri)

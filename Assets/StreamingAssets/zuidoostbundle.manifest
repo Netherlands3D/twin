@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.28f1
-CRC: 3641809029
+CRC: 882418621
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d70fc15deb0a314af091fced520fe3fd
+    Hash: 0b7ce866f806ffdd8229af9a4b58fa50
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2e3d30ebc32e8e0e8146effdaf0930d6
+    Hash: e073595ab6763944240b0282658e0422
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ae4a950336428340f38cca95d50fb259
+    Hash: d3f9767ba393075eeaca5a2859e9ef80
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -41,60 +41,6 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: eu.netherlands3d.coordinates.Runtime
   ClassName: Netherlands3D.Coordinates.CoordinateSystem
 Assets:
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_3.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_22.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_10.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_CF.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_6.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_2.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_0.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_16.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_19.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_11.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_23.jpg
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/zuidoost.obj
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_0.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_22.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Parkside.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/03_-_Default.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_4.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_15.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_18.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/RubyGardens.001.mat
 - Assets/_Functionalities/AssetBundles/AssetBundleAssets/zuidoostprefab.prefab
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_13.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/04_-_Default.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_A1.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_1.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_14.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_14.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_7.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_10.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_E.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_9.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/ZC.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_1.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/03_-_Default.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_8.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_A2.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Brightside.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_20.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Paasheuvelweg_Ground_PBR.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_18.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_4.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_16.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_2.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_21.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_8.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Paasheuvelweg_PBR.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_6.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/04_-_Default.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_C1.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_B2.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_17.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_5.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_D1.001.mat
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_20.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_12.jpg
-- Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_12.mat
 Dependencies: []
