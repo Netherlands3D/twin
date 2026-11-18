@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private string bundleName;
         private string prefabName;
 
+        private SpawnFromCoordinate fromCoordinate;
+
         protected override void OnVisualizationInitialize()
         {
             base.OnVisualizationInitialize();
@@ -55,31 +57,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 {
                     instantiatedPrefab = instance;
                     instantiatedPrefab.transform.localPosition = Vector3.zero;
-                    SpawnFromCoordinate fromCoordinate = instance.GetComponent<SpawnFromCoordinate>();
-                    if (fromCoordinate != null)
-                    {
-                        var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
-                        transformProperty.Position = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                        transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
-                        transformProperty.LocalScale = transform.localScale;
-                    }
+                    fromCoordinate = instance.GetComponent<SpawnFromCoordinate>();
                 });
         }
-
-        protected override void Update()
+        
+        protected override void UpdatePosition(Coordinate newPosition)
         {
-            base.Update();
-            if (instantiatedPrefab == null)
-                return;
-            
-            SpawnFromCoordinate fromCoordinate = instantiatedPrefab.GetComponent<SpawnFromCoordinate>();
-            if (fromCoordinate != null)
+            if (fromCoordinate == null)
             {
-                var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
-                transformProperty.Position = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
-                transformProperty.LocalScale = transform.localScale;
+                base.UpdatePosition(newPosition);
+                return;
             }
+            
+            var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformProperty.Position = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+            transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
+            transformProperty.LocalScale = transform.localScale;
+            base.UpdatePosition(newPosition);
         }
 
         private void Unload()
