@@ -84,22 +84,16 @@ namespace Netherlands3D.ProjectTime
 
         private void Start()
         {
+            OnProjectDataChanged(ProjectData.Current); //set initial value based on the current project
             if (useCurrentTime)
             {
                 ResetToNow();
             }
-            else
-            {
-                var newTime = new DateTime(year, month, day, hour, minutes, seconds, dateTimeKind);
-                Time = newTime;
-            }
-           
-            OnProjectDataChanged(ProjectData.Current); //set initial value based on the current project
         }
         
         private void OnEnable()
         {
-            ProjectData.Current?.OnDataChanged.AddListener(OnProjectDataChanged);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
             
             timeOfDayChanged.AddListener(SaveCurrentDateTime);
             useCurrentTimeChanged.AddListener(SaveUseCurrentTime);
@@ -107,7 +101,7 @@ namespace Netherlands3D.ProjectTime
 
         private void OnDisable()
         {
-            ProjectData.Current?.OnDataChanged.RemoveListener(OnProjectDataChanged);
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
             timeOfDayChanged.RemoveListener(SaveCurrentDateTime);
             useCurrentTimeChanged.RemoveListener(SaveUseCurrentTime);
         }

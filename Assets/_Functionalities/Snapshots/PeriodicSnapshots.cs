@@ -138,6 +138,7 @@ namespace Netherlands3D.Snapshots
             previousTarget = sourceCamera.targetTexture;
             previousMask = sourceCamera.cullingMask;
             previousActive = RenderTexture.active;
+            cachedTime = timeService.Time;
 
             try
             {
@@ -150,8 +151,7 @@ namespace Netherlands3D.Snapshots
                 sourceCamera.targetTexture = renderTexture;
 
                 yield return null;
-
-                cachedTime = timeService.Time;
+                
                 for (var index = 0; index < moments.Count; index++)
                 {
                     onProgress.Invoke(1f / moments.Count * (index + 1));
