@@ -10,12 +10,13 @@ namespace Netherlands3D.SubObjects
         private static readonly Color32 NO_OVERRIDE_COLOR32 = NO_OVERRIDE_COLOR;
 
         public delegate void ObjectMappingHandler(ObjectMapping mapping);
+
         public static event ObjectMappingHandler ObjectMappingCheckIn;
         public static event ObjectMappingHandler ObjectMappingCheckOut;
 
         private static List<ObjectMapping> mappings;
         private static Color32[] colorBuffer = new Color32[0];
-        private static readonly Dictionary<string, Color32> overrideColors = new(); 
+        private static readonly Dictionary<string, Color32> overrideColors = new();
         private static readonly Dictionary<string, Dictionary<string, Color32>> layerColors = new();
         private static readonly Dictionary<string, Dictionary<string, Color32>> selectionColors = new();
 
@@ -33,7 +34,7 @@ namespace Netherlands3D.SubObjects
             if (mappings != null && mappings.Remove(mapping))
                 ObjectMappingCheckOut?.Invoke(mapping);
         }
-        
+
         //todo solve duplicate colors
         public static void AddOverrideColors(Dictionary<string, Color> colorMap)
         {
@@ -44,15 +45,17 @@ namespace Netherlands3D.SubObjects
         {
             foreach (var kv in colorMap) overrideColors.Remove(kv.Key);
         }
-        
-        private static void Set(Dictionary<string, Dictionary<string, Color32>> store, string layerId, string objectId, Color32 color)
+
+        private static void Set(Dictionary<string, Dictionary<string, Color32>> store, string layerId, string objectId,
+            Color32 color)
         {
             if (!store.TryGetValue(layerId, out var dict))
                 store[layerId] = dict = new Dictionary<string, Color32>();
             dict[objectId] = color;
         }
 
-        private static void Remove(Dictionary<string, Dictionary<string, Color32>> store, string layerId, string objectId)
+        private static void Remove(Dictionary<string, Dictionary<string, Color32>> store, string layerId,
+            string objectId)
         {
             if (store.TryGetValue(layerId, out var dict))
             {
@@ -62,11 +65,28 @@ namespace Netherlands3D.SubObjects
             }
         }
 
-        public static void AddLayerColor(string layerId, string objectId, Color color) => Set(layerColors, layerId, objectId, color);
+        public static void AddLayerColor(string layerId, string objectId, Color color) =>
+            Set(layerColors, layerId, objectId, color);
+
         public static void RemoveLayerColor(string layerId, string objectId) => Remove(layerColors, layerId, objectId);
-        public static void AddSelectionColor(string layerId, string objectId, Color color) => Set(selectionColors, layerId, objectId, color);
-        public static void RemoveSelectionColor(string layerId, string objectId) => Remove(selectionColors, layerId, objectId);
-        
+
+        public static void AddSelectionColor(string layerId, string objectId, Color color) =>
+            Set(selectionColors, layerId, objectId, color);
+
+        public static void RemoveSelectionColor(string layerId, string objectId) =>
+            Remove(selectionColors, layerId, objectId);
+
+        public static bool TryGetLayerColor(string layerId, string objectId, out Color32 color)
+        {
+            color = default;
+            if (layerColors.TryGetValue(layerId, out var dict) && dict.TryGetValue(objectId, out Color32 color32))
+            {
+                color = color32;
+                return true;
+            }
+            return false;
+        }
+
         //TODO we will need a cascading coloring system to apply colors, when multiple colors are registered to one bagid, is this still needed?
         /// <summary>
         /// This will color the final result from styling, by its objectmapping it will find the corresponding bagids in the override color dictionary and apply mesh vertex coloring.
@@ -75,7 +95,7 @@ namespace Netherlands3D.SubObjects
         public static void ApplyColors(ObjectMapping mapping, string layerId = null)
         {
             bool hasOverrides = overrideColors.Count > 0;
-            
+
             if (layerId == null && !hasOverrides) return;
 
             if (!mapping.TryGetComponent(out MeshFilter meshFilter)) return;
@@ -128,7 +148,7 @@ namespace Netherlands3D.SubObjects
 
             if (anyColor)
             {
-                mesh.SetColors(buffer, 0, offset); 
+                mesh.SetColors(buffer, 0, offset);
             }
             else if (mesh.HasVertexAttribute(VertexAttribute.Color))
             {
