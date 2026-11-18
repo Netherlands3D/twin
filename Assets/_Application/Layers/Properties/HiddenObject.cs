@@ -70,11 +70,10 @@ namespace Netherlands3D.Twin.layers.properties
                     var visibilityColor = visiblity == true ? storedColor : Color.clear;
                     
                     var layerId = visualization.LayerData.Id.ToString();
-                    if (Interaction.TryGetLayerColor(layerId, id, out var currentColor) && currentColor.Equals(visibilityColor))
+                    if (Interaction.TryGetLayerColor(layerId, id, out var currentColor) && currentColor.Equals(visibilityColor)) //implicit cast to color24
                     {
                         return false;
                     }
-                    
                     Interaction.AddLayerColor(layerId, id, visibilityColor);
                     return true;
                 }
