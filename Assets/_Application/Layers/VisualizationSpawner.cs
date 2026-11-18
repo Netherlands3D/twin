@@ -16,12 +16,12 @@ namespace Netherlands3D.Twin.Layers
 {
     public class VisualizationSpawner : ILayerSpawner
     {
-        private readonly PrefabLibrary prefabLibrary;
+        private readonly AssetLibrary.AssetLibrary assetLibrary;
         private PointerToWorldPosition pointerToWorldPosition;
 
-        public VisualizationSpawner(PrefabLibrary prefabLibrary)
+        public VisualizationSpawner(AssetLibrary.AssetLibrary assetLibrary)
         {
-            this.prefabLibrary = prefabLibrary;
+            this.assetLibrary = assetLibrary;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.Layers
                 return null; //a folder has no visualization, if there is no prefab ID, there is no visualization (possibly legacy Folder data structure). The string "folder" comes from the LayerBuilder.Type, and maybe should be changed so we don't have to do a hard check here
             }
 
-            var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
+            var prefab = assetLibrary.GetPrefabById(layerData.PrefabIdentifier);
             return await SpawnUsingPrefab(layerData, prefab);
         }
 
@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.Layers
             Vector3 position,
             Quaternion rotation
         ) {
-            var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
+            var prefab = assetLibrary.GetPrefabById(layerData.PrefabIdentifier);
             return await SpawnUsingPrefab(layerData, prefab);
         }
 
