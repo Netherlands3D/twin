@@ -7,17 +7,12 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
-using Netherlands3D.UI_Toolkit;
-using Netherlands3D.UI.Components;
-using Netherlands3D.UI.Panels;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
-using UnityEngine.UIElements;
 
 namespace Netherlands3D.AddressSearch
 {
