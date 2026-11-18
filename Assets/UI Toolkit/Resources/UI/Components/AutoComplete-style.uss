@@ -27,6 +27,11 @@
     align-items: center;
 }
 
+.auto-complete__field > TextInput
+{
+    align-items: center;
+}
+
 .auto-complete .textfield .unity-base-text-field__input {
     padding: 0;
     background-color: transparent;

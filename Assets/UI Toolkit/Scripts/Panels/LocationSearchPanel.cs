@@ -66,7 +66,7 @@ namespace Netherlands3D.UI.Panels
         public void SetSuggestions(List<SuggestionResult> suggestions)
         {
             currentSuggestions = suggestions;
-            AddressSearch.SetResults(currentSuggestions, suggestion => suggestion.Label);
+            AddressSearch.SetResults(currentSuggestions, suggestion => suggestion.DisplayLabel);
         }
 
         /// <summary>Remove all result items and close the dropdown.</summary>
