@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 #endif
 
-namespace Netherlands3D
+namespace Netherlands3D.Cursor
 {
     public static class PointerStyle
     {
@@ -202,8 +202,10 @@ namespace Netherlands3D
 
 #if !UNITY_EDITOR && UNITY_WEBGL
             SetCSSCursor(cursorString);
-elif !UNITY_EDITOR && UNITY_STANDALONE_WIN
+#elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
             WindowsCursor.Apply(type);
+#elif UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+            MacCursor.Apply(type);
 #else
             Debug.Log("change cursor to " + cursorString);
 #endif

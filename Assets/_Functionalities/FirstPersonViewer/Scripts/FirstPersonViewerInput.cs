@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 using System;
 using Netherlands3D.Twin;
 using UnityEngine.Events;
-using Cursor = UnityEngine.Cursor;
 using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine.UIElements;
 
@@ -126,11 +125,11 @@ namespace Netherlands3D.FirstPersonViewer
             // Lock the mouse cursor to the screen using the old method to keep it centered (used by the Object Selector).
             cursorLocked = lockCursor;
 
-            Cursor.lockState = lockCursor
+            UnityEngine.Cursor.lockState = lockCursor
                 ? CursorLockMode.Locked
                 : CursorLockMode.None;
 
-            Cursor.visible = !lockCursor;
+            UnityEngine.Cursor.visible = !lockCursor;
 
             if (lockCursor)
             {

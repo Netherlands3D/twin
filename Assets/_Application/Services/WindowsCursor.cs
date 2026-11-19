@@ -1,8 +1,8 @@
-#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 using System;
 using System.Runtime.InteropServices;
 
-namespace Netherlands3D
+namespace Netherlands3D.Cursor
 {
     internal static class WindowsCursor
     {
