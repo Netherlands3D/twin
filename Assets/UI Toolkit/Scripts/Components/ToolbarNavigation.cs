@@ -1,6 +1,5 @@
 using System;
 using Netherlands3D.Services;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
@@ -17,6 +16,8 @@ namespace Netherlands3D.UI.Components
         private Toggle Perspective => this.Q<Toggle>("Perspective");
         private Button FPV => this.Q<Button>("FPV");
         private bool isDragging;
+
+        public event Action OnDashboardClicked;
         
         public ToolbarNavigation()
         {
@@ -34,7 +35,7 @@ namespace Netherlands3D.UI.Components
 
             var dashboardButton = this.Q<Button>("Dashboard");
             if (dashboardButton != null)
-                dashboardButton.clicked += () => App.UIRoot?.OpenDashboard(dashboardButton);
+                dashboardButton.clicked += () => OnDashboardClicked?.Invoke();
             
             FPV.RegisterCallback<PointerEnterEvent>(OnFPVPointerEnter);
             FPV.RegisterCallback<PointerLeaveEvent>(OnFPVPointerLeave);

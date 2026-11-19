@@ -23,35 +23,50 @@ namespace Netherlands3D.Twin.Functionalities
         [NonSerialized]
         private FunctionalityData currentData;
 
+        [NonSerialized]
+        private bool hiddenFeaturesAllowed;
+
+        /// <summary>
+        /// Allows a hidden functionality to be enabled by the spoke configuration or a temporary test override.
+        /// </summary>
+        public bool HiddenFeaturesAllowed
+        {
+            get => hiddenFeaturesAllowed;
+            set
+            {
+                if (hiddenFeaturesAllowed == value) return;
+
+                var wasEnabled = IsEnabled;
+                hiddenFeaturesAllowed = value;
+                if (Type == FunctionalityType.Hidden && !value)
+                    Data.IsEnabled = false;
+
+                if (IsEnabled != wasEnabled)
+                    InvokeOnEnableChangeEvents();
+            }
+        }
+
         public FunctionalityData Data
         {
             get => currentData ??= CreateDefaultData();
             set
             {
-                var oldEnabled = Data.IsEnabled;
+                var oldEnabled = IsEnabled;
                 currentData = value;
 
-                if (currentData.IsEnabled != oldEnabled)
+                if (IsEnabled != oldEnabled)
                     InvokeOnEnableChangeEvents();
             }
         }
 
         public void ResetDataToDefaults()
         {
-            var data = CreateDefaultData();
-            if (Type == FunctionalityType.Hidden)
-                data.IsEnabled = IsEnabled;
-
-            Data = data;
+            Data = CreateDefaultData();
         }
 
         private FunctionalityData CreateDefaultData()
         {
-            var data = defaultData.CreateCopy();
-            if (Type == FunctionalityType.Hidden)
-                data.IsEnabled = false;
-
-            return data;
+            return defaultData.CreateCopy();
         }
 
         [Tooltip("Functionality button title")]
@@ -71,9 +86,12 @@ namespace Netherlands3D.Twin.Functionalities
 
         public bool IsEnabled
         {
-            get => Data.IsEnabled;
+            get => Data.IsEnabled && (Type != FunctionalityType.Hidden || HiddenFeaturesAllowed);
             set
             {
+                if (Type == FunctionalityType.Hidden && !HiddenFeaturesAllowed)
+                    value = false;
+
                 //cant enable functionality if configuration is invalid
                 if (Data.IsEnabled && configuration is IConfiguration config && config.Validate().Count > 0)
                 {
@@ -83,9 +101,11 @@ namespace Netherlands3D.Twin.Functionalities
                 if (value == Data.IsEnabled) //IsEnabled was not changed
                     return;
 
+                var wasEnabled = IsEnabled;
                 Data.IsEnabled = value;
                 
-                InvokeOnEnableChangeEvents();
+                if (IsEnabled != wasEnabled)
+                    InvokeOnEnableChangeEvents();
             }
         }
 
@@ -94,7 +114,7 @@ namespace Netherlands3D.Twin.Functionalities
 
         private void InvokeOnEnableChangeEvents()
         {
-            if (Data.IsEnabled)
+            if (IsEnabled)
                 OnEnableFunctionality.Invoke();
             else
                 OnDisableFunctionality.Invoke();
@@ -110,7 +130,7 @@ namespace Netherlands3D.Twin.Functionalities
         {
             return new JSONObject
             {
-                ["enabled"] = Data.IsEnabled,
+                ["enabled"] = IsEnabled,
                 ["configuration"] = (configuration as IConfiguration)?.ToJsonNode()
             };
         }
