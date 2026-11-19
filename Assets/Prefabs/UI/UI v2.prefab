@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 4297113770841784289}
   - component: {fileID: -184948826278789416}
   - component: {fileID: 6000328000754631239}
+  - component: {fileID: 6874033562800198732}
   m_Layer: 5
   m_Name: UI v2
   m_TagString: Untagged
@@ -361,6 +362,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6874033562800198732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88f70bfd808247e6b957c2a76cc464ae, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI_Toolkit.Scripts.Behaviours.DashboardBehaviour
+  configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
+  dashboardFunctionality: {fileID: 11400000, guid: a0b242efecc94870933456231b6fca4b, type: 2}
 --- !u!114 &6000328000754631239
 MonoBehaviour:
   m_ObjectHideFlags: 0
