@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using Netherlands3D.Coordinates;
+using Unity.Collections;
 using UnityEngine.Events;
 
 #if SUBOBJECT
@@ -190,14 +191,13 @@ namespace Netherlands3D.CartesianTiles
                 yield break;
             }
 
-            byte[] results = webRequest.downloadHandler.data;
+            var results = webRequest.downloadHandler.nativeData;
 
-            webRequest.Dispose();
-
-            if (results == null || results.Length == 0)
+            if (results.IsCreated || results.Length == 0)
             {
                 if(logErrors) Debug.LogError($"Downloaded empty mesh for tile {tileKey} from {url}");
                 RemoveGameObject(tileKey);
+                webRequest.Dispose();
                 callback?.Invoke(tileChange);
                 yield break;
             }
@@ -205,6 +205,9 @@ namespace Netherlands3D.CartesianTiles
             yield return new WaitUntil(() => pauseLoading == false);
 
             GameObject newGameobject = CreateNewGameObject(url, results, tileChange);
+            
+            webRequest.Dispose();
+            
             if (!newGameobject)
             {
                 callback?.Invoke(tileChange);
@@ -337,7 +340,7 @@ namespace Netherlands3D.CartesianTiles
             }
         }
 
-        private GameObject CreateNewGameObject(string source, byte[] binaryMeshData, TileChange tileChange)
+        private GameObject CreateNewGameObject(string source, NativeArray<byte>.ReadOnly binaryMeshData, TileChange tileChange)
         {
             container = new GameObject();
             container.name = tileChange.X.ToString() + "-" + tileChange.Y.ToString();
