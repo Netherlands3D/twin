@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Netherlands3D.ProjectTime;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI_Toolkit;
@@ -104,7 +105,6 @@ namespace Netherlands3D.UI.Components
         private DateTime snapStartedInitialEndTime;
         private DateTime snapStartedTargetEndTime;
 
-
         private readonly DateTimeInterval[] unitGroups = new DateTimeInterval[]
         {
             new (DateTimeUnit.Year, 100),
@@ -139,6 +139,8 @@ namespace Netherlands3D.UI.Components
             new (DateTimeUnit.Second, 2),
             new (DateTimeUnit.Second, 1),
         };
+
+        private TimeService timeService;
 
         [UxmlAttribute("start-time")]
         private string StartTimeUxml
@@ -616,7 +618,8 @@ namespace Netherlands3D.UI.Components
         {
             if (Application.isPlaying)
             {
-                ProjectData.Current.OnCurrentDateTimeChanged.AddListener(HandleProjectTimeChanged);
+                timeService = Services.ServiceLocator.GetService<TimeService>();
+                timeService.timeOfDayChanged.AddListener(HandleProjectTimeChanged);
             }
             
             StartSnap();
@@ -639,7 +642,7 @@ namespace Netherlands3D.UI.Components
         {
             if (Application.isPlaying)
             {
-                ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(HandleProjectTimeChanged);
+                timeService.timeOfDayChanged.AddListener(HandleProjectTimeChanged);
             }
         }
         
@@ -779,8 +782,9 @@ namespace Netherlands3D.UI.Components
             if (currentTime == lastCurrentTime) return;
             var projectData = ProjectData.Current;
             if (projectData == null) return;
-            projectData.UseCurrentTime = false;
-            projectData.CurrentDateTime = currentTime;
+           
+            timeService.UseCurrentTime = false;
+            timeService.SetTime(currentTime);
             lastCurrentTime = currentTime;
         }
 

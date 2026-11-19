@@ -44,7 +44,6 @@ namespace Netherlands3D.Twin.Projects
             set
             {
                 currentDateTime = value;
-                OnCurrentDateTimeChanged.Invoke(value);
             }
         }
         public bool UseCurrentTime = false;
@@ -63,7 +62,6 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        [NonSerialized] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
 
