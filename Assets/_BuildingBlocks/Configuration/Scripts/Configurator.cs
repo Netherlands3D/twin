@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Interface;
 using Netherlands3D.Twin.Projects;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

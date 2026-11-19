@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using System.Threading.Tasks;
 using GLTFast;
 using System;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using System.Text;
 #if UNITY_EDITOR
 using System.IO.Compression;

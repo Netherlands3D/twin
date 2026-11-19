@@ -15,6 +15,7 @@ namespace Netherlands3D.Twin.Services
     {
         [SerializeField] private PrefabLibrary prefabLibrary;
         [SerializeField] private DataTypeChain fromUrlImporter;
+        
         private VisualizationSpawner spawner;
         
         public UnityEvent<LayerData> LayerAdded { get; } = new();
@@ -65,6 +66,7 @@ namespace Netherlands3D.Twin.Services
             
             var layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
+
             LayerAdded.Invoke(layerData);
             return layer;
         }

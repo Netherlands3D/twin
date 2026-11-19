@@ -41,7 +41,7 @@
 #endregion License and information
 using UnityEngine;
 
-namespace SimpleJSON
+namespace Netherlands3D.SimpleJSON
 {
     public enum JSONContainerType { Array, Object }
 	public partial class JSONNode

@@ -15,6 +15,7 @@ namespace Netherlands3D.Services
         private InputAction saveProjectAction;
         private InputAction undoAction;
         private InputAction redoAction;
+        private InputAction exitAction;
         
         private InputActionMap polygonSelectionActionMap;
         private InputActionMap cameraInputActionMap;
@@ -39,6 +40,7 @@ namespace Netherlands3D.Services
         
         public InputAction OpenProjectAction => openProjectAction ??= applicationActionMap.FindAction("Projects/Open");
         public InputAction SaveProjectAction => saveProjectAction ??= applicationActionMap.FindAction("Projects/Save");
+        public InputAction ExitAction => exitAction ??= applicationActionMap.FindAction("Projects/Exit");
         
         public InputAction LeftClickAction => leftClickAction ??= cameraInputActionMap.FindAction("LeftClick");
         public InputAction RightClickAction => rightClickAction ??= cameraInputActionMap.FindAction("RightClick");
@@ -66,12 +68,14 @@ namespace Netherlands3D.Services
         {
             OpenProjectAction.Enable();
             SaveProjectAction.Enable();
+            exitAction.Enable();
         }
 
         private void OnDisable()
         {
             OpenProjectAction.Disable();
             SaveProjectAction.Disable();
+            exitAction.Disable();
         }
 
         public void SetCameraActionsEnabled(bool enable)

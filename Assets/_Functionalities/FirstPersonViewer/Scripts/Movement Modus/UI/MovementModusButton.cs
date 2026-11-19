@@ -1,6 +1,5 @@
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.UI.Tooltips;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +24,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             movementIcons.ForEach(i => i.sprite = preset.viewIcon);
 
-            GetComponent<TooltipTrigger>().TooltipText = preset.viewName;
+            //keep this for future reference to know what tooltip should be used when feature fpv is fully implemented again
+            //GetComponent<TooltipTrigger>().TooltipText = preset.viewName;
         }
 
         private void OnEnable()

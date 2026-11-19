@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -215,6 +215,16 @@ namespace Netherlands3D.CityJson.Structure
         public void AddAttribute(CityObjectAttribute attribute)
         {
             Attributes.Add(attribute.Key, attribute);
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var properties = new Dictionary<string, object>();
+            foreach (var attribute in Attributes)
+            {
+                properties[attribute.Key] = attribute.Value.GetJSONValue();
+            }
+            return properties;
         }
 
         public static CityObject CreateEmpty(string id, CityObjectType type = CityObjectType.GenericCityObject, CoordinateSystem coordinateSystem = CoordinateSystem.RD)
