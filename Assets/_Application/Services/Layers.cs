@@ -199,8 +199,6 @@ namespace Netherlands3D.Twin.Services
         {
             try
             {
-                if(spawner == null) spawner = new VisualizationSpawner(prefabLibrary);
-                
                 Task<LayerGameObject> visualizationTask = layer.LayerGameObjectTask;
                 if (layer.LayerGameObjectTask == null)
                 {

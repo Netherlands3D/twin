@@ -86,6 +86,12 @@ namespace Netherlands3D.AssetLibrary
 
         public LayerGameObject GetPrefabById(string identifier)
         {
+            if (identifier == null) 
+            {
+                Debug.LogError($"Prefab with identifier '{identifier}' could not be found, defaulting to fallback prefab");
+                return fallbackPrefab;
+            }
+            
             if (!prefabs.TryGetValue(identifier, out var prefab))
             {
                 Debug.LogError($"Prefab with identifier '{identifier}' could not be found, defaulting to fallback prefab");
