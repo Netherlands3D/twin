@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.layers.properties
             hiddenObjectsPropertyData.SelectionMaterial = selectionMaterial;
             hiddenObjectsPropertyData.OnHiddenObjectDataStylingRuleRemoved.AddListener(OnHiddenObjectRemoved);
             
-            visualization.OnFeatureCreated += AddAttributesToLayerFeature;
+            visualization.OnStylingFeatureCreated += AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnStylingChanged);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             
@@ -85,7 +85,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             bool changed = false;
 
-            foreach (var (_, feature) in visualization.LayerFeatures)
+            foreach (var (_, feature) in visualization.StylingFeatures)
             {
                 changed |= UpdateFeatureColor(feature);
             }
@@ -160,7 +160,7 @@ namespace Netherlands3D.Twin.layers.properties
                     if (mapping.items.TryGetValue(objectId, out var item))
                     {
                         var layerFeature = visualization.CreateFeature(item);
-                        visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                        visualization.StylingFeatures.Add(layerFeature.Geometry, layerFeature);
                         UpdateFeatureColor(layerFeature);
                         hasStyledObjects = true;
                     }
@@ -178,7 +178,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             foreach (ObjectMappingItem item in mapping.items.Values)
             {
-                visualization.LayerFeatures.Remove(item);
+                visualization.StylingFeatures.Remove(item);
             }
         }
 
@@ -218,7 +218,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             
-            visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
+            visualization.OnStylingFeatureCreated -= AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnStylingChanged);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
             

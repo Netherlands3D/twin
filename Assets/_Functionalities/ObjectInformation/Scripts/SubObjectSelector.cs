@@ -229,7 +229,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     {
                         ObjectMappingItem item = selector.SubObjectSelector.GetMappingItemForBagID(bagId, mapping, out layer);
                         feature = layer.CreateFeature(item);
-                        layer.LayerFeatures.Add(feature.Geometry, feature);
+                        layer.StylingFeatures.Add(feature.Geometry, feature);
                     }
 
                     Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);

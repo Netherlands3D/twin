@@ -233,18 +233,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             if (layerFeature == null)
             {
                 layerFeature = CreateFeature(feature);
-                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                StylingFeatures.Add(layerFeature.Geometry, layerFeature);
             }
         }
 
         public void RemoveStylingFeatureForGeoJsonFeature(Feature feature)
         {
-            LayerFeatures.Remove(feature);
+            StylingFeatures.Remove(feature);
         }
 
         public override void ApplyStyling()
         {
-            foreach (var stylingFeature in LayerFeatures.Values)
+            foreach (var stylingFeature in StylingFeatures.Values)
             {
                 ApplyStylingToFeature(stylingFeature);
             }

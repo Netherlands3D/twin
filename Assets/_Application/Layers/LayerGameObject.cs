@@ -49,12 +49,12 @@ namespace Netherlands3D.Twin.Layers
         public LayerData LayerData => layerData;
         public abstract BoundingBox Bounds { get; }
         
-        public Dictionary<object, StylingFeature> LayerFeatures { get; private set; } = new();
-        public Func<StylingFeature, StylingFeature> OnFeatureCreated;
+        public Dictionary<object, StylingFeature> StylingFeatures { get; private set; } = new();
+        public Func<StylingFeature, StylingFeature> OnStylingFeatureCreated;
         
         public StylingFeature GetStylingFeatureByGeometry(object geometry)
         {
-            LayerFeatures.TryGetValue(geometry, out var feature);
+            StylingFeatures.TryGetValue(geometry, out var feature);
             return feature;
         }
 
@@ -324,8 +324,8 @@ namespace Netherlands3D.Twin.Layers
         {
             StylingFeature feature = StylingFeature.Create(this, geometry);
             AddAttributesToLayerFeature(feature);
-            if(OnFeatureCreated != null)
-                feature = OnFeatureCreated.Invoke(feature);
+            if(OnStylingFeatureCreated != null)
+                feature = OnStylingFeatureCreated.Invoke(feature);
             return feature;
         }
 

@@ -63,7 +63,7 @@ namespace Netherlands3D.Timeline
         {
             var geoJsonFeature = (Feature)feature;
 
-            var layerFeature = visualization.LayerFeatures[geoJsonFeature];
+            var layerFeature = visualization.StylingFeatures[geoJsonFeature];
             var status = currentTimestampForFeature?.value;
 
             if (layerFeature.Attributes.TryGetValue(TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier, out var savedStatus))

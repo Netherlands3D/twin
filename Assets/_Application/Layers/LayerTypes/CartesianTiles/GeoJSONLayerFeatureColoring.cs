@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.layers.properties
                 {
                     layerFeature = visualization.CreateFeature(layer);
                     AddAttributesToLayerFeature(layerFeature);
-                    visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                    visualization.StylingFeatures.Add(layerFeature.Geometry, layerFeature);
                 }
                 layer.RenderMaterial.color = visualization.LayerData.Color;
             }
@@ -77,7 +77,7 @@ namespace Netherlands3D.Twin.layers.properties
         
         public void OnApplyStyling()
         {
-            foreach (var (_, stylingFeature) in visualization.LayerFeatures)
+            foreach (var (_, stylingFeature) in visualization.StylingFeatures)
             {
                 visualization.ApplyStylingToFeature(stylingFeature);
             }
