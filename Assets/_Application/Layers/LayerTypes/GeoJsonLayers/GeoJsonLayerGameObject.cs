@@ -244,7 +244,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
         
-        private List<FeatureMapping> mappings = new List<FeatureMapping>();
+        private List<GeoJsonFeatureMapping> mappings = new List<GeoJsonFeatureMapping>();
 
         // private void Update()
         // {

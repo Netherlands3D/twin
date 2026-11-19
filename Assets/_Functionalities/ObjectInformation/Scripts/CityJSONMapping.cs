@@ -160,6 +160,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 meshes = visualizer.GetAllMeshes();
             }
         }
+
+        public void SetVisiblity(bool visible)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Select(string subId = null)
         {
             UpdateVisualizer();

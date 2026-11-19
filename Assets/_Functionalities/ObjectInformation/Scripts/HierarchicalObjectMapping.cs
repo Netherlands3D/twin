@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Utility;
@@ -34,7 +35,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             throw new NotImplementedException();
         }
-        
+
+        public void SetMappingProjected(bool projected)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, object> GetProperties()
+        {
+            throw new NotImplementedException();
+        }
+
 #if UNITY_EDITOR
         public void DebugMapping()
         {
