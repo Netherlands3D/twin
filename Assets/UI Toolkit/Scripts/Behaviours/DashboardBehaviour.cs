@@ -1,31 +1,36 @@
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 {
     /// <summary>
-    /// Controls Dashboarding activation, the temporary test override and the placeholder dashboard view.
+    /// Controls Dashboarding activation, the temporary test override and the dashboard view.
     /// </summary>
     [RequireComponent(typeof(AppRootBehaviour))]
     public class DashboardBehaviour : MonoBehaviour
     {
+        private const string DashboardOpenClass = "app--dashboard-open";
+
         [SerializeField] private Configuration configuration;
         [SerializeField] private Functionality dashboardFunctionality;
 
-        private AppRootBehaviour appRoot;
         private InputService input;
+        private VisualElement root;
+        private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
         private VisualElement previousFocus;
-        private bool isOpen;
 
         private void Start()
         {
-            appRoot = GetComponent<AppRootBehaviour>();
-            closeButton = appRoot.Root.Q<Button>("CloseDashboard");
+            root = GetComponent<AppRootBehaviour>().Root;
+            toolbarNavigation = root.Q<ToolbarNavigation>();
+            closeButton = root.Q<Button>("CloseDashboard");
             input = ServiceLocator.GetService<InputService>();
             Subscribe();
         }
@@ -39,12 +44,9 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void Subscribe()
         {
             input.ToggleDashboardAction.performed += OnToggleDashboard;
-            dashboardFunctionality.OnEnableFunctionality.AddListener(OpenDashboard);
-            dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
+            toolbarNavigation.OnDashboardClicked += OpenDashboard;
             closeButton.clicked += CloseDashboard;
-
-            if (dashboardFunctionality.IsEnabled)
-                OpenDashboard();
+            dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
         }
 
         private void OnDisable()
@@ -52,9 +54,9 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             if (input == null) return;
 
             input.ToggleDashboardAction.performed -= OnToggleDashboard;
-            dashboardFunctionality.OnEnableFunctionality.RemoveListener(OpenDashboard);
-            dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
+            toolbarNavigation.OnDashboardClicked -= OpenDashboard;
             closeButton.clicked -= CloseDashboard;
+            dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
             CloseDashboard();
         }
 
@@ -70,32 +72,31 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OpenDashboard()
         {
-            if (!dashboardFunctionality.IsEnabled || isOpen) return;
+            if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || root.ClassListContains(DashboardOpenClass)) return;
 
-            previousFocus = appRoot.Root.focusController?.focusedElement as VisualElement;
-            isOpen = true;
-            appRoot.SetDashboardVisible(true);
-            // Focus can only move after the newly visible UI has been laid out.
+            previousFocus = root.focusController?.focusedElement as VisualElement;
+            root.AddToClassList(DashboardOpenClass);
+            // Move focus after the dashboard has become visible.
             closeButton.schedule.Execute(() =>
             {
-                if (isOpen)
+                if (root.ClassListContains(DashboardOpenClass))
                     closeButton.Focus();
             });
         }
 
         private void CloseDashboard()
         {
-            if (!isOpen) return;
+            if (!root.ClassListContains(DashboardOpenClass)) return;
 
-            isOpen = false;
-            appRoot.SetDashboardVisible(false);
+            root.RemoveFromClassList(DashboardOpenClass);
             var elementToFocus = previousFocus;
             previousFocus = null;
             if (elementToFocus?.panel == null) return;
 
-            appRoot.Root.schedule.Execute(() =>
+            // Restore focus after the viewer has become visible again.
+            root.schedule.Execute(() =>
             {
-                if (!isOpen && elementToFocus.panel == appRoot.Root.panel)
+                if (!root.ClassListContains(DashboardOpenClass) && elementToFocus.panel == root.panel)
                     elementToFocus.Focus();
             });
         }

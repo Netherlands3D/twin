@@ -13,11 +13,17 @@ MonoBehaviour:
   m_Name: Configurator
   m_EditorClassIdentifier: 
   configuration: {fileID: 11400000, guid: ef4fdd9a7713bc0458843a4884b6e1c5, type: 2}
-  setupSceneName: SetupWindow
   mainSceneName: Main
   configFilePath: app.config.json
   debugUrl: 
-  debugConfig: 
+  debugConfig: "{\r\n    \"title\" : \"Lelystad\",\r\n    \"allowUserSettings\" :
+    true,\r\n    \"origin\" : {\r\n        \"epsg\" : 2,\r\n        \"x\" : 155207,\r\n       
+    \"y\" : 462945,\r\n        \"z\" : 0\r\n    },\r\n    \"functionalities\" : {\r\n       
+    \"debug-info\" : {\r\n            \"enabled\" : false,\r\n            \"configuration\"
+    : null\r\n        },\r\n        \"first-person-viewer\" : {\r\n            \"enabled\"
+    : true,\r\n            \"configuration\" : null\r\n        },\r\n        \"dashboarding\"
+    : {\r\n            \"enabled\" : true,\r\n            \"configuration\" : null\r\n       
+    }\r\n    }\r\n}"
   OnStartedLoading:
     m_PersistentCalls:
       m_Calls:
@@ -48,9 +54,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnOpenInterface:
-    m_PersistentCalls:
-      m_Calls: []
-  OnCloseInterface:
-    m_PersistentCalls:
-      m_Calls: []
