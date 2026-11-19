@@ -80,6 +80,9 @@ namespace Netherlands3D.CartesianTiles
 
 			if (tiles[tileKey].runningWebRequest != null) tiles[tileKey].runningWebRequest.Abort();
 			if (tiles[tileKey].runningCoroutine != null) StopCoroutine(tiles[tileKey].runningCoroutine);
+            
+            tiles[tileKey].runningWebRequest?.Dispose();
+            tiles[tileKey].runningWebRequest = null;
 		}
     }
 }
