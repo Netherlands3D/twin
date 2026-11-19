@@ -1,26 +1,17 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
+#if !UNITY_EDITOR && UNITY_WEBGL
+using System.Runtime.InteropServices;
+#endif
 
-namespace Netherlands3D
+namespace Netherlands3D.Cursor
 {
     public static class PointerStyle
     {
-        public class StyleRequest
-        {
-            public StyleRequest(object requestingObject, Style cursorStyle)
-            {
-                this.requestingObject = requestingObject;
-                this.cursorStyle = cursorStyle;
-            }
-
-            public object requestingObject;
-            public Style cursorStyle;
-        }
-
+#if !UNITY_EDITOR && UNITY_WEBGL
         [DllImport("__Internal")]
         private static extern string SetCSSCursor(string cursorName = "auto");
+#endif
         private static List<object> activeStyleRequestObjects = new();
         private static Dictionary<object, Style> requestedStyles = new();
 
@@ -211,6 +202,10 @@ namespace Netherlands3D
 
 #if !UNITY_EDITOR && UNITY_WEBGL
             SetCSSCursor(cursorString);
+#elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+            WindowsCursor.Apply(type);
+#elif UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+            MacCursor.Apply(type);
 #else
             Debug.Log("change cursor to " + cursorString);
 #endif
