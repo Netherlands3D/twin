@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI_Toolkit;
@@ -13,9 +14,8 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class TimelineLegendPanel : VisualElement
     {
+        private LayerData activeLayer;
         private ListView listView;
-        
-        private ColorPropertyData colorPropertyData;
         private TimelineStatusStylingLayerPropertyData timelineStatusStylingPropertyData;
 
         public TimelineLegendPanel()
@@ -37,8 +37,10 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            colorPropertyData?.OnStylingChanged.RemoveListener(UpdateSwatches);
-            timelineStatusStylingPropertyData?.OnStylingChanged.RemoveListener(UpdateSwatches);
+            foreach (var stylingProperty in activeLayer.GetProperties<StylingPropertyData>())
+            {
+                stylingProperty.OnStylingChanged.RemoveListener(UpdateSwatches);
+            }
         }
         
         private VisualElement MakeListViewItem()
@@ -54,28 +56,37 @@ namespace Netherlands3D.UI.Panels
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
             
-            string status = listView.itemsSource[index] as string;
-            Color? color;
-            bool? visibility;
-            if (index > 0)
+            var rule = listView.itemsSource[index] as StylingRule;
+            
+            string name =  rule.Name;
+            
+            if (name == StylingPropertyData.NameOfDefaultStyle)
             {
-                color = timelineStatusStylingPropertyData.GetColorForStatus(status);
-                visibility = timelineStatusStylingPropertyData.GetVisibilityForStatus(status);
+                name = "Geen status";
             }
-            else
-            {
-                color = colorPropertyData.GetDefaultSymbolizerColor();
-                visibility = colorPropertyData.GetDefaultSymbolizerVisibility();
-            }
+            
+            Color? color = rule.Symbolizer.GetColor(Symbolizer.FillColorProperty);//todo
+            bool? visibility = rule.Symbolizer.GetVisibility();
+
             tile.Tile.ColorHex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : ColorUtility.ToHtmlStringRGB(Color.white);
-            tile.Tile.LabelText = status;
+            tile.Tile.LabelText = name;
             tile.Tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
         }
         
+        
+        
         private void UpdateSwatches()
         {
-            var list = new List<string>() { "Geen status" };
-            list.AddRange(timelineStatusStylingPropertyData.GetStylingRuleNames());
+            var list = new List<StylingRule>();
+            foreach (var stylingPropertyData in activeLayer.GetProperties<StylingPropertyData>())
+            {
+                if(stylingPropertyData is MaskingLayerPropertyData) // Masking data should not be displayed in the legend
+                    continue;
+
+                    foreach (var rule in stylingPropertyData.StylingRules.Values)
+                        list.Add(rule);
+            }
+            
             listView.itemsSource = list;
             listView.RefreshItems();
         }
@@ -89,13 +100,15 @@ namespace Netherlands3D.UI.Panels
         {
             SetVisible(false);
         }
-
+        
         public void SetLegend(LayerData layerData)
         {
-            colorPropertyData = layerData.GetProperty<ColorPropertyData>();
-            colorPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
-            timelineStatusStylingPropertyData = layerData.GetProperty<TimelineStatusStylingLayerPropertyData>();
-            timelineStatusStylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches); //todo: do this once per frame
+            activeLayer = layerData;
+            foreach (var stylingProperty in layerData.GetProperties<StylingPropertyData>())
+            {
+                stylingProperty.OnStylingChanged.AddListener(UpdateSwatches);
+            }
+            
             UpdateSwatches();
         }
     }

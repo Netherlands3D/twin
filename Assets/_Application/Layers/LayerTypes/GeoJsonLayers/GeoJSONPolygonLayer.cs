@@ -13,59 +13,50 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPolygonLayer : MonoBehaviour, IGeoJsonVisualisationLayer
+    public partial class GeoJSONPolygonLayer : MonoBehaviour, IGeoJsonGeometryTypeVisualizer
     {
-        private GeoJsonLayerGameObject parentLayerVisualization;
-        
         public string DisplayName => "Polygonen";
         public string StylingColorProperty => Symbolizer.FillColorProperty;
 
         public bool SupportsGeometryType(Feature feature)
         {
-            return  feature.Geometry.Type == GeoJSONObjectType.MultiPolygon || feature.Geometry.Type == GeoJSONObjectType.Polygon;
+            return feature.Geometry.Type == GeoJSONObjectType.MultiPolygon || feature.Geometry.Type == GeoJSONObjectType.Polygon;
         }
-        
+
         public int FeatureCount => spawnedVisualisations.Count;
 
-        public Transform Transform
-        {
-            get => transform;
-        }
+        public Transform Transform => transform;
+        public Material RenderMaterial => polygonVisualizationMaterial;
 
-        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
+        public event IGeoJsonGeometryTypeVisualizer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();
 
         [SerializeField] private Material polygonVisualizationMaterial;
-
-        private Material polygonVisualizationMaterialInstance;
         [SerializeField] private Material polygonSelectionVisualizationMaterial;
-
-        public Color RenderColor
+        FeaturePolygonVisualisations selectedVisualisations;
+        
+        public void SetColorForAllFeatures(Color color)
         {
-            get
+            var newColor = new Color(color.r, color.g, color.b, polygonVisualizationMaterial.color.a); //todo: we don't support alpha yet in the color picker
+
+            foreach (var visualisation in spawnedVisualisations.Values)
             {
-                return polygonVisualizationMaterialInstance.color;
-            }
-            set
-            {
-                if (polygonVisualizationMaterialInstance == null)
-                    polygonVisualizationMaterialInstance = new Material(polygonVisualizationMaterial);
-                var newColor = new Color(value.r, value.g, value.b, polygonVisualizationMaterial.color.a); //todo: we don't support alpha yet in the color picker
-                polygonVisualizationMaterialInstance.color = newColor;
-                //todo: we currently only support coloring the entire layer, if we want to support per feature coloring, this should be changed to a function with a feature as a parameter
-                foreach (var visualisation in spawnedVisualisations.Values)
-                    visualisation.SetMaterial(polygonVisualizationMaterialInstance);
+                foreach (var pv in visualisation.Data)
+                {
+                    pv.SetMaterialPropertyBlockColor(newColor, visualisation != selectedVisualisations);
+                }
             }
         }
-        
-        public Material RenderMaterial
+
+        public void SetColorForFeature(Feature feature, Color color)
         {
-            get
+            var newColor = new Color(color.r, color.g, color.b, polygonVisualizationMaterial.color.a); //todo: we don't support alpha yet in the color picker
+
+            var pv = spawnedVisualisations[feature];
+            foreach (var polygon in pv.Data)
             {
-                if (polygonVisualizationMaterialInstance == null)
-                    polygonVisualizationMaterialInstance = new Material(polygonVisualizationMaterial);
-                return polygonVisualizationMaterialInstance;
+                polygon.SetMaterialPropertyBlockColor(newColor, pv != selectedVisualisations);
             }
         }
         
@@ -109,28 +100,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             foreach (var mesh in meshes)
             {
-                PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(mesh);
-                if (visualisation != null)
+                var visualisations = GetPolygonVisualisationsByMesh(mesh);
+                if (visualisations.pv != null)
                 {
-                    visualisation.VisualisationMaterial = polygonSelectionVisualizationMaterial;
-
-                    Color col = new Color(1, 0, 0, 0);
-                    List<Color> colors = new List<Color>();
-                    foreach (Vector3 v in visualisation.PolygonMesh.vertices)
-                        colors.Add(col);
-
-                    visualisation.PolygonMesh.SetColors(colors);
+                    polygonSelectionVisualizationMaterial.color = color;
+                    visualisations.pv.VisualisationMaterial = polygonSelectionVisualizationMaterial;
+                    visualisations.pv.SetMaterialPropertyBlockActive(false);
+                    
+                    selectedVisualisations = visualisations.fpv;
                 }
             }
         }
-
+        
         /// <summary>
         /// not ideal since the polygonvisualisation mesh is not cached. needs caching
         /// returns the polygon visualisation matching the provided meshes
         /// </summary>
         /// <param name="meshes"></param>
         /// <returns></returns>
-        public PolygonVisualisation GetPolygonVisualisationByMesh(Mesh mesh)
+        public (FeaturePolygonVisualisations fpv, PolygonVisualisation pv) GetPolygonVisualisationsByMesh(Mesh mesh)
         {
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
@@ -138,30 +126,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 foreach (PolygonVisualisation pv in visualisations)
                 {
                     if (mesh == pv.PolygonMesh)
-                        return pv;
+                        return (fpv.Value, pv);
                 }
             }
 
-            return null;
+            return (null, null);
         }
 
-        public void SetVisualisationDeselected()
+        public void SetVisualisationDeselected(List<Mesh> meshes)
         {
-            foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
+            foreach (var mesh in meshes)
             {
-                List<PolygonVisualisation> visualisations = fpv.Value.Data;
-                foreach (PolygonVisualisation pv in visualisations)
+                var visualisation = GetPolygonVisualisationsByMesh(mesh);
+                if (visualisation.pv != null)
                 {
-                    if (pv != null)
-                    {
-                        pv.VisualisationMaterial = polygonVisualizationMaterialInstance;
-                        Color col = new Color(0, 0, 0, 0);
-                        List<Color> colors = new List<Color>();
-                        foreach (Vector3 v in pv.PolygonMesh.vertices)
-                            colors.Add(col);
-
-                        pv.PolygonMesh.SetColors(colors);
-                    }
+                    visualisation.pv.VisualisationMaterial = polygonVisualizationMaterial;
+                    visualisation.pv.SetMaterialPropertyBlockActive(true);
+                    selectedVisualisations = null;
                 }
             }
         }
@@ -185,9 +166,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 feature = feature,
                 geoJsonPolygonLayer = this
             };
-
-            var defaultMaterial = polygonVisualizationMaterialInstance;
-
+            
             // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature
             // to the visualisations
             switch (feature.Geometry)
@@ -196,14 +175,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     newFeatureVisualisation.AppendVisualisations(GeometryVisualizationFactory.CreatePolygonVisualization(
                         multiPolygon,
                         originalCoordinateSystem,
-                        defaultMaterial
+                        polygonVisualizationMaterial
                     ));
                     break;
                 case Polygon polygon:
                     newFeatureVisualisation.AppendVisualisations(GeometryVisualizationFactory.CreatePolygonVisualisation(
                         polygon,
                         originalCoordinateSystem,
-                        defaultMaterial
+                        polygonVisualizationMaterial
                     ));
                     break;
             }
@@ -211,8 +190,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // After setting up the entire visualisation - apply styling so that we use the styling system to tweak
             // this visualisation consistent with what would happen if you re-apply the styling using the ApplyStyling()
             // method
-            newFeatureVisualisation.SetMaterial(polygonVisualizationMaterialInstance);
-
+            newFeatureVisualisation.SetMaterial(polygonVisualizationMaterial);
             // bounds are calculated in the AppendVisualisations method, and is therefore not explicitly called here
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
             newFeatureVisualisation.ShowVisualisations(activeInHierarchy);
@@ -222,7 +200,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// Copy the feature attributes onto the layer feature so that the styling system can
         /// use that as input to pick the correct style.
         /// </summary>
-        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             // it should be a FeaturePolygonVisualisations, just do a sanity check here
             if (feature.Geometry is not FeaturePolygonVisualisations visualisations) return feature;

@@ -104,7 +104,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         public bool IsMappingVisible(BagMeshMapping mapping, string bagId)
         {
-            LayerFeature feature = GetLayerFeatureFromBagID(bagId, mapping, out LayerGameObject layer);
+            StylingFeature feature = GetLayerFeatureFromBagID(bagId, mapping, out LayerGameObject layer);
             if (feature != null)
             {
                 HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
@@ -150,13 +150,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return null;
         }
         
-        public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        public StylingFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
             if (layer == null)
                 return null;
 
-            return layer.GetLayerFeatureByGeometry(item);
+            return layer.GetStylingFeatureByGeometry(item);
         }
 
         public string FindSubObjectAtPointerPosition()
@@ -224,12 +224,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 foreach (string bagId in selectedMapping.Value)
                 {
                     //try to get the existing layerfeature if the feature was already styled, if not create a new and add to the visualisation
-                    LayerFeature feature = selector.SubObjectSelector.GetLayerFeatureFromBagID(bagId, mapping, out layer);
+                    StylingFeature feature = selector.SubObjectSelector.GetLayerFeatureFromBagID(bagId, mapping, out layer);
                     if (feature == null)
                     {
                         ObjectMappingItem item = selector.SubObjectSelector.GetMappingItemForBagID(bagId, mapping, out layer);
                         feature = layer.CreateFeature(item);
-                        layer.LayerFeatures.Add(feature.Geometry, feature);
+                        layer.StylingFeatures.Add(feature.Geometry, feature);
                     }
 
                     Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);

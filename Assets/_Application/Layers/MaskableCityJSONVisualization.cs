@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void UpdateMaskBitMask(int bitmask)
         {
-            foreach (var geometry in cityJsonLayerGameObject.LayerFeatures.Keys)
+            foreach (var geometry in cityJsonLayerGameObject.StylingFeatures.Keys)
             {
                 var visualizer = geometry as CityObjectVisualizer;
                 ApplyMaskingToFeature(visualizer);

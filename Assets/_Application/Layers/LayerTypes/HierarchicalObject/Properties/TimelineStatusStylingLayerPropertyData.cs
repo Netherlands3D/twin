@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Netherlands3D.CityJson.Structure;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.Timeline;
@@ -17,8 +15,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         public const string TimelineStatusAttributeIdentifier = "data-timeline-status-color";
         private const string TimelineStatusColorIdentifier = "timeline-status-color";
 
-        [JsonIgnore] public Dictionary<CityObject, TimestampCollection> TimestampCollections = new();
-        [JsonIgnore] public UnityEvent<CityObject, TimestampCollection> TimestampCollectionAddded = new();
+        [JsonIgnore] public Dictionary<object, TimestampCollection> TimestampCollections = new();
+        [JsonIgnore] public UnityEvent<object, TimestampCollection> TimestampCollectionAddded = new();
 
         public TimelineStatusStylingLayerPropertyData()
         {
@@ -112,10 +110,10 @@ namespace Netherlands3D.Twin.Layers.Properties
             OnStylingChanged.Invoke();
         }
         
-        public void AddTimestampCollection(CityObject co, TimestampCollection collection)
+        public void AddTimestampCollection(object feature, TimestampCollection collection)
         {
-            TimestampCollections.Add(co, collection);
-            TimestampCollectionAddded.Invoke(co, collection);
+            TimestampCollections.Add(feature, collection);
+            TimestampCollectionAddded.Invoke(feature, collection);
         }
     }
 }
