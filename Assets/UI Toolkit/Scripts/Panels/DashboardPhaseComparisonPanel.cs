@@ -47,6 +47,10 @@ namespace Netherlands3D.UI.Panels
         private string[] grossFloorAreaChangesCells;
 
         private bool nonHousing;
+        private bool hasHousingData;
+        private bool hasNonHousingData;
+        private string[] housingSources;
+        private string[] nonHousingSources;
         private (IReadOnlyList<(string Label, string[] Cells)> Segments, IReadOnlyList<(string Label, string[] Cells)> Rooms,
             IReadOnlyList<(string Label, string[] Cells)> Categories, IReadOnlyList<(string Label, string[] Cells)> SocialFacilities) loadedBreakdowns;
 
@@ -57,7 +61,7 @@ namespace Netherlands3D.UI.Panels
             {
                 var selectedTab = GetSelectedTab(tabs.value);
                 nonHousing = value;
-                header.LabelText = value ? "Fasevergelijking \u2013 Niet-wonen" : "Fasevergelijking \u2013 Wonen";
+                header.LabelText = value ? "Gebiedsprogramma \u2013 Niet-wonen" : "Gebiedsprogramma \u2013 Wonen";
                 SetTabVisible(segmentsButton, !value);
                 SetTabVisible(roomsButton, !value);
                 SetTabVisible(categoriesButton, value);
@@ -97,8 +101,6 @@ namespace Netherlands3D.UI.Panels
             tableRows = this.Q("BreakdownRows");
             emptyBreakdown = this.Q<Label>("EmptyBreakdown");
 
-            SelectTab(keyFiguresButton);
-
             scrollView.verticalScroller.valueChanged += offset => columnHeadings.style.translate = new Translate(0, offset);
 
             tabs.RegisterValueChangedCallback(evt =>
@@ -118,19 +120,23 @@ namespace Netherlands3D.UI.Panels
             minimumFloorAreaChangesCells = floorAreaDifferences;
             totalGrossFloorAreaCells = grossFloorArea;
             grossFloorAreaChangesCells = grossFloorAreaDifferences;
-
-            if (GetSelectedTab(tabs.value) == ComparisonTab.KeyFigures)
-                ShowTab(ComparisonTab.KeyFigures);
         }
 
         internal void SetBreakdownData((string Label, string[] Cells)[] segments, (string Label, string[] Cells)[] rooms,
             (string Label, string[] Cells)[] categories, (string Label, string[] Cells)[] socialFacilities)
         {
             loadedBreakdowns = (segments, rooms, categories, socialFacilities);
-            var selectedTab = GetSelectedTab(tabs.value);
-            if (selectedTab != ComparisonTab.KeyFigures)
-                ShowTab(selectedTab);
         }
+
+        internal void SetSourceData(bool housingAvailable, bool nonHousingAvailable, string[] housingPhaseSources, string[] nonHousingPhaseSources)
+        {
+            hasHousingData = housingAvailable;
+            hasNonHousingData = nonHousingAvailable;
+            housingSources = housingPhaseSources;
+            nonHousingSources = nonHousingPhaseSources;
+        }
+
+        internal void Refresh() => ShowTab(GetSelectedTab(tabs.value));
 
         private static void SetTabVisible(Button button, bool visible)
         {
@@ -187,7 +193,13 @@ namespace Netherlands3D.UI.Panels
             };
 
             rowHeading.text = heading;
-            var hasData = RenderRows(rows ?? Array.Empty<(string Label, string[] Cells)>());
+            RenderRows(rows ?? Array.Empty<(string Label, string[] Cells)>());
+            var hasData = tab == ComparisonTab.KeyFigures ? (nonHousing ? hasNonHousingData : hasHousingData) : rows?.Count > 0;
+            var sources = nonHousing ? nonHousingSources : housingSources;
+            var headings = columnHeadings.Query(className: PhaseCellClass).ToList();
+            for (var i = 0; i < headings.Count; i++)
+                headings[i].tooltip = sources != null && i < sources.Length ? sources[i] : string.Empty;
+
             scrollView.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
             emptyBreakdown.EnableInClassList(UtilityClassConstants.HIDDEN, hasData);
         }
@@ -212,10 +224,9 @@ namespace Netherlands3D.UI.Panels
             };
         }
 
-        private bool RenderRows(IEnumerable<(string Label, string[] Cells)> rows)
+        private void RenderRows(IEnumerable<(string Label, string[] Cells)> rows)
         {
             tableRows.Clear();
-            var hasData = false;
 
             foreach (var (rowTitle, cells) in rows)
             {
@@ -229,7 +240,6 @@ namespace Netherlands3D.UI.Panels
                 for (var i = 0; i < PhaseCount; i++)
                 {
                     var phaseValue = GetPhaseValue(cells, i);
-                    hasData |= phaseValue != EmptyValue;
 
                     var cell = new VisualElement();
                     cell.AddToClassList(ValueClass);
@@ -243,8 +253,6 @@ namespace Netherlands3D.UI.Panels
 
                 tableRows.Add(row);
             }
-
-            return hasData;
         }
 
         private static string GetPhaseValue(string[] values, int index)

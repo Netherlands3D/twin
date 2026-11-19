@@ -117,7 +117,8 @@ namespace Netherlands3D.UI.Panels
                 return;
 
             displayedData = data;
-            var phases = DashboardSummary.CalculatePhases(data);
+            var summary = DashboardSummary.Calculate(data);
+            var phases = summary.Phases;
 
             phaseComparison.SetKeyFigureData(
                 phases.Select(phase => FormatNumber(phase.Dwellings)).ToArray(),
@@ -127,12 +128,17 @@ namespace Netherlands3D.UI.Panels
                 phases.Select(phase => FormatNumber(phase.GrossFloorArea, SquareMetres)).ToArray(),
                 FormatChanges(phases, phase => phase.GrossFloorArea, SquareMetres));
 
-            var breakdowns = DashboardSummary.CalculateBreakdowns(data);
             phaseComparison.SetBreakdownData(
-                breakdowns.Segments.Select(row => (row.Label, row.Values.Select((value, i) => FormatSegment(value, phases[i].Dwellings)).ToArray())).ToArray(),
-                FormatBreakdown(breakdowns.Rooms),
-                FormatBreakdown(breakdowns.Categories, SquareMetres),
-                FormatBreakdown(breakdowns.SocialFacilities, SquareMetres));
+                summary.Segments.Select(row => (row.Label, row.Values.Select((value, i) => FormatSegment(value, phases[i].Dwellings)).ToArray())).ToArray(),
+                FormatBreakdown(summary.Rooms),
+                FormatBreakdown(summary.Categories, SquareMetres),
+                FormatBreakdown(summary.SocialFacilities, SquareMetres));
+
+            phaseComparison.SetSourceData(
+                phases.Any(phase => phase.HousingSources.HasData), phases.Any(phase => phase.NonHousingSources.HasData),
+                phases.Select(phase => FormatSources(phase.HousingSources)).ToArray(),
+                phases.Select(phase => FormatSources(phase.NonHousingSources)).ToArray());
+            phaseComparison.Refresh();
 
             var block = DashboardSummary.FirstBlockWithData(data);
             var blockPhases = block == null ? Array.Empty<DashboardSummary.PhaseTotals>() : DashboardSummary.CalculatePhases(data, block);
@@ -154,31 +160,43 @@ namespace Netherlands3D.UI.Panels
             return rows.Select(row => (row.Label, row.Values.Select(value => FormatNumber(value, unit)).ToArray())).ToArray();
         }
 
-        private static string FormatSegment(decimal? value, long? phaseTotal)
+        private static string FormatSources(DashboardSummary.PhaseSources sources)
+        {
+            var sourceCounts = DashboardData.Phases.Select(phase => (Phase: phase, Count: sources.BlockPhases.Count(entry => string.Equals(entry.Value, phase, StringComparison.OrdinalIgnoreCase))))
+                .Where(source => source.Count > 0).Select(source => $"{source.Phase}: {source.Count}");
+            return $"{sources.Phase}: {sources.ExactBlocks} blokken met gegevens van deze fase, {sources.EarlierBlocks} met een eerdere uitwerking, {sources.MissingBlocks} zonder uitwerking.\nBronfasen: {string.Join(", ", sourceCounts)}. Lege numerieke waarden blijven onbekend.";
+        }
+
+        private static string FormatSegment(DashboardSummary.NumericResult value, DashboardSummary.NumericResult phaseTotal)
         {
             var count = FormatNumber(value);
             var share = DashboardSummary.CalculateSegmentShare(value, phaseTotal);
-            return share.HasValue ? $"{count} ({share.Value.ToString("0%", NumberCulture)})" : count;
+            return share.CompleteValue.HasValue ? $"{count} ({share.CompleteValue.Value.ToString("0%", NumberCulture)})" : count;
         }
 
-        private static string FormatNumber(decimal? value, string unit = "")
+        private static string FormatNumber(DashboardSummary.NumericResult result, string unit = "")
         {
-            return value.HasValue ? value.Value.ToString("#,0.##", NumberCulture) + unit : string.Empty;
+            if (!result.Value.HasValue)
+                return string.Empty;
+
+            var number = result.Value.Value.ToString("#,0.##", NumberCulture) + unit;
+            return result.Status == DashboardSummary.ResultStatus.Partial ? $"{number}*" : number;
         }
 
-        private static string[] FormatChanges(DashboardSummary.PhaseTotals[] phases, Func<DashboardSummary.PhaseTotals, decimal?> selectValue,
+        private static string[] FormatChanges(DashboardSummary.PhaseTotals[] phases, Func<DashboardSummary.PhaseTotals, DashboardSummary.NumericResult> selectValue,
             string unit)
         {
-            var changes = DashboardSummary.CalculateChanges(phases, selectValue);
+            var changes = DashboardSummary.CalculateChanges(phases.Select(selectValue).ToArray());
             return changes.Select(change =>
             {
-                if (!change.Difference.HasValue)
+                if (!change.Difference.Value.HasValue)
                     return string.Empty;
 
-                var difference = change.Difference.Value.ToString("+#,0.##;-#,0.##;0", NumberCulture) + unit;
-                return change.RelativeChange.HasValue
-                    ? $"{difference} ({change.RelativeChange.Value.ToString("+0%;-0%;0%", NumberCulture)})"
+                var difference = change.Difference.Value.Value.ToString("+#,0.##;-#,0.##;0", NumberCulture) + unit;
+                var formatted = change.RelativeChange.Value.HasValue
+                    ? $"{difference} ({change.RelativeChange.Value.Value.ToString("+0%;-0%;0%", NumberCulture)})"
                     : difference;
+                return change.Difference.Status == DashboardSummary.ResultStatus.Partial ? $"{formatted}*" : formatted;
             }).ToArray();
         }
     }

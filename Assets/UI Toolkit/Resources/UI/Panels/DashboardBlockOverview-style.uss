@@ -9,7 +9,8 @@
     margin-bottom: 0;
 }
 
-.dashboard-block-overview__empty {
+.dashboard-block-overview__empty,
+.dashboard-block-overview__explanation {
     margin-top: var(--spacing-2);
 }
 

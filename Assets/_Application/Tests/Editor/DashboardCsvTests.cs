@@ -92,20 +92,20 @@ namespace Netherlands3D.Twin.Tests
                 "Wonen;A;BBP;Sociaal;2;40;;;;;",
                 "Niet-wonen;Z;BBP;;;;;Maatschappelijk (IKC);25;;",
                 "Niet-wonen;Z;BBP;;;;;Maatschappelijk (IKC);;;");
-            var phases = (Array)InvokeSummary("CalculatePhases", data, null);
+            var summary = InvokeSummary("Calculate", data);
+            var phases = (Array)summary.GetType().GetField("Item1").GetValue(summary);
             var phase = phases.GetValue(0);
 
             AssertResult(Property(phase, "Dwellings"), 10m, "Partial");
             AssertResult(Property(phase, "GrossFloorArea"), 25m, "Partial");
-            AssertResult(Property(phase, "AverageMinimumFloorArea"), null, "Partial");
+            AssertResult(Property(phase, "AverageMinimumFloorArea"), 40m, "Partial");
             Assert.That(Property(phase, "HasData"), Is.True);
 
-            var breakdowns = InvokeSummary("CalculateBreakdowns", data);
-            foreach (var field in new[] { "Item1", "Item2", "Item3", "Item4" })
+            foreach (var field in new[] { "Item2", "Item3", "Item4", "Item5" })
             {
-                var rows = (Array)breakdowns.GetType().GetField(field).GetValue(breakdowns);
+                var rows = (Array)summary.GetType().GetField(field).GetValue(summary);
                 var values = (Array)Property(rows.GetValue(0), "Values");
-                AssertResult(values.GetValue(0), field == "Item1" || field == "Item2" ? 10m : 25m, "Partial");
+                AssertResult(values.GetValue(0), field == "Item2" || field == "Item3" ? 10m : 25m, "Partial");
             }
         }
 
@@ -120,23 +120,76 @@ namespace Netherlands3D.Twin.Tests
             var phases = (Array)InvokeSummary("CalculatePhases", data, null);
 
             AssertResult(Property(phases.GetValue(0), "Dwellings"), 30m, "Complete");
-            AssertResult(Property(phases.GetValue(1), "Dwellings"), 12m, "Partial");
+            AssertResult(Property(phases.GetValue(1), "Dwellings"), 32m, "Complete");
             AssertResult(Property(phases.GetValue(1), "GrossFloorArea"), 100m, "Complete");
-            AssertResult(Property(phases.GetValue(2), "Dwellings"), null, "Unknown");
+            AssertResult(Property(phases.GetValue(2), "Dwellings"), 32m, "Complete");
+            AssertResult(Property(phases.GetValue(0), "GrossFloorArea"), null, "Unknown");
             var breakdowns = InvokeSummary("CalculateBreakdowns", data);
             var segments = (Array)breakdowns.GetType().GetField("Item1").GetValue(breakdowns);
-            AssertResult(((Array)Property(segments.GetValue(0), "Values")).GetValue(1), 12m, "Partial");
+            AssertResult(((Array)Property(segments.GetValue(0), "Values")).GetValue(1), 32m, "Complete");
             var blockPhases = (Array)InvokeSummary("CalculatePhases", data, "A");
             AssertResult(Property(blockPhases.GetValue(1), "Dwellings"), 12m, "Complete");
+            AssertResult(Property(blockPhases.GetValue(2), "Dwellings"), null, "Unknown");
+        }
+
+        [Test]
+        public void SelectsWholeVersionsSeparatelyAndPreservesTheirSourcePhases()
+        {
+            var data = ReadRows(
+                "Wonen;A;BBP;Sociaal;2;40;10;;;;",
+                "Wonen;A;BBP;Vrij;3;80;20;;;;",
+                "Wonen;A;SO;Sociaal;2;50;;;;;",
+                "Wonen;B;VO;Sociaal;2;60;30;;;;",
+                "Niet-wonen;A;BBP;;;;;Kantoor;100;;",
+                "Niet-wonen;A;VO;;;;;Kantoor;0;;");
+            var phases = (Array)InvokeSummary("CalculatePhases", data, null);
+            AssertResult(Property(phases.GetValue(0), "Dwellings"), 30m, "Partial");
+            AssertResult(Property(phases.GetValue(1), "Dwellings"), null, "Unknown");
+            AssertResult(Property(phases.GetValue(2), "Dwellings"), 30m, "Partial");
+            AssertResult(Property(phases.GetValue(1), "GrossFloorArea"), 100m, "Complete");
+            AssertResult(Property(phases.GetValue(2), "GrossFloorArea"), 0m, "Complete");
+
+            var sources = Property(phases.GetValue(2), "HousingSources");
+            var blocks = (System.Collections.Generic.IReadOnlyDictionary<string, string>)Property(sources, "BlockPhases");
+            Assert.That(blocks["A"], Is.EqualTo("SO"));
+            Assert.That(blocks["B"], Is.EqualTo("VO"));
+            Assert.That(Property(sources, "EarlierBlocks"), Is.EqualTo(1));
+            Assert.That(Property(sources, "ExactBlocks"), Is.EqualTo(1));
+            Assert.That(Property(Property(phases.GetValue(0), "HousingSources"), "MissingBlocks"), Is.EqualTo(1));
+
+            var breakdowns = InvokeSummary("CalculateBreakdowns", data);
+            var segments = (Array)breakdowns.GetType().GetField("Item1").GetValue(breakdowns);
+            var free = segments.Cast<object>().Single(row => (string)Property(row, "Label") == "Vrije sector");
+            AssertResult(((Array)Property(free, "Values")).GetValue(1), null, "Unknown");
+
+            var current = InvokeSummary("CalculateCurrent", data);
+            AssertResult(Property(current, "Dwellings"), 30m, "Partial");
+            AssertResult(Property(current, "GrossFloorArea"), 0m, "Complete");
+        }
+
+        [Test]
+        public void RecalculatesAreaAveragesFromSelectedRowsAndKeepsActualBlockPhasesEmpty()
+        {
+            var data = ReadRows(
+                "Wonen;A;BBP;Sociaal;2;40;10;;;;",
+                "Wonen;A;SO;Sociaal;2;50;20;;;;",
+                "Wonen;B;BBP;Sociaal;3;80;60;;;;");
+            var phases = (Array)InvokeSummary("CalculatePhases", data, null);
+            AssertResult(Property(phases.GetValue(1), "Dwellings"), 80m, "Complete");
+            AssertResult(Property(phases.GetValue(1), "AverageMinimumFloorArea"), 72.5m, "Complete");
+            AssertResult(Property(phases.GetValue(3), "Dwellings"), 80m, "Complete");
+            var blockPhases = (Array)InvokeSummary("CalculatePhases", data, "B");
+            AssertResult(Property(blockPhases.GetValue(1), "Dwellings"), null, "Unknown");
+            Assert.That(Property(blockPhases.GetValue(1), "HasData"), Is.False);
         }
 
         [TestCase("10", "40", "30", "60", 55, "Complete")]
         [TestCase("0", "", "10", "40", 40, "Complete")]
-        [TestCase("", "40", "10", "40", null, "Partial")]
-        [TestCase("10", "", "10", "40", null, "Partial")]
+        [TestCase("", "40", "10", "40", 40, "Partial")]
+        [TestCase("10", "", "10", "40", 40, "Partial")]
         [TestCase("0", "", "0", "", null, "NotApplicable")]
         [TestCase("10", "", "10", "", null, "Unknown")]
-        public void RequiresCompleteWeightsAndAreasForTheWeightedAverage(string firstCount, string firstArea, string secondCount, string secondArea,
+        public void CalculatesWeightedAveragesFromKnownWeightsAndAreas(string firstCount, string firstArea, string secondCount, string secondArea,
             int? expected, string status)
         {
             var data = ReadRows(
@@ -147,7 +200,7 @@ namespace Netherlands3D.Twin.Tests
         }
 
         [Test]
-        public void OnlyCalculatesSharesAndChangesFromCompleteResults()
+        public void CalculatesChangesFromKnownValuesAndSharesFromCompleteTotals()
         {
             var data = ReadRows(
                 "Wonen;A;BBP;Sociaal;2;;0;;;;",
@@ -184,6 +237,16 @@ namespace Netherlands3D.Twin.Tests
             var completeChange = ((Array)InvokeSummary("CalculateChanges", (object)values)).GetValue(1);
             AssertResult(completeChange.GetType().GetField("Item1").GetValue(completeChange), 5m, "Complete");
             AssertResult(completeChange.GetType().GetField("Item2").GetValue(completeChange), 0.5m, "Complete");
+
+            var partialData = ReadRows(
+                "Wonen;A;BBP;Sociaal;2;40;10;;;;", "Wonen;A;BBP;Vrij;3;60;;;;;",
+                "Wonen;A;SO;Sociaal;2;50;15;;;;", "Wonen;A;SO;Vrij;3;60;;;;;");
+            var partialPhases = (Array)InvokeSummary("CalculatePhases", partialData, null);
+            values.SetValue(Property(partialPhases.GetValue(0), "Dwellings"), 0);
+            values.SetValue(Property(partialPhases.GetValue(1), "Dwellings"), 1);
+            var partialChange = ((Array)InvokeSummary("CalculateChanges", (object)values)).GetValue(1);
+            AssertResult(partialChange.GetType().GetField("Item1").GetValue(partialChange), 5m, "Partial");
+            AssertResult(partialChange.GetType().GetField("Item2").GetValue(partialChange), 0.5m, "Partial");
         }
 
         [Test]

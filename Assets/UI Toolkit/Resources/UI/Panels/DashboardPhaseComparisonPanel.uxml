@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="dashboard-phase-comparison dashboard-theme">
     <ui:VisualElement class="dashboard-phase-comparison__toolbar">
-        <nl3d:Header name="ComparisonHeader" icon="Tile" text="Fasevergelijking &#8211; Wonen"/>
-        <ui:ToggleButtonGroup name="ComparisonTabs" allow-empty-selection="false" class="dashboard-phase-comparison__tabs">
+        <nl3d:Header name="ComparisonHeader" icon="Tile" text="Gebiedsprogramma &#8211; Wonen"/>
+        <ui:ToggleButtonGroup name="ComparisonTabs" value="0" allow-empty-selection="false" class="dashboard-phase-comparison__tabs">
             <nl3d:Button name="KeyFiguresTab" button-style="Normal" LabelText="Kerncijfers"/>
             <nl3d:Button name="CategoriesTab" button-style="Normal" LabelText="Categorie&#235;n" class="hidden"/>
             <nl3d:Button name="SocialFacilitiesTab" button-style="Normal" LabelText="Maatschappelijk" class="hidden"/>
@@ -9,25 +9,32 @@
             <nl3d:Button name="RoomsTab" button-style="Normal" LabelText="Kamers"/>
         </ui:ToggleButtonGroup>
     </ui:VisualElement>
-    <nl3d:ScrollView name="ComparisonScrollView" mode="VerticalAndHorizontal" item-gap="0" class="dashboard-phase-comparison__scroll">
-        <ui:VisualElement class="dashboard-phase-comparison__table">
-            <ui:VisualElement name="BreakdownRows"/>
-            <ui:VisualElement name="ColumnHeadings" picking-mode="Ignore" class="dashboard-phase-comparison__row dashboard-phase-comparison__column-headings">
-                <ui:Label name="RowHeading" text="Vergelijking" class="dashboard-phase-comparison__label dashboard-phase-comparison__row-heading text-header"/>
-                <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
-                    <ui:Label text="BBP" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--bbp text-header"/>
-                </ui:VisualElement>
-                <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
-                    <ui:Label text="SO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--so text-header"/>
-                </ui:VisualElement>
-                <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
-                    <ui:Label text="VO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--vo text-header"/>
-                </ui:VisualElement>
-                <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
-                    <ui:Label text="DO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--do text-header"/>
-                </ui:VisualElement>
-            </ui:VisualElement>
+    <ui:VisualElement class="dashboard-phase-comparison__body">
+        <ui:VisualElement class="dashboard-phase-comparison__description">
+            <ui:Label text="Per blok de laatst beschikbare uitwerking tot en met de fase.&#10;&#10;*Onvolledig: berekend uit bekende gegevens. Gemiddelden gebruiken bekende aantallen en oppervlakten. Verschillen vergelijken deelsommen; de dekking kan per fase verschillen." class="dashboard-phase-comparison__explanation"/>
         </ui:VisualElement>
-    </nl3d:ScrollView>
-    <ui:Label name="EmptyBreakdown" text="Geen gegevens beschikbaar" class="dashboard-phase-comparison__empty"/>
+        <ui:VisualElement class="dashboard-phase-comparison__content">
+            <nl3d:ScrollView name="ComparisonScrollView" mode="VerticalAndHorizontal" item-gap="0" class="dashboard-phase-comparison__scroll">
+                <ui:VisualElement class="dashboard-phase-comparison__table">
+                    <ui:VisualElement name="BreakdownRows"/>
+                    <ui:VisualElement name="ColumnHeadings" picking-mode="Ignore" class="dashboard-phase-comparison__row dashboard-phase-comparison__column-headings">
+                        <ui:Label name="RowHeading" text="Vergelijking" class="dashboard-phase-comparison__label dashboard-phase-comparison__row-heading text-header"/>
+                        <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
+                            <ui:Label text="BBP" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--bbp text-header"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
+                            <ui:Label text="SO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--so text-header"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
+                            <ui:Label text="VO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--vo text-header"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
+                            <ui:Label text="DO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--do text-header"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </nl3d:ScrollView>
+            <ui:Label name="EmptyBreakdown" text="Geen gegevens beschikbaar" class="dashboard-phase-comparison__empty"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

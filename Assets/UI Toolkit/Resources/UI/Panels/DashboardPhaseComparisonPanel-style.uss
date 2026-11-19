@@ -12,16 +12,41 @@
     flex-direction: row;
     flex-wrap: wrap;
     flex-shrink: 0;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-bottom: var(--spacing-2);
 }
 
-.dashboard-phase-comparison__toolbar > .header {
+.dashboard-phase-comparison__body {
+    flex-direction: row;
     flex-grow: 1;
+    min-height: 0;
+}
+
+.dashboard-phase-comparison__description,
+.dashboard-phase-comparison__toolbar > .header {
+    flex-shrink: 1;
+    flex-basis: 304px;
+    max-width: 28%;
+    min-width: 0;
     margin-right: var(--spacing-4);
+}
+
+.dashboard-phase-comparison__toolbar .header__label {
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.dashboard-phase-comparison__content {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 0;
+    min-height: 0;
 }
 
 .dashboard-phase-comparison__tabs {
     margin: 0;
+    margin-left: auto;
     flex-shrink: 1;
     max-width: 100%;
 }
@@ -38,6 +63,10 @@
 
 .dashboard-phase-comparison__empty {
     margin-top: var(--spacing-2);
+}
+
+.dashboard-phase-comparison__explanation {
+    flex-shrink: 0;
 }
 
 .dashboard-phase-comparison__scroll {
