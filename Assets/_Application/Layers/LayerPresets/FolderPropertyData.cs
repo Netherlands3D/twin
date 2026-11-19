@@ -28,5 +28,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             this.isScenario = isScenario;
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new FolderPropertyData(isScenario)
+            {
+                isEditable = isEditable
+            };
+        }
     }
 }

@@ -28,5 +28,12 @@ namespace Netherlands3D.FirstPersonViewer.Layers
         }
 
         public void SetMovementID(int movementID) => this.movementID = movementID;
+        public override LayerPropertyData Clone()
+        {
+            return new FirstPersonLayerPropertyData(movementID, new Dictionary<string, object>(settingValues))
+            {
+                isEditable = isEditable
+            };
+        }
     }
 }

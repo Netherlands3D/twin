@@ -141,5 +141,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                 maskBitIndexChanged.Invoke(maskBitIndex);
             }
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new PolygonSelectionLayerPropertyData()
+            {
+                lineWidth = lineWidth,
+                extrusionHeight = extrusionHeight,
+                isMask = isMask,
+                invertMask = invertMask,
+                shapeType = shapeType,
+                isEditable = isEditable,
+                originalPolygon = originalPolygon == null ? null : new List<Coordinate>(originalPolygon)
+            };
+        }
     }
 }

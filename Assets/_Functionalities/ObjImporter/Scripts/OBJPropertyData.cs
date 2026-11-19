@@ -57,5 +57,15 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             return existingAssets;
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new OBJPropertyData()
+            {
+                objFile = objFile,
+                mtlFile = mtlFile,
+                isEditable = isEditable
+            };
+        }
     }
 }

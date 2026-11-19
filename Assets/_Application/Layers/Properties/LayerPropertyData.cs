@@ -8,7 +8,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers.Properties
 {
     [Serializable]
-    public class LayerPropertyData
+    public abstract class LayerPropertyData
     {
         /// <summary>
         /// Property data has a unique identifier for tracking which data belongs to this
@@ -28,5 +28,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 IsEditableChanged.Invoke(value);
             }
         }
+
+        public abstract LayerPropertyData Clone();
     }
 }

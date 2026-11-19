@@ -19,5 +19,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
         {
             this.geojsonCoordinate = geojsonCoordinate;
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new GeoJSONPropertyData(geojsonCoordinate)
+            {
+                isEditable = isEditable
+            };
+        }
     }
 }

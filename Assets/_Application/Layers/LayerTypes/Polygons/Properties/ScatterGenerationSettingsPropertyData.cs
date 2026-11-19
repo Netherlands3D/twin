@@ -174,5 +174,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
             return new Vector3(x, y, z);
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new ScatterGenerationSettingsPropertyData(originalObjectPrefabId)
+            {
+                density = density,
+                scatter = scatter,
+                angle = angle,
+                minScale = minScale,
+                maxScale = maxScale,
+                fillType = fillType,
+                strokeWidth = strokeWidth,
+                autoRotateToLine = autoRotateToLine,
+                isEditable = isEditable
+            };
+        }
     }
 }

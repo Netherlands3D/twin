@@ -36,5 +36,14 @@ namespace Netherlands3D.Functionalities.GLBImporter
 
             return existingAssets;
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new GLBPropertyData()
+            {
+                glbFile = glbFile,
+                isEditable = isEditable,
+            };
+        }
     }
 }

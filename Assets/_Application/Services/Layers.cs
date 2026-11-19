@@ -13,9 +13,9 @@ namespace Netherlands3D.Twin.Services
 {
     public class Layers : MonoBehaviour
     {
-        [SerializeField] private PrefabLibrary prefabLibrary;
+        public AssetLibrary.AssetLibrary AssetLibrary => assetLibrary;
         [SerializeField] private DataTypeChain fromUrlImporter;
-        
+        [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
         private VisualizationSpawner spawner;
         
         public UnityEvent<LayerData> LayerAdded { get; } = new();
@@ -36,9 +36,11 @@ namespace Netherlands3D.Twin.Services
         public UnityEvent<LayerData, bool> LayerRemoved { get; } = new();
         public UnityEvent<LayerGameObject> VisualizationCreated = new();
 
-        private void Awake()
+        private async void Awake()
         {
-            spawner = new VisualizationSpawner(prefabLibrary);
+            assetLibrary.InitializePrefabs();
+            spawner = new VisualizationSpawner(assetLibrary);
+            await assetLibrary.InitializeCatalogs();
         }
 
         /// <summary>
@@ -60,7 +62,12 @@ namespace Netherlands3D.Twin.Services
             }
 
             var layerData = builder.Build();
-            
+
+            return Add(layerData);
+        }
+
+        private Layer Add(LayerData layerData, UnityAction<LayerGameObject> callback = null)
+        {
             layerData.InitializeParent(ProjectData.Current.RootLayer);
             ProjectData.Current.RootLayer.AddChild(layerData, 0);
             
@@ -114,7 +121,7 @@ namespace Netherlands3D.Twin.Services
 
             return layers;
         }
-
+        
         /// <summary>
         /// Force a LayerData object to be visualized as a specific prefab.
         ///
@@ -126,6 +133,15 @@ namespace Netherlands3D.Twin.Services
             var layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
             return layer;
+        }
+
+        public LayerData Copy(LayerData source)
+        {
+            var copy = source.Clone();
+            Add(copy);
+            copy.Name = $"kopie van {source.Name}";
+            copy.SetParent(source.ParentLayer, source.SiblingIndex);
+            return copy;
         }
 
         /// <summary>

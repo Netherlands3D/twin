@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using netDxf.Tables;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,7 +25,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public bool IsNew { get; private set; } = true;
         [SerializeField, DataMember] protected string name;
         [SerializeField, DataMember] protected bool activeSelf = true;
-        
+
         /// <summary>
         /// The default color of a layer.
         /// 
@@ -41,7 +42,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
         [JsonIgnore] protected int rootId = -1;
-        [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();        
+        [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
 
         [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
@@ -123,6 +124,17 @@ namespace Netherlands3D.Twin.Layers
                 return ParentLayer.ActiveInHierarchy && activeSelf;
             }
         }
+        
+        public bool HasSelectedAncestor() 
+        {
+            var parentLayer = this.ParentLayer;
+            while (parentLayer != null)
+            {
+                if (parentLayer.IsSelected)  return true;
+                parentLayer = parentLayer.ParentLayer;
+            }
+            return false;
+        }
 
         [JsonIgnore] public List<LayerPropertyData> LayerProperties
         {
@@ -133,6 +145,7 @@ namespace Netherlands3D.Twin.Layers
 
                 return layerProperties;
             }
+            set => layerProperties = value;
         }
 
         [JsonIgnore]
@@ -248,6 +261,26 @@ namespace Netherlands3D.Twin.Layers
             this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
         }
 
+        public LayerData Clone()
+        {
+            var copy = new LayerData(name);
+            copy.prefabId = prefabId;
+            copy.activeSelf = activeSelf;
+            copy.color = color;
+            copy.IsExpanded = IsExpanded;
+            copy.LayerProperties = LayerProperties.Select(lp => lp.Clone()).ToList();
+
+            foreach (var child in children)
+            {
+                var childCopy = child.Clone();
+                childCopy.parent = copy;
+                copy.children.Add(childCopy);
+            }
+            
+            
+            return copy;
+        }
+        
         public void SetParent(LayerData newParent, int siblingIndex = -1)
         {
             if (newParent == null)

@@ -42,5 +42,13 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             this.axisHeight = axisHeight;
             this.rotorDiameter = rotorDiameter;
         }
+
+        public override LayerPropertyData Clone()
+        {
+            return new WindmillPropertyData(axisHeight, rotorDiameter)
+            {
+                isEditable = isEditable
+            };
+        }
     }
 }
