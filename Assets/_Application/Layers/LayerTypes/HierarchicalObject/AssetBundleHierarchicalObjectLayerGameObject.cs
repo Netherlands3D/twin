@@ -10,8 +10,8 @@ using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    //on how to make an assetbundle go to the assetbundleservice for info
-    public class AssetBundleLayerGameObject : HierarchicalObjectLayerGameObject
+    //for more info on how to make an assetbundle go to the assetbundleservice
+    public class AssetBundleHierarchicalObjectLayerGameObject : HierarchicalObjectLayerGameObject
     {
         private AssetBundleService assetBundleService;
         private string bundleName;
@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 fromCoordinate = instance.GetComponent<SpawnFromCoordinate>();
                 var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
                 Coordinate coordinate = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
+                transformProperty.EulerRotation = fromCoordinate.Rotation;
                 transformProperty.LocalScale = transform.localScale;
                 transformProperty.Position = coordinate;
                 GetComponent<WorldTransform>().MoveToCoordinate(coordinate);

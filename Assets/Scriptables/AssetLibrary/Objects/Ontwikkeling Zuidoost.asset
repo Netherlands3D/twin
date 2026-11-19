@@ -18,3 +18,6 @@ MonoBehaviour:
   url: 
   bundleName: zuidoostbundle
   prefabName: zuidoostprefab.prefab
+  coordinate: {x: 4.941864, y: 52.31434, z: 40.20403}
+  coordinateSystem: 4979
+  rotation: {x: 0, y: 180, z: 0}
