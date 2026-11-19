@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 fromCoordinate = instance.GetComponent<SpawnFromCoordinate>();
                 var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
                 Coordinate coordinate = fromCoordinate.Coordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                transformProperty.EulerRotation = new Vector3(0, fromCoordinate.Rotation, 0);
+                transformProperty.EulerRotation = fromCoordinate.Rotation;
                 transformProperty.LocalScale = transform.localScale;
                 transformProperty.Position = coordinate;
                 GetComponent<WorldTransform>().MoveToCoordinate(coordinate);

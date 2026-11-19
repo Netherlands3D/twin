@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.SpawnFromCoordinate
   Coordinates: {x: 4.9418635, y: 52.31434, z: 40.20403}
   coordinateSystem: 4979
-  rotation: 180
+  rotation: {x: 0, y: 180, z: 0}
 --- !u!114 &5812613392203947867
 MonoBehaviour:
   m_ObjectHideFlags: 0
