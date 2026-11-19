@@ -5,8 +5,10 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.UI.Panels;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Tests
 {
@@ -266,6 +268,37 @@ namespace Netherlands3D.Twin.Tests
             var social = (Array)breakdowns.GetType().GetField("Item4").GetValue(breakdowns);
             Assert.That(Property(social.GetValue(0), "Label"), Is.EqualTo("IKC"));
             AssertResult(((Array)Property(social.GetValue(0), "Values")).GetValue(0), 40m, "Complete");
+        }
+
+        [TestCase("SO", "VO")]
+        [TestCase("DO", "SO")]
+        public void BindsLatestBlockProgramsSeparatelyAndDistinguishesUnknownFromNotApplicable(string housingPhase, string nonHousingPhase)
+        {
+            var data = ReadRows(
+                "Wonen;A;BBP;Sociaal;2;40;10;;;;",
+                $"Wonen;A;{housingPhase};Sociaal;2;;0;;;;",
+                "Niet-wonen;A;BBP;;;;;Kantoor;100;;",
+                $"Niet-wonen;A;{nonHousingPhase};;;;;Kantoor;;;");
+            var hud = new DashboardHUD();
+            var showData = typeof(DashboardHUD).GetMethod("ShowData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            showData.Invoke(hud, new object[] { data });
+            var overview = hud.Q<DashboardBlockOverview>();
+
+            Assert.That(overview.TotalDwellings, Is.EqualTo("0"));
+            Assert.That(overview.AverageMinimumFloorArea, Is.EqualTo("n.v.t."));
+            Assert.That(overview.NonHousingGrossFloorArea, Is.EqualTo("\u2014"));
+            Assert.That(overview.HeaderText, Does.Contain($"Wonen: {housingPhase}"));
+            Assert.That(overview.HeaderText, Does.Contain($"Niet-wonen: {nonHousingPhase}"));
+
+            var unknownHousing = ReadRows($"Wonen;A;{housingPhase};Sociaal;2;40;;;;;");
+            showData.Invoke(hud, new object[] { unknownHousing });
+            Assert.That(overview.TotalDwellings, Is.EqualTo("\u2014"));
+            Assert.That(overview.AverageMinimumFloorArea, Is.EqualTo("\u2014"));
+            Assert.That(overview.HeaderText, Does.Not.Contain("Niet-wonen:"));
+
+            showData.Invoke(hud, new object[] { null });
+            Assert.That(overview.HeaderText, Is.EqualTo("Bouwblokoverzicht"));
+            Assert.That(overview.AverageMinimumFloorArea, Is.EqualTo("\u2014"));
         }
 
         private static DashboardData ReadRows(params string[] rows)

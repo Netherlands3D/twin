@@ -143,16 +143,22 @@ namespace Netherlands3D.UI.Panels
             var block = DashboardSummary.FirstBlockWithData(data);
             var blockPhases = block == null ? Array.Empty<DashboardSummary.PhaseTotals>() : DashboardSummary.CalculatePhases(data, block);
             var availablePhases = blockPhases.Where(phase => phase.HasData).ToArray();
-            var currentPhase = availablePhases.LastOrDefault();
+            var housingPhase = availablePhases.LastOrDefault(phase => phase.HousingSources.HasData);
+            var nonHousingPhase = availablePhases.LastOrDefault(phase => phase.NonHousingSources.HasData);
+            var sourcePhases = new[]
+            {
+                housingPhase.HasData ? $"Wonen: {housingPhase.Phase}" : null,
+                nonHousingPhase.HasData ? $"Niet-wonen: {nonHousingPhase.Phase}" : null
+            }.Where(source => source != null);
 
-            blockOverview.HeaderText = currentPhase.HasData ? $"Overzicht {DashboardSummary.BlockName(block)} ({currentPhase.Phase})" : "Bouwblokoverzicht";
-            blockOverview.TotalDwellings = FormatNumber(currentPhase.Dwellings);
-            blockOverview.SocialDwellings = FormatNumber(currentPhase.SocialDwellings);
-            blockOverview.MidRentDwellings = FormatNumber(currentPhase.MidRentDwellings);
-            blockOverview.FreeSectorDwellings = FormatNumber(currentPhase.FreeSectorDwellings);
-            blockOverview.AverageMinimumFloorArea = FormatNumber(currentPhase.AverageMinimumFloorArea, SquareMetres);
+            blockOverview.HeaderText = availablePhases.Length > 0 ? $"Overzicht {DashboardSummary.BlockName(block)} ({string.Join(", ", sourcePhases)})" : "Bouwblokoverzicht";
+            blockOverview.TotalDwellings = FormatNumber(housingPhase.Dwellings);
+            blockOverview.SocialDwellings = FormatNumber(housingPhase.SocialDwellings);
+            blockOverview.MidRentDwellings = FormatNumber(housingPhase.MidRentDwellings);
+            blockOverview.FreeSectorDwellings = FormatNumber(housingPhase.FreeSectorDwellings);
+            blockOverview.AverageMinimumFloorArea = FormatNumber(housingPhase.AverageMinimumFloorArea, SquareMetres);
             blockOverview.AvailablePhases = string.Join(" / ", availablePhases.Select(phase => phase.Phase));
-            blockOverview.NonHousingGrossFloorArea = FormatNumber(currentPhase.GrossFloorArea, SquareMetres);
+            blockOverview.NonHousingGrossFloorArea = FormatNumber(nonHousingPhase.GrossFloorArea, SquareMetres);
         }
 
         private static (string Label, string[] Cells)[] FormatBreakdown(DashboardSummary.BreakdownRow[] rows, string unit = "")
@@ -176,6 +182,9 @@ namespace Netherlands3D.UI.Panels
 
         private static string FormatNumber(DashboardSummary.NumericResult result, string unit = "")
         {
+            if (result.Status == DashboardSummary.ResultStatus.NotApplicable)
+                return "n.v.t.";
+
             if (!result.Value.HasValue)
                 return string.Empty;
 
