@@ -58,11 +58,19 @@ namespace Netherlands3D.Twin.DataSets
                     switch (ReadText(csv, "Type"))
                     {
                         case "Wonen":
-                            housing.Add(new DashboardData.HousingRow(block, phase, ReadDate(csv, "Datum indiening"), ReadText(csv, "Segment"),
-                                ReadInteger(csv, "Kamers"), ReadDecimal(csv, "Min GBO"), ReadInteger(csv, "Aantal woningen")));
+                            var housingRow = new DashboardData.HousingRow(block, phase, ReadDate(csv, "Datum indiening"), ReadText(csv, "Segment"),
+                                ReadInteger(csv, "Kamers"), ReadDecimal(csv, "Min GBO"), ReadInteger(csv, "Aantal woningen"));
+                            if (DashboardData.IsValid(housingRow))
+                                housing.Add(housingRow);
+                            else
+                                skippedLineNumbers.Add(lineNumber);
                             break;
                         case "Niet-wonen":
-                            nonHousing.Add(new DashboardData.NonHousingRow(block, phase, ReadText(csv, "Categorie"), ReadDecimal(csv, "BVO")));
+                            var nonHousingRow = new DashboardData.NonHousingRow(block, phase, ReadText(csv, "Categorie"), ReadDecimal(csv, "BVO"));
+                            if (DashboardData.IsValid(nonHousingRow))
+                                nonHousing.Add(nonHousingRow);
+                            else
+                                skippedLineNumbers.Add(lineNumber);
                             break;
                         case "Programmawijziging":
                             programChanges.Add(new DashboardData.ProgramChangeRow(block, phase, ReadText(csv, "Programma"), ReadText(csv, "Afwijking")));

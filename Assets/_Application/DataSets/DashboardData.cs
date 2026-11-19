@@ -22,13 +22,19 @@ namespace Netherlands3D.Twin.DataSets
         {
             SkippedLineNumbers = skippedLineNumbers.ToArray();
             SourceRowCount = housing.Count + nonHousing.Count + programChanges.Count + SkippedRowCount;
-            Housing = housing.Where(row => !string.IsNullOrWhiteSpace(row.Block) && !string.IsNullOrWhiteSpace(row.Phase) &&
-                !string.IsNullOrWhiteSpace(row.Segment) && row.Rooms.HasValue && row.DwellingCount > 0).ToArray();
-            NonHousing = nonHousing.Where(row => !string.IsNullOrWhiteSpace(row.Block) && !string.IsNullOrWhiteSpace(row.Phase) &&
-                !string.IsNullOrWhiteSpace(row.Category) && row.GrossFloorArea > 0).ToArray();
+            Housing = housing.Where(IsValid).ToArray();
+            NonHousing = nonHousing.Where(IsValid).ToArray();
             ProgramChanges = programChanges.Where(row => !string.IsNullOrWhiteSpace(row.Block) && !string.IsNullOrWhiteSpace(row.Phase) &&
                 !string.IsNullOrWhiteSpace(row.Deviation)).ToArray();
         }
+
+        internal static bool IsValid(HousingRow row) =>
+            !string.IsNullOrWhiteSpace(row.Block) && !string.IsNullOrWhiteSpace(row.Phase) &&
+            !string.IsNullOrWhiteSpace(row.Segment) && row.Rooms.HasValue && (!row.DwellingCount.HasValue || row.DwellingCount.Value >= 0);
+
+        internal static bool IsValid(NonHousingRow row) =>
+            !string.IsNullOrWhiteSpace(row.Block) && !string.IsNullOrWhiteSpace(row.Phase) &&
+            !string.IsNullOrWhiteSpace(row.Category) && (!row.GrossFloorArea.HasValue || row.GrossFloorArea.Value >= 0);
 
         public sealed class HousingRow
         {
