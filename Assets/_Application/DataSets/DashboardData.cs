@@ -29,10 +29,10 @@ namespace Netherlands3D.Twin.DataSets
         }
 
         internal static bool IsValid(HousingRow row) =>
-            HasBlockAndPhase(row.Block, row.Phase) && !string.IsNullOrWhiteSpace(row.Segment) && row.DwellingCount >= 0;
+            HasBlockAndPhase(row.Block, row.Phase) && !string.IsNullOrWhiteSpace(row.Segment) && (!row.DwellingCount.HasValue || row.DwellingCount.Value >= 0);
 
         internal static bool IsValid(NonHousingRow row) =>
-            HasBlockAndPhase(row.Block, row.Phase) && !string.IsNullOrWhiteSpace(row.Category) && row.GrossFloorArea >= 0;
+            HasBlockAndPhase(row.Block, row.Phase) && !string.IsNullOrWhiteSpace(row.Category) && (!row.GrossFloorArea.HasValue || row.GrossFloorArea.Value >= 0);
 
         internal static bool IsValid(ProgramChangeRow row) =>
             HasBlockAndPhase(row.Block, row.Phase) && !string.IsNullOrWhiteSpace(row.Deviation);
