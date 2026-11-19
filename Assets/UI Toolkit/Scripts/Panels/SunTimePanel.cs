@@ -51,6 +51,8 @@ namespace Netherlands3D.UI.Panels
         private const string aboutString = " om ";
         private const string timeSuffix = ":00";
 
+        private TimeService timeService;
+
         public SunTimePanel()
         {
         }
@@ -77,6 +79,8 @@ namespace Netherlands3D.UI.Panels
             imagesContainer = this.Q<VisualElement>("ImagesGrid");
             //once because we want to unregister immediately after firing or evertying will be instantiated multple times
             imagesContainer.RegisterCallbackOnce<GeometryChangedEvent>(OnGridGeometryChanged); 
+            
+            timeService = Services.ServiceLocator.GetService<TimeService>();
         }
 
         private void OnGridGeometryChanged(GeometryChangedEvent evt)
@@ -106,8 +110,9 @@ namespace Netherlands3D.UI.Panels
 
         public string GetMomentsText(int startIndex, int count)
         {
+            int year = timeService.Time.Year;
             StringBuilder builder = new StringBuilder();
-            moments.Sort((a, b) => a.ToDateTime().CompareTo(b.ToDateTime()));
+            moments.Sort((a, b) => a.ToDateTime(year).CompareTo(b.ToDateTime(year)));
             for(int i = startIndex; i < startIndex + count; i++)
             {
                 Moment moment = moments[i];               

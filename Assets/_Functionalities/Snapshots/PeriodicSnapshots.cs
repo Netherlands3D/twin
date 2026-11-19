@@ -39,9 +39,9 @@ namespace Netherlands3D.Snapshots
             [Range(0, 23)]
             public int hour;
 
-            public DateTime ToDateTime()
+            public DateTime ToDateTime(int year)
             {
-                return new DateTime(DateTime.Now.Year, month, day, hour, 0, 0);
+                return new DateTime(year, month, day, hour, 0, 0);
             }
         }
 
@@ -152,6 +152,8 @@ namespace Netherlands3D.Snapshots
 
                 yield return null;
                 
+                onStartGenerating.Invoke();
+                
                 for (var index = 0; index < moments.Count; index++)
                 {
                     onProgress.Invoke(1f / moments.Count * (index + 1));
@@ -209,32 +211,14 @@ namespace Netherlands3D.Snapshots
             Texture2D snapshotTexture = null;
             try
             {
-                DateTime dateTime = moment.ToDateTime();
+                DateTime dateTime = moment.ToDateTime(timeService.Time.Year);
                 timeService.SetTime(dateTime);
-                
                 renderTexture.Create();
                 sourceCamera.Render();
-                
                 RenderTexture.active = renderTexture;
-
-                snapshotTexture = new Texture2D(
-                    snapshotWidth,
-                    snapshotHeight,
-                    TextureFormat.RGB24,
-                    false);
-
-                snapshotTexture.ReadPixels(
-                    new Rect(0, 0, snapshotWidth, snapshotHeight),
-                    0,
-                    0);
-              
-               
-
-                Texture2D texture = CreateTimestampTexture(
-                    snapshotTexture.EncodeToPNG(),
-                    dateTime,
-                    snapshotWidth,
-                    snapshotHeight);
+                snapshotTexture = new Texture2D(snapshotWidth, snapshotHeight, TextureFormat.RGB24, false);
+                snapshotTexture.ReadPixels(new Rect(0, 0, snapshotWidth, snapshotHeight), 0, 0);
+                Texture2D texture = CreateTimestampTexture(snapshotTexture.EncodeToPNG(), dateTime, snapshotWidth, snapshotHeight);
 
                 byte[] bytes = fileType switch
                 {
@@ -244,9 +228,7 @@ namespace Netherlands3D.Snapshots
                     _ => texture.EncodeToPNG()
                 };
 
-                File.WriteAllBytes(
-                    $"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png",
-                    bytes);
+                File.WriteAllBytes($"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png", bytes);
                 
                 Destroy(texture);
             }
