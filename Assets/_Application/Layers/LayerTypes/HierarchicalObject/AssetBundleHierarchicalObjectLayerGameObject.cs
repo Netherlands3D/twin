@@ -10,8 +10,8 @@ using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    //on how to make an assetbundle go to the assetbundleservice for info
-    public class AssetBundleLayerGameObject : HierarchicalObjectLayerGameObject
+    //for more info on how to make an assetbundle go to the assetbundleservice
+    public class AssetBundleHierarchicalObjectLayerGameObject : HierarchicalObjectLayerGameObject
     {
         private AssetBundleService assetBundleService;
         private string bundleName;

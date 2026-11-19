@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D
 {
-    public class SpawnFromCoordinate : MonoBehaviour
+    public class SpawnFromCoordinate : MonoBehaviour, IAssetBundleData
     {
         public CoordinateSystem CoordinateSystem => coordinateSystem;
         public Coordinate Coordinate =>  new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
