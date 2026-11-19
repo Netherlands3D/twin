@@ -70,6 +70,7 @@ namespace Netherlands3D.Twin.Configuration
 
         public IEnumerator Execute()
         {
+            configuration.AllowHiddenFeatures = false;
             configuration.ShouldStartSetup = false;
 
             //TODO the following is disabled temporarily

@@ -10,6 +10,8 @@ namespace Netherlands3D
     [RequireComponent(typeof(UIDocument))]
     public class AppRootBehaviour : MonoBehaviour
     {
+        private const string DashboardOpenClass = "app--dashboard-open";
+
         public VisualElement Root => appRoot;
 
         private UIDocument appDocument;
@@ -57,6 +59,11 @@ namespace Netherlands3D
         public void DisableFunctionality(Functionality functionality)
         {
             appRoot.RemoveFromClassList("app--functionality-" + functionality.Id);
+        }
+
+        internal void SetDashboardVisible(bool visible)
+        {
+            appRoot.EnableInClassList(DashboardOpenClass, visible);
         }
 
         public Vector2 GetPanelClickPosition()
