@@ -328,6 +328,7 @@ namespace Netherlands3D.Snapshots
                         float alpha = col.a;
                         //blend the pixel of label into the base pixel by its alpha (basic blending)
                         Color blendedColor = Color.Lerp(baseCol, col, alpha);
+                        blendedColor.a = 1f;
 
                         timeStampTexture.SetPixel(x, y, blendedColor);
                     }
