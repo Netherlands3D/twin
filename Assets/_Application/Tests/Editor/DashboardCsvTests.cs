@@ -441,6 +441,40 @@ namespace Netherlands3D.Twin.Tests
             Assert.Throws<ArgumentException>(() => chart.SetData(new[] { new RingChart.Segment("Negative", -1, Color.blue) }));
         }
 
+        [Test]
+        public void AreaComparisonChartScalesAreasAndKeepsCallerTextZeroAndUnknownValues()
+        {
+            var chart = new AreaComparisonChart();
+            chart.SetData(new[]
+            {
+                new AreaComparisonChart.Item("Small", 16, Color.blue, "Known area: 16", "16 m\u00b2*"),
+                new AreaComparisonChart.Item("Large", 64, Color.green),
+                new AreaComparisonChart.Item("Zero", 0, Color.gray),
+                new AreaComparisonChart.Item("Unknown", null, Color.gray)
+            });
+
+            var circles = chart.Query(className: "area-comparison-chart__circle").ToList();
+            Assert.That(circles.Count, Is.EqualTo(2));
+            Assert.That(circles[0].style.width.value.value, Is.EqualTo(50f));
+            Assert.That(circles[1].style.width.value.value, Is.EqualTo(100f));
+            Assert.That(circles[0].tooltip, Is.EqualTo("Known area: 16"));
+            var labels = chart.Query<Label>(className: "area-comparison-chart__value-label").ToList();
+            Assert.That(labels.Select(label => label.text), Is.EqualTo(new[] { "16 m\u00b2*", "64", "0", "\u2014" }));
+            Assert.That(chart.Q("ChartLegend").Query<Label>().ToList().Select(label => label.text), Is.EqualTo(new[] { "Small", "Large", "Zero", "Unknown" }));
+
+            chart.SetData(new[] { new AreaComparisonChart.Item("Small", 16, Color.blue) }, 64);
+            Assert.That(chart.Query(className: "area-comparison-chart__circle").ToList().Count, Is.EqualTo(1));
+            Assert.That(chart.Q(className: "area-comparison-chart__circle").style.width.value.value, Is.EqualTo(50f));
+            Assert.Throws<ArgumentOutOfRangeException>(() => chart.SetData(new[] { new AreaComparisonChart.Item("Large", 64, Color.blue) }, 16));
+            Assert.Throws<ArgumentException>(() => chart.SetData(new[] { new AreaComparisonChart.Item("Negative", -1, Color.blue) }));
+
+            chart.SetData(Array.Empty<AreaComparisonChart.Item>());
+            Assert.That(chart.Q("ChartItems").childCount, Is.Zero);
+            Assert.That(chart.Q("ChartLegend").childCount, Is.Zero);
+            Assert.That(chart.Q("ChartItems").style.display.value, Is.EqualTo(DisplayStyle.None));
+            Assert.That(chart.Q("EmptyChart").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+        }
+
         [TestCase("9007199254740992", "1", "9007199254740993")]
         [TestCase("0.123456789012345678", "0.000000000000000001", "0.123456789012345679")]
         public void BarChartPreservesDecimalPrecisionInTotalLabels(string first, string second, string expected)
@@ -509,6 +543,8 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(hud.Q<BarChart>("HousingBlockChart").Description, Is.Empty);
             Assert.That(hud.Q<RingChart>("HousingSegmentChart").Q<Label>("ChartTotal").text, Is.EqualTo("30"));
             Assert.That(hud.Q<RingChart>("HousingSegmentChart").Q("ChartSegments")[0].tooltip.Count(character => character == '%'), Is.EqualTo(1));
+            Assert.That(hud.Q<RingChart>("HousingSegmentChart").Q<Label>("ChartTotal").tooltip, Does.Not.Contain("Alle blokken:"));
+            Assert.That(hud.Q<AreaComparisonChart>("HousingFloorAreaChart").Q<Label>(className: "area-comparison-chart__value-label").tooltip, Does.Not.Contain("Alle blokken:"));
 
             var incomplete = ReadRows("Wonen;A;BBP;Sociaal;2;40;10;;;;", "Wonen;B;SO;Sociaal;2;40;;;;;");
             showData.Invoke(hud, new object[] { incomplete });
@@ -529,6 +565,21 @@ namespace Netherlands3D.Twin.Tests
 
             showData.Invoke(hud, new object[] { null });
             Assert.That(explanation.ClassListContains("hidden"), Is.True);
+        }
+
+        [Test]
+        public void DashboardAreaChartWeightsTheLatestHousingPhasePerBlock()
+        {
+            var hud = new DashboardHUD();
+            var showData = typeof(DashboardHUD).GetMethod("ShowData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var data = ReadRows("Wonen;A;BBP;Sociaal;2;20;100;;;;", "Wonen;A;SO;Sociaal;2;40;10;;;;", "Wonen;B;BBP;Sociaal;2;70;20;;;;");
+            showData.Invoke(hud, new object[] { data });
+            var chart = hud.Q<AreaComparisonChart>("HousingFloorAreaChart");
+            Assert.That(chart.Q<Label>(className: "area-comparison-chart__value-label").text, Is.EqualTo("60 m\u00b2"));
+            Assert.That(chart.Query(className: "area-comparison-chart__circle").ToList().Count, Is.EqualTo(1));
+
+            showData.Invoke(hud, new object[] { null });
+            Assert.That(chart.Q("ChartItems").childCount, Is.Zero);
         }
 
         [Test]

@@ -27,7 +27,8 @@
 }
 
 .bar-chart__legend,
-.ring-chart__legend {
+.ring-chart__legend,
+.area-comparison-chart__legend {
     display: none;
     flex-direction: row;
     flex-wrap: wrap;
@@ -36,7 +37,8 @@
 }
 
 .bar-chart__legend-entry,
-.ring-chart__legend-entry {
+.ring-chart__legend-entry,
+.area-comparison-chart__legend-entry {
     flex-direction: row;
     align-items: center;
     margin-right: var(--spacing-3);
@@ -44,7 +46,8 @@
 }
 
 .bar-chart__swatch,
-.ring-chart__swatch {
+.ring-chart__swatch,
+.area-comparison-chart__swatch {
     width: var(--spacing-3);
     height: var(--spacing-3);
     margin-right: var(--spacing-1);

@@ -22,7 +22,7 @@ namespace Netherlands3D.UI.Panels
         private const string SquareMetres = " m\u00b2";
         private const string AllBlocksExplanation = "Alle blokken: laatst beschikbare woonfase per blok.";
         private const string PhaseComparisonExplanation = "Per blok de laatst beschikbare uitwerking tot en met de fase.";
-        private const string IncompleteDataExplanation = "*Onvolledig: berekend met bekende gegevens. Voor gemiddelden gebruiken we alleen bekende aantallen en oppervlakten.";
+        private const string IncompleteDataExplanation = "*Onvolledig: berekend met bekende gegevens. Percentages gaan over het bekende subtotaal. Voor gemiddelden gebruiken we alleen bekende aantallen en oppervlakten.";
         private static readonly CustomStyleProperty<Color> SocialColor = new("--color-dashboard-segment-social");
         private static readonly CustomStyleProperty<Color> MidRentColor = new("--color-dashboard-segment-mid-rent");
         private static readonly CustomStyleProperty<Color> FreeSectorColor = new("--color-dashboard-segment-free-sector");
@@ -31,6 +31,7 @@ namespace Netherlands3D.UI.Panels
         private readonly DashboardPhaseComparisonPanel phaseComparison;
         private readonly BarChart housingChart;
         private readonly RingChart housingSegmentChart;
+        private readonly AreaComparisonChart housingFloorAreaChart;
         private readonly TextCallOut sidebarDataExplanation;
         private readonly ToggleSwitch phaseView;
         private Color socialColor = Color.gray;
@@ -43,6 +44,7 @@ namespace Netherlands3D.UI.Panels
             DashboardSummary.BreakdownRow[] Categories, DashboardSummary.BreakdownRow[] SocialFacilities) summary;
         private (string Block, DashboardSummary.PhaseTotals[] Phases, DashboardSummary.PhaseTotals Housing, DashboardSummary.PhaseTotals NonHousing) blockSelection;
         private DashboardSummary.HousingBlockSummary[] housingBlocks = Array.Empty<DashboardSummary.HousingBlockSummary>();
+        private (string Label, DashboardSummary.NumericResult Value)[] housingFloorAreas = Array.Empty<(string Label, DashboardSummary.NumericResult Value)>();
 
         public DashboardHUD()
         {
@@ -59,6 +61,7 @@ namespace Netherlands3D.UI.Panels
             phaseComparison.ViewChanged += UpdateSidebarExplanation;
             housingChart = programOverview.Q<BarChart>("HousingBlockChart");
             housingSegmentChart = programOverview.Q<RingChart>("HousingSegmentChart");
+            housingFloorAreaChart = programOverview.Q<AreaComparisonChart>("HousingFloorAreaChart");
             housingSegmentChart.NumberCulture = NumberCulture;
             housingChart.NumberCulture = NumberCulture;
             housingChart.ValueFormat = "#,0";
@@ -82,6 +85,7 @@ namespace Netherlands3D.UI.Panels
                     phaseComparison.NonHousing = selection[i];
                     housingChart.EnableInClassList(UtilityClassConstants.HIDDEN, selection[i]);
                     housingSegmentChart.EnableInClassList(UtilityClassConstants.HIDDEN, selection[i]);
+                    housingFloorAreaChart.EnableInClassList(UtilityClassConstants.HIDDEN, selection[i]);
                     return;
                 }
             }
@@ -149,6 +153,7 @@ namespace Netherlands3D.UI.Panels
             summary = DashboardSummary.Calculate(data);
             blockSelection = SelectBlockOverview(data);
             housingBlocks = DashboardSummary.CalculateHousingBlocks(data);
+            housingFloorAreas = DashboardSummary.CalculateHousingFloorAreas(data);
             ShowHousingChart();
             var phases = summary.Phases;
 
@@ -228,6 +233,7 @@ namespace Netherlands3D.UI.Panels
 
             var blocks = phaseComparison.NonHousing ? Array.Empty<DashboardSummary.HousingBlockSummary>() : housingBlocks;
             incomplete |= blocks.Any(entry => IsIncomplete(entry.Total));
+            incomplete |= !phaseComparison.NonHousing && housingFloorAreas.Any(entry => IsIncomplete(entry.Value));
             SetSidebarExplanation(blocks.Length > 1 ? AllBlocksExplanation : null, incomplete);
         }
 
@@ -262,6 +268,14 @@ namespace Netherlands3D.UI.Panels
 
         private void ShowHousingChart()
         {
+            housingFloorAreaChart.SetData(housingFloorAreas.Select(entry =>
+            {
+                var text = FormatNumber(entry.Value, SquareMetres);
+                if (string.IsNullOrEmpty(text))
+                    text = "\u2014";
+                return new AreaComparisonChart.Item(entry.Label, entry.Value.Value, SegmentColor(entry.Label),
+                    $"Gemiddelde minimale\nwoonoppervlakte: {text}", text);
+            }).ToArray());
             var total = summary.Phases?.LastOrDefault().Dwellings ?? default;
             var segments = summary.Segments ?? Array.Empty<DashboardSummary.BreakdownRow>();
             housingSegmentChart.SetData(segments.Select(segment =>
@@ -272,8 +286,7 @@ namespace Netherlands3D.UI.Panels
                     : null;
                 var tooltip = $"{segment.Label}: {ChartNumber(value)} woningen" + (percentage == null ? "" : $"\n{percentage}");
                 return new RingChart.Segment(segment.Label, value.Value, SegmentColor(segment.Label), tooltip, percentage);
-            }).ToArray(), ChartNumber(total), $"Totaal: {ChartNumber(total)} woningen\n{AllBlocksExplanation}"
-                + (IsIncomplete(total) ? "\nPercentages: aandeel van het bekende subtotaal." : ""));
+            }).ToArray(), ChartNumber(total), $"Totaal: {ChartNumber(total)} woningen");
 
             var blocks = housingBlocks;
             if (blocks.Length == 0)

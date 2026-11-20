@@ -20,6 +20,16 @@ namespace Netherlands3D.Twin.DataSets
 
         public static PhaseTotals CalculateCurrent(DashboardData data) => CalculatePhases(data).LastOrDefault();
 
+        public static (string Label, NumericResult Value)[] CalculateHousingFloorAreas(DashboardData data)
+        {
+            if (data == null)
+                return Array.Empty<(string Label, NumericResult Value)>();
+
+            var selection = SelectRows(data.Housing, row => row.Block, row => row.Phase, DashboardData.Phases.Last(), null);
+            return HousingSegments(data).Select(segment => (segment, AverageMinimumFloorArea(
+                selection.Rows.Where(row => Equal(SegmentName(row.Segment), segment)).ToArray(), selection.Sources.MissingBlocks > 0))).ToArray();
+        }
+
         public static HousingBlockSummary[] CalculateHousingBlocks(DashboardData data, string phase = null)
         {
             if (data == null)
