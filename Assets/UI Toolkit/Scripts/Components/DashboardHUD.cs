@@ -267,9 +267,13 @@ namespace Netherlands3D.UI.Panels
             housingSegmentChart.SetData(segments.Select(segment =>
             {
                 var value = segment.Values.Last();
-                return new RingChart.Segment(segment.Label, value.Value, SegmentColor(segment.Label), $"{segment.Label}: {ChartNumber(value)} woningen");
+                var percentage = value.Value.HasValue && total.Value > 0
+                    ? (value.Value.Value / total.Value.Value).ToString("0.#%", NumberCulture) + (IsIncomplete(total) ? "*" : "")
+                    : null;
+                var tooltip = $"{segment.Label}: {ChartNumber(value)} woningen" + (percentage == null ? "" : $"\n{percentage}");
+                return new RingChart.Segment(segment.Label, value.Value, SegmentColor(segment.Label), tooltip, percentage);
             }).ToArray(), ChartNumber(total), $"Totaal: {ChartNumber(total)} woningen\n{AllBlocksExplanation}"
-                + (IsIncomplete(total) ? "\nPercentages: aandeel van het bekende subtotaal." : ""), IsIncomplete(total));
+                + (IsIncomplete(total) ? "\nPercentages: aandeel van het bekende subtotaal." : ""));
 
             var blocks = housingBlocks;
             if (blocks.Length == 0)

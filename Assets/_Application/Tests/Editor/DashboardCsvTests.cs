@@ -409,16 +409,16 @@ namespace Netherlands3D.Twin.Tests
             var chart = new RingChart { Unit = "Woningen" };
             chart.SetData(new[]
             {
-                new RingChart.Segment("Known", 10, Color.blue, "Known: 10"),
+                new RingChart.Segment("Known", 10, Color.blue, "Known: 10\n100%*", "100%*"),
                 new RingChart.Segment("Unknown", null, Color.green, "Unknown")
             }, "10*", "Known subtotal: 10");
 
             Assert.That(chart.Q("ChartSegments").childCount, Is.EqualTo(1));
-            Assert.That(chart.Q("ChartSegments")[0].tooltip, Does.StartWith("Known: 10\n"));
-            Assert.That(chart.Q("ChartSegments")[0].tooltip, Does.Contain("100%"));
+            Assert.That(chart.Q("ChartSegments")[0].tooltip, Is.EqualTo("Known: 10\n100%*"));
             var percentageLabel = chart.Q("ChartPercentages").Q<Label>();
             Assert.That(percentageLabel.tooltip, Is.EqualTo(chart.Q("ChartSegments")[0].tooltip));
             Assert.That(percentageLabel.pickingMode, Is.EqualTo(PickingMode.Position));
+            Assert.That(percentageLabel.text, Is.EqualTo("100%*"));
             Assert.That(chart.Q("ChartLegend").childCount, Is.EqualTo(2));
             Assert.That(chart.Q<Label>("ChartTotal").text, Is.EqualTo("10*"));
             Assert.That(chart.Q<Label>("ChartTotal").tooltip, Is.EqualTo("Known subtotal: 10"));

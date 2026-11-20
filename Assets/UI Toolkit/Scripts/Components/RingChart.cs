@@ -89,7 +89,7 @@ namespace Netherlands3D.UI.Components
         }
 
         /// <summary>Null amounts have no arc. An optional total text can describe a known subtotal.</summary>
-        public void SetData(IReadOnlyList<Segment> data, string totalText = null, string totalTooltip = null, bool isIncomplete = false)
+        public void SetData(IReadOnlyList<Segment> data, string totalText = null, string totalTooltip = null)
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
@@ -115,8 +115,8 @@ namespace Netherlands3D.UI.Components
                 {
                     var share = segment.Amount.Value / total;
                     var next = fraction + share;
-                    var percentage = share.ToString("0.#%", NumberCulture) + (isIncomplete ? "*" : "");
-                    var tooltip = string.IsNullOrEmpty(segment.Tooltip) ? percentage : $"{segment.Tooltip}\n{percentage}";
+                    var percentage = segment.PercentageText ?? share.ToString("0.#%", NumberCulture);
+                    var tooltip = segment.Tooltip ?? percentage;
                     var label = new Label(percentage) { tooltip = tooltip };
                     label.AddToClassList("ring-chart__percentage");
                     label.AddToClassList("chart-badge");
@@ -148,13 +148,19 @@ namespace Netherlands3D.UI.Components
             public decimal? Amount { get; }
             public Color Color { get; }
             public string Tooltip { get; }
+            public string PercentageText { get; }
 
-            public Segment(string label, decimal? amount, Color color, string tooltip = null)
+            public Segment(string label, decimal? amount, Color color, string tooltip = null) : this(label, amount, color, tooltip, null)
+            {
+            }
+
+            public Segment(string label, decimal? amount, Color color, string tooltip, string percentageText)
             {
                 Label = label;
                 Amount = amount;
                 Color = color;
                 Tooltip = tooltip;
+                PercentageText = percentageText;
             }
         }
 
