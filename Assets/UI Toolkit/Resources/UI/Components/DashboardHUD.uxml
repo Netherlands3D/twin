@@ -7,6 +7,7 @@
             <nl3d:ScrollView name="Scrollview" mode="Vertical" horizontal-scroller-visibility="Hidden">
                 <ui:VisualElement name="ProgramOverviewContent">
                     <nl3dP:DashboardBlockOverview/>
+                    <nl3d:RingChart name="HousingSegmentChart" title="Segmentverdeling woningen" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>
                     <nl3d:BarChart name="HousingBlockChart" title="Woningen per blok" icon="Tile" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="PhaseProgressContent" class="hidden"/>

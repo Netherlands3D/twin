@@ -403,6 +403,44 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(chart.Query(className: "bar-chart__legend-entry").ToList().Count, Is.EqualTo(2));
         }
 
+        [Test]
+        public void RingChartKeepsUnknownValuesDistinctFromZeroAndReplacesPreviousData()
+        {
+            var chart = new RingChart { Unit = "Woningen" };
+            chart.SetData(new[]
+            {
+                new RingChart.Segment("Known", 10, Color.blue, "Known: 10"),
+                new RingChart.Segment("Unknown", null, Color.green, "Unknown")
+            }, "10*", "Known subtotal: 10");
+
+            Assert.That(chart.Q("ChartSegments").childCount, Is.EqualTo(1));
+            Assert.That(chart.Q("ChartSegments")[0].tooltip, Does.StartWith("Known: 10\n"));
+            Assert.That(chart.Q("ChartSegments")[0].tooltip, Does.Contain("100%"));
+            var percentageLabel = chart.Q("ChartPercentages").Q<Label>();
+            Assert.That(percentageLabel.tooltip, Is.EqualTo(chart.Q("ChartSegments")[0].tooltip));
+            Assert.That(percentageLabel.pickingMode, Is.EqualTo(PickingMode.Position));
+            Assert.That(chart.Q("ChartLegend").childCount, Is.EqualTo(2));
+            Assert.That(chart.Q<Label>("ChartTotal").text, Is.EqualTo("10*"));
+            Assert.That(chart.Q<Label>("ChartTotal").tooltip, Is.EqualTo("Known subtotal: 10"));
+
+            chart.SetData(new[] { new RingChart.Segment("Zero", 0, Color.blue) });
+            Assert.That(chart.Q("ChartSegments").childCount, Is.Zero);
+            Assert.That(chart.Q("ChartPercentages").childCount, Is.Zero);
+            Assert.That(chart.Q("ChartLegend").childCount, Is.EqualTo(1));
+            Assert.That(chart.Q<Label>("ChartTotal").text, Is.EqualTo("0"));
+            Assert.That(chart.Q<Label>("ChartTotal").tooltip, Is.Null.Or.Empty);
+
+            chart.SetData(new[] { new RingChart.Segment("Unknown", null, Color.blue) });
+            Assert.That(chart.Q("ChartSegments").childCount, Is.Zero);
+            Assert.That(chart.Q<Label>("ChartTotal").text, Is.EqualTo("\u2014"));
+
+            chart.SetData(Array.Empty<RingChart.Segment>());
+            Assert.That(chart.Q("ChartLegend").childCount, Is.Zero);
+            Assert.That(chart.Q("ChartPlot").style.display.value, Is.EqualTo(DisplayStyle.None));
+            Assert.That(chart.Q("EmptyChart").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+            Assert.Throws<ArgumentException>(() => chart.SetData(new[] { new RingChart.Segment("Negative", -1, Color.blue) }));
+        }
+
         [TestCase("9007199254740992", "1", "9007199254740993")]
         [TestCase("0.123456789012345678", "0.000000000000000001", "0.123456789012345679")]
         public void BarChartPreservesDecimalPrecisionInTotalLabels(string first, string second, string expected)
@@ -469,11 +507,14 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(explanation.Text, Does.Contain("Alle blokken:"));
             Assert.That(explanation.Text, Does.Not.Contain("*Onvolledig"));
             Assert.That(hud.Q<BarChart>("HousingBlockChart").Description, Is.Empty);
+            Assert.That(hud.Q<RingChart>("HousingSegmentChart").Q<Label>("ChartTotal").text, Is.EqualTo("30"));
+            Assert.That(hud.Q<RingChart>("HousingSegmentChart").Q("ChartSegments")[0].tooltip.Count(character => character == '%'), Is.EqualTo(1));
 
             var incomplete = ReadRows("Wonen;A;BBP;Sociaal;2;40;10;;;;", "Wonen;B;SO;Sociaal;2;40;;;;;");
             showData.Invoke(hud, new object[] { incomplete });
             Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
             Assert.That(explanation.Text, Does.Not.Contain("* "));
+            Assert.That(hud.Q<RingChart>("HousingSegmentChart").Q<Label>("ChartTotal").text, Is.EqualTo("10*"));
 
             var housingTypes = hud.Q<ToggleButtonGroup>("HousingTypes");
             housingTypes.value = new ToggleButtonGroupState(2, housingTypes.childCount);

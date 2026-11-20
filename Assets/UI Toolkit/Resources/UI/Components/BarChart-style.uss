@@ -1,3 +1,5 @@
+@import url("Chart-style.uss");
+
 .bar-chart {
     --bar-chart-plot-height: 200px;
     --bar-chart-column-width: 72px;
@@ -141,46 +143,9 @@
     margin-bottom: var(--spacing-3);
 }
 
-.bar-chart__total-label {
-    height: var(--spacing-6);
-    min-width: var(--spacing-8);
-    max-width: 100%;
-    padding: 0 var(--spacing-2);
-    flex-shrink: 0;
-    background-color: var(--color-white);
-    border-width: var(--spacing-0_5);
-    border-color: var(--color-blue-200);
-    border-radius: var(--spacing-3);
-    -unity-text-align: middle-center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .bar-chart__category-label {
     height: var(--spacing-8);
     -unity-text-align: middle-center;
-}
-
-.bar-chart__legend {
-    display: none;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: var(--spacing-2);
-}
-
-.bar-chart__legend-entry {
-    flex-direction: row;
-    align-items: center;
-    margin-right: var(--spacing-3);
-    margin-bottom: var(--spacing-1);
-}
-
-.bar-chart__swatch {
-    width: var(--spacing-3);
-    height: var(--spacing-3);
-    margin-right: var(--spacing-1);
 }
 
 .bar-chart__empty {

@@ -17,16 +17,16 @@
                     <ui:VisualElement name="ColumnHeadings" picking-mode="Ignore" class="dashboard-phase-comparison__row dashboard-phase-comparison__column-headings">
                         <ui:Label name="RowHeading" text="Vergelijking" class="dashboard-phase-comparison__label dashboard-phase-comparison__row-heading text-header"/>
                         <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
-                            <ui:Label text="BBP" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--bbp text-header"/>
+                            <ui:Label text="BBP" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--bbp chart-badge text-header"/>
                         </ui:VisualElement>
                         <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
-                            <ui:Label text="SO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--so text-header"/>
+                            <ui:Label text="SO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--so chart-badge text-header"/>
                         </ui:VisualElement>
                         <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
-                            <ui:Label text="VO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--vo text-header"/>
+                            <ui:Label text="VO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--vo chart-badge text-header"/>
                         </ui:VisualElement>
                         <ui:VisualElement class="dashboard-phase-comparison__value dashboard-phase-comparison__phase-cell">
-                            <ui:Label text="DO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--do text-header"/>
+                            <ui:Label text="DO" class="dashboard-phase-comparison__phase-badge dashboard-phase-comparison__phase-badge--do chart-badge text-header"/>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>

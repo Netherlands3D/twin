@@ -30,6 +30,7 @@ namespace Netherlands3D.UI.Panels
         private readonly DashboardBlockOverview blockOverview;
         private readonly DashboardPhaseComparisonPanel phaseComparison;
         private readonly BarChart housingChart;
+        private readonly RingChart housingSegmentChart;
         private readonly TextCallOut sidebarDataExplanation;
         private readonly ToggleSwitch phaseView;
         private Color socialColor = Color.gray;
@@ -57,6 +58,8 @@ namespace Netherlands3D.UI.Panels
             phaseComparison = phaseChanges.Q<DashboardPhaseComparisonPanel>();
             phaseComparison.ViewChanged += UpdateSidebarExplanation;
             housingChart = programOverview.Q<BarChart>("HousingBlockChart");
+            housingSegmentChart = programOverview.Q<RingChart>("HousingSegmentChart");
+            housingSegmentChart.NumberCulture = NumberCulture;
             housingChart.NumberCulture = NumberCulture;
             housingChart.ValueFormat = "#,0";
             housingChart.RegisterCallback<CustomStyleResolvedEvent>(OnChartStylesResolved);
@@ -78,6 +81,7 @@ namespace Netherlands3D.UI.Panels
 
                     phaseComparison.NonHousing = selection[i];
                     housingChart.EnableInClassList(UtilityClassConstants.HIDDEN, selection[i]);
+                    housingSegmentChart.EnableInClassList(UtilityClassConstants.HIDDEN, selection[i]);
                     return;
                 }
             }
@@ -258,6 +262,15 @@ namespace Netherlands3D.UI.Panels
 
         private void ShowHousingChart()
         {
+            var total = summary.Phases?.LastOrDefault().Dwellings ?? default;
+            var segments = summary.Segments ?? Array.Empty<DashboardSummary.BreakdownRow>();
+            housingSegmentChart.SetData(segments.Select(segment =>
+            {
+                var value = segment.Values.Last();
+                return new RingChart.Segment(segment.Label, value.Value, SegmentColor(segment.Label), $"{segment.Label}: {ChartNumber(value)} woningen");
+            }).ToArray(), ChartNumber(total), $"Totaal: {ChartNumber(total)} woningen\n{AllBlocksExplanation}"
+                + (IsIncomplete(total) ? "\nPercentages: aandeel van het bekende subtotaal." : ""), IsIncomplete(total));
+
             var blocks = housingBlocks;
             if (blocks.Length == 0)
             {
