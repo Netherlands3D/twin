@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="dashboard-phase-comparison dashboard-theme">
     <ui:VisualElement class="dashboard-phase-comparison__toolbar">
-        <nl3d:Header name="ComparisonHeader" icon="Tile" text="Gebiedsprogramma &#8211; Wonen"/>
+        <nl3d:Header name="ComparisonHeader" icon="PresentationChart" text="Gebiedsprogramma &#8211; Wonen"/>
         <ui:ToggleButtonGroup name="ComparisonTabs" value="0" allow-empty-selection="false" class="dashboard-phase-comparison__tabs">
             <nl3d:Button name="KeyFiguresTab" button-style="Normal" LabelText="Kerncijfers"/>
             <nl3d:Button name="CategoriesTab" button-style="Normal" LabelText="Categorie&#235;n" class="hidden"/>
@@ -10,9 +10,6 @@
         </ui:ToggleButtonGroup>
     </ui:VisualElement>
     <ui:VisualElement class="dashboard-phase-comparison__body">
-        <ui:VisualElement class="dashboard-phase-comparison__description">
-            <ui:Label text="Per blok de laatst beschikbare uitwerking tot en met de fase.&#10;&#10;*Onvolledig: berekend uit bekende gegevens. Gemiddelden gebruiken bekende aantallen en oppervlakten. Verschillen vergelijken deelsommen; de dekking kan per fase verschillen." class="dashboard-phase-comparison__explanation"/>
-        </ui:VisualElement>
         <ui:VisualElement class="dashboard-phase-comparison__content">
             <nl3d:ScrollView name="ComparisonScrollView" mode="VerticalAndHorizontal" item-gap="0" class="dashboard-phase-comparison__scroll">
                 <ui:VisualElement class="dashboard-phase-comparison__table">

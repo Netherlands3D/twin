@@ -23,7 +23,6 @@
     min-height: 0;
 }
 
-.dashboard-phase-comparison__description,
 .dashboard-phase-comparison__toolbar > .header {
     flex-shrink: 1;
     flex-basis: 304px;
@@ -63,10 +62,6 @@
 
 .dashboard-phase-comparison__empty {
     margin-top: var(--spacing-2);
-}
-
-.dashboard-phase-comparison__explanation {
-    flex-shrink: 0;
 }
 
 .dashboard-phase-comparison__scroll {

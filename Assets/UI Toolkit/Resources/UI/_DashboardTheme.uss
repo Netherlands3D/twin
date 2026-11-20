@@ -1,4 +1,7 @@
 .dashboard-theme {
+    --color-dashboard-segment-social: #1a6bbf;
+    --color-dashboard-segment-mid-rent: #c07000;
+    --color-dashboard-segment-free-sector: #1a8a50;
     --color-dashboard-phase-bbp: #1a56a0;
     --color-dashboard-phase-so: #c05000;
     --color-dashboard-phase-vo: #1060a0;

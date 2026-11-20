@@ -9,8 +9,7 @@
     margin-bottom: 0;
 }
 
-.dashboard-block-overview__empty,
-.dashboard-block-overview__explanation {
+.dashboard-block-overview__empty {
     margin-top: var(--spacing-2);
 }
 

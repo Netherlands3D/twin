@@ -3,9 +3,11 @@
         <ui:VisualElement name="Sidebar" class="dashboard-hud__sidebar">
             <nl3d:ToggleSwitch name="DashboardViewSwitch" toggle-on-label-click="false" label="Faseweergave" class="dashboard-hud__phase-toggle"/>
             <ui:VisualElement class="panel-divider" picking-mode="Ignore"/>
-            <nl3d:ScrollView name="Scrollview">
+            <nl3d:TextCallOut name="SidebarDataExplanation" class="dashboard-hud__data-explanation hidden"/>
+            <nl3d:ScrollView name="Scrollview" mode="Vertical" horizontal-scroller-visibility="Hidden">
                 <ui:VisualElement name="ProgramOverviewContent">
                     <nl3dP:DashboardBlockOverview/>
+                    <nl3d:BarChart name="HousingBlockChart" title="Woningen per blok" icon="Tile" value-axis-label="Aantal woningen" minimum-step="1" class="dashboard-hud__housing-chart dashboard-theme"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="PhaseProgressContent" class="hidden"/>
             </nl3d:ScrollView>

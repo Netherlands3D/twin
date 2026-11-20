@@ -30,7 +30,6 @@
             <ui:Label text="BVO niet-wonen" class="dashboard-block-overview__label"/>
             <ui:Label name="NonHousingGrossFloorAreaValue" text="&#8212;" class="dashboard-block-overview__value text-header"/>
         </ui:VisualElement>
-        <ui:Label text="*Onvolledig: berekend uit bekende gegevens. Gemiddelden gebruiken bekende aantallen en oppervlakten." class="dashboard-block-overview__explanation"/>
     </ui:VisualElement>
     <ui:Label name="EmptyBlockOverview" text="Geen gegevens beschikbaar" class="dashboard-block-overview__empty"/>
 </ui:UXML>

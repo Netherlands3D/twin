@@ -5,6 +5,7 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using NUnit.Framework;
 using UnityEngine;
@@ -299,6 +300,130 @@ namespace Netherlands3D.Twin.Tests
             showData.Invoke(hud, new object[] { null });
             Assert.That(overview.HeaderText, Is.EqualTo("Bouwblokoverzicht"));
             Assert.That(overview.AverageMinimumFloorArea, Is.EqualTo("\u2014"));
+        }
+
+        [Test]
+        public void HousingColumnsMatchAreaTotalsAndUseWholeSourcePhases()
+        {
+            var data = ReadRows(
+                "Wonen;A;BBP;Sociaal;2;40;10;;;;",
+                "Wonen;A;BBP;Vrij;3;80;20;;;;",
+                "Wonen;A;SO;Sociaal;2;40;12;;;;",
+                "Wonen;A;SO;Midden;3;60;3;;;;",
+                "Wonen;B;BBP;Sociaal;2;40;20;;;;",
+                "Wonen;C;VO;Sociaal;2;40;;;;;");
+            var blocks = (Array)InvokeSummary("CalculateHousingBlocks", data, "SO");
+            var first = blocks.GetValue(0);
+            Assert.That(Property(first, "SourcePhase"), Is.EqualTo("SO"));
+            AssertResult(Property(first, "Total"), 15m, "Complete");
+            Assert.That(Property(first, "Segments"), Is.EqualTo(new[] { "Sociaal", "Middenhuur", "Vrije sector" }));
+            AssertResult(((Array)Property(first, "Values")).GetValue(2), null, "Unknown");
+            Assert.That(Property(blocks.GetValue(1), "SourcePhase"), Is.EqualTo("BBP"));
+            Assert.That(Property(blocks.GetValue(2), "SourcePhase"), Is.Null);
+
+            var knownTotal = blocks.Cast<object>().Sum(block => (decimal?)Property(Property(block, "Total"), "Value"));
+            var phases = (Array)InvokeSummary("CalculatePhases", data, null);
+            Assert.That(knownTotal, Is.EqualTo(Property(Property(phases.GetValue(1), "Dwellings"), "Value")));
+
+            var current = (Array)InvokeSummary("CalculateHousingBlocks", data, null);
+            Assert.That(Property(current.GetValue(2), "SourcePhase"), Is.EqualTo("VO"));
+            AssertResult(Property(current.GetValue(2), "Total"), null, "Unknown");
+        }
+
+        [Test]
+        public void BarChartScalesStacksAndKeepsZeroAndUnknownCategoriesWithoutInventingSegments()
+        {
+            var chart = new BarChart { MinimumStep = 1 };
+            var series = new[] { new BarChart.Series("First", Color.blue), new BarChart.Series("Second", Color.green) };
+            chart.SetData(series, new[]
+            {
+                new BarChart.Category("A", new[] { new BarChart.Value(10, "First: 10"), new BarChart.Value(20, "Second: 20") }),
+                new BarChart.Category("B", new[] { new BarChart.Value(0), new BarChart.Value(null) }, "Zero and unknown")
+            });
+
+            var segments = chart.Query(className: "bar-chart__segment").ToList();
+            Assert.That(segments.Count, Is.EqualTo(2));
+            Assert.That(segments[0].style.height.value.value, Is.EqualTo(25f));
+            Assert.That(segments[1].style.height.value.value, Is.EqualTo(50f));
+            Assert.That(segments[0].tooltip, Is.EqualTo("First: 10"));
+            Assert.That(chart.Query(className: "bar-chart__tick").ToList().Count, Is.EqualTo(5));
+            var gridLines = chart.Q(className: "bar-chart__plot").Query(className: "bar-chart__grid-line").ToList();
+            Assert.That(gridLines.Count, Is.EqualTo(5));
+            Assert.That(gridLines[4].style.top.value.value, Is.EqualTo(0f));
+            var columns = chart.Query(className: "bar-chart__column").ToList();
+            Assert.That(columns.Count, Is.EqualTo(2));
+            var totals = chart.Query<Label>(className: "bar-chart__total-label").ToList();
+            Assert.That(totals[0].text, Is.EqualTo("30"));
+            Assert.That(totals[0].parent.style.bottom.value.value, Is.EqualTo(75f));
+            Assert.That(totals[1].text, Is.EqualTo("\u2014"));
+            Assert.That(totals[1].tooltip, Is.EqualTo("Zero and unknown"));
+            Assert.That(chart.Query(className: "bar-chart__legend-entry").ToList().Count, Is.EqualTo(2));
+
+            chart.SetData(series, new[]
+            {
+                new BarChart.Category("Partial", new[] { new BarChart.Value(10), new BarChart.Value(null) }, "Known subtotal", "10*"),
+                new BarChart.Category("Zero", new[] { new BarChart.Value(0), new BarChart.Value(0) })
+            });
+            totals = chart.Query<Label>(className: "bar-chart__total-label").ToList();
+            Assert.That(totals[0].text, Is.EqualTo("10*"));
+            Assert.That(totals[0].tooltip, Is.EqualTo("Known subtotal"));
+            Assert.That(totals[1].text, Is.EqualTo("0"));
+
+            chart.SetData(Array.Empty<BarChart.Series>(), Array.Empty<BarChart.Category>());
+            Assert.That(chart.Query(className: "bar-chart__segment").ToList(), Is.Empty);
+            Assert.That(chart.Query(className: "bar-chart__legend-entry").ToList(), Is.Empty);
+            Assert.That(chart.Q("ChartBody").style.display.value, Is.EqualTo(DisplayStyle.None));
+        }
+
+        [Test]
+        public void SidebarExplanationFollowsVisibleDataAndDoesNotRepeatChartDescriptions()
+        {
+            var hud = new DashboardHUD();
+            var showData = typeof(DashboardHUD).GetMethod("ShowData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var complete = ReadRows("Wonen;A;BBP;Sociaal;2;40;10;;;;", "Wonen;B;SO;Sociaal;2;40;20;;;;");
+            showData.Invoke(hud, new object[] { complete });
+            var explanation = hud.Q<TextCallOut>("SidebarDataExplanation");
+            Assert.That(explanation.parent, Is.SameAs(hud.Q("Sidebar")));
+            Assert.That(explanation.Text, Does.Contain("Alle blokken:"));
+            Assert.That(explanation.Text, Does.Not.Contain("*Onvolledig"));
+            Assert.That(hud.Q<BarChart>("HousingBlockChart").Description, Is.Empty);
+
+            var incomplete = ReadRows("Wonen;A;BBP;Sociaal;2;40;10;;;;", "Wonen;B;SO;Sociaal;2;40;;;;;");
+            showData.Invoke(hud, new object[] { incomplete });
+            Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
+            Assert.That(explanation.Text, Does.Not.Contain("* "));
+
+            var housingTypes = hud.Q<ToggleButtonGroup>("HousingTypes");
+            housingTypes.value = new ToggleButtonGroupState(2, housingTypes.childCount);
+            Assert.That(explanation.Text, Is.Empty);
+            Assert.That(explanation.ClassListContains("hidden"), Is.True);
+
+            housingTypes.value = new ToggleButtonGroupState(1, housingTypes.childCount);
+            Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
+            hud.Q<ToggleSwitch>("DashboardViewSwitch").value = true;
+            Assert.That(explanation.Text, Does.Contain("tot en met de fase"));
+            Assert.That(explanation.Text.Split(new[] { "*Onvolledig" }, StringSplitOptions.None).Length - 1, Is.EqualTo(1));
+
+            showData.Invoke(hud, new object[] { null });
+            Assert.That(explanation.ClassListContains("hidden"), Is.True);
+        }
+
+        [Test]
+        public void PhaseComparisonUsesTheSharedWarningOnlyForTheSelectedTable()
+        {
+            var hud = new DashboardHUD();
+            var showData = typeof(DashboardHUD).GetMethod("ShowData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            showData.Invoke(hud, new object[] { ReadRows("Wonen;A;BBP;Sociaal;2;;10;;;;") });
+            hud.Q<ToggleSwitch>("DashboardViewSwitch").value = true;
+            var explanation = hud.Q<TextCallOut>("SidebarDataExplanation");
+            Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
+
+            var tabs = hud.Q<ToggleButtonGroup>("ComparisonTabs");
+            tabs.value = new ToggleButtonGroupState(8, tabs.childCount);
+            Assert.That(explanation.Text, Does.Contain("tot en met de fase"));
+            Assert.That(explanation.Text, Does.Not.Contain("*Onvolledig"));
+            tabs.value = new ToggleButtonGroupState(1, tabs.childCount);
+            Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
         }
 
         private static DashboardData ReadRows(params string[] rows)

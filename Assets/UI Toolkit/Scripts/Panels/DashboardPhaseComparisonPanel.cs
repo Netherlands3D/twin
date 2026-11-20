@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Panels
         private const string RowClass = "dashboard-phase-comparison__row";
         private const int PhaseCount = 4;
 
-        private enum ComparisonTab
+        internal enum ComparisonTab
         {
             KeyFigures,
             Segments,
@@ -26,6 +26,9 @@ namespace Netherlands3D.UI.Panels
             SocialFacilities,
             Rooms
         }
+
+        internal ComparisonTab SelectedTab => GetSelectedTab(tabs.value);
+        internal event Action ViewChanged;
 
         private readonly Header header;
         private readonly ToggleButtonGroup tabs;
@@ -202,6 +205,7 @@ namespace Netherlands3D.UI.Panels
 
             scrollView.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
             emptyBreakdown.EnableInClassList(UtilityClassConstants.HIDDEN, hasData);
+            ViewChanged?.Invoke();
         }
 
         private IReadOnlyList<(string Label, string[] Cells)> GetKeyFigureRows()

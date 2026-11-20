@@ -20,6 +20,22 @@ namespace Netherlands3D.Twin.DataSets
 
         public static PhaseTotals CalculateCurrent(DashboardData data) => CalculatePhases(data).LastOrDefault();
 
+        public static HousingBlockSummary[] CalculateHousingBlocks(DashboardData data, string phase = null)
+        {
+            if (data == null)
+                return Array.Empty<HousingBlockSummary>();
+
+            var selection = SelectRows(data.Housing, row => row.Block, row => row.Phase, phase ?? DashboardData.Phases.Last(), null);
+            var segments = HousingSegments(data).ToArray();
+            return selection.Sources.BlockPhases.OrderBy(source => source.Key, StringComparer.OrdinalIgnoreCase).Select(source =>
+            {
+                var rows = selection.Rows.Where(row => Equal(row.Block, source.Key)).ToArray();
+                var values = segments.Select(segment => Sum(rows.Where(row => Equal(SegmentName(row.Segment), segment))
+                    .Select(row => (decimal?)row.DwellingCount), source.Value == null)).ToArray();
+                return new HousingBlockSummary(source.Key, source.Value, Sum(rows.Select(row => (decimal?)row.DwellingCount), source.Value == null), segments, values);
+            }).ToArray();
+        }
+
         public static (NumericResult Difference, NumericResult RelativeChange)[] CalculateChanges(NumericResult[] values)
         {
             var changes = new (NumericResult Difference, NumericResult RelativeChange)[values.Length];
@@ -78,9 +94,7 @@ namespace Netherlands3D.Twin.DataSets
                 return (empty, empty, empty, empty);
             }
 
-            var segments = data.Housing.Select(row => SegmentName(row.Segment)).Distinct(StringComparer.OrdinalIgnoreCase)
-                .OrderBy(segment => segment switch { "Sociaal" => 0, "Middenhuur" => 1, "Vrije sector" => 2, _ => 3 })
-                .ThenBy(segment => segment, StringComparer.OrdinalIgnoreCase)
+            var segments = HousingSegments(data)
                 .Select(segment => new BreakdownRow(segment, phases.Select(input => Sum(input.Housing.Rows
                     .Where(row => Equal(SegmentName(row.Segment), segment)).Select(row => (decimal?)row.DwellingCount), input.Housing.Sources.MissingBlocks > 0)).ToArray())).ToArray();
             var rooms = data.Housing.Where(row => row.Rooms.HasValue).Select(row => row.Rooms.Value).Distinct().OrderBy(room => room)
@@ -219,6 +233,11 @@ namespace Netherlands3D.Twin.DataSets
             return Equal(segment, "Sociaal") ? "Sociaal" : segment;
         }
 
+        private static IEnumerable<string> HousingSegments(DashboardData data) => data.Housing.Select(row => SegmentName(row.Segment))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(segment => segment switch { "Sociaal" => 0, "Middenhuur" => 1, "Vrije sector" => 2, _ => 3 })
+            .ThenBy(segment => segment, StringComparer.OrdinalIgnoreCase);
+
         private static bool Equal(string first, string second) => string.Equals(first, second, StringComparison.OrdinalIgnoreCase);
 
         internal enum ResultStatus
@@ -281,6 +300,24 @@ namespace Netherlands3D.Twin.DataSets
                 Phase = phase;
                 Housing = housing;
                 NonHousing = nonHousing;
+            }
+        }
+
+        internal readonly struct HousingBlockSummary
+        {
+            public string Block { get; }
+            public string SourcePhase { get; }
+            public NumericResult Total { get; }
+            public string[] Segments { get; }
+            public NumericResult[] Values { get; }
+
+            public HousingBlockSummary(string block, string sourcePhase, NumericResult total, string[] segments, NumericResult[] values)
+            {
+                Block = block;
+                SourcePhase = sourcePhase;
+                Total = total;
+                Segments = segments;
+                Values = values;
             }
         }
 
