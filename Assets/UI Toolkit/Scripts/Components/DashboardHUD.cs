@@ -38,6 +38,10 @@ namespace Netherlands3D.UI.Panels
         private Layers layers;
         private ProjectDataHandler projectLoader;
         private DashboardData displayedData;
+        private (DashboardSummary.PhaseTotals[] Phases, DashboardSummary.BreakdownRow[] Segments, DashboardSummary.BreakdownRow[] Rooms,
+            DashboardSummary.BreakdownRow[] Categories, DashboardSummary.BreakdownRow[] SocialFacilities) summary;
+        private (string Block, DashboardSummary.PhaseTotals[] Phases, DashboardSummary.PhaseTotals Housing, DashboardSummary.PhaseTotals NonHousing) blockSelection;
+        private DashboardSummary.HousingBlockSummary[] housingBlocks = Array.Empty<DashboardSummary.HousingBlockSummary>();
 
         public DashboardHUD()
         {
@@ -138,8 +142,10 @@ namespace Netherlands3D.UI.Panels
                 return;
 
             displayedData = data;
-            ShowHousingChart(data);
-            var summary = DashboardSummary.Calculate(data);
+            summary = DashboardSummary.Calculate(data);
+            blockSelection = SelectBlockOverview(data);
+            housingBlocks = DashboardSummary.CalculateHousingBlocks(data);
+            ShowHousingChart();
             var phases = summary.Phases;
 
             phaseComparison.SetKeyFigureData(
@@ -160,7 +166,7 @@ namespace Netherlands3D.UI.Panels
                 phases.Any(phase => phase.HousingSources.HasData), phases.Any(phase => phase.NonHousingSources.HasData),
                 phases.Select(phase => FormatSources(phase.HousingSources)).ToArray(),
                 phases.Select(phase => FormatSources(phase.NonHousingSources)).ToArray());
-            var (block, availablePhases, housingPhase, nonHousingPhase) = SelectBlockOverview(data);
+            var (block, availablePhases, housingPhase, nonHousingPhase) = blockSelection;
             var sourcePhases = new[]
             {
                 housingPhase.HasData ? $"Wonen: {housingPhase.Phase}" : null,
@@ -197,7 +203,6 @@ namespace Netherlands3D.UI.Panels
 
             if (phaseView.value)
             {
-                var summary = DashboardSummary.Calculate(displayedData);
                 var values = phaseComparison.SelectedTab switch
                 {
                     DashboardPhaseComparisonPanel.ComparisonTab.Segments => summary.Segments.SelectMany(row => row.Values),
@@ -213,11 +218,11 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
-            var (_, _, housing, nonHousing) = SelectBlockOverview(displayedData);
+            var (_, _, housing, nonHousing) = blockSelection;
             var incomplete = housing.HasData && (IsIncomplete(housing.Dwellings) || IsIncomplete(housing.AverageMinimumFloorArea))
                 || nonHousing.HasData && IsIncomplete(nonHousing.GrossFloorArea);
 
-            var blocks = phaseComparison.NonHousing ? Array.Empty<DashboardSummary.HousingBlockSummary>() : DashboardSummary.CalculateHousingBlocks(displayedData);
+            var blocks = phaseComparison.NonHousing ? Array.Empty<DashboardSummary.HousingBlockSummary>() : housingBlocks;
             incomplete |= blocks.Any(entry => IsIncomplete(entry.Total));
             SetSidebarExplanation(blocks.Length > 1 ? AllBlocksExplanation : null, incomplete);
         }
@@ -239,7 +244,7 @@ namespace Netherlands3D.UI.Panels
             changed |= UpdateChartColor(evt.customStyle, MidRentColor, ref midRentColor);
             changed |= UpdateChartColor(evt.customStyle, FreeSectorColor, ref freeSectorColor);
             if (changed)
-                ShowHousingChart(displayedData);
+                ShowHousingChart();
         }
 
         private static bool UpdateChartColor(ICustomStyle styles, CustomStyleProperty<Color> property, ref Color current)
@@ -251,9 +256,9 @@ namespace Netherlands3D.UI.Panels
             return true;
         }
 
-        private void ShowHousingChart(DashboardData data)
+        private void ShowHousingChart()
         {
-            var blocks = DashboardSummary.CalculateHousingBlocks(data);
+            var blocks = housingBlocks;
             if (blocks.Length == 0)
             {
                 housingChart.SetData(Array.Empty<BarChart.Series>(), Array.Empty<BarChart.Category>());

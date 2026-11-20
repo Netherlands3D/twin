@@ -11,6 +11,7 @@
         <ui:ScrollView name="ChartScrollView" mode="Horizontal" vertical-scroller-visibility="Hidden" class="bar-chart__scroll">
             <ui:VisualElement name="Columns" class="bar-chart__columns"/>
         </ui:ScrollView>
+        <ui:VisualElement name="HorizontalPlotArea" class="bar-chart__horizontal-plot-area"/>
     </ui:VisualElement>
     <ui:VisualElement name="ChartLegend" class="bar-chart__legend"/>
     <ui:Label name="EmptyChart" text="Geen gegevens beschikbaar" class="bar-chart__empty"/>

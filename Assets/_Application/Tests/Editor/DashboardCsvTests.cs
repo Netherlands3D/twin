@@ -375,6 +375,34 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(chart.Q("ChartBody").style.display.value, Is.EqualTo(DisplayStyle.None));
         }
 
+        [Test]
+        public void BarChartCanChangeDirectionWithoutLosingDataTooltipsOrTotals()
+        {
+            var chart = new BarChart { MinimumStep = 1 };
+            chart.SetData(new[] { new BarChart.Series("First", Color.blue), new BarChart.Series("Second", Color.green) }, new[]
+            {
+                new BarChart.Category("A", new[] { new BarChart.Value(10, "First: 10"), new BarChart.Value(20, "Second: 20") }, "Total: 30"),
+                new BarChart.Category("B", new[] { new BarChart.Value(0), new BarChart.Value(null) }, "Unknown")
+            });
+
+            chart.Orientation = BarChart.BarChartOrientation.Horizontal;
+            var segments = chart.Query(className: "bar-chart__segment").ToList();
+            Assert.That(segments[0].style.width.value.value, Is.EqualTo(25f));
+            Assert.That(segments[1].style.width.value.value, Is.EqualTo(50f));
+            Assert.That(segments[0].tooltip, Is.EqualTo("First: 10"));
+            Assert.That(chart.Q("Columns").parent, Is.SameAs(chart.Q("HorizontalPlotArea")));
+            Assert.That(chart.Query<Label>(className: "bar-chart__tick").ToList().Last().style.left.value.value, Is.EqualTo(100f));
+            var total = chart.Q<Label>(className: "bar-chart__total-label");
+            Assert.That(total.text, Is.EqualTo("30"));
+            Assert.That(total.tooltip, Is.EqualTo("Total: 30"));
+            Assert.That(total.parent.style.left.value.value, Is.EqualTo(75f));
+
+            chart.Orientation = BarChart.BarChartOrientation.Vertical;
+            Assert.That(chart.Q("Columns").parent, Is.SameAs(chart.Q<UnityEngine.UIElements.ScrollView>("ChartScrollView").contentContainer));
+            Assert.That(chart.Query(className: "bar-chart__segment").ToList()[1].style.height.value.value, Is.EqualTo(50f));
+            Assert.That(chart.Query(className: "bar-chart__legend-entry").ToList().Count, Is.EqualTo(2));
+        }
+
         [TestCase("9007199254740992", "1", "9007199254740993")]
         [TestCase("0.123456789012345678", "0.000000000000000001", "0.123456789012345679")]
         public void BarChartPreservesDecimalPrecisionInTotalLabels(string first, string second, string expected)
