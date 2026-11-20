@@ -16,6 +16,7 @@ namespace Netherlands3D.UI.Components
     public partial class BarChart : VisualElement
     {
         private const int IntervalCount = 4;
+        private const decimal CompactThreshold = 9_999m;
         private readonly Header titleHeader;
         private readonly Label descriptionLabel;
         private readonly Label axisLabel;
@@ -60,6 +61,18 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("minimum-step")]
         public double MinimumStep { get; set; }
 
+        [UxmlAttribute("compact-numbers")]
+        public bool CompactNumbers { get; set; }
+
+        [UxmlAttribute("thousand-suffix")]
+        public string ThousandSuffix { get; set; } = "k";
+
+        [UxmlAttribute("million-suffix")]
+        public string MillionSuffix { get; set; } = "M";
+
+        [UxmlAttribute("billion-suffix")]
+        public string BillionSuffix { get; set; } = "B";
+
         /// <summary>Formatting used for numeric axis labels on the next SetData call.</summary>
         public string ValueFormat { get; set; } = "#,0.##";
         public CultureInfo NumberCulture { get; set; } = CultureInfo.CurrentCulture;
@@ -85,11 +98,14 @@ namespace Netherlands3D.UI.Components
         /// <summary>Replaces all columns. Every category must contain one value per series, in series order.</summary>
         public void SetData(IReadOnlyList<Series> series, IReadOnlyList<Category> categories)
         {
-            if (series == null) throw new ArgumentNullException(nameof(series));
-            if (categories == null) throw new ArgumentNullException(nameof(categories));
+            if (series == null)
+                throw new ArgumentNullException(nameof(series));
+            if (categories == null)
+                throw new ArgumentNullException(nameof(categories));
             if (double.IsNaN(MinimumStep) || double.IsInfinity(MinimumStep) || MinimumStep < 0)
                 throw new ArgumentOutOfRangeException(nameof(MinimumStep));
-            if (series.Any(item => item == null)) throw new ArgumentException("Series cannot contain null entries.", nameof(series));
+            if (series.Any(item => item == null))
+                throw new ArgumentException("Series cannot contain null entries.", nameof(series));
             foreach (var category in categories)
             {
                 if (category == null || category.Values.Count != series.Count)
@@ -108,19 +124,22 @@ namespace Netherlands3D.UI.Components
             if (!hasData)
                 return;
 
-            var largestStack = categories.Max(category => category.Values.Sum(value => (double)(value.Amount ?? 0)));
+            var stacks = categories.Select(category => (Category: category, Total: category.Values.Sum(value => value.Amount ?? 0m))).ToArray();
+            var largestStack = (double)stacks.Max(stack => stack.Total);
             var step = Math.Max(CalculateStep(largestStack), MinimumStep);
             var maximum = step * IntervalCount;
             for (var i = 0; i <= IntervalCount; i++)
             {
-                var tick = new Label((step * i).ToString(ValueFormat, NumberCulture));
+                var tickValue = step * i;
+                var tick = new Label(FormatAxisValue(tickValue)) { tooltip = tickValue.ToString(ValueFormat, NumberCulture) };
                 tick.AddToClassList("bar-chart__tick");
                 tick.style.bottom = Length.Percent(100f * i / IntervalCount);
                 ticks.Add(tick);
             }
 
-            foreach (var category in categories)
+            foreach (var item in stacks)
             {
+                var category = item.Category;
                 var column = new VisualElement();
                 column.AddToClassList("bar-chart__column");
                 var plot = new VisualElement { pickingMode = PickingMode.Ignore };
@@ -153,15 +172,15 @@ namespace Netherlands3D.UI.Components
                 }
 
                 plot.Add(stack);
-                var total = category.Values.Sum(value => (double)(value.Amount ?? 0));
+                var total = item.Total;
                 var totalText = category.TotalLabel ?? (category.Values.All(value => value.Amount.HasValue)
-                    ? total.ToString(ValueFormat, NumberCulture)
+                    ? FormatValue(total)
                     : "\u2014");
                 var totalLabel = new Label(totalText) { tooltip = category.Tooltip };
                 totalLabel.AddToClassList("bar-chart__total-label");
                 var totalAnchor = new VisualElement { pickingMode = PickingMode.Ignore };
                 totalAnchor.AddToClassList("bar-chart__total-anchor");
-                totalAnchor.style.bottom = Length.Percent((float)(total / maximum * 100));
+                totalAnchor.style.bottom = Length.Percent((float)((double)total / maximum * 100));
                 totalAnchor.Add(totalLabel);
                 plot.Add(totalAnchor);
                 plot.RegisterCallback<GeometryChangedEvent>(evt =>
@@ -195,6 +214,35 @@ namespace Netherlands3D.UI.Components
                 entry.Add(new Label(item.Label));
                 legend.Add(entry);
             }
+        }
+
+        /// <summary>Formats a value for totals and axes. Tooltips can retain the original, unabridged value.</summary>
+        public string FormatValue(decimal value)
+        {
+            var magnitude = Math.Abs(value);
+            if (!CompactNumbers || magnitude < CompactThreshold)
+                return value.ToString(ValueFormat, NumberCulture);
+
+            var divisor = magnitude >= 1_000_000_000m ? 1_000_000_000m : magnitude >= 1_000_000m ? 1_000_000m : 1_000m;
+            var rounded = decimal.Round(value / divisor, 1, MidpointRounding.AwayFromZero);
+            if (Math.Abs(rounded) >= 1_000m && divisor < 1_000_000_000m)
+            {
+                divisor *= 1_000m;
+                rounded = decimal.Round(value / divisor, 1, MidpointRounding.AwayFromZero);
+            }
+
+            var suffix = divisor == 1_000m ? ThousandSuffix : divisor == 1_000_000m ? MillionSuffix : BillionSuffix;
+            return rounded.ToString("0.#", NumberCulture) + suffix;
+        }
+
+        private string FormatAxisValue(double value)
+        {
+            if (value < (double)decimal.MaxValue)
+                return FormatValue((decimal)value);
+
+            return CompactNumbers
+                ? (value / 1_000_000_000).ToString("0.#", NumberCulture) + BillionSuffix
+                : value.ToString(ValueFormat, NumberCulture);
         }
 
         private static double CalculateStep(double maximum)
@@ -237,6 +285,7 @@ namespace Netherlands3D.UI.Components
         {
             public string Label { get; }
             public string Tooltip { get; }
+
             /// <summary>Optional total text, including any completeness marker supplied by the caller.</summary>
             public string TotalLabel { get; }
             public IReadOnlyList<Value> Values { get; }

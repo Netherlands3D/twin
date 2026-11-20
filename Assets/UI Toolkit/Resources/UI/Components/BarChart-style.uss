@@ -6,7 +6,7 @@
     flex-shrink: 0;
     min-width: 0;
     max-width: 100%;
-    font-size: 16px;
+    font-size: var(--font-size-base);
 }
 
 .bar-chart__title,
@@ -71,7 +71,7 @@
 .bar-chart__tick {
     position: absolute;
     right: 0;
-    height: 24px;
+    height: var(--spacing-6);
     margin-bottom: -12px;
     -unity-text-align: middle-right;
 }
@@ -116,8 +116,8 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 12px;
-    right: 12px;
+    left: var(--spacing-3);
+    right: var(--spacing-3);
     flex-direction: column-reverse;
 }
 
@@ -155,7 +155,7 @@
 }
 
 .bar-chart__category-label {
-    height: 32px;
+    height: var(--spacing-8);
     -unity-text-align: middle-center;
 }
 
@@ -175,8 +175,8 @@
 }
 
 .bar-chart__swatch {
-    width: 12px;
-    height: 12px;
+    width: var(--spacing-3);
+    height: var(--spacing-3);
     margin-right: var(--spacing-1);
 }
 

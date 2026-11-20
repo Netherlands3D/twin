@@ -160,13 +160,7 @@ namespace Netherlands3D.UI.Panels
                 phases.Any(phase => phase.HousingSources.HasData), phases.Any(phase => phase.NonHousingSources.HasData),
                 phases.Select(phase => FormatSources(phase.HousingSources)).ToArray(),
                 phases.Select(phase => FormatSources(phase.NonHousingSources)).ToArray());
-            phaseComparison.Refresh();
-
-            var block = DashboardSummary.FirstBlockWithData(data);
-            var blockPhases = block == null ? Array.Empty<DashboardSummary.PhaseTotals>() : DashboardSummary.CalculatePhases(data, block);
-            var availablePhases = blockPhases.Where(phase => phase.HasData).ToArray();
-            var housingPhase = availablePhases.LastOrDefault(phase => phase.HousingSources.HasData);
-            var nonHousingPhase = availablePhases.LastOrDefault(phase => phase.NonHousingSources.HasData);
+            var (block, availablePhases, housingPhase, nonHousingPhase) = SelectBlockOverview(data);
             var sourcePhases = new[]
             {
                 housingPhase.HasData ? $"Wonen: {housingPhase.Phase}" : null,
@@ -181,7 +175,16 @@ namespace Netherlands3D.UI.Panels
             blockOverview.AverageMinimumFloorArea = FormatNumber(housingPhase.AverageMinimumFloorArea, SquareMetres);
             blockOverview.AvailablePhases = string.Join(" / ", availablePhases.Select(phase => phase.Phase));
             blockOverview.NonHousingGrossFloorArea = FormatNumber(nonHousingPhase.GrossFloorArea, SquareMetres);
-            UpdateSidebarExplanation();
+            phaseComparison.Refresh();
+        }
+
+        private static (string Block, DashboardSummary.PhaseTotals[] Phases, DashboardSummary.PhaseTotals Housing, DashboardSummary.PhaseTotals NonHousing) SelectBlockOverview(DashboardData data)
+        {
+            var block = DashboardSummary.FirstBlockWithData(data);
+            var phases = block == null ? Array.Empty<DashboardSummary.PhaseTotals>() : DashboardSummary.CalculatePhases(data, block);
+            var availablePhases = phases.Where(phase => phase.HasData).ToArray();
+            return (block, availablePhases, availablePhases.LastOrDefault(phase => phase.HousingSources.HasData),
+                availablePhases.LastOrDefault(phase => phase.NonHousingSources.HasData));
         }
 
         private void UpdateSidebarExplanation()
@@ -210,10 +213,7 @@ namespace Netherlands3D.UI.Panels
                 return;
             }
 
-            var block = DashboardSummary.FirstBlockWithData(displayedData);
-            var phases = block == null ? Array.Empty<DashboardSummary.PhaseTotals>() : DashboardSummary.CalculatePhases(displayedData, block);
-            var housing = phases.LastOrDefault(phase => phase.HousingSources.HasData);
-            var nonHousing = phases.LastOrDefault(phase => phase.NonHousingSources.HasData);
+            var (_, _, housing, nonHousing) = SelectBlockOverview(displayedData);
             var incomplete = housing.HasData && (IsIncomplete(housing.Dwellings) || IsIncomplete(housing.AverageMinimumFloorArea))
                 || nonHousing.HasData && IsIncomplete(nonHousing.GrossFloorArea);
 
@@ -268,7 +268,10 @@ namespace Netherlands3D.UI.Panels
                     $"{source}\n{block.Segments[i]}: {ChartNumber(value)} woningen")).ToArray();
                 var details = string.Join("\n", block.Values.Select((value, i) => $"{block.Segments[i]}: {ChartNumber(value)}"));
                 var label = block.Total.Status == DashboardSummary.ResultStatus.Complete ? block.Block : block.Block + "*";
-                return new BarChart.Category(label, values, $"{source}\nTotaal: {ChartNumber(block.Total)} woningen\n{details}", ChartNumber(block.Total));
+                var totalLabel = block.Total.Value.HasValue ? housingChart.FormatValue(block.Total.Value.Value) : "\u2014";
+                if (block.Total.Status == DashboardSummary.ResultStatus.Partial)
+                    totalLabel += "*";
+                return new BarChart.Category(label, values, $"{source}\nTotaal: {ChartNumber(block.Total)} woningen\n{details}", totalLabel);
             }).ToArray();
             housingChart.SetData(series, categories);
         }

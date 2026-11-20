@@ -39,6 +39,7 @@ namespace Netherlands3D.UI.Panels
         private readonly Button roomsButton;
         private readonly UnityEngine.UIElements.ScrollView scrollView;
         private readonly VisualElement columnHeadings;
+        private readonly List<VisualElement> phaseHeadings;
         private readonly Label rowHeading;
         private readonly VisualElement tableRows;
         private readonly Label emptyBreakdown;
@@ -100,6 +101,7 @@ namespace Netherlands3D.UI.Panels
             roomsButton = tabs.Q<Button>("RoomsTab");
             scrollView = this.Q<UnityEngine.UIElements.ScrollView>("ComparisonScrollView");
             columnHeadings = this.Q("ColumnHeadings");
+            phaseHeadings = columnHeadings.Query(className: PhaseCellClass).ToList();
             rowHeading = this.Q<Label>("RowHeading");
             tableRows = this.Q("BreakdownRows");
             emptyBreakdown = this.Q<Label>("EmptyBreakdown");
@@ -199,9 +201,8 @@ namespace Netherlands3D.UI.Panels
             RenderRows(rows ?? Array.Empty<(string Label, string[] Cells)>());
             var hasData = tab == ComparisonTab.KeyFigures ? (nonHousing ? hasNonHousingData : hasHousingData) : rows?.Count > 0;
             var sources = nonHousing ? nonHousingSources : housingSources;
-            var headings = columnHeadings.Query(className: PhaseCellClass).ToList();
-            for (var i = 0; i < headings.Count; i++)
-                headings[i].tooltip = sources != null && i < sources.Length ? sources[i] : string.Empty;
+            for (var i = 0; i < phaseHeadings.Count; i++)
+                phaseHeadings[i].tooltip = sources != null && i < sources.Length ? sources[i] : string.Empty;
 
             scrollView.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
             emptyBreakdown.EnableInClassList(UtilityClassConstants.HIDDEN, hasData);
@@ -261,7 +262,7 @@ namespace Netherlands3D.UI.Panels
 
         private static string GetPhaseValue(string[] values, int index)
         {
-            var value = values != null && index < values.Length ? values[index].Trim() : null;
+            var value = values != null && index < values.Length ? values[index]?.Trim() : null;
             return string.IsNullOrEmpty(value) ? EmptyValue : value;
         }
     }

@@ -375,6 +375,60 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(chart.Q("ChartBody").style.display.value, Is.EqualTo(DisplayStyle.None));
         }
 
+        [TestCase("9007199254740992", "1", "9007199254740993")]
+        [TestCase("0.123456789012345678", "0.000000000000000001", "0.123456789012345679")]
+        public void BarChartPreservesDecimalPrecisionInTotalLabels(string first, string second, string expected)
+        {
+            var culture = System.Globalization.CultureInfo.InvariantCulture;
+            var chart = new BarChart { NumberCulture = culture, ValueFormat = "0.############################" };
+            chart.SetData(new[] { new BarChart.Series("First", Color.blue), new BarChart.Series("Second", Color.green) }, new[]
+            {
+                new BarChart.Category("A", new[] { new BarChart.Value(decimal.Parse(first, culture)), new BarChart.Value(decimal.Parse(second, culture)) })
+            });
+
+            Assert.That(chart.Q<Label>(className: "bar-chart__total-label").text, Is.EqualTo(expected));
+        }
+
+        [TestCase("9998", "9.998")]
+        [TestCase("9999", "10k")]
+        [TestCase("10400", "10,4k")]
+        [TestCase("999949", "999,9k")]
+        [TestCase("999950", "1 mln")]
+        [TestCase("10400000", "10,4 mln")]
+        [TestCase("10400000000", "10,4 mld")]
+        public void BarChartCompactsTotalLabelsUsingTheConfiguredCultureAndSuffixes(string input, string expected)
+        {
+            var chart = new BarChart
+            {
+                CompactNumbers = true,
+                NumberCulture = System.Globalization.CultureInfo.GetCultureInfo("nl-NL"),
+                MillionSuffix = " mln",
+                BillionSuffix = " mld"
+            };
+            chart.SetData(new[] { new BarChart.Series("A", Color.blue) }, new[]
+            {
+                new BarChart.Category("A", new[] { new BarChart.Value(decimal.Parse(input, System.Globalization.CultureInfo.InvariantCulture)) }, "Full value: " + input)
+            });
+
+            var total = chart.Q<Label>(className: "bar-chart__total-label");
+            Assert.That(total.text, Is.EqualTo(expected));
+            Assert.That(total.tooltip, Is.EqualTo("Full value: " + input));
+        }
+
+        [Test]
+        public void BarChartCompactsAxisLabelsButKeepsTheFullValueInTooltips()
+        {
+            var chart = new BarChart { CompactNumbers = true, NumberCulture = System.Globalization.CultureInfo.GetCultureInfo("nl-NL") };
+            chart.SetData(new[] { new BarChart.Series("A", Color.blue) }, new[]
+            {
+                new BarChart.Category("A", new[] { new BarChart.Value(10_400m) })
+            });
+
+            var highestTick = chart.Query<Label>(className: "bar-chart__tick").ToList().Last();
+            Assert.That(highestTick.text, Is.EqualTo("20k"));
+            Assert.That(highestTick.tooltip, Is.EqualTo("20.000"));
+        }
+
         [Test]
         public void SidebarExplanationFollowsVisibleDataAndDoesNotRepeatChartDescriptions()
         {
