@@ -329,6 +329,56 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Dashboard",
+            "id": "198c6796-43c3-4fc5-a62d-874bfbbe9dc9",
+            "actions": [
+                {
+                    "name": "ToggleFunctionality",
+                    "type": "Button",
+                    "id": "bbaff6f2-1636-4709-8899-5cc26d568f74",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "Shift+F8",
+                    "id": "d08c4a40-7d2f-4a64-a182-5ba29b6e6720",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "ToggleFunctionality",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "ff7495d2-81fa-40ae-befa-7aa593f1f699",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "ToggleFunctionality",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "97803adc-644c-477d-a035-4e048acb7b8b",
+                    "path": "<Keyboard>/f8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "ToggleFunctionality",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
         }
     ],
     "controlSchemes": [

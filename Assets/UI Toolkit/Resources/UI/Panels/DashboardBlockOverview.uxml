@@ -1,0 +1,35 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="dashboard-block-overview">
+    <nl3d:Header name="BlockHeader" icon="Object" text="Bouwblokoverzicht"/>
+    <ui:VisualElement class="panel-divider" picking-mode="Ignore"/>
+    <ui:VisualElement name="BlockRows" class="hidden">
+        <ui:VisualElement class="dashboard-block-overview__row">
+            <ui:Label text="Totaal woningen" class="dashboard-block-overview__label"/>
+            <ui:Label name="TotalDwellingsValue" text="&#8212;" class="dashboard-block-overview__value text-header"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-block-overview__row">
+            <ui:Label text="Sociaal" class="dashboard-block-overview__label"/>
+            <ui:Label name="SocialDwellingsValue" text="&#8212;" class="dashboard-block-overview__value text-header"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-block-overview__row">
+            <ui:Label text="Middenhuur" class="dashboard-block-overview__label"/>
+            <ui:Label name="MidRentDwellingsValue" text="&#8212;" class="dashboard-block-overview__value text-header"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-block-overview__row">
+            <ui:Label text="Vrije sector" class="dashboard-block-overview__label"/>
+            <ui:Label name="FreeSectorDwellingsValue" text="&#8212;" class="dashboard-block-overview__value text-header"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-block-overview__row">
+            <ui:Label text="Gemiddelde minimale woonoppervlakte" class="dashboard-block-overview__label"/>
+            <ui:Label name="AverageMinimumFloorAreaValue" text="&#8212;" class="dashboard-block-overview__value text-header"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-block-overview__row">
+            <ui:Label text="Fasen met gegevens" class="dashboard-block-overview__label"/>
+            <ui:Label name="AvailablePhasesValue" text="&#8212;" class="dashboard-block-overview__value text-header"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-block-overview__row">
+            <ui:Label text="BVO niet-wonen" class="dashboard-block-overview__label"/>
+            <ui:Label name="NonHousingGrossFloorAreaValue" text="&#8212;" class="dashboard-block-overview__value text-header"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label name="EmptyBlockOverview" text="Geen gegevens beschikbaar" class="dashboard-block-overview__empty"/>
+</ui:UXML>

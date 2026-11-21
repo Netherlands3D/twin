@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" editor-extension-mode="False" class="ring-chart">
+    <nl3d:Header name="ChartTitle" icon="PresentationChart" text="" class="ring-chart__title"/>
+    <ui:VisualElement name="ChartPlot" picking-mode="Ignore" class="ring-chart__plot">
+        <ui:VisualElement picking-mode="Ignore" class="ring-chart__track"/>
+        <ui:VisualElement name="ChartSegments" picking-mode="Ignore" class="ring-chart__segments"/>
+        <ui:VisualElement name="ChartPercentages" picking-mode="Ignore" class="ring-chart__percentages"/>
+        <ui:VisualElement picking-mode="Ignore" class="ring-chart__centre">
+            <ui:Label name="ChartTotal" text="—" class="ring-chart__total-label"/>
+            <ui:Label name="ChartUnit" picking-mode="Ignore" class="ring-chart__unit"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="ChartLegend" class="ring-chart__legend"/>
+    <ui:Label name="EmptyChart" text="Geen gegevens beschikbaar" class="ring-chart__empty"/>
+</ui:UXML>

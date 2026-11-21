@@ -117,6 +117,7 @@
     --icon-copypaste: url("project://database/Assets/Sprites/UI/Icons/Type=CopyPaste,%20Color=white,%20Size=medium.png");
     --icon-credentials: url("project://database/Assets/Sprites/UI/Icons/Type=Credentials,%20Color=white,%20Size=medium.png");
     --icon-csv: url("project://database/Assets/Sprites/UI/Icons/Type=CSV,%20Color=white,%20Size=medium.png");
+    --icon-dashboard: url("project://database/Assets/Sprites/UI/Icons/Type=Dashboard,%20Color=white,%20Size=medium.png");
     --icon-dot: url("project://database/Assets/Sprites/UI/Icons/Type=Dot,%20Color=white,%20Size=medium.png");
     --icon-down: url("project://database/Assets/Sprites/UI/Icons/Type=Down,%20Color=white,%20Size=medium.png");
     --icon-downloadtile: url("project://database/Assets/Sprites/UI/Icons/Type=DownloadTile,%20Color=white,%20Size=medium.png");

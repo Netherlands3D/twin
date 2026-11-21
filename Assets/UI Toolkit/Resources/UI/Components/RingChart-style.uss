@@ -1,0 +1,79 @@
+@import url("Chart-style.uss");
+
+.ring-chart {
+    --ring-chart-thickness: 32;
+    --ring-chart-horizontal-inset: 72;
+    --ring-chart-vertical-inset: 40;
+    --ring-chart-label-gap: 8;
+    flex-shrink: 0;
+    min-width: 0;
+    max-width: 100%;
+    font-size: var(--font-size-base);
+}
+
+.ring-chart__title {
+    margin-bottom: var(--spacing-4);
+}
+
+.ring-chart__title > .header__label {
+    flex-shrink: 1;
+    min-width: 0;
+    white-space: normal;
+}
+
+.ring-chart__plot {
+    display: none;
+    width: 320px;
+    max-width: 100%;
+    height: 240px;
+    align-self: center;
+}
+
+.ring-chart__track,
+.ring-chart__segments,
+.ring-chart__percentages,
+.ring-chart__segment {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.ring-chart__track {
+    color: var(--color-blue-100);
+}
+
+.ring-chart__highlighted {
+    opacity: 0.8;
+}
+
+.ring-chart__centre {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.ring-chart__total-label {
+    max-width: 60%;
+}
+
+.ring-chart__unit {
+    display: none;
+    max-width: 60%;
+    margin-top: var(--spacing-1);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.ring-chart__percentage {
+    position: absolute;
+    translate: -50% -50%;
+}
+
+.ring-chart__empty {
+    white-space: normal;
+}

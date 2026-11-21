@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using CsvHelper;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
@@ -10,7 +11,11 @@ using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.AssetBundles;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SFB;
@@ -57,6 +62,7 @@ namespace Netherlands3D.Twin.Projects
         private ZipOutputStream zipOutputStream;
 
         private string lastSavePath;
+        private Functionality dashboarding;
 
         public static ProjectDataHandler Instance
         {
@@ -113,6 +119,13 @@ namespace Netherlands3D.Twin.Projects
             InputService input =  ServiceLocator.GetService<InputService>();
             input.OpenProjectAction.performed += OpenProject;
             input.SaveProjectAction.performed += SaveProject;
+
+            dashboarding = Configurator.Dashboarding;
+            if (dashboarding != null)
+            {
+                dashboarding.OnEnableFunctionality.AddListener(OnDashboardingChanged);
+                dashboarding.OnDisableFunctionality.AddListener(OnDashboardingChanged);
+            }
         }
 
         private void OnDisable()
@@ -126,6 +139,12 @@ namespace Netherlands3D.Twin.Projects
             InputService input =  ServiceLocator.GetService<InputService>();
             input.OpenProjectAction.performed -= OpenProject;
             input.SaveProjectAction.performed -= SaveProject;
+
+            if (dashboarding != null)
+            {
+                dashboarding.OnEnableFunctionality.RemoveListener(OnDashboardingChanged);
+                dashboarding.OnDisableFunctionality.RemoveListener(OnDashboardingChanged);
+            }
         }
 
         private void OpenProject(InputAction.CallbackContext ctx) => OpenProject();
@@ -199,12 +218,74 @@ namespace Netherlands3D.Twin.Projects
                     zipStream.CopyTo(streamWriter);
                 }
                 var project = ProjectData.Current;
+                UpdateCsvAssets(project, zf);
                 OnLoadCompleted.Invoke(project);
                 return project;
             }
 
             OnLoadFailed.Invoke();
             return null;
+        }
+
+        private void OnDashboardingChanged()
+        {
+            if (ProjectData.Current != null)
+                UpdateCsvAssets(ProjectData.Current);
+        }
+
+        private static void UpdateCsvAssets(ProjectData project, ZipFile archive = null)
+        {
+            var enabled = Configurator.IsDashboardingEnabled;
+            foreach (var layer in project.RootLayer.GetFlatHierarchy())
+            {
+                if (layer.IsDisposed)
+                    continue;
+
+                var dashboardCsv = layer.GetProperty<DashboardCsvPropertyData>();
+                if (dashboardCsv != null)
+                {
+                    if (archive != null)
+                        dashboardCsv.HasLocalSource = HasCsvAsset(archive, layer.Name, "Dashboard-CSV", dashboardCsv.Url);
+
+                    if (!enabled)
+                        dashboardCsv.ClearLoadedData();
+                    else if (dashboardCsv.HasLocalSource && dashboardCsv.Data == null)
+                        LoadCsvAsset(layer.Name, "Dashboard-CSV", dashboardCsv.LoadFromProjectAsset);
+                }
+
+                var buildingColorCsv = layer.GetProperty<CartesianTileSubObjectColorPropertyData>();
+                if (buildingColorCsv != null)
+                {
+                    if (archive != null)
+                        buildingColorCsv.HasLocalSource = HasCsvAsset(archive, layer.Name, "Gebouwkleuren-CSV", buildingColorCsv.Data);
+
+                    if (!enabled)
+                        buildingColorCsv.ClearLoadedColors();
+                    else if (buildingColorCsv.HasLocalSource && buildingColorCsv.Colors == null)
+                        LoadCsvAsset(layer.Name, "Gebouwkleuren-CSV", buildingColorCsv.LoadFromProjectAsset);
+                }
+            }
+        }
+
+        private static bool HasCsvAsset(ZipFile archive, string layerName, string sourceType, Uri uri)
+        {
+            if (uri != null && uri.IsStoredInProject() && archive.GetEntry(uri.LocalPath.TrimStart('/', '\\')) is { IsFile: true })
+                return true;
+
+            Debug.LogWarning($"{sourceType} voor laag '{layerName}' ontbreekt in het projectbestand.");
+            return false;
+        }
+
+        private static void LoadCsvAsset(string layerName, string sourceType, Action load)
+        {
+            try
+            {
+                load();
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException or FormatException)
+            {
+                Debug.LogWarning($"{sourceType} voor laag '{layerName}' kon niet worden ingelezen ({exception.GetType().Name}).");
+            }
         }
 
         private readonly JsonSerializerSettings serializerSettings = new()

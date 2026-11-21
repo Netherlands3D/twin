@@ -1,0 +1,75 @@
+@import url("../_DashboardTheme.uss");
+
+/* body */
+
+.dashboard-hud__body {
+    flex-direction: row;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+/* Sidebar panel */
+
+.dashboard-hud__sidebar {
+    width: var(--inspector-width);
+    min-width: 0;
+    max-width: 100%;
+    flex-shrink: 0;
+    padding: var(--spacing-3);
+    background-color: var(--color-white);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-100);
+}
+
+.dashboard-hud__phase-toggle {
+    margin: 0 var(--spacing-4);
+    height: var(--spacing-8);
+    border-width: 0;
+}
+
+.dashboard-hud__sidebar > .panel-divider {
+    background-color: var(--color-blue-100);
+    flex-grow: 0;
+    margin-top: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+    height: var(--spacing-0_5);
+}
+
+.dashboard-hud__data-explanation {
+    flex-shrink: 0;
+    margin-bottom: var(--spacing-3);
+}
+
+.dashboard-hud__sidebar > #Scrollview {
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    flex-shrink: 1;
+}
+
+.dashboard-hud__sidebar > #Scrollview > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport > .unity-scroll-view__content-container {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Map area */
+
+.dashboard-hud__main,
+.dashboard-hud__map-area {
+    flex-grow: 1;
+    min-width: 0;
+    min-height: 0;
+}
+
+.dashboard-hud__phase-changes {
+    height: 232px;
+    max-height: 40%;
+    flex-shrink: 0;
+    background-color: var(--color-white);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-100);
+}
+
+.dashboard-hud__housing-chart {
+    margin-top: var(--spacing-4);
+}

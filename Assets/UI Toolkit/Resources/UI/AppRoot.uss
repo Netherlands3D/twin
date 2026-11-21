@@ -10,3 +10,25 @@
     top: 50%;
     left: 50%;
 }
+
+.dashboard-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.app--dashboard-open .dashboard-overlay {
+    display: flex;
+}
+
+.app.app--dashboard-open {
+    margin: 0;
+    padding: 0;
+}
+
+.app--dashboard-open .app__viewer-ui {
+    display: none;
+}
