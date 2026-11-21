@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -27,6 +31,7 @@ namespace Netherlands3D.UI.Panels
         private const float scrollSpeed = 300f; // px/s
         
         private LayerData rootLayer;
+        private Functionality dashboarding;
         private LayerDragGhost dragGhost;
         private float dropMargin = 0.25f; //top 25% and bottom 25% are for reordering, 25%-75% is for reparenting
 
@@ -94,6 +99,12 @@ namespace Netherlands3D.UI.Panels
             App.Layers.LayerAdded.AddListener(OnLayerAdded);
             App.Layers.LayerRemoved.AddListener(OnLayerRemoved);
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
+            dashboarding = Configurator.Dashboarding;
+            if (dashboarding != null)
+            {
+                dashboarding.OnEnableFunctionality.AddListener(OnDashboardingChanged);
+                dashboarding.OnDisableFunctionality.AddListener(OnDashboardingChanged);
+            }
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
             
             schedule.Execute(() =>
@@ -144,6 +155,30 @@ namespace Netherlands3D.UI.Panels
             App.Layers.LayerAdded.RemoveListener(OnLayerAdded);
             App.Layers.LayerRemoved.RemoveListener(OnLayerRemoved);
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
+            if (dashboarding != null)
+            {
+                dashboarding.OnEnableFunctionality.RemoveListener(OnDashboardingChanged);
+                dashboarding.OnDisableFunctionality.RemoveListener(OnDashboardingChanged);
+            }
+        }
+
+        private void OnDashboardingChanged()
+        {
+            if (!Configurator.IsDashboardingEnabled)
+            {
+                foreach (var layer in rootLayer.Root.SelectedLayers.Where(IsCsvLayer).ToList())
+                    layer.DeselectLayer();
+
+                if (referenceLayerItem?.LayerData is { } referenceLayer && IsCsvLayer(referenceLayer))
+                    referenceLayerItem = null;
+            }
+
+            OnRequestRebuild();
+        }
+
+        private static bool IsCsvLayer(LayerData layer)
+        {
+            return layer.HasProperty<DashboardCsvPropertyData>() || layer.HasProperty<CartesianTileSubObjectColorPropertyData>();
         }
 
         public override void OnInspectorClick(InspectorPanel inspector)
@@ -268,11 +303,13 @@ namespace Netherlands3D.UI.Panels
         
         private void RestoreSelection()
         {
+            var idsToSelect = selectionToRestore.Select(layer => layer.RootId).ToHashSet();
             var indicesToSelect = new List<int>();
 
-            foreach (var layer in selectionToRestore)
+            for (var index = 0; index < treeView.itemsSource.Count; index++)
             {
-                indicesToSelect.Add(layer.RootId);
+                if (idsToSelect.Contains(treeView.GetIdForIndex(index)))
+                    indicesToSelect.Add(index);
             }
             
             treeView.SetSelection(indicesToSelect);
@@ -317,21 +354,24 @@ namespace Netherlands3D.UI.Panels
         public void PopulateLayerPanel(LayerData rootLayer)
         {
             this.rootLayer = rootLayer;
-            var tree = LayerTreeViewUtility.ToTreeViewItems(rootLayer, treeView);
+            var tree = Configurator.IsDashboardingEnabled
+                ? LayerTreeViewUtility.ToTreeViewItems(rootLayer, treeView)
+                : LayerTreeViewUtility.ToTreeViewItemsWithHiddenLayers(rootLayer, treeView, layer => !IsCsvLayer(layer));
             treeView.SetRootItems(tree);
-            ReExpandTree(rootLayer);
+            ReExpandTree(tree);
             
             treeView.RefreshItems();
         }
 
-        private void ReExpandTree(LayerData layer)
+        private void ReExpandTree(IEnumerable<TreeViewItemData<LayerData>> items)
         {
-            foreach (var child in layer.ChildrenLayers)
+            foreach (var item in items)
             {
-                if (child.IsExpanded)
+                if (item.data.IsExpanded)
                 {
-                    treeView.ExpandItem(child.RootId, false, false);
-                    ReExpandTree(child);
+                    treeView.ExpandItem(item.id, false, false);
+                    if (item.children != null)
+                        ReExpandTree(item.children);
                 }
             }
             OnRequestRefresh();

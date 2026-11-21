@@ -4,6 +4,8 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -145,7 +147,8 @@ namespace Netherlands3D.UI.Panels
 
         private void OnUploadStarted(ClickEvent evt)
         {
-            ServiceLocator.GetService<FileOpen>().OpenFile(supportedFileTypes);
+            var extensions = Configurator.IsDashboardingEnabled ? supportedFileTypes : supportedFileTypes.Replace(",csv,", ",");
+            ServiceLocator.GetService<FileOpen>().OpenFile(extensions);
         }
 
         private void OnInportUriButtonClicked(ClickEvent evt)
@@ -161,6 +164,8 @@ namespace Netherlands3D.UI.Panels
             {
                 credentialHandler.ClearCredentials();
                 Uri uri = new Uri(value);
+                if (uri.IsAbsoluteUri && uri.AbsolutePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) && !FileTypeAdapter.CanImportCsv())
+                    return;
 
                 credentialHandler.Uri = uri;
                 credentialHandler.ApplyCredentials();
