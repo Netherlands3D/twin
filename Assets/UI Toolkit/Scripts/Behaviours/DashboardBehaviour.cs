@@ -22,6 +22,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         [SerializeField] private Functionality dashboardFunctionality;
 
         private InputService input;
+        private InputAction toggleDashboardAction;
         private VisualElement root;
         private DashboardHUD dashboardOverlay;
         private ToolbarNavigation toolbarNavigation;
@@ -46,7 +47,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void Subscribe()
         {
-            input.ToggleDashboardAction.performed += OnToggleDashboard;
+            if (toggleDashboardAction != null) return;
+
+            toggleDashboardAction = input.ToggleDashboardAction;
+            toggleDashboardAction.performed += OnToggleDashboard;
             toolbarNavigation.OnDashboardClicked += OpenDashboard;
             closeButton.clicked += CloseDashboard;
             dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
@@ -54,12 +58,18 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnDisable()
         {
-            if (input == null) return;
+            if (toggleDashboardAction != null)
+            {
+                toggleDashboardAction.performed -= OnToggleDashboard;
+                toggleDashboardAction = null;
+            }
 
-            input.ToggleDashboardAction.performed -= OnToggleDashboard;
-            toolbarNavigation.OnDashboardClicked -= OpenDashboard;
-            closeButton.clicked -= CloseDashboard;
-            dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
+            if (toolbarNavigation != null)
+                toolbarNavigation.OnDashboardClicked -= OpenDashboard;
+            if (closeButton != null)
+                closeButton.clicked -= CloseDashboard;
+            if (dashboardFunctionality != null)
+                dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
             CloseDashboard();
         }
 
@@ -90,7 +100,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void CloseDashboard()
         {
-            if (!root.ClassListContains(DashboardOpenClass)) return;
+            if (root == null || !root.ClassListContains(DashboardOpenClass)) return;
 
             root.RemoveFromClassList(DashboardOpenClass);
             dashboardOverlay.StopDataBinding();
