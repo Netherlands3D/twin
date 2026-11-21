@@ -10,8 +10,16 @@
                     <nl3d:RingChart name="HousingSegmentChart" title="Segmentverdeling woningen" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>
                     <nl3d:AreaComparisonChart name="HousingFloorAreaChart" title="Gemiddelde minimale woonoppervlakte per segment (m²)" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>
                     <nl3d:BarChart name="HousingBlockChart" title="Woningen per blok" icon="Tile" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    <nl3d:BarChart name="HousingRoomChart" title="Kamerverdeling woningen" icon="Tile" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    <nl3d:RingChart name="NonHousingCategoryChart" title="BVO per categorie (m&#178;)" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>
                 </ui:VisualElement>
-                <ui:VisualElement name="PhaseProgressContent" class="hidden"/>
+                <ui:VisualElement name="PhaseProgressContent" class="hidden">
+                    <nl3d:BarChart name="HousingPhaseChart" title="Woningen per segment per fase" icon="PresentationChart" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    <nl3d:BarChart name="HousingRoomPhaseChart" title="Kamerverdeling per fase" icon="PresentationChart" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    <nl3d:AreaComparisonChart name="HousingFloorAreaPhaseChart" title="Gemiddelde minimale woonoppervlakte per fase (m&#178;)" icon="PresentationChart" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    <nl3d:BarChart name="NonHousingPhaseChart" title="BVO per categorie per fase" icon="PresentationChart" value-axis-label="BVO (m&#178;)" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    <nl3d:BarChart name="NonHousingBlockPhaseChart" title="BVO per blok en fase" icon="PresentationChart" value-axis-label="BVO (m&#178;)" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                </ui:VisualElement>
             </nl3d:ScrollView>
         </ui:VisualElement>
         <ui:VisualElement name="HudMain" picking-mode="Ignore" class="dashboard-hud__main">

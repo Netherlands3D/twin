@@ -2,8 +2,21 @@
     --color-dashboard-segment-social: #1a6bbf;
     --color-dashboard-segment-mid-rent: #c07000;
     --color-dashboard-segment-free-sector: #1a8a50;
-    --color-dashboard-phase-bbp: #1a56a0;
-    --color-dashboard-phase-so: #c05000;
-    --color-dashboard-phase-vo: #1060a0;
-    --color-dashboard-phase-do: #7030b0;
+    --color-dashboard-phase-bbp: #216e88;
+    --color-dashboard-phase-so: #36a180;
+    --color-dashboard-phase-vo: #cc7065;
+    --color-dashboard-phase-do: #ad7c22;
+    --color-dashboard-category-business: #ed703e;
+    --color-dashboard-category-office: #3e83c5;
+    --color-dashboard-category-hospitality: #db3781;
+    --color-dashboard-category-social: #36a180;
+    --color-dashboard-category-retail: #a355cc;
+    --color-dashboard-category-supermarket: #c7a12e;
+    --color-dashboard-category-sport: #37c5a1;
+    --color-dashboard-category-existing-office: #806044;
+    --color-dashboard-category-home-office: #007c83;
+    --color-dashboard-room-one: #5141b5;
+    --color-dashboard-room-two: #b52c62;
+    --color-dashboard-room-three: #68752a;
+    --color-dashboard-room-four: #50565e;
 }

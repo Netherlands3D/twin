@@ -22,10 +22,21 @@
 .area-comparison-chart__items {
     display: none;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     align-items: flex-start;
+    min-width: 100%;
+    flex-shrink: 0;
+}
+
+.area-comparison-chart__scroll {
+    display: none;
     min-width: 0;
+    max-width: 100%;
+}
+
+.area-comparison-chart__scroll .unity-scroll-view__content-container {
+    min-width: 100%;
 }
 
 .area-comparison-chart__item {
@@ -34,8 +45,7 @@
     min-width: var(--area-comparison-chart-item-width);
     flex-direction: column;
     flex-shrink: 0;
-    padding: 0 var(--spacing-1);
-    margin-bottom: var(--spacing-2);
+    padding: 0 var(--spacing-2) 0 0;
 }
 
 .area-comparison-chart__canvas {

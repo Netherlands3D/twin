@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,6 +16,7 @@ namespace Netherlands3D.UI.Components
         private readonly Header titleHeader;
         private readonly VisualElement items;
         private readonly VisualElement legend;
+        private readonly UnityEngine.UIElements.ScrollView chartScrollView;
         private readonly Label emptyLabel;
 
         [UxmlAttribute("title")]
@@ -37,6 +39,7 @@ namespace Netherlands3D.UI.Components
             titleHeader = this.Q<Header>("ChartTitle");
             items = this.Q("ChartItems");
             legend = this.Q("ChartLegend");
+            chartScrollView = this.Q<UnityEngine.UIElements.ScrollView>("ChartScrollView");
             emptyLabel = this.Q<Label>("EmptyChart");
         }
 
@@ -59,6 +62,7 @@ namespace Netherlands3D.UI.Components
             items.Clear();
             legend.Clear();
             items.style.display = data.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            chartScrollView.style.display = data.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
             legend.style.display = data.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
             emptyLabel.style.display = data.Count > 0 ? DisplayStyle.None : DisplayStyle.Flex;
             foreach (var item in data)
@@ -96,14 +100,7 @@ namespace Netherlands3D.UI.Components
                 entry.Add(canvas);
                 items.Add(entry);
 
-                var legendEntry = new VisualElement { tooltip = item.Tooltip };
-                legendEntry.AddToClassList("area-comparison-chart__legend-entry");
-                var swatch = new VisualElement { pickingMode = PickingMode.Ignore };
-                swatch.AddToClassList("area-comparison-chart__swatch");
-                swatch.style.backgroundColor = item.Color;
-                legendEntry.Add(swatch);
-                legendEntry.Add(new Label(item.Label));
-                legend.Add(legendEntry);
+                ChartUtility.AddLegendEntry(legend, "area-comparison-chart", item.Label, item.Color, item.Tooltip);
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,7 +23,7 @@ namespace Netherlands3D.UI.Components
         }
 
         private const int IntervalCount = 4;
-        private const decimal CompactThreshold = 9_999m;
+        private static readonly double[] StepMultipliers = { 1, 1.25, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10 };
         private readonly Header titleHeader;
         private readonly Label descriptionLabel;
         private readonly Label axisLabel;
@@ -174,6 +175,7 @@ namespace Netherlands3D.UI.Components
             valueAxis.style.marginTop = StyleKeyword.Null;
             valueAxis.style.marginRight = StyleKeyword.Null;
             valueAxis.style.marginLeft = StyleKeyword.Null;
+            valueAxis.style.height = StyleKeyword.Null;
             ticks.style.width = StyleKeyword.Null;
             var hasData = categoryData.Length > 0 && seriesData.Length > 0;
             body.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
@@ -316,7 +318,14 @@ namespace Netherlands3D.UI.Components
                 if (float.IsNaN(size) || float.IsNaN(labelSize) || size <= 0)
                     return;
 
-                requiredMargin = Mathf.Max(requiredMargin, labelSize - size * (float)(1 - item.Fraction));
+                if (IsHorizontal)
+                    requiredMargin = Mathf.Max(requiredMargin, labelSize - size * (float)(1 - item.Fraction));
+                else
+                {
+                    var totalHeight = size + item.Plot.resolvedStyle.marginTop;
+                    if (item.Fraction > 0)
+                        requiredMargin = Mathf.Max(requiredMargin, (labelSize - totalHeight * (float)(1 - item.Fraction)) / (float)item.Fraction);
+                }
             }
 
             foreach (var item in plots)
@@ -326,8 +335,15 @@ namespace Netherlands3D.UI.Components
                     if (!Mathf.Approximately(item.Plot.resolvedStyle.marginRight, requiredMargin))
                         item.Plot.style.marginRight = requiredMargin;
                 }
-                else if (!Mathf.Approximately(item.Plot.resolvedStyle.marginTop, requiredMargin))
-                    item.Plot.style.marginTop = requiredMargin;
+                else
+                {
+                    var totalHeight = item.Plot.resolvedStyle.height + item.Plot.resolvedStyle.marginTop;
+                    if (!Mathf.Approximately(item.Plot.resolvedStyle.marginTop, requiredMargin))
+                        item.Plot.style.marginTop = requiredMargin;
+                    var height = Mathf.Max(1, totalHeight - requiredMargin);
+                    if (!Mathf.Approximately(item.Plot.resolvedStyle.height, height))
+                        item.Plot.style.height = height;
+                }
             }
 
             if (IsHorizontal)
@@ -335,8 +351,13 @@ namespace Netherlands3D.UI.Components
                 if (!Mathf.Approximately(valueAxis.resolvedStyle.marginRight, requiredMargin))
                     valueAxis.style.marginRight = requiredMargin;
             }
-            else if (!Mathf.Approximately(valueAxis.resolvedStyle.marginTop, requiredMargin))
-                valueAxis.style.marginTop = requiredMargin;
+            else
+            {
+                if (!Mathf.Approximately(valueAxis.resolvedStyle.marginTop, requiredMargin))
+                    valueAxis.style.marginTop = requiredMargin;
+                if (!Mathf.Approximately(valueAxis.resolvedStyle.height, plots[0].Plot.resolvedStyle.height))
+                    valueAxis.style.height = plots[0].Plot.resolvedStyle.height;
+            }
         }
 
         private bool UpdateLabelWidth()
@@ -371,10 +392,27 @@ namespace Netherlands3D.UI.Components
                     changed = true;
                 }
             }
-            else if (!Mathf.Approximately(ticks.style.width.value.value, width))
+            else
             {
-                ticks.style.width = width;
-                changed = true;
+                if (!Mathf.Approximately(ticks.style.width.value.value, width))
+                {
+                    ticks.style.width = width;
+                    changed = true;
+                }
+                for (var i = 0; i < categoryLabels.Count; i++)
+                {
+                    var category = categoryLabels[i];
+                    var total = plots[i].Anchor.Q<Label>();
+                    var categoryWidth = category.MeasureTextSize(category.text, 0, MeasureMode.Undefined, 0, MeasureMode.Undefined).x;
+                    var totalWidth = total.MeasureTextSize(total.text, 0, MeasureMode.Undefined, 0, MeasureMode.Undefined).x
+                        + total.resolvedStyle.paddingLeft + total.resolvedStyle.paddingRight + total.resolvedStyle.borderLeftWidth + total.resolvedStyle.borderRightWidth;
+                    var columnWidth = Mathf.Ceil(Mathf.Max(categoryWidth, totalWidth) + 4);
+                    if (!float.IsNaN(columnWidth) && !Mathf.Approximately(category.parent.style.minWidth.value.value, columnWidth))
+                    {
+                        category.parent.style.minWidth = columnWidth;
+                        changed = true;
+                    }
+                }
             }
 
             return changed;
@@ -383,36 +421,11 @@ namespace Netherlands3D.UI.Components
         private void RenderLegend()
         {
             foreach (var item in seriesData)
-            {
-                var entry = new VisualElement();
-                entry.AddToClassList("bar-chart__legend-entry");
-                var swatch = new VisualElement { pickingMode = PickingMode.Ignore };
-                swatch.AddToClassList("bar-chart__swatch");
-                swatch.style.backgroundColor = item.Color;
-                entry.Add(swatch);
-                entry.Add(new Label(item.Label));
-                legend.Add(entry);
-            }
+                ChartUtility.AddLegendEntry(legend, "bar-chart", item.Label, item.Color);
         }
 
         /// <summary>Formats a value for totals and axes. Tooltips can retain the original, unabridged value.</summary>
-        public string FormatValue(decimal value)
-        {
-            var magnitude = Math.Abs(value);
-            if (!CompactNumbers || magnitude < CompactThreshold)
-                return value.ToString(ValueFormat, NumberCulture);
-
-            var divisor = magnitude >= 1_000_000_000m ? 1_000_000_000m : magnitude >= 1_000_000m ? 1_000_000m : 1_000m;
-            var rounded = decimal.Round(value / divisor, 1, MidpointRounding.AwayFromZero);
-            if (Math.Abs(rounded) >= 1_000m && divisor < 1_000_000_000m)
-            {
-                divisor *= 1_000m;
-                rounded = decimal.Round(value / divisor, 1, MidpointRounding.AwayFromZero);
-            }
-
-            var suffix = divisor == 1_000m ? ThousandSuffix : divisor == 1_000_000m ? MillionSuffix : BillionSuffix;
-            return rounded.ToString("0.#", NumberCulture) + suffix;
-        }
+        public string FormatValue(decimal value) => ChartUtility.FormatValue(value, NumberCulture, ValueFormat, CompactNumbers, ThousandSuffix, MillionSuffix, BillionSuffix);
 
         private string FormatAxisValue(double value)
         {
@@ -432,7 +445,7 @@ namespace Netherlands3D.UI.Components
             var roughStep = maximum / IntervalCount;
             var magnitude = Math.Pow(10, Math.Floor(Math.Log10(roughStep)));
             var fraction = roughStep / magnitude;
-            var multiplier = fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10;
+            var multiplier = StepMultipliers.First(value => value >= fraction);
             return magnitude * multiplier;
         }
 

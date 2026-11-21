@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -62,6 +63,7 @@ namespace Netherlands3D.UI.Components
             plot.RegisterCallback<GeometryChangedEvent>(OnTotalGeometryChanged);
             plot.RegisterCallback<CustomStyleResolvedEvent>(_ => UpdateTotalPosition());
             totalLabel.parent.RegisterCallback<GeometryChangedEvent>(OnTotalGeometryChanged);
+            totalLabel.RegisterCallback<PointerEnterEvent>(_ => totalLabel.parent.BringToFront());
         }
 
         private static float GetStyleLength(VisualElement element, CustomStyleProperty<float> property, float fallback) =>
@@ -107,6 +109,7 @@ namespace Netherlands3D.UI.Components
             emptyLabel.style.display = hasData ? DisplayStyle.None : DisplayStyle.Flex;
             totalLabel.text = totalText ?? (data.All(segment => segment.Amount.HasValue) ? total.ToString("#,0.##", NumberCulture) : "\u2014");
             totalLabel.tooltip = totalTooltip;
+            totalLabel.parent.BringToFront();
 
             var fraction = 0m;
             foreach (var segment in data)
@@ -131,14 +134,7 @@ namespace Netherlands3D.UI.Components
                     fraction = next;
                 }
 
-                var entry = new VisualElement { tooltip = segment.Tooltip };
-                entry.AddToClassList("ring-chart__legend-entry");
-                var swatch = new VisualElement { pickingMode = PickingMode.Ignore };
-                swatch.AddToClassList("ring-chart__swatch");
-                swatch.style.backgroundColor = segment.Color;
-                entry.Add(swatch);
-                entry.Add(new Label(segment.Label));
-                legend.Add(entry);
+                ChartUtility.AddLegendEntry(legend, "ring-chart", segment.Label, segment.Color, segment.Tooltip);
             }
         }
 
@@ -207,7 +203,10 @@ namespace Netherlands3D.UI.Components
                 EnableInClassList("ring-chart__highlighted", highlighted);
                 percentageLabel.EnableInClassList("ring-chart__highlighted", highlighted);
                 if (highlighted)
+                {
                     percentageLabel.BringToFront();
+                    percentageLabel.parent.BringToFront();
+                }
             }
 
             private void UpdatePercentagePosition()

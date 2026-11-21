@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 
@@ -63,7 +64,6 @@ namespace Netherlands3D.UI.Panels
             get => nonHousing;
             set
             {
-                var selectedTab = GetSelectedTab(tabs.value);
                 nonHousing = value;
                 header.LabelText = value ? "Gebiedsprogramma \u2013 Niet-wonen" : "Gebiedsprogramma \u2013 Wonen";
                 SetTabVisible(segmentsButton, !value);
@@ -71,19 +71,7 @@ namespace Netherlands3D.UI.Panels
                 SetTabVisible(categoriesButton, value);
                 SetTabVisible(socialFacilitiesButton, value);
 
-                var replacement = selectedTab switch
-                {
-                    ComparisonTab.Segments when value => categoriesButton,
-                    ComparisonTab.Categories when !value => segmentsButton,
-                    ComparisonTab.Rooms when value => keyFiguresButton,
-                    ComparisonTab.SocialFacilities when !value => keyFiguresButton,
-                    _ => null
-                };
-
-                if (replacement != null)
-                    SelectTab(replacement);
-
-                ShowTab(GetSelectedTab(tabs.value));
+                ResetView();
             }
         }
 
@@ -142,6 +130,13 @@ namespace Netherlands3D.UI.Panels
         }
 
         internal void Refresh() => ShowTab(GetSelectedTab(tabs.value));
+
+        internal void ResetView()
+        {
+            SelectTab(keyFiguresButton);
+            ShowTab(ComparisonTab.KeyFigures);
+            scrollView.scrollOffset = Vector2.zero;
+        }
 
         private static void SetTabVisible(Button button, bool visible)
         {

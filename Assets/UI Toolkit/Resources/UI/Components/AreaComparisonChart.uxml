@@ -1,6 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" editor-extension-mode="False" class="area-comparison-chart">
     <nl3d:Header name="ChartTitle" icon="PresentationChart" text="" class="area-comparison-chart__title"/>
-    <ui:VisualElement name="ChartItems" picking-mode="Ignore" class="area-comparison-chart__items"/>
+    <ui:ScrollView name="ChartScrollView" mode="Horizontal" vertical-scroller-visibility="Hidden" class="area-comparison-chart__scroll">
+        <ui:VisualElement name="ChartItems" picking-mode="Ignore" class="area-comparison-chart__items"/>
+    </ui:ScrollView>
     <ui:VisualElement name="ChartLegend" class="area-comparison-chart__legend"/>
     <ui:Label name="EmptyChart" text="Geen gegevens beschikbaar" class="area-comparison-chart__empty"/>
 </ui:UXML>

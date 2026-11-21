@@ -13,7 +13,6 @@
 .ring-chart__total-label {
     height: var(--spacing-6);
     min-width: var(--spacing-8);
-    max-width: 100%;
     padding: 0 var(--spacing-2);
     flex-shrink: 0;
     background-color: var(--color-white);
@@ -22,8 +21,6 @@
     border-radius: var(--spacing-3);
     -unity-text-align: middle-center;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .bar-chart__legend,
@@ -32,7 +29,7 @@
     display: none;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: var(--spacing-2);
 }
 
@@ -42,7 +39,15 @@
     flex-direction: row;
     align-items: center;
     margin-right: var(--spacing-3);
-    margin-bottom: var(--spacing-1);
+    margin-bottom: 0;
+}
+
+.bar-chart__legend-entry > .unity-label,
+.ring-chart__legend-entry > .unity-label,
+.area-comparison-chart__legend-entry > .unity-label {
+    margin: 0;
+    padding: 0;
+    min-height: var(--spacing-5);
 }
 
 .bar-chart__swatch,

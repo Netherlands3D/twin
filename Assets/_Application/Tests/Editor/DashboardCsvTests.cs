@@ -343,8 +343,8 @@ namespace Netherlands3D.Twin.Tests
 
             var segments = chart.Query(className: "bar-chart__segment").ToList();
             Assert.That(segments.Count, Is.EqualTo(2));
-            Assert.That(segments[0].style.height.value.value, Is.EqualTo(25f));
-            Assert.That(segments[1].style.height.value.value, Is.EqualTo(50f));
+            Assert.That(segments[0].style.height.value.value, Is.EqualTo(31.25f));
+            Assert.That(segments[1].style.height.value.value, Is.EqualTo(62.5f));
             Assert.That(segments[0].tooltip, Is.EqualTo("First: 10"));
             Assert.That(chart.Query(className: "bar-chart__tick").ToList().Count, Is.EqualTo(5));
             var gridLines = chart.Q(className: "bar-chart__plot").Query(className: "bar-chart__grid-line").ToList();
@@ -354,7 +354,7 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(columns.Count, Is.EqualTo(2));
             var totals = chart.Query<Label>(className: "bar-chart__total-label").ToList();
             Assert.That(totals[0].text, Is.EqualTo("30"));
-            Assert.That(totals[0].parent.style.bottom.value.value, Is.EqualTo(75f));
+            Assert.That(totals[0].parent.style.bottom.value.value, Is.EqualTo(93.75f));
             Assert.That(totals[1].text, Is.EqualTo("\u2014"));
             Assert.That(totals[1].tooltip, Is.EqualTo("Zero and unknown"));
             Assert.That(chart.Query(className: "bar-chart__legend-entry").ToList().Count, Is.EqualTo(2));
@@ -387,19 +387,19 @@ namespace Netherlands3D.Twin.Tests
 
             chart.Orientation = BarChart.BarChartOrientation.Horizontal;
             var segments = chart.Query(className: "bar-chart__segment").ToList();
-            Assert.That(segments[0].style.width.value.value, Is.EqualTo(25f));
-            Assert.That(segments[1].style.width.value.value, Is.EqualTo(50f));
+            Assert.That(segments[0].style.width.value.value, Is.EqualTo(31.25f));
+            Assert.That(segments[1].style.width.value.value, Is.EqualTo(62.5f));
             Assert.That(segments[0].tooltip, Is.EqualTo("First: 10"));
             Assert.That(chart.Q("Columns").parent, Is.SameAs(chart.Q("HorizontalPlotArea")));
             Assert.That(chart.Query<Label>(className: "bar-chart__tick").ToList().Last().style.left.value.value, Is.EqualTo(100f));
             var total = chart.Q<Label>(className: "bar-chart__total-label");
             Assert.That(total.text, Is.EqualTo("30"));
             Assert.That(total.tooltip, Is.EqualTo("Total: 30"));
-            Assert.That(total.parent.style.left.value.value, Is.EqualTo(75f));
+            Assert.That(total.parent.style.left.value.value, Is.EqualTo(93.75f));
 
             chart.Orientation = BarChart.BarChartOrientation.Vertical;
             Assert.That(chart.Q("Columns").parent, Is.SameAs(chart.Q<UnityEngine.UIElements.ScrollView>("ChartScrollView").contentContainer));
-            Assert.That(chart.Query(className: "bar-chart__segment").ToList()[1].style.height.value.value, Is.EqualTo(50f));
+            Assert.That(chart.Query(className: "bar-chart__segment").ToList()[1].style.height.value.value, Is.EqualTo(62.5f));
             Assert.That(chart.Query(className: "bar-chart__legend-entry").ToList().Count, Is.EqualTo(2));
         }
 
@@ -525,8 +525,22 @@ namespace Netherlands3D.Twin.Tests
             });
 
             var highestTick = chart.Query<Label>(className: "bar-chart__tick").ToList().Last();
-            Assert.That(highestTick.text, Is.EqualTo("20k"));
-            Assert.That(highestTick.tooltip, Is.EqualTo("20.000"));
+            Assert.That(highestTick.text, Is.EqualTo("12k"));
+            Assert.That(highestTick.tooltip, Is.EqualTo("12.000"));
+        }
+
+        [TestCase("1830", "2000")]
+        [TestCase("5014", "6000")]
+        [TestCase("150513", "160000")]
+        public void BarChartUsesFinerScaleStepsForDifferentMagnitudes(string amount, string expectedMaximum)
+        {
+            var culture = System.Globalization.CultureInfo.InvariantCulture;
+            var chart = new BarChart { NumberCulture = culture, ValueFormat = "0.##" };
+            chart.SetData(new[] { new BarChart.Series("A", Color.blue) }, new[]
+            {
+                new BarChart.Category("A", new[] { new BarChart.Value(decimal.Parse(amount, culture)) })
+            });
+            Assert.That(chart.Query<Label>(className: "bar-chart__tick").ToList().Last().tooltip, Is.EqualTo(expectedMaximum));
         }
 
         [Test]
@@ -538,7 +552,7 @@ namespace Netherlands3D.Twin.Tests
             showData.Invoke(hud, new object[] { complete });
             var explanation = hud.Q<TextCallOut>("SidebarDataExplanation");
             Assert.That(explanation.parent, Is.SameAs(hud.Q("Sidebar")));
-            Assert.That(explanation.Text, Does.Contain("Alle blokken:"));
+            Assert.That(explanation.Text, Does.Contain("Per blok gebruiken we de laatst beschikbare gegevens."));
             Assert.That(explanation.Text, Does.Not.Contain("*Onvolledig"));
             Assert.That(hud.Q<BarChart>("HousingBlockChart").Description, Is.Empty);
             Assert.That(hud.Q<RingChart>("HousingSegmentChart").Q<Label>("ChartTotal").text, Is.EqualTo("30"));
@@ -554,13 +568,13 @@ namespace Netherlands3D.Twin.Tests
 
             var housingTypes = hud.Q<ToggleButtonGroup>("HousingTypes");
             housingTypes.value = new ToggleButtonGroupState(2, housingTypes.childCount);
-            Assert.That(explanation.Text, Is.Empty);
-            Assert.That(explanation.ClassListContains("hidden"), Is.True);
+            Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
+            Assert.That(explanation.ClassListContains("hidden"), Is.False);
 
             housingTypes.value = new ToggleButtonGroupState(1, housingTypes.childCount);
             Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
             hud.Q<ToggleSwitch>("DashboardViewSwitch").value = true;
-            Assert.That(explanation.Text, Does.Contain("tot en met de fase"));
+            Assert.That(explanation.Text, Does.Contain("Per blok gebruiken we de laatst beschikbare gegevens."));
             Assert.That(explanation.Text.Split(new[] { "*Onvolledig" }, StringSplitOptions.None).Length - 1, Is.EqualTo(1));
 
             showData.Invoke(hud, new object[] { null });
@@ -583,7 +597,19 @@ namespace Netherlands3D.Twin.Tests
         }
 
         [Test]
-        public void PhaseComparisonUsesTheSharedWarningOnlyForTheSelectedTable()
+        public void DashboardRingTotalsDoNotDependOnPhaseChartFormatting()
+        {
+            var hud = new DashboardHUD();
+            var phaseChart = hud.Q<BarChart>("NonHousingPhaseChart");
+            phaseChart.CompactNumbers = false;
+            phaseChart.ValueFormat = "0.000";
+            var showData = typeof(DashboardHUD).GetMethod("ShowData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            showData.Invoke(hud, new object[] { ReadRows("Niet-wonen;A;BBP;;;;;Kantoor;15000;;") });
+            Assert.That(hud.Q<RingChart>("NonHousingCategoryChart").Q<Label>("ChartTotal").text, Is.EqualTo("15k"));
+        }
+
+        [Test]
+        public void PhaseComparisonKeepsTheSharedWarningForVisibleChartsWhenTheTableChanges()
         {
             var hud = new DashboardHUD();
             var showData = typeof(DashboardHUD).GetMethod("ShowData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
@@ -594,10 +620,51 @@ namespace Netherlands3D.Twin.Tests
 
             var tabs = hud.Q<ToggleButtonGroup>("ComparisonTabs");
             tabs.value = new ToggleButtonGroupState(8, tabs.childCount);
-            Assert.That(explanation.Text, Does.Contain("tot en met de fase"));
-            Assert.That(explanation.Text, Does.Not.Contain("*Onvolledig"));
+            Assert.That(explanation.Text, Does.Contain("Per blok gebruiken we de laatst beschikbare gegevens."));
+            Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
             tabs.value = new ToggleButtonGroupState(1, tabs.childCount);
             Assert.That(explanation.Text, Does.Contain("*Onvolledig"));
+        }
+
+        [Test]
+        public void DashboardShowsTheTotalDiagramSetsAndDoesNotAddBlockPhaseIterations()
+        {
+            var hud = new DashboardHUD();
+            var showData = typeof(DashboardHUD).GetMethod("ShowData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var data = ReadRows(
+                "Wonen;A;BBP;Sociaal;2;40;10;;;;", "Wonen;A;SO;Sociaal;2;50;12;;;;",
+                "Wonen;B;BBP;Midden;3;60;20;;;;", "Niet-wonen;A;BBP;;;;;Kantoor;100;;", "Niet-wonen;A;SO;;;;;Kantoor;120;;");
+            showData.Invoke(hud, new object[] { data });
+
+            var program = hud.Q("ProgramOverviewContent");
+            var progress = hud.Q("PhaseProgressContent");
+            Assert.That(program.Query<BarChart>().ToList().Count, Is.EqualTo(2));
+            Assert.That(program.Query<RingChart>().ToList().Count, Is.EqualTo(2));
+            Assert.That(program.Query<AreaComparisonChart>().ToList().Count, Is.EqualTo(1));
+            Assert.That(progress.Query<BarChart>().ToList().Count, Is.EqualTo(4));
+            Assert.That(progress.Query<AreaComparisonChart>().ToList().Count, Is.EqualTo(1));
+            Assert.That(hud.Q<RingChart>("NonHousingCategoryChart").Q<Label>("ChartTotal").text, Is.EqualTo("120"));
+            Assert.That(hud.Q<BarChart>("HousingRoomChart").Query<Label>(className: "bar-chart__total-label").ToList().Select(label => label.text), Is.EqualTo(new[] { "12", "20" }));
+            Assert.That(hud.Q<BarChart>("NonHousingPhaseChart").Query<Label>(className: "bar-chart__total-label").ToList().Select(label => label.text), Is.EqualTo(new[] { "100", "120", "120", "120" }));
+            Assert.That(hud.Q<BarChart>("NonHousingBlockPhaseChart").Query<Label>(className: "bar-chart__total-label").ToList().Select(label => label.text), Is.EqualTo(new[] { "100", "120" }));
+
+            var tabs = hud.Q<ToggleButtonGroup>("ComparisonTabs");
+            tabs.value = new ToggleButtonGroupState(8, tabs.childCount);
+            var housingTypes = hud.Q<ToggleButtonGroup>("HousingTypes");
+            housingTypes.value = new ToggleButtonGroupState(2, housingTypes.childCount);
+            Assert.That(tabs.value[0], Is.True);
+            tabs.value = new ToggleButtonGroupState(2, tabs.childCount);
+            hud.Q<ToggleSwitch>("DashboardViewSwitch").value = true;
+            Assert.That(tabs.value[0], Is.True);
+            Assert.That(program.ClassListContains("hidden"), Is.True);
+            Assert.That(progress.ClassListContains("hidden"), Is.False);
+            hud.Q<ToggleSwitch>("DashboardViewSwitch").value = false;
+            Assert.That(program.ClassListContains("hidden"), Is.False);
+            Assert.That(progress.ClassListContains("hidden"), Is.True);
+
+            showData.Invoke(hud, new object[] { null });
+            Assert.That(hud.Q<BarChart>("HousingRoomChart").Q("Columns").childCount, Is.Zero);
+            Assert.That(hud.Q<BarChart>("NonHousingBlockPhaseChart").Q("Columns").childCount, Is.Zero);
         }
 
         private static DashboardData ReadRows(params string[] rows)

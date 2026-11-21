@@ -20,6 +20,39 @@ namespace Netherlands3D.Twin.DataSets
 
         public static PhaseTotals CalculateCurrent(DashboardData data) => CalculatePhases(data).LastOrDefault();
 
+        public static (string Label, NumericResult Total, NumericResult[] Values)[] CalculateHousingRooms(DashboardData data)
+        {
+            if (data == null)
+                return Array.Empty<(string Label, NumericResult Total, NumericResult[] Values)>();
+
+            var selection = SelectRows(data.Housing, row => row.Block, row => row.Phase, DashboardData.Phases.Last(), null);
+            var segments = HousingSegments(data).ToArray();
+            var incomplete = selection.Sources.MissingBlocks > 0 || selection.Rows.Any(row => !row.Rooms.HasValue && row.DwellingCount != 0);
+            return data.Housing.Where(row => row.Rooms.HasValue).Select(row => row.Rooms.Value).Distinct().OrderBy(room => room).Select(room =>
+            {
+                var rows = selection.Rows.Where(row => row.Rooms == room).ToArray();
+                var values = segments.Select(segment => Sum(rows.Where(row => Equal(SegmentName(row.Segment), segment))
+                    .Select(row => (decimal?)row.DwellingCount), incomplete)).ToArray();
+                return (room == 1 ? "1 kamer" : $"{room} kamers", Sum(rows.Select(row => (decimal?)row.DwellingCount), incomplete), values);
+            }).ToArray();
+        }
+
+        public static (string Block, string Phase, NumericResult Value)[] CalculateNonHousingBlockPhases(DashboardData data)
+        {
+            if (data == null)
+                return Array.Empty<(string Block, string Phase, NumericResult Value)>();
+
+            return data.NonHousing.GroupBy(row => row.Block, StringComparer.OrdinalIgnoreCase).OrderBy(block => block.Key, StringComparer.OrdinalIgnoreCase)
+                .SelectMany(block => DashboardData.Phases.Where(phase => block.Any(row => Equal(row.Phase, phase)))
+                    .Select(phase => (block.Key, phase, Sum(block.Where(row => Equal(row.Phase, phase)).Select(row => row.GrossFloorArea), false)))).ToArray();
+        }
+
+        public static NumericResult SumResults(IEnumerable<NumericResult> values)
+        {
+            var items = values.ToArray();
+            return Sum(items.Select(item => item.Value), items.Any(item => item.Status == ResultStatus.Unknown || item.Status == ResultStatus.Partial));
+        }
+
         public static (string Label, NumericResult Value)[] CalculateHousingFloorAreas(DashboardData data)
         {
             if (data == null)

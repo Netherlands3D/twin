@@ -2,7 +2,7 @@
 
 .bar-chart {
     --bar-chart-plot-height: 200px;
-    --bar-chart-column-width: 72px;
+    --bar-chart-column-width: 64px;
     --bar-chart-tick-width: 48px;
     --bar-chart-bar-thickness: 48px;
     --bar-chart-grid-color: var(--color-blue-100);
@@ -40,14 +40,14 @@
     flex-direction: row;
     height: var(--bar-chart-plot-height);
     flex-shrink: 0;
-    margin-right: var(--spacing-2);
+    margin-right: var(--spacing-1);
 }
 
 .bar-chart__axis-title {
     width: var(--spacing-6);
     height: 100%;
     flex-shrink: 0;
-    margin-right: var(--spacing-2);
+    margin-right: 0;
 }
 
 .bar-chart__axis-label {
@@ -56,6 +56,8 @@
     top: 50%;
     width: var(--bar-chart-plot-height);
     height: var(--spacing-6);
+    margin: 0;
+    padding: 0 0 var(--spacing-1) 0;
     translate: -50% -50%;
     rotate: -90deg;
     transform-origin: 50% 50%;
@@ -144,8 +146,20 @@
 }
 
 .bar-chart__category-label {
-    height: var(--spacing-8);
+    min-height: var(--spacing-5);
+    margin: var(--spacing-1) 0 0;
+    padding: 0;
+    white-space: nowrap;
     -unity-text-align: middle-center;
+}
+
+.bar-chart__total-label {
+    padding-left: var(--spacing-1);
+    padding-right: var(--spacing-1);
+}
+
+.bar-chart__scroll .unity-scroller--horizontal {
+    margin-top: 0;
 }
 
 .bar-chart__empty {
@@ -262,6 +276,7 @@
 }
 
 .bar-chart--horizontal .bar-chart__axis-label {
+    padding: 0;
     position: relative;
     left: auto;
     top: auto;
