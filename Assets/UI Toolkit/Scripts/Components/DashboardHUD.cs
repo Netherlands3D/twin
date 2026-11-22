@@ -25,22 +25,6 @@ namespace Netherlands3D.UI.Panels
         private const string AllBlocksExplanation = "Per blok gebruiken we de laatst beschikbare gegevens.";
         private const string PhaseComparisonExplanation = "BVO per blok en fase toont alleen de beschikbare fasegegevens.";
         private const string IncompleteDataExplanation = "*Onvolledig: alleen bekende gegevens tellen mee, ook voor percentages en gemiddelden.";
-        private static readonly CustomStyleProperty<Color> SocialColor = new("--color-dashboard-segment-social");
-        private static readonly CustomStyleProperty<Color> MidRentColor = new("--color-dashboard-segment-mid-rent");
-        private static readonly CustomStyleProperty<Color> FreeSectorColor = new("--color-dashboard-segment-free-sector");
-        private static readonly (string Label, CustomStyleProperty<Color> Property)[] AdditionalColors =
-        {
-            ("BBP", new("--color-dashboard-phase-bbp")), ("SO", new("--color-dashboard-phase-so")),
-            ("VO", new("--color-dashboard-phase-vo")), ("DO", new("--color-dashboard-phase-do")),
-            ("Bedrijf", new("--color-dashboard-category-business")), ("Kantoor", new("--color-dashboard-category-office")),
-            ("Horeca", new("--color-dashboard-category-hospitality")), ("Maatschappelijk", new("--color-dashboard-category-social")),
-            ("Detailhandel", new("--color-dashboard-category-retail")), ("Supermarkt", new("--color-dashboard-category-supermarket")),
-            ("Sport", new("--color-dashboard-category-sport")),
-            ("Bestaand programma - kantoor", new("--color-dashboard-category-existing-office")),
-            ("Kantoor thuiswerk", new("--color-dashboard-category-home-office")),
-            ("1 kamer", new("--color-dashboard-room-one")), ("2 kamers", new("--color-dashboard-room-two")),
-            ("3 kamers", new("--color-dashboard-room-three")), ("4 kamers", new("--color-dashboard-room-four"))
-        };
 
         private readonly DashboardBlockOverview blockOverview;
         private readonly DashboardPhaseComparisonPanel phaseComparison;
@@ -57,9 +41,6 @@ namespace Netherlands3D.UI.Panels
         private readonly Dictionary<string, Color> additionalColors = new(StringComparer.OrdinalIgnoreCase);
         private readonly TextCallOut sidebarDataExplanation;
         private readonly ToggleSwitch phaseView;
-        private Color socialColor = Color.gray;
-        private Color midRentColor = Color.gray;
-        private Color freeSectorColor = Color.gray;
         private Layers layers;
         private ProjectDataHandler projectLoader;
         private DashboardData displayedData;
@@ -298,31 +279,11 @@ namespace Netherlands3D.UI.Panels
 
         private void OnChartStylesResolved(CustomStyleResolvedEvent evt)
         {
-            var changed = UpdateChartColor(evt.customStyle, SocialColor, ref socialColor);
-            changed |= UpdateChartColor(evt.customStyle, MidRentColor, ref midRentColor);
-            changed |= UpdateChartColor(evt.customStyle, FreeSectorColor, ref freeSectorColor);
-            foreach (var (label, property) in AdditionalColors)
-            {
-                if (!evt.customStyle.TryGetValue(property, out var color) || additionalColors.TryGetValue(label, out var current) && current == color)
-                    continue;
-
-                additionalColors[label] = color;
-                changed = true;
-            }
-            if (changed)
+            if (DashboardColors.Read(evt.customStyle, additionalColors))
             {
                 ShowHousingChart();
                 ShowAdditionalCharts();
             }
-        }
-
-        private static bool UpdateChartColor(ICustomStyle styles, CustomStyleProperty<Color> property, ref Color current)
-        {
-            if (!styles.TryGetValue(property, out var color) || color == current)
-                return false;
-
-            current = color;
-            return true;
         }
 
         private void ShowHousingChart()
@@ -424,24 +385,7 @@ namespace Netherlands3D.UI.Panels
             return string.IsNullOrEmpty(text) ? "\u2014" : text;
         }
 
-        private Color SegmentColor(string segment)
-        {
-            switch (segment)
-            {
-                case "Sociaal": return socialColor;
-                case "Middenhuur": return midRentColor;
-                case "Vrije sector": return freeSectorColor;
-            }
-
-            if (additionalColors.TryGetValue(segment, out var color))
-                return color;
-
-            // Keep additional segment colours stable when rows or filters change.
-            uint hash = 2166136261;
-            foreach (var character in segment.ToUpperInvariant())
-                hash = unchecked((hash ^ character) * 16777619);
-            return Color.HSVToRGB((hash % 360) / 360f, 0.65f, 0.7f);
-        }
+        private Color SegmentColor(string segment) => DashboardColors.GetColor(segment, additionalColors);
 
         private static string ChartNumber(DashboardSummary.NumericResult result) => result.Value.HasValue ? FormatNumber(result) : "\u2014";
 

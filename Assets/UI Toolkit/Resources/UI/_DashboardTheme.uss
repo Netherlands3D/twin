@@ -1,4 +1,8 @@
 .dashboard-theme {
+    --color-dashboard-map-base: var(--color-blue-200);
+    --color-dashboard-dwellings-low: #c8e6d4;
+    --color-dashboard-dwellings-medium: #7ecba0;
+    --color-dashboard-dwellings-high: #2e9e60;
     --color-dashboard-segment-social: #1a6bbf;
     --color-dashboard-segment-mid-rent: #c07000;
     --color-dashboard-segment-free-sector: #1a8a50;
