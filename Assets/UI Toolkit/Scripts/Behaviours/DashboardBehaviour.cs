@@ -38,6 +38,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private readonly Dictionary<string, Color> mapColors = new(StringComparer.OrdinalIgnoreCase);
         private VisualElement paletteSource;
         private DashboardMapLayer selectedMapLayer;
+        private VisualElement mapColorPanel;
+        private VisualElement mapColorContent;
+        private DropDown mapColorSelection;
+        private VisualElement mapLegend;
 
         private void Start()
         {
@@ -46,6 +50,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             toolbarNavigation = root.Q<ToolbarNavigation>();
             closeButton = root.Q<Button>("CloseDashboard");
             paletteSource = root.Q("HousingBlockChart");
+            mapColorPanel = root.Q("DashboardMapColors");
+            mapColorContent = mapColorPanel.Q("MapColorContent");
+            mapColorSelection = mapColorPanel.Q<DropDown>("ColorMode");
+            mapLegend = mapColorPanel.Q("ColorLegend");
+            // The NL3D dropdown's text style is available after its UXML has been deserialized.
+            mapColorSelection.SetValue(0);
             input = ServiceLocator.GetService<InputService>();
             Subscribe();
         }
@@ -68,6 +78,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             ObjectBinding = new DashboardObjectBinding(Netherlands3D.Twin.App.Layers, ProjectDataHandler.Instance, dashboardFunctionality);
             mapStyling = new DashboardMapStyling(ObjectBinding);
             ObjectBinding.Changed += OnMapDataChanged;
+            mapColorSelection.DropDownValueChanged.AddListener(OnMapLayerChanged);
             paletteSource.RegisterCallback<CustomStyleResolvedEvent>(OnMapStylesResolved);
             ReadMapColors(paletteSource.customStyle);
             OnMapDataChanged();
@@ -75,6 +86,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnDisable()
         {
+            mapColorSelection?.DropDownValueChanged.RemoveListener(OnMapLayerChanged);
             paletteSource?.UnregisterCallback<CustomStyleResolvedEvent>(OnMapStylesResolved);
             mapStyling?.Dispose();
             mapStyling = null;
@@ -117,16 +129,54 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             }
 
             RefreshMapColors();
+            RefreshMapLegend();
         }
 
         private void OnMapLayerChanged(int index)
         {
             selectedMapLayer = (DashboardMapLayer)Math.Max(0, index);
             RefreshMapColors();
+            RefreshMapLegend();
         }
 
         private void RefreshMapColors() => mapStyling?.Update(selectedMapLayer,
             ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null);
+
+        private void RefreshMapLegend()
+        {
+            mapLegend.Clear();
+            var hasData = ObjectBinding?.HasData == true;
+            mapColorContent.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
+            if (!hasData || !DashboardColors.HasMapColors(mapColors))
+                return;
+
+            switch (selectedMapLayer)
+            {
+                case DashboardMapLayer.Base:
+                    AddMapLegendEntry("base", "Basiskleur / geen data");
+                    break;
+                case DashboardMapLayer.Segment:
+                    foreach (var segment in ObjectBinding.HousingSegments)
+                    {
+                        var key = DashboardColors.SegmentKey(segment);
+                        AddMapLegendEntry(key, "Meest " + segment);
+                    }
+                    break;
+                case DashboardMapLayer.Dwellings:
+                    AddMapLegendEntry("low", "Minder dan 300 woningen");
+                    AddMapLegendEntry("medium", "300 tot en met 599 woningen");
+                    AddMapLegendEntry("high", "Vanaf 600 woningen");
+                    break;
+                case DashboardMapLayer.Phase:
+                    foreach (var phase in new[] { "BBP", "SO", "VO", "DO" })
+                        AddMapLegendEntry(phase.ToLowerInvariant(), phase);
+                    break;
+            }
+            if (selectedMapLayer != DashboardMapLayer.Base)
+                AddMapLegendEntry("base", "Geen bruikbare data");
+        }
+
+        private void AddMapLegendEntry(string key, string text) => ChartUtility.AddLegendEntry(mapLegend, "dashboard-map-layers", text, mapColors[key]);
 
         private void OnToggleDashboard(InputAction.CallbackContext _)
         {

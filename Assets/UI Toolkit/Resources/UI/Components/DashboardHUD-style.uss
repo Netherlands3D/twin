@@ -1,4 +1,5 @@
 @import url("../_DashboardTheme.uss");
+@import url("Chart-style.uss");
 
 /* body */
 
@@ -68,6 +69,39 @@
     background-color: var(--color-white);
     border-width: var(--spacing-0_5);
     border-color: var(--color-blue-100);
+}
+
+.dashboard-hud__map-area > .dashboard-map-layers {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+}
+
+.dashboard-map-layers {
+    width: 360px;
+    max-width: 100%;
+    background-color: var(--color-white);
+    border-width: 1px;
+    border-color: var(--color-blue-200);
+    border-radius: 4px;
+}
+
+.dashboard-map-layers__container {
+    margin: 0;
+}
+
+.dashboard-map-layers__label {
+    margin-top: var(--spacing-3);
+    margin-bottom: var(--spacing-1);
+}
+
+.dashboard-map-layers__legend {
+    flex-direction: column;
+}
+
+.dashboard-map-layers .dashboard-map-layers__legend-entry {
+    margin-right: 0;
+    margin-bottom: var(--spacing-1);
 }
 
 .dashboard-hud__housing-chart {

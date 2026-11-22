@@ -29,8 +29,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts
         {
             var entry = new VisualElement { tooltip = tooltip };
             entry.AddToClassList($"{stylePrefix}__legend-entry");
+            entry.AddToClassList("legend-entry");
             var swatch = new VisualElement { pickingMode = PickingMode.Ignore };
             swatch.AddToClassList($"{stylePrefix}__swatch");
+            swatch.AddToClassList("legend-swatch");
             swatch.style.backgroundColor = color;
             entry.Add(swatch);
             entry.Add(new Label(label));

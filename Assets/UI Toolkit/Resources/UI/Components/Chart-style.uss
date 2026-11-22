@@ -35,6 +35,7 @@
 
 .bar-chart__legend-entry,
 .ring-chart__legend-entry,
+.legend-entry,
 .area-comparison-chart__legend-entry {
     flex-direction: row;
     align-items: center;
@@ -44,6 +45,7 @@
 
 .bar-chart__legend-entry > .unity-label,
 .ring-chart__legend-entry > .unity-label,
+.legend-entry > .unity-label,
 .area-comparison-chart__legend-entry > .unity-label {
     margin: 0;
     padding: 0;
@@ -52,6 +54,7 @@
 
 .bar-chart__swatch,
 .ring-chart__swatch,
+.legend-swatch,
 .area-comparison-chart__swatch {
     width: var(--spacing-3);
     height: var(--spacing-3);
