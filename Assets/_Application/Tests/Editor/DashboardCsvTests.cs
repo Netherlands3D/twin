@@ -667,6 +667,137 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(hud.Q<BarChart>("NonHousingBlockPhaseChart").Q("Columns").childCount, Is.Zero);
         }
 
+        [Test]
+        public void ObjectIndexKeepsAllRecordsAndUsesTheSameLatestHousingPhaseAsTheCharts()
+        {
+            var data = ReadRows(
+                "Wonen;3;BBP;Sociaal;2;40;100;;;;",
+                "Wonen;3;SO;Sociaal;2;40;20;;;;",
+                "Wonen;3;SO;Midden;3;60;30;;;;",
+                "Niet-wonen;3;VO;;;;;Kantoor;200;;",
+                "Programmawijziging;3;VO;;;;;;;Wonen;Meer woningen",
+                "Wonen;4N;BBP;Vrij;3;60;7;;;;");
+            var index = CreateObjectIndex(data);
+            var block = FindObjectBlock(index, "3");
+
+            Assert.That(((System.Collections.ICollection)Property(block, "Housing")).Count, Is.EqualTo(3));
+            Assert.That(((System.Collections.ICollection)Property(block, "NonHousing")).Count, Is.EqualTo(1));
+            Assert.That(((System.Collections.ICollection)Property(block, "ProgramChanges")).Count, Is.EqualTo(1));
+            Assert.That(Property(block, "LatestPhase"), Is.EqualTo("VO"));
+            var housing = Property(block, "HousingSummary");
+            Assert.That(Property(housing, "SourcePhase"), Is.EqualTo("SO"));
+            AssertResult(Property(housing, "Total"), 50m, "Complete");
+            AssertResult(Property(Property(FindObjectBlock(index, "4N"), "HousingSummary"), "Total"), 7m, "Complete");
+            Assert.That(FindObjectBlock(index, "3"), Is.SameAs(block), "Multiple model parts must share the records, not duplicate totals.");
+        }
+
+        [Test]
+        public void ObjectIndexSupportsMissingIdentifiersAndPreservesLeadingZeroes()
+        {
+            var index = CreateObjectIndex(ReadRows("Wonen;03;SO;Sociaal;2;40;0;;;;"));
+
+            Assert.That(FindObjectBlock(index, null), Is.Null);
+            Assert.That(FindObjectBlock(index, " "), Is.Null);
+            Assert.That(FindObjectBlock(index, "3"), Is.Null);
+            Assert.That(FindObjectBlock(index, "ONBEKEND"), Is.Null);
+            Assert.That(FindObjectBlock(index, " 03 "), Is.Not.Null);
+            AssertResult(Property(Property(FindObjectBlock(index, "03"), "HousingSummary"), "Total"), 0m, "Complete");
+            Assert.That(FindObjectBlock(CreateObjectIndex(null), "03"), Is.Null);
+        }
+
+        [Test]
+        public void ObjectIndexRetainsUnknownCountsInTheLatestPhaseInsteadOfUsingEarlierValues()
+        {
+            var data = ReadRows("Wonen;3;BBP;Sociaal;2;40;100;;;;", "Wonen;3;SO;Sociaal;2;40;;;;;");
+            var housing = Property(FindObjectBlock(CreateObjectIndex(data), "3"), "HousingSummary");
+
+            Assert.That(Property(housing, "SourcePhase"), Is.EqualTo("SO"));
+            AssertResult(Property(housing, "Total"), null, "Unknown");
+        }
+
+        [Test]
+        public void ReplacingObjectIndexRemovesOldMatchesAndUsesNewValues()
+        {
+            var first = CreateObjectIndex(ReadRows("Wonen;3;SO;Sociaal;2;40;10;;;;"));
+            var replacement = CreateObjectIndex(ReadRows("Wonen;4N;VO;Sociaal;2;40;30;;;;"));
+
+            Assert.That(FindObjectBlock(first, "3"), Is.Not.Null);
+            Assert.That(FindObjectBlock(replacement, "3"), Is.Null);
+            AssertResult(Property(Property(FindObjectBlock(replacement, "4n"), "HousingSummary"), "Total"), 30m, "Complete");
+        }
+
+        [Test]
+        public void ClearingDashboardCsvNotifiesBindingsAndKeepsTheSourceForReloading()
+        {
+            var source = new Netherlands3D.Twin.Layers.Properties.DashboardCsvPropertyData(new Uri("https://example.invalid/data.csv"),
+                ReadRows("Wonen;3;SO;Sociaal;2;40;10;;;;"));
+            var notifications = 0;
+            source.DataChanged.AddListener(() => notifications++);
+
+            typeof(Netherlands3D.Twin.Layers.Properties.DashboardCsvPropertyData)
+                .GetMethod("ClearLoadedData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(source, null);
+
+            Assert.That(source.Data, Is.Null);
+            Assert.That(source.Url, Is.EqualTo(new Uri("https://example.invalid/data.csv")));
+            Assert.That(notifications, Is.EqualTo(1));
+        }
+
+        [TestCase("dashboard", true)]
+        [TestCase("DashboardSloterdijk", true)]
+        [TestCase("dashboardingSloterdijk", true)]
+        [TestCase("DASHBOARDING", true)]
+        [TestCase("dashboard-kubussen.city", true)]
+        [TestCase(" dashboardBlokken", true)]
+        [TestCase("Sloterdijk", false)]
+        [TestCase("Mijn dashboard", false)]
+        [TestCase("3", false)]
+        [TestCase("", false)]
+        [TestCase(null, false)]
+        public void DashboardParticipationDependsOnTheCurrentLayerName(string name, bool expected)
+        {
+            var type = typeof(DashboardData).Assembly.GetType("Netherlands3D.Twin.DataSets.DashboardObjectBinding");
+            var actual = type.GetMethod("IsDashboardLayerName").Invoke(null, new object[] { name });
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCase("\"03\"", "03")]
+        [TestCase("\"4N\"", "4N")]
+        [TestCase("3", "3")]
+        [TestCase("3.0", "3")]
+        [TestCase("true", null)]
+        [TestCase("null", null)]
+        [TestCase("[]", null)]
+        [TestCase("{}", null)]
+        [TestCase("\" \"", null)]
+        public void CityJsonBlockIdentifiersAcceptTextAndNumbersButRejectOtherTypes(string jsonValue, string expected)
+        {
+            var assembly = typeof(DashboardData).Assembly;
+            var target = new GameObject("Dashboard block identifier test");
+            try
+            {
+                var cityObject = target.AddComponent(assembly.GetType("Netherlands3D.CityJson.Structure.CityObject"));
+                var attributeType = assembly.GetType("Netherlands3D.CityJson.Structure.CityObjectAttribute");
+                var nodeType = attributeType.GetConstructors().Single(constructor => constructor.GetParameters().Length == 3).GetParameters()[2].ParameterType;
+                var node = nodeType.GetMethod("Parse").Invoke(null, new object[] { jsonValue });
+                var attribute = Activator.CreateInstance(attributeType, new[] { cityObject, "Blok", node });
+                var attributes = (System.Collections.IDictionary)cityObject.GetType().GetProperty("Attributes").GetValue(cityObject);
+                attributes.Add("Blok", attribute);
+                var actual = assembly.GetType("Netherlands3D.Twin.DataSets.DashboardObjectBinding")
+                    .GetMethod("ReadBlockIdentifier", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).Invoke(null, new object[] { cityObject });
+                Assert.That(actual, Is.EqualTo(expected));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(target);
+            }
+        }
+
+        private static object CreateObjectIndex(DashboardData data) => Activator.CreateInstance(
+            typeof(DashboardData).Assembly.GetType("Netherlands3D.Twin.DataSets.DashboardObjectData"), new object[] { data });
+
+        private static object FindObjectBlock(object index, string identifier) => index.GetType().GetMethod("Find").Invoke(index, new object[] { identifier });
+
         private static DashboardData ReadRows(params string[] rows)
         {
             const string header = "Type;Blok;Planproduct;Segment;Kamers;Min GBO;Aantal woningen;Categorie;BVO;Programma;Afwijking";

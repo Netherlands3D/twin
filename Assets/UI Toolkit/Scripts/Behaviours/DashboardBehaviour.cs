@@ -1,6 +1,8 @@
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
@@ -28,6 +30,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
         private VisualElement previousFocus;
+        internal DashboardObjectBinding ObjectBinding { get; private set; }
 
         private void Start()
         {
@@ -54,10 +57,13 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             toolbarNavigation.OnDashboardClicked += OpenDashboard;
             closeButton.clicked += CloseDashboard;
             dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
+            ObjectBinding = new DashboardObjectBinding(Netherlands3D.Twin.App.Layers, ProjectDataHandler.Instance, dashboardFunctionality);
         }
 
         private void OnDisable()
         {
+            ObjectBinding?.Dispose();
+            ObjectBinding = null;
             if (toggleDashboardAction != null)
             {
                 toggleDashboardAction.performed -= OnToggleDashboard;

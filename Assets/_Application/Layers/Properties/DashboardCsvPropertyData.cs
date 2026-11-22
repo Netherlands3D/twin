@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
@@ -12,6 +13,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         [JsonIgnore] public DashboardData Data { get; private set; }
         [JsonIgnore] internal bool HasLocalSource { get; set; }
+        [JsonIgnore] public readonly UnityEvent DataChanged = new();
 
         public DashboardCsvPropertyData()
         {
@@ -29,11 +31,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             SetData(DashboardCsv.Read(reader));
         }
 
-        internal void ClearLoadedData() => Data = null;
+        internal void ClearLoadedData() => SetData(null);
 
         private void SetData(DashboardData data)
         {
             Data = data;
+            DataChanged.Invoke();
 #if UNITY_EDITOR
             if (data == null || Url == null)
                 return;
