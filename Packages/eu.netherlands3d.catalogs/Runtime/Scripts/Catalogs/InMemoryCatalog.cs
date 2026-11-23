@@ -118,6 +118,11 @@ namespace Netherlands3D.Catalogs.Catalogs
             return new RecordItem(id, title, description, url: uri);
         }
 
+        public static RecordItem CreateRectordWithMetaData(string id, string title, IDictionary<string, object> metaData, string description = "", Uri uri = null)
+        {
+            return new RecordItem(id, title,  description, metaData, uri);
+        }
+
         public static FolderItem CreateFolder(
             string id, 
             string title, 
