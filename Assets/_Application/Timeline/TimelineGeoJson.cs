@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
@@ -17,7 +16,6 @@ namespace Netherlands3D.Timeline
         protected override void OnEnable()
         {
             base.OnEnable();
-            // ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
             geoJson.OnFeatureAdd.AddListener(OnAddFeature);
             geoJson.OnFeatureRemove.AddListener(OnRemoveFeature);
         }
@@ -72,8 +70,8 @@ namespace Netherlands3D.Timeline
 
             layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
             
-            visualization.ApplyStyling();
-            // visualization.ApplyStylingToFeature(layerFeature);
+            // visualization.ApplyStyling();
+            visualization.ApplyStylingToFeature(layerFeature);
             
         }
 
