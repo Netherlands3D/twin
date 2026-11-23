@@ -203,12 +203,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-#if UNITY_EDITOR
         public void Debug(Color color)
         {
             boundingBox.Debug(color);
             UnityEngine.Debug.DrawLine(feature.gameObject.transform.position, boundingBox.Center.ToUnity(), color);
         }
-#endif
     }
 }
