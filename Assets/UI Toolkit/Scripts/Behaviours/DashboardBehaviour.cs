@@ -56,6 +56,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 Subscribe();
         }
 
+        private void LateUpdate()
+        {
+            // Imported meshes receive their normal NL3D styling after the binding event.
+            mapStyling?.ApplyPendingMeshColors();
+        }
+
         private void Subscribe()
         {
             if (toggleDashboardAction != null) return;

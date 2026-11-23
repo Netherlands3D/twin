@@ -4,10 +4,12 @@ using System.Linq;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
-using Netherlands3D.Twin.DataSets;
+using Netherlands3D.Tiles3D;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.DataSets
 {
@@ -29,6 +31,9 @@ namespace Netherlands3D.Twin.DataSets
         private IReadOnlyDictionary<string, Color> colors;
         private DashboardMapLayer selectedLayer;
         private readonly Dictionary<CityJSONLayerGameObject, StylingPropertyData> styles = new();
+        private readonly Dictionary<HierarchicalObjectLayerGameObject, (StylingPropertyData[] Properties, UnityAction Listener)> meshLayers = new();
+        private readonly Dictionary<(MeshRenderer Renderer, int MaterialIndex), (HierarchicalObjectLayerGameObject Layer, MeshColorOverride Override)> meshOverrides = new();
+        private bool meshColorsPending;
 
         public DashboardMapStyling(DashboardObjectBinding binding)
         {
@@ -40,12 +45,154 @@ namespace Netherlands3D.Twin.DataSets
             selectedLayer = layer;
             colors = palette;
             Refresh();
+            meshColorsPending = true;
+        }
+
+        public void ApplyPendingMeshColors()
+        {
+            if (!meshColorsPending)
+                return;
+
+            meshColorsPending = false;
+            RefreshMeshColors();
         }
 
         public void Dispose()
         {
+            foreach (var layer in meshLayers.Keys.ToArray())
+                UnsubscribeMeshLayer(layer);
+            foreach (var entry in meshOverrides.Values)
+                entry.Override.Restore();
+            meshOverrides.Clear();
+            meshColorsPending = false;
             foreach (var visualization in styles.Keys.ToArray())
                 Restore(visualization);
+        }
+
+        private void RefreshMeshColors()
+        {
+            var targets = colors != null && binding.HasData
+                ? binding.ObjVisualizations.Concat(binding.GlbVisualizations).Where(layer => DashboardObjectBinding.IsDashboardLayerName(layer.Name)).ToArray()
+                : Array.Empty<HierarchicalObjectLayerGameObject>();
+            foreach (var layer in meshLayers.Keys.Except(targets).ToArray())
+                UnsubscribeMeshLayer(layer);
+
+            var activeSlots = new HashSet<(MeshRenderer Renderer, int MaterialIndex)>();
+            var glbLayers = binding.GlbVisualizations.ToHashSet();
+            foreach (var layer in targets)
+            {
+                if (!meshLayers.ContainsKey(layer))
+                {
+                    var properties = layer.LayerData.GetProperties<StylingPropertyData>().ToArray();
+                    UnityAction listener = () => OnMeshStylingChanged(layer);
+                    meshLayers.Add(layer, (properties, listener));
+                    foreach (var property in properties)
+                        property.OnStylingChanged.AddListener(listener);
+                }
+
+                var isGlb = glbLayers.Contains(layer);
+                foreach (var renderer in layer.GetComponentsInChildren<MeshRenderer>(true))
+                {
+                    if (renderer == null || renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>(true) != layer)
+                        continue;
+
+                    var materials = renderer.sharedMaterials;
+                    for (var materialIndex = 0; materialIndex < materials.Length; materialIndex++)
+                    {
+                        var material = materials[materialIndex];
+                        if (material == null || !material.HasProperty(NL3DShaders.BaseColorShaderProperty))
+                            continue;
+
+                        DashboardObjectData.BlockData block;
+                        if (isGlb)
+                            binding.GlbObjects.TryGetValue(renderer, out block);
+                        else
+                            binding.ObjObjects.TryGetValue(material, out block);
+
+                        var slot = (renderer, materialIndex);
+                        if (!meshOverrides.TryGetValue(slot, out var entry))
+                        {
+                            entry = (layer, new MeshColorOverride(renderer, materialIndex));
+                            meshOverrides.Add(slot, entry);
+                        }
+                        activeSlots.Add(slot);
+                        entry.Override.Apply(colors[GetColorKey(block, selectedLayer)]);
+                    }
+                }
+            }
+
+            foreach (var slot in meshOverrides.Keys.Except(activeSlots).ToArray())
+            {
+                meshOverrides[slot].Override.Restore();
+                meshOverrides.Remove(slot);
+            }
+        }
+
+        private void OnMeshStylingChanged(HierarchicalObjectLayerGameObject layer)
+        {
+            if (layer == null || !layer.HasLayerData || layer.LayerData.IsDisposed)
+                return;
+
+            // The layer's normal styling listener runs first. Retain its current user color for restoration.
+            foreach (var (slot, entry) in meshOverrides)
+            {
+                if (entry.Layer != layer || slot.Renderer == null)
+                    continue;
+
+                var feature = layer.GetLayerFeatureByGeometry(slot.Renderer) ?? LayerFeature.Create(layer, slot.Renderer);
+                entry.Override.SetOriginalColor(layer.GetStyling(feature).GetFillColor());
+            }
+            meshColorsPending = true;
+        }
+
+        private void UnsubscribeMeshLayer(HierarchicalObjectLayerGameObject layer)
+        {
+            var subscription = meshLayers[layer];
+            foreach (var property in subscription.Properties)
+                property.OnStylingChanged.RemoveListener(subscription.Listener);
+            meshLayers.Remove(layer);
+        }
+
+        internal sealed class MeshColorOverride
+        {
+            private readonly MeshRenderer renderer;
+            private readonly int materialIndex;
+            private readonly MaterialPropertyBlock original = new();
+            private readonly MaterialPropertyBlock working = new();
+
+            public MeshColorOverride(MeshRenderer renderer, int materialIndex)
+            {
+                this.renderer = renderer;
+                this.materialIndex = materialIndex;
+                renderer.GetPropertyBlock(original, materialIndex);
+            }
+
+            public void Apply(Color color)
+            {
+                renderer.GetPropertyBlock(working, materialIndex);
+                if (working.isEmpty)
+                    renderer.GetPropertyBlock(working);
+                working.SetColor(NL3DShaders.BaseColorShaderProperty, color);
+                renderer.SetPropertyBlock(working, materialIndex);
+            }
+
+            public void SetOriginalColor(Color? color)
+            {
+                if (!color.HasValue || renderer == null)
+                    return;
+
+                if (original.isEmpty)
+                    renderer.GetPropertyBlock(original);
+                original.SetColor(NL3DShaders.BaseColorShaderProperty, color.Value);
+            }
+
+            public void Restore()
+            {
+                if (renderer == null || materialIndex >= renderer.sharedMaterials.Length)
+                    return;
+
+                renderer.SetPropertyBlock(original.isEmpty ? null : original, materialIndex);
+            }
         }
 
         private void Refresh()

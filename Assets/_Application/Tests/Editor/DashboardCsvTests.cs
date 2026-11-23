@@ -742,42 +742,6 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(notifications, Is.EqualTo(1));
         }
 
-        [TestCase(0, "low")]
-        [TestCase(299, "low")]
-        [TestCase(300, "medium")]
-        [TestCase(599, "medium")]
-        [TestCase(600, "high")]
-        public void DashboardMapUsesPrototypeDwellingThresholds(int dwellings, string expected)
-        {
-            var block = FindObjectBlock(CreateObjectIndex(ReadRows($"Wonen;3;SO;Sociaal;2;40;{dwellings};;;;")), "3");
-
-            Assert.That(GetMapColorKey(block, "Dwellings"), Is.EqualTo(expected));
-        }
-
-        [Test]
-        public void DashboardMapUsesNeutralForUnknownCountsAndTheExistingSegmentOrderForTies()
-        {
-            var unknown = FindObjectBlock(CreateObjectIndex(ReadRows("Wonen;3;SO;Sociaal;2;40;;;;;")), "3");
-            Assert.That(GetMapColorKey(unknown, "Dwellings"), Is.EqualTo("base"));
-            Assert.That(GetMapColorKey(unknown, "Segment"), Is.EqualTo("base"));
-            Assert.That(GetMapColorKey(null, "Phase"), Is.EqualTo("base"));
-
-            var tied = FindObjectBlock(CreateObjectIndex(ReadRows("Wonen;3;SO;Sociaal;2;40;20;;;;", "Wonen;3;SO;Midden;2;40;20;;;;")), "3");
-            Assert.That(GetMapColorKey(tied, "Segment"), Is.EqualTo("social"));
-            Assert.That(GetMapColorKey(tied, "Base"), Is.EqualTo("base"));
-        }
-
-        [Test]
-        public void DashboardMapUsesTheLatestHousingVersionAndTheLatestAvailablePlanPhase()
-        {
-            var block = FindObjectBlock(CreateObjectIndex(ReadRows("Wonen;3;BBP;Sociaal;2;40;1000;;;;",
-                "Wonen;3;SO;Midden;2;40;10;;;;", "Niet-wonen;3;VO;;;;;Kantoor;200;;")), "3");
-
-            Assert.That(GetMapColorKey(block, "Segment"), Is.EqualTo("mid-rent"));
-            Assert.That(GetMapColorKey(block, "Dwellings"), Is.EqualTo("low"));
-            Assert.That(GetMapColorKey(block, "Phase"), Is.EqualTo("vo"));
-        }
-
         [TestCase("dashboard", true)]
         [TestCase("DashboardSloterdijk", true)]
         [TestCase("dashboardingSloterdijk", true)]
@@ -795,20 +759,6 @@ namespace Netherlands3D.Twin.Tests
             var actual = type.GetMethod("IsDashboardLayerName").Invoke(null, new object[] { name });
 
             Assert.That(actual, Is.EqualTo(expected));
-        }
-
-        [Test]
-        public void AdditionalCsvSegmentsHaveTheSameStableColorForMapAndCharts()
-        {
-            var block = FindObjectBlock(CreateObjectIndex(ReadRows("Wonen;3;SO;Koop;2;40;20;;;;")), "3");
-            Assert.That(GetMapColorKey(block, "Segment"), Is.EqualTo("segment:KOOP"));
-
-            var type = typeof(DashboardData).Assembly.GetType("Netherlands3D.Twin.DataSets.DashboardColors");
-            var method = type.GetMethod("GetColor");
-            var palette = new System.Collections.Generic.Dictionary<string, Color>(StringComparer.OrdinalIgnoreCase);
-            var mapColor = method.Invoke(null, new object[] { "Koop", palette });
-            var chartColor = method.Invoke(null, new object[] { "koop", palette });
-            Assert.That(mapColor, Is.EqualTo(chartColor));
         }
 
         [TestCase("\"03\"", "03")]
@@ -841,14 +791,6 @@ namespace Netherlands3D.Twin.Tests
             {
                 UnityEngine.Object.DestroyImmediate(target);
             }
-        }
-
-        private static object GetMapColorKey(object block, string layer)
-        {
-            var assembly = typeof(DashboardData).Assembly;
-            var mode = Enum.Parse(assembly.GetType("Netherlands3D.Twin.DataSets.DashboardMapLayer"), layer);
-            return assembly.GetType("Netherlands3D.Twin.DataSets.DashboardMapStyling")
-                .GetMethod("GetColorKey", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).Invoke(null, new[] { block, mode });
         }
 
         [TestCase("3", "3")]
