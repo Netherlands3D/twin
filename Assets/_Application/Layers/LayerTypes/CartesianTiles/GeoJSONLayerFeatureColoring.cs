@@ -41,7 +41,6 @@ namespace Netherlands3D.Twin.layers.properties
                     AddAttributesToLayerFeature(layerFeature);
                     visualization.StylingFeatures.Add(layerFeature.Geometry, layerFeature);
                 }
-                layer.RenderMaterial.color = visualization.LayerData.Color;
             }
         }
 
