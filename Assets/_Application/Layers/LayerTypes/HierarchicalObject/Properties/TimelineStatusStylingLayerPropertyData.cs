@@ -16,7 +16,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         private const string TimelineStatusColorIdentifier = "timeline-status-color";
 
         [JsonIgnore] public Dictionary<object, TimestampCollection> TimestampCollections = new();
-        [JsonIgnore] public UnityEvent<object, TimestampCollection> TimestampCollectionAddded = new();
+        [JsonIgnore] public UnityEvent<object, TimestampCollection> TimestampCollectionAdded = new();
+        [JsonIgnore] public UnityEvent<object> TimestampCollectionRemoved = new();
 
         public TimelineStatusStylingLayerPropertyData()
         {
@@ -113,7 +114,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void AddTimestampCollection(object feature, TimestampCollection collection)
         {
             TimestampCollections.Add(feature, collection);
-            TimestampCollectionAddded.Invoke(feature, collection);
+            TimestampCollectionAdded.Invoke(feature, collection);
+        }
+        
+        public void RemoveTimestampCollection(object feature)
+        {
+            TimestampCollections.Remove(feature);
+            TimestampCollectionRemoved.Invoke(feature);
         }
     }
 }

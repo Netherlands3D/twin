@@ -69,6 +69,7 @@ namespace Netherlands3D.Timeline
         private void OnRemoveFeature(Feature feature)
         {
             geoJson.RemoveStylingFeatureForGeoJsonFeature(feature);
+            timelineStatusStylingLayerPropertyData.RemoveTimestampCollection(feature);
         }
     }
 }
