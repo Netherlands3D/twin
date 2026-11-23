@@ -13,9 +13,9 @@ namespace Netherlands3D.Twin.Services
 {
     public class Layers : MonoBehaviour
     {
-        [SerializeField] private PrefabLibrary prefabLibrary;
+        public AssetLibrary.AssetLibrary AssetLibrary => assetLibrary;
         [SerializeField] private DataTypeChain fromUrlImporter;
-        
+        [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
         private VisualizationSpawner spawner;
         
         public UnityEvent<LayerData> LayerAdded { get; } = new();
@@ -35,6 +35,20 @@ namespace Netherlands3D.Twin.Services
         /// </remarks>
         public UnityEvent<LayerData, bool> LayerRemoved { get; } = new();
         public UnityEvent<LayerGameObject> VisualizationCreated = new();
+
+        private async void Awake()
+        {
+            InitializeSpawner();
+            await assetLibrary.InitializeCatalogs();
+        }
+
+        private void InitializeSpawner()
+        {
+            if (spawner != null) return;
+
+            assetLibrary.InitializePrefabs();
+            spawner = new VisualizationSpawner(assetLibrary);
+        }
 
         /// <summary>
         /// Adds a new layer to the current project using the given preset.
@@ -157,7 +171,7 @@ namespace Netherlands3D.Twin.Services
                 if (layer.LayerGameObjectTask == null)
                 {
                     // The default project can request layer visualizations during Awake.
-                    spawner ??= new VisualizationSpawner(prefabLibrary);
+                    InitializeSpawner();
                     visualizationTask = spawner.Spawn(layer.LayerData);
                     layer.SetVisualizationTask(visualizationTask);
                 }
