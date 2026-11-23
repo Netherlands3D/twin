@@ -23,6 +23,18 @@ namespace Netherlands3D.Twin.Functionalities
         Unsaved
     }
 
+    public enum FunctionalityStatePersistence
+    {
+        /// <summary>
+        /// Save and restore the functionality's state through the .nl3d project.
+        /// </summary>
+        Project,
+        /// Initialize state from the functionality's defaults and retain runtime changes.
+        /// Do not save or restore this state through .nl3d files.
+        /// Creating or loading a project leaves the current state unchanged.
+        RuntimeOnly
+    }
+
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality/Generic", fileName = "Functionality", order = 0)]
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
@@ -90,6 +102,7 @@ namespace Netherlands3D.Twin.Functionalities
         [TextArea(5, 10)] public string Description;
         public ScriptableObject configuration;
         public FunctionalitySettingsCategory settingsCategory = FunctionalitySettingsCategory.Optional;
+        public FunctionalityStatePersistence statePersistence = FunctionalityStatePersistence.Project;
 
         public string Id => defaultData.Id;
 
