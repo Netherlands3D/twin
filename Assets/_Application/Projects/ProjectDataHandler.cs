@@ -87,19 +87,12 @@ namespace Netherlands3D.Twin.Projects
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
-            OnPreloadedAssets();
+          
         }
 
-        private void OnPreloadedAssets()
+        private void Start()
         {
             LoadDefaultProject();
-        }
-
-        private void OnDestroy()
-        {
-            AssetBundleLoader loader = FindObjectOfType<AssetBundleLoader>();
-            if (loader)
-                loader.OnAssetsLoaded.RemoveListener(OnPreloadedAssets);
         }
 
         private void OnEnable()
