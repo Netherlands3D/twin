@@ -37,10 +37,8 @@ namespace Netherlands3D.UI.Panels
 
         private void OnDetachFromPanel(DetachFromPanelEvent evt)
         {
-            foreach (var stylingProperty in activeLayer.GetProperties<StylingPropertyData>())
-            {
-                stylingProperty.OnStylingChanged.RemoveListener(UpdateSwatches);
-            }
+            if(activeLayer != null)
+                RemoveListenersFromLayer(activeLayer);
         }
         
         private VisualElement MakeListViewItem()
@@ -103,13 +101,33 @@ namespace Netherlands3D.UI.Panels
         
         public void SetLegend(LayerData layerData)
         {
+            if(activeLayer == layerData) return;
+            
+            if(activeLayer != null)
+                RemoveListenersFromLayer(layerData);
+
             activeLayer = layerData;
-            foreach (var stylingProperty in layerData.GetProperties<StylingPropertyData>())
+            
+            if(activeLayer != null)
+                AddListenersToLayer(layerData);
+            
+            UpdateSwatches();
+        }
+
+        private void AddListenersToLayer(LayerData layerData)
+        {
+            foreach (var stylingProperty in layerData?.GetProperties<StylingPropertyData>())
             {
                 stylingProperty.OnStylingChanged.AddListener(UpdateSwatches);
             }
-            
-            UpdateSwatches();
+        }
+
+        private void RemoveListenersFromLayer(LayerData layerData)
+        {
+            foreach (var stylingProperty in layerData.GetProperties<StylingPropertyData>())
+            {
+                stylingProperty.OnStylingChanged.RemoveListener(UpdateSwatches);
+            }
         }
     }
 }
