@@ -311,14 +311,14 @@ namespace Netherlands3D.Twin.Configuration
             // Hidden functionality availability belongs to the spoke or the test session, not the project.
             foreach (var functionality in Functionalities)
             {
-                if (functionality.settingsCategory != FunctionalitySettingsCategory.Unsaved && functionality.settingsCategory != FunctionalitySettingsCategory.Hidden)
+                if (functionality.statePersistence == FunctionalityStatePersistence.Project)
                     functionality.ResetDataToDefaults();
             }
             
             foreach (var savedData in changedData.functionalities)
             {
                 var savedId = savedData.Id;
-                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.settingsCategory != FunctionalitySettingsCategory.Unsaved && f.settingsCategory != FunctionalitySettingsCategory.Hidden && f.Data.Id == savedId);
+                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.statePersistence == FunctionalityStatePersistence.Project && f.Data.Id == savedId);
                 if (matchingFunctionality != null)
                 {
                     matchingFunctionality.Data = savedData;
@@ -333,7 +333,7 @@ namespace Netherlands3D.Twin.Configuration
         {
             foreach (var functionality in Functionalities)
             {
-                if (functionality.settingsCategory == FunctionalitySettingsCategory.Unsaved || functionality.settingsCategory == FunctionalitySettingsCategory.Hidden)
+                if (functionality.statePersistence == FunctionalityStatePersistence.RuntimeOnly)
                 {
                     // Older project files may still contain data for this functionality.
                     ProjectData.Current.functionalities.RemoveAll(data => data.Id == functionality.Id);

@@ -20,7 +20,6 @@ namespace Netherlands3D.Twin.Functionalities
         /// Hide the functionality's controls in the settings panel.
         /// </summary>
         Hidden,
-        Unsaved
     }
 
     public enum FunctionalityStatePersistence
