@@ -20,6 +20,7 @@ MonoBehaviour:
   Description: 
   configuration: {fileID: 0}
   settingsCategory: 2
+  statePersistence: 1
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []
