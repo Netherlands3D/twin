@@ -228,7 +228,7 @@ namespace Netherlands3D.Snapshots
                     _ => texture.EncodeToPNG()
                 };
 
-                File.WriteAllBytes($"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png", bytes);
+                File.WriteAllBytes($"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.{fileType.ToString()}", bytes);
                 
                 Destroy(texture);
             }
