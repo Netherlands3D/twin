@@ -7,6 +7,7 @@ namespace Netherlands3D.Twin.DataSets
     public sealed class DashboardData
     {
         internal static IReadOnlyList<string> Phases { get; } = Array.AsReadOnly(new[] { "BBP", "SO", "VO", "DO" });
+        internal IReadOnlyList<string> AvailablePhases { get; }
         public int SourceRowCount { get; }
         public int SkippedRowCount => SkippedLineNumbers.Count;
         public IReadOnlyList<int> SkippedLineNumbers { get; }
@@ -26,6 +27,9 @@ namespace Netherlands3D.Twin.DataSets
             Housing = housing.Where(IsValid).ToArray();
             NonHousing = nonHousing.Where(IsValid).ToArray();
             ProgramChanges = programChanges.Where(IsValid).ToArray();
+            var availablePhases = Housing.Select(row => row.Phase).Concat(NonHousing.Select(row => row.Phase))
+                .Concat(ProgramChanges.Select(row => row.Phase)).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            AvailablePhases = Phases.Where(availablePhases.Contains).ToArray();
         }
 
         internal static bool IsValid(HousingRow row) =>

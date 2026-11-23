@@ -276,7 +276,7 @@ namespace Netherlands3D.Twin.DataSets
             if (block == null || layer == DashboardMapLayer.Base)
                 return "base";
             if (layer == DashboardMapLayer.Phase)
-                return block.LatestPhase?.ToLowerInvariant() ?? "base";
+                return block.LatestPhase != null ? DashboardColors.PhaseKey(block.LatestPhase) : "base";
 
             var housing = block.HousingSummary;
             if (!housing.Total.CompleteValue.HasValue)

@@ -127,6 +127,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void OnMapDataChanged()
         {
             DashboardColors.SetSegmentColors(ObjectBinding?.HasData == true ? ObjectBinding.HousingSegments : Array.Empty<string>(), mapColors);
+            DashboardColors.SetPhaseColors(ObjectBinding?.HasData == true ? ObjectBinding.AvailablePhases : Array.Empty<string>(), mapColors);
 
             RefreshMapColors();
             RefreshMapLegend();
@@ -171,8 +172,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                     AddMapLegendEntry("high", "Vanaf 600 woningen");
                     break;
                 case DashboardMapLayer.Phase:
-                    foreach (var phase in DashboardData.Phases)
-                        AddMapLegendEntry(phase.ToLowerInvariant(), phase);
+                    foreach (var phase in ObjectBinding.AvailablePhases)
+                        AddMapLegendEntry(DashboardColors.PhaseKey(phase), phase);
                     break;
             }
             if (selectedMapLayer != DashboardMapLayer.Base)

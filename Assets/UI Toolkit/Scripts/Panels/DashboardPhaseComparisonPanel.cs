@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Twin.DataSets;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
@@ -103,6 +104,15 @@ namespace Netherlands3D.UI.Panels
             });
 
             NonHousing = false;
+        }
+
+        internal void SetPhaseColors(IReadOnlyDictionary<string, Color> colors)
+        {
+            foreach (var heading in phaseHeadings)
+            {
+                var badge = heading.Q<Label>();
+                badge.style.backgroundColor = DashboardColors.GetPhaseColor(badge.text, colors);
+            }
         }
 
         internal void SetKeyFigureData(string[] dwellings, string[] dwellingDifferences, string[] minimumFloorArea, string[] floorAreaDifferences, string[] grossFloorArea, string[] grossFloorAreaDifferences)

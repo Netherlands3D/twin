@@ -177,7 +177,7 @@ namespace Netherlands3D.UI.Panels
             housingRooms = DashboardSummary.CalculateHousingRooms(data);
             nonHousingBlockPhases = DashboardSummary.CalculateNonHousingBlockPhases(data);
             roomPhaseTotals = summary.Phases.Select((phase, index) => DashboardSummary.SumResults(summary.Rooms.Select(row => row.Values[index]))).ToArray();
-            RefreshHousingColors();
+            RefreshCategoryColors();
             ShowHousingChart();
             ShowAdditionalCharts();
             var phases = summary.Phases;
@@ -282,16 +282,18 @@ namespace Netherlands3D.UI.Panels
         {
             if (DashboardColors.Read(evt.customStyle, additionalColors))
             {
-                RefreshHousingColors();
+                RefreshCategoryColors();
                 ShowHousingChart();
                 ShowAdditionalCharts();
             }
         }
 
-        private void RefreshHousingColors()
+        private void RefreshCategoryColors()
         {
             DashboardColors.SetSegmentColors((summary.Segments ?? Array.Empty<DashboardSummary.BreakdownRow>()).Select(row => row.Label), additionalColors);
             DashboardColors.SetRoomColors((summary.Rooms ?? Array.Empty<DashboardSummary.BreakdownRow>()).Select(row => row.Label), additionalColors);
+            DashboardColors.SetPhaseColors(displayedData?.AvailablePhases ?? Array.Empty<string>(), additionalColors);
+            phaseComparison.SetPhaseColors(additionalColors);
         }
 
         private void ShowHousingChart()
@@ -356,12 +358,12 @@ namespace Netherlands3D.UI.Panels
             housingFloorAreaPhaseChart.SetData(phases.Select(phase =>
             {
                 var text = AreaText(phase.AverageMinimumFloorArea);
-                return new AreaComparisonChart.Item(phase.Phase, phase.AverageMinimumFloorArea.Value, SegmentColor(phase.Phase),
+                return new AreaComparisonChart.Item(phase.Phase, phase.AverageMinimumFloorArea.Value, DashboardColors.GetPhaseColor(phase.Phase, additionalColors),
                     $"{phase.Phase}\nGemiddelde minimale\nwoonoppervlakte: {text}", text);
             }).ToArray());
 
             // Each bar represents one block-phase value; phases are never stacked or added together.
-            nonHousingBlockPhaseChart.SetData(DashboardData.Phases.Select(phase => new BarChart.Series(phase, SegmentColor(phase))).ToArray(),
+            nonHousingBlockPhaseChart.SetData(DashboardData.Phases.Select(phase => new BarChart.Series(phase, DashboardColors.GetPhaseColor(phase, additionalColors))).ToArray(),
                 nonHousingBlockPhases.Select(row => new BarChart.Category($"{row.Block}\n{row.Phase}",
                     DashboardData.Phases.Select(phase => new BarChart.Value(phase == row.Phase ? row.Value.Value : 0,
                         $"{DashboardSummary.BlockName(row.Block)}\n{row.Phase}: {ChartNumber(row.Value)}{SquareMetres}")),

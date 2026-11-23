@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.DataSets
             ("high", new("--color-dashboard-dwellings-high")),
             ("bbp", new("--color-dashboard-phase-bbp")), ("so", new("--color-dashboard-phase-so")),
             ("vo", new("--color-dashboard-phase-vo")), ("do", new("--color-dashboard-phase-do")),
+            ("phase-unavailable", new("--color-dashboard-phase-unavailable")),
             ("Bedrijf", new("--color-dashboard-category-business")), ("Kantoor", new("--color-dashboard-category-office")),
             ("Horeca", new("--color-dashboard-category-hospitality")), ("Maatschappelijk", new("--color-dashboard-category-social")),
             ("Detailhandel", new("--color-dashboard-category-retail")), ("Supermarkt", new("--color-dashboard-category-supermarket")),
@@ -56,11 +57,23 @@ namespace Netherlands3D.Twin.DataSets
 
         public static string SegmentKey(string segment) => "segment:" + segment.ToUpperInvariant();
 
+        public static string PhaseKey(string phase) => "phase:" + phase.ToUpperInvariant();
+
         public static void SetSegmentColors(IEnumerable<string> segments, IDictionary<string, Color> colors) =>
             SetScaleColors(segments, "segment:", new[] { "social", "mid-rent", "free-sector" }, colors);
 
         public static void SetRoomColors(IEnumerable<string> rooms, IDictionary<string, Color> colors) =>
             SetScaleColors(rooms, "room:", new[] { "1 kamer", "2 kamers", "3 kamers", "4 kamers" }, colors);
+
+        public static void SetPhaseColors(IEnumerable<string> phases, IDictionary<string, Color> colors)
+        {
+            SetScaleColors(phases, "phase:", new[] { "bbp", "so", "vo", "do" }, colors);
+            if (!colors.TryGetValue("phase-unavailable", out var unavailable))
+                return;
+
+            foreach (var phase in DashboardData.Phases)
+                colors.TryAdd(PhaseKey(phase), unavailable);
+        }
 
         private static void SetScaleColors(IEnumerable<string> labels, string prefix, string[] stops, IDictionary<string, Color> colors)
         {
@@ -84,6 +97,9 @@ namespace Netherlands3D.Twin.DataSets
 
         public static Color GetRoomColor(string room, IReadOnlyDictionary<string, Color> colors) =>
             colors.TryGetValue("room:" + room.ToUpperInvariant(), out var color) ? color : GetColor(room, colors);
+
+        public static Color GetPhaseColor(string phase, IReadOnlyDictionary<string, Color> colors) =>
+            colors.TryGetValue(PhaseKey(phase), out var color) ? color : GetColor(phase, colors);
 
         public static Color GetColor(string label, IReadOnlyDictionary<string, Color> colors)
         {
