@@ -84,7 +84,7 @@ namespace Netherlands3D.UI.Panels
             Color? color = stylingPropertyData.GetColorByStylingRuleKey(stylingRuleKey, stylingPropertyData.GetColorPropertyTypeForStylingRule(stylingRuleKey));
             bool? visibility = stylingPropertyData.GetVisibilityByStylingRuleKey(stylingRuleKey);
             
-            tile.Tile.ColorHex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : ColorUtility.ToHtmlStringRGB(Color.white);
+            tile.Tile.Color = color.HasValue ? new Color(color.Value.r, color.Value.g, color.Value.b, 1) : Color.white;
             tile.Tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
 
             string layerName = stylingPropertyData.GetStylingRuleName(stylingRuleKey);
@@ -143,7 +143,9 @@ namespace Netherlands3D.UI.Panels
             var dict = new Dictionary<int, bool>();
             foreach (int i in swatchesListView.selectedIndices)
             {
-                dict.Add(i, visibility);
+                string stylingRuleKey = swatchesListView.itemsSource[i] as string;
+                var index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(stylingRuleKey);
+                dict.Add(index, visibility);
             }
             
             stylingPropertyData.SetVisibilityByMaterialIndices(dict);
