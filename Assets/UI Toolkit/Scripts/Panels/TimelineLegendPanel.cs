@@ -63,7 +63,9 @@ namespace Netherlands3D.UI.Panels
                 name = "Geen status";
             }
             
-            Color? color = rule.Symbolizer.GetColor(Symbolizer.FillColorProperty);//todo
+            Color? color = rule.Symbolizer.GetFillColor();
+            if (!color.HasValue) //todo: we currently have no way of determining if the rule is supposed to show the fill or stroke color, so for now we will fallback to the stroke color if the fill color is empty.
+                color = rule.Symbolizer.GetStrokeColor();
             bool? visibility = rule.Symbolizer.GetVisibility();
 
             tile.Tile.ColorHex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : ColorUtility.ToHtmlStringRGB(Color.white);
