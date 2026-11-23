@@ -301,6 +301,7 @@ namespace Netherlands3D.AddressSearch
                 .GroupBy(result => result.CollectionId)
                 .SelectMany(group => group
                 .OrderBy(result => result.Label, StringComparer.CurrentCultureIgnoreCase))
+                .OrderByDescending(result => result.Score)
                 .Take(maxResults)
                 .ToList();
 
