@@ -29,10 +29,9 @@ namespace Netherlands3D.Timeline
 
         private void OnAddFeature(Feature feature)
         {
-            Dictionary<string, Color> newStates = new Dictionary<string, Color>();
-
             if (feature.Properties.TryGetValue(timelineAttributeName, out var attribute))
             {
+                Dictionary<string, Color> newStates = new Dictionary<string, Color>();
                 InitTimelineStylingProperty();
                 geoJson.AddStylingFeatureForGeoJsonFeature(feature);
 
@@ -45,16 +44,10 @@ namespace Netherlands3D.Timeline
                 }
 
                 SetFeatureAttributeForTime(ProjectData.Current.CurrentDateTime, feature, collection);
+                
+                // todo: if rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat (maxValue is tbd)
+                timelineStatusStylingLayerPropertyData.AddNewRulesForStatuses(newStates);
             }
-
-            if (timelineStatusStylingLayerPropertyData == null)
-            {
-                Destroy(this); //this CityJSON does not have timeline attributes, InitTimelineStylingProperty is never called, and we do not need this component anymore
-                return;
-            }
-
-            // todo: if rules.Count > maxValue -> melding naar gebruiker dat het misschien niet goed gaat (maxValue is tbd)
-            timelineStatusStylingLayerPropertyData.AddNewRulesForStatuses(newStates);
         }
 
         protected override void SetFeatureAttribute(object feature, Timestamp currentTimestampForFeature)
@@ -70,9 +63,7 @@ namespace Netherlands3D.Timeline
 
             layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
             
-            // visualization.ApplyStyling();
             visualization.ApplyStylingToFeature(layerFeature);
-            
         }
 
         private void OnRemoveFeature(Feature feature)
