@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         
         public static string GetIconImage(string prefabId)
         {
-            var template = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            var template = App.Layers.AssetLibrary.GetPrefabById(prefabId);
             switch (template)
             {
                 case WMSLayerGameObject _:
