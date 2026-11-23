@@ -793,6 +793,24 @@ namespace Netherlands3D.Twin.Tests
             }
         }
 
+        [TestCase("3", "3")]
+        [TestCase(" 4N ", "4N")]
+        [TestCase("03", "03")]
+        [TestCase("4N (Instance)", "4N")]
+        [TestCase("BLOK_4N", "BLOK_4N")]
+        [TestCase("4N_DashboardSloterdijk", "4N_DashboardSloterdijk")]
+        [TestCase("ONBEKEND", "ONBEKEND")]
+        [TestCase(" ", null)]
+        [TestCase(null, null)]
+        public void ObjMaterialIdentifiersPreserveBlockCodesWithoutUsingModelFileNames(string materialName, string expected)
+        {
+            var method = typeof(DashboardData).Assembly.GetType("Netherlands3D.Twin.DataSets.DashboardObjectBinding")
+                .GetMethod("ReadObjBlockIdentifier", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+
+            var identifier = method.Invoke(null, new object[] { materialName });
+            Assert.That(identifier, Is.EqualTo(expected));
+        }
+
         private static object CreateObjectIndex(DashboardData data) => Activator.CreateInstance(
             typeof(DashboardData).Assembly.GetType("Netherlands3D.Twin.DataSets.DashboardObjectData"), new object[] { data });
 
