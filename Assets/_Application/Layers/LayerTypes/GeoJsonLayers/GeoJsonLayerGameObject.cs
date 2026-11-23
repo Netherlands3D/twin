@@ -258,12 +258,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void ApplyBaseColor(StylingFeature stylingFeature)
         {
-            if (stylingFeature.Geometry is not IGeoJsonGeometryTypeVisualizer)
+            if (stylingFeature.Geometry is not IGeoJsonGeometryTypeVisualizer visualizationLayer)
                 return;
 
             Symbolizer symbolizer = GetStyling(stylingFeature);
             
-            Color? color = symbolizer.GetFillColor();
+            Color? color = symbolizer.GetColor(visualizationLayer.StylingColorProperty);
             if (color.HasValue)
             {
                 if (int.TryParse(stylingFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
