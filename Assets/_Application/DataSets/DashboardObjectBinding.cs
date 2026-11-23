@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CityJson.Structure;
+using Netherlands3D.Functionalities.OBJImporter;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
@@ -13,26 +14,34 @@ using LayerService = Netherlands3D.Twin.Services.Layers;
 namespace Netherlands3D.Twin.DataSets
 {
     /// <summary>
-    /// Maintains session-only CityJSON bindings while dashboard functionality is available.
+    /// Maintains session-only model bindings while dashboard functionality is available.
     /// </summary>
     internal sealed class DashboardObjectBinding : IDisposable
     {
         private readonly LayerService layers;
         private readonly ProjectDataHandler projectLoader;
         private readonly Functionality functionality;
-        private readonly HashSet<CityJSONLayerGameObject> visualizations = new();
+        private readonly HashSet<HierarchicalObjectLayerGameObject> visualizations = new();
         private readonly HashSet<LayerData> namedLayers = new();
         private readonly HashSet<LayerData> currentProjectLayers = new();
         private readonly Dictionary<CityObject, DashboardObjectData.BlockData> objects = new();
+        private readonly Dictionary<Material, DashboardObjectData.BlockData> objObjects = new();
+        private readonly Dictionary<HierarchicalObjectLayerGameObject, GameObject> objRoots = new();
         private DashboardCsvPropertyData source;
         private DashboardData data;
         private DashboardObjectData index = new(null);
         private int reportedInvalidBlockCount;
+#if UNITY_EDITOR
+        private readonly Dictionary<HierarchicalObjectLayerGameObject, string> bindingDiagnostics = new();
+        private readonly List<(string Name, string Identifier, bool Matched)> diagnosticItems = new();
+#endif
 
         public IReadOnlyDictionary<CityObject, DashboardObjectData.BlockData> Objects => objects;
+        public IReadOnlyDictionary<Material, DashboardObjectData.BlockData> ObjObjects => objObjects;
         public bool HasData => functionality.IsEnabled && data != null;
         public IReadOnlyList<string> HousingSegments => index.HousingSegments;
-        public IEnumerable<CityJSONLayerGameObject> Visualizations => visualizations.Where(IsCurrent);
+        public IEnumerable<CityJSONLayerGameObject> Visualizations => visualizations.OfType<CityJSONLayerGameObject>().Where(IsCurrent);
+        public IEnumerable<HierarchicalObjectLayerGameObject> ObjVisualizations => visualizations.Where(visualization => IsCurrent(visualization) && visualization.GetComponent<OBJSpawner>() != null);
         public event Action Changed;
 
         public static bool IsDashboardLayerName(string name) => name?.TrimStart().StartsWith("dashboard", StringComparison.OrdinalIgnoreCase) == true;
@@ -58,6 +67,19 @@ namespace Netherlands3D.Twin.DataSets
                 return null;
 
             return string.IsNullOrWhiteSpace(value.Value) ? null : value.Value.Trim();
+        }
+
+        internal static string ReadObjBlockIdentifier(string materialName)
+        {
+            if (string.IsNullOrWhiteSpace(materialName))
+                return null;
+
+            var identifier = materialName.Trim();
+            const string instanceSuffix = " (Instance)";
+            if (identifier.EndsWith(instanceSuffix, StringComparison.Ordinal))
+                identifier = identifier.Substring(0, identifier.Length - instanceSuffix.Length).TrimEnd();
+
+            return string.IsNullOrWhiteSpace(identifier) ? null : identifier;
         }
 
         public DashboardObjectBinding(LayerService layers, ProjectDataHandler projectLoader, Functionality functionality)
@@ -93,6 +115,12 @@ namespace Netherlands3D.Twin.DataSets
                 Unsubscribe(visualization);
             visualizations.Clear();
             objects.Clear();
+            objObjects.Clear();
+            objRoots.Clear();
+#if UNITY_EDITOR
+            bindingDiagnostics.Clear();
+            diagnosticItems.Clear();
+#endif
         }
 
         private void OnLayerAdded(LayerData layer)
@@ -115,35 +143,65 @@ namespace Netherlands3D.Twin.DataSets
 
         private void OnVisualizationCreated(LayerGameObject visualization)
         {
-            if (visualization is not CityJSONLayerGameObject cityJson)
+            if (visualization is not HierarchicalObjectLayerGameObject hierarchical || !IsSupported(hierarchical))
                 return;
 
-            Subscribe(cityJson);
+            Subscribe(hierarchical);
             RefreshObjects();
         }
 
-        private bool IsCurrent(CityJSONLayerGameObject visualization) => visualization != null && visualization.HasLayerData &&
+        private static bool IsSupported(HierarchicalObjectLayerGameObject visualization) => visualization is CityJSONLayerGameObject || visualization.GetComponent<OBJSpawner>() != null;
+
+        private bool IsCurrent(HierarchicalObjectLayerGameObject visualization) => visualization != null && visualization.HasLayerData &&
             !visualization.LayerData.IsDisposed && currentProjectLayers.Contains(visualization.LayerData);
 
-        private void Subscribe(CityJSONLayerGameObject visualization)
+        private void Subscribe(HierarchicalObjectLayerGameObject visualization)
         {
-            if (visualizations.Add(visualization))
-                // VisualizationCreated is raised before SetData initializes CityJson on the layer behaviour.
+            if (!visualizations.Add(visualization))
+                return;
+
+            // VisualizationCreated is raised before SetData initializes the layer behaviour.
+            if (visualization is CityJSONLayerGameObject)
                 visualization.GetComponent<CityJSON>().onAllCityObjectsProcessed.AddListener(RefreshObjects);
+            else
+                visualization.GetComponent<OBJSpawner>().ObjectVisualized.AddListener(OnObjVisualized);
         }
 
-        private void Unsubscribe(CityJSONLayerGameObject visualization)
+        private void Unsubscribe(HierarchicalObjectLayerGameObject visualization)
         {
-            if (visualization != null)
+            objRoots.Remove(visualization);
+#if UNITY_EDITOR
+            bindingDiagnostics.Remove(visualization);
+#endif
+            if (visualization == null)
+                return;
+
+            if (visualization is CityJSONLayerGameObject)
                 visualization.GetComponent<CityJSON>().onAllCityObjectsProcessed.RemoveListener(RefreshObjects);
+            else if (visualization.TryGetComponent<OBJSpawner>(out var spawner))
+                spawner.ObjectVisualized.RemoveListener(OnObjVisualized);
+        }
+
+        private void OnObjVisualized(GameObject importedObject)
+        {
+            if (importedObject == null)
+                return;
+
+            var visualization = importedObject.GetComponentInParent<HierarchicalObjectLayerGameObject>(true);
+            if (visualization == null || !visualizations.Contains(visualization))
+                return;
+
+            objRoots[visualization] = importedObject;
+            CaptureCurrentLayers();
+            RefreshObjectsCore(visualization);
         }
 
         private void DiscoverVisualizations()
         {
             // Recover existing and hidden visualizations only at initialization and project load.
-            foreach (var visualization in UnityEngine.Object.FindObjectsByType<CityJSONLayerGameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var visualization in UnityEngine.Object.FindObjectsByType<HierarchicalObjectLayerGameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
-                if (IsCurrent(visualization))
+                if (IsCurrent(visualization) && IsSupported(visualization))
                     Subscribe(visualization);
             }
         }
@@ -164,12 +222,6 @@ namespace Netherlands3D.Twin.DataSets
             if (discoverVisualizations)
                 DiscoverVisualizations();
 
-            foreach (var visualization in visualizations.Where(visualization => !IsCurrent(visualization)).ToArray())
-            {
-                Unsubscribe(visualization);
-                visualizations.Remove(visualization);
-            }
-
             var nextSource = functionality.IsEnabled ? hierarchy
                 .Select(layer => layer.GetProperty<DashboardCsvPropertyData>())
                 .Where(candidate => candidate != null)
@@ -187,6 +239,9 @@ namespace Netherlands3D.Twin.DataSets
             {
                 data = source?.Data;
                 index = new DashboardObjectData(data);
+#if UNITY_EDITOR
+                bindingDiagnostics.Clear();
+#endif
             }
             RefreshObjectsCore();
         }
@@ -197,10 +252,17 @@ namespace Netherlands3D.Twin.DataSets
             RefreshObjectsCore();
         }
 
-        private void RefreshObjectsCore()
+        private void RefreshObjectsCore(HierarchicalObjectLayerGameObject importedVisualization = null)
         {
+            // VisualizationCreated precedes SetData; keep pending visualizations until their data is assigned.
+            foreach (var visualization in visualizations.Where(visualization => visualization == null || visualization.HasLayerData && !IsCurrent(visualization)).ToArray())
+            {
+                Unsubscribe(visualization);
+                visualizations.Remove(visualization);
+            }
+
             // Layer data is assigned after VisualizationCreated, so observe names once it is available.
-            var currentLayers = Visualizations.Select(visualization => visualization.LayerData).ToHashSet();
+            var currentLayers = visualizations.Where(IsCurrent).Select(visualization => visualization.LayerData).ToHashSet();
             foreach (var layer in namedLayers.Except(currentLayers).ToArray())
             {
                 layer.NameChanged.RemoveListener(OnLayerNameChanged);
@@ -213,40 +275,114 @@ namespace Netherlands3D.Twin.DataSets
             }
 
             objects.Clear();
-            if (!functionality.IsEnabled || data == null)
-            {
-                reportedInvalidBlockCount = 0;
-                Changed?.Invoke();
-                return;
-            }
-
+            objObjects.Clear();
             var invalidBlockCount = 0;
             foreach (var visualization in visualizations)
             {
                 if (!IsCurrent(visualization))
                     continue;
 
-                foreach (var cityObject in visualization.CityJson.CityObjects)
+#if UNITY_EDITOR
+                diagnosticItems.Clear();
+#endif
+                if (HasData && IsDashboardLayerName(visualization.Name))
                 {
-                    if (!IsDashboardObject(cityObject))
-                        continue;
-
-                    var blockId = ReadBlockIdentifier(cityObject);
-                    if (blockId == null)
-                        invalidBlockCount++;
-                    var block = index.Find(blockId);
-                    if (block != null)
-                        objects[cityObject] = block;
+                    if (visualization is CityJSONLayerGameObject cityJson)
+                    {
+                        foreach (var cityObject in cityJson.CityJson.CityObjects)
+                        {
+                            var blockId = ReadBlockIdentifier(cityObject);
+                            if (blockId == null)
+                                invalidBlockCount++;
+                            var block = index.Find(blockId);
+                            if (block != null)
+                                objects[cityObject] = block;
+                            RecordBindingDiagnostic(cityObject.name, blockId, block != null);
+                        }
+                    }
+                    else
+                        BindObjMaterials(visualization, ref invalidBlockCount);
                 }
+                LogBinding(visualization, visualization == importedVisualization);
             }
+#if UNITY_EDITOR
+            diagnosticItems.Clear();
+#endif
             if (invalidBlockCount > 0 && invalidBlockCount != reportedInvalidBlockCount)
             {
-                var message = $"Bij {invalidBlockCount} dashboardobject(en) ontbreekt een bruikbare blokcode. Vul het attribuut Blok in met tekst of een getal.";
+                var message = $"Bij {invalidBlockCount} dashboardobject(en) ontbreekt een bruikbare blokcode. Gebruik het attribuut Blok bij CityJSON of een materiaalnaam bij OBJ.";
                 Debug.LogWarning(message);
                 App.Snackbar?.DisplayError(message);
             }
             reportedInvalidBlockCount = invalidBlockCount;
             Changed?.Invoke();
+        }
+
+        private void BindObjMaterials(HierarchicalObjectLayerGameObject visualization, ref int invalidBlockCount)
+        {
+            foreach (var material in GetObjMaterials(visualization))
+            {
+                var identifier = ReadObjBlockIdentifier(material.name);
+                if (identifier == null)
+                    invalidBlockCount++;
+
+                var block = index.Find(identifier);
+                if (block != null)
+                    objObjects[material] = block;
+                RecordBindingDiagnostic(material.name, identifier, block != null);
+            }
+        }
+
+        private IEnumerable<Material> GetObjMaterials(HierarchicalObjectLayerGameObject visualization)
+        {
+            var root = objRoots.TryGetValue(visualization, out var importedObject) && importedObject != null ? importedObject : visualization.gameObject;
+            return root.GetComponentsInChildren<MeshRenderer>(true).SelectMany(renderer => renderer.sharedMaterials).Where(material => material != null).Distinct();
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        private void RecordBindingDiagnostic(string name, string identifier, bool matched)
+        {
+#if UNITY_EDITOR
+            diagnosticItems.Add((name, identifier ?? "ontbreekt", matched));
+#endif
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        private void LogBinding(HierarchicalObjectLayerGameObject visualization, bool importCompleted)
+        {
+#if UNITY_EDITOR
+            var format = visualization is CityJSONLayerGameObject ? "CityJSON" : "OBJ";
+            var message = $"Dashboardkoppeling {format} '{visualization.Name}': ";
+            if (!functionality.IsEnabled)
+                message += "niet actief (dashboarding uitgeschakeld).";
+            else if (!IsDashboardLayerName(visualization.Name))
+                message += "niet actief (laagnaam begint niet met dashboard).";
+            else if (!HasData)
+                message += "niet actief (geen geladen dashboard-CSV).";
+            else
+            {
+                var total = diagnosticItems.Count;
+                var matched = diagnosticItems.Count(item => item.Matched);
+                var identifiers = diagnosticItems.Select(item => item.Identifier).Distinct().OrderBy(identifier => identifier).ToArray();
+                var unit = visualization is CityJSONLayerGameObject ? "CityObjects" : "materialen";
+                message += $"{total} ingelezen {unit}, {matched} gekoppeld, {total - matched} zonder overeenkomst.";
+                message += " Aangetroffen blokcodes: " + (identifiers.Length == 0 ? "geen" : string.Join(", ", identifiers.Take(20)));
+                if (identifiers.Length > 20)
+                    message += $" (eerste 20 van {identifiers.Length})";
+                message += ".";
+                if (matched < total)
+                {
+                    var unmatched = diagnosticItems.Where(item => !item.Matched).Select(item => $"{item.Name} => '{item.Identifier}'");
+                    message += " Geen CSV-match of ontbrekende blokcode: " + string.Join(", ", unmatched.OrderBy(item => item).Take(10));
+                }
+            }
+
+            if (!importCompleted && bindingDiagnostics.TryGetValue(visualization, out var previous) && previous == message)
+                return;
+
+            bindingDiagnostics[visualization] = message;
+            Debug.Log(message + (importCompleted ? " Dashboardkoppeling opnieuw beoordeeld na OBJ/MTL-import." : ""), visualization);
+#endif
         }
     }
 }
