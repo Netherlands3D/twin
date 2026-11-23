@@ -252,7 +252,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStylingToFeature(StylingFeature stylingFeature)
         {
-            ApplyBaseColor(stylingFeature); 
+            ApplyBaseColor(stylingFeature);
             ApplyFeatureColor(stylingFeature);
         }
 
@@ -262,14 +262,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return;
 
             Symbolizer symbolizer = GetStyling(stylingFeature);
+
+            var isVisibleStyling = symbolizer.GetVisibility();
+            var isVisible = isVisibleStyling.HasValue ? isVisibleStyling.Value : true;
+
+            Color newColor = Color.clear;
             
-            Color? color = symbolizer.GetColor(visualizationLayer.StylingColorProperty);
-            if (color.HasValue)
+            if (isVisible)
             {
-                if (int.TryParse(stylingFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
-                {
-                    visualisationLayers[materialIndex].SetColorForAllFeatures(color.Value);
-                }
+                Color? color = symbolizer.GetColor(visualizationLayer.StylingColorProperty);
+                newColor = !color.HasValue ? visualizationLayer.RenderMaterial.color : color.Value;
+            }
+
+            if (int.TryParse(stylingFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var index))
+            {
+                visualisationLayers[index].SetColorForAllFeatures(newColor);
             }
         }
 
@@ -277,7 +284,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             if (stylingFeature.Geometry is not Feature geoJsonFeature)
                 return;
-            
+
             foreach (var typeVisualizer in VisualisationLayers)
             {
                 if (!typeVisualizer.SupportsGeometryType(geoJsonFeature))
@@ -286,10 +293,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var featureSymbolizer = GetStyling(stylingFeature);
                 var baseFeature = GetStylingFeatureByGeometry(typeVisualizer);
                 var baseColorSymbolizer = GetStyling(baseFeature);
-                
+
                 //todo: this is currently inefficient but necessary since the base color comes from a different StylingFeature than the individual color. This was a workaround to avoid having to create StylingFeatures for each GeoJsonFeature as that would have even more performance impact.
                 var combinedSymbolizer = Symbolizer.Merge(baseColorSymbolizer, featureSymbolizer);
-                
+
                 var isVisibleStyling = combinedSymbolizer.GetVisibility();
                 var isVisible = isVisibleStyling.HasValue ? isVisibleStyling.Value : true;
 
