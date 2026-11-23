@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Netherlands3D.AssetLibrary.Entries;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Catalogs.Catalogs;
+using Netherlands3D.Catalogs.Catalogs.Strategies;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
+using Netherlands3D.Functionalities.AssetBundles;
+using Netherlands3D.Functionalities.LayerPresets;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
@@ -31,7 +36,9 @@ namespace Netherlands3D.AssetLibrary
         public const string PREFAB_IDENTIFIER = "prefab-library";
 
         [SerializeField] private List<AssetLibraryEntry> items = new();
+        [SerializeField] private List<LayerGameObject> hiddenItems = new();
         [SerializeField] private List<string> extraCatalogs = new();
+        [SerializeField] private LayerGameObject fallbackPrefab;
 
         // Cached list of scriptable object events that have been registered
         private readonly Dictionary<int, ScriptableObject> scriptableObjectEvents = new();
@@ -39,7 +46,22 @@ namespace Netherlands3D.AssetLibrary
 
         [field: NonSerialized] public InMemoryCatalog Catalog { get; private set; }
 
-        public async Task Initialize()
+        public void InitializePrefabs()
+        {
+            foreach (var entry in hiddenItems)
+            {
+                prefabs[entry.PrefabIdentifier] = entry;
+            }
+            foreach (var entry in items)
+            {
+                foreach (var prefab in entry.CollectPrefabs())
+                {
+                    prefabs[prefab.PrefabIdentifier] = prefab;
+                }
+            }
+        }
+        
+        public async Task InitializeCatalogs()
         {
             Catalog = new InMemoryCatalog(
                 "application",
@@ -62,13 +84,19 @@ namespace Netherlands3D.AssetLibrary
             }
         }
 
+        public LayerGameObject GetPrefabById(string identifier)
+        {
+            if (!prefabs.TryGetValue(identifier, out var prefab))
+            {
+                Debug.LogError($"Prefab with identifier '{identifier}' could not be found, defaulting to fallback prefab");
+                return fallbackPrefab;
+            }
+            
+            return prefab;
+        }
+
         private void RegisterEntry(AssetLibraryEntry entry)
         {
-            foreach (var prefab in entry.CollectPrefabs())
-            {
-                prefabs[prefab.PrefabIdentifier] = prefab;
-            }
-
             foreach (var @event in entry.CollectEvents())
             {
                 scriptableObjectEvents[@event.GetInstanceID()] = @event;
@@ -103,6 +131,8 @@ namespace Netherlands3D.AssetLibrary
         {
             if (recordItem.Url.IsRemoteAsset())
                 App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url)); //todo: Exceptions should still be handled
+            else if (recordItem.Url.IsStreamingAssets())
+                App.Layers.Add(new AssetBundleLayerPreset.Args(recordItem.Url, recordItem.Title));
             else
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }
