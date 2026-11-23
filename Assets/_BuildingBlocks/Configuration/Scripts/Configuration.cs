@@ -35,22 +35,6 @@ namespace Netherlands3D.Twin.Configuration
 
         public string CorsProxyUrl => corsProxyUrl;
 
-        private bool allowHiddenFeatures;
-
-        /// <summary>
-        /// Controls hidden functionality availability for this session. Project files cannot change this permission.
-        /// </summary>
-        public bool AllowHiddenFeatures
-        {
-            get => allowHiddenFeatures;
-            set
-            {
-                allowHiddenFeatures = value;
-                foreach (var functionality in Functionalities.Where(f => f.settingsCategory == FunctionalitySettingsCategory.Hidden))
-                    functionality.HiddenFeaturesAllowed = value;
-            }
-        }
-
         public Coordinate Origin
         {
             get => origin;
@@ -131,9 +115,6 @@ namespace Netherlands3D.Twin.Configuration
 
         public void Populate(JSONNode jsonNode)
         {
-            if (jsonNode["allowHiddenFeatures"] != null)
-                AllowHiddenFeatures = jsonNode["allowHiddenFeatures"].AsBool;
-
             if (jsonNode["title"])
             {
                 Title = jsonNode["title"];
@@ -238,7 +219,6 @@ namespace Netherlands3D.Twin.Configuration
             {
                 ["title"] = Title,
                 ["allowUserSettings"] = AllowUserSettings,
-                ["allowHiddenFeatures"] = AllowHiddenFeatures,
                 ["origin"] = new JSONObject()
                 {
                     ["epsg"] = origin.CoordinateSystem,

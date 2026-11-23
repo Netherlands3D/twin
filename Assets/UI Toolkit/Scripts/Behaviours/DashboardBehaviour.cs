@@ -64,7 +64,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
             // The WebGL test override changes permission and Dashboarding together for this session only.
             var enable = !dashboardFunctionality.IsEnabled;
-            configuration.AllowHiddenFeatures = enable;
             dashboardFunctionality.IsEnabled = enable;
         }
 

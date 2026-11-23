@@ -43,29 +43,6 @@ namespace Netherlands3D.Twin.Functionalities
         [NonSerialized]
         private FunctionalityData currentData;
 
-        [NonSerialized]
-        private bool hiddenFeaturesAllowed;
-
-        /// <summary>
-        /// Allows a hidden functionality to be enabled by the spoke configuration or a temporary test override.
-        /// </summary>
-        public bool HiddenFeaturesAllowed
-        {
-            get => hiddenFeaturesAllowed;
-            set
-            {
-                if (hiddenFeaturesAllowed == value) return;
-
-                var wasEnabled = IsEnabled;
-                hiddenFeaturesAllowed = value;
-                if (settingsCategory == FunctionalitySettingsCategory.Hidden && !value)
-                    Data.IsEnabled = false;
-
-                if (IsEnabled != wasEnabled)
-                    InvokeOnEnableChangeEvents();
-            }
-        }
-
         public FunctionalityData Data
         {
             get => currentData ??= CreateDefaultData();
@@ -107,12 +84,9 @@ namespace Netherlands3D.Twin.Functionalities
 
         public bool IsEnabled
         {
-            get => Data.IsEnabled && (settingsCategory != FunctionalitySettingsCategory.Hidden || HiddenFeaturesAllowed);
+            get => Data.IsEnabled;
             set
             {
-                if (settingsCategory == FunctionalitySettingsCategory.Hidden && !HiddenFeaturesAllowed)
-                    value = false;
-
                 //cant enable functionality if configuration is invalid
                 if (Data.IsEnabled && configuration is IConfiguration config && config.Validate().Count > 0)
                 {
@@ -121,12 +95,10 @@ namespace Netherlands3D.Twin.Functionalities
 
                 if (value == Data.IsEnabled) //IsEnabled was not changed
                     return;
-
-                var wasEnabled = IsEnabled;
+                
                 Data.IsEnabled = value;
                 
-                if (IsEnabled != wasEnabled)
-                    InvokeOnEnableChangeEvents();
+                InvokeOnEnableChangeEvents();
             }
         }
 
