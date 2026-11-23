@@ -36,12 +36,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         [SerializeField] private Material polygonSelectionVisualizationMaterial;
         FeaturePolygonVisualisations selectedVisualisations;
 
-        private float maxAlpha; // todo this can be deleted when we support alpha in the color picker.
-
-        private void Start()
-        {
-            maxAlpha = polygonVisualizationMaterial.color.a;
-        }
+        private float maxAlpha = 0.5f; // todo this can be deleted when we support alpha in the color picker.
 
         public void SetColorForAllFeatures(Color color)
         {
@@ -60,9 +55,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void SetColorForFeature(Feature feature, Color color)
         {
             var pv = spawnedVisualisations[feature];
+            var alpha = Mathf.Clamp(color.a, 0, maxAlpha); 
+            var newColor = new Color(color.r, color.g, color.b, alpha); //todo: we don't support alpha yet in the color picker
+
             foreach (var polygon in pv.Data)
             {
-                polygon.SetMaterialPropertyBlockColor(color, pv != selectedVisualisations);
+                polygon.SetMaterialPropertyBlockColor(newColor, pv != selectedVisualisations);
             }
         }
         

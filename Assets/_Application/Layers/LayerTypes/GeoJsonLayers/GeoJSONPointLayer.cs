@@ -36,12 +36,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private List<List<Coordinate>> visualisationsToRemove = new();
 
-        private float maxAlpha; // todo this can be deleted when we support alpha in the color picker.
-
-        private void Start()
-        {
-            maxAlpha = RenderMaterial.color.a;
-        }
+        private float maxAlpha = 0.5f; // todo this can be deleted when we support alpha in the color picker.
         
         public void SetColorForAllFeatures(Color color)
         {
