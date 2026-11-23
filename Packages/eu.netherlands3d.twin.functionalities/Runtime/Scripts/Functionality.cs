@@ -6,10 +6,19 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {
-    public enum FunctionalityType
+    public enum FunctionalitySettingsCategory
     {
-        Optional = 0, // Existing assets without a type are optional.
+        /// <summary>
+        /// Show the functionality's controls in the settings panel. (default option)
+        /// </summary>
+        Optional = 0,
+        /// <summary>
+        /// Show the functionality's controls in the experimental settings section in the settings panel.
+        /// </summary>
         Experimental,
+        /// <summary>
+        /// Hide the functionality's controls in the settings panel.
+        /// </summary>
         Hidden,
         Unsaved
     }
@@ -38,7 +47,7 @@ namespace Netherlands3D.Twin.Functionalities
 
                 var wasEnabled = IsEnabled;
                 hiddenFeaturesAllowed = value;
-                if (Type == FunctionalityType.Hidden && !value)
+                if (settingsCategory == FunctionalitySettingsCategory.Hidden && !value)
                     Data.IsEnabled = false;
 
                 if (IsEnabled != wasEnabled)
@@ -80,16 +89,16 @@ namespace Netherlands3D.Twin.Functionalities
 
         [TextArea(5, 10)] public string Description;
         public ScriptableObject configuration;
-        public FunctionalityType Type = FunctionalityType.Optional;
+        public FunctionalitySettingsCategory settingsCategory = FunctionalitySettingsCategory.Optional;
 
         public string Id => defaultData.Id;
 
         public bool IsEnabled
         {
-            get => Data.IsEnabled && (Type != FunctionalityType.Hidden || HiddenFeaturesAllowed);
+            get => Data.IsEnabled && (settingsCategory != FunctionalitySettingsCategory.Hidden || HiddenFeaturesAllowed);
             set
             {
-                if (Type == FunctionalityType.Hidden && !HiddenFeaturesAllowed)
+                if (settingsCategory == FunctionalitySettingsCategory.Hidden && !HiddenFeaturesAllowed)
                     value = false;
 
                 //cant enable functionality if configuration is invalid

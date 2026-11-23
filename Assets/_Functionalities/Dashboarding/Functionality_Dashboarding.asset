@@ -19,7 +19,7 @@ MonoBehaviour:
   Header: Dashboard
   Description: 
   configuration: {fileID: 0}
-  Type: 2
+  settingsCategory: 2
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []

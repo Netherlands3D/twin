@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.Configuration
             set
             {
                 allowHiddenFeatures = value;
-                foreach (var functionality in Functionalities.Where(f => f.Type == FunctionalityType.Hidden))
+                foreach (var functionality in Functionalities.Where(f => f.settingsCategory == FunctionalitySettingsCategory.Hidden))
                     functionality.HiddenFeaturesAllowed = value;
             }
         }
@@ -311,14 +311,14 @@ namespace Netherlands3D.Twin.Configuration
             // Hidden functionality availability belongs to the spoke or the test session, not the project.
             foreach (var functionality in Functionalities)
             {
-                if (functionality.Type != FunctionalityType.Unsaved && functionality.Type != FunctionalityType.Hidden)
+                if (functionality.settingsCategory != FunctionalitySettingsCategory.Unsaved && functionality.settingsCategory != FunctionalitySettingsCategory.Hidden)
                     functionality.ResetDataToDefaults();
             }
             
             foreach (var savedData in changedData.functionalities)
             {
                 var savedId = savedData.Id;
-                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.Type != FunctionalityType.Unsaved && f.Type != FunctionalityType.Hidden && f.Data.Id == savedId);
+                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.settingsCategory != FunctionalitySettingsCategory.Unsaved && f.settingsCategory != FunctionalitySettingsCategory.Hidden && f.Data.Id == savedId);
                 if (matchingFunctionality != null)
                 {
                     matchingFunctionality.Data = savedData;
@@ -333,7 +333,7 @@ namespace Netherlands3D.Twin.Configuration
         {
             foreach (var functionality in Functionalities)
             {
-                if (functionality.Type == FunctionalityType.Unsaved || functionality.Type == FunctionalityType.Hidden)
+                if (functionality.settingsCategory == FunctionalitySettingsCategory.Unsaved || functionality.settingsCategory == FunctionalitySettingsCategory.Hidden)
                 {
                     // Older project files may still contain data for this functionality.
                     ProjectData.Current.functionalities.RemoveAll(data => data.Id == functionality.Id);
