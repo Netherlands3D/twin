@@ -1,15 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.Feature;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.CityJSON;
 using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Tools.UI;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -126,13 +123,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-       
-
         private void OnRemoveFeatures()
         {
-            foreach (var co in cityJson.CityObjects)
+            foreach (var map in mappings)
             {
-                RemoveFeatureMapping(co);
+                SelectionService.MappingTree.Remove(map);
             }
             mappings.Clear();
         }
@@ -168,7 +163,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             mappings.Add(objectMapping);
         }
 
-        private void RemoveFeatureMapping(CityObject feature)
+        private bool RemoveFeatureMapping(CityObject feature)
         {
             foreach (CityJSONMapping mapping in mappings)
             {
@@ -176,8 +171,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 {
                     //destroy featuremapping object, there should be no references anywhere else to this object!
                     SelectionService.MappingTree.Remove(mapping);
+                    return true;
                 }
             }
+            return false;
         }
         
         protected override void OnMouseClickNothing()
@@ -185,13 +182,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
            //override base because we want no deselection while selecting
         }
         
-#if UNITY_EDITOR
-        protected override void Update()
-        {
-            base.Update();
-            foreach(var mapping in mappings)
-                mapping.Debug();
-        }
-#endif
+// #if UNITY_EDITOR
+//         protected override void Update()
+//         {
+//             base.Update();
+//             foreach(var mapping in mappings)
+//                 mapping.Debug();
+//         }
+// #endif
     }
 }

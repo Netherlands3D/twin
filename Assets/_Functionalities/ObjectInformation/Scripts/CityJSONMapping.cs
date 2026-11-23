@@ -137,9 +137,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             Coordinate topRight = new Coordinate(feature.CoordinateSystem, MaxExtent.x, MaxExtent.y, MaxExtent.z);
             boundingBox = new BoundingBox(bottomLeft, topRight );
             lastPosition = unityPosition;
-            
-            SelectionService.MappingTree.Remove(this);
-            SelectionService.MappingTree.RootInsert(this);
+
+            //when object with bounding box is moving we need to reinsert it to the tree
+            if (SelectionService.MappingTree.Remove(this)) 
+                SelectionService.MappingTree.RootInsert(this);
         }
         
         public void SetCityJsonLayerParent(CityJSONLayerGameObject parentLayer)
@@ -203,10 +204,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
 #if UNITY_EDITOR
-        public void Debug()
+        public void Debug(Color color)
         {
-            boundingBox.Debug(Color.blueViolet);
-            UnityEngine.Debug.DrawLine(feature.gameObject.transform.position, boundingBox.Center.ToUnity(), Color.blueViolet);
+            boundingBox.Debug(color);
+            UnityEngine.Debug.DrawLine(feature.gameObject.transform.position, boundingBox.Center.ToUnity(), color);
         }
 #endif
     }
