@@ -61,15 +61,19 @@ namespace Netherlands3D.Twin.layers.properties
             if (int.TryParse(layerFeature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var index))
             {
                 CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
-                if (layer.FeatureCount > 0)
+                if (layer.FeatureCount == 0)
+                {
+                    featureColorPropertyData.RemoveColorForMaterialIndex(index);
+                }
+                if (layer.FeatureCount == 1) //create styling rule, this will automatically trigger ApplyStyling
                 {
                     var symbolizer = visualization.GetStyling(layerFeature);
                     var color = symbolizer.GetColor(layer.StylingColorProperty);
                     featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(visualization.LayerData.Color), layer.StylingColorProperty);
                 }
-                else
+                else // styling rule already exists, so apply the styling to the feature
                 {
-                    featureColorPropertyData.RemoveColorForMaterialIndex(index);
+                    visualization.ApplyStylingToFeature(layerFeature);
                 }
             }
         }
