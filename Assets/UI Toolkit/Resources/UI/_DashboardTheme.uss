@@ -3,13 +3,13 @@
     --color-dashboard-dwellings-low: #c8e6d4;
     --color-dashboard-dwellings-medium: #7ecba0;
     --color-dashboard-dwellings-high: #2e9e60;
-    --color-dashboard-segment-social: #1a6bbf;
-    --color-dashboard-segment-mid-rent: #c07000;
-    --color-dashboard-segment-free-sector: #1a8a50;
-    --color-dashboard-phase-bbp: #216e88;
-    --color-dashboard-phase-so: #36a180;
-    --color-dashboard-phase-vo: #cc7065;
-    --color-dashboard-phase-do: #ad7c22;
+    --color-dashboard-segment-social: #4a78ad;
+    --color-dashboard-segment-mid-rent: #254976;
+    --color-dashboard-segment-free-sector: #102a49;
+    --color-dashboard-phase-bbp: #b65649;
+    --color-dashboard-phase-so: #a03c32;
+    --color-dashboard-phase-vo: #81291f;
+    --color-dashboard-phase-do: #5e1d18;
     --color-dashboard-category-business: #ed703e;
     --color-dashboard-category-office: #3e83c5;
     --color-dashboard-category-hospitality: #db3781;
@@ -19,8 +19,8 @@
     --color-dashboard-category-sport: #37c5a1;
     --color-dashboard-category-existing-office: #806044;
     --color-dashboard-category-home-office: #007c83;
-    --color-dashboard-room-one: #5141b5;
-    --color-dashboard-room-two: #b52c62;
-    --color-dashboard-room-three: #68752a;
-    --color-dashboard-room-four: #50565e;
+    --color-dashboard-room-one: #9160a6;
+    --color-dashboard-room-two: #78498e;
+    --color-dashboard-room-three: #603673;
+    --color-dashboard-room-four: #452451;
 }

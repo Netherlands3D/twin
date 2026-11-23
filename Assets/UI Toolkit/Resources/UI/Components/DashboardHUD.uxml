@@ -27,9 +27,10 @@
             <ui:VisualElement name="DashboardMapArea" picking-mode="Ignore" class="dashboard-hud__map-area">
                 <ui:VisualElement name="DashboardMapColors" class="dashboard-map-layers dashboard-theme">
                     <nl3d:ContentContainer text="Kaartkleuren" container-style="Normal" expanded="true" show-divider="true" class="dashboard-map-layers__container">
+                        <ui:Label name="MapColorEmpty" text="Geen gegevens beschikbaar"/>
                         <ui:VisualElement name="MapColorContent" class="hidden">
                             <nl3d:DropDown name="ColorMode" dropdown-style="Text" choices="Basiskleur,Grootste woningsegment,Aantal woningen,Laatst beschikbare planfase" tooltip="Kies waarop de kleuren van de gekoppelde bouwblokken zijn gebaseerd."/>
-                            <ui:Label text="Legenda" class="text-header dashboard-map-layers__label"/>
+                            <nl3d:Header text="Legenda" icon="Legend" class="dashboard-map-layers__label"/>
                             <ui:VisualElement name="ColorLegend" class="dashboard-map-layers__legend"/>
                         </ui:VisualElement>
                     </nl3d:ContentContainer>

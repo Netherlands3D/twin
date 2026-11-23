@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.DataSets;
@@ -40,6 +39,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private DashboardMapLayer selectedMapLayer;
         private VisualElement mapColorPanel;
         private VisualElement mapColorContent;
+        private Label mapColorEmpty;
         private DropDown mapColorSelection;
         private VisualElement mapLegend;
 
@@ -52,6 +52,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             paletteSource = root.Q("HousingBlockChart");
             mapColorPanel = root.Q("DashboardMapColors");
             mapColorContent = mapColorPanel.Q("MapColorContent");
+            mapColorEmpty = mapColorPanel.Q<Label>("MapColorEmpty");
             mapColorSelection = mapColorPanel.Q<DropDown>("ColorMode");
             mapLegend = mapColorPanel.Q("ColorLegend");
             // The NL3D dropdown's text style is available after its UXML has been deserialized.
@@ -125,14 +126,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnMapDataChanged()
         {
-            foreach (var key in mapColors.Keys.Where(key => key.StartsWith("segment:", StringComparison.Ordinal)).ToArray())
-                mapColors.Remove(key);
-
-            if (ObjectBinding?.HasData == true)
-            {
-                foreach (var segment in ObjectBinding.HousingSegments)
-                    mapColors[DashboardColors.SegmentKey(segment)] = DashboardColors.GetColor(segment, mapColors);
-            }
+            DashboardColors.SetSegmentColors(ObjectBinding?.HasData == true ? ObjectBinding.HousingSegments : Array.Empty<string>(), mapColors);
 
             RefreshMapColors();
             RefreshMapLegend();
@@ -152,8 +146,11 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         {
             mapLegend.Clear();
             var hasData = ObjectBinding?.HasData == true;
-            mapColorContent.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
-            if (!hasData || !DashboardColors.HasMapColors(mapColors))
+            var hasLinkedObjects = hasData && (ObjectBinding.Objects.Count > 0 || ObjectBinding.ObjObjects.Count > 0 || ObjectBinding.GlbObjects.Count > 0);
+            mapColorEmpty.text = hasData ? "Geen 3D-objecten gekoppeld aan de dashboardgegevens." : "Geen gegevens beschikbaar";
+            mapColorContent.EnableInClassList(UtilityClassConstants.HIDDEN, !hasLinkedObjects);
+            mapColorEmpty.EnableInClassList(UtilityClassConstants.HIDDEN, hasLinkedObjects);
+            if (!hasLinkedObjects || !DashboardColors.HasMapColors(mapColors))
                 return;
 
             switch (selectedMapLayer)
@@ -174,7 +171,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                     AddMapLegendEntry("high", "Vanaf 600 woningen");
                     break;
                 case DashboardMapLayer.Phase:
-                    foreach (var phase in new[] { "BBP", "SO", "VO", "DO" })
+                    foreach (var phase in DashboardData.Phases)
                         AddMapLegendEntry(phase.ToLowerInvariant(), phase);
                     break;
             }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.DataSets
 {
     /// <summary>
-    /// Resolves the shared dashboard palette and stable colors for additional CSV segment names.
+    /// Resolves the shared dashboard palette and category scales for the current CSV data.
     /// </summary>
     internal static class DashboardColors
     {
@@ -53,13 +54,36 @@ namespace Netherlands3D.Twin.DataSets
             return true;
         }
 
-        public static string SegmentKey(string segment) => segment switch
+        public static string SegmentKey(string segment) => "segment:" + segment.ToUpperInvariant();
+
+        public static void SetSegmentColors(IEnumerable<string> segments, IDictionary<string, Color> colors) =>
+            SetScaleColors(segments, "segment:", new[] { "social", "mid-rent", "free-sector" }, colors);
+
+        public static void SetRoomColors(IEnumerable<string> rooms, IDictionary<string, Color> colors) =>
+            SetScaleColors(rooms, "room:", new[] { "1 kamer", "2 kamers", "3 kamers", "4 kamers" }, colors);
+
+        private static void SetScaleColors(IEnumerable<string> labels, string prefix, string[] stops, IDictionary<string, Color> colors)
         {
-            "Sociaal" => "social",
-            "Middenhuur" => "mid-rent",
-            "Vrije sector" => "free-sector",
-            _ => "segment:" + segment.ToUpperInvariant()
-        };
+            foreach (var key in colors.Keys.Where(key => key.StartsWith(prefix, StringComparison.Ordinal)).ToArray())
+                colors.Remove(key);
+
+            if (stops.Any(key => !colors.ContainsKey(key)))
+                return;
+
+            var entries = labels.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+            for (var i = 0; i < entries.Length; i++)
+            {
+                var position = entries.Length > 1 ? (float)i / (entries.Length - 1) * (stops.Length - 1) : 0;
+                var lower = Mathf.Min(Mathf.FloorToInt(position), stops.Length - 2);
+                colors[prefix + entries[i].ToUpperInvariant()] = Color.Lerp(colors[stops[lower]], colors[stops[lower + 1]], position - lower);
+            }
+        }
+
+        public static Color GetSegmentColor(string segment, IReadOnlyDictionary<string, Color> colors) =>
+            colors.TryGetValue(SegmentKey(segment), out var color) ? color : GetColor(segment, colors);
+
+        public static Color GetRoomColor(string room, IReadOnlyDictionary<string, Color> colors) =>
+            colors.TryGetValue("room:" + room.ToUpperInvariant(), out var color) ? color : GetColor(room, colors);
 
         public static Color GetColor(string label, IReadOnlyDictionary<string, Color> colors)
         {
