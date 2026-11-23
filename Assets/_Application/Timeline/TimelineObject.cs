@@ -10,11 +10,7 @@ namespace Netherlands3D.Timeline
     public abstract class TimelineObject : MonoBehaviour
     {
         protected abstract string timelineAttributeName { get; }
-
         protected LayerGameObject visualization;
-        // private CityJSONLayerGameObject visualization;
-        // private CityJSON cityJson;
-
         protected TimelineStatusStylingLayerPropertyData timelineStatusStylingLayerPropertyData;
         protected TimelineLegendBehaviour timelineLegendBehaviour;
 
@@ -51,11 +47,12 @@ namespace Netherlands3D.Timeline
             visualization.LayerData.LayerSelected.AddListener(EnableLegend);
             visualization.LayerData.LayerDeselected.AddListener(DisableLegend);
         }
-
-        // protected abstract void ReadTimeLineFromAttributes();
         
         private void OnTimeChanged(DateTime currentTime)
         {
+            if(timelineStatusStylingLayerPropertyData == null)
+                return;
+            
             foreach (var timeline in timelineStatusStylingLayerPropertyData.TimestampCollections)
             {
                 SetFeatureAttributeForTime(currentTime, timeline.Key, timeline.Value);
