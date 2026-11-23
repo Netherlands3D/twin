@@ -9,6 +9,7 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Tools.UI;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -183,5 +184,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
            //override base because we want no deselection while selecting
         }
+        
+#if UNITY_EDITOR
+        protected override void Update()
+        {
+            base.Update();
+            foreach(var mapping in mappings)
+                mapping.Debug();
+        }
+#endif
     }
 }
