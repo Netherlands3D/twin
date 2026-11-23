@@ -811,6 +811,40 @@ namespace Netherlands3D.Twin.Tests
             Assert.That(identifier, Is.EqualTo(expected));
         }
 
+        [Test]
+        public void GlbMeshesUseTheNearestMatchingBlockGroupAndStayWithinTheImportedModel()
+        {
+            var index = CreateObjectIndex(ReadRows("Wonen;4N;SO;Sociaal;2;40;10;;;;", "Wonen;03;SO;Sociaal;2;40;20;;;;"));
+            var method = typeof(DashboardData).Assembly.GetType("Netherlands3D.Twin.DataSets.DashboardObjectBinding")
+                .GetMethod("FindGlbBlock", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var outside = new GameObject("4N");
+            try
+            {
+                var root = new GameObject("Model").transform;
+                root.SetParent(outside.transform, false);
+                var group = new GameObject("4N").transform;
+                group.SetParent(root, false);
+                var mesh = new GameObject("Mesh-0").transform;
+                mesh.SetParent(group, false);
+                Assert.That(method.Invoke(null, new object[] { index, mesh, root }), Is.SameAs(FindObjectBlock(index, "4N")));
+
+                var inner = new GameObject("03").transform;
+                inner.SetParent(group, false);
+                mesh.SetParent(inner, false);
+                Assert.That(method.Invoke(null, new object[] { index, mesh, root }), Is.SameAs(FindObjectBlock(index, "03")));
+
+                mesh.SetParent(root, false);
+                mesh.name = "ONBEKEND";
+                Assert.That(method.Invoke(null, new object[] { index, mesh, root }), Is.Null, "Do not use a sibling group or a layer name outside the model.");
+                Assert.That(method.Invoke(null, new object[] { CreateObjectIndex(null), inner, root }), Is.Null);
+                Assert.That(method.Invoke(null, new object[] { index, outside.transform, root }), Is.Null);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(outside);
+            }
+        }
+
         private static object CreateObjectIndex(DashboardData data) => Activator.CreateInstance(
             typeof(DashboardData).Assembly.GetType("Netherlands3D.Twin.DataSets.DashboardObjectData"), new object[] { data });
 

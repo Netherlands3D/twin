@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CityJson.Structure;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.GLBImporter;
 using Netherlands3D.Functionalities.OBJImporter;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.Events;
 using LayerService = Netherlands3D.Twin.Services.Layers;
 
 namespace Netherlands3D.Twin.DataSets
@@ -26,6 +30,7 @@ namespace Netherlands3D.Twin.DataSets
         private readonly HashSet<LayerData> currentProjectLayers = new();
         private readonly Dictionary<CityObject, DashboardObjectData.BlockData> objects = new();
         private readonly Dictionary<Material, DashboardObjectData.BlockData> objObjects = new();
+        private readonly Dictionary<MeshRenderer, DashboardObjectData.BlockData> glbObjects = new();
         private readonly Dictionary<HierarchicalObjectLayerGameObject, GameObject> objRoots = new();
         private DashboardCsvPropertyData source;
         private DashboardData data;
@@ -34,14 +39,17 @@ namespace Netherlands3D.Twin.DataSets
 #if UNITY_EDITOR
         private readonly Dictionary<HierarchicalObjectLayerGameObject, string> bindingDiagnostics = new();
         private readonly List<(string Name, string Identifier, bool Matched)> diagnosticItems = new();
+        private readonly Dictionary<LayerData, UnityAction<Coordinate>> glbPositionListeners = new();
 #endif
 
         public IReadOnlyDictionary<CityObject, DashboardObjectData.BlockData> Objects => objects;
         public IReadOnlyDictionary<Material, DashboardObjectData.BlockData> ObjObjects => objObjects;
+        public IReadOnlyDictionary<MeshRenderer, DashboardObjectData.BlockData> GlbObjects => glbObjects;
         public bool HasData => functionality.IsEnabled && data != null;
         public IReadOnlyList<string> HousingSegments => index.HousingSegments;
         public IEnumerable<CityJSONLayerGameObject> Visualizations => visualizations.OfType<CityJSONLayerGameObject>().Where(IsCurrent);
         public IEnumerable<HierarchicalObjectLayerGameObject> ObjVisualizations => visualizations.Where(visualization => IsCurrent(visualization) && visualization.GetComponent<OBJSpawner>() != null);
+        public IEnumerable<HierarchicalObjectLayerGameObject> GlbVisualizations => visualizations.Where(visualization => IsCurrent(visualization) && visualization.GetComponent<GLBSpawner>() != null);
         public event Action Changed;
 
         public static bool IsDashboardLayerName(string name) => name?.TrimStart().StartsWith("dashboard", StringComparison.OrdinalIgnoreCase) == true;
@@ -82,6 +90,21 @@ namespace Netherlands3D.Twin.DataSets
             return string.IsNullOrWhiteSpace(identifier) ? null : identifier;
         }
 
+        internal static DashboardObjectData.BlockData FindGlbBlock(DashboardObjectData index, Transform geometry, Transform modelRoot)
+        {
+            if (geometry == null || modelRoot == null || !geometry.IsChildOf(modelRoot))
+                return null;
+
+            // Exporters may split one named group into several mesh children. Prefer the nearest matching node.
+            for (var node = geometry; node != null && node != modelRoot; node = node.parent)
+            {
+                var block = index.Find(node.name);
+                if (block != null)
+                    return block;
+            }
+            return null;
+        }
+
         public DashboardObjectBinding(LayerService layers, ProjectDataHandler projectLoader, Functionality functionality)
         {
             this.layers = layers;
@@ -108,7 +131,12 @@ namespace Netherlands3D.Twin.DataSets
             functionality.OnDisableFunctionality.RemoveListener(Refresh);
             source?.DataChanged.RemoveListener(Refresh);
             foreach (var layer in namedLayers)
+            {
                 layer.NameChanged.RemoveListener(OnLayerNameChanged);
+#if UNITY_EDITOR
+                UnsubscribeGlbPositionChanged(layer);
+#endif
+            }
             namedLayers.Clear();
             currentProjectLayers.Clear();
             foreach (var visualization in visualizations)
@@ -116,6 +144,7 @@ namespace Netherlands3D.Twin.DataSets
             visualizations.Clear();
             objects.Clear();
             objObjects.Clear();
+            glbObjects.Clear();
             objRoots.Clear();
 #if UNITY_EDITOR
             bindingDiagnostics.Clear();
@@ -150,7 +179,7 @@ namespace Netherlands3D.Twin.DataSets
             RefreshObjects();
         }
 
-        private static bool IsSupported(HierarchicalObjectLayerGameObject visualization) => visualization is CityJSONLayerGameObject || visualization.GetComponent<OBJSpawner>() != null;
+        private static bool IsSupported(HierarchicalObjectLayerGameObject visualization) => visualization is CityJSONLayerGameObject || visualization.GetComponent<OBJSpawner>() != null || visualization.GetComponent<GLBSpawner>() != null;
 
         private bool IsCurrent(HierarchicalObjectLayerGameObject visualization) => visualization != null && visualization.HasLayerData &&
             !visualization.LayerData.IsDisposed && currentProjectLayers.Contains(visualization.LayerData);
@@ -164,7 +193,7 @@ namespace Netherlands3D.Twin.DataSets
             if (visualization is CityJSONLayerGameObject)
                 visualization.GetComponent<CityJSON>().onAllCityObjectsProcessed.AddListener(RefreshObjects);
             else
-                visualization.GetComponent<OBJSpawner>().ObjectVisualized.AddListener(OnObjVisualized);
+                visualization.GetComponent<IImportedObject>().ObjectVisualized.AddListener(OnObjVisualized);
         }
 
         private void Unsubscribe(HierarchicalObjectLayerGameObject visualization)
@@ -178,7 +207,7 @@ namespace Netherlands3D.Twin.DataSets
 
             if (visualization is CityJSONLayerGameObject)
                 visualization.GetComponent<CityJSON>().onAllCityObjectsProcessed.RemoveListener(RefreshObjects);
-            else if (visualization.TryGetComponent<OBJSpawner>(out var spawner))
+            else if (visualization.TryGetComponent<IImportedObject>(out var spawner))
                 spawner.ObjectVisualized.RemoveListener(OnObjVisualized);
         }
 
@@ -194,6 +223,8 @@ namespace Netherlands3D.Twin.DataSets
             objRoots[visualization] = importedObject;
             CaptureCurrentLayers();
             RefreshObjectsCore(visualization);
+            if (visualization.GetComponent<GLBSpawner>() != null)
+                LogGlbGeometry(visualization, importedObject);
         }
 
         private void DiscoverVisualizations()
@@ -266,16 +297,26 @@ namespace Netherlands3D.Twin.DataSets
             foreach (var layer in namedLayers.Except(currentLayers).ToArray())
             {
                 layer.NameChanged.RemoveListener(OnLayerNameChanged);
+#if UNITY_EDITOR
+                UnsubscribeGlbPositionChanged(layer);
+#endif
                 namedLayers.Remove(layer);
             }
             foreach (var layer in currentLayers)
             {
                 if (namedLayers.Add(layer))
+                {
                     layer.NameChanged.AddListener(OnLayerNameChanged);
+#if UNITY_EDITOR
+                    if (layer.HasProperty<GLBPropertyData>())
+                        SubscribeGlbPositionChanged(layer);
+#endif
+                }
             }
 
             objects.Clear();
             objObjects.Clear();
+            glbObjects.Clear();
             var invalidBlockCount = 0;
             foreach (var visualization in visualizations)
             {
@@ -300,6 +341,8 @@ namespace Netherlands3D.Twin.DataSets
                             RecordBindingDiagnostic(cityObject.name, blockId, block != null);
                         }
                     }
+                    else if (visualization.GetComponent<GLBSpawner>() != null)
+                        BindGlbMeshes(visualization);
                     else
                         BindObjMaterials(visualization, ref invalidBlockCount);
                 }
@@ -335,9 +378,78 @@ namespace Netherlands3D.Twin.DataSets
 
         private IEnumerable<Material> GetObjMaterials(HierarchicalObjectLayerGameObject visualization)
         {
-            var root = objRoots.TryGetValue(visualization, out var importedObject) && importedObject != null ? importedObject : visualization.gameObject;
+            var root = GetImportedRoot(visualization);
             return root.GetComponentsInChildren<MeshRenderer>(true).SelectMany(renderer => renderer.sharedMaterials).Where(material => material != null).Distinct();
         }
+
+        private GameObject GetImportedRoot(HierarchicalObjectLayerGameObject visualization) =>
+            objRoots.TryGetValue(visualization, out var importedObject) && importedObject != null ? importedObject : visualization.gameObject;
+
+        private void BindGlbMeshes(HierarchicalObjectLayerGameObject visualization)
+        {
+            var root = GetImportedRoot(visualization);
+            foreach (var renderer in root.GetComponentsInChildren<MeshRenderer>(true))
+            {
+                var block = FindGlbBlock(index, renderer.transform, root.transform);
+                if (block != null)
+                    glbObjects[renderer] = block;
+                RecordBindingDiagnostic(renderer.name, block?.Block ?? renderer.name, block != null);
+            }
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        private void LogGlbGeometry(HierarchicalObjectLayerGameObject visualization, GameObject importedObject)
+        {
+#if UNITY_EDITOR
+            var renderers = importedObject.GetComponentsInChildren<MeshRenderer>(true);
+            if (renderers.Length == 0)
+            {
+                Debug.Log($"GLB-geometrie '{visualization.Name}': geen MeshRenderers aangetroffen.", visualization);
+                return;
+            }
+
+            var bounds = renderers[0].bounds;
+            foreach (var renderer in renderers.Skip(1))
+                bounds.Encapsulate(renderer.bounds);
+
+            var layerPosition = visualization.WorldTransform.Coordinate.Convert(CoordinateSystem.RDNAP);
+            var geometryPosition = new Coordinate(bounds.center).Convert(CoordinateSystem.RDNAP);
+            var offset = bounds.center - visualization.transform.position;
+            Debug.Log($"GLB-geometrie '{visualization.Name}': {renderers.Length} meshonderdelen. " +
+                $"Laag RD/NAP: {layerPosition}. Geometriemiddelpunt RD/NAP: {geometryPosition}. " +
+                $"Unity-middelpunt: {bounds.center.ToString("F3")}, afmetingen (m): {bounds.size.ToString("F3")}, " +
+                $"verschil met laagpositie (Unity, m): {offset.ToString("F3")}. Controle verplaatst niets.", visualization);
+#endif
+        }
+
+#if UNITY_EDITOR
+        private void SubscribeGlbPositionChanged(LayerData layer)
+        {
+            var property = layer.GetProperty<TransformLayerPropertyData>();
+            if (property == null)
+                return;
+
+            UnityAction<Coordinate> listener = _ => OnGlbPositionChanged(layer);
+            glbPositionListeners.Add(layer, listener);
+            property.OnPositionChanged.AddListener(listener);
+        }
+
+        private void UnsubscribeGlbPositionChanged(LayerData layer)
+        {
+            if (!glbPositionListeners.TryGetValue(layer, out var listener))
+                return;
+
+            layer.GetProperty<TransformLayerPropertyData>()?.OnPositionChanged.RemoveListener(listener);
+            glbPositionListeners.Remove(layer);
+        }
+
+        private void OnGlbPositionChanged(LayerData layer)
+        {
+            var visualization = GlbVisualizations.FirstOrDefault(candidate => candidate.LayerData == layer);
+            if (visualization != null)
+                LogGlbGeometry(visualization, GetImportedRoot(visualization));
+        }
+#endif
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         private void RecordBindingDiagnostic(string name, string identifier, bool matched)
@@ -351,7 +463,7 @@ namespace Netherlands3D.Twin.DataSets
         private void LogBinding(HierarchicalObjectLayerGameObject visualization, bool importCompleted)
         {
 #if UNITY_EDITOR
-            var format = visualization is CityJSONLayerGameObject ? "CityJSON" : "OBJ";
+            var format = visualization is CityJSONLayerGameObject ? "CityJSON" : visualization.GetComponent<GLBSpawner>() != null ? "GLB" : "OBJ";
             var message = $"Dashboardkoppeling {format} '{visualization.Name}': ";
             if (!functionality.IsEnabled)
                 message += "niet actief (dashboarding uitgeschakeld).";
@@ -364,7 +476,7 @@ namespace Netherlands3D.Twin.DataSets
                 var total = diagnosticItems.Count;
                 var matched = diagnosticItems.Count(item => item.Matched);
                 var identifiers = diagnosticItems.Select(item => item.Identifier).Distinct().OrderBy(identifier => identifier).ToArray();
-                var unit = visualization is CityJSONLayerGameObject ? "CityObjects" : "materialen";
+                var unit = format == "CityJSON" ? "CityObjects" : format == "GLB" ? "meshonderdelen" : "materialen";
                 message += $"{total} ingelezen {unit}, {matched} gekoppeld, {total - matched} zonder overeenkomst.";
                 message += " Aangetroffen blokcodes: " + (identifiers.Length == 0 ? "geen" : string.Join(", ", identifiers.Take(20)));
                 if (identifiers.Length > 20)
@@ -381,7 +493,7 @@ namespace Netherlands3D.Twin.DataSets
                 return;
 
             bindingDiagnostics[visualization] = message;
-            Debug.Log(message + (importCompleted ? " Dashboardkoppeling opnieuw beoordeeld na OBJ/MTL-import." : ""), visualization);
+            Debug.Log(message + (importCompleted ? $" Dashboardkoppeling opnieuw beoordeeld na {(format == "GLB" ? "GLB" : "OBJ/MTL")}-import." : ""), visualization);
 #endif
         }
     }
