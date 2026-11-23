@@ -44,23 +44,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             set => lineRenderer3D = value;
         }
 
+        private float maxAlpha; // todo this can be deleted when we support alpha in the color picker.
+
+        private void Start()
+        {
+            maxAlpha = RenderMaterial.color.a;
+        }
+        
         public void SetColorForAllFeatures(Color color)
         {
             // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             LineRenderer3D.LineMaterial = new Material(LineRenderer3D.LineMaterial);
-            var newColor = new Color(color.r, color.g, color.b, LineRenderer3D.LineMaterial.color.a); //todo: we don't support alpha yet in the color picker
+            var alpha = Mathf.Clamp(color.a, 0, maxAlpha); 
+            var newColor = new Color(color.r, color.g, color.b, alpha); //todo: we don't support alpha yet in the color picker
             LineRenderer3D.SetAllColors(newColor);
         }
-
 
         public void SetColorForFeature(Feature feature, Color color)
         {
             var data = spawnedVisualisations[feature];
+            var alpha = Mathf.Clamp(color.a, 0, maxAlpha); 
+            var newColor = new Color(color.r, color.g, color.b, alpha); //todo: we don't support alpha yet in the color picker
+
             foreach (var pointList in data.Data)
             {
-                LineRenderer3D.SetColor(pointList, color); //todo:
+                LineRenderer3D.SetColor(pointList, newColor);
             }
         }
 

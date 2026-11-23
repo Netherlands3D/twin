@@ -9,7 +9,6 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -37,23 +36,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private List<List<Coordinate>> visualisationsToRemove = new();
 
+        private float maxAlpha; // todo this can be deleted when we support alpha in the color picker.
+
+        private void Start()
+        {
+            maxAlpha = RenderMaterial.color.a;
+        }
+        
         public void SetColorForAllFeatures(Color color)
         {
             // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
-            var newColor = new Color(color.r, color.g, color.b, PointRenderer3D.PointMaterial.color.a); //todo: we don't support alpha yet in the color picker
+            var alpha = Mathf.Clamp(color.a, 0, maxAlpha); 
+            var newColor = new Color(color.r, color.g, color.b, alpha); //todo: we don't support alpha yet in the color picker
             PointRenderer3D.SetAllColors(newColor);
         }
-
 
         public void SetColorForFeature(Feature feature, Color color)
         {
             var data = spawnedVisualisations[feature];
+            var alpha = Mathf.Clamp(color.a, 0, maxAlpha); 
+            var newColor = new Color(color.r, color.g, color.b, alpha); //todo: we don't support alpha yet in the color picker
+
             foreach (var pointList in data.Data)
             {
-                PointRenderer3D.SetColor(pointList, color); //todo
+                PointRenderer3D.SetColor(pointList, newColor);
             }
         }
 
