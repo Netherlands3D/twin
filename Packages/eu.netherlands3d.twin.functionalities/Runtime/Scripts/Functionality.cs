@@ -79,6 +79,8 @@ namespace Netherlands3D.Twin.Functionalities
         public ScriptableObject configuration;
         public FunctionalitySettingsCategory settingsCategory = FunctionalitySettingsCategory.Optional;
         public FunctionalityStatePersistence statePersistence = FunctionalityStatePersistence.Project;
+        
+        public string[] enableOnHosts = Array.Empty<string>();
 
         public string Id => defaultData.Id;
 
