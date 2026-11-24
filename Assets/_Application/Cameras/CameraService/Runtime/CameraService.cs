@@ -38,11 +38,11 @@ namespace Netherlands3D.Twin.Cameras
 
         public Camera PreviousCamera => previous;
 
-        public bool IsCurrentCameraFpv => isCurrentCameraFPV;
+        public bool IsActiveCameraFpv => isActiveCameraFpv;
 
         private Camera current;
         private Camera previous;
-        private bool isCurrentCameraFPV = false;
+        private bool isActiveCameraFpv = false;
         
         private void Start()
         {
@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Cameras
             current = cameraObject;
             previous?.gameObject.SetActive(false);
             cameraObject.gameObject.SetActive(true);
-            isCurrentCameraFPV = isFPV;
+            isActiveCameraFpv = isFPV;
             OnSwitchCamera.Invoke(cameraObject);
         }
 

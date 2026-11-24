@@ -326,7 +326,7 @@ namespace Netherlands3D.CartesianTiles
         private Vector4 GetViewRange()
         {
             Extent cameraExtent;
-            if (!cameraService.IsCurrentCameraFpv)
+            if (!cameraService.IsActiveCameraFpv)
             {
                 useRadialDistanceCheck = false;
                 float maxViewDistance = GetAltitudeViewDistanceFactor() * (cameraService.ActiveCamera.farClipPlane + maxTileSize);
