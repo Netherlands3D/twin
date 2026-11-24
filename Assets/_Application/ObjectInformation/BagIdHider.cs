@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.ObjectInformation
 {
-    public class BagIdHider : MonoBehaviour
+    public class BagIdHider : MonoBehaviour, IAssetBundleData
     {
         [SerializeField] private HiddenBagIds data;
         [SerializeField] private HiddenBagIds alwaysHiddenData;

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.Catalogs;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
@@ -13,17 +13,31 @@ namespace Netherlands3D.AssetLibrary.Entries
     {
         [SerializeField] private string bundleName;
         [SerializeField] private string prefabName;
-
-        public string BundleName => bundleName;
-        public string PrefabName => prefabName;
+        [SerializeField] private Vector3 coordinate = Vector3.zero;
+        [SerializeField] private CoordinateSystem coordinateSystem;
+        [SerializeField] private Vector3 rotation;
 
         public override ICatalogItem ToCatalogItem()
         {
-            if (string.IsNullOrWhiteSpace(bundleName) || string.IsNullOrWhiteSpace(prefabName))
+            if (string.IsNullOrWhiteSpace(bundleName) ||
+                string.IsNullOrWhiteSpace(prefabName))
                 return null;
 
+            
+            Dictionary<string, object> metaData = new Dictionary<string, object>();
+            metaData.Add("coordinate", coordinate);
+            metaData.Add("rotation", rotation);
+            metaData.Add("coordinateSystem", coordinateSystem);
+            
             var resolved = $"streamingassets:///{Uri.EscapeDataString(bundleName)}/{Uri.EscapeDataString(prefabName)}";
-            return InMemoryCatalog.CreateRecord(Id, Title, Description, new Uri(resolved, UriKind.Absolute));
+
+            return InMemoryCatalog.CreateRectordWithMetaData(
+                Id,
+                Title,
+                metaData,
+                Description,
+                new Uri(resolved, UriKind.Absolute)
+            );
         }
         
         public override IEnumerable<LayerGameObject> CollectPrefabs()
