@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47224adf747a413a86057f38957337f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
   fromUrlImporter: {fileID: 1444499676158243795}
+  assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
   VisualizationCreated:
     m_PersistentCalls:
       m_Calls: []
