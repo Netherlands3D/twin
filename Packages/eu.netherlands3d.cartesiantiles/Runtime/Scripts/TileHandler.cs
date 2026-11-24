@@ -330,8 +330,6 @@ namespace Netherlands3D.CartesianTiles
             {
                 useRadialDistanceCheck = false;
                 float maxViewDistance = GetAltitudeViewDistanceFactor() * (cameraService.ActiveCamera.farClipPlane + maxTileSize);
-                Debug.Log(maxViewDistance);
-                //functie maken waarbij je cameraactive farcliplane ophaalt, en dan kijken hoe hoog je boven maaiveld zit en dan obv afstand maximale hoeveelheid tegels bepalen, dus dicht bij de grond weinig tegels
                 cameraExtent = cameraService.ActiveCamera.GetRDExtent(maxViewDistance);
             }
             else
@@ -361,7 +359,7 @@ namespace Netherlands3D.CartesianTiles
             float distanceToGround = pos.y - ServiceLocator.GetService<HeightMap>().GetHeight(new Coordinate(pos));
             float height = Mathf.Max(1f, Mathf.Abs(distanceToGround));
             float t = Mathf.Clamp01(height / CameraService.CAMERA_MAXHEIGHT);
-            //curve to increase view distance more quickly at lower altitudes.
+            //curve to increase view distance more quickly at lower altitudes as the viewdistance does not increase linearly when increasing height
             return Mathf.Pow(t, 0.65f);
         }
 
