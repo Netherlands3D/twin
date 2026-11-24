@@ -162,33 +162,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             SelectionService.MappingTree.RootInsert(objectMapping);
             mappings.Add(objectMapping);
         }
-
-        private bool RemoveFeatureMapping(CityObject feature)
-        {
-            foreach (CityJSONMapping mapping in mappings)
-            {
-                if (mapping.Feature == feature)
-                {
-                    //destroy featuremapping object, there should be no references anywhere else to this object!
-                    SelectionService.MappingTree.Remove(mapping);
-                    return true;
-                }
-            }
-            return false;
-        }
         
         protected override void OnMouseClickNothing()
         {
            //override base because we want no deselection while selecting
         }
-        
-// #if UNITY_EDITOR
-//         protected override void Update()
-//         {
-//             base.Update();
-//             foreach(var mapping in mappings)
-//                 mapping.Debug();
-//         }
-// #endif
     }
 }
