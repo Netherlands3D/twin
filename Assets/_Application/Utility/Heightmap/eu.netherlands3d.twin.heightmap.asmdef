@@ -1,0 +1,16 @@
+{
+    "name": "eu.netherlands3d.twin.heightmap",
+    "rootNamespace": "Netherlands3D.Twin.HeightMap",
+    "references": [
+        "GUID:19c45768ddcd67943afbf0cb4e4ff0b3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

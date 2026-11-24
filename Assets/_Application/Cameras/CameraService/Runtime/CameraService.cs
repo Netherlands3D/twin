@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NetTopologySuite.Geometries;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,6 +12,8 @@ namespace Netherlands3D.Twin.Cameras
         public UnityEvent<Camera> OnSwitchCamera = new();
         
         private Vector3 lastPosition;
+
+        public const float CAMERA_MAXHEIGHT = 1500;
 
         public Camera ActiveCamera
         {
@@ -35,8 +38,11 @@ namespace Netherlands3D.Twin.Cameras
 
         public Camera PreviousCamera => previous;
 
+        public bool IsCurrentCameraFpv => isCurrentCameraFPV;
+
         private Camera current;
         private Camera previous;
+        private bool isCurrentCameraFPV = false;
         
         private void Start()
         {
@@ -49,7 +55,7 @@ namespace Netherlands3D.Twin.Cameras
             }
         }
 
-        public void SwitchCamera(Camera cameraObject)
+        public void SwitchCamera(Camera cameraObject, bool isFPV = false)
         {
             if (cameraObject == null)
             {
@@ -62,7 +68,7 @@ namespace Netherlands3D.Twin.Cameras
             current = cameraObject;
             previous?.gameObject.SetActive(false);
             cameraObject.gameObject.SetActive(true);
-            
+            isCurrentCameraFPV = isFPV;
             OnSwitchCamera.Invoke(cameraObject);
         }
 

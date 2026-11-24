@@ -111,7 +111,7 @@ namespace Netherlands3D.FirstPersonViewer
             //When entering the FPV for the first time use the cool animation :).
             if (!FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy)
             {
-                App.Cameras.SwitchCamera(FirstPersonCamera.FPVCamera);
+                App.Cameras.SwitchCamera(FirstPersonCamera.FPVCamera, true);
 
                 bool usePitch = startState != null && startState.CameraConstrain != CameraConstrain.CONTROL_NONE;
                 FirstPersonCamera.SetupViewer(usePitch);

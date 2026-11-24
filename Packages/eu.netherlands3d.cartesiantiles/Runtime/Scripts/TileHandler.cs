@@ -23,8 +23,9 @@ using UnityEngine;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
-using UnityEngine.Events;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.HeightMap;
+using UnityEngine.Events;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -82,8 +83,7 @@ namespace Netherlands3D.CartesianTiles
         /// <summary>
         /// list of tilechanges, ready to be processed
         /// </summary>
-        [HideInInspector]
-        public List<TileChange> pendingTileChanges = new List<TileChange>();
+        [HideInInspector] public List<TileChange> pendingTileChanges = new List<TileChange>();
 
         /// <summary>
         /// dictionary with tilechanges that are curently being processed
@@ -132,15 +132,12 @@ namespace Netherlands3D.CartesianTiles
         public UnityEvent<Layer> layerAdded = new();
         public UnityEvent<Layer> layerRemoved = new();
 
-        private Camera activeCamera;
+        private CameraService cameraService;
         
       
         void Start()
         {
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            SetActiveCamera(cameraService.ActiveCamera);
-            
-            cameraService.OnSwitchCamera.AddListener(SetActiveCamera);
+            cameraService = ServiceLocator.GetService<CameraService>();
             
             //todo we want to listen to current active camera, but for now commented until a new fpv algorithm is introduced to calculate the tilehandler camera extents for optimal loading tiles
             //cameraService.OnSwitchCamera.AddListener(SetActiveCamera);
@@ -158,11 +155,6 @@ namespace Netherlands3D.CartesianTiles
             {
                 GetTilesizes();
             }
-        }
-
-        public void SetActiveCamera(Camera camera)
-        {
-            activeCamera = camera;
         }
 
         public void AddLayer(Layer layer)
@@ -334,16 +326,18 @@ namespace Netherlands3D.CartesianTiles
         private Vector4 GetViewRange()
         {
             Extent cameraExtent;
-            if (activeCamera is not FistPersonViewCamera)
+            if (!cameraService.IsCurrentCameraFpv)
             {
                 useRadialDistanceCheck = false;
+                float maxViewDistance = GetGroundViewRange() * cameraService.ActiveCamera.farClipPlane + maxTileSize;
+                Debug.Log(maxViewDistance);
                 //functie maken waarbij je cameraactive farcliplane ophaalt, en dan kijken hoe hoog je boven maaiveld zit en dan obv afstand maximale hoeveelheid tegels bepalen, dus dicht bij de grond weinig tegels
-                cameraExtent = activeCamera.GetRDExtent(activeCamera.farClipPlane + maxTileSize, );
+                cameraExtent = cameraService.ActiveCamera.GetRDExtent(maxViewDistance);
             }
             else
             {
                 useRadialDistanceCheck = true;
-                var cameraRD = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RD);
+                var cameraRD = new Coordinate(cameraService.ActiveCamera.transform.position).Convert(CoordinateSystem.RD);
                 cameraExtent = new Extent(
                     cameraRD.easting - groundLevelClipRange,
                     cameraRD.northing - groundLevelClipRange,
@@ -360,10 +354,20 @@ namespace Netherlands3D.CartesianTiles
 
             return viewRange;
         }
+        
+        private float GetGroundViewRange()
+        {
+            Vector3 pos = cameraService.ActiveCamera.transform.position;
+            float distanceToGround = pos.y - ServiceLocator.GetService<HeightMap>().GetHeight(new Coordinate(pos));
+            float height = Mathf.Max(1f, Mathf.Abs(distanceToGround));
+            float t = Mathf.Clamp01(height / CameraService.CAMERA_MAXHEIGHT);
+            t = Mathf.Pow(t, 2f);
+            return t;
+        }
 
         private Vector3Int GetRDCameraPosition()
         {
-            var cameraPositionRD = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RDNAP);
+            var cameraPositionRD = new Coordinate(cameraService.ActiveCamera.transform.position).Convert(CoordinateSystem.RDNAP);
             Vector3Int cameraPosition = new Vector3Int();
             cameraPosition.x = (int)cameraPositionRD.easting;
             cameraPosition.y = (int)cameraPositionRD.northing;
@@ -423,7 +427,7 @@ namespace Netherlands3D.CartesianTiles
             //Godview only frustum check
             if (filterByCameraFrustum && !useRadialDistanceCheck)
             {
-                GeometryUtility.CalculateFrustumPlanes(activeCamera, cameraFrustumPlanes);
+                GeometryUtility.CalculateFrustumPlanes(cameraService.ActiveCamera, cameraFrustumPlanes);
             }
 
             maxTileDistances = 0;
@@ -727,13 +731,6 @@ namespace Netherlands3D.CartesianTiles
                 }
             }
             return highestPriorityTileChange;
-        }
-        
-        private void OnDestroy()
-        {
-            //todo we want to listen to current active camera, but for now commented until a new fpv algorithm is introduced to calculate the tilehandler camera extents for optimal loading tiles
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            cameraService.OnSwitchCamera.RemoveListener(SetActiveCamera);
         }
     }
 

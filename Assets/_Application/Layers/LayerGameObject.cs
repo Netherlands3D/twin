@@ -244,7 +244,7 @@ namespace Netherlands3D.Twin.Layers
             if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
             {
                 targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
+                float height = ServiceLocator.GetService<HeightMap.HeightMap>().GetHeight(targetCoordinate);
                 targetCoordinate.height = height;
             }
 
