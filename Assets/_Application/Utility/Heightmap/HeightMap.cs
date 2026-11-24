@@ -7,8 +7,8 @@ namespace Netherlands3D.Twin.Heightmap
     {
         [SerializeField] private Texture2D heightMap;
         
-        private Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84_LatLon, 50.75035d, 3.35833d);
-        private Coordinate topRight = new Coordinate(CoordinateSystem.WGS84_LatLon, 53.5171625d, 7.22778d);
+        private readonly Coordinate bottomLeft = new (CoordinateSystem.WGS84_LatLon, 50.75035d, 3.35833d); //bottomleft corner matching the heightmap texture
+        private readonly Coordinate topRight = new (CoordinateSystem.WGS84_LatLon, 53.5171625d, 7.22778d); //topright corner matching the heightmap texture
 
         private const float lowestPoint = -6.76f;
         private const float highestPoint = 322.4f;
