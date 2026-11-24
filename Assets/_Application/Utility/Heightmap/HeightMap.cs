@@ -1,7 +1,7 @@
 ﻿using Netherlands3D.Coordinates;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.HeightMap
+namespace Netherlands3D.Twin.Heightmap
 {
     public class HeightMap : MonoBehaviour
     {

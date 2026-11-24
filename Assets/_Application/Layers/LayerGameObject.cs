@@ -10,6 +10,7 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using System.Linq;
+using Netherlands3D.Twin.Heightmap;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 #if UNITY_EDITOR
@@ -244,7 +245,7 @@ namespace Netherlands3D.Twin.Layers
             if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
             {
                 targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
-                float height = ServiceLocator.GetService<HeightMap.HeightMap>().GetHeight(targetCoordinate);
+                float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
                 targetCoordinate.height = height;
             }
 

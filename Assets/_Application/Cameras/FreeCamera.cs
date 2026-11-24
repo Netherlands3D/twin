@@ -2,6 +2,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Heightmap;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 using UnityEngine.InputSystem;

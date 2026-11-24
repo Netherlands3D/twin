@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Heightmap;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -21,7 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private DecalProjector decalProjector;
         public Camera ProjectionCamera { get; private set; }
         private Camera mainCamera;
-        private HeightMap.HeightMap heightMap;
+        private HeightMap heightMap;
         
         private void Awake()
         {
@@ -32,7 +33,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void Start()
         {
-            heightMap = ServiceLocator.GetService<HeightMap.HeightMap>();
+            heightMap = ServiceLocator.GetService<HeightMap>();
             App.Cameras.OnSwitchCamera.AddListener(SetCamera);
             mainCamera = App.Cameras.ActiveCamera;
         }

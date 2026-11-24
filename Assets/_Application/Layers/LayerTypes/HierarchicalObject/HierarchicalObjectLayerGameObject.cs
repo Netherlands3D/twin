@@ -13,6 +13,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Twin.Heightmap;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;

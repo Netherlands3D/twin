@@ -24,7 +24,7 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.HeightMap;
+using Netherlands3D.Twin.Heightmap;
 using UnityEngine.Events;
 
 namespace Netherlands3D.CartesianTiles
@@ -329,7 +329,7 @@ namespace Netherlands3D.CartesianTiles
             if (!cameraService.IsCurrentCameraFpv)
             {
                 useRadialDistanceCheck = false;
-                float maxViewDistance = GetGroundViewRange() * cameraService.ActiveCamera.farClipPlane + maxTileSize;
+                float maxViewDistance = GetAltitudeViewDistanceFactor() * (cameraService.ActiveCamera.farClipPlane + maxTileSize);
                 Debug.Log(maxViewDistance);
                 //functie maken waarbij je cameraactive farcliplane ophaalt, en dan kijken hoe hoog je boven maaiveld zit en dan obv afstand maximale hoeveelheid tegels bepalen, dus dicht bij de grond weinig tegels
                 cameraExtent = cameraService.ActiveCamera.GetRDExtent(maxViewDistance);
@@ -355,14 +355,14 @@ namespace Netherlands3D.CartesianTiles
             return viewRange;
         }
         
-        private float GetGroundViewRange()
+        private float GetAltitudeViewDistanceFactor()
         {
             Vector3 pos = cameraService.ActiveCamera.transform.position;
             float distanceToGround = pos.y - ServiceLocator.GetService<HeightMap>().GetHeight(new Coordinate(pos));
             float height = Mathf.Max(1f, Mathf.Abs(distanceToGround));
             float t = Mathf.Clamp01(height / CameraService.CAMERA_MAXHEIGHT);
-            t = Mathf.Pow(t, 2f);
-            return t;
+            //curve to increase view distance more quickly at lower altitudes.
+            return Mathf.Pow(t, 0.65f);
         }
 
         private Vector3Int GetRDCameraPosition()
