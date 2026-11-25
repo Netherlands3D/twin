@@ -1,5 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="stats-graph">
     <ui:Label name="Title" text="Title" class="stats-graph__title"/>
     <ui:VisualElement name="Graph" class="stats-graph__graph"/>
-    <ui:Label name="Value" text="0" class="stats-graph__value"/>
+    <ui:VisualElement name="Values" class="stats-graph__values">
+        <ui:Label name="MaxValue" text="0" class="stats-graph__range-value"/>
+        <ui:Label name="Value" text="0" class="stats-graph__value"/>
+        <ui:Label name="MinValue" text="0" class="stats-graph__range-value"/>
+    </ui:VisualElement>
 </ui:UXML>
