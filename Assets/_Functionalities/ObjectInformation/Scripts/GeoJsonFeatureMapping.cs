@@ -272,9 +272,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             selectedGameObjects.Clear();
 
+            //reset the color to the color of the visualisationLayer
             visualisationLayer.SetVisualisationDeselected(meshes);
+            
+            //in case we have an individual style for the feature, we should re-apply this
             var stylingFeature = geoJsonLayerParent.GetStylingFeatureByGeometry(feature);
-            geoJsonLayerParent.ApplyStylingToFeature(stylingFeature);
+            if(stylingFeature != null)
+               geoJsonLayerParent.ApplyStylingToFeature(stylingFeature); 
         }
 
         public void SetMappingProjected(bool projected)
