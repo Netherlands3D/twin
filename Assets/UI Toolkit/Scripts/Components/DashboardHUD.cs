@@ -2,12 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.DataSets;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.Services;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit;
@@ -42,8 +37,6 @@ namespace Netherlands3D.UI.Panels
         private readonly Dictionary<string, Color> additionalColors = new(StringComparer.OrdinalIgnoreCase);
         private readonly TextCallOut sidebarDataExplanation;
         private readonly ToggleSwitch phaseView;
-        private Layers layers;
-        private ProjectDataHandler projectLoader;
         private DashboardData displayedData;
         private bool hasMissingGeometry;
         private (DashboardSummary.PhaseTotals[] Phases, DashboardSummary.BreakdownRow[] Segments, DashboardSummary.BreakdownRow[] Rooms,
@@ -121,52 +114,7 @@ namespace Netherlands3D.UI.Panels
                 scrollView.scrollOffset = Vector2.zero;
         }
 
-        internal void StartDataBinding()
-        {
-            if (layers != null)
-                return;
-
-            layers = App.Layers;
-            projectLoader = ProjectDataHandler.Instance;
-            layers?.LayerAdded.AddListener(OnLayerAdded);
-            layers?.LayerRemoved.AddListener(OnLayerRemoved);
-            if (projectLoader != null)
-                projectLoader.OnLoadCompleted?.AddListener(RefreshData);
-
-            RefreshData(ProjectData.Current);
-        }
-
-        internal void StopDataBinding()
-        {
-            layers?.LayerAdded.RemoveListener(OnLayerAdded);
-            layers?.LayerRemoved.RemoveListener(OnLayerRemoved);
-            if (projectLoader != null)
-                projectLoader.OnLoadCompleted?.RemoveListener(RefreshData);
-
-            layers = null;
-            projectLoader = null;
-            ShowData(null);
-        }
-
-        private void OnLayerAdded(LayerData layer)
-        {
-            if (layer.HasProperty<DashboardCsvPropertyData>())
-                RefreshData(ProjectData.Current);
-        }
-
-        private void OnLayerRemoved(LayerData layer, bool isRemovalRoot) => OnLayerAdded(layer);
-
-        private void RefreshData(ProjectData project)
-        {
-            var data = project?.RootLayer?.GetFlatHierarchy()
-                .Where(layer => !layer.IsDisposed)
-                .Select(layer => layer.GetProperty<DashboardCsvPropertyData>()?.Data)
-                .FirstOrDefault(candidate => candidate != null);
-
-            ShowData(data);
-        }
-
-        private void ShowData(DashboardData data)
+        internal void SetData(DashboardData data)
         {
             if (ReferenceEquals(displayedData, data))
                 return;

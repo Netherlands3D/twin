@@ -32,6 +32,7 @@ namespace Netherlands3D.Twin.DataSets
         private readonly Dictionary<CityObject, DashboardObjectData.BlockData> objects = new();
         private readonly Dictionary<Material, DashboardObjectData.BlockData> objObjects = new();
         private readonly Dictionary<MeshRenderer, DashboardObjectData.BlockData> glbObjects = new();
+        private readonly Dictionary<MeshRenderer, MeshCollider> objPickingColliders = new();
         private readonly Dictionary<HierarchicalObjectLayerGameObject, GameObject> objRoots = new();
         private DashboardCsvPropertyData source;
         private DashboardData data;
@@ -47,6 +48,7 @@ namespace Netherlands3D.Twin.DataSets
         public IReadOnlyDictionary<Material, DashboardObjectData.BlockData> ObjObjects => objObjects;
         public IReadOnlyDictionary<MeshRenderer, DashboardObjectData.BlockData> GlbObjects => glbObjects;
         public bool HasData => functionality.IsEnabled && data != null;
+        internal DashboardData Data => HasData ? data : null;
         public IReadOnlyList<string> BlockIdentifiers => index.BlockIdentifiers;
         public IReadOnlyList<string> HousingSegments => index.HousingSegments;
         public IReadOnlyList<string> AvailablePhases => data?.AvailablePhases ?? Array.Empty<string>();
@@ -55,18 +57,79 @@ namespace Netherlands3D.Twin.DataSets
         public IEnumerable<HierarchicalObjectLayerGameObject> GlbVisualizations => visualizations.Where(visualization => IsCurrent(visualization) && visualization.GetComponent<GLBSpawner>() != null);
         public event Action Changed;
 
-        internal DashboardObjectData.BlockData GetGlbBlock(MeshRenderer renderer)
+        internal DashboardObjectData.BlockData GetMeshBlock(MeshRenderer renderer, int materialIndex)
         {
-            if (!HasData || renderer == null || !glbObjects.TryGetValue(renderer, out var block))
+            if (!HasData || renderer == null)
                 return null;
 
             var visualization = renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>();
-            return IsCurrent(visualization) && visualization.LayerData.ActiveInHierarchy ? block : null;
+            if (!IsCurrent(visualization) || !visualization.LayerData.ActiveInHierarchy || !IsDashboardLayerName(visualization.Name))
+                return null;
+
+            if (glbObjects.TryGetValue(renderer, out var block))
+                return block;
+
+            if (visualization.GetComponent<OBJSpawner>() == null)
+                return null;
+
+            var materials = renderer.sharedMaterials;
+            return materialIndex >= 0 && materialIndex < materials.Length && materials[materialIndex] != null
+                && objObjects.TryGetValue(materials[materialIndex], out block) ? block : null;
         }
 
-        internal IEnumerable<MeshRenderer> GetGlbRenderers(string block) => glbObjects
-            .Where(entry => string.Equals(entry.Value.Block, block, StringComparison.OrdinalIgnoreCase) && GetGlbBlock(entry.Key) != null)
-            .Select(entry => entry.Key);
+        internal IEnumerable<(MeshRenderer Renderer, int MaterialIndex)> GetMeshSlots(string block)
+        {
+            foreach (var visualization in ObjVisualizations.Concat(GlbVisualizations).Where(visualization => visualization.LayerData.ActiveInHierarchy))
+            {
+                foreach (var renderer in visualization.GetComponentsInChildren<MeshRenderer>())
+                {
+                    if (renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>() != visualization)
+                        continue;
+
+                    var materials = renderer.sharedMaterials;
+                    for (var i = 0; i < materials.Length; i++)
+                    {
+                        if (GetMeshBlock(renderer, i) is { } data && string.Equals(data.Block, block, StringComparison.OrdinalIgnoreCase))
+                            yield return (renderer, i);
+                    }
+                }
+            }
+        }
+
+        internal void SetObjPickingEnabled(bool enabled)
+        {
+            var renderers = enabled && HasData ? ObjVisualizations.Where(visualization => IsDashboardLayerName(visualization.Name))
+                .SelectMany(visualization => visualization.GetComponentsInChildren<MeshRenderer>(true)
+                    .Where(renderer => renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>(true) == visualization)).ToHashSet() : new HashSet<MeshRenderer>();
+            foreach (var renderer in objPickingColliders.Keys.Except(renderers).ToArray())
+            {
+                var collider = objPickingColliders[renderer];
+                if (collider != null)
+                {
+                    collider.enabled = false;
+                    UnityEngine.Object.Destroy(collider);
+                }
+                objPickingColliders.Remove(renderer);
+            }
+            foreach (var renderer in renderers)
+            {
+                if (!renderer.TryGetComponent<MeshFilter>(out var filter) || filter.sharedMesh == null)
+                    continue;
+                if (objPickingColliders.TryGetValue(renderer, out var owned) && owned != null)
+                {
+                    owned.sharedMesh = filter.sharedMesh;
+                    continue;
+                }
+                if (renderer.GetComponents<MeshCollider>().Any(collider => collider.enabled && !collider.convex && !collider.isTrigger && collider.sharedMesh == filter.sharedMesh))
+                    continue;
+
+                // The OBJ importer only adds a collider to the root; split meshes need their own while dashboarding.
+                var picking = renderer.gameObject.AddComponent<MeshCollider>();
+                picking.hideFlags = HideFlags.DontSave;
+                picking.sharedMesh = filter.sharedMesh;
+                objPickingColliders[renderer] = picking;
+            }
+        }
 
         internal IEnumerable<CityJSONMapping> GetCityJsonMappings(string block)
         {
@@ -155,6 +218,7 @@ namespace Netherlands3D.Twin.DataSets
 
         public void Dispose()
         {
+            SetObjPickingEnabled(false);
             layers.LayerAdded.RemoveListener(OnLayerAdded);
             layers.LayerRemoved.RemoveListener(OnLayerRemoved);
             layers.VisualizationCreated.RemoveListener(OnVisualizationCreated);

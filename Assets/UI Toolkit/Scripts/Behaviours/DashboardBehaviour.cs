@@ -35,9 +35,9 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private TransformHandleInterfaceToggle transformHandles;
         private bool restoreTransformHandles;
         private readonly HashSet<CityJSONMapping> selectedObjects = new();
-        private readonly HashSet<MeshRenderer> selectedGlbObjects = new();
+        private readonly HashSet<(MeshRenderer Renderer, int MaterialIndex)> selectedMeshObjects = new();
         private readonly HashSet<LayerData> selectedObjectLayers = new();
-        private MeshRenderer pendingGlbSelection;
+        private (MeshRenderer Renderer, int MaterialIndex)? pendingMeshSelection;
         private bool objectSelectionChanged;
         private InputAction toggleDashboardAction;
         private VisualElement root;
@@ -48,8 +48,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private VisualElement previousFocus;
         internal DashboardObjectBinding ObjectBinding { get; private set; }
         internal CityJSONMapping SelectedObjectMapping { get; private set; }
-        internal MeshRenderer SelectedGlbObject { get; private set; }
-        internal DashboardObjectData.BlockData SelectedObjectBlock => GetObjectBlock(SelectedObjectMapping) ?? ObjectBinding?.GetGlbBlock(SelectedGlbObject);
+        internal (MeshRenderer Renderer, int MaterialIndex)? SelectedMeshObject { get; private set; }
+        internal DashboardObjectData.BlockData SelectedObjectBlock => GetObjectBlock(SelectedObjectMapping) ?? GetObjectBlock(SelectedMeshObject);
         private DashboardMapStyling mapStyling;
         private readonly Dictionary<string, Color> mapColors = new(StringComparer.OrdinalIgnoreCase);
         private VisualElement paletteSource;
@@ -89,13 +89,13 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void LateUpdate()
         {
-            var glb = pendingGlbSelection;
-            pendingGlbSelection = null;
-            var block = ObjectBinding?.GetGlbBlock(glb);
+            var mesh = pendingMeshSelection;
+            pendingMeshSelection = null;
+            var block = GetObjectBlock(mesh);
             if (block != null)
             {
                 selectionService.Deselect();
-                SelectObjectBlock(block.Block, glbPrimary: glb);
+                SelectObjectBlock(block.Block, meshPrimary: mesh);
             }
             // Imported meshes receive their normal NL3D styling after the binding event.
             mapStyling?.ApplyPendingMeshColors();
@@ -176,6 +176,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnMapDataChanged()
         {
+            ObjectBinding?.SetObjPickingEnabled(root.ClassListContains(DashboardOpenClass));
+            dashboardOverlay.SetData(root.ClassListContains(DashboardOpenClass) ? ObjectBinding?.Data : null);
             dashboardHeader.SetBlocks(ObjectBinding?.HasData == true ? ObjectBinding.BlockIdentifiers : Array.Empty<string>());
             var linkedBlocks = ObjectBinding?.HasData == true
                 ? ObjectBinding.Objects.Values.Concat(ObjectBinding.ObjObjects.Values).Concat(ObjectBinding.GlbObjects.Values)
@@ -183,7 +185,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             dashboardHeader.SetLinkedBlocks(linkedBlocks);
             dashboardOverlay.SetMissingGeometry(ObjectBinding?.HasData == true && ObjectBinding.BlockIdentifiers.Any(block => !linkedBlocks.Contains(block)));
-            if (selectedObjects.Any(mapping => GetObjectBlock(mapping) == null) || selectedGlbObjects.Any(renderer => ObjectBinding.GetGlbBlock(renderer) == null))
+            if (selectedObjects.Any(mapping => GetObjectBlock(mapping) == null) || selectedMeshObjects.Any(slot => GetObjectBlock(slot) == null))
                 selectionService.Deselect();
 
             DashboardColors.SetSegmentColors(ObjectBinding?.HasData == true ? ObjectBinding.HousingSegments : Array.Empty<string>(), mapColors);
@@ -215,10 +217,14 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnObjectDeselected() => ClearObjectSelection();
 
+        private DashboardObjectData.BlockData GetObjectBlock((MeshRenderer Renderer, int MaterialIndex)? slot) =>
+            slot.HasValue ? ObjectBinding?.GetMeshBlock(slot.Value.Renderer, slot.Value.MaterialIndex) : null;
+
         private bool AllowNormalSelection()
         {
-            pendingGlbSelection = null;
-            if (!root.ClassListContains(DashboardOpenClass) || Pointer.current == null || ObjectBinding?.HasData != true || ObjectBinding.GlbObjects.Count == 0)
+            pendingMeshSelection = null;
+            if (!root.ClassListContains(DashboardOpenClass) || Pointer.current == null || ObjectBinding?.HasData != true
+                || ObjectBinding.GlbObjects.Count == 0 && ObjectBinding.ObjObjects.Count == 0)
                 return true;
 
             var ray = Netherlands3D.Twin.App.Cameras.ActiveCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
@@ -226,11 +232,30 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 return true;
 
             var renderer = hit.collider.GetComponent<MeshRenderer>();
-            if (ObjectBinding.GetGlbBlock(renderer) == null)
+            var materialIndex = GetHitMaterialIndex(hit);
+            if (ObjectBinding.GetMeshBlock(renderer, materialIndex) == null)
                 return true;
 
-            pendingGlbSelection = renderer;
+            pendingMeshSelection = (renderer, materialIndex);
             return false;
+        }
+
+        private static int GetHitMaterialIndex(RaycastHit hit)
+        {
+            if (hit.collider is not MeshCollider collider || collider.sharedMesh == null || hit.triangleIndex < 0)
+                return -1;
+
+            var mesh = collider.sharedMesh;
+            // MeshCollider triangle indices address the concatenated triangle submeshes.
+            long triangle = hit.triangleIndex;
+            for (var i = 0; i < mesh.subMeshCount; i++)
+            {
+                var triangles = mesh.GetIndexCount(i) / 3;
+                if (triangle < triangles)
+                    return i;
+                triangle -= triangles;
+            }
+            return -1;
         }
 
         private void OnBlockClicked()
@@ -245,7 +270,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 objectSelectionChanged = false;
         }
 
-        private void SelectObjectBlock(string block, CityJSONMapping primary = null, MeshRenderer glbPrimary = null)
+        private void SelectObjectBlock(string block, CityJSONMapping primary = null, (MeshRenderer Renderer, int MaterialIndex)? meshPrimary = null)
         {
             ClearObjectSelection();
             foreach (var mapping in ObjectBinding.GetCityJsonMappings(block))
@@ -256,14 +281,15 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             if (primary != null && selectedObjects.Add(primary))
                 primary.Select();
 
-            selectedGlbObjects.UnionWith(ObjectBinding.GetGlbRenderers(block));
+            selectedMeshObjects.UnionWith(ObjectBinding.GetMeshSlots(block));
             selectedObjectLayers.UnionWith(selectedObjects.Select(mapping => mapping.LayerData));
-            selectedObjectLayers.UnionWith(selectedGlbObjects.Select(renderer => renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>().LayerData));
+            selectedObjectLayers.UnionWith(selectedMeshObjects.Select(slot => slot.Renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>().LayerData));
             foreach (var layer in selectedObjectLayers)
                 layer.LayerActiveInHierarchyChanged.AddListener(OnSelectedObjectLayerActiveChanged);
             SelectedObjectMapping = primary != null && selectedObjects.Contains(primary) ? primary : selectedObjects.FirstOrDefault();
-            SelectedGlbObject = glbPrimary != null && selectedGlbObjects.Contains(glbPrimary) ? glbPrimary : selectedGlbObjects.FirstOrDefault();
-            mapStyling.SelectBlock(selectedGlbObjects.Count > 0 ? block : null);
+            SelectedMeshObject = meshPrimary.HasValue && selectedMeshObjects.Contains(meshPrimary.Value) ? meshPrimary
+                : selectedMeshObjects.Count > 0 ? selectedMeshObjects.First() : null;
+            mapStyling.SelectBlock(selectedMeshObjects.Count > 0 ? block : null);
             objectSelectionChanged = true;
         }
 
@@ -275,8 +301,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void ClearObjectSelection()
         {
-            pendingGlbSelection = null;
-            if (selectedObjects.Count == 0 && selectedGlbObjects.Count == 0)
+            pendingMeshSelection = null;
+            if (selectedObjects.Count == 0 && selectedMeshObjects.Count == 0)
                 return;
 
             foreach (var layer in selectedObjectLayers)
@@ -287,10 +313,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                     mapping.Deselect();
             }
             selectedObjects.Clear();
-            selectedGlbObjects.Clear();
+            selectedMeshObjects.Clear();
             selectedObjectLayers.Clear();
             SelectedObjectMapping = null;
-            SelectedGlbObject = null;
+            SelectedMeshObject = null;
             mapStyling?.SelectBlock(null);
             objectSelectionChanged = true;
         }
@@ -369,12 +395,13 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
             previousFocus = root.focusController?.focusedElement as VisualElement;
             root.AddToClassList(DashboardOpenClass);
+            ObjectBinding.SetObjPickingEnabled(true);
             if (transformHandles != null)
             {
                 restoreTransformHandles = transformHandles.gameObject.activeSelf;
                 transformHandles.gameObject.SetActive(false);
             }
-            dashboardOverlay.StartDataBinding();
+            dashboardOverlay.SetData(ObjectBinding.Data);
             foreach (var mapping in selectionService.SelectedMappings.Values)
             {
                 if (mapping is not CityJSONMapping cityJson)
@@ -400,13 +427,15 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             if (root == null || !root.ClassListContains(DashboardOpenClass)) return;
 
             root.RemoveFromClassList(DashboardOpenClass);
+            ObjectBinding?.SetObjPickingEnabled(false);
             selectionService.Deselect();
             ClearObjectSelection();
+            dashboardHeader.SelectBlock(null);
             if (transformHandles != null)
                 transformHandles.gameObject.SetActive(restoreTransformHandles && transformHandles.Target != null);
             restoreTransformHandles = false;
             objectSelectionChanged = false;
-            dashboardOverlay.StopDataBinding();
+            dashboardOverlay.SetData(null);
             var elementToFocus = previousFocus;
             previousFocus = null;
             if (elementToFocus?.panel == null) return;

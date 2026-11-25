@@ -125,7 +125,7 @@ namespace Netherlands3D.Twin.DataSets
                         }
                         activeSlots.Add(slot);
                         var color = colors[GetColorKey(block, selectedLayer)];
-                        if (isGlb && block != null && string.Equals(block.Block, selectedBlock, StringComparison.OrdinalIgnoreCase) && material.HasProperty(HighlightColorProperty))
+                        if (block != null && string.Equals(block.Block, selectedBlock, StringComparison.OrdinalIgnoreCase) && material.HasProperty(HighlightColorProperty))
                             color = material.GetColor(HighlightColorProperty);
                         entry.Override.Apply(color);
                     }
