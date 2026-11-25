@@ -20,6 +20,10 @@ namespace Netherlands3D.Twin.DataSets
 
         public static PhaseTotals CalculateCurrent(DashboardData data) => CalculatePhases(data).LastOrDefault();
 
+        public static int CountBlocks(DashboardData data) => data == null ? 0 : data.Housing.Select(row => row.Block)
+            .Concat(data.NonHousing.Select(row => row.Block)).Concat(data.ProgramChanges.Select(row => row.Block))
+            .Distinct(StringComparer.OrdinalIgnoreCase).Count();
+
         public static (string Label, NumericResult Total, NumericResult[] Values)[] CalculateHousingRooms(DashboardData data)
         {
             if (data == null)
@@ -105,11 +109,13 @@ namespace Netherlands3D.Twin.DataSets
 
         public static NumericResult CalculateSegmentShare(NumericResult dwellingsInSegment, NumericResult phaseTotal)
         {
-            if (!dwellingsInSegment.CompleteValue.HasValue || !phaseTotal.CompleteValue.HasValue)
+            if (!dwellingsInSegment.Value.HasValue || !phaseTotal.Value.HasValue)
                 return new NumericResult(null, UnavailableStatus(dwellingsInSegment, phaseTotal));
 
+            var status = dwellingsInSegment.Status == ResultStatus.Complete && phaseTotal.Status == ResultStatus.Complete
+                ? ResultStatus.Complete : ResultStatus.Partial;
             return phaseTotal.Value > 0
-                ? new NumericResult(dwellingsInSegment.Value.Value / phaseTotal.Value.Value, ResultStatus.Complete)
+                ? new NumericResult(dwellingsInSegment.Value.Value / phaseTotal.Value.Value, status)
                 : new NumericResult(null, ResultStatus.NotApplicable);
         }
 

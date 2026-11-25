@@ -17,11 +17,11 @@ namespace Netherlands3D.UI.Panels
     {
         private static readonly CultureInfo NumberCulture = CultureInfo.GetCultureInfo("nl-NL");
         private const string SquareMetres = " m\u00b2";
-        private const string AllBlocksExplanation = "Per blok gebruiken we de laatst beschikbare gegevens.";
-        private const string PhaseComparisonExplanation = "BVO per blok en fase toont alleen de beschikbare fasegegevens.";
+        private const string AvailableDataExplanation = "Het overzicht is gebaseerd op de beschikbare projectgegevens.";
         private const string IncompleteDataExplanation = "*Onvolledig: alleen bekende gegevens tellen mee, ook voor percentages en gemiddelden.";
         private const string MissingGeometryExplanation = "**Geen gekoppeld 3D-object gevonden.";
 
+        private readonly DashboardProjectOverview projectOverview;
         private readonly DashboardBlockOverview blockOverview;
         private readonly DashboardPhaseComparisonPanel phaseComparison;
         private readonly BarChart housingChart;
@@ -55,6 +55,7 @@ namespace Netherlands3D.UI.Panels
 
             phaseView = this.Q<ToggleSwitch>("DashboardViewSwitch");
             sidebarDataExplanation = this.Q<TextCallOut>("SidebarDataExplanation");
+            projectOverview = this.Q<DashboardProjectOverview>();
             var programOverview = this.Q("ProgramOverviewContent");
             var phaseProgress = this.Q("PhaseProgressContent");
             var phaseChanges = this.Q("PhaseChangesPanel");
@@ -131,6 +132,12 @@ namespace Netherlands3D.UI.Panels
             ShowHousingChart();
             ShowAdditionalCharts();
             var phases = summary.Phases;
+            var current = phases.LastOrDefault();
+            projectOverview.SetData(
+                FormatNumber(current.Dwellings),
+                data == null ? null : DashboardSummary.CountBlocks(data).ToString("#,0", NumberCulture),
+                ChartLabel(current.GrossFloorArea),
+                FormatShare(current.SocialDwellings, current.Dwellings));
 
             phaseComparison.SetKeyFigureData(
                 phases.Select(phase => FormatNumber(phase.Dwellings)).ToArray(),
@@ -201,13 +208,7 @@ namespace Netherlands3D.UI.Panels
                     .Concat(summary.Segments.Concat(summary.Rooms).Concat(summary.Categories).SelectMany(row => row.Values));
                 if (phaseComparison.SelectedTab == DashboardPhaseComparisonPanel.ComparisonTab.SocialFacilities)
                     values = values.Concat(summary.SocialFacilities.SelectMany(row => row.Values));
-                var visibleValues = values.ToArray();
-                var context = string.Join(" ", new[]
-                {
-                    summary.Phases.Any(HasEarlierSources) ? AllBlocksExplanation : null,
-                    nonHousingBlockPhases.Length > 0 ? PhaseComparisonExplanation : null
-                }.Where(text => text != null));
-                SetSidebarExplanation(context, visibleValues.Any(IsIncomplete));
+                SetSidebarExplanation(AvailableDataExplanation, values.Any(IsIncomplete));
                 return;
             }
 
@@ -220,11 +221,8 @@ namespace Netherlands3D.UI.Panels
             incomplete |= housingFloorAreas.Any(entry => IsIncomplete(entry.Value)) || housingRooms.Any(entry => IsIncomplete(entry.Total));
             var current = summary.Phases.LastOrDefault();
             incomplete |= current.NonHousingSources?.HasData == true && IsIncomplete(current.GrossFloorArea);
-            SetSidebarExplanation(HasEarlierSources(current) ? AllBlocksExplanation : null, incomplete);
+            SetSidebarExplanation(AvailableDataExplanation, incomplete);
         }
-
-        private static bool HasEarlierSources(DashboardSummary.PhaseTotals phase) =>
-            phase.HousingSources?.EarlierBlocks > 0 || phase.NonHousingSources?.EarlierBlocks > 0;
 
         private static bool IsIncomplete(DashboardSummary.NumericResult result) =>
             result.Status == DashboardSummary.ResultStatus.Unknown || result.Status == DashboardSummary.ResultStatus.Partial;
@@ -298,8 +296,7 @@ namespace Netherlands3D.UI.Panels
             chart.SetData(rows.Select(row =>
             {
                 var value = row.Values.Last();
-                var percentage = value.Value.HasValue && total.Value > 0
-                    ? (value.Value.Value / total.Value.Value).ToString("0.#%", NumberCulture) + (IsIncomplete(total) ? "*" : "") : null;
+                var percentage = FormatShare(value, total);
                 var tooltip = $"{row.Label}: {ChartNumber(value)}{unit}" + (percentage == null ? "" : $"\n{percentage}");
                 return new RingChart.Segment(row.Label, value.Value, colorForLabel(row.Label), tooltip, percentage);
             }).ToArray(), ChartLabel(total), $"Totaal: {ChartNumber(total)}{unit}");
@@ -375,11 +372,17 @@ namespace Netherlands3D.UI.Panels
             return $"{sources.Phase}: {sources.ExactBlocks} blokken met gegevens van deze fase, {sources.EarlierBlocks} met een eerdere uitwerking, {sources.MissingBlocks} zonder uitwerking.\nBronfasen: {string.Join(", ", sourceCounts)}. Lege numerieke waarden blijven onbekend.";
         }
 
+        private static string FormatShare(DashboardSummary.NumericResult value, DashboardSummary.NumericResult total)
+        {
+            var share = DashboardSummary.CalculateSegmentShare(value, total);
+            return share.Value.HasValue ? share.Value.Value.ToString("0.#%", NumberCulture) + (IsIncomplete(share) ? "*" : "") : null;
+        }
+
         private static string FormatSegment(DashboardSummary.NumericResult value, DashboardSummary.NumericResult phaseTotal)
         {
             var count = FormatNumber(value);
-            var share = DashboardSummary.CalculateSegmentShare(value, phaseTotal);
-            return share.CompleteValue.HasValue ? $"{count} ({share.CompleteValue.Value.ToString("0%", NumberCulture)})" : count;
+            var share = FormatShare(value, phaseTotal);
+            return share == null ? count : $"{count} ({share})";
         }
 
         private static string FormatNumber(DashboardSummary.NumericResult result, string unit = "")

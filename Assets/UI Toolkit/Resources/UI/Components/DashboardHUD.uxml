@@ -5,6 +5,7 @@
             <ui:VisualElement class="panel-divider" picking-mode="Ignore"/>
             <nl3d:TextCallOut name="SidebarDataExplanation" class="dashboard-hud__data-explanation hidden"/>
             <nl3d:ScrollView name="Scrollview" mode="Vertical" horizontal-scroller-visibility="Hidden">
+                <nl3dP:DashboardProjectOverview/>
                 <ui:VisualElement name="ProgramOverviewContent">
                     <nl3dP:DashboardBlockOverview/>
                     <nl3d:RingChart name="HousingSegmentChart" title="Segmentverdeling woningen" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>

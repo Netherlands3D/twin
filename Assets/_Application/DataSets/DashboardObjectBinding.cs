@@ -202,17 +202,30 @@ namespace Netherlands3D.Twin.DataSets
             this.layers = layers;
             this.projectLoader = projectLoader;
             this.functionality = functionality;
+            functionality.OnEnableFunctionality.AddListener(StartTracking);
+            functionality.OnDisableFunctionality.AddListener(StopTracking);
+            if (functionality.IsEnabled)
+                StartTracking();
+        }
+
+        public void Dispose()
+        {
+            functionality.OnEnableFunctionality.RemoveListener(StartTracking);
+            functionality.OnDisableFunctionality.RemoveListener(StopTracking);
+            StopTracking();
+        }
+
+        private void StartTracking()
+        {
             layers.LayerAdded.AddListener(OnLayerAdded);
             layers.LayerRemoved.AddListener(OnLayerRemoved);
             layers.VisualizationCreated.AddListener(OnVisualizationCreated);
             if (projectLoader != null)
                 projectLoader.OnLoadCompleted.AddListener(OnProjectLoaded);
-            functionality.OnEnableFunctionality.AddListener(Refresh);
-            functionality.OnDisableFunctionality.AddListener(Refresh);
             Refresh(true);
         }
 
-        public void Dispose()
+        private void StopTracking()
         {
             SetObjPickingEnabled(false);
             layers.LayerAdded.RemoveListener(OnLayerAdded);
@@ -220,9 +233,11 @@ namespace Netherlands3D.Twin.DataSets
             layers.VisualizationCreated.RemoveListener(OnVisualizationCreated);
             if (projectLoader != null)
                 projectLoader.OnLoadCompleted.RemoveListener(OnProjectLoaded);
-            functionality.OnEnableFunctionality.RemoveListener(Refresh);
-            functionality.OnDisableFunctionality.RemoveListener(Refresh);
             source?.DataChanged.RemoveListener(Refresh);
+            source = null;
+            data = null;
+            index = new DashboardObjectData(null);
+            reportedInvalidBlockCount = 0;
             foreach (var layer in namedLayers)
             {
                 layer.NameChanged.RemoveListener(OnLayerNameChanged);
@@ -241,6 +256,7 @@ namespace Netherlands3D.Twin.DataSets
             bindingDiagnostics.Clear();
             diagnosticItems.Clear();
 #endif
+            Changed?.Invoke();
         }
 
         private void OnLayerAdded(LayerData layer)
@@ -265,7 +281,7 @@ namespace Netherlands3D.Twin.DataSets
 
         private void OnVisualizationCreated(LayerGameObject visualization)
         {
-            if (visualization is not HierarchicalObjectLayerGameObject hierarchical || !IsSupported(hierarchical))
+            if (!functionality.IsEnabled || visualization is not HierarchicalObjectLayerGameObject hierarchical || !IsSupported(hierarchical))
                 return;
 
             Subscribe(hierarchical);
@@ -340,16 +356,19 @@ namespace Netherlands3D.Twin.DataSets
 
         private void Refresh(bool discoverVisualizations)
         {
+            if (!functionality.IsEnabled)
+                return;
+
             var hierarchy = CaptureCurrentLayers();
             if (discoverVisualizations)
                 DiscoverVisualizations();
 
-            var nextSource = functionality.IsEnabled ? hierarchy
+            var nextSource = hierarchy
                 .Select(layer => layer.GetProperty<DashboardCsvPropertyData>())
                 .Where(candidate => candidate != null)
                 // Prefer loaded data, but also observe a source whose project asset is still loading.
                 .OrderByDescending(candidate => candidate.Data != null)
-                .FirstOrDefault() : null;
+                .FirstOrDefault();
             if (!ReferenceEquals(source, nextSource))
             {
                 source?.DataChanged.RemoveListener(Refresh);
@@ -370,6 +389,9 @@ namespace Netherlands3D.Twin.DataSets
 
         private void RefreshObjects()
         {
+            if (!functionality.IsEnabled)
+                return;
+
             CaptureCurrentLayers();
             RefreshObjectsCore();
         }
