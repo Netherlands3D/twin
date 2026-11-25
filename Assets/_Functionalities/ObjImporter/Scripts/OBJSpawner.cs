@@ -83,7 +83,17 @@ namespace Netherlands3D.Functionalities.OBJImporter
             var mtlFilePath = GetFilePath(propertyData.MtlFile);
 
             if (importedObject)
+            {
+                foreach (var renderer in importedObject.GetComponentsInChildren<MeshRenderer>(true))
+                {
+                    layerGameObject.LayerFeatures.Remove(renderer);
+                }
+
+                // Exclude the old renderers from styling while Destroy is pending.
+                importedObject.SetActive(false);
                 Destroy(importedObject);
+                importedObject = null;
+            }
 
             DisposeImporter();
 
