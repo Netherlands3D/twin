@@ -38,8 +38,8 @@ namespace Netherlands3D.UI.Panels
 
         public SettingsPanel(Configuration configuration) : this()
         {
-            var optionalFunctionalities = configuration.Functionalities.Where(f => f.Type == FunctionalityType.Optional).ToList();
-            var experimentalFunctionalities = configuration.Functionalities.Where(f => f.Type == FunctionalityType.Experimental).ToList();
+            var optionalFunctionalities = configuration.Functionalities.Where(f => f.settingsCategory == FunctionalitySettingsCategory.Optional).ToList();
+            var experimentalFunctionalities = configuration.Functionalities.Where(f => f.settingsCategory == FunctionalitySettingsCategory.Experimental).ToList();
             ConfigureFunctionalityList(settingsSection.Q<ListView>("Functionalities"), optionalFunctionalities);
 
             if (experimentalFunctionalities.Count > 0)

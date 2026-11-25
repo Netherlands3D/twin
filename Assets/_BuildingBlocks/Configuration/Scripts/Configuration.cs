@@ -35,22 +35,6 @@ namespace Netherlands3D.Twin.Configuration
 
         public string CorsProxyUrl => corsProxyUrl;
 
-        private bool allowHiddenFeatures;
-
-        /// <summary>
-        /// Controls hidden functionality availability for this session. Project files cannot change this permission.
-        /// </summary>
-        public bool AllowHiddenFeatures
-        {
-            get => allowHiddenFeatures;
-            set
-            {
-                allowHiddenFeatures = value;
-                foreach (var functionality in Functionalities.Where(f => f.Type == FunctionalityType.Hidden))
-                    functionality.HiddenFeaturesAllowed = value;
-            }
-        }
-
         public Coordinate Origin
         {
             get => origin;
@@ -131,9 +115,6 @@ namespace Netherlands3D.Twin.Configuration
 
         public void Populate(JSONNode jsonNode)
         {
-            if (jsonNode["allowHiddenFeatures"] != null)
-                AllowHiddenFeatures = jsonNode["allowHiddenFeatures"].AsBool;
-
             if (jsonNode["title"])
             {
                 Title = jsonNode["title"];
@@ -238,7 +219,6 @@ namespace Netherlands3D.Twin.Configuration
             {
                 ["title"] = Title,
                 ["allowUserSettings"] = AllowUserSettings,
-                ["allowHiddenFeatures"] = AllowHiddenFeatures,
                 ["origin"] = new JSONObject()
                 {
                     ["epsg"] = origin.CoordinateSystem,
@@ -311,14 +291,14 @@ namespace Netherlands3D.Twin.Configuration
             // Hidden functionality availability belongs to the spoke or the test session, not the project.
             foreach (var functionality in Functionalities)
             {
-                if (functionality.Type != FunctionalityType.Unsaved && functionality.Type != FunctionalityType.Hidden)
+                if (functionality.statePersistence == FunctionalityStatePersistence.Project)
                     functionality.ResetDataToDefaults();
             }
             
             foreach (var savedData in changedData.functionalities)
             {
                 var savedId = savedData.Id;
-                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.Type != FunctionalityType.Unsaved && f.Type != FunctionalityType.Hidden && f.Data.Id == savedId);
+                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.statePersistence == FunctionalityStatePersistence.Project && f.Data.Id == savedId);
                 if (matchingFunctionality != null)
                 {
                     matchingFunctionality.Data = savedData;
@@ -333,7 +313,7 @@ namespace Netherlands3D.Twin.Configuration
         {
             foreach (var functionality in Functionalities)
             {
-                if (functionality.Type == FunctionalityType.Unsaved || functionality.Type == FunctionalityType.Hidden)
+                if (functionality.statePersistence == FunctionalityStatePersistence.RuntimeOnly)
                 {
                     // Older project files may still contain data for this functionality.
                     ProjectData.Current.functionalities.RemoveAll(data => data.Id == functionality.Id);

@@ -6,12 +6,32 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {
-    public enum FunctionalityType
+    public enum FunctionalitySettingsCategory
     {
-        Optional = 0, // Existing assets without a type are optional.
+        /// <summary>
+        /// Show the functionality's controls in the settings panel. (default option)
+        /// </summary>
+        Optional = 0,
+        /// <summary>
+        /// Show the functionality's controls in the experimental settings section in the settings panel.
+        /// </summary>
         Experimental,
+        /// <summary>
+        /// Hide the functionality's controls in the settings panel.
+        /// </summary>
         Hidden,
-        Unsaved
+    }
+
+    public enum FunctionalityStatePersistence
+    {
+        /// <summary>
+        /// Save and restore the functionality's state through the .nl3d project.
+        /// </summary>
+        Project,
+        /// Initialize state from the functionality's defaults and retain runtime changes.
+        /// Do not save or restore this state through .nl3d files.
+        /// Creating or loading a project leaves the current state unchanged.
+        RuntimeOnly
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality/Generic", fileName = "Functionality", order = 0)]
@@ -22,29 +42,6 @@ namespace Netherlands3D.Twin.Functionalities
 
         [NonSerialized]
         private FunctionalityData currentData;
-
-        [NonSerialized]
-        private bool hiddenFeaturesAllowed;
-
-        /// <summary>
-        /// Allows a hidden functionality to be enabled by the spoke configuration or a temporary test override.
-        /// </summary>
-        public bool HiddenFeaturesAllowed
-        {
-            get => hiddenFeaturesAllowed;
-            set
-            {
-                if (hiddenFeaturesAllowed == value) return;
-
-                var wasEnabled = IsEnabled;
-                hiddenFeaturesAllowed = value;
-                if (Type == FunctionalityType.Hidden && !value)
-                    Data.IsEnabled = false;
-
-                if (IsEnabled != wasEnabled)
-                    InvokeOnEnableChangeEvents();
-            }
-        }
 
         public FunctionalityData Data
         {
@@ -80,18 +77,18 @@ namespace Netherlands3D.Twin.Functionalities
 
         [TextArea(5, 10)] public string Description;
         public ScriptableObject configuration;
-        public FunctionalityType Type = FunctionalityType.Optional;
+        public FunctionalitySettingsCategory settingsCategory = FunctionalitySettingsCategory.Optional;
+        public FunctionalityStatePersistence statePersistence = FunctionalityStatePersistence.Project;
+        
+        public string[] enableOnHosts = Array.Empty<string>();
 
         public string Id => defaultData.Id;
 
         public bool IsEnabled
         {
-            get => Data.IsEnabled && (Type != FunctionalityType.Hidden || HiddenFeaturesAllowed);
+            get => Data.IsEnabled;
             set
             {
-                if (Type == FunctionalityType.Hidden && !HiddenFeaturesAllowed)
-                    value = false;
-
                 //cant enable functionality if configuration is invalid
                 if (Data.IsEnabled && configuration is IConfiguration config && config.Validate().Count > 0)
                 {
@@ -100,12 +97,10 @@ namespace Netherlands3D.Twin.Functionalities
 
                 if (value == Data.IsEnabled) //IsEnabled was not changed
                     return;
-
-                var wasEnabled = IsEnabled;
+                
                 Data.IsEnabled = value;
                 
-                if (IsEnabled != wasEnabled)
-                    InvokeOnEnableChangeEvents();
+                InvokeOnEnableChangeEvents();
             }
         }
 
