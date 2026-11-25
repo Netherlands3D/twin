@@ -84,10 +84,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             if (importedObject)
             {
-                foreach (var renderer in importedObject.GetComponentsInChildren<MeshRenderer>(true))
-                {
-                    layerGameObject.LayerFeatures.Remove(renderer);
-                }
+                layerGameObject.LayerFeatures.Clear();
 
                 // Exclude the old renderers from styling while Destroy is pending.
                 importedObject.SetActive(false);
