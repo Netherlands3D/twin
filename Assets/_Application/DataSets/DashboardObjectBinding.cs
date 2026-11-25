@@ -2,18 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CityJson.Structure;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.GLBImporter;
 using Netherlands3D.Functionalities.OBJImporter;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
-using UnityEngine.Events;
 using LayerService = Netherlands3D.Twin.Services.Layers;
 
 namespace Netherlands3D.Twin.DataSets
@@ -41,7 +38,6 @@ namespace Netherlands3D.Twin.DataSets
 #if UNITY_EDITOR
         private readonly Dictionary<HierarchicalObjectLayerGameObject, string> bindingDiagnostics = new();
         private readonly List<(string Name, string Identifier, bool Matched)> diagnosticItems = new();
-        private readonly Dictionary<LayerData, UnityAction<Coordinate>> glbPositionListeners = new();
 #endif
 
         public IReadOnlyDictionary<CityObject, DashboardObjectData.BlockData> Objects => objects;
@@ -230,9 +226,7 @@ namespace Netherlands3D.Twin.DataSets
             foreach (var layer in namedLayers)
             {
                 layer.NameChanged.RemoveListener(OnLayerNameChanged);
-#if UNITY_EDITOR
-                UnsubscribeGlbPositionChanged(layer);
-#endif
+                layer.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveChanged);
             }
             namedLayers.Clear();
             currentProjectLayers.Clear();
@@ -266,6 +260,8 @@ namespace Netherlands3D.Twin.DataSets
             Refresh(true);
         }
         private void OnLayerNameChanged(string name) => RefreshObjects();
+
+        private void OnLayerActiveChanged(bool active) => Changed?.Invoke();
 
         private void OnVisualizationCreated(LayerGameObject visualization)
         {
@@ -320,8 +316,6 @@ namespace Netherlands3D.Twin.DataSets
             objRoots[visualization] = importedObject;
             CaptureCurrentLayers();
             RefreshObjectsCore(visualization);
-            if (visualization.GetComponent<GLBSpawner>() != null)
-                LogGlbGeometry(visualization, importedObject);
         }
 
         private void DiscoverVisualizations()
@@ -394,9 +388,7 @@ namespace Netherlands3D.Twin.DataSets
             foreach (var layer in namedLayers.Except(currentLayers).ToArray())
             {
                 layer.NameChanged.RemoveListener(OnLayerNameChanged);
-#if UNITY_EDITOR
-                UnsubscribeGlbPositionChanged(layer);
-#endif
+                layer.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveChanged);
                 namedLayers.Remove(layer);
             }
             foreach (var layer in currentLayers)
@@ -404,10 +396,7 @@ namespace Netherlands3D.Twin.DataSets
                 if (namedLayers.Add(layer))
                 {
                     layer.NameChanged.AddListener(OnLayerNameChanged);
-#if UNITY_EDITOR
-                    if (layer.HasProperty<GLBPropertyData>())
-                        SubscribeGlbPositionChanged(layer);
-#endif
+                    layer.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveChanged);
                 }
             }
 
@@ -493,60 +482,6 @@ namespace Netherlands3D.Twin.DataSets
                 RecordBindingDiagnostic(renderer.name, block?.Block ?? renderer.name, block != null);
             }
         }
-
-        [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        private void LogGlbGeometry(HierarchicalObjectLayerGameObject visualization, GameObject importedObject)
-        {
-#if UNITY_EDITOR
-            var renderers = importedObject.GetComponentsInChildren<MeshRenderer>(true);
-            if (renderers.Length == 0)
-            {
-                Debug.Log($"GLB-geometrie '{visualization.Name}': geen MeshRenderers aangetroffen.", visualization);
-                return;
-            }
-
-            var bounds = renderers[0].bounds;
-            foreach (var renderer in renderers.Skip(1))
-                bounds.Encapsulate(renderer.bounds);
-
-            var layerPosition = visualization.WorldTransform.Coordinate.Convert(CoordinateSystem.RDNAP);
-            var geometryPosition = new Coordinate(bounds.center).Convert(CoordinateSystem.RDNAP);
-            var offset = bounds.center - visualization.transform.position;
-            Debug.Log($"GLB-geometrie '{visualization.Name}': {renderers.Length} meshonderdelen. " +
-                $"Laag RD/NAP: {layerPosition}. Geometriemiddelpunt RD/NAP: {geometryPosition}. " +
-                $"Unity-middelpunt: {bounds.center.ToString("F3")}, afmetingen (m): {bounds.size.ToString("F3")}, " +
-                $"verschil met laagpositie (Unity, m): {offset.ToString("F3")}. Controle verplaatst niets.", visualization);
-#endif
-        }
-
-#if UNITY_EDITOR
-        private void SubscribeGlbPositionChanged(LayerData layer)
-        {
-            var property = layer.GetProperty<TransformLayerPropertyData>();
-            if (property == null)
-                return;
-
-            UnityAction<Coordinate> listener = _ => OnGlbPositionChanged(layer);
-            glbPositionListeners.Add(layer, listener);
-            property.OnPositionChanged.AddListener(listener);
-        }
-
-        private void UnsubscribeGlbPositionChanged(LayerData layer)
-        {
-            if (!glbPositionListeners.TryGetValue(layer, out var listener))
-                return;
-
-            layer.GetProperty<TransformLayerPropertyData>()?.OnPositionChanged.RemoveListener(listener);
-            glbPositionListeners.Remove(layer);
-        }
-
-        private void OnGlbPositionChanged(LayerData layer)
-        {
-            var visualization = GlbVisualizations.FirstOrDefault(candidate => candidate.LayerData == layer);
-            if (visualization != null)
-                LogGlbGeometry(visualization, GetImportedRoot(visualization));
-        }
-#endif
 
         [System.Diagnostics.Conditional("UNITY_EDITOR")]
         private void RecordBindingDiagnostic(string name, string identifier, bool matched)

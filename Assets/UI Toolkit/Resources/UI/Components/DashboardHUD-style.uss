@@ -107,3 +107,12 @@
 .dashboard-hud__housing-chart {
     margin-top: var(--spacing-4);
 }
+
+.dashboard-hud__annotations {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+}

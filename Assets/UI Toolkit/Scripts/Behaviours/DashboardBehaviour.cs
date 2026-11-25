@@ -6,8 +6,6 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Functionalities;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.UI.Components;
@@ -36,12 +34,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private bool restoreTransformHandles;
         private readonly HashSet<CityJSONMapping> selectedObjects = new();
         private readonly HashSet<(MeshRenderer Renderer, int MaterialIndex)> selectedMeshObjects = new();
-        private readonly HashSet<LayerData> selectedObjectLayers = new();
         private (MeshRenderer Renderer, int MaterialIndex)? pendingMeshSelection;
         private bool objectSelectionChanged;
         private InputAction toggleDashboardAction;
         private VisualElement root;
         private DashboardHUD dashboardOverlay;
+        private DashboardAnnotation dashboardAnnotation;
         private DashboardHeader dashboardHeader;
         private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
@@ -64,6 +62,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         {
             root = GetComponent<AppRootBehaviour>().Root;
             dashboardOverlay = root.Q<DashboardHUD>("DashboardOverlay");
+            dashboardAnnotation = dashboardOverlay.Q<DashboardAnnotation>("DashboardAnnotation");
             dashboardHeader = dashboardOverlay.Q<DashboardHeader>("DashboardHeader");
             toolbarNavigation = root.Q<ToolbarNavigation>();
             closeButton = root.Q<Button>("CloseDashboard");
@@ -104,7 +103,9 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             {
                 objectSelectionChanged = false;
                 dashboardHeader.SelectBlock(SelectedObjectBlock?.Block);
+                dashboardAnnotation.SetData(SelectedObjectBlock);
             }
+            UpdateAnnotationPosition();
         }
 
         private void Subscribe()
@@ -185,11 +186,22 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             dashboardHeader.SetLinkedBlocks(linkedBlocks);
             dashboardOverlay.SetMissingGeometry(ObjectBinding?.HasData == true && ObjectBinding.BlockIdentifiers.Any(block => !linkedBlocks.Contains(block)));
-            if (selectedObjects.Any(mapping => GetObjectBlock(mapping) == null) || selectedMeshObjects.Any(slot => GetObjectBlock(slot) == null))
-                selectionService.Deselect();
+            if (root.ClassListContains(DashboardOpenClass))
+            {
+                if (dashboardHeader.SelectedBlock != null)
+                {
+                    SelectObjectBlock(dashboardHeader.SelectedBlock);
+                    if (SelectedObjectBlock == null)
+                        objectSelectionChanged = false;
+                }
+                else if (selectedObjects.Count > 0 || selectedMeshObjects.Count > 0)
+                    selectionService.Deselect();
+            }
+            dashboardAnnotation.SetData(SelectedObjectBlock);
 
             DashboardColors.SetSegmentColors(ObjectBinding?.HasData == true ? ObjectBinding.HousingSegments : Array.Empty<string>(), mapColors);
             DashboardColors.SetPhaseColors(ObjectBinding?.HasData == true ? ObjectBinding.AvailablePhases : Array.Empty<string>(), mapColors);
+            dashboardAnnotation.SetPhaseColors(mapColors);
 
             RefreshMapColors();
             RefreshMapLegend();
@@ -272,7 +284,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void SelectObjectBlock(string block, CityJSONMapping primary = null, (MeshRenderer Renderer, int MaterialIndex)? meshPrimary = null)
         {
-            ClearObjectSelection();
+            ClearObjectSelection(clearAnnotation: false);
             foreach (var mapping in ObjectBinding.GetCityJsonMappings(block))
             {
                 mapping.Select();
@@ -282,10 +294,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 primary.Select();
 
             selectedMeshObjects.UnionWith(ObjectBinding.GetMeshSlots(block));
-            selectedObjectLayers.UnionWith(selectedObjects.Select(mapping => mapping.LayerData));
-            selectedObjectLayers.UnionWith(selectedMeshObjects.Select(slot => slot.Renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>().LayerData));
-            foreach (var layer in selectedObjectLayers)
-                layer.LayerActiveInHierarchyChanged.AddListener(OnSelectedObjectLayerActiveChanged);
             SelectedObjectMapping = primary != null && selectedObjects.Contains(primary) ? primary : selectedObjects.FirstOrDefault();
             SelectedMeshObject = meshPrimary.HasValue && selectedMeshObjects.Contains(meshPrimary.Value) ? meshPrimary
                 : selectedMeshObjects.Count > 0 ? selectedMeshObjects.First() : null;
@@ -293,20 +301,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             objectSelectionChanged = true;
         }
 
-        private void OnSelectedObjectLayerActiveChanged(bool active)
-        {
-            if (!active)
-                selectionService.Deselect();
-        }
-
-        private void ClearObjectSelection()
+        private void ClearObjectSelection(bool clearAnnotation = true)
         {
             pendingMeshSelection = null;
             if (selectedObjects.Count == 0 && selectedMeshObjects.Count == 0)
                 return;
 
-            foreach (var layer in selectedObjectLayers)
-                layer.LayerActiveInHierarchyChanged.RemoveListener(OnSelectedObjectLayerActiveChanged);
             foreach (var mapping in selectedObjects)
             {
                 if (mapping.Feature != null)
@@ -314,11 +314,75 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             }
             selectedObjects.Clear();
             selectedMeshObjects.Clear();
-            selectedObjectLayers.Clear();
             SelectedObjectMapping = null;
             SelectedMeshObject = null;
+            if (clearAnnotation)
+                dashboardAnnotation.SetData(null);
             mapStyling?.SelectBlock(null);
             objectSelectionChanged = true;
+        }
+
+        private void UpdateAnnotationPosition()
+        {
+            if (!root.ClassListContains(DashboardOpenClass) || SelectedObjectBlock == null)
+            {
+                dashboardAnnotation.SetPosition(default, false);
+                return;
+            }
+
+            var bounds = new Bounds();
+            var hasBounds = false;
+            foreach (var mapping in selectedObjects)
+            {
+                if (GetObjectBlock(mapping) == null || mapping.Visualizer == null)
+                    continue;
+
+                var renderer = mapping.Visualizer.GetComponent<MeshRenderer>();
+                if (renderer != null && renderer.enabled && renderer.gameObject.activeInHierarchy)
+                    IncludeBounds(renderer.bounds);
+            }
+            foreach (var (renderer, materialIndex) in selectedMeshObjects)
+            {
+                if (GetObjectBlock((renderer, materialIndex)) == null)
+                    continue;
+
+                var filter = renderer != null ? renderer.GetComponent<MeshFilter>() : null;
+                if (filter == null || filter.sharedMesh == null || materialIndex < 0 || materialIndex >= filter.sharedMesh.subMeshCount)
+                    continue;
+
+                var localBounds = filter.sharedMesh.GetSubMesh(materialIndex).bounds;
+                if (localBounds.size.sqrMagnitude == 0f)
+                    IncludeBounds(renderer.bounds);
+                else
+                {
+                    var worldBounds = new Bounds(renderer.transform.TransformPoint(localBounds.center), Vector3.zero);
+                    for (var x = -1; x <= 1; x += 2)
+                        for (var y = -1; y <= 1; y += 2)
+                            for (var z = -1; z <= 1; z += 2)
+                                worldBounds.Encapsulate(renderer.transform.TransformPoint(localBounds.center + Vector3.Scale(localBounds.extents, new Vector3(x, y, z))));
+                    IncludeBounds(worldBounds);
+                }
+            }
+            if (!hasBounds)
+            {
+                dashboardAnnotation.SetPosition(default, false);
+                return;
+            }
+
+            var camera = Netherlands3D.Twin.App.Cameras.ActiveCamera;
+            var screenPosition = camera.WorldToScreenPoint(bounds.center);
+            dashboardAnnotation.SetPosition(screenPosition.z > 0f ? Netherlands3D.Twin.App.UIRoot.GetUIPositionFromScreenPosition(screenPosition) : default, screenPosition.z > 0f);
+
+            void IncludeBounds(Bounds geometryBounds)
+            {
+                if (hasBounds)
+                    bounds.Encapsulate(geometryBounds);
+                else
+                {
+                    bounds = geometryBounds;
+                    hasBounds = true;
+                }
+            }
         }
 
         private void OnTransformTargetChanged(GameObject target)

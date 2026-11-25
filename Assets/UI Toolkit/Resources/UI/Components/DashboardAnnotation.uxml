@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" editor-extension-mode="False" class="world-annotation dashboard-annotation dashboard-theme hidden">
+    <nl3d:Icon image="Point" color="White" picking-mode="Ignore" class="world-annotation__position dashboard-annotation__anchor"/>
+    <ui:VisualElement class="world-annotation__container dashboard-annotation__panel">
+        <ui:VisualElement picking-mode="Ignore" class="world-annotation__container-background"/>
+        <ui:VisualElement class="dashboard-annotation__header">
+            <nl3d:Header name="AnnotationHeader" text="Blok" icon="Annotation"/>
+            <ui:Label name="AnnotationCount" text="0 programmawijzigingen" class="dashboard-annotation__count"/>
+        </ui:VisualElement>
+        <nl3d:ScrollView name="AnnotationScroll" mode="Vertical" item-gap="0" horizontal-scroller-visibility="Hidden" class="dashboard-annotation__scroll">
+            <ui:VisualElement name="AnnotationChanges"/>
+            <ui:Label name="AnnotationEmpty" text="Geen programmawijzigingen beschikbaar" class="dashboard-annotation__empty"/>
+        </nl3d:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

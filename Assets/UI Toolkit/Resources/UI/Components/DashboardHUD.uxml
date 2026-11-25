@@ -25,6 +25,9 @@
         <ui:VisualElement name="HudMain" picking-mode="Ignore" class="dashboard-hud__main">
             <nl3d:DashboardHeader name="DashboardHeader"/>
             <ui:VisualElement name="DashboardMapArea" picking-mode="Ignore" class="dashboard-hud__map-area">
+                <ui:VisualElement name="DashboardAnnotations" picking-mode="Ignore" class="dashboard-hud__annotations">
+                    <nl3d:DashboardAnnotation name="DashboardAnnotation" picking-mode="Ignore"/>
+                </ui:VisualElement>
                 <ui:VisualElement name="DashboardMapColors" class="dashboard-map-layers dashboard-theme">
                     <nl3d:ContentContainer text="Kaartkleuren" container-style="Normal" expanded="true" show-divider="true" class="dashboard-map-layers__container">
                         <ui:Label name="MapColorEmpty" text="Geen gegevens beschikbaar"/>
