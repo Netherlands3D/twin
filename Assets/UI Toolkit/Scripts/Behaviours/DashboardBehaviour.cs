@@ -6,6 +6,8 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.UI.Components;
@@ -33,6 +35,9 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private TransformHandleInterfaceToggle transformHandles;
         private bool restoreTransformHandles;
         private readonly HashSet<CityJSONMapping> selectedObjects = new();
+        private readonly HashSet<MeshRenderer> selectedGlbObjects = new();
+        private readonly HashSet<LayerData> selectedObjectLayers = new();
+        private MeshRenderer pendingGlbSelection;
         private bool objectSelectionChanged;
         private InputAction toggleDashboardAction;
         private VisualElement root;
@@ -43,7 +48,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private VisualElement previousFocus;
         internal DashboardObjectBinding ObjectBinding { get; private set; }
         internal CityJSONMapping SelectedObjectMapping { get; private set; }
-        internal DashboardObjectData.BlockData SelectedObjectBlock => GetObjectBlock(SelectedObjectMapping);
+        internal MeshRenderer SelectedGlbObject { get; private set; }
+        internal DashboardObjectData.BlockData SelectedObjectBlock => GetObjectBlock(SelectedObjectMapping) ?? ObjectBinding?.GetGlbBlock(SelectedGlbObject);
         private DashboardMapStyling mapStyling;
         private readonly Dictionary<string, Color> mapColors = new(StringComparer.OrdinalIgnoreCase);
         private VisualElement paletteSource;
@@ -83,6 +89,14 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void LateUpdate()
         {
+            var glb = pendingGlbSelection;
+            pendingGlbSelection = null;
+            var block = ObjectBinding?.GetGlbBlock(glb);
+            if (block != null)
+            {
+                selectionService.Deselect();
+                SelectObjectBlock(block.Block, glbPrimary: glb);
+            }
             // Imported meshes receive their normal NL3D styling after the binding event.
             mapStyling?.ApplyPendingMeshColors();
             // SelectionService deselects before selecting the next object; apply only the final toolbar state.
@@ -101,6 +115,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             toggleDashboardAction.performed += OnToggleDashboard;
             selectionService.SelectCityJsonMapping.AddListener(OnCityJsonSelected);
             selectionService.OnDeselect.AddListener(OnObjectDeselected);
+            selectionService.AddSelectionPredicate(AllowNormalSelection);
             transformHandles?.SetTarget.AddListener(OnTransformTargetChanged);
             dashboardHeader.BlockClicked += OnBlockClicked;
             toolbarNavigation.OnDashboardClicked += OpenDashboard;
@@ -124,6 +139,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             {
                 selectionService.SelectCityJsonMapping.RemoveListener(OnCityJsonSelected);
                 selectionService.OnDeselect.RemoveListener(OnObjectDeselected);
+                selectionService.RemoveSelectionPredicate(AllowNormalSelection);
             }
             ClearObjectSelection();
             objectSelectionChanged = false;
@@ -167,7 +183,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             dashboardHeader.SetLinkedBlocks(linkedBlocks);
             dashboardOverlay.SetMissingGeometry(ObjectBinding?.HasData == true && ObjectBinding.BlockIdentifiers.Any(block => !linkedBlocks.Contains(block)));
-            if (selectedObjects.Any(mapping => GetObjectBlock(mapping) == null))
+            if (selectedObjects.Any(mapping => GetObjectBlock(mapping) == null) || selectedGlbObjects.Any(renderer => ObjectBinding.GetGlbBlock(renderer) == null))
                 selectionService.Deselect();
 
             DashboardColors.SetSegmentColors(ObjectBinding?.HasData == true ? ObjectBinding.HousingSegments : Array.Empty<string>(), mapColors);
@@ -199,6 +215,24 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnObjectDeselected() => ClearObjectSelection();
 
+        private bool AllowNormalSelection()
+        {
+            pendingGlbSelection = null;
+            if (!root.ClassListContains(DashboardOpenClass) || Pointer.current == null || ObjectBinding?.HasData != true || ObjectBinding.GlbObjects.Count == 0)
+                return true;
+
+            var ray = Netherlands3D.Twin.App.Cameras.ActiveCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
+            if (!Physics.Raycast(ray, out var hit, Mathf.Infinity))
+                return true;
+
+            var renderer = hit.collider.GetComponent<MeshRenderer>();
+            if (ObjectBinding.GetGlbBlock(renderer) == null)
+                return true;
+
+            pendingGlbSelection = renderer;
+            return false;
+        }
+
         private void OnBlockClicked()
         {
             selectionService.Deselect();
@@ -207,11 +241,11 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 SelectObjectBlock(block);
 
             // Preserve CSV-only block choices when no selectable geometry is available.
-            if (SelectedObjectMapping == null)
+            if (SelectedObjectBlock == null)
                 objectSelectionChanged = false;
         }
 
-        private void SelectObjectBlock(string block, CityJSONMapping primary = null)
+        private void SelectObjectBlock(string block, CityJSONMapping primary = null, MeshRenderer glbPrimary = null)
         {
             ClearObjectSelection();
             foreach (var mapping in ObjectBinding.GetCityJsonMappings(block))
@@ -222,9 +256,14 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             if (primary != null && selectedObjects.Add(primary))
                 primary.Select();
 
-            foreach (var layer in selectedObjects.Select(mapping => mapping.LayerData).Distinct())
+            selectedGlbObjects.UnionWith(ObjectBinding.GetGlbRenderers(block));
+            selectedObjectLayers.UnionWith(selectedObjects.Select(mapping => mapping.LayerData));
+            selectedObjectLayers.UnionWith(selectedGlbObjects.Select(renderer => renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>().LayerData));
+            foreach (var layer in selectedObjectLayers)
                 layer.LayerActiveInHierarchyChanged.AddListener(OnSelectedObjectLayerActiveChanged);
             SelectedObjectMapping = primary != null && selectedObjects.Contains(primary) ? primary : selectedObjects.FirstOrDefault();
+            SelectedGlbObject = glbPrimary != null && selectedGlbObjects.Contains(glbPrimary) ? glbPrimary : selectedGlbObjects.FirstOrDefault();
+            mapStyling.SelectBlock(selectedGlbObjects.Count > 0 ? block : null);
             objectSelectionChanged = true;
         }
 
@@ -236,10 +275,11 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void ClearObjectSelection()
         {
-            if (selectedObjects.Count == 0)
+            pendingGlbSelection = null;
+            if (selectedObjects.Count == 0 && selectedGlbObjects.Count == 0)
                 return;
 
-            foreach (var layer in selectedObjects.Select(mapping => mapping.LayerData).Distinct())
+            foreach (var layer in selectedObjectLayers)
                 layer.LayerActiveInHierarchyChanged.RemoveListener(OnSelectedObjectLayerActiveChanged);
             foreach (var mapping in selectedObjects)
             {
@@ -247,7 +287,11 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                     mapping.Deselect();
             }
             selectedObjects.Clear();
+            selectedGlbObjects.Clear();
+            selectedObjectLayers.Clear();
             SelectedObjectMapping = null;
+            SelectedGlbObject = null;
+            mapStyling?.SelectBlock(null);
             objectSelectionChanged = true;
         }
 

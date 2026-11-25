@@ -55,6 +55,19 @@ namespace Netherlands3D.Twin.DataSets
         public IEnumerable<HierarchicalObjectLayerGameObject> GlbVisualizations => visualizations.Where(visualization => IsCurrent(visualization) && visualization.GetComponent<GLBSpawner>() != null);
         public event Action Changed;
 
+        internal DashboardObjectData.BlockData GetGlbBlock(MeshRenderer renderer)
+        {
+            if (!HasData || renderer == null || !glbObjects.TryGetValue(renderer, out var block))
+                return null;
+
+            var visualization = renderer.GetComponentInParent<HierarchicalObjectLayerGameObject>();
+            return IsCurrent(visualization) && visualization.LayerData.ActiveInHierarchy ? block : null;
+        }
+
+        internal IEnumerable<MeshRenderer> GetGlbRenderers(string block) => glbObjects
+            .Where(entry => string.Equals(entry.Value.Block, block, StringComparison.OrdinalIgnoreCase) && GetGlbBlock(entry.Key) != null)
+            .Select(entry => entry.Key);
+
         internal IEnumerable<CityJSONMapping> GetCityJsonMappings(string block)
         {
             foreach (var visualization in Visualizations.Where(visualization => visualization.LayerData.ActiveInHierarchy))

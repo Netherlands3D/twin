@@ -27,9 +27,11 @@ namespace Netherlands3D.Twin.DataSets
     internal sealed class DashboardMapStyling : IDisposable
     {
         private const string ColorAttribute = "data-dashboard-color";
+        private static readonly int HighlightColorProperty = Shader.PropertyToID("_HighlightColor");
         private readonly DashboardObjectBinding binding;
         private IReadOnlyDictionary<string, Color> colors;
         private DashboardMapLayer selectedLayer;
+        private string selectedBlock;
         private readonly Dictionary<CityJSONLayerGameObject, StylingPropertyData> styles = new();
         private readonly Dictionary<HierarchicalObjectLayerGameObject, (StylingPropertyData[] Properties, UnityAction Listener)> meshLayers = new();
         private readonly Dictionary<(MeshRenderer Renderer, int MaterialIndex), (HierarchicalObjectLayerGameObject Layer, MeshColorOverride Override)> meshOverrides = new();
@@ -45,6 +47,12 @@ namespace Netherlands3D.Twin.DataSets
             selectedLayer = layer;
             colors = palette;
             Refresh();
+            meshColorsPending = true;
+        }
+
+        internal void SelectBlock(string block)
+        {
+            selectedBlock = block;
             meshColorsPending = true;
         }
 
@@ -116,7 +124,10 @@ namespace Netherlands3D.Twin.DataSets
                             meshOverrides.Add(slot, entry);
                         }
                         activeSlots.Add(slot);
-                        entry.Override.Apply(colors[GetColorKey(block, selectedLayer)]);
+                        var color = colors[GetColorKey(block, selectedLayer)];
+                        if (isGlb && block != null && string.Equals(block.Block, selectedBlock, StringComparison.OrdinalIgnoreCase) && material.HasProperty(HighlightColorProperty))
+                            color = material.GetColor(HighlightColorProperty);
+                        entry.Override.Apply(color);
                     }
                 }
             }
