@@ -9,18 +9,20 @@ namespace Netherlands3D.Twin.DataSets
         public int SourceRowCount { get; }
         public int SkippedRowCount => SkippedLineNumbers.Count;
         public IReadOnlyList<int> SkippedLineNumbers { get; }
+        internal IReadOnlyList<(int LineNumber, string Reason)> SkippedRows { get; }
         public IReadOnlyList<HousingRow> Housing { get; }
         public IReadOnlyList<NonHousingRow> NonHousing { get; }
         public IReadOnlyList<ProgramChangeRow> ProgramChanges { get; }
 
         public DashboardData(IReadOnlyList<HousingRow> housing, IReadOnlyList<NonHousingRow> nonHousing, IReadOnlyList<ProgramChangeRow> programChanges)
-            : this(housing, nonHousing, programChanges, Array.Empty<int>())
+            : this(housing, nonHousing, programChanges, Array.Empty<(int, string)>())
         {
         }
 
-        internal DashboardData(IReadOnlyList<HousingRow> housing, IReadOnlyList<NonHousingRow> nonHousing, IReadOnlyList<ProgramChangeRow> programChanges, IReadOnlyList<int> skippedLineNumbers)
+        internal DashboardData(IReadOnlyList<HousingRow> housing, IReadOnlyList<NonHousingRow> nonHousing, IReadOnlyList<ProgramChangeRow> programChanges, IReadOnlyList<(int LineNumber, string Reason)> skippedRows)
         {
-            SkippedLineNumbers = skippedLineNumbers.ToArray();
+            SkippedRows = skippedRows.ToArray();
+            SkippedLineNumbers = SkippedRows.Select(row => row.LineNumber).ToArray();
             SourceRowCount = housing.Count + nonHousing.Count + programChanges.Count + SkippedRowCount;
             Housing = housing.Where(IsValid).ToArray();
             NonHousing = nonHousing.Where(IsValid).ToArray();

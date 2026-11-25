@@ -41,6 +41,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 return IconImage.POLYGON;
             }
 
+            if (layer.HasProperty<DashboardCsvPropertyData>())
+                return IconImage.CSV;
+
             var source = layer.GetProperty<LayerURLPropertyData>()?.Url ?? layer.GetProperty<CartesianTileSubObjectColorPropertyData>()?.Data;
             if (source?.IsAbsoluteUri == true && source.AbsolutePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                 return IconImage.CSV;

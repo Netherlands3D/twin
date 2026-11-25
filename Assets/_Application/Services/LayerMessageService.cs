@@ -2,6 +2,8 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.UI_Toolkit.Scripts;
 using UnityEngine;
 using UnityEngine.Events;
@@ -81,6 +83,15 @@ namespace Netherlands3D.Twin.Services
         {
             if(layerData is RootLayer) return;
             
+            if (layerData.GetProperty<DashboardCsvPropertyData>()?.Data is { } dashboard)
+            {
+                if (dashboard.SkippedRowCount > 0)
+                    snackbarService.DisplayWarning($"{layerData.Name} is toegevoegd met overgeslagen rijen." + DashboardCsvImportAdapter.GetSkippedLinesMessage(dashboard));
+                else
+                    snackbarService.DisplayMessage($"{layerData.Name} is succesvol toegevoegd", IconImage.CHECKMARK);
+                return;
+            }
+
             if (activeAddedCounter > 0)
                 activeAddedMessage += $" ,{layerData.Name}";
             else

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CsvHelper;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
@@ -39,11 +41,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             if (file.EndsWith(','))
                 file = file.Remove(file.Length - 1);
 
-            string fileExtension = Path.GetExtension(file).ToLower();
+            string fileExtension = Path.GetExtension(file).ToLowerInvariant();
             if (fileExtension.StartsWith('.'))
                 fileExtension = fileExtension.Substring(1);
 
-            if (fileExtension == "csv" && !CanImportCsv())
+            var dashboardFile = fileExtension is "csv" or "xlsx";
+            if (dashboardFile && !CanImportCsv(fileExtension.ToUpperInvariant()))
                 return;
 
             var possibleFileTypeEvents = fileTypeEvents.Where(fte => fte.Extension == fileExtension);
@@ -56,16 +59,39 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             };
 
             var matched = AdapterChain(localFile, possibleFileTypeEvents);
-            if (!matched && fileExtension == "csv")
-                App.Snackbar.DisplayError("Dit CSV-bestand kan niet worden ingeladen. Controleer de kolommen en het bestandsformaat.");
+            if (!matched && dashboardFile)
+                DisplayUnmatchedFile(path, fileExtension);
         }
 
-        internal static bool CanImportCsv()
+        private static void DisplayUnmatchedFile(string path, string extension)
+        {
+            var details = "Controleer de kolommen en het bestandsformaat.";
+            if (extension == "csv")
+            {
+                try
+                {
+                    using var reader = File.OpenText(path);
+                    DashboardCsv.ValidateHeaders(reader);
+                }
+                catch (DashboardImportFormatException exception)
+                {
+                    details = exception.Message;
+                }
+                catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException)
+                {
+                    details = "Controleer of het bestand leesbaar is en als CSV is opgeslagen.";
+                }
+            }
+
+            App.Snackbar.DisplayFailure($"Dit {extension.ToUpperInvariant()}-bestand kan niet worden ingeladen. {details}");
+        }
+
+        internal static bool CanImportCsv(string format = "CSV")
         {
             if (Configurator.IsDashboardingEnabled)
                 return true;
 
-            App.Snackbar.DisplayError("CSV-import is niet beschikbaar.");
+            App.Snackbar.DisplayFailure($"{format}-import is niet beschikbaar.");
             return false;
         }
 

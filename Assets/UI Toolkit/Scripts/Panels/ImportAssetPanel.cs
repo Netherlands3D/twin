@@ -24,7 +24,7 @@ namespace Netherlands3D.UI.Panels
     {
         public override string Title => "Importeren";
 
-        public const string supportedFileTypes = "obj,csv,json,geojson,glb";
+        public const string supportedFileTypes = "obj,csv,xlsx,json,geojson,glb";
         
         private Breadcrumb breadcrumb;
         private ListViewItem uploadButton;
@@ -147,7 +147,7 @@ namespace Netherlands3D.UI.Panels
 
         private void OnUploadStarted(ClickEvent evt)
         {
-            var extensions = Configurator.IsDashboardingEnabled ? supportedFileTypes : supportedFileTypes.Replace(",csv,", ",");
+            var extensions = Configurator.IsDashboardingEnabled ? supportedFileTypes : supportedFileTypes.Replace(",csv,xlsx,", ",");
             ServiceLocator.GetService<FileOpen>().OpenFile(extensions);
         }
 

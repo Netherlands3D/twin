@@ -25,8 +25,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         internal void LoadFromProjectAsset()
         {
-            using var reader = File.OpenText(AssetUriFactory.GetLocalPath(Url));
-            SetData(DashboardCsv.Read(reader));
+            SetData(DashboardCsv.ReadFile(AssetUriFactory.GetLocalPath(Url)));
         }
 
         internal void ClearLoadedData() => Data = null;
@@ -39,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 return;
 
             var skippedLines = data.SkippedRowCount > 0 ? $" (regels {string.Join(", ", data.SkippedLineNumbers)})" : string.Empty;
-            UnityEngine.Debug.Log($"Dashboard-CSV '{Path.GetFileName(Url.LocalPath)}' bevat {data.SourceRowCount} bronrijen, " +
+            UnityEngine.Debug.Log($"Dashboardbestand '{Path.GetFileName(Url.LocalPath)}' bevat {data.SourceRowCount} bronrijen, " +
                 $"{data.Housing.Count} woonrijen, {data.NonHousing.Count} niet-woonrijen, {data.ProgramChanges.Count} programmawijzigingen " +
                 $"en {data.SkippedRowCount} overgeslagen rijen{skippedLines}.");
 #endif
