@@ -21,6 +21,7 @@ namespace Netherlands3D.UI.Components
         private Button selectedButton;
 
         internal string SelectedBlock { get; private set; }
+        internal event Action BlockClicked;
 
         public DashboardHeader()
         {
@@ -44,7 +45,7 @@ namespace Netherlands3D.UI.Components
                     buildingBlocks.ScrollTo(button);
             });
             totalButton = buildingBlocks.Q<Button>();
-            totalButton.clicked += () => SelectBlock(totalButton, null);
+            totalButton.clicked += () => OnBlockClicked(totalButton, null);
             SelectBlock(totalButton, null);
         }
 
@@ -62,13 +63,34 @@ namespace Netherlands3D.UI.Components
             foreach (var identifier in blockIdentifiers)
             {
                 var button = new Button { ShowIcon = Button.ButtonStyle.Normal, LabelText = identifier };
-                button.clicked += () => SelectBlock(button, identifier);
+                button.clicked += () => OnBlockClicked(button, identifier);
                 blockButtons.Add(button);
                 buildingBlocks.Add(button);
             }
 
             var selectedIndex = Array.FindIndex(blockIdentifiers, identifier => string.Equals(identifier, selectedBlock, StringComparison.OrdinalIgnoreCase));
             SelectBlock(selectedIndex < 0 ? totalButton : blockButtons[selectedIndex], selectedIndex < 0 ? null : blockIdentifiers[selectedIndex]);
+        }
+
+        internal void SetLinkedBlocks(ISet<string> linkedBlocks)
+        {
+            for (var i = 0; i < blockIdentifiers.Length; i++)
+            {
+                var linked = linkedBlocks.Contains(blockIdentifiers[i]);
+                blockButtons[i].LabelText = linked ? blockIdentifiers[i] : blockIdentifiers[i] + "**";
+                blockButtons[i].tooltip = linked ? string.Empty : "Geen gekoppeld 3D-object";
+            }
+        }
+
+        internal void SelectBlock(string identifier)
+        {
+            var index = Array.FindIndex(blockIdentifiers, block => string.Equals(block, identifier, StringComparison.OrdinalIgnoreCase));
+            SelectBlock(index < 0 ? totalButton : blockButtons[index], index < 0 ? null : blockIdentifiers[index]);
+            buildingBlocks.schedule.Execute(() =>
+            {
+                if (selectedButton.panel != null && buildingBlocks.contentViewport.layout.width > 0f)
+                    buildingBlocks.ScrollTo(selectedButton);
+            });
         }
 
         private float MaximumBlockScroll => Mathf.Max(0f, buildingBlocks.contentContainer.layout.width - buildingBlocks.contentViewport.layout.width);
@@ -96,6 +118,12 @@ namespace Netherlands3D.UI.Components
             var delta = Mathf.Abs(evt.delta.x) > Mathf.Abs(evt.delta.y) ? evt.delta.x : evt.delta.y;
             ScrollBlocks(delta * 40f);
             evt.StopPropagation();
+        }
+
+        private void OnBlockClicked(Button button, string identifier)
+        {
+            SelectBlock(button, identifier);
+            BlockClicked?.Invoke();
         }
 
         private void SelectBlock(Button button, string identifier)

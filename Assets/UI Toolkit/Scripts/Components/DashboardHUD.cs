@@ -25,6 +25,7 @@ namespace Netherlands3D.UI.Panels
         private const string AllBlocksExplanation = "Per blok gebruiken we de laatst beschikbare gegevens.";
         private const string PhaseComparisonExplanation = "BVO per blok en fase toont alleen de beschikbare fasegegevens.";
         private const string IncompleteDataExplanation = "*Onvolledig: alleen bekende gegevens tellen mee, ook voor percentages en gemiddelden.";
+        private const string MissingGeometryExplanation = "**Geen gekoppeld 3D-object gevonden.";
 
         private readonly DashboardBlockOverview blockOverview;
         private readonly DashboardPhaseComparisonPanel phaseComparison;
@@ -44,6 +45,7 @@ namespace Netherlands3D.UI.Panels
         private Layers layers;
         private ProjectDataHandler projectLoader;
         private DashboardData displayedData;
+        private bool hasMissingGeometry;
         private (DashboardSummary.PhaseTotals[] Phases, DashboardSummary.BreakdownRow[] Segments, DashboardSummary.BreakdownRow[] Rooms,
             DashboardSummary.BreakdownRow[] Categories, DashboardSummary.BreakdownRow[] SocialFacilities) summary;
         private (string Block, DashboardSummary.PhaseTotals[] Phases, DashboardSummary.PhaseTotals Housing, DashboardSummary.PhaseTotals NonHousing) blockSelection;
@@ -227,6 +229,15 @@ namespace Netherlands3D.UI.Panels
                 availablePhases.LastOrDefault(phase => phase.NonHousingSources.HasData));
         }
 
+        internal void SetMissingGeometry(bool missing)
+        {
+            if (hasMissingGeometry == missing)
+                return;
+
+            hasMissingGeometry = missing;
+            UpdateSidebarExplanation();
+        }
+
         private void UpdateSidebarExplanation()
         {
             if (displayedData == null)
@@ -273,7 +284,12 @@ namespace Netherlands3D.UI.Panels
         // Context text and completeness are supplied together so future filters can update one shared callout.
         private void SetSidebarExplanation(string context, bool hasIncompleteData)
         {
-            sidebarDataExplanation.Text = string.Join("\n\n", new[] { context, hasIncompleteData ? IncompleteDataExplanation : null }
+            var notices = string.Join(" ", new[]
+            {
+                hasIncompleteData ? IncompleteDataExplanation : null,
+                displayedData != null && hasMissingGeometry ? MissingGeometryExplanation : null
+            }.Where(text => !string.IsNullOrEmpty(text)));
+            sidebarDataExplanation.Text = string.Join("\n\n", new[] { context, notices }
                 .Where(text => !string.IsNullOrEmpty(text)));
             sidebarDataExplanation.EnableInClassList(UtilityClassConstants.HIDDEN, string.IsNullOrEmpty(sidebarDataExplanation.Text));
         }

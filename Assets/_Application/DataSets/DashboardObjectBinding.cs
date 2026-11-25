@@ -5,6 +5,7 @@ using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.GLBImporter;
 using Netherlands3D.Functionalities.OBJImporter;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
@@ -53,6 +54,23 @@ namespace Netherlands3D.Twin.DataSets
         public IEnumerable<HierarchicalObjectLayerGameObject> ObjVisualizations => visualizations.Where(visualization => IsCurrent(visualization) && visualization.GetComponent<OBJSpawner>() != null);
         public IEnumerable<HierarchicalObjectLayerGameObject> GlbVisualizations => visualizations.Where(visualization => IsCurrent(visualization) && visualization.GetComponent<GLBSpawner>() != null);
         public event Action Changed;
+
+        internal IEnumerable<CityJSONMapping> GetCityJsonMappings(string block)
+        {
+            foreach (var visualization in Visualizations.Where(visualization => visualization.LayerData.ActiveInHierarchy))
+            {
+                var bounds = visualization.Bounds;
+                if (bounds == null)
+                    continue;
+
+                foreach (var mapping in SelectionService.MappingTree.Query<CityJSONMapping>(bounds).OfType<CityJSONMapping>())
+                {
+                    if (mapping.VisualisationParent == visualization && mapping.Feature != null && objects.TryGetValue(mapping.Feature, out var data)
+                        && string.Equals(data.Block, block, StringComparison.OrdinalIgnoreCase))
+                        yield return mapping;
+                }
+            }
+        }
 
         public static bool IsDashboardLayerName(string name) => name?.TrimStart().StartsWith("dashboard", StringComparison.OrdinalIgnoreCase) == true;
 

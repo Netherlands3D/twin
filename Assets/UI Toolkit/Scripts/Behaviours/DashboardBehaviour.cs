@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.UI;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
@@ -26,6 +29,11 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         [SerializeField] private Functionality dashboardFunctionality;
 
         private InputService input;
+        private SelectionService selectionService;
+        private TransformHandleInterfaceToggle transformHandles;
+        private bool restoreTransformHandles;
+        private readonly HashSet<CityJSONMapping> selectedObjects = new();
+        private bool objectSelectionChanged;
         private InputAction toggleDashboardAction;
         private VisualElement root;
         private DashboardHUD dashboardOverlay;
@@ -34,6 +42,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private Button closeButton;
         private VisualElement previousFocus;
         internal DashboardObjectBinding ObjectBinding { get; private set; }
+        internal CityJSONMapping SelectedObjectMapping { get; private set; }
+        internal DashboardObjectData.BlockData SelectedObjectBlock => GetObjectBlock(SelectedObjectMapping);
         private DashboardMapStyling mapStyling;
         private readonly Dictionary<string, Color> mapColors = new(StringComparer.OrdinalIgnoreCase);
         private VisualElement paletteSource;
@@ -60,6 +70,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             // The NL3D dropdown's text style is available after its UXML has been deserialized.
             mapColorSelection.SetValue(0);
             input = ServiceLocator.GetService<InputService>();
+            selectionService = ServiceLocator.GetService<SelectionService>();
+            transformHandles = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
             Subscribe();
         }
 
@@ -73,6 +85,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         {
             // Imported meshes receive their normal NL3D styling after the binding event.
             mapStyling?.ApplyPendingMeshColors();
+            // SelectionService deselects before selecting the next object; apply only the final toolbar state.
+            if (objectSelectionChanged)
+            {
+                objectSelectionChanged = false;
+                dashboardHeader.SelectBlock(SelectedObjectBlock?.Block);
+            }
         }
 
         private void Subscribe()
@@ -81,6 +99,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
             toggleDashboardAction = input.ToggleDashboardAction;
             toggleDashboardAction.performed += OnToggleDashboard;
+            selectionService.SelectCityJsonMapping.AddListener(OnCityJsonSelected);
+            selectionService.OnDeselect.AddListener(OnObjectDeselected);
+            transformHandles?.SetTarget.AddListener(OnTransformTargetChanged);
+            dashboardHeader.BlockClicked += OnBlockClicked;
             toolbarNavigation.OnDashboardClicked += OpenDashboard;
             closeButton.clicked += CloseDashboard;
             dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
@@ -95,6 +117,16 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnDisable()
         {
+            transformHandles?.SetTarget.RemoveListener(OnTransformTargetChanged);
+            if (dashboardHeader != null)
+                dashboardHeader.BlockClicked -= OnBlockClicked;
+            if (selectionService != null)
+            {
+                selectionService.SelectCityJsonMapping.RemoveListener(OnCityJsonSelected);
+                selectionService.OnDeselect.RemoveListener(OnObjectDeselected);
+            }
+            ClearObjectSelection();
+            objectSelectionChanged = false;
             mapColorSelection?.DropDownValueChanged.RemoveListener(OnMapLayerChanged);
             paletteSource?.UnregisterCallback<CustomStyleResolvedEvent>(OnMapStylesResolved);
             mapStyling?.Dispose();
@@ -129,11 +161,103 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void OnMapDataChanged()
         {
             dashboardHeader.SetBlocks(ObjectBinding?.HasData == true ? ObjectBinding.BlockIdentifiers : Array.Empty<string>());
+            var linkedBlocks = ObjectBinding?.HasData == true
+                ? ObjectBinding.Objects.Values.Concat(ObjectBinding.ObjObjects.Values).Concat(ObjectBinding.GlbObjects.Values)
+                    .Select(block => block.Block).ToHashSet(StringComparer.OrdinalIgnoreCase)
+                : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            dashboardHeader.SetLinkedBlocks(linkedBlocks);
+            dashboardOverlay.SetMissingGeometry(ObjectBinding?.HasData == true && ObjectBinding.BlockIdentifiers.Any(block => !linkedBlocks.Contains(block)));
+            if (selectedObjects.Any(mapping => GetObjectBlock(mapping) == null))
+                selectionService.Deselect();
+
             DashboardColors.SetSegmentColors(ObjectBinding?.HasData == true ? ObjectBinding.HousingSegments : Array.Empty<string>(), mapColors);
             DashboardColors.SetPhaseColors(ObjectBinding?.HasData == true ? ObjectBinding.AvailablePhases : Array.Empty<string>(), mapColors);
 
             RefreshMapColors();
             RefreshMapLegend();
+        }
+
+        private DashboardObjectData.BlockData GetObjectBlock(CityJSONMapping mapping)
+        {
+            if (mapping?.Feature == null || mapping.VisualisationParent == null || mapping.LayerData.IsDisposed || !mapping.LayerData.ActiveInHierarchy || ObjectBinding?.HasData != true)
+                return null;
+
+            return ObjectBinding.Objects.TryGetValue(mapping.Feature, out var block) ? block : null;
+        }
+
+        private void OnCityJsonSelected(CityJSONMapping mapping)
+        {
+            if (!root.ClassListContains(DashboardOpenClass))
+                return;
+
+            var block = GetObjectBlock(mapping);
+            if (block != null)
+                SelectObjectBlock(block.Block, mapping);
+            else
+                ClearObjectSelection();
+        }
+
+        private void OnObjectDeselected() => ClearObjectSelection();
+
+        private void OnBlockClicked()
+        {
+            selectionService.Deselect();
+            var block = dashboardHeader.SelectedBlock;
+            if (block != null && ObjectBinding?.HasData == true)
+                SelectObjectBlock(block);
+
+            // Preserve CSV-only block choices when no selectable geometry is available.
+            if (SelectedObjectMapping == null)
+                objectSelectionChanged = false;
+        }
+
+        private void SelectObjectBlock(string block, CityJSONMapping primary = null)
+        {
+            ClearObjectSelection();
+            foreach (var mapping in ObjectBinding.GetCityJsonMappings(block))
+            {
+                mapping.Select();
+                selectedObjects.Add(mapping);
+            }
+            if (primary != null && selectedObjects.Add(primary))
+                primary.Select();
+
+            foreach (var layer in selectedObjects.Select(mapping => mapping.LayerData).Distinct())
+                layer.LayerActiveInHierarchyChanged.AddListener(OnSelectedObjectLayerActiveChanged);
+            SelectedObjectMapping = primary != null && selectedObjects.Contains(primary) ? primary : selectedObjects.FirstOrDefault();
+            objectSelectionChanged = true;
+        }
+
+        private void OnSelectedObjectLayerActiveChanged(bool active)
+        {
+            if (!active)
+                selectionService.Deselect();
+        }
+
+        private void ClearObjectSelection()
+        {
+            if (selectedObjects.Count == 0)
+                return;
+
+            foreach (var layer in selectedObjects.Select(mapping => mapping.LayerData).Distinct())
+                layer.LayerActiveInHierarchyChanged.RemoveListener(OnSelectedObjectLayerActiveChanged);
+            foreach (var mapping in selectedObjects)
+            {
+                if (mapping.Feature != null)
+                    mapping.Deselect();
+            }
+            selectedObjects.Clear();
+            SelectedObjectMapping = null;
+            objectSelectionChanged = true;
+        }
+
+        private void OnTransformTargetChanged(GameObject target)
+        {
+            if (!root.ClassListContains(DashboardOpenClass))
+                return;
+
+            restoreTransformHandles = target != null;
+            transformHandles.gameObject.SetActive(false);
         }
 
         private void OnMapLayerChanged(int index)
@@ -201,7 +325,24 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
             previousFocus = root.focusController?.focusedElement as VisualElement;
             root.AddToClassList(DashboardOpenClass);
+            if (transformHandles != null)
+            {
+                restoreTransformHandles = transformHandles.gameObject.activeSelf;
+                transformHandles.gameObject.SetActive(false);
+            }
             dashboardOverlay.StartDataBinding();
+            foreach (var mapping in selectionService.SelectedMappings.Values)
+            {
+                if (mapping is not CityJSONMapping cityJson)
+                    continue;
+
+                var block = GetObjectBlock(cityJson);
+                if (block == null)
+                    continue;
+
+                SelectObjectBlock(block.Block, cityJson);
+                break;
+            }
             // Move focus after the dashboard has become visible.
             closeButton.schedule.Execute(() =>
             {
@@ -215,6 +356,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             if (root == null || !root.ClassListContains(DashboardOpenClass)) return;
 
             root.RemoveFromClassList(DashboardOpenClass);
+            selectionService.Deselect();
+            ClearObjectSelection();
+            if (transformHandles != null)
+                transformHandles.gameObject.SetActive(restoreTransformHandles && transformHandles.Target != null);
+            restoreTransformHandles = false;
+            objectSelectionChanged = false;
             dashboardOverlay.StopDataBinding();
             var elementToFocus = previousFocus;
             previousFocus = null;
