@@ -29,6 +29,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private InputAction toggleDashboardAction;
         private VisualElement root;
         private DashboardHUD dashboardOverlay;
+        private DashboardHeader dashboardHeader;
         private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
         private VisualElement previousFocus;
@@ -47,6 +48,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         {
             root = GetComponent<AppRootBehaviour>().Root;
             dashboardOverlay = root.Q<DashboardHUD>("DashboardOverlay");
+            dashboardHeader = dashboardOverlay.Q<DashboardHeader>("DashboardHeader");
             toolbarNavigation = root.Q<ToolbarNavigation>();
             closeButton = root.Q<Button>("CloseDashboard");
             paletteSource = root.Q("HousingBlockChart");
@@ -126,6 +128,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnMapDataChanged()
         {
+            dashboardHeader.SetBlocks(ObjectBinding?.HasData == true ? ObjectBinding.BlockIdentifiers : Array.Empty<string>());
             DashboardColors.SetSegmentColors(ObjectBinding?.HasData == true ? ObjectBinding.HousingSegments : Array.Empty<string>(), mapColors);
             DashboardColors.SetPhaseColors(ObjectBinding?.HasData == true ? ObjectBinding.AvailablePhases : Array.Empty<string>(), mapColors);
 

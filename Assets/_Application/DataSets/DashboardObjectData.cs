@@ -10,6 +10,7 @@ namespace Netherlands3D.Twin.DataSets
     internal sealed class DashboardObjectData
     {
         private readonly Dictionary<string, BlockData> blocks = new(StringComparer.OrdinalIgnoreCase);
+        public IReadOnlyList<string> BlockIdentifiers { get; } = Array.Empty<string>();
         public IReadOnlyList<string> HousingSegments { get; } = Array.Empty<string>();
 
         public DashboardObjectData(DashboardData data)
@@ -23,7 +24,8 @@ namespace Netherlands3D.Twin.DataSets
             var summaries = DashboardSummary.CalculateHousingBlocks(data).ToDictionary(summary => summary.Block, StringComparer.OrdinalIgnoreCase);
             HousingSegments = summaries.Values.FirstOrDefault().Segments ?? Array.Empty<string>();
             var identifiers = housing.Select(group => group.Key).Concat(nonHousing.Select(group => group.Key)).Concat(changes.Select(group => group.Key));
-            foreach (var identifier in identifiers.Distinct(StringComparer.OrdinalIgnoreCase))
+            BlockIdentifiers = identifiers.Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(identifier => identifier, StringComparer.OrdinalIgnoreCase).ToArray();
+            foreach (var identifier in BlockIdentifiers)
             {
                 summaries.TryGetValue(identifier, out var summary);
                 blocks.Add(identifier, new BlockData(identifier, housing[identifier].ToArray(), nonHousing[identifier].ToArray(), changes[identifier].ToArray(), summary));

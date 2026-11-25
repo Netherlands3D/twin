@@ -46,6 +46,7 @@ namespace Netherlands3D.Twin.DataSets
         public IReadOnlyDictionary<Material, DashboardObjectData.BlockData> ObjObjects => objObjects;
         public IReadOnlyDictionary<MeshRenderer, DashboardObjectData.BlockData> GlbObjects => glbObjects;
         public bool HasData => functionality.IsEnabled && data != null;
+        public IReadOnlyList<string> BlockIdentifiers => index.BlockIdentifiers;
         public IReadOnlyList<string> HousingSegments => index.HousingSegments;
         public IReadOnlyList<string> AvailablePhases => data?.AvailablePhases ?? Array.Empty<string>();
         public IEnumerable<CityJSONLayerGameObject> Visualizations => visualizations.OfType<CityJSONLayerGameObject>().Where(IsCurrent);
