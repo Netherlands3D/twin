@@ -49,6 +49,21 @@ namespace Netherlands3D.Tiles3D
         public string refine;
         public string contentUri = "";
         public Content content; //Gltf content
+        private byte hasNoJsonOrSubtreeExtention = 0; //0 not initialized, 1 has either one, 2 has none
+
+        public byte HasNoJsonOrSubtreeExtention
+        {
+            get
+            {
+                if (hasNoJsonOrSubtreeExtention == 0)
+                {
+                    hasNoJsonOrSubtreeExtention = 1;
+                    if(contentUri.Contains(".json") == false && contentUri.Contains(".subtree")==false)
+                        hasNoJsonOrSubtreeExtention = 2;
+                }
+                return hasNoJsonOrSubtreeExtention;
+            }
+        }
 
         public int CountLoadingChildren()
         {
@@ -62,8 +77,7 @@ namespace Netherlands3D.Tiles3D
             {
                 if (childTile.content != null)
                 {
-                    //todo make this a method
-                    if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
+                    if (childTile.HasNoJsonOrSubtreeExtention == 2)
                     {
                         if (childTile.isLoading)
                         {
@@ -80,31 +94,26 @@ namespace Netherlands3D.Tiles3D
         public int loadedChildren;
         public int CountLoadedChildren()
         {
-            int result = 0;
-            if (refine=="ADD")
-            {   loadedChildren =0;
+            if (refine == "ADD")
+            {
+                loadedChildren = 0;
                 return 0;
             }
+
+            int result = 0;
+
             foreach (var childTile in children)
             {
-                if (childTile.content != null)
+                if (childTile.content != null &&
+                    childTile.HasNoJsonOrSubtreeExtention == 2 &&
+                    childTile.content.State != Content.ContentLoadState.DOWNLOADING)
                 {
-                    //todo make this a method
-                    if (childTile.contentUri.Contains(".json") == false && childTile.contentUri.Contains(".subtree")==false)
-                    {
-
-                        if (childTile.content.State != Content.ContentLoadState.DOWNLOADING)
-                        {
-                            result++;
-                        }
-
-                    }
+                    result++;
                 }
+
+                result += childTile.CountLoadedChildren();
             }
-                foreach (var childTile in children)
-                {
-                    result += childTile.CountLoadedChildren();
-                }
+
             loadedChildren = result;
             return result;
         }
@@ -195,7 +204,7 @@ namespace Netherlands3D.Tiles3D
             loaded
         }
 
-
+        private Vector3 lastCameraPosition;
 
         public bool IsInViewFrustrum(Camera ofCamera)
         {
@@ -213,10 +222,14 @@ namespace Netherlands3D.Tiles3D
             }
             if (boundsAvailable)
             {
+                if (ofCamera.transform.position == lastCameraPosition)
+                    return inView;
+                
                 inView = false;
                 if (IsPointInbounds(new Coordinate(ofCamera.transform.position).Convert(tileSet.contentCoordinateSystem),8000d))
                 {
                     inView= ofCamera.InView(unityBounds);
+                    lastCameraPosition = ofCamera.transform.position;
                 }
                 
             }
@@ -443,8 +456,7 @@ namespace Netherlands3D.Tiles3D
             {
                 return;
             }
-            //todo use inverse of method that needs be created for this
-            if (contentUri.Contains(".json") || contentUri.Contains(".subtree"))
+            if (HasNoJsonOrSubtreeExtention == 1)
             {
                 if(IsInViewFrustrum(ofCamera)==false)
                     {
@@ -458,18 +470,29 @@ namespace Netherlands3D.Tiles3D
                         child.DestroyChildTilesIfTilesetOutOfView(ofCamera);
                     }
             }
-
-            
-
         }
+
+        public bool IsLeaf = true;
+
+        public void AddChild(Tile child)
+        {
+            children.Add(child);
+            IsLeaf = false;
+        }
+
+        public void RemoveChild(Tile child)
+        {
+            children.Remove(child);
+            IsLeaf = children.Count == 0;
+        }
+        
         private void DestroyChildTiles()
         {
             if(children.Count == 0) return;
             for (int i = children.Count - 1; i >= 0 ; i--)
             {
                 children[i].DestroyChildTiles();
-                children[i] = null;
-                children.RemoveAt(i);
+                RemoveChild(children[i]);
             }
         }
     }
