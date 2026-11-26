@@ -308,6 +308,7 @@ jobs:
 
       - name: 'Upload artifact to build pipeline'
         # see: https://github.com/actions/upload-artifact
+        id: upload
         uses: actions/upload-artifact@v4
         with: { name: '${{ env.WINDOWS_BUILD_ARTEFACT_NAME }}-${{ steps.buildUnity.outputs.buildVersion }}', path: '${{ env.WINDOWS_BUILD_OUTPUT_FOLDER }}' }
 
@@ -381,6 +382,7 @@ jobs:
 
       - name: 'Upload artifact to build pipeline'
         # see: https://github.com/actions/download-artifact    
+        id: upload
         uses: actions/upload-artifact@v4
         with: { name: '${{ env.WINDOWS_DEVELOPMENT_BUILD_ARTEFACT_NAME }}-${{ steps.buildUnity.outputs.buildVersion }}', path: '${{ env.WINDOWS_BUILD_OUTPUT_FOLDER }}' }
       
