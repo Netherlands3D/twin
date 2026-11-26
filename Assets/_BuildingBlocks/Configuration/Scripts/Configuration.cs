@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin.Configuration
 
             foreach (var functionality in Functionalities)
             {
-                if (!functionality.IsExperimental)
+                if (functionality.settingsCategory != FunctionalitySettingsCategory.Experimental)
                     continue;
 
                 if (functionality.Data is FileExtensionFunctionalityData data)

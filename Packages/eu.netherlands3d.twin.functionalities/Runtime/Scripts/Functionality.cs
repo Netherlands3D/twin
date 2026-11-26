@@ -107,9 +107,6 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
-        public bool IsExperimental;
-        
-
         public UnityEvent OnEnableFunctionality = new();
         public UnityEvent OnDisableFunctionality = new();
         public UnityEvent<Functionality> OnFunctionalityChanged = new();
