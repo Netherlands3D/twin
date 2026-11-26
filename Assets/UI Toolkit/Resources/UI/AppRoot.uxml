@@ -9,7 +9,13 @@
     class="app">
     <ui:Style src="./AppRoot.uss" />
     <nl3dP:DefaultHUD picking-mode="Ignore" />
-    <nl3dP:FPVHUD class="hidden" picking-mode="Ignore" />
+    <nl3dP:FPVHUD picking-mode="Ignore" />
+    <ui:VisualElement name="DashboardOverlay">
+        <ui:VisualElement class="dashboard-overlay__panel">
+            <ui:Label text="Dashboard" class="text-header" />
+            <nl3d:Button name="CloseDashboard" button-style="Normal" LabelText="Sluiten" />
+        </ui:VisualElement>
+    </ui:VisualElement>
     <nl3dP:SnackbarPanel />
-    <ui:VisualElement name="Dialogs" class="dialogs-anchor"/>
+    <ui:VisualElement name="Dialogs" class="dialogs-anchor" />
 </ui:UXML>

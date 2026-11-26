@@ -1,6 +1,9 @@
 using System;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+using EditableNameField = Netherlands3D.UI.Components.EditableNameField;
 
 namespace Netherlands3D.Services
 {
@@ -16,6 +19,7 @@ namespace Netherlands3D.Services
         private InputAction undoAction;
         private InputAction redoAction;
         private InputAction exitAction;
+        private InputAction toggleDashboardAction;
         
         private InputActionMap polygonSelectionActionMap;
         private InputActionMap cameraInputActionMap;
@@ -41,6 +45,7 @@ namespace Netherlands3D.Services
         public InputAction OpenProjectAction => openProjectAction ??= applicationActionMap.FindAction("Projects/Open");
         public InputAction SaveProjectAction => saveProjectAction ??= applicationActionMap.FindAction("Projects/Save");
         public InputAction ExitAction => exitAction ??= applicationActionMap.FindAction("Projects/Exit");
+        public InputAction ToggleDashboardAction => toggleDashboardAction ??= applicationActionMap.FindAction("Dashboard/ToggleFunctionality", true);
         
         public InputAction LeftClickAction => leftClickAction ??= cameraInputActionMap.FindAction("LeftClick");
         public InputAction RightClickAction => rightClickAction ??= cameraInputActionMap.FindAction("RightClick");
@@ -69,6 +74,7 @@ namespace Netherlands3D.Services
             OpenProjectAction.Enable();
             SaveProjectAction.Enable();
             ExitAction.Enable();
+            ToggleDashboardAction.Enable();
         }
 
         private void OnDisable()
@@ -76,6 +82,7 @@ namespace Netherlands3D.Services
             OpenProjectAction.Disable();
             SaveProjectAction.Disable();
             ExitAction.Disable();
+            ToggleDashboardAction.Disable();
         }
 
         public void SetCameraActionsEnabled(bool enable)

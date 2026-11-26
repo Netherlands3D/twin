@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin.Configuration
 
             foreach (var functionality in Functionalities)
             {
-                if (!functionality.IsExperimental)
+                if (functionality.settingsCategory != FunctionalitySettingsCategory.Experimental)
                     continue;
 
                 if (functionality.Data is FileExtensionFunctionalityData data)
@@ -314,8 +314,10 @@ namespace Netherlands3D.Twin.Configuration
 
         private void LoadFunctionalitiesFromProject(ProjectData changedData)
         {
+            // Hidden functionality availability belongs to the spoke or the test session, not the project.
             foreach (var functionality in Functionalities)
             {
+                if (functionality.statePersistence == FunctionalityStatePersistence.Project)
                 functionality.ResetDataToDefaults();
                 //remove any previous existing listener
                 functionality.OnFunctionalityChanged.RemoveListener(UpdateFunctionalityExtention);
@@ -326,7 +328,7 @@ namespace Netherlands3D.Twin.Configuration
             foreach (var savedData in changedData.functionalities)
             {
                 var savedId = savedData.Id;
-                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.Data.Id == savedId);
+                var matchingFunctionality = Functionalities.FirstOrDefault(f => f.statePersistence == FunctionalityStatePersistence.Project && f.Data.Id == savedId);
                 if (matchingFunctionality != null)
                 {
                     matchingFunctionality.Data = savedData;
@@ -337,7 +339,7 @@ namespace Netherlands3D.Twin.Configuration
             AddFunctionalityDataToProject(); //re add missing functionalities to project, in case the project did not have a specific functionalityData
         }
 
-        
+
         private void UpdateFunctionalityExtention(Functionality functionality)
         {
             if (fileOpenService == null)
@@ -354,11 +356,18 @@ namespace Netherlands3D.Twin.Configuration
             else
                 fileOpenService.RemoveSupportedDragAndDropExtention(data.FileExtention);
         }
-        
+
         public void AddFunctionalityDataToProject()
         {
             foreach (var functionality in Functionalities)
             {
+                if (functionality.statePersistence == FunctionalityStatePersistence.RuntimeOnly)
+                {
+                    // Older project files may still contain data for this functionality.
+                    ProjectData.Current.functionalities.RemoveAll(data => data.Id == functionality.Id);
+                    continue;
+                }
+
                 ProjectData.Current.AddFunctionality(functionality.Data);
             }
         }

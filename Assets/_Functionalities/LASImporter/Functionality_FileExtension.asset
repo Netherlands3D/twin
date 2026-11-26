@@ -19,7 +19,9 @@ MonoBehaviour:
   Header: Eigen .LAS bestanden tonen in de 3D viewer
   Description: 
   configuration: {fileID: 0}
-  IsExperimental: 1
+  settingsCategory: 1
+  statePersistence: 0
+  enableOnHosts: []
   OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []

@@ -6,6 +6,34 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Functionalities
 {
+    public enum FunctionalitySettingsCategory
+    {
+        /// <summary>
+        /// Show the functionality's controls in the settings panel. (default option)
+        /// </summary>
+        Optional = 0,
+        /// <summary>
+        /// Show the functionality's controls in the experimental settings section in the settings panel.
+        /// </summary>
+        Experimental,
+        /// <summary>
+        /// Hide the functionality's controls in the settings panel.
+        /// </summary>
+        Hidden,
+    }
+
+    public enum FunctionalityStatePersistence
+    {
+        /// <summary>
+        /// Save and restore the functionality's state through the .nl3d project.
+        /// </summary>
+        Project,
+        /// Initialize state from the functionality's defaults and retain runtime changes.
+        /// Do not save or restore this state through .nl3d files.
+        /// Creating or loading a project leaves the current state unchanged.
+        RuntimeOnly
+    }
+
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/Functionality/Generic", fileName = "Functionality", order = 0)]
     public class Functionality : ScriptableObject, ISimpleJsonMapper
     {
@@ -20,10 +48,10 @@ namespace Netherlands3D.Twin.Functionalities
             get => currentData ??= CreateDefaultData();
             set
             {
-                var oldEnabled = Data.IsEnabled;
+                var oldEnabled = IsEnabled;
                 currentData = value;
 
-                if (currentData.IsEnabled != oldEnabled)
+                if (IsEnabled != oldEnabled)
                     InvokeOnEnableChangeEvents();
             }
         }
@@ -49,6 +77,10 @@ namespace Netherlands3D.Twin.Functionalities
 
         [TextArea(5, 10)] public string Description;
         public ScriptableObject configuration;
+        public FunctionalitySettingsCategory settingsCategory = FunctionalitySettingsCategory.Optional;
+        public FunctionalityStatePersistence statePersistence = FunctionalityStatePersistence.Project;
+        
+        public string[] enableOnHosts = Array.Empty<string>();
 
         public string Id => defaultData.Id;
 
@@ -75,16 +107,13 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
-        public bool IsExperimental;
-        
-
         public UnityEvent OnEnableFunctionality = new();
         public UnityEvent OnDisableFunctionality = new();
         public UnityEvent<Functionality> OnFunctionalityChanged = new();
 
         private void InvokeOnEnableChangeEvents()
         {
-            if (Data.IsEnabled)
+            if (IsEnabled)
                 OnEnableFunctionality.Invoke();
             else
                 OnDisableFunctionality.Invoke();
@@ -100,7 +129,7 @@ namespace Netherlands3D.Twin.Functionalities
         {
             return new JSONObject
             {
-                ["enabled"] = Data.IsEnabled,
+                ["enabled"] = IsEnabled,
                 ["configuration"] = (configuration as IConfiguration)?.ToJsonNode()
             };
         }
