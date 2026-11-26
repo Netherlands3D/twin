@@ -399,5 +399,5 @@ jobs:
               state: 'success',
               target_url: process.env.ARTIFACT_URL,
               context: 'Windows build download',
-              description: 'Click Details to download the build',
+              description: 'Click to download the build',
             });
