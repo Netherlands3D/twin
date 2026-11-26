@@ -132,7 +132,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         }
 
         private void RefreshMapColors() => mapStyling?.Update(selectedMapLayer,
-            ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null);
+            root.ClassListContains(DashboardOpenClass) && ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null);
 
         private void OnToggleDashboard(InputAction.CallbackContext _)
         {
@@ -151,6 +151,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             previousFocus = root.focusController?.focusedElement as VisualElement;
             root.AddToClassList(DashboardOpenClass);
             dashboardOverlay.StartDataBinding();
+            RefreshMapColors();
             // Move focus after the dashboard has become visible.
             closeButton.schedule.Execute(() =>
             {
@@ -165,6 +166,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
             root.RemoveFromClassList(DashboardOpenClass);
             dashboardOverlay.StopDataBinding();
+            RefreshMapColors();
             var elementToFocus = previousFocus;
             previousFocus = null;
             if (elementToFocus?.panel == null) return;
