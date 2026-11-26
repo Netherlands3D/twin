@@ -53,7 +53,7 @@ namespace Netherlands3D
             foreach (var layer in newProjectData.RootLayer.GetFlatHierarchy())
             {
                 HandleLayerAdded(layer);
-        }
+            }
         }
 
         private void HandleLayerAdded(LayerData layer)
@@ -62,11 +62,11 @@ namespace Netherlands3D
             if (timelineProperty != null)
             {
                 SubscribeToTimelineProperty(timelineProperty);
-                }
+            }
 
             layer.PropertySet.AddListener(OnLayerPropertyAdded);
             layer.PropertyRemoved.AddListener(OnLayerPropertyRemoved);
-                }
+        }
                 
 
         private void OnLayerPropertyAdded(LayerPropertyData newProperty)
@@ -99,23 +99,24 @@ namespace Netherlands3D
         private void SubscribeToTimelineProperty(TimelineStatusStylingLayerPropertyData timelineProperty)
         {
             timelinePropertyDatas.Add(timelineProperty);
-            timelineProperty.TimestampCollectionAddded.AddListener(HandleTimestampCollectionAdded);
+            timelineProperty.TimestampCollectionAdded.AddListener(HandleTimestampCollectionAdded);
             UpdateTimelineElementVisibility();
         }
         
         private void UnsubscribeToTimelineProperty(TimelineStatusStylingLayerPropertyData timelineProperty)
         {
             timelinePropertyDatas.Remove(timelineProperty);
-            timelineProperty.TimestampCollectionAddded.RemoveListener(HandleTimestampCollectionAdded);
+            timelineProperty.TimestampCollectionAdded.RemoveListener(HandleTimestampCollectionAdded);
+
             UpdateTimelineElementVisibility();
         }
             
-        private void HandleTimestampCollectionAdded(CityObject co, TimestampCollection timestampCollection)
+        private void HandleTimestampCollectionAdded(object feature, TimestampCollection timestampCollection)
         {
             var addedMin = timestampCollection.LowestTimestamp;
             var addedMax = timestampCollection.HighestTimestamp;
             timelineElement.SetRange(addedMin.timestamp, addedMax.timestamp);
-            }
+        }
 
         private void UpdateTimelineElementVisibility()
         {

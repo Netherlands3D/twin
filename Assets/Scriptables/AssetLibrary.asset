@@ -30,6 +30,7 @@ MonoBehaviour:
   - {fileID: 5990074631127989039, guid: 78184c91e673b6142a99465863a32fa5, type: 3}
   - {fileID: 4142489338678956943, guid: 395dd4e52bd3b42cfb24f183f3839bba, type: 3}
   - {fileID: 6820785696303367138, guid: 0d964eb16008d99d29aac9278ac67bae, type: 3}
+  - {fileID: 1376849245051100002, guid: f54b3f1829b04b88b2f33f2b01e0d6a7, type: 3}
   extraCatalogs:
   - https://api.pdok.nl/catalogus/v1-demo/
   fallbackPrefab: {fileID: 221556199992705649, guid: 754eb7a73e57a46f8bb8de137184cc10,
