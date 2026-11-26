@@ -108,11 +108,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-        public void Remove(IMapping obj)
+        public bool Remove(IMapping obj)
         {
             bool isRemoved = Remove(root, obj);
             if (isRemoved)
                 OnMappingRemoved.Invoke(obj);
+            return isRemoved;
         }
 
         private bool Remove(Node node, IMapping obj)
@@ -325,6 +326,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     Debug.DrawLine(bl, nbl, Color.red);
                 else if (mapping is BagMeshMapping)
                     Debug.DrawLine(bl, nbl, Color.yellow);
+                else if(mapping is CityJSONMapping)
+                    Debug.DrawLine(bl, nbl, Color.purple);
             }
 
 
@@ -337,6 +340,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 {
                     mapping.BoundingBox.Debug(Color.cyan);
                     ((BagMeshMapping)mapping).DebugBounds(Color.blue);
+                }
+                else if (mapping is CityJSONMapping)
+                { 
+                    ((CityJSONMapping)mapping).Debug(Color.purple);
                 }
             }
 

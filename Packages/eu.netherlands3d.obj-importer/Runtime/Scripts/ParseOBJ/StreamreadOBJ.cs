@@ -195,8 +195,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
 
             //setup first submesh;
             AddSubMesh("default");
-            bool lineRead = true;
-            int totalLinesCount = 0;
             FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.None);
 
             streamReader = new StreamReader(fileStream, System.Text.Encoding.UTF8);
@@ -205,7 +203,7 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             currentcharindex = 0;
             System.DateTime time = System.DateTime.UtcNow;
 
-            while (lineRead)
+            while (currentcharindex < charlistlength || streamReader.Peek() != -1)
             {
 
                 if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
@@ -214,12 +212,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                     yield return null;
                     time = System.DateTime.UtcNow;
                 }
-                if (streamReader.Peek() == -1)
-                {
-                    lineRead = false;
-                    continue;
-                }
-                totalLinesCount++;
                 ReadLine();
                 if (needToCancel)
                 {
@@ -235,7 +227,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                     File.Delete(filename);
                     rollback();
                     isFinished = true;
-                    lineRead = false;
                     callback(false);
                     yield break;
                 }
@@ -588,7 +579,7 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
                         sb.Append(readChar);
                     }
                 }
-                else { return ""; }
+                else { return sb.ToString(); }
             }
         }
 

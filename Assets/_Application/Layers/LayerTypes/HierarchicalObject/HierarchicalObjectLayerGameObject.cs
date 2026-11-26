@@ -117,7 +117,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             foreach (var meshRenderer in GetComponentsInChildren<MeshRenderer>())
             {
                 var stylingFeature = CreateFeature(meshRenderer);
-                LayerFeatures.Add(stylingFeature.Geometry, stylingFeature);
+                StylingFeatures.Add(stylingFeature.Geometry, stylingFeature);
             }
 
             ApplyStyling();
@@ -394,7 +394,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         public override void ApplyStyling()
         {
-            foreach (var feature in LayerFeatures.Values)
+            foreach (var feature in StylingFeatures.Values)
             {
                 ApplyStylingToFeature(feature);
             }
@@ -402,7 +402,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.ApplyStyling();
         }
 
-        public virtual void ApplyStylingToFeature(LayerFeature feature)
+        public override void ApplyStylingToFeature(StylingFeature feature)
         {
             if (feature.Geometry is not MeshRenderer meshRenderer) return;
             
