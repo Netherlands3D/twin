@@ -556,6 +556,86 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8aa4805020d81442786d50f84f3e3c26, type: 3}
+--- !u!1001 &675732737
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 629363520834603047, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_Name
+      value: Sun
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 783.4831
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -100.20364
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 466.9422
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4927405905975373730, guid: 507110fcb3156b253ac6e23530f15543,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 507110fcb3156b253ac6e23530f15543, type: 3}
+--- !u!114 &675732738 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8529003706672095954, guid: 507110fcb3156b253ac6e23530f15543,
+    type: 3}
+  m_PrefabInstance: {fileID: 675732737}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7edbfaf41db12e1e8247a66bb99e0ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.SunTime
 --- !u!1 &767208734 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5315891981602308680, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
@@ -3237,7 +3317,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onPostShift.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 675732738}
     - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}
       propertyPath: onPostShift.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -3251,7 +3331,7 @@ PrefabInstance:
     - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}
       propertyPath: onPostShift.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Sun.SunTime, eu.netherlands3d.sun.Runtime
+      value: Netherlands3D.SunTime, eu.netherlands3d.twin
       objectReference: {fileID: 0}
     - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}
@@ -3357,3 +3437,4 @@ SceneRoots:
   - {fileID: 8877400144582484875}
   - {fileID: 2776663393198188358}
   - {fileID: 489896381}
+  - {fileID: 675732737}

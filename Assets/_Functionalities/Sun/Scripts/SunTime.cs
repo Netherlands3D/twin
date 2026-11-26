@@ -42,6 +42,11 @@ namespace Netherlands3D
             sunDirectionalLight.transform.localRotation = Quaternion.Euler(angles);
         }
 
+        public void RecalculateOrigin()
+        {
+            RecalculateOrigin(timeService.Time);
+        }
+
         //call this when the origin changes to recalculate the origin and set the sun position without calling the time change event
         public void RecalculateOrigin(DateTime time)
         {
