@@ -5,7 +5,7 @@ env:
   BUILD_OUTPUT_FOLDER: 'build/WebGL/WebGL'
   PRODUCTION_BUILD_ARTEFACT_NAME: 'viewer'
   DEVELOPMENT_BUILD_ARTEFACT_NAME: 'viewer-development'
-  WINDOWS_BUILD_OUTPUT_FOLDER: 'build/NL3D'
+  WINDOWS_BUILD_OUTPUT_FOLDER: 'build/StandaloneWindows64'
   WINDOWS_BUILD_ARTEFACT_NAME: 'viewer-windows'
   WINDOWS_DEVELOPMENT_BUILD_ARTEFACT_NAME: 'viewer-windows-development'
 
