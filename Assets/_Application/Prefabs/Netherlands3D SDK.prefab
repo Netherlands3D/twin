@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47224adf747a413a86057f38957337f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
   fromUrlImporter: {fileID: 1444499676158243795}
+  assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
   VisualizationCreated:
     m_PersistentCalls:
       m_Calls: []
@@ -77,6 +77,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6e1704cdf27264f12b6666fa18971ba2, type: 2}
   - {fileID: 11400000, guid: 88768754e3348f846a9dbe83309eddc8, type: 2}
   - {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
+  - {fileID: 11400000, guid: 34a0a43923df4aa5a2865dfcdaeb0846, type: 2}
   OnAdapterFound:
     m_PersistentCalls:
       m_Calls: []

@@ -1,0 +1,31 @@
+using GeoJSON.Net.Feature;
+using Netherlands3D.Coordinates;
+using System.Collections.Generic;
+using Netherlands3D.Twin.Utility;
+using UnityEngine;
+
+namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
+{
+    public interface IGeoJsonGeometryTypeVisualizer
+    {
+        public string DisplayName { get; }
+        public string StylingColorProperty { get; }
+        bool SupportsGeometryType(Feature feature);
+        int FeatureCount { get; }
+        Transform Transform { get; }
+        void SetColorForAllFeatures(Color color);
+        void SetColorForFeature(Feature feature, Color color);
+        Material RenderMaterial { get; }
+        List<Mesh> GetMeshData(Feature feature);
+        void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color);
+        void SetVisualisationDeselected(List<Mesh> meshes);
+        void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem, bool activeInHierarchy);
+        void OnLayerActiveInHierarchyChanged(bool activeInHierarchy);
+        public BoundingBox GetBoundingBoxOfVisibleFeatures();
+        Bounds GetFeatureBounds(Feature feature);
+        float GetSelectionRange();
+        void RemoveFeaturesOutOfView();
+        delegate void GeoJsonHandler(Feature feature);
+        event GeoJsonHandler FeatureRemoved;
+    }
+}

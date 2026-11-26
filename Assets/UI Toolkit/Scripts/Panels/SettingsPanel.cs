@@ -23,6 +23,7 @@ namespace Netherlands3D.UI.Panels
         private ContentContainer settingsSection;
         private RadioButtonGroup qualityRadioButtonGroup;
         private ListView functionalitiesListView;
+        private ListView experimentalFunctionalitiesListView;
         
         public SettingsPanel()
         {
@@ -40,8 +41,14 @@ namespace Netherlands3D.UI.Panels
             functionalitiesListView = settingsSection.Q<ListView>("Functionalities");
             functionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             functionalitiesListView.makeItem = MakeFunctionalityItem;
-            functionalitiesListView.bindItem = BindFunctionalityItem;
-            functionalitiesListView.itemsSource = configuration.Functionalities;
+            functionalitiesListView.bindItem = (item, index) => BindFunctionalityItem(item, index, functionalitiesListView);
+            functionalitiesListView.itemsSource = configuration.Functionalities.Where(f => !f.IsExperimental).ToList();
+            
+            experimentalFunctionalitiesListView = settingsSection.Q<ListView>("ExperimentalFunctionalities");
+            experimentalFunctionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            experimentalFunctionalitiesListView.makeItem = MakeFunctionalityItem;
+            experimentalFunctionalitiesListView.bindItem = (item, index) => BindFunctionalityItem(item, index, experimentalFunctionalitiesListView);
+            experimentalFunctionalitiesListView.itemsSource = configuration.Functionalities.Where(f => f.IsExperimental).ToList();
             
             var fpvFunctionality = configuration.Functionalities.FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
             if (fpvFunctionality != null)
@@ -58,12 +65,12 @@ namespace Netherlands3D.UI.Panels
             return listViewItem;
         }
 
-        private void BindFunctionalityItem(VisualElement item, int index)
+        private void BindFunctionalityItem(VisualElement item, int index, ListView source)
         {
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<CheckboxToggle>() is not CheckboxToggle toggle) return;
 
-            Functionality functionality = functionalitiesListView.itemsSource[index] as Functionality;
+            Functionality functionality = source.itemsSource[index] as Functionality;
             toggle.LabelText = functionality.Title;
             toggle.SetValueWithoutNotify(functionality.IsEnabled);
 

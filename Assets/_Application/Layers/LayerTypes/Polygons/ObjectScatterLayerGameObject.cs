@@ -105,21 +105,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void InitializeScatterMesh(string prefabId)
         {
-            var scatterObjectPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            var scatterObjectPrefab = App.Layers.AssetLibrary.GetPrefabById(prefabId);
             this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
             var sharedMaterial = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
             this.material = new Material(sharedMaterial);
             this.material.enableInstancing = true;
 
             var feature = CreateFeature(material);
-            LayerFeatures.Add(feature.Geometry, feature);
+            StylingFeatures.Add(feature.Geometry, feature);
         }
 
         public override void ApplyStyling()
         {
             base.ApplyStyling();
             // Apply style to the features that was discovered
-            foreach (var feature in LayerFeatures.Values)
+            foreach (var feature in StylingFeatures.Values)
             {
                 Symbolizer styling = GetStyling(feature);
                 var fillColor = styling.GetFillColor();

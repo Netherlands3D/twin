@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -59,15 +60,16 @@ namespace Netherlands3D.SelectionTools
         private Color lineColor;
         public Mesh PolygonMesh { get; private set; }
         private Renderer renderer;
+        private MaterialPropertyBlock block;
 
         public Material VisualisationMaterial
         {
             get => renderer.material;
             set => renderer.material = value;
         }
-        
+
 #if UNITY_EDITOR
-            private void OnValidate()
+        private void OnValidate()
         {
             EnableLineRenderers(drawLine);
             EnableMeshRenderers(drawMesh);
@@ -78,6 +80,8 @@ namespace Netherlands3D.SelectionTools
         private void Awake()
         {
             renderer = GetComponent<Renderer>();
+            block = new MaterialPropertyBlock();
+            renderer.SetPropertyBlock(block);
         }
 
         /// <summary>
@@ -115,7 +119,7 @@ namespace Netherlands3D.SelectionTools
         public void UpdateVisualisation(List<List<Vector3>> newPolygon)
         {
             polygons = newPolygon;
-            
+
             DestroyPolygonMesh(); //cleanup to avoid memory leaks
 
             bool invertWindingOrder = false;
@@ -166,18 +170,18 @@ namespace Netherlands3D.SelectionTools
 
         private void EnableMeshRenderers(bool value) // to set this programatically, set the property DrawMesh
         {
-            GetComponent<MeshRenderer>().enabled = value;
+            renderer.enabled = value;
         }
 
         private void EnableColliders(bool value)
         {
             var mc = GetComponent<MeshCollider>();
-            if (mc)
+            if (mc != null)
                 mc.enabled = value;
             else
                 Debug.LogWarning("This PolygonVisualisation has to collider to enable/disable", gameObject);
         }
-        
+
         private void DestroyPolygonMesh()
         {
             if (PolygonMesh)
@@ -191,6 +195,21 @@ namespace Netherlands3D.SelectionTools
         {
             DestroyPolygonMesh();
             // VisualisationMaterial is global (for now), so they don't have to be destroyed here
+        }
+
+        public void SetMaterialPropertyBlockActive(bool active)
+        {
+            if (active)
+                renderer.SetPropertyBlock(block);
+            else
+                renderer.SetPropertyBlock(null);
+        }
+
+        public void SetMaterialPropertyBlockColor(Color colorValue, bool apply)
+        {
+            block.SetColor(Shader.PropertyToID("_BaseColor"), colorValue);
+            if (apply)
+                renderer.SetPropertyBlock(block);
         }
     }
 }
