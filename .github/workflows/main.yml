@@ -5,6 +5,9 @@ env:
   BUILD_OUTPUT_FOLDER: 'build/WebGL/WebGL'
   PRODUCTION_BUILD_ARTEFACT_NAME: 'viewer'
   DEVELOPMENT_BUILD_ARTEFACT_NAME: 'viewer-development'
+  WINDOWS_BUILD_OUTPUT_FOLDER: 'build/StandaloneWindows64'
+  WINDOWS_BUILD_ARTEFACT_NAME: 'viewer-windows'
+  WINDOWS_DEVELOPMENT_BUILD_ARTEFACT_NAME: 'viewer-windows-development'
 
 jobs:
   ## See: https://game.ci/docs/github/test-runner
@@ -248,3 +251,153 @@ jobs:
         id: deployment
         # see: https://github.com/actions/deploy-pages
         uses: actions/deploy-pages@v4
+
+  build-windows:
+    name: '🗺️ Build Netherlands3D Windows Viewer'
+    needs: [ 'test' ]
+    permissions: { contents: read, statuses: write }
+
+    # only run this when a commit was pushed to the main branch
+    if: github.ref_name == 'main'
+
+    outputs:
+      buildVersion: ${{ steps.buildUnity.outputs.buildVersion }} 
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Free Disk Space'
+        # see: https://github.com/jlumbroso/free-disk-space  
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+
+      - name: 'Checkout code from repository'
+        # see: https://github.com/actions/checkout      
+        uses: actions/checkout@v4
+        with: { lfs: true }
+
+      - name: 'Cache Library folder - restore and track'
+        # see: https://github.com/actions/cache      
+        uses: actions/cache@v4
+        with:
+          path: 'Library'
+          # platform-specific key so the WebGL and Windows Library folders don't interfere
+          key: StandaloneWindows64-Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            StandaloneWindows64-Library-
+
+      - name: 'Build Unity project to Windows'
+        id: buildUnity # used in the artefact name
+        # See https://game.ci/docs/github/getting-started
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: StandaloneWindows64
+          buildName: NL3D
+          unityVersion: auto
+          # A custom specific image can be used (source: https://github.com/game-ci/unity-builder/blob/main/action.yml):
+
+      - name: 'Upload artifact to build pipeline'
+        # see: https://github.com/actions/upload-artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with: { name: '${{ env.WINDOWS_BUILD_ARTEFACT_NAME }}-${{ steps.buildUnity.outputs.buildVersion }}', path: '${{ env.WINDOWS_BUILD_OUTPUT_FOLDER }}' }
+
+      - name: 'Publish artifact link as status'
+        uses: actions/github-script@v7
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success',
+              target_url: process.env.ARTIFACT_URL,
+              context: 'Windows build download',
+              description: 'Click Details to download the build',
+            });
+
+
+  build-development-windows:
+    name: '🐞 Build Development Netherlands3D Windows Viewer'
+    needs: [ 'test' ]
+    permissions: { contents: read, statuses: write}
+
+    if: contains(github.ref_name, 'standalone/')
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Free Disk Space'
+        # see: https://github.com/jlumbroso/free-disk-space  
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+
+      - name: 'Checkout code from repository'
+        # see: https://github.com/actions/checkout      
+        uses: actions/checkout@v4
+        with: { lfs: true }
+
+      - name: 'Cache Library folder - restore and track'
+        # see: https://github.com/actions/cache      
+        uses: actions/cache@v4
+        with:
+          path: 'Library'
+          # platform-specific key so the WebGL and Windows Library folders don't interfere
+          key: StandaloneWindows64-Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            StandaloneWindows64-Library-
+
+      - name: 'Build Unity project to Windows'
+        # See https://game.ci/docs/github/getting-started
+        id: buildUnity # used in the artefact name
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: StandaloneWindows64
+          buildName: NL3D
+          customParameters: '-Development -AllowDebugging'
+          # A custom specific image can be used (source: https://github.com/game-ci/unity-builder/blob/main/action.yml):
+          unityVersion: auto
+
+      - name: 'Upload artifact to build pipeline'
+        # see: https://github.com/actions/download-artifact    
+        id: upload
+        uses: actions/upload-artifact@v4
+        with: { name: '${{ env.WINDOWS_DEVELOPMENT_BUILD_ARTEFACT_NAME }}-${{ steps.buildUnity.outputs.buildVersion }}', path: '${{ env.WINDOWS_BUILD_OUTPUT_FOLDER }}' }
+      
+      - name: 'Publish artifact link as status'
+        uses: actions/github-script@v7
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success',
+              target_url: process.env.ARTIFACT_URL,
+              context: 'Windows build download',
+              description: 'Click to download the build',
+            });
