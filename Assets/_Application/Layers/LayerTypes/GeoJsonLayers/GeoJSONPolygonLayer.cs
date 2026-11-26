@@ -29,7 +29,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public Material RenderMaterial => polygonVisualizationMaterial;
 
         public event IGeoJsonGeometryTypeVisualizer.GeoJsonHandler FeatureRemoved;
-        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
         public void SetRenderingEnabled(bool enabled)
         {
             foreach (var visualisation in spawnedVisualisations)
