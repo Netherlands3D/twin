@@ -74,7 +74,7 @@ namespace Netherlands3D.UI.Panels
             }
             
             BagDataService bagDataService = ServiceLocator.GetService<BagDataService>();
-            bagDataService.LoadBagId(buildingIds.FirstOrDefault().Key, handle);
+            bagDataService.LoadBagIdData(buildingIds.FirstOrDefault().Key, handle);
         }
         
         public void PopulateAddresses(List<string> addresses)
