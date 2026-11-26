@@ -6,6 +6,8 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using Netherlands3D.ProjectTime;
+using Netherlands3D.Services;
 
 namespace Netherlands3D.Timeline
 {
@@ -14,6 +16,7 @@ namespace Netherlands3D.Timeline
     {
         protected override string timelineAttributeName => "+timestamps"; //in CityJson extensions start with a +
         private CityJSON cityJson;
+        private TimeService timeService;
 
         protected override void Awake()
         {
@@ -25,12 +28,16 @@ namespace Netherlands3D.Timeline
         {
             base.OnEnable();
             cityJson.onAllCityObjectsProcessed.AddListener(ReadTimeLineFromAttributes);
+            
+            timeService = ServiceLocator.GetService<TimeService>();
+            timeService.timeOfDayChanged.AddListener(OnTimeChanged);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             cityJson.onAllCityObjectsProcessed.RemoveListener(ReadTimeLineFromAttributes);
+            timeService.timeOfDayChanged.RemoveListener(OnTimeChanged);
         }
 
         private void ReadTimeLineFromAttributes()
@@ -87,6 +94,14 @@ namespace Netherlands3D.Timeline
 
                 layerFeature.Attributes[TimelineStatusStylingLayerPropertyData.TimelineStatusAttributeIdentifier] = status;
                 visualization.ApplyStylingToFeature(layerFeature);
+            }
+        }
+        
+        private void OnTimeChanged(DateTime currentTime)
+        {
+            foreach (var timeline in timelineStatusStylingLayerPropertyData.TimestampCollections)
+            {
+                //SetFeatureAttribute(currentTime, timeline.Key, timeline.Value); todo merge main time
             }
         }
     }

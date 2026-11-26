@@ -22,12 +22,12 @@ namespace Netherlands3D.Timeline
         
         protected virtual void OnEnable()
         {
-            ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);
+            //ProjectData.Current.OnCurrentDateTimeChanged.AddListener(OnTimeChanged);todo merge main time
         }
         
         protected virtual void OnDisable()
         {
-            ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnTimeChanged);
+            //ProjectData.Current.OnCurrentDateTimeChanged.RemoveListener(OnTimeChanged);todo merge main time
         
             visualization.LayerData.LayerSelected.RemoveListener(EnableLegend);
             visualization.LayerData.LayerDeselected.RemoveListener(DisableLegend);
