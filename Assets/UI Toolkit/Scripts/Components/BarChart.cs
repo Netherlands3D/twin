@@ -212,6 +212,7 @@ namespace Netherlands3D.UI.Components
                 }
             }
             RenderLegend();
+            ScheduleLayoutUpdate();
         }
 
         private void RenderAxis(double step)
@@ -313,6 +314,11 @@ namespace Netherlands3D.UI.Components
 
         private void OnChartGeometryChanged(GeometryChangedEvent evt)
         {
+            ScheduleLayoutUpdate();
+        }
+
+        private void ScheduleLayoutUpdate()
+        {
             if (layoutUpdatePending)
                 return;
 
@@ -326,7 +332,11 @@ namespace Netherlands3D.UI.Components
             if (plots.Count == 0)
                 return;
             if (UpdateLabelWidth())
+            {
+                // Width constraints may change without resizing a plot, so do not rely on another geometry event.
+                ScheduleLayoutUpdate();
                 return;
+            }
 
             var requiredMargin = IsHorizontal && ticks.childCount > 0 ? ticks[ticks.childCount - 1].resolvedStyle.width / 2 : 0;
             if (float.IsNaN(requiredMargin))

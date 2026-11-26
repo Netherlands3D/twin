@@ -6,9 +6,15 @@ namespace Netherlands3D.Twin.DataSets
 {
     internal static class DashboardSummary
     {
-        public static (PhaseTotals[] Phases, BreakdownRow[] Segments, BreakdownRow[] Rooms, BreakdownRow[] Categories, BreakdownRow[] SocialFacilities) Calculate(DashboardData data)
+        public static (PhaseTotals[] Phases, BreakdownRow[] Segments, BreakdownRow[] Rooms, BreakdownRow[] Categories, BreakdownRow[] SocialFacilities) CalculatePhaseComparison(DashboardData data, string block = null)
         {
-            var inputs = SelectPhases(data, null);
+            var inputs = data == null ? Array.Empty<PhaseInput>()
+                : DashboardData.Phases.Select(phase => SelectPhase(data, phase, block, useEarlierPhases: false)).ToArray();
+            return Calculate(data, inputs);
+        }
+
+        private static (PhaseTotals[] Phases, BreakdownRow[] Segments, BreakdownRow[] Rooms, BreakdownRow[] Categories, BreakdownRow[] SocialFacilities) Calculate(DashboardData data, PhaseInput[] inputs)
+        {
             var breakdowns = CalculateBreakdowns(data, inputs);
             return (inputs.Select(CalculatePhase).ToArray(), breakdowns.Segments, breakdowns.Rooms, breakdowns.Categories, breakdowns.SocialFacilities);
         }
@@ -106,14 +112,15 @@ namespace Netherlands3D.Twin.DataSets
             }).ToArray();
         }
 
-        public static (string Block, string Phase, NumericResult Value)[] CalculateNonHousingBlockPhases(DashboardData data)
+        public static (string Block, string Phase, NumericResult Value)[] CalculateNonHousingBlockPhases(DashboardData data, string block)
         {
             if (data == null)
                 return Array.Empty<(string Block, string Phase, NumericResult Value)>();
 
-            return data.NonHousing.GroupBy(row => row.Block, StringComparer.OrdinalIgnoreCase).OrderBy(block => block.Key, StringComparer.OrdinalIgnoreCase)
-                .SelectMany(block => DashboardData.Phases.Where(phase => block.Any(row => Equal(row.Phase, phase)))
-                    .Select(phase => (block.Key, phase, Sum(block.Where(row => Equal(row.Phase, phase)).Select(row => row.GrossFloorArea), false)))).ToArray();
+            return data.NonHousing.Where(row => block == null || Equal(row.Block, block))
+                .GroupBy(row => row.Block, StringComparer.OrdinalIgnoreCase).OrderBy(rows => rows.Key, StringComparer.OrdinalIgnoreCase)
+                .SelectMany(rows => DashboardData.Phases.Where(phase => block != null || rows.Any(row => Equal(row.Phase, phase)))
+                    .Select(phase => (rows.Key, phase, Sum(rows.Where(row => Equal(row.Phase, phase)).Select(row => row.GrossFloorArea), false)))).ToArray();
         }
 
         public static NumericResult SumResults(IEnumerable<NumericResult> values)

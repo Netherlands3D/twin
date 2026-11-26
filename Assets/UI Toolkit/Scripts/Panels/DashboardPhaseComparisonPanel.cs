@@ -54,6 +54,7 @@ namespace Netherlands3D.UI.Panels
         private string[] grossFloorAreaChangesCells;
 
         private bool nonHousing;
+        private string scope = "Gebiedsprogramma";
         private bool hasHousingData;
         private bool hasNonHousingData;
         private string[] housingSources;
@@ -67,7 +68,7 @@ namespace Netherlands3D.UI.Panels
             set
             {
                 nonHousing = value;
-                header.LabelText = value ? "Gebiedsprogramma \u2013 Niet-wonen" : "Gebiedsprogramma \u2013 Wonen";
+                UpdateHeader();
                 SetTabVisible(segmentsButton, !value);
                 SetTabVisible(roomsButton, !value);
                 SetTabVisible(categoriesButton, value);
@@ -106,6 +107,14 @@ namespace Netherlands3D.UI.Panels
 
             NonHousing = false;
         }
+
+        internal void SetContext(string block)
+        {
+            scope = block == null ? "Gebiedsprogramma" : DashboardSummary.BlockName(block);
+            UpdateHeader();
+        }
+
+        private void UpdateHeader() => header.LabelText = $"{scope} \u2013 {(nonHousing ? "Niet-wonen" : "Wonen")}";
 
         internal void SetPhaseColors(IReadOnlyDictionary<string, Color> colors)
         {

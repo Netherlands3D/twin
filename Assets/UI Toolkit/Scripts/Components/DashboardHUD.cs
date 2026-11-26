@@ -174,12 +174,10 @@ namespace Netherlands3D.UI.Panels
             displayedData = data;
             selectedBlock = block;
             if (dataChanged)
-                RefreshDataset();
+                allHousingBlocks = DashboardSummary.CalculateHousingBlocks(data);
+            RefreshPhaseSelection();
             RefreshSelection();
-            if (dataChanged)
-                phaseComparison.Refresh();
-            else
-                UpdateSidebarExplanation();
+            phaseComparison.Refresh();
         }
 
         internal void SetBlock(string block)
@@ -187,12 +185,11 @@ namespace Netherlands3D.UI.Panels
             SetData(displayedData, block);
         }
 
-        private void RefreshDataset()
+        private void RefreshPhaseSelection()
         {
             var data = displayedData;
-            summary = DashboardSummary.Calculate(data);
-            allHousingBlocks = DashboardSummary.CalculateHousingBlocks(data);
-            nonHousingBlockPhases = DashboardSummary.CalculateNonHousingBlockPhases(data);
+            summary = DashboardSummary.CalculatePhaseComparison(data, selectedBlock);
+            nonHousingBlockPhases = DashboardSummary.CalculateNonHousingBlockPhases(data, selectedBlock);
             roomPhaseTotals = summary.Phases.Select((phase, index) => DashboardSummary.SumResults(summary.Rooms.Select(row => row.Values[index]))).ToArray();
             RefreshCategoryColors();
             ShowPhaseCharts();
@@ -235,9 +232,8 @@ namespace Netherlands3D.UI.Panels
             var data = displayedData;
             var phase = SelectedProgramPhase;
             var blockPhases = DashboardSummary.GetProgramPhases(data, NonHousing, selectedBlock);
-            programSummary = selectedBlock == null && phase == null
-                ? (summary.Phases?.LastOrDefault() ?? default, summary.Segments, summary.Categories)
-                : DashboardSummary.CalculateProgramOverview(data, selectedBlock, phase);
+            phaseComparison.SetContext(selectedBlock);
+            programSummary = DashboardSummary.CalculateProgramOverview(data, selectedBlock, phase);
             if (selectedBlock == null)
                 RefreshProjectOverview();
             planPhases.SetEnabled(data != null);
