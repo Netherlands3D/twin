@@ -5,6 +5,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -111,7 +112,8 @@ namespace Netherlands3D.FirstPersonViewer
             //When entering the FPV for the first time use the cool animation :).
             if (!FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy)
             {
-                App.Cameras.SwitchCamera(FirstPersonCamera.FPVCamera, true);
+                ServiceLocator.GetService<TileHandler>().SetUseRadialDistanceCheck(true);
+                App.Cameras.SwitchCamera(FirstPersonCamera.FPVCamera);
 
                 bool usePitch = startState != null && startState.CameraConstrain != CameraConstrain.CONTROL_NONE;
                 FirstPersonCamera.SetupViewer(usePitch);
@@ -257,6 +259,7 @@ namespace Netherlands3D.FirstPersonViewer
             Input.ViewerExited();
 
             App.Cameras.SwitchToPreviousCamera();
+            ServiceLocator.GetService<TileHandler>().SetUseRadialDistanceCheck(false);
             App.UIRoot.DisableFPVUI();
         }
 

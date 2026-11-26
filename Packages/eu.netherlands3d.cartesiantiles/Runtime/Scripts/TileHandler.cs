@@ -317,6 +317,11 @@ namespace Netherlands3D.CartesianTiles
             activeTileChanges.Remove(new Vector3Int(handledTileChange.X, handledTileChange.Y, handledTileChange.layerIndex));
         }
 
+        public void SetUseRadialDistanceCheck(bool useRadialDistanceCheck)
+        {
+            this.useRadialDistanceCheck = useRadialDistanceCheck;
+        }
+
         /// <summary>
         /// uses CameraExtent
         /// updates the variable viewrange
@@ -326,15 +331,13 @@ namespace Netherlands3D.CartesianTiles
         private Vector4 GetViewRange()
         {
             Extent cameraExtent;
-            if (!cameraService.IsActiveCameraFpv)
+            if (!useRadialDistanceCheck)
             {
-                useRadialDistanceCheck = false;
                 float maxViewDistance = GetAltitudeViewDistanceFactor() * (cameraService.ActiveCamera.farClipPlane + maxTileSize);
                 cameraExtent = cameraService.ActiveCamera.GetRDExtent(maxViewDistance);
             }
             else
             {
-                useRadialDistanceCheck = true;
                 var cameraRD = new Coordinate(cameraService.ActiveCamera.transform.position).Convert(CoordinateSystem.RD);
                 cameraExtent = new Extent(
                     cameraRD.easting - groundLevelClipRange,
