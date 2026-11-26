@@ -28,6 +28,10 @@
     padding: 0;
 }
 
+.dashboard-project-overview #ProjectPhase {
+    white-space: normal;
+}
+
 .dashboard-project-overview .text-header,
 .dashboard-project-overview .header__label {
     -unity-font-definition: var(--nl3d-header-font);

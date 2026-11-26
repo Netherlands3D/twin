@@ -4,8 +4,17 @@
             <nl3d:ToggleSwitch name="DashboardViewSwitch" toggle-on-label-click="false" label="Faseweergave" class="dashboard-hud__phase-toggle"/>
             <ui:VisualElement class="panel-divider" picking-mode="Ignore"/>
             <nl3d:TextCallOut name="SidebarDataExplanation" class="dashboard-hud__data-explanation hidden"/>
+            <ui:ToggleButtonGroup name="PlanPhases" value="0" allow-empty-selection="false" tooltip="Kies een planfase voor het programmaoverzicht." class="dashboard-hud__phase-toolbar">
+                <nl3d:Button button-style="Normal" LabelText="Actuele stand" tooltip="Laatste beschikbare gegevens per bouwblok."/>
+                <nl3d:Button name="BBP" button-style="Normal" LabelText="BBP"/>
+                <nl3d:Button name="SO" button-style="Normal" LabelText="SO"/>
+                <nl3d:Button name="VO" button-style="Normal" LabelText="VO"/>
+                <nl3d:Button name="DO" button-style="Normal" LabelText="DO"/>
+            </ui:ToggleButtonGroup>
             <nl3d:ScrollView name="Scrollview" mode="Vertical" horizontal-scroller-visibility="Hidden">
                 <nl3dP:DashboardProjectOverview/>
+                <nl3d:TextCallOut name="PhaseDataCoverage" text="" class="dashboard-hud__phase-coverage hidden"/>
+                <nl3d:TextCallOut name="EmptyProgramSelection" text="" class="dashboard-hud__empty-selection hidden"/>
                 <nl3dP:DashboardBlockOverview class="hidden"/>
                 <ui:VisualElement name="ProgramOverviewContent">
                     <nl3d:RingChart name="HousingSegmentChart" title="Segmentverdeling woningen" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>

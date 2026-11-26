@@ -36,6 +36,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private readonly HashSet<(MeshRenderer Renderer, int MaterialIndex)> selectedMeshObjects = new();
         private (MeshRenderer Renderer, int MaterialIndex)? pendingMeshSelection;
         private bool objectSelectionChanged;
+        private bool mapRefreshPending;
         private InputAction toggleDashboardAction;
         private VisualElement root;
         private DashboardHUD dashboardOverlay;
@@ -96,8 +97,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 selectionService.Deselect();
                 SelectObjectBlock(block.Block, meshPrimary: mesh);
             }
-            // Imported meshes receive their normal NL3D styling after the binding event.
-            mapStyling?.ApplyPendingMeshColors();
             // SelectionService deselects before selecting the next object; apply only the final toolbar state.
             if (objectSelectionChanged)
             {
@@ -106,6 +105,14 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 dashboardOverlay.SetBlock(dashboardHeader.SelectedBlock);
                 dashboardAnnotation.SetData(SelectedObjectBlock);
             }
+            if (mapRefreshPending)
+            {
+                mapRefreshPending = false;
+                RefreshMapColors();
+                RefreshMapLegend();
+            }
+            // Imported meshes receive their normal NL3D styling after the binding event.
+            mapStyling?.ApplyPendingMeshColors();
             UpdateAnnotationPosition();
         }
 
@@ -120,6 +127,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             selectionService.AddSelectionPredicate(AllowNormalSelection);
             transformHandles?.SetTarget.AddListener(OnTransformTargetChanged);
             dashboardHeader.BlockClicked += OnBlockClicked;
+            dashboardOverlay.ProgramSelectionChanged += RequestMapRefresh;
             toolbarNavigation.OnDashboardClicked += OpenDashboard;
             closeButton.clicked += CloseDashboard;
             dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
@@ -137,6 +145,9 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             transformHandles?.SetTarget.RemoveListener(OnTransformTargetChanged);
             if (dashboardHeader != null)
                 dashboardHeader.BlockClicked -= OnBlockClicked;
+            if (dashboardOverlay != null)
+                dashboardOverlay.ProgramSelectionChanged -= RequestMapRefresh;
+            mapRefreshPending = false;
             if (selectionService != null)
             {
                 selectionService.SelectCityJsonMapping.RemoveListener(OnCityJsonSelected);
@@ -204,8 +215,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             DashboardColors.SetPhaseColors(ObjectBinding?.HasData == true ? ObjectBinding.AvailablePhases : Array.Empty<string>(), mapColors);
             dashboardAnnotation.SetPhaseColors(mapColors);
 
-            RefreshMapColors();
-            RefreshMapLegend();
+            RequestMapRefresh();
         }
 
         private DashboardObjectData.BlockData GetObjectBlock(CityJSONMapping mapping)
@@ -399,12 +409,18 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void OnMapLayerChanged(int index)
         {
             selectedMapLayer = (DashboardMapLayer)Math.Max(0, index);
-            RefreshMapColors();
-            RefreshMapLegend();
+            RequestMapRefresh();
         }
 
-        private void RefreshMapColors() => mapStyling?.Update(selectedMapLayer,
-            ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null);
+        private void RequestMapRefresh() => mapRefreshPending = true;
+
+        private void RefreshMapColors()
+        {
+            var dashboardOpen = root.ClassListContains(DashboardOpenClass);
+            mapStyling?.Update(selectedMapLayer,
+                ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null,
+                dashboardOpen ? dashboardOverlay.SelectedProgramPhase : null);
+        }
 
         private void RefreshMapLegend()
         {
@@ -435,7 +451,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                     AddMapLegendEntry("high", "Vanaf 600 woningen");
                     break;
                 case DashboardMapLayer.Phase:
-                    foreach (var phase in ObjectBinding.AvailablePhases)
+                    foreach (var phase in mapStyling.VisiblePhases)
                         AddMapLegendEntry(DashboardColors.PhaseKey(phase), phase);
                     break;
             }

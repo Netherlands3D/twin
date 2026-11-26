@@ -41,6 +41,36 @@
     margin-bottom: var(--spacing-3);
 }
 
+.dashboard-hud__empty-selection,
+.dashboard-hud__phase-coverage {
+    margin: var(--spacing-2) 0;
+    white-space: normal;
+}
+
+.dashboard-hud__phase-toolbar {
+    flex-shrink: 0;
+    margin: 0 0 var(--spacing-3);
+    min-width: 0;
+    max-width: 100%;
+}
+
+.dashboard-hud__phase-toolbar .unity-toggle-button-group__container {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.dashboard-hud__phase-toolbar .button {
+    margin-right: var(--spacing-1);
+    margin-bottom: var(--spacing-1);
+    min-height: var(--spacing-10);
+    padding: var(--spacing-1) var(--spacing-2);
+}
+
+.dashboard-hud__phase-toolbar .button:checked:disabled {
+    background-color: var(--color-blue-100);
+    border-color: var(--color-blue-200);
+}
+
 .dashboard-hud__sidebar > #Scrollview {
     min-height: 0;
     min-width: 0;

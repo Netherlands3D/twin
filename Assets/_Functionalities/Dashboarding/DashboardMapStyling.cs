@@ -32,10 +32,13 @@ namespace Netherlands3D.Twin.DataSets
         private IReadOnlyDictionary<string, Color> colors;
         private DashboardMapLayer selectedLayer;
         private string selectedBlock;
+        private readonly Dictionary<string, string> colorKeys = new(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<CityJSONLayerGameObject, StylingPropertyData> styles = new();
         private readonly Dictionary<HierarchicalObjectLayerGameObject, (StylingPropertyData[] Properties, UnityAction Listener)> meshLayers = new();
         private readonly Dictionary<(MeshRenderer Renderer, int MaterialIndex), (HierarchicalObjectLayerGameObject Layer, MeshColorOverride Override)> meshOverrides = new();
         private bool meshColorsPending;
+
+        internal IEnumerable<string> VisiblePhases => DashboardData.Phases.Where(phase => colorKeys.Values.Contains(DashboardColors.PhaseKey(phase)));
 
         public DashboardMapStyling(DashboardObjectBinding binding)
         {
@@ -44,11 +47,51 @@ namespace Netherlands3D.Twin.DataSets
 
         public void Update(DashboardMapLayer layer, IReadOnlyDictionary<string, Color> palette)
         {
+            Update(layer, palette, null);
+        }
+
+        public void Update(DashboardMapLayer layer, IReadOnlyDictionary<string, Color> palette, string phase)
+        {
             selectedLayer = layer;
             colors = palette;
+            RefreshColorKeys(phase);
             Refresh();
             meshColorsPending = true;
         }
+
+        private void RefreshColorKeys(string phase)
+        {
+            colorKeys.Clear();
+            if (colors == null || !binding.HasData || selectedLayer == DashboardMapLayer.Base)
+                return;
+
+            var housing = phase != null && selectedLayer != DashboardMapLayer.Phase
+                ? DashboardSummary.CalculateHousingBlocks(binding.Data, phase)
+                    .ToDictionary(summary => summary.Block, StringComparer.OrdinalIgnoreCase)
+                : new Dictionary<string, DashboardSummary.HousingBlockSummary>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var block in binding.Objects.Values.Concat(binding.ObjObjects.Values).Concat(binding.GlbObjects.Values).Distinct())
+            {
+                if (phase == null)
+                {
+                    colorKeys[block.Block] = GetColorKey(block, selectedLayer);
+                    continue;
+                }
+
+                string sourcePhase = null;
+                if (selectedLayer == DashboardMapLayer.Phase)
+                {
+                    var available = block.Housing.Any(row => string.Equals(row.Phase, phase, StringComparison.OrdinalIgnoreCase))
+                        || block.NonHousing.Any(row => string.Equals(row.Phase, phase, StringComparison.OrdinalIgnoreCase));
+                    sourcePhase = available ? phase : null;
+                }
+                housing.TryGetValue(block.Block, out var summary);
+                colorKeys[block.Block] = GetColorKey(summary, sourcePhase, selectedLayer);
+            }
+        }
+
+        private string GetCurrentColorKey(DashboardObjectData.BlockData block) =>
+            block != null && colorKeys.TryGetValue(block.Block, out var key) ? key : "base";
 
         internal void SelectBlock(string block)
         {
@@ -124,7 +167,7 @@ namespace Netherlands3D.Twin.DataSets
                             meshOverrides.Add(slot, entry);
                         }
                         activeSlots.Add(slot);
-                        var color = colors[GetColorKey(block, selectedLayer)];
+                        var color = colors[GetCurrentColorKey(block)];
                         if (block != null && string.Equals(block.Block, selectedBlock, StringComparison.OrdinalIgnoreCase) && material.HasProperty(HighlightColorProperty))
                             color = material.GetColor(HighlightColorProperty);
                         entry.Override.Apply(color);
@@ -265,7 +308,7 @@ namespace Netherlands3D.Twin.DataSets
             }
 
             binding.Objects.TryGetValue(visualizer.CityObject, out var block);
-            attributes[ColorAttribute] = GetColorKey(block, selectedLayer);
+            attributes[ColorAttribute] = GetCurrentColorKey(block);
         }
 
         private void Restore(CityJSONLayerGameObject visualization)
@@ -284,12 +327,16 @@ namespace Netherlands3D.Twin.DataSets
 
         internal static string GetColorKey(DashboardObjectData.BlockData block, DashboardMapLayer layer)
         {
-            if (block == null || layer == DashboardMapLayer.Base)
+            return block == null ? "base" : GetColorKey(block.HousingSummary, block.LatestPhase, layer);
+        }
+
+        private static string GetColorKey(DashboardSummary.HousingBlockSummary housing, string phase, DashboardMapLayer layer)
+        {
+            if (layer == DashboardMapLayer.Base)
                 return "base";
             if (layer == DashboardMapLayer.Phase)
-                return block.LatestPhase != null ? DashboardColors.PhaseKey(block.LatestPhase) : "base";
+                return phase != null ? DashboardColors.PhaseKey(phase) : "base";
 
-            var housing = block.HousingSummary;
             if (!housing.Total.CompleteValue.HasValue)
                 return "base";
             if (layer == DashboardMapLayer.Dwellings)

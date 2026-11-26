@@ -4,7 +4,7 @@
         <ui:VisualElement class="dashboard-project-overview__card">
             <ui:Label text="Woningen" class="text-header"/>
             <ui:Label name="ProjectDwellings" text="&#8212;" class="text-header dashboard-project-overview__value"/>
-            <ui:Label text="Laatste gegevens"/>
+            <ui:Label name="ProjectPhase" text="Laatste beschikbare gegevens"/>
         </ui:VisualElement>
         <ui:VisualElement class="dashboard-project-overview__card">
             <ui:Label text="Blokken" class="text-header"/>
