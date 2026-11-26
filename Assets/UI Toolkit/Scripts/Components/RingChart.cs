@@ -102,7 +102,7 @@ namespace Netherlands3D.UI.Components
             segments.Clear();
             percentageLabels.Clear();
             legend.Clear();
-            var hasData = data.Count > 0;
+            var hasData = data.Any(segment => segment.Amount.HasValue);
             plot.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
             legend.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
             totalLabel.parent.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
@@ -110,6 +110,8 @@ namespace Netherlands3D.UI.Components
             totalLabel.text = totalText ?? (data.All(segment => segment.Amount.HasValue) ? total.ToString("#,0.##", NumberCulture) : "\u2014");
             totalLabel.tooltip = totalTooltip;
             totalLabel.parent.BringToFront();
+            if (!hasData)
+                return;
 
             var fraction = 0m;
             foreach (var segment in data)

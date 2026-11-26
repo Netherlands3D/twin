@@ -103,6 +103,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             {
                 objectSelectionChanged = false;
                 dashboardHeader.SelectBlock(SelectedObjectBlock?.Block);
+                dashboardOverlay.SetBlock(dashboardHeader.SelectedBlock);
                 dashboardAnnotation.SetData(SelectedObjectBlock);
             }
             UpdateAnnotationPosition();
@@ -178,8 +179,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void OnMapDataChanged()
         {
             ObjectBinding?.SetObjPickingEnabled(root.ClassListContains(DashboardOpenClass));
-            dashboardOverlay.SetData(root.ClassListContains(DashboardOpenClass) ? ObjectBinding?.Data : null);
             dashboardHeader.SetBlocks(ObjectBinding?.HasData == true ? ObjectBinding.BlockIdentifiers : Array.Empty<string>());
+            dashboardOverlay.SetData(root.ClassListContains(DashboardOpenClass) ? ObjectBinding?.Data : null, dashboardHeader.SelectedBlock);
             var linkedBlocks = ObjectBinding?.HasData == true
                 ? ObjectBinding.Objects.Values.Concat(ObjectBinding.ObjObjects.Values).Concat(ObjectBinding.GlbObjects.Values)
                     .Select(block => block.Block).ToHashSet(StringComparer.OrdinalIgnoreCase)
@@ -280,6 +281,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             // Preserve CSV-only block choices when no selectable geometry is available.
             if (SelectedObjectBlock == null)
                 objectSelectionChanged = false;
+            dashboardOverlay.SetBlock(block);
         }
 
         private void SelectObjectBlock(string block, CityJSONMapping primary = null, (MeshRenderer Renderer, int MaterialIndex)? meshPrimary = null)
@@ -465,7 +467,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 restoreTransformHandles = transformHandles.gameObject.activeSelf;
                 transformHandles.gameObject.SetActive(false);
             }
-            dashboardOverlay.SetData(ObjectBinding.Data);
+            dashboardOverlay.SetData(ObjectBinding.Data, dashboardHeader.SelectedBlock);
             foreach (var mapping in selectionService.SelectedMappings.Values)
             {
                 if (mapping is not CityJSONMapping cityJson)

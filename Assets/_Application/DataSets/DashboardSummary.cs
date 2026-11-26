@@ -13,6 +13,16 @@ namespace Netherlands3D.Twin.DataSets
             return (inputs.Select(CalculatePhase).ToArray(), breakdowns.Segments, breakdowns.Rooms, breakdowns.Categories, breakdowns.SocialFacilities);
         }
 
+        public static (PhaseTotals Current, BreakdownRow[] Segments, BreakdownRow[] Categories) CalculateProgramOverview(DashboardData data, string block)
+        {
+            if (data == null)
+                return (default, Array.Empty<BreakdownRow>(), Array.Empty<BreakdownRow>());
+
+            var input = SelectPhase(data, DashboardData.Phases.Last(), block, useEarlierPhases: true);
+            var breakdowns = CalculateBreakdowns(data, new[] { input });
+            return (CalculatePhase(input), breakdowns.Segments, breakdowns.Categories);
+        }
+
         public static PhaseTotals[] CalculatePhases(DashboardData data, string block = null)
         {
             return SelectPhases(data, block).Select(CalculatePhase).ToArray();
@@ -26,10 +36,15 @@ namespace Netherlands3D.Twin.DataSets
 
         public static (string Label, NumericResult Total, NumericResult[] Values)[] CalculateHousingRooms(DashboardData data)
         {
+            return CalculateHousingRooms(data, null);
+        }
+
+        public static (string Label, NumericResult Total, NumericResult[] Values)[] CalculateHousingRooms(DashboardData data, string block)
+        {
             if (data == null)
                 return Array.Empty<(string Label, NumericResult Total, NumericResult[] Values)>();
 
-            var selection = SelectRows(data.Housing, row => row.Block, row => row.Phase, DashboardData.Phases.Last(), null);
+            var selection = SelectRows(data.Housing, row => row.Block, row => row.Phase, DashboardData.Phases.Last(), block, useEarlierPhases: true);
             var segments = HousingSegments(data).ToArray();
             var incomplete = selection.Sources.MissingBlocks > 0 || selection.Rows.Any(row => !row.Rooms.HasValue && row.DwellingCount != 0);
             return data.Housing.Where(row => row.Rooms.HasValue).Select(row => row.Rooms.Value).Distinct().OrderBy(room => room).Select(room =>
@@ -59,10 +74,15 @@ namespace Netherlands3D.Twin.DataSets
 
         public static (string Label, NumericResult Value)[] CalculateHousingFloorAreas(DashboardData data)
         {
+            return CalculateHousingFloorAreas(data, null);
+        }
+
+        public static (string Label, NumericResult Value)[] CalculateHousingFloorAreas(DashboardData data, string block)
+        {
             if (data == null)
                 return Array.Empty<(string Label, NumericResult Value)>();
 
-            var selection = SelectRows(data.Housing, row => row.Block, row => row.Phase, DashboardData.Phases.Last(), null);
+            var selection = SelectRows(data.Housing, row => row.Block, row => row.Phase, DashboardData.Phases.Last(), block, useEarlierPhases: true);
             return HousingSegments(data).Select(segment => (segment, AverageMinimumFloorArea(
                 selection.Rows.Where(row => Equal(SegmentName(row.Segment), segment)).ToArray(), selection.Sources.MissingBlocks > 0))).ToArray();
         }
@@ -172,12 +192,17 @@ namespace Netherlands3D.Twin.DataSets
             if (data == null)
                 return Array.Empty<PhaseInput>();
 
-            return DashboardData.Phases.Select(phase => new PhaseInput(phase,
-                SelectRows(data.Housing, row => row.Block, row => row.Phase, phase, block),
-                SelectRows(data.NonHousing, row => row.Block, row => row.Phase, phase, block))).ToArray();
+            return DashboardData.Phases.Select(phase => SelectPhase(data, phase, block, useEarlierPhases: false)).ToArray();
         }
 
-        private static Selection<T> SelectRows<T>(IEnumerable<T> rows, Func<T, string> getBlock, Func<T, string> getPhase, string phase, string block)
+        private static PhaseInput SelectPhase(DashboardData data, string phase, string block, bool useEarlierPhases)
+        {
+            return new PhaseInput(phase,
+                SelectRows(data.Housing, row => row.Block, row => row.Phase, phase, block, useEarlierPhases),
+                SelectRows(data.NonHousing, row => row.Block, row => row.Phase, phase, block, useEarlierPhases));
+        }
+
+        private static Selection<T> SelectRows<T>(IEnumerable<T> rows, Func<T, string> getBlock, Func<T, string> getPhase, string phase, string block, bool useEarlierPhases = false)
         {
             var selected = new List<T>();
             var sources = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -186,7 +211,7 @@ namespace Netherlands3D.Twin.DataSets
             foreach (var blockRows in rows.Where(row => block == null || Equal(getBlock(row), block)).GroupBy(getBlock, StringComparer.OrdinalIgnoreCase))
             {
                 // Select a whole version before inspecting its values. Unknown fields must not fall back independently.
-                var source = blockRows.Select(getPhase).Where(candidate => block == null ? PhaseIndex(candidate) <= phaseIndex : Equal(candidate, phase))
+                var source = blockRows.Select(getPhase).Where(candidate => block == null || useEarlierPhases ? PhaseIndex(candidate) <= phaseIndex : Equal(candidate, phase))
                     .OrderByDescending(PhaseIndex).FirstOrDefault();
                 sources.Add(blockRows.Key, source);
                 if (source != null)

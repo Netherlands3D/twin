@@ -1,5 +1,12 @@
 .dashboard-block-overview {
     flex-shrink: 0;
+    min-width: 0;
+}
+
+.dashboard-block-overview .header__label {
+    flex-shrink: 1;
+    min-width: 0;
+    white-space: normal;
 }
 
 .dashboard-block-overview > .panel-divider {

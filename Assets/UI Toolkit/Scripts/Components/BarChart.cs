@@ -96,6 +96,10 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("minimum-step")]
         public double MinimumStep { get; set; }
 
+        /// <summary>Minimum number of positions reserved for vertical bars on the next SetData call.</summary>
+        [UxmlAttribute("minimum-column-count")]
+        public int MinimumColumnCount { get; set; }
+
         [UxmlAttribute("compact-numbers")]
         public bool CompactNumbers { get; set; }
 
@@ -160,6 +164,8 @@ namespace Netherlands3D.UI.Components
         {
             if (double.IsNaN(MinimumStep) || double.IsInfinity(MinimumStep) || MinimumStep < 0)
                 throw new ArgumentOutOfRangeException(nameof(MinimumStep));
+            if (MinimumColumnCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(MinimumColumnCount));
 
             var stacks = categoryData.Select(category => (Category: category, Total: category.Values.Sum(value => value.Amount ?? 0m))).ToArray();
             EnableInClassList("bar-chart--horizontal", IsHorizontal);
@@ -177,7 +183,7 @@ namespace Netherlands3D.UI.Components
             valueAxis.style.marginLeft = StyleKeyword.Null;
             valueAxis.style.height = StyleKeyword.Null;
             ticks.style.width = StyleKeyword.Null;
-            var hasData = categoryData.Length > 0 && seriesData.Length > 0;
+            var hasData = categoryData.Any(category => category.Values.Any(value => value.Amount.HasValue));
             body.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
             legend.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
             emptyLabel.style.display = hasData ? DisplayStyle.None : DisplayStyle.Flex;
@@ -190,6 +196,21 @@ namespace Netherlands3D.UI.Components
             RenderAxis(step);
             foreach (var item in stacks)
                 columns.Add(CreateBar(item.Category, item.Total, maximum));
+            if (!IsHorizontal)
+            {
+                // Reserve the remaining positions without adding data, labels or tooltips.
+                for (var i = stacks.Length; i < MinimumColumnCount; i++)
+                {
+                    var column = new VisualElement { pickingMode = PickingMode.Ignore };
+                    column.AddToClassList("bar-chart__column");
+                    var plot = new VisualElement { pickingMode = PickingMode.Ignore };
+                    plot.AddToClassList("bar-chart__plot");
+                    AddGridLines(plot);
+                    plots.Add((plot, null, 0));
+                    column.Add(plot);
+                    columns.Add(column);
+                }
+            }
             RenderLegend();
         }
 
@@ -312,6 +333,9 @@ namespace Netherlands3D.UI.Components
                 return;
             foreach (var item in plots)
             {
+                if (item.Anchor == null)
+                    continue;
+
                 var size = IsHorizontal ? item.Plot.resolvedStyle.width : item.Plot.resolvedStyle.height;
                 var labelSize = IsHorizontal ? item.Anchor.resolvedStyle.width + item.Anchor.resolvedStyle.marginLeft
                     : item.Anchor.resolvedStyle.height + item.Anchor.resolvedStyle.marginBottom;

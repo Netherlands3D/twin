@@ -61,10 +61,14 @@ namespace Netherlands3D.UI.Components
 
             items.Clear();
             legend.Clear();
-            items.style.display = data.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            chartScrollView.style.display = data.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            legend.style.display = data.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            emptyLabel.style.display = data.Count > 0 ? DisplayStyle.None : DisplayStyle.Flex;
+            var hasData = data.Any(item => item.Amount.HasValue);
+            items.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
+            chartScrollView.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
+            legend.style.display = hasData ? DisplayStyle.Flex : DisplayStyle.None;
+            emptyLabel.style.display = hasData ? DisplayStyle.None : DisplayStyle.Flex;
+            if (!hasData)
+                return;
+
             foreach (var item in data)
             {
                 var entry = new VisualElement();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -203,8 +204,9 @@ namespace Netherlands3D.UI.Panels
             };
 
             rowHeading.text = heading;
-            RenderRows(rows ?? Array.Empty<(string Label, string[] Cells)>());
-            var hasData = tab == ComparisonTab.KeyFigures ? (nonHousing ? hasNonHousingData : hasHousingData) : rows?.Count > 0;
+            var hasData = (nonHousing ? hasNonHousingData : hasHousingData)
+                && rows?.Any(row => row.Cells != null && row.Cells.Any(value => !string.IsNullOrWhiteSpace(value))) == true;
+            RenderRows(hasData ? rows : Array.Empty<(string Label, string[] Cells)>());
             var sources = nonHousing ? nonHousingSources : housingSources;
             for (var i = 0; i < phaseHeadings.Count; i++)
                 phaseHeadings[i].tooltip = sources != null && i < sources.Length ? sources[i] : string.Empty;

@@ -38,10 +38,13 @@ namespace Netherlands3D.UI.Panels
         private readonly TextCallOut sidebarDataExplanation;
         private readonly ToggleSwitch phaseView;
         private DashboardData displayedData;
+        private string selectedBlock;
         private bool hasMissingGeometry;
         private (DashboardSummary.PhaseTotals[] Phases, DashboardSummary.BreakdownRow[] Segments, DashboardSummary.BreakdownRow[] Rooms,
             DashboardSummary.BreakdownRow[] Categories, DashboardSummary.BreakdownRow[] SocialFacilities) summary;
+        private (DashboardSummary.PhaseTotals Current, DashboardSummary.BreakdownRow[] Segments, DashboardSummary.BreakdownRow[] Categories) programSummary;
         private (string Block, DashboardSummary.PhaseTotals[] Phases, DashboardSummary.PhaseTotals Housing, DashboardSummary.PhaseTotals NonHousing) blockSelection;
+        private DashboardSummary.HousingBlockSummary[] allHousingBlocks = Array.Empty<DashboardSummary.HousingBlockSummary>();
         private DashboardSummary.HousingBlockSummary[] housingBlocks = Array.Empty<DashboardSummary.HousingBlockSummary>();
         private (string Label, DashboardSummary.NumericResult Value)[] housingFloorAreas = Array.Empty<(string Label, DashboardSummary.NumericResult Value)>();
         private (string Label, DashboardSummary.NumericResult Total, DashboardSummary.NumericResult[] Values)[] housingRooms = Array.Empty<(string Label, DashboardSummary.NumericResult Total, DashboardSummary.NumericResult[] Values)>();
@@ -59,7 +62,7 @@ namespace Netherlands3D.UI.Panels
             var programOverview = this.Q("ProgramOverviewContent");
             var phaseProgress = this.Q("PhaseProgressContent");
             var phaseChanges = this.Q("PhaseChangesPanel");
-            blockOverview = programOverview.Q<DashboardBlockOverview>();
+            blockOverview = this.Q<DashboardBlockOverview>();
             phaseComparison = phaseChanges.Q<DashboardPhaseComparisonPanel>();
             phaseComparison.ViewChanged += UpdateSidebarExplanation;
             housingChart = programOverview.Q<BarChart>("HousingBlockChart");
@@ -117,20 +120,40 @@ namespace Netherlands3D.UI.Panels
 
         internal void SetData(DashboardData data)
         {
-            if (ReferenceEquals(displayedData, data))
+            SetData(data, data == null ? null : selectedBlock);
+        }
+
+        internal void SetData(DashboardData data, string block)
+        {
+            var dataChanged = !ReferenceEquals(displayedData, data);
+            if (!dataChanged && string.Equals(selectedBlock, block, StringComparison.OrdinalIgnoreCase))
                 return;
 
             displayedData = data;
+            selectedBlock = block;
+            if (dataChanged)
+                RefreshDataset();
+            RefreshSelection();
+            if (dataChanged)
+                phaseComparison.Refresh();
+            else
+                UpdateSidebarExplanation();
+        }
+
+        internal void SetBlock(string block)
+        {
+            SetData(displayedData, block);
+        }
+
+        private void RefreshDataset()
+        {
+            var data = displayedData;
             summary = DashboardSummary.Calculate(data);
-            blockSelection = SelectBlockOverview(data);
-            housingBlocks = DashboardSummary.CalculateHousingBlocks(data);
-            housingFloorAreas = DashboardSummary.CalculateHousingFloorAreas(data);
-            housingRooms = DashboardSummary.CalculateHousingRooms(data);
+            allHousingBlocks = DashboardSummary.CalculateHousingBlocks(data);
             nonHousingBlockPhases = DashboardSummary.CalculateNonHousingBlockPhases(data);
             roomPhaseTotals = summary.Phases.Select((phase, index) => DashboardSummary.SumResults(summary.Rooms.Select(row => row.Values[index]))).ToArray();
             RefreshCategoryColors();
-            ShowHousingChart();
-            ShowAdditionalCharts();
+            ShowPhaseCharts();
             var phases = summary.Phases;
             var current = phases.LastOrDefault();
             projectOverview.SetData(
@@ -157,14 +180,31 @@ namespace Netherlands3D.UI.Panels
                 phases.Any(phase => phase.HousingSources.HasData), phases.Any(phase => phase.NonHousingSources.HasData),
                 phases.Select(phase => FormatSources(phase.HousingSources)).ToArray(),
                 phases.Select(phase => FormatSources(phase.NonHousingSources)).ToArray());
+        }
+
+        private void RefreshSelection()
+        {
+            var data = displayedData;
+            programSummary = selectedBlock == null
+                ? (summary.Phases?.LastOrDefault() ?? default, summary.Segments, summary.Categories)
+                : DashboardSummary.CalculateProgramOverview(data, selectedBlock);
+            blockSelection = SelectBlockOverview(data, selectedBlock);
+            projectOverview.EnableInClassList(UtilityClassConstants.HIDDEN, selectedBlock != null);
+            blockOverview.EnableInClassList(UtilityClassConstants.HIDDEN, selectedBlock == null);
+            housingBlocks = selectedBlock == null ? allHousingBlocks
+                : allHousingBlocks.Where(block => string.Equals(block.Block, selectedBlock, StringComparison.OrdinalIgnoreCase)).ToArray();
+            housingFloorAreas = DashboardSummary.CalculateHousingFloorAreas(data, selectedBlock);
+            housingRooms = DashboardSummary.CalculateHousingRooms(data, selectedBlock);
+            ShowHousingChart();
+            ShowProgramCharts();
             var (block, availablePhases, housingPhase, nonHousingPhase) = blockSelection;
             var sourcePhases = new[]
             {
-                housingPhase.HasData ? $"Wonen: {housingPhase.Phase}" : null,
-                nonHousingPhase.HasData ? $"Niet-wonen: {nonHousingPhase.Phase}" : null
-            }.Where(source => source != null);
+                housingPhase.HasData ? housingPhase.Phase : null,
+                nonHousingPhase.HasData ? nonHousingPhase.Phase : null
+            }.Where(source => source != null).Distinct();
 
-            blockOverview.HeaderText = availablePhases.Length > 0 ? $"Overzicht {DashboardSummary.BlockName(block)} ({string.Join(", ", sourcePhases)})" : "Bouwblokoverzicht";
+            blockOverview.HeaderText = availablePhases.Length > 0 ? $"Overzicht {DashboardSummary.BlockName(block)} ({string.Join(" / ", sourcePhases)})" : "Bouwblokoverzicht";
             blockOverview.TotalDwellings = FormatNumber(housingPhase.Dwellings);
             blockOverview.SocialDwellings = FormatNumber(housingPhase.SocialDwellings);
             blockOverview.MidRentDwellings = FormatNumber(housingPhase.MidRentDwellings);
@@ -172,12 +212,10 @@ namespace Netherlands3D.UI.Panels
             blockOverview.AverageMinimumFloorArea = FormatNumber(housingPhase.AverageMinimumFloorArea, SquareMetres);
             blockOverview.AvailablePhases = string.Join(" / ", availablePhases.Select(phase => phase.Phase));
             blockOverview.NonHousingGrossFloorArea = FormatNumber(nonHousingPhase.GrossFloorArea, SquareMetres);
-            phaseComparison.Refresh();
         }
 
-        private static (string Block, DashboardSummary.PhaseTotals[] Phases, DashboardSummary.PhaseTotals Housing, DashboardSummary.PhaseTotals NonHousing) SelectBlockOverview(DashboardData data)
+        private static (string Block, DashboardSummary.PhaseTotals[] Phases, DashboardSummary.PhaseTotals Housing, DashboardSummary.PhaseTotals NonHousing) SelectBlockOverview(DashboardData data, string block)
         {
-            var block = DashboardSummary.FirstBlockWithData(data);
             var phases = block == null ? Array.Empty<DashboardSummary.PhaseTotals>() : DashboardSummary.CalculatePhases(data, block);
             var availablePhases = phases.Where(phase => phase.HasData).ToArray();
             return (block, availablePhases, availablePhases.LastOrDefault(phase => phase.HousingSources.HasData),
@@ -219,7 +257,7 @@ namespace Netherlands3D.UI.Panels
             var blocks = housingBlocks;
             incomplete |= blocks.Any(entry => IsIncomplete(entry.Total));
             incomplete |= housingFloorAreas.Any(entry => IsIncomplete(entry.Value)) || housingRooms.Any(entry => IsIncomplete(entry.Total));
-            var current = summary.Phases.LastOrDefault();
+            var current = programSummary.Current;
             incomplete |= current.NonHousingSources?.HasData == true && IsIncomplete(current.GrossFloorArea);
             SetSidebarExplanation(AvailableDataExplanation, incomplete);
         }
@@ -246,7 +284,8 @@ namespace Netherlands3D.UI.Panels
             {
                 RefreshCategoryColors();
                 ShowHousingChart();
-                ShowAdditionalCharts();
+                ShowProgramCharts();
+                ShowPhaseCharts();
             }
         }
 
@@ -266,8 +305,8 @@ namespace Netherlands3D.UI.Panels
                 return new AreaComparisonChart.Item(entry.Label, entry.Value.Value, DashboardColors.GetSegmentColor(entry.Label, additionalColors),
                     $"Gemiddelde minimale\nwoonoppervlakte: {text}", text);
             }).ToArray());
-            var total = summary.Phases?.LastOrDefault().Dwellings ?? default;
-            var segments = summary.Segments ?? Array.Empty<DashboardSummary.BreakdownRow>();
+            var total = programSummary.Current.Dwellings;
+            var segments = programSummary.Segments ?? Array.Empty<DashboardSummary.BreakdownRow>();
             ShowRingChart(housingSegmentChart, segments, total, " woningen", label => DashboardColors.GetSegmentColor(label, additionalColors));
 
             var blocks = housingBlocks;
@@ -302,17 +341,23 @@ namespace Netherlands3D.UI.Panels
             }).ToArray(), ChartLabel(total), $"Totaal: {ChartNumber(total)}{unit}");
         }
 
-        private void ShowAdditionalCharts()
+        private void ShowProgramCharts()
+        {
+            var programSegments = programSummary.Segments ?? Array.Empty<DashboardSummary.BreakdownRow>();
+            housingRoomChart.SetData(programSegments.Select(row => new BarChart.Series(row.Label, DashboardColors.GetSegmentColor(row.Label, additionalColors))).ToArray(),
+                housingRooms.Select(room => new BarChart.Category(room.Label, room.Values.Select((value, index) => new BarChart.Value(value.Value,
+                    $"{room.Label}\n{programSegments[index].Label}: {ChartNumber(value)} woningen")),
+                    $"{room.Label}\nTotaal: {ChartNumber(room.Total)} woningen", ChartLabel(room.Total, housingRoomChart))).ToArray());
+            ShowRingChart(nonHousingCategoryChart, programSummary.Categories ?? Array.Empty<DashboardSummary.BreakdownRow>(),
+                programSummary.Current.GrossFloorArea, SquareMetres, SegmentColor);
+        }
+
+        private void ShowPhaseCharts()
         {
             var phases = summary.Phases ?? Array.Empty<DashboardSummary.PhaseTotals>();
             var segments = summary.Segments ?? Array.Empty<DashboardSummary.BreakdownRow>();
             var rooms = summary.Rooms ?? Array.Empty<DashboardSummary.BreakdownRow>();
             var categories = summary.Categories ?? Array.Empty<DashboardSummary.BreakdownRow>();
-            housingRoomChart.SetData(segments.Select(row => new BarChart.Series(row.Label, DashboardColors.GetSegmentColor(row.Label, additionalColors))).ToArray(),
-                housingRooms.Select(room => new BarChart.Category(room.Label, room.Values.Select((value, index) => new BarChart.Value(value.Value,
-                    $"{room.Label}\n{segments[index].Label}: {ChartNumber(value)} woningen")),
-                    $"{room.Label}\nTotaal: {ChartNumber(room.Total)} woningen", ChartLabel(room.Total, housingRoomChart))).ToArray());
-            ShowRingChart(nonHousingCategoryChart, categories, phases.LastOrDefault().GrossFloorArea, SquareMetres, SegmentColor);
             ShowPhaseChart(housingPhaseChart, segments, phases.Select(phase => phase.Dwellings).ToArray(), " woningen", label => DashboardColors.GetSegmentColor(label, additionalColors));
             ShowPhaseChart(housingRoomPhaseChart, rooms, roomPhaseTotals, " woningen", label => DashboardColors.GetRoomColor(label, additionalColors));
             ShowPhaseChart(nonHousingPhaseChart, categories, phases.Select(phase => phase.GrossFloorArea).ToArray(), SquareMetres, SegmentColor);
@@ -326,7 +371,7 @@ namespace Netherlands3D.UI.Panels
             // Each bar represents one block-phase value; phases are never stacked or added together.
             nonHousingBlockPhaseChart.SetData(DashboardData.Phases.Select(phase => new BarChart.Series(phase, DashboardColors.GetPhaseColor(phase, additionalColors))).ToArray(),
                 nonHousingBlockPhases.Select(row => new BarChart.Category($"{row.Block}\n{row.Phase}",
-                    DashboardData.Phases.Select(phase => new BarChart.Value(phase == row.Phase ? row.Value.Value : 0,
+                    DashboardData.Phases.Select(phase => new BarChart.Value(phase == row.Phase ? row.Value.Value : null,
                         $"{DashboardSummary.BlockName(row.Block)}\n{row.Phase}: {ChartNumber(row.Value)}{SquareMetres}")),
                     $"{DashboardSummary.BlockName(row.Block)}\n{row.Phase}: {ChartNumber(row.Value)}{SquareMetres}", ChartLabel(row.Value, nonHousingBlockPhaseChart))).ToArray());
         }

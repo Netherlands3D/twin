@@ -94,7 +94,7 @@ namespace Netherlands3D.UI.Panels
         {
             label.text = string.IsNullOrWhiteSpace(value) ? EmptyValue : value;
 
-            var hasData = valueLabels.Any(valueLabel => valueLabel.text != EmptyValue);
+            var hasData = valueLabels.Any(valueLabel => valueLabel != availablePhasesValue && valueLabel.text != EmptyValue);
             rows.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
             emptyState.EnableInClassList(UtilityClassConstants.HIDDEN, hasData);
         }
