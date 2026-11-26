@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.Feature;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.CityJSON;
 using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -89,11 +87,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             
             foreach (var visualizer in importedObject.GetComponentsInChildren<CityObjectVisualizer>())
             {
-                ApplyStylingToFeature(LayerFeatures[visualizer]);
+                ApplyStylingToFeature(StylingFeatures[visualizer]);
             }
         }
         
-        public override void ApplyStylingToFeature(LayerFeature feature)
+        public override void ApplyStylingToFeature(StylingFeature feature)
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
             
@@ -125,13 +123,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-       
-
         private void OnRemoveFeatures()
         {
-            foreach (var co in cityJson.CityObjects)
+            foreach (var map in mappings)
             {
-                RemoveFeatureMapping(co);
+                SelectionService.MappingTree.Remove(map);
             }
             mappings.Clear();
         }
@@ -147,11 +143,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         private void AddStylingFeature(CityObjectVisualizer visualizer)
         {
-            if(LayerFeatures.ContainsKey(visualizer))
+            if(StylingFeatures.ContainsKey(visualizer))
                 return;
             
             var layerFeature = CreateFeature(visualizer);
-            LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            StylingFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);
         }
@@ -165,18 +161,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             objectMapping.UpdateBoundingBox();
             SelectionService.MappingTree.RootInsert(objectMapping);
             mappings.Add(objectMapping);
-        }
-
-        private void RemoveFeatureMapping(CityObject feature)
-        {
-            foreach (CityJSONMapping mapping in mappings)
-            {
-                if (mapping.Feature == feature)
-                {
-                    //destroy featuremapping object, there should be no references anywhere else to this object!
-                    SelectionService.MappingTree.Remove(mapping);
-                }
-            }
         }
         
         protected override void OnMouseClickNothing()
