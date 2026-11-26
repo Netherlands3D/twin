@@ -255,7 +255,7 @@ jobs:
   build-windows:
     name: '🗺️ Build Netherlands3D Windows Viewer'
     needs: [ 'test' ]
-    permissions: { contents: read }
+    permissions: { contents: read, statuses: write }
 
     # only run this when a commit was pushed to the main branch
     if: github.ref_name == 'main'
@@ -311,10 +311,27 @@ jobs:
         uses: actions/upload-artifact@v4
         with: { name: '${{ env.WINDOWS_BUILD_ARTEFACT_NAME }}-${{ steps.buildUnity.outputs.buildVersion }}', path: '${{ env.WINDOWS_BUILD_OUTPUT_FOLDER }}' }
 
+      - name: 'Publish artifact link as status'
+        uses: actions/github-script@v7
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+          with:
+        script: |
+          await github.rest.repos.createCommitStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            sha: context.sha,
+            state: 'success',
+            target_url: process.env.ARTIFACT_URL,
+            context: 'Windows build download',
+            description: 'Click Details to download the build',
+          });
+
+
   build-development-windows:
     name: '🐞 Build Development Netherlands3D Windows Viewer'
     needs: [ 'test' ]
-    permissions: { contents: read }
+    permissions: { contents: read, statuses: write}
 
     if: contains(github.ref_name, 'standalone/')
 
@@ -367,3 +384,18 @@ jobs:
         uses: actions/upload-artifact@v4
         with: { name: '${{ env.WINDOWS_DEVELOPMENT_BUILD_ARTEFACT_NAME }}-${{ steps.buildUnity.outputs.buildVersion }}', path: '${{ env.WINDOWS_BUILD_OUTPUT_FOLDER }}' }
       
+      - name: 'Publish artifact link as status'
+        uses: actions/github-script@v7
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+          with:
+        script: |
+          await github.rest.repos.createCommitStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            sha: context.sha,
+            state: 'success',
+            target_url: process.env.ARTIFACT_URL,
+            context: 'Windows build download',
+            description: 'Click Details to download the build',
+          });
