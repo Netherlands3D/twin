@@ -22,14 +22,6 @@
     justify-content: center;
 }
 
-.app--dashboard-open .dashboard-overlay {
-    display: flex;
-}
-
-.app--dashboard-open .app__viewer-ui {
-    display: none;
-}
-
 .dashboard-overlay__panel {
     background-color: var(--color-white);
     border-radius: var(--border-radius-md);

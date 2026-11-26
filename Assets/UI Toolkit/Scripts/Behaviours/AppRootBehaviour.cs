@@ -17,6 +17,14 @@ namespace Netherlands3D
         private UIDocument appDocument;
         private VisualElement appRoot;
 
+        public enum Hud
+        {
+            None,
+            DefaultHUD,
+            FPVHUD,
+            DashboardOverlay
+        }
+
         //the excuted order of this script should be executed very early to ensure the presence of the approot. 
         private void Awake()
         {
@@ -29,17 +37,22 @@ namespace Netherlands3D
             DisableFPVUI();
         }
 
+        public void SwitchToHud(Hud hud)
+        {
+            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, hud != Hud.DefaultHUD);
+            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, hud != Hud.DefaultHUD);
+            appRoot.Q<VisualElement>("DashboardOverlay").EnableInClassList(UtilityClassConstants.HIDDEN, hud != Hud.DashboardOverlay);
+        }
+
         //todo: in the future we might want to create a list of huds we can switch between, so we avoid multiple true/false permutations, but for now we only have 2, so this is not needed yet
         public void DisableFPVUI()
         {
-            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            SwitchToHud(Hud.DefaultHUD);
         }
 
         public void EnableFPVUI()
         {
-            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, false);
-            appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, true);
+            SwitchToHud(Hud.FPVHUD);
         }
 
         /// <summary>
@@ -63,7 +76,14 @@ namespace Netherlands3D
 
         internal void SetDashboardVisible(bool visible)
         {
-            appRoot.EnableInClassList(DashboardOpenClass, visible);
+            if (visible)
+            {
+                SwitchToHud(Hud.DashboardOverlay);
+            }
+            else
+            {
+                SwitchToHud(Hud.DefaultHUD);
+            }
         }
 
         public Vector2 GetPanelClickPosition()

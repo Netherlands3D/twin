@@ -38,7 +38,6 @@ namespace Netherlands3D.Twin.Services
 
         private async void Awake()
         {
-            InitializeSpawner();
             await assetLibrary.InitializeCatalogs();
         }
 
@@ -170,8 +169,7 @@ namespace Netherlands3D.Twin.Services
                 Task<LayerGameObject> visualizationTask = layer.LayerGameObjectTask;
                 if (layer.LayerGameObjectTask == null)
                 {
-                    // The default project can request layer visualizations during Awake.
-                    InitializeSpawner();
+                    if (spawner == null) spawner = new VisualizationSpawner(assetLibrary);
                     visualizationTask = spawner.Spawn(layer.LayerData);
                     layer.SetVisualizationTask(visualizationTask);
                 }
