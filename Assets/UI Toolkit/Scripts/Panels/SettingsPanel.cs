@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Quality;
-using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
@@ -24,6 +22,8 @@ namespace Netherlands3D.UI.Panels
         public override string Title => "Instellingen";
         private ContentContainer settingsSection;
         private RadioButtonGroup qualityRadioButtonGroup;
+        private ListView functionalitiesListView;
+        private ListView experimentalFunctionalitiesListView;
         
         public SettingsPanel()
         {
@@ -38,22 +38,19 @@ namespace Netherlands3D.UI.Panels
 
         public SettingsPanel(Configuration configuration) : this()
         {
-            var optionalFunctionalities = configuration.Functionalities.Where(f => f.settingsCategory == FunctionalitySettingsCategory.Optional).ToList();
-            var experimentalFunctionalities = configuration.Functionalities.Where(f => f.settingsCategory == FunctionalitySettingsCategory.Experimental).ToList();
-            ConfigureFunctionalityList(settingsSection.Q<ListView>("Functionalities"), optionalFunctionalities);
+            functionalitiesListView = settingsSection.Q<ListView>("Functionalities");
+            functionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            functionalitiesListView.makeItem = MakeFunctionalityItem;
+            functionalitiesListView.bindItem = (item, index) => BindFunctionalityItem(item, index, functionalitiesListView);
+            functionalitiesListView.itemsSource = configuration.Functionalities.Where(f => !f.IsExperimental).ToList();
 
-            if (experimentalFunctionalities.Count > 0)
-            {
-                var experimentalSection = settingsSection.Q<VisualElement>("ExperimentalSection");
-                var experimentalList = experimentalSection?.Q<ListView>("ExperimentalFunctionalities");
-                if (experimentalList != null)
-                {
-                    ConfigureFunctionalityList(experimentalList, experimentalFunctionalities);
-                    experimentalSection.RemoveFromClassList(UtilityClassConstants.HIDDEN);
-                }
-            }
+            experimentalFunctionalitiesListView = settingsSection.Q<ListView>("ExperimentalFunctionalities");
+            experimentalFunctionalitiesListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            experimentalFunctionalitiesListView.makeItem = MakeFunctionalityItem;
+            experimentalFunctionalitiesListView.bindItem = (item, index) => BindFunctionalityItem(item, index, experimentalFunctionalitiesListView);
+            experimentalFunctionalitiesListView.itemsSource = configuration.Functionalities.Where(f => f.IsExperimental).ToList();
             
-            var fpvFunctionality = optionalFunctionalities.Concat(experimentalFunctionalities).FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
+            var fpvFunctionality = configuration.Functionalities.FirstOrDefault(f => f.Id == FPVSettingsPanel.FPV_ID);
             if (fpvFunctionality != null)
             {
                 var fpvSection = new FPVSettingsPanel(fpvFunctionality);
@@ -61,36 +58,27 @@ namespace Netherlands3D.UI.Panels
             }
         }
         
-        private void ConfigureFunctionalityList(ListView listView, List<Functionality> functionalities)
-        {
-            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-            listView.makeItem = MakeFunctionalityItem;
-            listView.bindItem = (item, index) => BindFunctionalityItem(item, functionalities[index]);
-            listView.itemsSource = functionalities;
-        }
-
         private VisualElement MakeFunctionalityItem()
         {
             var toggle = new CheckboxToggle();
-            // ListView reuses items, so register the callback once and update the functionality when binding.
-            toggle.RegisterValueChangedCallback(evt =>
-            {
-                if (toggle.userData is not Functionality functionality) return;
-
-                functionality.IsEnabled = evt.newValue;
-                App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
-            });
-            return new ListViewItem(toggle);
+            var listViewItem = new ListViewItem(toggle);
+            return listViewItem;
         }
 
-        private void BindFunctionalityItem(VisualElement item, Functionality functionality)
+        private void BindFunctionalityItem(VisualElement item, int index, ListView source)
         {
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<CheckboxToggle>() is not CheckboxToggle toggle) return;
 
-            toggle.userData = functionality;
+            Functionality functionality = source.itemsSource[index] as Functionality;
             toggle.LabelText = functionality.Title;
             toggle.SetValueWithoutNotify(functionality.IsEnabled);
+
+            toggle.RegisterValueChangedCallback(evt =>
+            { 
+                functionality.IsEnabled = evt.newValue;
+                App.Debug.DisplayMessage("Functie voorkeuren succesvol aangepast", IconImage.CHECKMARK);
+            });
         }
 
         private void OnQualitySettingsChanged(ChangeEvent<int> evt)
