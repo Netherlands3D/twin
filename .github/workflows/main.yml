@@ -316,16 +316,16 @@ jobs:
         env:
           ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
           with:
-        script: |
-          await github.rest.repos.createCommitStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: context.sha,
-            state: 'success',
-            target_url: process.env.ARTIFACT_URL,
-            context: 'Windows build download',
-            description: 'Click Details to download the build',
-          });
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success',
+              target_url: process.env.ARTIFACT_URL,
+              context: 'Windows build download',
+              description: 'Click Details to download the build',
+            });
 
 
   build-development-windows:
@@ -389,13 +389,13 @@ jobs:
         env:
           ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
           with:
-        script: |
-          await github.rest.repos.createCommitStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: context.sha,
-            state: 'success',
-            target_url: process.env.ARTIFACT_URL,
-            context: 'Windows build download',
-            description: 'Click Details to download the build',
-          });
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success',
+              target_url: process.env.ARTIFACT_URL,
+              context: 'Windows build download',
+              description: 'Click Details to download the build',
+            });
