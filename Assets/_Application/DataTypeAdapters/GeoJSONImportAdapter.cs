@@ -106,7 +106,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                                 polePresets = new List<LayerPresetArgs>();
                                 uniquePresets[trajectType] = polePresets;
                             }
-                            polePresets.Add(new GeoJSONElectricityPolePreset.Args(electricityPolePresetPrefabMapper, coordinate, pole.OBJECTIDENTIFIER + " id:" + featureIndex, pole.Type));
+                            polePresets.Add(new GeoJSONElectricityPolePreset.Args(electricityPolePresetPrefabMapper, coordinate, pole.OBJECTIDENTIFIER + " id:" + featureIndex, pole.Type, pole.Height, new Vector3(pole.Rotation[0], pole.Rotation[1], pole.Rotation[2])));
                             break;
                         }
 
@@ -155,6 +155,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
         {
             public string OBJECTIDENTIFIER { get; set; }
             public string Type { get; set; }
+            
+            public float Height { get; set; }
+            public float[] Rotation { get; set; }
         }
     }
 }

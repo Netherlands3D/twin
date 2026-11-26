@@ -29,6 +29,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         private int previousSiblingIndex = -1;
         private float ropeLengthMp = 1.1f;
         public bool DebugTarget = false;
+        
 
         [SerializeField] private Material ropeMaterial;
         
@@ -53,6 +54,11 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                 float height = heightMap.GetHeight(targetCoordinate);
                 targetCoordinate.height = height;
                 transformPropertyData.Position = targetCoordinate;
+                
+                transformPropertyData.EulerRotation = geoJsonPropertyData.startRotation;
+                //set height of this  object with all renderers in children
+                float maxHeight = geoJsonPropertyData.startHeight;
+                SetObjectHeight(maxHeight);
             }
             
             connectedPropertyData = visualisation.LayerData.GetProperty<ConnectableHierarchicalLayerPropertyData>();
@@ -60,6 +66,29 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             
             AddListeners();
             ConnectToSibling();
+        }
+        
+        private void SetObjectHeight(float targetHeight)
+        {
+            Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>(true);
+            if (renderers.Length == 0)
+            {
+                Debug.LogWarning("No renderers found in object hierarchy.");
+                return;
+            }
+            Bounds combinedBounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
+            {
+                combinedBounds.Encapsulate(renderers[i].bounds);
+            }
+            float currentHeight = combinedBounds.size.y;
+            if (currentHeight <= 0.001f)
+            {
+                Debug.LogWarning("Object has no measurable height.");
+                return;
+            }
+            float scaleFactor = targetHeight / currentHeight;
+            transformPropertyData.LocalScale = transform.localScale * scaleFactor;
         }
 
         private void AddListeners()

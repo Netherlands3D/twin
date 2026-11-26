@@ -15,23 +15,23 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
         {
             public string ObjectId { get; set; }
             public string Type { get; set; }
-            
+            public float Height { get; set; }
+            public Vector3 Rotation { get; set; }
             public Coordinate Coordinate { get; set; }
-            
             public GeoJSONPresetPrefabMapper PrefabMapper { get; set; }
 
-            public Args(GeoJSONPresetPrefabMapper mapper, Coordinate coordinate, string objectId, string type)
+            public Args(GeoJSONPresetPrefabMapper mapper, Coordinate coordinate, string objectId, string type, float height, Vector3 rotation)
             {
                 this.Coordinate = coordinate;
                 this.ObjectId = objectId;
                 Type = type;
+                Height = height;
+                Rotation = rotation;
                 PrefabMapper = mapper;
             }
         }
 
-        public ILayerBuilder Apply(
-            ILayerBuilder builder,
-            Args args)
+        public ILayerBuilder Apply(ILayerBuilder builder, Args args)
         {
             if(args.PrefabMapper == null || !args.PrefabMapper.TryGetPrefabIdentifier(args.Type, out  var prefabIdentifier))
             {
@@ -42,7 +42,7 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
             return builder
                 .OfType(prefabIdentifier)
                 .NamedAs(args.ObjectId)
-                .AddProperty(new GeoJSONPropertyData(args.Coordinate));
+                .AddProperty(new GeoJSONPropertyData(args.Coordinate, true, args.Height, args.Rotation));
         }
 
         public ILayerBuilder Apply(
