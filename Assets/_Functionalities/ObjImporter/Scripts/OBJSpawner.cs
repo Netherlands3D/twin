@@ -84,7 +84,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             if (importedObject)
             {
-                layerGameObject.LayerFeatures.Clear();
+                layerGameObject.StylingFeatures.Clear();
 
                 // Exclude the old renderers from styling while Destroy is pending.
                 importedObject.SetActive(false);
