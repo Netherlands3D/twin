@@ -1,11 +1,7 @@
-using System;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.Functionalities;
-using System.Collections.Generic;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 

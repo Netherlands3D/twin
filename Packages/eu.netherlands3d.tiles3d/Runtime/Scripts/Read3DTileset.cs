@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using UnityEngine.Networking;
 using System;
 using System.Linq;

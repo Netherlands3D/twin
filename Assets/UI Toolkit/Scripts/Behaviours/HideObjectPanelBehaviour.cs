@@ -21,7 +21,7 @@ namespace Netherlands3D.UI.Panels
             SelectionService selectionService = ServiceLocator.GetService<SelectionService>();
             Dictionary<string, IMapping> selectedMappings = selectionService.SelectedMappings;
             
-            return selectedMappings.Values.Any(m => m is MeshMapping);
+            return selectedMappings.Values.Any(m => m is BagMeshMapping);
         }
 
         public override object GetData()
@@ -42,7 +42,7 @@ namespace Netherlands3D.UI.Panels
             return content;
         }
 
-        private void OnUpdateMappings(MeshMapping mapping, string bagId)
+        private void OnUpdateMappings(BagMeshMapping mapping, string bagId)
         {
             HideObjectPanel panel = content as HideObjectPanel;
             panel.UpdateContent();

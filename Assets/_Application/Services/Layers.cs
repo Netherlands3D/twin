@@ -13,8 +13,9 @@ namespace Netherlands3D.Twin.Services
 {
     public class Layers : MonoBehaviour
     {
-        [SerializeField] private PrefabLibrary prefabLibrary;
+        public AssetLibrary.AssetLibrary AssetLibrary => assetLibrary;
         [SerializeField] private DataTypeChain fromUrlImporter;
+        [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
         private VisualizationSpawner spawner;
         
         public UnityEvent<LayerData> LayerAdded { get; } = new();
@@ -35,9 +36,11 @@ namespace Netherlands3D.Twin.Services
         public UnityEvent<LayerData, bool> LayerRemoved { get; } = new();
         public UnityEvent<LayerGameObject> VisualizationCreated = new();
 
-        private void Awake()
+        private async void Awake()
         {
-            spawner = new VisualizationSpawner(prefabLibrary);
+            assetLibrary.InitializePrefabs();
+            spawner = new VisualizationSpawner(assetLibrary);
+            await assetLibrary.InitializeCatalogs();
         }
 
         /// <summary>
@@ -65,6 +68,7 @@ namespace Netherlands3D.Twin.Services
             
             var layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
+
             LayerAdded.Invoke(layerData);
             return layer;
         }

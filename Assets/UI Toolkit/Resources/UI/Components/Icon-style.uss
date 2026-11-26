@@ -65,6 +65,7 @@
 .icon.image-download-tile { background-image: var(--icon-downloadtile); }
 .icon.image-edit { background-image: var(--icon-edit); }
 .icon.image-eyedropper-full { background-image: var(--icon-eyedropperfull); }
+.icon.image-exit { background-image: var(--icon-exit); }
 .icon.image-filters{ background-image: var(--icon-filters); }
 .icon.image-folder { background-image: var(--icon-folder); }
 .icon.image-forward { background-image: var(--icon-forward); }

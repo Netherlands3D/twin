@@ -117,8 +117,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private bool Remove(Node node, IMapping obj)
         {
-            if (!node.Bounds.Contains(obj.BoundingBox)) return false;
-
+            //todo this check is not working correctly!
+            // if (!node.Bounds.Intersects(obj.BoundingBox))
+            //     return false;
+            
             if (node.Remove(obj))
                 return true;
 
@@ -133,7 +135,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     }
                 }
             }
-
             return false;
         }
 
@@ -320,9 +321,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 Vector3 nbl = node.Bounds.BottomLeft.ToUnity();
                 bl.y = 100;
                 nbl.y = 100;
-                if (mapping is FeatureMapping)
+                if (mapping is GeoJsonFeatureMapping)
                     Debug.DrawLine(bl, nbl, Color.red);
-                else if (mapping is MeshMapping)
+                else if (mapping is BagMeshMapping)
                     Debug.DrawLine(bl, nbl, Color.yellow);
             }
 
@@ -330,12 +331,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             for (int i = 0; i < node.MappingCount; i++)
             {
                 IMapping mapping = node.Mappings[i];
-                if (mapping is FeatureMapping)
+                if (mapping is GeoJsonFeatureMapping)
                     mapping.BoundingBox.Debug(Color.magenta);
-                else if (mapping is MeshMapping)
+                else if (mapping is BagMeshMapping)
                 {
                     mapping.BoundingBox.Debug(Color.cyan);
-                    ((MeshMapping)mapping).DebugBounds(Color.blue);
+                    ((BagMeshMapping)mapping).DebugBounds(Color.blue);
                 }
             }
 

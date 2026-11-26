@@ -1,6 +1,6 @@
 using GLTFast;
 using Netherlands3D.Coordinates;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 using System;
 using System.Text;
 using System.Threading.Tasks;

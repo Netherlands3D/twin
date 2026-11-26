@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 
 namespace Netherlands3D.CityJson.Structure
 {

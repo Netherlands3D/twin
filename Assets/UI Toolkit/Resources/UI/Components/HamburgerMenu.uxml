@@ -5,5 +5,6 @@
         <nl3d:Button name="Save" button-type="transparent" button-style="IconOnly" icon="Save" tooltip="Sla het huidige project op"/>
         <nl3d:ToolButton name="Settings" button-type="transparent" button-style="IconOnly" icon="Settings" toolType="Settings" tooltip="Instellingen"/>
         <nl3d:Button name="Help" button-type="transparent" button-style="IconOnly" icon="Help" tooltip="Meer informatie"/>
+        <nl3d:Button name="Exit" button-type="transparent" button-style="IconOnly" icon="Exit" tooltip="Applicatie sluiten"/>
     </ui:VisualElement>
 </ui:UXML>

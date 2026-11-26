@@ -108,6 +108,13 @@ namespace Netherlands3D
                 }
                 layer.SetProperty(pd);
             }
+            else if (layer.PrefabIdentifier == "96d778a591e307e48b3f896321843660")
+            {
+                LayerURLPropertyData streamingAssetsPropertyData = new LayerURLPropertyData();
+                var resolved = $"streamingassets:///{Uri.EscapeDataString("zuidoostbundle")}/{Uri.EscapeDataString("zuidoostprefab.prefab")}";
+                streamingAssetsPropertyData.Url = new Uri(resolved, UriKind.Absolute);
+                layer.SetProperty(streamingAssetsPropertyData);
+            }
 
             MigratePropertyData(layer, obj);
             

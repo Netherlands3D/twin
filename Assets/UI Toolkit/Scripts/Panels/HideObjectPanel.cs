@@ -73,7 +73,7 @@ namespace Netherlands3D.UI.Panels
             {
                 //move to coord
                 string id = item.ID;
-                if (mappings[id] is not MeshMapping map) return;
+                if (mappings[id] is not BagMeshMapping map) return;
               
                 Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, map.ObjectMapping.items[id]);
                 App.Cameras.ActiveCamera.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);

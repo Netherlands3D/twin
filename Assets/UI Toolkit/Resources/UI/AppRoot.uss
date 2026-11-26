@@ -3,3 +3,10 @@
     margin: 8px;
     padding: 4px;
 }
+
+.dialogs-anchor
+{
+    position: absolute;    
+    top: 50%;
+    left: 50%;
+}

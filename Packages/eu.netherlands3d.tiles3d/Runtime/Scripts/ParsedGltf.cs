@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Meshoptimizer;
 using Unity.Collections;
 using Netherlands3D.Coordinates;
-using SimpleJSON;
+using Netherlands3D.SimpleJSON;
 
 
 #if SUBOBJECT
