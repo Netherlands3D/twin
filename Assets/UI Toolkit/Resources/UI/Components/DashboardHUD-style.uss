@@ -41,8 +41,7 @@
     margin-bottom: var(--spacing-3);
 }
 
-.dashboard-hud__empty-selection,
-.dashboard-hud__phase-coverage {
+.dashboard-hud__empty-selection {
     margin: var(--spacing-2) 0;
     white-space: normal;
 }

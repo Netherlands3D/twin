@@ -3,6 +3,9 @@
     --color-dashboard-dwellings-low: #8ab39b;
     --color-dashboard-dwellings-medium: #589672;
     --color-dashboard-dwellings-high: #246e45;
+    --color-dashboard-bvo-low: #fce8d8;
+    --color-dashboard-bvo-medium: #f5b899;
+    --color-dashboard-bvo-high: #e07040;
     --color-dashboard-segment-social: #4a78ad;
     --color-dashboard-segment-mid-rent: #254976;
     --color-dashboard-segment-free-sector: #102a49;

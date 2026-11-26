@@ -23,6 +23,7 @@ namespace Netherlands3D.UI.Panels
         private readonly Label averageMinimumFloorAreaValue;
         private readonly Label availablePhasesValue;
         private readonly Label nonHousingGrossFloorAreaValue;
+        private bool nonHousing;
 
         public string HeaderText
         {
@@ -90,11 +91,24 @@ namespace Netherlands3D.UI.Panels
             nonHousingGrossFloorAreaValue = this.Q<Label>("NonHousingGrossFloorAreaValue");
         }
 
+        internal void SetProgram(bool showNonHousing)
+        {
+            nonHousing = showNonHousing;
+            foreach (var label in valueLabels.Where(label => label != availablePhasesValue))
+                label.parent.EnableInClassList(UtilityClassConstants.HIDDEN, nonHousing ? label != nonHousingGrossFloorAreaValue : label == nonHousingGrossFloorAreaValue);
+            RefreshEmptyState();
+        }
+
         private void SetValue(Label label, string value)
         {
             label.text = string.IsNullOrWhiteSpace(value) ? EmptyValue : value;
+            RefreshEmptyState();
+        }
 
-            var hasData = valueLabels.Any(valueLabel => valueLabel != availablePhasesValue && valueLabel.text != EmptyValue);
+        private void RefreshEmptyState()
+        {
+            var hasData = valueLabels.Any(label => label != availablePhasesValue && label.text != EmptyValue
+                && (nonHousing ? label == nonHousingGrossFloorAreaValue : label != nonHousingGrossFloorAreaValue));
             rows.EnableInClassList(UtilityClassConstants.HIDDEN, !hasData);
             emptyState.EnableInClassList(UtilityClassConstants.HIDDEN, hasData);
         }

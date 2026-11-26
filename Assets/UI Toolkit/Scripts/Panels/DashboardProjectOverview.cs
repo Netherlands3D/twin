@@ -1,4 +1,5 @@
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI_Toolkit;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
@@ -13,6 +14,7 @@ namespace Netherlands3D.UI.Panels
         private readonly Label nonHousingGrossFloorArea;
         private readonly Label socialShare;
         private readonly Label phaseLabel;
+        private readonly Label nonHousingPhaseLabel;
 
         public DashboardProjectOverview()
         {
@@ -24,6 +26,7 @@ namespace Netherlands3D.UI.Panels
             nonHousingGrossFloorArea = this.Q<Label>("ProjectNonHousingGrossFloorArea");
             socialShare = this.Q<Label>("ProjectSocialShare");
             phaseLabel = this.Q<Label>("ProjectPhase");
+            nonHousingPhaseLabel = this.Q<Label>("ProjectNonHousingPhase");
         }
 
         internal void SetData(string dwellings, string blocks, string grossFloorArea, string share)
@@ -37,7 +40,16 @@ namespace Netherlands3D.UI.Panels
             blockCount.text = DisplayValue(blocks);
             nonHousingGrossFloorArea.text = DisplayValue(grossFloorArea);
             socialShare.text = DisplayValue(share);
-            phaseLabel.text = phase == null ? "Laatste beschikbare gegevens" : $"Planfase {phase}";
+            var context = phase == null ? "Laatste beschikbare gegevens" : $"Planfase {phase}";
+            phaseLabel.text = context;
+            nonHousingPhaseLabel.text = context;
+        }
+
+        internal void SetProgram(bool nonHousing)
+        {
+            totalDwellings.parent.EnableInClassList(UtilityClassConstants.HIDDEN, nonHousing);
+            socialShare.parent.EnableInClassList(UtilityClassConstants.HIDDEN, nonHousing);
+            nonHousingGrossFloorArea.parent.EnableInClassList(UtilityClassConstants.HIDDEN, !nonHousing);
         }
 
         private static string DisplayValue(string value) => string.IsNullOrWhiteSpace(value) ? EmptyValue : value;

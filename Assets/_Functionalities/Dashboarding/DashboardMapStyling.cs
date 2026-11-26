@@ -18,7 +18,9 @@ namespace Netherlands3D.Twin.DataSets
         Base,
         Segment,
         Dwellings,
-        Phase
+        Phase,
+        Category,
+        GrossFloorArea
     }
 
     /// <summary>
@@ -52,41 +54,53 @@ namespace Netherlands3D.Twin.DataSets
 
         public void Update(DashboardMapLayer layer, IReadOnlyDictionary<string, Color> palette, string phase)
         {
+            Update(layer, palette, phase, false);
+        }
+
+        public void Update(DashboardMapLayer layer, IReadOnlyDictionary<string, Color> palette, string phase, bool nonHousing)
+        {
             selectedLayer = layer;
             colors = palette;
-            RefreshColorKeys(phase);
+            RefreshColorKeys(phase, nonHousing);
             Refresh();
             meshColorsPending = true;
         }
 
-        private void RefreshColorKeys(string phase)
+        private void RefreshColorKeys(string phase, bool nonHousing)
         {
             colorKeys.Clear();
             if (colors == null || !binding.HasData || selectedLayer == DashboardMapLayer.Base)
                 return;
 
-            var housing = phase != null && selectedLayer != DashboardMapLayer.Phase
+            var housing = !nonHousing && phase != null && selectedLayer != DashboardMapLayer.Phase
                 ? DashboardSummary.CalculateHousingBlocks(binding.Data, phase)
                     .ToDictionary(summary => summary.Block, StringComparer.OrdinalIgnoreCase)
                 : new Dictionary<string, DashboardSummary.HousingBlockSummary>(StringComparer.OrdinalIgnoreCase);
+            var nonHousingBlocks = nonHousing && selectedLayer != DashboardMapLayer.Phase
+                ? DashboardSummary.CalculateNonHousingBlocks(binding.Data, phase).ToDictionary(summary => summary.Block, StringComparer.OrdinalIgnoreCase)
+                : new Dictionary<string, DashboardSummary.NonHousingBlockSummary>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var block in binding.Objects.Values.Concat(binding.ObjObjects.Values).Concat(binding.GlbObjects.Values).Distinct())
             {
-                if (phase == null)
+                if (selectedLayer == DashboardMapLayer.Phase)
                 {
-                    colorKeys[block.Block] = GetColorKey(block, selectedLayer);
+                    var phases = nonHousing ? block.NonHousing.Select(row => row.Phase) : block.Housing.Select(row => row.Phase);
+                    var available = phases.ToHashSet(StringComparer.OrdinalIgnoreCase);
+                    var source = phase == null ? DashboardData.Phases.LastOrDefault(available.Contains) : available.Contains(phase) ? phase : null;
+                    colorKeys[block.Block] = source == null ? "base" : DashboardColors.PhaseKey(source);
                     continue;
                 }
 
-                string sourcePhase = null;
-                if (selectedLayer == DashboardMapLayer.Phase)
+                if (nonHousing)
                 {
-                    var available = block.Housing.Any(row => string.Equals(row.Phase, phase, StringComparison.OrdinalIgnoreCase))
-                        || block.NonHousing.Any(row => string.Equals(row.Phase, phase, StringComparison.OrdinalIgnoreCase));
-                    sourcePhase = available ? phase : null;
+                    nonHousingBlocks.TryGetValue(block.Block, out var summary);
+                    colorKeys[block.Block] = GetNonHousingColorKey(summary, selectedLayer);
                 }
-                housing.TryGetValue(block.Block, out var summary);
-                colorKeys[block.Block] = GetColorKey(summary, sourcePhase, selectedLayer);
+                else
+                {
+                    housing.TryGetValue(block.Block, out var summary);
+                    colorKeys[block.Block] = GetColorKey(phase == null ? block.HousingSummary : summary, selectedLayer);
+                }
             }
         }
 
@@ -325,17 +339,23 @@ namespace Netherlands3D.Twin.DataSets
             visualization.ApplyStyling();
         }
 
-        internal static string GetColorKey(DashboardObjectData.BlockData block, DashboardMapLayer layer)
+        private static string GetNonHousingColorKey(DashboardSummary.NonHousingBlockSummary summary, DashboardMapLayer layer)
         {
-            return block == null ? "base" : GetColorKey(block.HousingSummary, block.LatestPhase, layer);
+            if (!summary.Total.CompleteValue.HasValue)
+                return "base";
+            if (layer == DashboardMapLayer.GrossFloorArea)
+                return summary.Total.Value < 5000 ? "bvo-low" : summary.Total.Value < 15000 ? "bvo-medium" : "bvo-high";
+            if (summary.Total.Value == 0)
+                return "base";
+
+            var dominant = Enumerable.Range(0, summary.Categories.Length).OrderByDescending(index => summary.Values[index].Value).First();
+            return DashboardColors.CategoryKey(summary.Categories[dominant]);
         }
 
-        private static string GetColorKey(DashboardSummary.HousingBlockSummary housing, string phase, DashboardMapLayer layer)
+        private static string GetColorKey(DashboardSummary.HousingBlockSummary housing, DashboardMapLayer layer)
         {
             if (layer == DashboardMapLayer.Base)
                 return "base";
-            if (layer == DashboardMapLayer.Phase)
-                return phase != null ? DashboardColors.PhaseKey(phase) : "base";
 
             if (!housing.Total.CompleteValue.HasValue)
                 return "base";

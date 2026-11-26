@@ -67,8 +67,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             dashboardHeader = dashboardOverlay.Q<DashboardHeader>("DashboardHeader");
             toolbarNavigation = root.Q<ToolbarNavigation>();
             closeButton = root.Q<Button>("CloseDashboard");
-            paletteSource = root.Q("HousingBlockChart");
             mapColorPanel = root.Q("DashboardMapColors");
+            paletteSource = mapColorPanel;
             mapColorContent = mapColorPanel.Q("MapColorContent");
             mapColorEmpty = mapColorPanel.Q<Label>("MapColorEmpty");
             mapColorSelection = mapColorPanel.Q<DropDown>("ColorMode");
@@ -197,7 +197,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                     .Select(block => block.Block).ToHashSet(StringComparer.OrdinalIgnoreCase)
                 : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             dashboardHeader.SetLinkedBlocks(linkedBlocks);
-            dashboardOverlay.SetMissingGeometry(ObjectBinding?.HasData == true && ObjectBinding.BlockIdentifiers.Any(block => !linkedBlocks.Contains(block)));
             if (root.ClassListContains(DashboardOpenClass))
             {
                 if (dashboardHeader.SelectedBlock != null)
@@ -213,6 +212,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
             DashboardColors.SetSegmentColors(ObjectBinding?.HasData == true ? ObjectBinding.HousingSegments : Array.Empty<string>(), mapColors);
             DashboardColors.SetPhaseColors(ObjectBinding?.HasData == true ? ObjectBinding.AvailablePhases : Array.Empty<string>(), mapColors);
+            foreach (var key in mapColors.Keys.Where(key => key.StartsWith("category:", StringComparison.Ordinal)).ToArray())
+                mapColors.Remove(key);
+            foreach (var category in DashboardSummary.NonHousingCategories(ObjectBinding?.Data))
+                mapColors[DashboardColors.CategoryKey(category)] = DashboardColors.GetColor(category, mapColors);
             dashboardAnnotation.SetPhaseColors(mapColors);
 
             RequestMapRefresh();
@@ -414,12 +417,27 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void RequestMapRefresh() => mapRefreshPending = true;
 
+        private DashboardMapLayer CurrentMapLayer => dashboardOverlay.NonHousing ? selectedMapLayer switch
+        {
+            DashboardMapLayer.Segment => DashboardMapLayer.Category,
+            DashboardMapLayer.Dwellings => DashboardMapLayer.GrossFloorArea,
+            _ => selectedMapLayer
+        } : selectedMapLayer;
+
         private void RefreshMapColors()
         {
             var dashboardOpen = root.ClassListContains(DashboardOpenClass);
-            mapStyling?.Update(selectedMapLayer,
+            var composition = dashboardOverlay.NonHousing ? "Grootste functiecategorie" : "Grootste woningsegment";
+            if (mapColorSelection.choices[1] != composition)
+            {
+                mapColorSelection.choices[1] = composition;
+                mapColorSelection.choices[2] = dashboardOverlay.NonHousing ? "BVO (m\u00b2)" : "Aantal woningen";
+                mapColorSelection.SetValueWithoutNotify(mapColorSelection.choices[(int)selectedMapLayer]);
+                mapColorSelection.SetValue((int)selectedMapLayer);
+            }
+            mapStyling?.Update(CurrentMapLayer,
                 ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null,
-                dashboardOpen ? dashboardOverlay.SelectedProgramPhase : null);
+                dashboardOpen ? dashboardOverlay.SelectedProgramPhase : null, dashboardOverlay.NonHousing);
         }
 
         private void RefreshMapLegend()
@@ -427,13 +445,18 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             mapLegend.Clear();
             var hasData = ObjectBinding?.HasData == true;
             var hasLinkedObjects = hasData && (ObjectBinding.Objects.Count > 0 || ObjectBinding.ObjObjects.Count > 0 || ObjectBinding.GlbObjects.Count > 0);
+            var linkedBlocks = hasData ? ObjectBinding.Objects.Values.Concat(ObjectBinding.ObjObjects.Values).Concat(ObjectBinding.GlbObjects.Values)
+                .Select(block => block.Block).ToHashSet(StringComparer.OrdinalIgnoreCase) : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var programBlocks = !hasData ? Enumerable.Empty<string>() : dashboardOverlay.NonHousing
+                ? ObjectBinding.Data.NonHousing.Select(row => row.Block) : ObjectBinding.Data.Housing.Select(row => row.Block);
+            dashboardOverlay.SetMissingGeometry(programBlocks.Distinct(StringComparer.OrdinalIgnoreCase).Any(block => !linkedBlocks.Contains(block)));
             mapColorEmpty.text = hasData ? "Geen 3D-objecten gekoppeld aan de dashboardgegevens." : "Geen gegevens beschikbaar";
             mapColorContent.EnableInClassList(UtilityClassConstants.HIDDEN, !hasLinkedObjects);
             mapColorEmpty.EnableInClassList(UtilityClassConstants.HIDDEN, hasLinkedObjects);
             if (!hasLinkedObjects || !DashboardColors.HasMapColors(mapColors))
                 return;
 
-            switch (selectedMapLayer)
+            switch (CurrentMapLayer)
             {
                 case DashboardMapLayer.Base:
                     AddMapLegendEntry("base", "Basiskleur / geen data");
@@ -453,6 +476,15 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 case DashboardMapLayer.Phase:
                     foreach (var phase in mapStyling.VisiblePhases)
                         AddMapLegendEntry(DashboardColors.PhaseKey(phase), phase);
+                    break;
+                case DashboardMapLayer.GrossFloorArea:
+                    AddMapLegendEntry("bvo-low", "Minder dan 5.000 m\u00b2");
+                    AddMapLegendEntry("bvo-medium", "5.000 tot minder dan 15.000 m\u00b2");
+                    AddMapLegendEntry("bvo-high", "Vanaf 15.000 m\u00b2");
+                    break;
+                case DashboardMapLayer.Category:
+                    foreach (var category in DashboardSummary.NonHousingCategories(ObjectBinding.Data))
+                        AddMapLegendEntry(DashboardColors.CategoryKey(category), "Meest " + category);
                     break;
             }
             if (selectedMapLayer != DashboardMapLayer.Base)

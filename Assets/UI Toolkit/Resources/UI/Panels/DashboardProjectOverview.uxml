@@ -15,6 +15,7 @@
             <ui:Label text="BVO niet-wonen" class="text-header"/>
             <ui:Label name="ProjectNonHousingGrossFloorArea" text="&#8212;" class="text-header dashboard-project-overview__value"/>
             <ui:Label text="Totaal m&#178;"/>
+            <ui:Label name="ProjectNonHousingPhase" text="Laatste beschikbare gegevens"/>
         </ui:VisualElement>
         <ui:VisualElement class="dashboard-project-overview__card">
             <ui:Label text="Sociaal" class="text-header"/>

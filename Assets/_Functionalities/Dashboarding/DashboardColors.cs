@@ -18,6 +18,8 @@ namespace Netherlands3D.Twin.DataSets
             ("free-sector", new("--color-dashboard-segment-free-sector")),
             ("low", new("--color-dashboard-dwellings-low")), ("medium", new("--color-dashboard-dwellings-medium")),
             ("high", new("--color-dashboard-dwellings-high")),
+            ("bvo-low", new("--color-dashboard-bvo-low")), ("bvo-medium", new("--color-dashboard-bvo-medium")),
+            ("bvo-high", new("--color-dashboard-bvo-high")),
             ("bbp", new("--color-dashboard-phase-bbp")), ("so", new("--color-dashboard-phase-so")),
             ("vo", new("--color-dashboard-phase-vo")), ("do", new("--color-dashboard-phase-do")),
             ("phase-unavailable", new("--color-dashboard-phase-unavailable")),
@@ -47,7 +49,7 @@ namespace Netherlands3D.Twin.DataSets
 
         public static bool HasMapColors(IReadOnlyDictionary<string, Color> colors)
         {
-            foreach (var key in new[] { "base", "social", "mid-rent", "free-sector", "low", "medium", "high", "bbp", "so", "vo", "do" })
+            foreach (var key in new[] { "base", "social", "mid-rent", "free-sector", "low", "medium", "high", "bvo-low", "bvo-medium", "bvo-high", "bbp", "so", "vo", "do" })
             {
                 if (!colors.ContainsKey(key))
                     return false;
@@ -56,6 +58,8 @@ namespace Netherlands3D.Twin.DataSets
         }
 
         public static string SegmentKey(string segment) => "segment:" + segment.ToUpperInvariant();
+
+        public static string CategoryKey(string category) => "category:" + category.ToUpperInvariant();
 
         public static string PhaseKey(string phase) => "phase:" + phase.ToUpperInvariant();
 

@@ -35,28 +35,48 @@ namespace Netherlands3D.Twin.DataSets
 
         public static PhaseTotals CalculateCurrent(DashboardData data) => CalculatePhases(data).LastOrDefault();
 
-        public static int CountBlocks(DashboardData data) => CountBlocks(data, null);
+        public static string[] GetProgramPhases(DashboardData data, bool nonHousing, string block = null)
+        {
+            if (data == null)
+                return Array.Empty<string>();
 
-        public static int CountBlocks(DashboardData data, string phase)
+            var phases = nonHousing
+                ? data.NonHousing.Where(row => block == null || Equal(row.Block, block)).Select(row => row.Phase)
+                : data.Housing.Where(row => block == null || Equal(row.Block, block)).Select(row => row.Phase);
+            var available = phases.ToHashSet(StringComparer.OrdinalIgnoreCase);
+            return DashboardData.Phases.Where(available.Contains).ToArray();
+        }
+
+        public static int CountBlocks(DashboardData data, string phase, bool nonHousing)
         {
             if (data == null)
                 return 0;
 
-            return data.Housing.Where(row => phase == null || Equal(row.Phase, phase)).Select(row => row.Block)
-                .Concat(data.NonHousing.Where(row => phase == null || Equal(row.Phase, phase)).Select(row => row.Block))
-                .Concat(data.ProgramChanges.Where(row => phase == null || Equal(row.Phase, phase)).Select(row => row.Block))
-                .Distinct(StringComparer.OrdinalIgnoreCase).Count();
+            var blocks = nonHousing
+                ? data.NonHousing.Where(row => phase == null || Equal(row.Phase, phase)).Select(row => row.Block)
+                : data.Housing.Where(row => phase == null || Equal(row.Phase, phase)).Select(row => row.Block);
+            return blocks.Distinct(StringComparer.OrdinalIgnoreCase).Count();
         }
 
-        public static string[] GetBlockPhases(DashboardData data, string block)
-        {
-            if (data == null || block == null)
-                return Array.Empty<string>();
+        public static string[] NonHousingCategories(DashboardData data) => data == null ? Array.Empty<string>()
+            : data.NonHousing.Select(row => SplitCategory(row.Category).Main).Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(category => category, StringComparer.OrdinalIgnoreCase).ToArray();
 
-            var available = data.Housing.Where(row => Equal(row.Block, block)).Select(row => row.Phase)
-                .Concat(data.NonHousing.Where(row => Equal(row.Block, block)).Select(row => row.Phase))
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
-            return DashboardData.Phases.Where(available.Contains).ToArray();
+        public static NonHousingBlockSummary[] CalculateNonHousingBlocks(DashboardData data, string phase = null, string block = null)
+        {
+            if (data == null)
+                return Array.Empty<NonHousingBlockSummary>();
+
+            var selection = SelectRows(data.NonHousing, row => row.Block, row => row.Phase, phase ?? DashboardData.Phases.Last(), block, useEarlierPhases: phase == null);
+            var categories = NonHousingCategories(data);
+            return selection.Sources.BlockPhases.Where(source => phase == null || source.Value != null)
+                .OrderBy(source => source.Key, StringComparer.OrdinalIgnoreCase).Select(source =>
+                {
+                    var rows = selection.Rows.Where(row => Equal(row.Block, source.Key)).ToArray();
+                    var values = categories.Select(category => Sum(rows.Where(row => Equal(SplitCategory(row.Category).Main, category))
+                        .Select(row => row.GrossFloorArea), source.Value == null)).ToArray();
+                    return new NonHousingBlockSummary(source.Key, source.Value, Sum(rows.Select(row => row.GrossFloorArea), source.Value == null), categories, values);
+                }).ToArray();
         }
 
         public static (string Label, NumericResult Total, NumericResult[] Values)[] CalculateHousingRooms(DashboardData data)
@@ -416,6 +436,24 @@ namespace Netherlands3D.Twin.DataSets
                 Phase = phase;
                 Housing = housing;
                 NonHousing = nonHousing;
+            }
+        }
+
+        internal readonly struct NonHousingBlockSummary
+        {
+            public string Block { get; }
+            public string SourcePhase { get; }
+            public NumericResult Total { get; }
+            public string[] Categories { get; }
+            public NumericResult[] Values { get; }
+
+            public NonHousingBlockSummary(string block, string sourcePhase, NumericResult total, string[] categories, NumericResult[] values)
+            {
+                Block = block;
+                SourcePhase = sourcePhase;
+                Total = total;
+                Categories = categories;
+                Values = values;
             }
         }
 
