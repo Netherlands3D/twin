@@ -101,7 +101,7 @@ namespace Netherlands3D.Timeline
         {
             foreach (var timeline in timelineStatusStylingLayerPropertyData.TimestampCollections)
             {
-                SetFeatureAttribute(currentTime, timeline.Key, timeline.Value);
+                //SetFeatureAttribute(currentTime, timeline.Key, timeline.Value); todo merge main time
             }
         }
     }
