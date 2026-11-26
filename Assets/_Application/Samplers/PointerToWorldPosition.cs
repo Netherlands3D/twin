@@ -3,6 +3,7 @@ using UnityEngine;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Heightmap;
 
 namespace Netherlands3D.Twin.Samplers
 {

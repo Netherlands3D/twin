@@ -1,17 +1,14 @@
 ﻿using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Samplers
+namespace Netherlands3D.Twin.Heightmap
 {
     public class HeightMap : MonoBehaviour
     {
         [SerializeField] private Texture2D heightMap;
-
-        private double minX = StandardBoundingBoxes.RD_NetherlandsBounds_Cropped.BottomLeft.easting;
-        private double maxX = StandardBoundingBoxes.RD_NetherlandsBounds_Cropped.TopRight.easting;
-        private double minY = StandardBoundingBoxes.RD_NetherlandsBounds_Cropped.BottomLeft.northing;
-        private double maxY = StandardBoundingBoxes.RD_NetherlandsBounds_Cropped.TopRight.northing;
+        
+        private readonly Coordinate bottomLeft = new (CoordinateSystem.WGS84_LatLon, 50.75035d, 3.35833d); //bottomleft corner matching the heightmap texture
+        private readonly Coordinate topRight = new (CoordinateSystem.WGS84_LatLon, 53.5171625d, 7.22778d); //topright corner matching the heightmap texture
 
         private const float lowestPoint = -6.76f;
         private const float highestPoint = 322.4f;
@@ -30,8 +27,8 @@ namespace Netherlands3D.Twin.Samplers
             }
 
             Coordinate rd = coordinate.Convert(CoordinateSystem.RD);
-            double u = (rd.easting - minX) / (maxX - minX);
-            double v = (rd.northing - minY) / (maxY - minY);
+            double u = (rd.easting - bottomLeft.easting) / (topRight.easting - bottomLeft.easting);
+            double v = (rd.northing - bottomLeft.northing) / (topRight.northing - bottomLeft.northing);
             
             Color pixel;
             if (bilinear)

@@ -1,8 +1,7 @@
 using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Twin.Heightmap;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 

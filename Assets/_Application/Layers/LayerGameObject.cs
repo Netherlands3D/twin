@@ -10,6 +10,7 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using System.Linq;
+using Netherlands3D.Twin.Heightmap;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 #if UNITY_EDITOR

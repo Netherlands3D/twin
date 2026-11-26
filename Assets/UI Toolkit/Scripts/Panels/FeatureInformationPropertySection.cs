@@ -5,12 +5,12 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using Newtonsoft.Json.Linq;
 using Netherlands3D.SimpleJSON; //todo when cityjson attributes will not use simplejson, convert also the parsing methods to flatten arrays also to newtonsoft
+using Netherlands3D.Twin.Heightmap; 
 using UnityEngine;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;

@@ -12,6 +12,8 @@ namespace Netherlands3D.Twin.Cameras
         
         private Vector3 lastPosition;
 
+        public const float CAMERA_MAXHEIGHT = 1500;
+
         public Camera ActiveCamera
         {
             get
@@ -62,7 +64,6 @@ namespace Netherlands3D.Twin.Cameras
             current = cameraObject;
             previous?.gameObject.SetActive(false);
             cameraObject.gameObject.SetActive(true);
-            
             OnSwitchCamera.Invoke(cameraObject);
         }
 
