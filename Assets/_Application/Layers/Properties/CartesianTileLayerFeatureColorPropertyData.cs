@@ -23,12 +23,10 @@ namespace Netherlands3D.Twin.Layers.Properties
             public Color color;
         }
         
-        public void SetColor(LayerFeature layerFeature, Color color, string colorPropertyType)
+        public void SetColor(StylingFeature stylingFeature, Color color, string colorPropertyType)
         {
-            if (layerFeature.Geometry is not Material mat) return;
-            
-            int.TryParse(layerFeature.Attributes[MaterialIndexKey], out int materialIndexIdentifier);
-            layerFeature.Attributes.TryGetValue(MaterialNameIdentifier, out string materialName);
+            int.TryParse(stylingFeature.Attributes[MaterialIndexKey], out int materialIndexIdentifier);
+            stylingFeature.Attributes.TryGetValue(MaterialNameIdentifier, out string materialName);
 
             SetColorByMaterialIndex(materialIndexIdentifier, materialName, color, colorPropertyType);
         }
@@ -47,46 +45,39 @@ namespace Netherlands3D.Twin.Layers.Properties
                 )
             );
             SetColorByColorPropertyType(color, stylingRule, colorPropertyType);
+
             SetStylingRule(stylingRuleKey, stylingRule);
         }
         
-        public void SetColorsByMaterialIndices(List<ColorData> colors, string colorPropertyType)
+        public void SetColorsByMaterialIndices(List<ColorData> colors)
         {
             stylingRuleKeys.Clear();
             foreach (var colorData in colors)
             {
-                var stylingRuleName = colorData.name;
                 var stylingRuleKey = ColorizationStyleRuleKey(colorData.index);
-
                 // Add or set the colorization of this feature by its material index
-                var stylingRule = new StylingRule(
-                    stylingRuleName,
-                    Expression.EqualTo(
-                        Expression.Get(MaterialIndexKey),
-                        colorData.index.ToString()
-                    )
-                );
+                var stylingRule = StylingRules[stylingRuleKey];
                 //todo whenever the ui changes we should be able to choose which color property type here to use
+                var colorPropertyType = GetColorPropertyTypeForStylingRule(stylingRuleKey);
                 SetColorByColorPropertyType(colorData.color, stylingRule, colorPropertyType);
                 stylingRuleKeys.Add(stylingRuleKey, stylingRule);
             }
             SetStylingRules(stylingRuleKeys);
         }
         
-        public Color? GetColor(LayerFeature layerFeature, string colorPropertyType)
+        public void SetVisibilityByMaterialIndices(Dictionary<int, bool> newValues)
         {
-            if (layerFeature.Geometry is not Material mat) return null;
-
-            int.TryParse(layerFeature.GetAttribute(MaterialIndexKey), out int materialIndexIdentifier);
-            var stylingRuleKey = ColorizationStyleRuleKey(materialIndexIdentifier);
-            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
+            stylingRuleKeys.Clear();
+            foreach (var kvp in newValues)
             {
-                if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
-                    return mat.color;
-                else
-                    return null;
+                var stylingRuleKey = ColorizationStyleRuleKey(kvp.Key);
+                // Add or set the colorization of this feature by its material index
+                var stylingRule = StylingRules[stylingRuleKey];
+                //todo whenever the ui changes we should be able to choose which color property type here to use
+                stylingRule.Symbolizer.SetVisibility(kvp.Value);
+                stylingRuleKeys.Add(stylingRuleKey, stylingRule);
             }
-            return GetColorByColorPropertyType(stylingRule, colorPropertyType);
+            SetStylingRules(stylingRuleKeys);
         }
         
         public Color? GetColorByStylingRuleKey(string stylingRuleKey, string colorPropertyType)
@@ -96,6 +87,16 @@ namespace Netherlands3D.Twin.Layers.Properties
                 return null;
             }
             return GetColorByColorPropertyType(stylingRule, colorPropertyType);
+        }
+        
+        public bool? GetVisibilityByStylingRuleKey(string stylingRuleKey)
+        {
+            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
+            {
+                return null;
+            }
+
+            return stylingRule.Symbolizer.GetVisibility();
         }
         
         public void RemoveColorForMaterialIndex(int index)
