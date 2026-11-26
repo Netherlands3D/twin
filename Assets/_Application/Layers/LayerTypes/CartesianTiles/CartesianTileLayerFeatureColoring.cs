@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             
-            visualization.OnFeatureCreated += AddAttributesToLayerFeature;
+            visualization.OnStylingFeatureCreated += AddAttributesToLayerFeature;
             featureColorPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             
@@ -50,15 +50,16 @@ namespace Netherlands3D.Twin.layers.properties
                 binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
 
                 var layerFeature = visualization.CreateFeature(material);
-                visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-                var color = featureColorPropertyData.GetColor(layerFeature, Symbolizer.FillColorProperty);
+                visualization.StylingFeatures.Add(layerFeature.Geometry, layerFeature);
+                var symbolizer =  visualization.GetStyling(layerFeature);
+                var color = symbolizer.GetFillColor();
                 featureColorPropertyData.SetColor(layerFeature, color.GetValueOrDefault(Color.white), Symbolizer.FillColorProperty);
             }
         }
         
         private void OnApplyStyling()
         {
-            foreach (var (_, feature) in visualization.LayerFeatures)
+            foreach (var (_, feature) in visualization.StylingFeatures)
             {
                 //do cascading to get css result styling
                 Symbolizer symbolizer = visualization.GetStyling(feature);
@@ -77,7 +78,7 @@ namespace Netherlands3D.Twin.layers.properties
             }
         }
         
-        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             if (feature.Geometry is not Material mat) return feature;
 
@@ -92,7 +93,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             
-            visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
+            visualization.OnStylingFeatureCreated -= AddAttributesToLayerFeature;
             featureColorPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
         }

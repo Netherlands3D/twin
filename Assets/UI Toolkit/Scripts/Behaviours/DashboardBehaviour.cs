@@ -43,11 +43,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnToggleDashboard(InputAction.CallbackContext _)
         {
-            if (input.IsInputFieldSelected()) return;
-
             // The WebGL test override changes permission and Dashboarding together for this session only.
             var enable = !dashboardFunctionality.IsEnabled;
-            configuration.AllowHiddenFeatures = enable;
             dashboardFunctionality.IsEnabled = enable;
         }
     }
