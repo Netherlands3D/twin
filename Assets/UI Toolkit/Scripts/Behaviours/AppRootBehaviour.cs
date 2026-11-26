@@ -40,7 +40,7 @@ namespace Netherlands3D
         public void SwitchToHud(Hud hud)
         {
             appRoot.Q<DefaultHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, hud != Hud.DefaultHUD);
-            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, hud != Hud.DefaultHUD);
+            appRoot.Q<FPVHUD>().EnableInClassList(UtilityClassConstants.HIDDEN, hud != Hud.FPVHUD);
             appRoot.Q<VisualElement>("DashboardOverlay").EnableInClassList(UtilityClassConstants.HIDDEN, hud != Hud.DashboardOverlay);
         }
 

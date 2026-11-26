@@ -38,6 +38,7 @@ namespace Netherlands3D.Twin.Services
 
         private async void Awake()
         {
+            InitializeSpawner();
             await assetLibrary.InitializeCatalogs();
         }
 
