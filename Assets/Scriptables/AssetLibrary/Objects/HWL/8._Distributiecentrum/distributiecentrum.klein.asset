@@ -15,4 +15,4 @@ MonoBehaviour:
   id: objects_distributiecentrum.klein
   title: Distributiecentrum - klein
   description: 
-  prefab: {fileID: 4705758047892485819, guid: 10a054f81aefef24d8a205a90d1c1fcd, type: 3}
+  prefab: {fileID: 4705758047892485819, guid: ca7633045d5a1d24888164f23f10b11f, type: 3}

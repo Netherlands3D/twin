@@ -15,4 +15,4 @@ MonoBehaviour:
   id: objects-boerderij
   title: Boerderij
   description: 
-  prefab: {fileID: 4705758047892485819, guid: 06d974202e360544981b65c32d65342d, type: 3}
+  prefab: {fileID: 4705758047892485819, guid: 4ca0562d3683aa1449e4784588a44edd, type: 3}

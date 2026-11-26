@@ -15,4 +15,4 @@ MonoBehaviour:
   id: objects_distributiecentrum.entree
   title: Distributiecentrum - entree
   description: 
-  prefab: {fileID: 4705758047892485819, guid: 10a054f81aefef24d8a205a90d1c1fcd, type: 3}
+  prefab: {fileID: 4705758047892485819, guid: 41a70fe23392b754abacfe4aaf42b966, type: 3}

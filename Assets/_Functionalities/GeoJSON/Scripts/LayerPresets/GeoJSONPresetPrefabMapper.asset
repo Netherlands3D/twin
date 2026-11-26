@@ -13,7 +13,15 @@ MonoBehaviour:
   m_Name: GeoJSONPresetPrefabMapper
   m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Panels.GeoJSONPresetPrefabMapper
   mappings:
-  - Type: buismast | Wintrack-draagmast
-    PrefabIdentifier: 6d417c78e8df4974b9f4306c99dd4ef9
   - Type: buismast | Windrack-hoekmast of -afspanmast
     PrefabIdentifier: 2c27c4b373b42b24480bb463e1b2956c
+  - Type: buismast | Wintrack-draagmast
+    PrefabIdentifier: 6d417c78e8df4974b9f4306c99dd4ef9
+  - Type: buismast | Wintrack-V-draagmast
+    PrefabIdentifier: cbd349c3b1eff3e45abbf9d1c5b78f0b
+  - Type: vakwerkmast | Donaumast
+    PrefabIdentifier: 353ba723424e3d0469d4c770da8fc061
+  - Type: vakwerkmast | M-compactmast
+    PrefabIdentifier: bcdd07968438bec4f96062986449484d
+  - Type: vakwerkmast | Tonmast
+    PrefabIdentifier: 65e912b7bebaca547a36a19782791384

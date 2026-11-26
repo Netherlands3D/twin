@@ -72,6 +72,12 @@ MonoBehaviour:
   prefabIdentifier: 085b1d9906ffa084b9942b73971ebfeb
   thumbnail: {fileID: 0}
   spawnLocation: 0
+  VisualisationError:
+    m_PersistentCalls:
+      m_Calls: []
+  OnVisibilityChanged:
+    m_PersistentCalls:
+      m_Calls: []
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
@@ -129,7 +135,7 @@ PrefabInstance:
     - target: {fileID: -4651724363257294730, guid: e6fdb159235464942ba15410ab970a67,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4651724363257294730, guid: e6fdb159235464942ba15410ab970a67,
         type: 3}

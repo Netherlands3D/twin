@@ -15,4 +15,4 @@ MonoBehaviour:
   id: objects-schuur
   title: schuur
   description: 
-  prefab: {fileID: 4705758047892485819, guid: 06d974202e360544981b65c32d65342d, type: 3}
+  prefab: {fileID: 4705758047892485819, guid: 1c1af85a271ef21409f054e65ae283ca, type: 3}
