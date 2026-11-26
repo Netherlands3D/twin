@@ -25,7 +25,7 @@ MonoBehaviour:
     viewer, <a href=\"https://netherlands3d.eu/docs/handleiding/first-person-viewer\">kijk
     in de documentatie</a>."
   configuration: {fileID: 0}
-  settingsCategory: 1
+  settingsCategory: 0
   statePersistence: 0
   enableOnHosts: []
   OnEnableFunctionality:
