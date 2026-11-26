@@ -10,8 +10,6 @@ namespace Netherlands3D
     [RequireComponent(typeof(UIDocument))]
     public class AppRootBehaviour : MonoBehaviour
     {
-        private const string DashboardOpenClass = "app--dashboard-open";
-
         public VisualElement Root => appRoot;
 
         private UIDocument appDocument;

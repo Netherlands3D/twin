@@ -1,0 +1,52 @@
+.dashboard-hud__header {
+    flex-direction: row;
+    flex-shrink: 0;
+    align-items: center;
+    min-height: var(--spacing-15);
+    padding: var(--spacing-2) var(--spacing-5);
+    background-color: var(--color-white);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-100);
+}
+
+.dashboard-hud__header-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+}
+
+.dashboard-hud__title {
+    flex-grow: 1;
+    margin: 0;
+}
+
+.dashboard-hud__toolbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+    margin-right: var(--spacing-4);
+}
+
+.dashboard-hud__toolbar-label {
+    margin-right: var(--spacing-3);
+}
+
+.dashboard-hud__button-group {
+    margin: 0;
+    max-width: 100%;
+}
+
+.dashboard-hud__button-group .unity-toggle-button-group__container {
+    flex-wrap: wrap;
+}
+
+.dashboard-hud__button-group .button {
+    margin-right: var(--spacing-2);
+    min-height: var(--spacing-10);
+    padding: var(--spacing-1) var(--spacing-2);
+}
