@@ -1,14 +1,11 @@
 using Netherlands3D.Coordinates;
-using Netherlands3D.JavascriptConnection;
+using Netherlands3D.Cursor;
 using Netherlands3D.Minimap;
-using Netherlands3D.Services;
 using Netherlands3D.Twin;
-using Netherlands3D.Twin.Cameras;
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
