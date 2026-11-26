@@ -43,7 +43,7 @@ namespace Netherlands3D.AddressSearch
     public class AddressSearchService : MonoBehaviour
     {
         private const string locationApiBaseUrl = "https://api.pdok.nl/kadaster/location-api/v1";
-        private const int rows =50;
+        private const int rows =10;
         private const int maxResults = 10;
         private const float minimumScore = 0;
         private const int charactersNeededBeforeSearch = 2;
@@ -184,7 +184,7 @@ namespace Netherlands3D.AddressSearch
                        relevance.ToString(CultureInfo.InvariantCulture);
             }
 
-            url += "&limit=" + Mathf.Clamp(rows, 1, 50);
+            url += "&limit=" + Mathf.Clamp(rows, 1, maxResults);
             url += "&crs=" + UnityWebRequest.EscapeURL(Crs84);
             url += "&f=json";
             url += "&bbox=" + GetNetherlandsBbox();
@@ -298,10 +298,7 @@ namespace Netherlands3D.AddressSearch
             if (requestVersion != searchRequestVersion) yield break;
 
             List<SuggestionResult> best = results
-                .GroupBy(result => result.CollectionId)
-                .SelectMany(group => group
-                .OrderBy(result => result.Label, StringComparer.CurrentCultureIgnoreCase))
-                .OrderByDescending(result => result.Score)
+                .OrderBy(result => result.Label, StringComparer.CurrentCultureIgnoreCase)
                 .Take(maxResults)
                 .ToList();
 
