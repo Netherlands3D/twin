@@ -60,12 +60,16 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
 
             var source = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
-            var preset = new DashboardCsvPreset.Args(localFile.FileName, new DashboardCsvPropertyData(source, data));
+            var propertyData = new DashboardCsvPropertyData(source, data);
+            var preset = new DashboardCsvPreset.Args(localFile.FileName, propertyData);
 
             foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
             {
                 if (layer.IsDisposed || !layer.HasProperty<DashboardCsvPropertyData>())
                     continue;
+
+                if (propertyData.LogoFile == null)
+                    propertyData.LogoFile = layer.GetProperty<DashboardCsvPropertyData>().LogoFile;
 
                 var parent = layer.ParentLayer;
                 var siblingIndex = layer.SiblingIndex;

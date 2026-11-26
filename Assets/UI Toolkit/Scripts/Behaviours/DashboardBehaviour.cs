@@ -1,6 +1,12 @@
+using System;
+using System.IO;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Configuration;
+using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,7 +27,11 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         [SerializeField] private Functionality dashboardFunctionality;
 
         private InputService input;
+        private DashboardDataBinding dataBinding;
         private VisualElement root;
+        private DashboardHeader dashboardHeader;
+        private DashboardCsvPropertyData logoSource;
+        private Texture2D logoTexture;
         private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
         private VisualElement previousFocus;
@@ -29,6 +39,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void Start()
         {
             root = GetComponent<AppRootBehaviour>().Root;
+            dashboardHeader = root.Q<DashboardHeader>();
             toolbarNavigation = root.Q<ToolbarNavigation>();
             closeButton = root.Q<Button>("CloseDashboard");
             input = ServiceLocator.GetService<InputService>();
@@ -47,6 +58,9 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             toolbarNavigation.OnDashboardClicked += OpenDashboard;
             closeButton.clicked += CloseDashboard;
             dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
+            dataBinding = new DashboardDataBinding(App.Layers, ProjectDataHandler.Instance, dashboardFunctionality);
+            dataBinding.Changed += RefreshProjectTitle;
+            RefreshProjectTitle();
         }
 
         private void OnDisable()
@@ -57,7 +71,67 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             toolbarNavigation.OnDashboardClicked -= OpenDashboard;
             closeButton.clicked -= CloseDashboard;
             dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
+            dataBinding.Changed -= RefreshProjectTitle;
+            dataBinding.Dispose();
+            dataBinding = null;
+            SetLogoSource(null);
             CloseDashboard();
+        }
+
+        private void RefreshProjectTitle()
+        {
+            dashboardHeader.SetProjectTitle(dataBinding.Data?.ProjectTitle);
+            SetLogoSource(dataBinding.Data != null ? dataBinding.Source : null);
+        }
+
+        private void SetLogoSource(DashboardCsvPropertyData source)
+        {
+            if (logoSource == source)
+                return;
+
+            if (logoSource != null)
+                logoSource.OnLogoFileChanged.RemoveListener(RefreshLogo);
+
+            logoSource = source;
+            if (logoSource != null)
+                logoSource.OnLogoFileChanged.AddListener(RefreshLogo);
+
+            RefreshLogo(logoSource?.LogoFile);
+        }
+
+        private void RefreshLogo(Uri logoFile)
+        {
+            dashboardHeader.SetLogo(null);
+            if (logoTexture != null)
+            {
+                Destroy(logoTexture);
+                logoTexture = null;
+            }
+
+            if (logoFile == null || logoFile.Scheme != "project")
+                return;
+
+            var texture = new Texture2D(2, 2);
+            try
+            {
+                if (!texture.LoadImage(File.ReadAllBytes(AssetUriFactory.GetLocalPath(logoFile)), true))
+                {
+                    Debug.LogWarning("Het dashboardlogo kan niet worden geladen. Kies een geldig PNG- of JPG-bestand.");
+                    return;
+                }
+
+                logoTexture = texture;
+                dashboardHeader.SetLogo(logoTexture);
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or UnityException)
+            {
+                Debug.LogWarning($"Het dashboardlogo kan niet worden geladen ({exception.GetType().Name}).");
+            }
+            finally
+            {
+                if (logoTexture != texture)
+                    Destroy(texture);
+            }
         }
 
         private void OnToggleDashboard(InputAction.CallbackContext _)
@@ -74,6 +148,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         {
             if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || root.ClassListContains(DashboardOpenClass)) return;
 
+            RefreshProjectTitle();
             previousFocus = root.focusController?.focusedElement as VisualElement;
             root.AddToClassList(DashboardOpenClass);
             // Move focus after the dashboard has become visible.

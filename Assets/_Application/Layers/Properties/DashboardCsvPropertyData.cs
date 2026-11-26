@@ -1,17 +1,34 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "DashboardCsv")]
-    public sealed class DashboardCsvPropertyData : LayerURLPropertyData
+    public sealed class DashboardCsvPropertyData : LayerURLPropertyData, ILayerPropertyDataWithAssets
     {
+        [DataMember] private Uri logoFile;
+
+        [JsonIgnore] public readonly UnityEvent<Uri> OnLogoFileChanged = new();
         [JsonIgnore] public DashboardData Data { get; private set; }
         [JsonIgnore] internal bool HasLocalSource { get; set; }
+        [JsonIgnore] public readonly UnityEvent DataChanged = new();
+
+        [JsonIgnore]
+        public Uri LogoFile
+        {
+            get => logoFile;
+            set
+            {
+                logoFile = value;
+                OnLogoFileChanged.Invoke(value);
+            }
+        }
 
         public DashboardCsvPropertyData()
         {
@@ -28,11 +45,21 @@ namespace Netherlands3D.Twin.Layers.Properties
             SetData(DashboardCsv.ReadFile(AssetUriFactory.GetLocalPath(Url)));
         }
 
-        internal void ClearLoadedData() => Data = null;
+        internal void ClearLoadedData() => SetData(null);
+
+        IEnumerable<LayerAsset> ILayerPropertyDataWithAssets.GetAssets()
+        {
+            foreach (var asset in base.GetAssets())
+                yield return asset;
+
+            if (logoFile != null)
+                yield return new LayerAsset(this, logoFile);
+        }
 
         private void SetData(DashboardData data)
         {
             Data = data;
+            DataChanged.Invoke();
 #if UNITY_EDITOR
             if (data == null || Url == null)
                 return;

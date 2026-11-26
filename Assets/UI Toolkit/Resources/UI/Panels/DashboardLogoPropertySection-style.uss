@@ -1,0 +1,8 @@
+.dashboard-logo-property-section__file-name {
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+}
+
+.dashboard-logo-property-section__button {
+    align-self: flex-start;
+}

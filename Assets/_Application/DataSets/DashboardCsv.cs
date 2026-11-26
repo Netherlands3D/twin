@@ -87,6 +87,7 @@ namespace Netherlands3D.Twin.DataSets
             var nonHousing = new List<DashboardData.NonHousingRow>();
             var programChanges = new List<DashboardData.ProgramChangeRow>();
             var skippedRows = new List<(int, string)>();
+            string projectTitle = null;
 
             foreach (var (lineNumber, values) in rows)
             {
@@ -97,6 +98,18 @@ namespace Netherlands3D.Twin.DataSets
                         : $"Te veel velden. Er staan {values.Length} velden in plaats van {headers.Length}.";
                     skippedRows.Add((lineNumber, reason));
                     continue;
+                }
+
+                if (columnIndices.TryGetValue("Projecttitel", out var titleColumn))
+                {
+                    var title = values[titleColumn]?.Trim();
+                    if (!string.IsNullOrEmpty(title))
+                    {
+                        if (projectTitle != null && !string.Equals(projectTitle, title, StringComparison.Ordinal))
+                            throw new DashboardImportFormatException($"Rij {lineNumber}: vul in de kolom 'Projecttitel' overal dezelfde titel in.");
+
+                        projectTitle = title;
+                    }
                 }
 
                 var issues = new List<string>();
@@ -159,7 +172,7 @@ namespace Netherlands3D.Twin.DataSets
                     skippedRows.Add((lineNumber, string.Join(", ", issues) + "."));
             }
 
-            return new DashboardData(housing, nonHousing, programChanges, skippedRows);
+            return new DashboardData(housing, nonHousing, programChanges, skippedRows, projectTitle);
         }
 
         private static CsvReader Open(TextReader reader)

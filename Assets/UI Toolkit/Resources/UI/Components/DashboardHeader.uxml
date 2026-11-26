@@ -1,6 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="dashboard-hud__header">
     <ui:VisualElement class="dashboard-hud__header-content">
-        <ui:Label text="Dashboard" class="inspector-header-title dashboard-hud__title"/>
+        <ui:VisualElement class="dashboard-hud__branding">
+            <ui:VisualElement name="DashboardLogo" picking-mode="Ignore" class="dashboard-hud__logo hidden"/>
+            <ui:Label text="Dashboard" enable-rich-text="false" class="inspector-header-title dashboard-hud__title"/>
+        </ui:VisualElement>
         <ui:VisualElement class="dashboard-hud__toolbar">
             <ui:Label text="Bouwblokken" class="text-header dashboard-hud__toolbar-label"/>
             <ui:ToggleButtonGroup name="BuildingBlocks" value="0" allow-empty-selection="false" class="dashboard-hud__button-group">

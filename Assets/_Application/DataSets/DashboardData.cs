@@ -6,6 +6,7 @@ namespace Netherlands3D.Twin.DataSets
 {
     public sealed class DashboardData
     {
+        public string ProjectTitle { get; }
         public int SourceRowCount { get; }
         public int SkippedRowCount => SkippedLineNumbers.Count;
         public IReadOnlyList<int> SkippedLineNumbers { get; }
@@ -19,8 +20,9 @@ namespace Netherlands3D.Twin.DataSets
         {
         }
 
-        internal DashboardData(IReadOnlyList<HousingRow> housing, IReadOnlyList<NonHousingRow> nonHousing, IReadOnlyList<ProgramChangeRow> programChanges, IReadOnlyList<(int LineNumber, string Reason)> skippedRows)
+        internal DashboardData(IReadOnlyList<HousingRow> housing, IReadOnlyList<NonHousingRow> nonHousing, IReadOnlyList<ProgramChangeRow> programChanges, IReadOnlyList<(int LineNumber, string Reason)> skippedRows, string projectTitle = null)
         {
+            ProjectTitle = projectTitle;
             SkippedRows = skippedRows.ToArray();
             SkippedLineNumbers = SkippedRows.Select(row => row.LineNumber).ToArray();
             SourceRowCount = housing.Count + nonHousing.Count + programChanges.Count + SkippedRowCount;
