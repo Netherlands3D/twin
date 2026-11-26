@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.layers.properties
             hiddenObjectsPropertyData.SelectionMaterial = selectionMaterial;
             hiddenObjectsPropertyData.OnHiddenObjectDataStylingRuleRemoved.AddListener(OnHiddenObjectRemoved);
             
-            visualization.OnFeatureCreated += AddAttributesToLayerFeature;
+            visualization.OnStylingFeatureCreated += AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnStylingChanged);
             visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             
@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.layers.properties
             binaryMeshLayer.OnMappingRemoved.AddListener(OnRemovedMapping);
         }
         
-        private bool UpdateFeatureColor(LayerFeature feature)
+        private bool UpdateFeatureColor(StylingFeature feature)
         {
             //do cascading to get css result styling
             Symbolizer symbolizer = visualization.GetStyling(feature);
@@ -85,7 +85,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             bool changed = false;
 
-            foreach (var (_, feature) in visualization.LayerFeatures)
+            foreach (var (_, feature) in visualization.StylingFeatures)
             {
                 changed |= UpdateFeatureColor(feature);
             }
@@ -160,7 +160,7 @@ namespace Netherlands3D.Twin.layers.properties
                     if (mapping.items.TryGetValue(objectId, out var item))
                     {
                         var layerFeature = visualization.CreateFeature(item);
-                        visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                        visualization.StylingFeatures.Add(layerFeature.Geometry, layerFeature);
                         UpdateFeatureColor(layerFeature);
                         hasStyledObjects = true;
                     }
@@ -178,12 +178,12 @@ namespace Netherlands3D.Twin.layers.properties
         {
             foreach (ObjectMappingItem item in mapping.items.Values)
             {
-                visualization.LayerFeatures.Remove(item);
+                visualization.StylingFeatures.Remove(item);
             }
         }
 
         //todo check if this method probably needs a refactor since the between step of a layerfeature is not needed to store hiddenobject data
-        public static LayerFeature GetLayerFeatureFromBagId(string bagId)
+        public static StylingFeature GetLayerFeatureFromBagId(string bagId)
         {
             CartesianTileLayerGameObject[] cartesianTileLayerGameObjects = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None);
             foreach(CartesianTileLayerGameObject cartesian in cartesianTileLayerGameObjects)
@@ -205,7 +205,7 @@ namespace Netherlands3D.Twin.layers.properties
             return null;
         }
         
-        protected LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        protected StylingFeature AddAttributesToLayerFeature(StylingFeature feature)
         {
             if(feature.Geometry is ObjectMappingItem item)
             {
@@ -218,7 +218,7 @@ namespace Netherlands3D.Twin.layers.properties
         {
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             
-            visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
+            visualization.OnStylingFeatureCreated -= AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnStylingChanged);
             visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
             
