@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CsvHelper;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.Configuration;
-using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
@@ -60,30 +58,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
             var matched = AdapterChain(localFile, possibleFileTypeEvents);
             if (!matched && dashboardFile)
-                DisplayUnmatchedFile(path, fileExtension);
-        }
-
-        private static void DisplayUnmatchedFile(string path, string extension)
-        {
-            var details = "Controleer de kolommen en het bestandsformaat.";
-            if (extension == "csv")
-            {
-                try
-                {
-                    using var reader = File.OpenText(path);
-                    DashboardCsv.ValidateHeaders(reader);
-                }
-                catch (DashboardImportFormatException exception)
-                {
-                    details = exception.Message;
-                }
-                catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException)
-                {
-                    details = "Controleer of het bestand leesbaar is en als CSV is opgeslagen.";
-                }
-            }
-
-            App.Snackbar.DisplayFailure($"Dit {extension.ToUpperInvariant()}-bestand kan niet worden ingeladen. {details}");
+                App.Snackbar.DisplayError($"Dit {fileExtension.ToUpperInvariant()}-bestand kan niet worden ingeladen. Controleer de kolommen en het bestandsformaat.");
         }
 
         internal static bool CanImportCsv(string format = "CSV")
@@ -91,7 +66,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             if (Configurator.IsDashboardingEnabled)
                 return true;
 
-            App.Snackbar.DisplayFailure($"{format}-import is niet beschikbaar.");
+            App.Snackbar.DisplayError($"{format}-import is niet beschikbaar.");
             return false;
         }
 
