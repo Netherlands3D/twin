@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,6 +28,17 @@ namespace Netherlands3D.Twin.Layers.Properties
                 isEditable = value;
                 IsEditableChanged.Invoke(value);
             }
+        }
+        
+        public LayerPropertyData Clone()
+        {
+            var settings = ProjectDataHandler.SerializerSettings;
+            var json = JsonConvert.SerializeObject(this, settings);
+            var copy = (LayerPropertyData)JsonConvert.DeserializeObject(
+                json, GetType(), settings);
+
+            copy.UUID = Guid.NewGuid();
+            return copy;
         }
     }
 }

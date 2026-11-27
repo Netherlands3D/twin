@@ -203,7 +203,7 @@ namespace Netherlands3D.Twin.Projects
             return null;
         }
 
-        private readonly JsonSerializerSettings serializerSettings = new()
+        public static JsonSerializerSettings SerializerSettings { get; } = new()
         {
             TypeNameHandling = TypeNameHandling.Auto,
             Formatting = Formatting.Indented,
@@ -214,7 +214,7 @@ namespace Netherlands3D.Twin.Projects
         {
             try
             {
-                JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
+                JsonConvert.PopulateObject(json, ProjectData.Current, SerializerSettings);
             }
             catch(Exception e)
             {
@@ -293,7 +293,7 @@ namespace Netherlands3D.Twin.Projects
 
         private void WriteProjectToZip(ProjectData projectData, ZipOutputStream zipOutputStream)
         {
-            var jsonProject = JsonConvert.SerializeObject(projectData, serializerSettings);
+            var jsonProject = JsonConvert.SerializeObject(projectData, SerializerSettings);
             var entry = new ZipEntry(ProjectJsonFileNameInZip);
             zipOutputStream.PutNextEntry(entry);
             byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(jsonProject.ToString());
