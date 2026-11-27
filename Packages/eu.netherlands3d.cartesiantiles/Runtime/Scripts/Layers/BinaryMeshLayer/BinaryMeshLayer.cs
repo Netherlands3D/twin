@@ -193,7 +193,7 @@ namespace Netherlands3D.CartesianTiles
 
             var results = webRequest.downloadHandler.nativeData;
 
-            if (results.IsCreated || results.Length == 0)
+            if (!results.IsCreated || results.Length == 0)
             {
                 if(logErrors) Debug.LogError($"Downloaded empty mesh for tile {tileKey} from {url}");
                 RemoveGameObject(tileKey);
