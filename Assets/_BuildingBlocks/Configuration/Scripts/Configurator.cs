@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using KindMen.Uxios;
 using KindMen.Uxios.Interceptors;
 using KindMen.Uxios.Interceptors.NetworkInspector;
@@ -72,7 +73,6 @@ namespace Netherlands3D.Twin.Configuration
 
         public IEnumerator Execute()
         {
-            configuration.AllowHiddenFeatures = false;
             configuration.ShouldStartSetup = false;
 
             //TODO the following is disabled temporarily
@@ -80,6 +80,25 @@ namespace Netherlands3D.Twin.Configuration
             //indicatorsConfiguration.OnDossierIdChanged.RemoveListener(UpdateDossierIdAfterLoading);
             
             OnStartedLoading.Invoke();
+            
+            var url = Application.absoluteURL;
+            #if UNITY_EDITOR
+            url = debugUrl;
+            #endif
+            
+            if (Uri.TryCreate(url, UriKind.Absolute, out var applicationUri))
+            {
+                foreach (var functionality in configuration.Functionalities)
+                {
+                    if (functionality.enableOnHosts.Any(host =>
+                            string.Equals(host, applicationUri.Host,
+                                StringComparison.OrdinalIgnoreCase)))
+                    {
+                        functionality.IsEnabled = true;
+                    }
+                }
+                
+            }
             
             #if UNITY_EDITOR
             if (string.IsNullOrEmpty(debugConfig) == false)
@@ -91,11 +110,6 @@ namespace Netherlands3D.Twin.Configuration
                 yield return configuration.PopulateFromFile(Application.dataPath + '/' + configFilePath);
             #if UNITY_EDITOR
             }
-            #endif
-
-            var url = Application.absoluteURL;
-            #if UNITY_EDITOR
-            url = debugUrl;
             #endif
 
             if (string.IsNullOrEmpty(url) == false)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.LayerStyles;
@@ -68,6 +69,7 @@ namespace Netherlands3D.UI.Panels
             item.RegisterCallback<ClickEvent>(evt =>
             {
                 ColorPicker.SetColorInputComponentsWithoutNotify(item.Tile.Color);
+                ColorPicker.SetTransparentToggleWithoutNotify(item.Tile.VisibilityState);
             });
             var listViewItem = new ListViewItem(item);
             return listViewItem;
@@ -79,13 +81,12 @@ namespace Netherlands3D.UI.Panels
             if (listViewItem.Q<ColorTileListViewItem>() is not ColorTileListViewItem tile) return;
            
             string stylingRuleKey = swatchesListView.itemsSource[index] as string;
-            //todo getting the probable coloring type for a stylingrule like this should be fixed in the future by chosing the option in the ui since this is not available yet, we need to do a guess based on available coloring propertytypes in the styling rule
-            string colorProperty = stylingPropertyData.GetColorPropertyTypeForStylingRule(stylingRuleKey);
-            Color? color = stylingPropertyData.GetColorByStylingRuleKey(stylingRuleKey, colorProperty);
-            if (color.HasValue)
-            {
-                tile.Tile.ColorHex = ColorUtility.ToHtmlStringRGB(color.Value);
-            }
+            Color? color = stylingPropertyData.GetColorByStylingRuleKey(stylingRuleKey, stylingPropertyData.GetColorPropertyTypeForStylingRule(stylingRuleKey));
+            bool? visibility = stylingPropertyData.GetVisibilityByStylingRuleKey(stylingRuleKey);
+            
+            tile.Tile.Color = color.HasValue ? new Color(color.Value.r, color.Value.g, color.Value.b, 1) : Color.white;
+            tile.Tile.VisibilityState = visibility.HasValue ? visibility.Value : true;
+
             string layerName = stylingPropertyData.GetStylingRuleName(stylingRuleKey);
             //layer names usually will look like Twin_Something, lets use only the second part of the split on _
             string name = layerName.Contains('_') ? layerName.Split('_')[1] : layerName;
@@ -100,8 +101,9 @@ namespace Netherlands3D.UI.Panels
             
             stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
             ColorPicker.ColorChanged.AddListener(OnPickColor);
+            ColorPicker.VisibilityChanged.AddListener(OnVisibilityChanged);
 
-            ColorPicker.SetVisibilityToggleEnabled(false); //todo: support visibility off
+            ColorPicker.SetVisibilityToggleEnabled(true);
             ColorPicker.SetVisible(false);
         }
 
@@ -109,6 +111,7 @@ namespace Netherlands3D.UI.Panels
         {
             stylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
             ColorPicker.ColorChanged.RemoveListener(OnPickColor);
+            ColorPicker.VisibilityChanged.RemoveListener(OnVisibilityChanged);
         }
 
 
@@ -132,7 +135,20 @@ namespace Netherlands3D.UI.Panels
                 data.color = color;
                 colorData.Add(data);
             }
-            stylingPropertyData.SetColorsByMaterialIndices(colorData, Symbolizer.FillColorProperty);
+            stylingPropertyData.SetColorsByMaterialIndices(colorData);
+        }
+
+        private void OnVisibilityChanged(bool visibility)
+        {
+            var dict = new Dictionary<int, bool>();
+            foreach (int i in swatchesListView.selectedIndices)
+            {
+                string stylingRuleKey = swatchesListView.itemsSource[i] as string;
+                var index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(stylingRuleKey);
+                dict.Add(index, visibility);
+            }
+            
+            stylingPropertyData.SetVisibilityByMaterialIndices(dict);
         }
     }
 }

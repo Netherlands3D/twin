@@ -20,18 +20,17 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
     [RequireComponent(typeof(AppRootBehaviour))]
     public class DashboardBehaviour : MonoBehaviour
     {
-        private const string DashboardOpenClass = "app--dashboard-open";
-
         [SerializeField] private Configuration configuration;
         [SerializeField] private Functionality dashboardFunctionality;
 
         private InputService input;
         private InputAction toggleDashboardAction;
-        private VisualElement root;
+        private AppRootBehaviour appRoot;
         private DashboardHUD dashboardOverlay;
         private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
         private VisualElement previousFocus;
+        private bool isOpen;
         internal DashboardObjectBinding ObjectBinding { get; private set; }
         private DashboardMapStyling mapStyling;
         private readonly Dictionary<string, Color> mapColors = new(StringComparer.OrdinalIgnoreCase);
@@ -45,12 +44,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void Start()
         {
-            root = GetComponent<AppRootBehaviour>().Root;
-            dashboardOverlay = root.Q<DashboardHUD>("DashboardOverlay");
-            toolbarNavigation = root.Q<ToolbarNavigation>();
-            closeButton = root.Q<Button>("CloseDashboard");
-            paletteSource = root.Q("HousingBlockChart");
-            mapColorPanel = root.Q("DashboardMapColors");
+            appRoot = GetComponent<AppRootBehaviour>();
+            dashboardOverlay = appRoot.Root.Q<DashboardHUD>("DashboardOverlay");
+            toolbarNavigation = appRoot.Root.Q<ToolbarNavigation>();
+            closeButton = appRoot.Root.Q<Button>("CloseDashboard");
+            paletteSource = appRoot.Root.Q("HousingBlockChart");
+            mapColorPanel = appRoot.Root.Q("DashboardMapColors");
             mapColorContent = mapColorPanel.Q("MapColorContent");
             mapColorEmpty = mapColorPanel.Q<Label>("MapColorEmpty");
             mapColorSelection = mapColorPanel.Q<DropDown>("ColorMode");
@@ -141,7 +140,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         }
 
         private void RefreshMapColors() => mapStyling?.Update(selectedMapLayer,
-            ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null);
+            isOpen && ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null);
 
         private void RefreshMapLegend()
         {
@@ -184,43 +183,44 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnToggleDashboard(InputAction.CallbackContext _)
         {
-            if (input.IsInputFieldSelected()) return;
-
             // The WebGL test override changes permission and Dashboarding together for this session only.
             var enable = !dashboardFunctionality.IsEnabled;
-            configuration.AllowHiddenFeatures = enable;
             dashboardFunctionality.IsEnabled = enable;
         }
 
         private void OpenDashboard()
         {
-            if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || root.ClassListContains(DashboardOpenClass)) return;
+            if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || isOpen) return;
 
-            previousFocus = root.focusController?.focusedElement as VisualElement;
-            root.AddToClassList(DashboardOpenClass);
+            previousFocus = appRoot.Root.focusController?.focusedElement as VisualElement;
+            isOpen = true;
+            appRoot.SetDashboardVisible(true);
             dashboardOverlay.StartDataBinding();
+            RefreshMapColors();
             // Move focus after the dashboard has become visible.
             closeButton.schedule.Execute(() =>
             {
-                if (root.ClassListContains(DashboardOpenClass))
+                if (isOpen)
                     closeButton.Focus();
             });
         }
 
         private void CloseDashboard()
         {
-            if (root == null || !root.ClassListContains(DashboardOpenClass)) return;
+            if (!isOpen) return;
 
-            root.RemoveFromClassList(DashboardOpenClass);
+            isOpen = false;
+            appRoot.SetDashboardVisible(false);
             dashboardOverlay.StopDataBinding();
+            RefreshMapColors();
             var elementToFocus = previousFocus;
             previousFocus = null;
             if (elementToFocus?.panel == null) return;
 
             // Restore focus after the viewer has become visible again.
-            root.schedule.Execute(() =>
+            appRoot.Root.schedule.Execute(() =>
             {
-                if (!root.ClassListContains(DashboardOpenClass) && elementToFocus.panel == root.panel)
+                if (!isOpen && elementToFocus.panel == appRoot.Root.panel)
                     elementToFocus.Focus();
             });
         }
