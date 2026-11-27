@@ -15,7 +15,10 @@ namespace Netherlands3D.UI.Components
         private Button North => this.Q<Button>("North");
         private Toggle Perspective => this.Q<Toggle>("Perspective");
         private Button FPV => this.Q<Button>("FPV");
+        private Button DashboardButton => this.Q<Button>("Dashboard");
         private bool isDragging;
+
+        public event Action OnDashboardClicked;
         
         public ToolbarNavigation()
         {
@@ -30,6 +33,8 @@ namespace Netherlands3D.UI.Components
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
             North.RegisterCallback<ClickEvent>(OnNorthClick);
             Perspective.RegisterValueChangedCallback(OnToggleOrthographicView);
+
+            DashboardButton.RegisterCallback<ClickEvent>(OnDashboardButtonClick);
             
             FPV.RegisterCallback<PointerEnterEvent>(OnFPVPointerEnter);
             FPV.RegisterCallback<PointerLeaveEvent>(OnFPVPointerLeave);
@@ -76,6 +81,11 @@ namespace Netherlands3D.UI.Components
         private void OnNorthClick(ClickEvent _)
         {
             ServiceLocator.GetService<Compass>().SwitchToNorth();
+        }
+
+        private void OnDashboardButtonClick(ClickEvent _)
+        {
+            OnDashboardClicked?.Invoke();
         }
 
         public void UpdateCompass(float yawInDegrees)
