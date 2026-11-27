@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using netDxf.Tables;
 using UnityEngine;
 using UnityEngine.Events;
 
