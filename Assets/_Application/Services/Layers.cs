@@ -69,7 +69,12 @@ namespace Netherlands3D.Twin.Services
             }
 
             var layerData = builder.Build();
-            
+
+            return Add(layerData);
+        }
+
+        private Layer Add(LayerData layerData, UnityAction<LayerGameObject> callback = null)
+        {
             layerData.InitializeParent(ProjectData.Current.RootLayer);
             ProjectData.Current.RootLayer.AddChild(layerData, 0);
             
@@ -123,7 +128,7 @@ namespace Netherlands3D.Twin.Services
 
             return layers;
         }
-
+        
         /// <summary>
         /// Force a LayerData object to be visualized as a specific prefab.
         ///
@@ -135,6 +140,15 @@ namespace Netherlands3D.Twin.Services
             var layer = new Layer(layerData);
             Visualize(layer, callback);
             return layer;
+        }
+
+        public LayerData Copy(LayerData source)
+        {
+            var copy = source.Clone();
+            Add(copy);
+            copy.Name = $"kopie van {source.Name}";
+            copy.SetParent(source.ParentLayer, source.SiblingIndex);
+            return copy;
         }
 
         /// <summary>
