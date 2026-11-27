@@ -1,0 +1,4 @@
+.las-classification-property-section__list-view {
+    min-height: 160px;
+    max-height: 360px;
+}

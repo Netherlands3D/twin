@@ -29,15 +29,15 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public struct SubObjectData
         {
-            public LayerFeature layerFeature;
+            public StylingFeature StylingFeature;
             public string id;
             public bool visible;
             public Coordinate coord;
         }
      
-        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate, bool notify = true)
+        public void SetVisibilityForSubObject(StylingFeature stylingFeature, bool visible, Coordinate coordinate, bool notify = true)
         {
-            string id = layerFeature.Attributes[VisibilityAttributeIdentifier];
+            string id = stylingFeature.Attributes[VisibilityAttributeIdentifier];
             SetVisibilityForSubObjectById(id, visible, coordinate, notify);
         }   
         
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             stylingRuleKeys.Clear();
             foreach (SubObjectData obj in objects)
             {
-                var stylingRuleName = obj.layerFeature != null ? obj.layerFeature.Attributes[VisibilityAttributeIdentifier] : obj.id;
+                var stylingRuleName = obj.StylingFeature != null ? obj.StylingFeature.Attributes[VisibilityAttributeIdentifier] : obj.id;
                 var stylingRuleKey = VisibilityStyleRuleKey(stylingRuleName);
 
                 // Add or set the colorization of this feature by its material index
@@ -74,7 +74,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                     stylingRuleName,
                     Expression.EqualTo(
                         Expression.Get(VisibilityAttributeIdentifier),
-                        obj.layerFeature != null ? obj.layerFeature.Attributes[VisibilityAttributeIdentifier] : obj.id
+                        obj.StylingFeature != null ? obj.StylingFeature.Attributes[VisibilityAttributeIdentifier] : obj.id
                     )
                 );
                 stylingRule.Symbolizer.SetVisibility(obj.visible);
@@ -85,9 +85,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             SetStylingRules(stylingRuleKeys);
         }
 
-        public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
+        public bool? GetVisibilityForSubObject(StylingFeature stylingFeature)
         {
-            string id = layerFeature.GetAttribute(VisibilityAttributeIdentifier);
+            string id = stylingFeature.GetAttribute(VisibilityAttributeIdentifier);
             return GetVisibilityForSubObjectById(id);
         }
 
@@ -101,9 +101,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             return stylingRule.Symbolizer.GetVisibility();
         }
 
-        public Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature)
+        public Coordinate? GetVisibilityCoordinateForSubObject(StylingFeature stylingFeature)
         {
-            string id = layerFeature.GetAttribute(VisibilityAttributeIdentifier);
+            string id = stylingFeature.GetAttribute(VisibilityAttributeIdentifier);
             return GetVisibilityCoordinateForSubObjectById(id);
         }
 

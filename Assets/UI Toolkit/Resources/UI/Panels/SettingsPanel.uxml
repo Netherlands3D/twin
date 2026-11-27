@@ -1,4 +1,4 @@
-<ui:UXML 
+﻿<ui:UXML 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:ui="UnityEngine.UIElements" 
     xmlns:nl3d="Netherlands3D.UI.Components"
@@ -11,16 +11,12 @@
         <nl3d:ContentContainer name="SettingsSection" leading-icon="AdjustmentsHorizontal" text="Weergave instellingen" class="settings-panel__section">
             <nl3d:RadioButtonGroup name="QualitySettings" choices="Laag (high performance), Middel, Hoog" label="Kwaliteit"/>
             <ui:VisualElement name="spacer" class="settings-panel__spacer"/>
-            <ui:VisualElement>
                 <ui:Label text="Optionele functionaliteiten" class="text-header"/>
                 <nl3d:ListView name="Functionalities"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="ExperimentalSection" class="hidden">
-                <ui:VisualElement class="settings-panel__spacer"/>
+                <ui:VisualElement name="spacer" class="settings-panel__spacer"/>
                 <ui:Label text="Experimentele functionaliteiten" class="text-header"/>
-                <nl3d:TextCallOut text="Let op! Deze functies zijn nog in ontwikkeling. De applicatie kan hierdoor vastlopen."/>
+                <nl3d:TextCallOut text="&lt;b&gt;&lt;color=#E35656&gt;Let op!&lt;/color&gt;&lt;/b&gt; Experimentele functionaliteiten zijn nog in ontwikkeling en kunnen ervoor zorgen dat de applicatie instabiel wordt of vastloopt."/>
                 <nl3d:ListView name="ExperimentalFunctionalities"/>
-            </ui:VisualElement>
         </nl3d:ContentContainer>
     </nl3d:ScrollView>
 </ui:UXML>
