@@ -139,7 +139,7 @@ namespace Netherlands3D.Twin.DataSets
                 if (entry.Layer != layer || slot.Renderer == null)
                     continue;
 
-                var feature = layer.GetLayerFeatureByGeometry(slot.Renderer) ?? LayerFeature.Create(layer, slot.Renderer);
+                var feature = layer.GetStylingFeatureByGeometry(slot.Renderer) ?? StylingFeature.Create(layer, slot.Renderer);
                 entry.Override.SetOriginalColor(layer.GetStyling(feature).GetFillColor());
             }
             meshColorsPending = true;
@@ -222,7 +222,7 @@ namespace Netherlands3D.Twin.DataSets
                     rule.Symbolizer.SetStrokeColor(color);
                     style.StylingRules.Add(key, rule);
                 }
-                foreach (var feature in visualization.LayerFeatures.Values)
+                foreach (var feature in visualization.StylingFeatures.Values)
                 {
                     if (feature.Geometry is CityObjectVisualizer visualizer)
                         SetColorAttribute(visualizer, feature.Attributes);
@@ -235,7 +235,7 @@ namespace Netherlands3D.Twin.DataSets
         {
             foreach (var visualization in styles.Keys)
             {
-                var feature = visualization.GetLayerFeatureByGeometry(visualizer);
+                var feature = visualization.GetStylingFeatureByGeometry(visualizer);
                 if (feature == null)
                     continue;
 
@@ -266,7 +266,7 @@ namespace Netherlands3D.Twin.DataSets
 
             visualization.OnFeatureAdded.RemoveListener(OnFeatureAdded);
             visualization.RuntimeStyles.Remove(style);
-            foreach (var feature in visualization.LayerFeatures.Values)
+            foreach (var feature in visualization.StylingFeatures.Values)
                 feature.Attributes.Remove(ColorAttribute);
             visualization.ApplyStyling();
         }
