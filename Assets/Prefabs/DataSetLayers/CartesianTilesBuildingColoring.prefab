@@ -45,9 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: c57dd4a997e79ce43895144d0702166c
-  onShow:
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  VisualisationError:
     m_PersistentCalls:
       m_Calls: []
-  onHide:
+  progressEvent:
     m_PersistentCalls:
       m_Calls: []
