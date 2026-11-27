@@ -28,25 +28,33 @@ namespace Netherlands3D.Twin.Layers
             return BuildRecursive(rootLayer.ChildrenLayers, filter, keepEmptyBranches);
         }
 
-        private static List<TreeViewItemData<LayerData>> BuildRecursive(List<LayerData> layers, Func<LayerData, bool> filter = null, bool keepEmptyBranches = true)
+        internal static List<TreeViewItemData<LayerData>> ToTreeViewItemsWithHiddenLayers(LayerData rootLayer, TreeView oldTree, Func<LayerData, bool> filter)
+        {
+            ReleaseListsToPool(oldTree);
+            return BuildRecursive(rootLayer.ChildrenLayers, filter, keepEmptyBranches: false, promoteChildren: true);
+        }
+
+        private static List<TreeViewItemData<LayerData>> BuildRecursive(List<LayerData> layers, Func<LayerData, bool> filter, bool keepEmptyBranches, bool promoteChildren = false)
         {
             var result = ListPool<TreeViewItemData<LayerData>>.Get();
             if (layers == null) return result;
 
             foreach (var layer in layers)
             {
-                var children = BuildRecursive(layer.ChildrenLayers, filter, keepEmptyBranches);
-                bool include = true;
-                if(filter != null)
-                    include = filter(layer);
-                
-                var includeBranch = true;
-                if(!keepEmptyBranches)
-                    includeBranch = children.Count > 0;
-                
-                if (include || includeBranch)
-                    result.Add(new TreeViewItemData<LayerData>(layer.RootId, layer, children.Count > 0 ? children : null
-                    ));
+                var children = BuildRecursive(layer.ChildrenLayers, filter, keepEmptyBranches, promoteChildren);
+                var include = filter == null || filter(layer);
+                if (!include && promoteChildren)
+                {
+                    result.AddRange(children);
+                    ListPool<TreeViewItemData<LayerData>>.Release(children);
+                    continue;
+                }
+
+                if (include || keepEmptyBranches || children.Count > 0)
+                    result.Add(new TreeViewItemData<LayerData>(layer.RootId, layer, children.Count > 0 ? children : null));
+
+                if (children.Count == 0)
+                    ListPool<TreeViewItemData<LayerData>>.Release(children);
             }
 
             return result;

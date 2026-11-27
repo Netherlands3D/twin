@@ -60,6 +60,7 @@
 .icon.image-copy-paste { background-image: var(--icon-copypaste); }
 .icon.image-credentials { background-image: var(--icon-credentials); }
 .icon.image-csv { background-image: var(--icon-csv); }
+.icon.image-dashboard { background-image: var(--icon-dashboard); }
 .icon.image-dot { background-image: var(--icon-dot); }
 .icon.image-down { background-image: var(--icon-down); }
 .icon.image-download-tile { background-image: var(--icon-downloadtile); }
