@@ -4,6 +4,7 @@ using Netherlands3D.Functionalities.LASImporter;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -40,6 +41,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return IconImage.ORTHOGONAL_VIEW;
                 return IconImage.POLYGON;
             }
+
+            var source = layer.GetProperty<LayerURLPropertyData>()?.Url ?? layer.GetProperty<CartesianTileSubObjectColorPropertyData>()?.Data;
+            if (source?.IsAbsoluteUri == true && source.AbsolutePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                return IconImage.CSV;
 
             return GetIconImage(layer.PrefabIdentifier);
         }

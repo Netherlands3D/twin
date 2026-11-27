@@ -1,0 +1,62 @@
+.chart-badge {
+    min-width: var(--spacing-12);
+    height: var(--spacing-6);
+    margin: 0;
+    padding: 0 var(--spacing-2);
+    border-radius: var(--spacing-3);
+    color: var(--color-white);
+    white-space: nowrap;
+    -unity-text-align: middle-center;
+}
+
+.bar-chart__total-label,
+.ring-chart__total-label {
+    height: var(--spacing-6);
+    min-width: var(--spacing-8);
+    padding: 0 var(--spacing-2);
+    flex-shrink: 0;
+    background-color: var(--color-white);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-200);
+    border-radius: var(--spacing-3);
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+}
+
+.bar-chart__legend,
+.ring-chart__legend,
+.area-comparison-chart__legend {
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: var(--spacing-2);
+}
+
+.bar-chart__legend-entry,
+.ring-chart__legend-entry,
+.legend-entry,
+.area-comparison-chart__legend-entry {
+    flex-direction: row;
+    align-items: center;
+    margin-right: var(--spacing-3);
+    margin-bottom: 0;
+}
+
+.bar-chart__legend-entry > .unity-label,
+.ring-chart__legend-entry > .unity-label,
+.legend-entry > .unity-label,
+.area-comparison-chart__legend-entry > .unity-label {
+    margin: 0;
+    padding: 0;
+    min-height: var(--spacing-5);
+}
+
+.bar-chart__swatch,
+.ring-chart__swatch,
+.legend-swatch,
+.area-comparison-chart__swatch {
+    width: var(--spacing-3);
+    height: var(--spacing-3);
+    margin-right: var(--spacing-1);
+}
