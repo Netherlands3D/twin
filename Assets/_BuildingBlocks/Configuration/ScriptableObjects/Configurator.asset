@@ -22,7 +22,7 @@ MonoBehaviour:
     \"debug-info\" : {\r\n            \"enabled\" : false,\r\n            \"configuration\"
     : null\r\n        },\r\n        \"first-person-viewer\" : {\r\n            \"enabled\"
     : true,\r\n            \"configuration\" : null\r\n        },\r\n        \"dashboarding\"
-    : {\r\n            \"enabled\" : true,\r\n            \"configuration\" : null\r\n       
+    : {\r\n            \"enabled\" : false,\r\n            \"configuration\" : null\r\n       
     }\r\n    }\r\n}"
   OnStartedLoading:
     m_PersistentCalls:
