@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" editor-extension-mode="False" class="dashboard-project-overview">
+    <nl3d:Header text="Totaal project" icon="Tile"/>
+    <ui:VisualElement class="dashboard-project-overview__cards">
+        <ui:VisualElement class="dashboard-project-overview__card">
+            <ui:Label text="Woningen" class="text-header"/>
+            <ui:Label name="ProjectDwellings" text="&#8212;" class="text-header dashboard-project-overview__value"/>
+            <ui:Label text="Laatste gegevens"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-project-overview__card">
+            <ui:Label text="Blokken" class="text-header"/>
+            <ui:Label name="ProjectBlocks" text="&#8212;" class="text-header dashboard-project-overview__value"/>
+            <ui:Label text="Met gegevens"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-project-overview__card">
+            <ui:Label text="BVO niet-wonen" class="text-header"/>
+            <ui:Label name="ProjectNonHousingGrossFloorArea" text="&#8212;" class="text-header dashboard-project-overview__value"/>
+            <ui:Label text="Totaal m&#178;"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dashboard-project-overview__card">
+            <ui:Label text="Sociaal" class="text-header"/>
+            <ui:Label name="ProjectSocialShare" text="&#8212;" class="text-header dashboard-project-overview__value"/>
+            <ui:Label text="Van de woningen"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

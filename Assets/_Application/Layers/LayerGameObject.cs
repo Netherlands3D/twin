@@ -51,6 +51,9 @@ namespace Netherlands3D.Twin.Layers
         
         public Dictionary<object, StylingFeature> StylingFeatures { get; private set; } = new();
         public Func<StylingFeature, StylingFeature> OnStylingFeatureCreated;
+
+        // Session-only styling contributions are resolved after the saved layer styles.
+        internal List<StylingPropertyData> RuntimeStyles { get; } = new();
         
         public StylingFeature GetStylingFeatureByGeometry(object geometry)
         {
@@ -268,8 +271,8 @@ namespace Netherlands3D.Twin.Layers
 
         public Symbolizer GetStyling(StylingFeature feature)
         {
-            var stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
-            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
+            var stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>().Concat(RuntimeStyles);
+            if (!stylingPropertyDatas.Any()) return null;
 
             return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
         }
