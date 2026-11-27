@@ -21,27 +21,27 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
     [RequireComponent(typeof(AppRootBehaviour))]
     public class DashboardBehaviour : MonoBehaviour
     {
-        private const string DashboardOpenClass = "app--dashboard-open";
-
         [SerializeField] private Configuration configuration;
         [SerializeField] private Functionality dashboardFunctionality;
 
         private InputService input;
+        private InputAction toggleDashboardAction;
+        private AppRootBehaviour appRoot;
         private DashboardDataBinding dataBinding;
-        private VisualElement root;
         private DashboardHeader dashboardHeader;
         private DashboardCsvPropertyData logoSource;
         private Texture2D logoTexture;
         private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
         private VisualElement previousFocus;
+        private bool isOpen;
 
         private void Start()
         {
-            root = GetComponent<AppRootBehaviour>().Root;
-            dashboardHeader = root.Q<DashboardHeader>();
-            toolbarNavigation = root.Q<ToolbarNavigation>();
-            closeButton = root.Q<Button>("CloseDashboard");
+            appRoot = GetComponent<AppRootBehaviour>();
+            dashboardHeader = appRoot.Root.Q<DashboardHeader>();
+            toolbarNavigation = appRoot.Root.Q<ToolbarNavigation>();
+            closeButton = appRoot.Root.Q<Button>("CloseDashboard");
             input = ServiceLocator.GetService<InputService>();
             Subscribe();
         }
@@ -54,7 +54,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void Subscribe()
         {
-            input.ToggleDashboardAction.performed += OnToggleDashboard;
+            if (toggleDashboardAction != null) return;
+
+            toggleDashboardAction = input.ToggleDashboardAction;
+            toggleDashboardAction.performed += OnToggleDashboard;
             toolbarNavigation.OnDashboardClicked += OpenDashboard;
             closeButton.clicked += CloseDashboard;
             dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
@@ -65,16 +68,25 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnDisable()
         {
-            if (input == null) return;
+            if (toggleDashboardAction != null)
+            {
+                toggleDashboardAction.performed -= OnToggleDashboard;
+                toggleDashboardAction = null;
+            }
 
-            input.ToggleDashboardAction.performed -= OnToggleDashboard;
-            toolbarNavigation.OnDashboardClicked -= OpenDashboard;
-            closeButton.clicked -= CloseDashboard;
-            dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
-            dataBinding.Changed -= RefreshProjectTitle;
-            dataBinding.Dispose();
-            dataBinding = null;
-            SetLogoSource(null);
+            if (toolbarNavigation != null)
+                toolbarNavigation.OnDashboardClicked -= OpenDashboard;
+            if (closeButton != null)
+                closeButton.clicked -= CloseDashboard;
+            if (dashboardFunctionality != null)
+                dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
+            if (dataBinding != null)
+            {
+                dataBinding.Changed -= RefreshProjectTitle;
+                dataBinding.Dispose();
+                dataBinding = null;
+                SetLogoSource(null);
+            }
             CloseDashboard();
         }
 
@@ -136,42 +148,41 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnToggleDashboard(InputAction.CallbackContext _)
         {
-            if (input.IsInputFieldSelected()) return;
-
             // The WebGL test override changes permission and Dashboarding together for this session only.
             var enable = !dashboardFunctionality.IsEnabled;
-            configuration.AllowHiddenFeatures = enable;
             dashboardFunctionality.IsEnabled = enable;
         }
 
         private void OpenDashboard()
         {
-            if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || root.ClassListContains(DashboardOpenClass)) return;
+            if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || isOpen) return;
 
             RefreshProjectTitle();
-            previousFocus = root.focusController?.focusedElement as VisualElement;
-            root.AddToClassList(DashboardOpenClass);
+            previousFocus = appRoot.Root.focusController?.focusedElement as VisualElement;
+            isOpen = true;
+            appRoot.SetDashboardVisible(true);
             // Move focus after the dashboard has become visible.
             closeButton.schedule.Execute(() =>
             {
-                if (root.ClassListContains(DashboardOpenClass))
+                if (isOpen)
                     closeButton.Focus();
             });
         }
 
         private void CloseDashboard()
         {
-            if (!root.ClassListContains(DashboardOpenClass)) return;
+            if (!isOpen) return;
 
-            root.RemoveFromClassList(DashboardOpenClass);
+            isOpen = false;
+            appRoot.SetDashboardVisible(false);
             var elementToFocus = previousFocus;
             previousFocus = null;
             if (elementToFocus?.panel == null) return;
 
             // Restore focus after the viewer has become visible again.
-            root.schedule.Execute(() =>
+            appRoot.Root.schedule.Execute(() =>
             {
-                if (!root.ClassListContains(DashboardOpenClass) && elementToFocus.panel == root.panel)
+                if (!isOpen && elementToFocus.panel == appRoot.Root.panel)
                     elementToFocus.Focus();
             });
         }

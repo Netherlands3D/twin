@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -24,7 +24,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 77c433a944001411a9376d15fb427d17, type: 2}
   - {fileID: 11400000, guid: 73566e5fce73b5440b33ed107ed5be94, type: 2}
   - {fileID: 11400000, guid: a0b242efecc94870933456231b6fca4b, type: 2}
+  - {fileID: 11400000, guid: 9a44973c47c8dd6ec81899a089d609c1, type: 2}
   corsProxyUrl: 
+  supportedFileTypes:
+  - obj
+  - csv
+  - xlsx
+  - json
+  - geojson
+  - glb
   OnAllowUserSettingsChanged:
     m_PersistentCalls:
       m_Calls: []

@@ -22,7 +22,7 @@ namespace Netherlands3D.UI.Panels
         private readonly Button importButton;
         private readonly Label fileName;
         private readonly ErrorPanelContent errorPanel;
-        private FileOpen fileOpen;
+        private FileOpenService fileOpen;
         private Functionality dashboarding;
         private DashboardCsvPropertyData propertyData;
         private bool awaitingFile;
@@ -53,7 +53,7 @@ namespace Netherlands3D.UI.Panels
             if (evt.destinationPanel.contextType != ContextType.Player)
                 return;
 
-            fileOpen = ServiceLocator.GetService<FileOpen>();
+            fileOpen = ServiceLocator.GetService<FileOpenService>();
             fileOpen.onFilesSelected.AddListener(ImportLogo);
             dashboarding = Configurator.Dashboarding;
             dashboarding.OnEnableFunctionality.AddListener(UpdateAvailability);

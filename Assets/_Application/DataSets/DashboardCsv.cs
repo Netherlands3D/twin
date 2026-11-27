@@ -17,17 +17,11 @@ namespace Netherlands3D.Twin.DataSets
             "Aantal woningen", "Categorie", "BVO", "Programma", "Afwijking"
         };
 
-        internal static bool HasDashboardColumns(TextReader reader)
+        internal static bool HasBuildingColorColumns(TextReader reader)
         {
             using var csv = Open(reader);
-            if (!ReadNextRecord(csv, out _) || !csv.ReadHeader())
-                return false;
-
-            return HasDashboardColumns(csv.Context.HeaderRecord);
+            return ReadNextRecord(csv, out _) && csv.ReadHeader() && CartesianTileSubObjectColorCsv.HasColorColumns(csv.Context.HeaderRecord);
         }
-
-        internal static bool HasDashboardColumns(string[] headers) =>
-            !CartesianTileSubObjectColorCsv.HasColorColumns(headers) && RequiredHeaders.All(headers.Contains);
 
         internal static DashboardData ReadFile(string path)
         {
@@ -42,12 +36,6 @@ namespace Netherlands3D.Twin.DataSets
         {
             using var csv = Open(reader);
             return ReadRows(ReadHeaders(csv), ReadCsvRows(csv));
-        }
-
-        internal static void ValidateHeaders(TextReader reader)
-        {
-            using var csv = Open(reader);
-            GetColumnIndices(ReadHeaders(csv));
         }
 
         private static string[] ReadHeaders(CsvReader csv)

@@ -38,16 +38,6 @@ namespace Netherlands3D.Twin.Services
             DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Warning, defaultWarningIcon, time);
         }
 
-        internal void DisplayFailure(string newText, float time = defaultWaitTime)
-        {
-            DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Warning, IconImage.CLOSE, time);
-        }
-
-        internal void DisplayWarning(string newText, float time = defaultWaitTime)
-        {
-            DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Warning, IconImage.WARNING, time);
-        }
-
         public void DisplayMessage(string newText, string icon, float time = defaultWaitTime)
         {
             DisplayText(newText, string.Empty, SnackBarItem.SnackbarMessageType.Info, icon, time);

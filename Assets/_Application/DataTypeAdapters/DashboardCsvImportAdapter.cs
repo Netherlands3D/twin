@@ -19,10 +19,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             if (DashboardXlsx.IsWorkbook(localFile.LocalFilePath))
                 return true;
 
+            if (!string.Equals(Path.GetExtension(localFile.LocalFilePath), ".csv", StringComparison.OrdinalIgnoreCase))
+                return false;
+
             try
             {
                 using var reader = File.OpenText(localFile.LocalFilePath);
-                return DashboardCsv.HasDashboardColumns(reader);
+                return !DashboardCsv.HasBuildingColorColumns(reader);
             }
             catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException)
             {
@@ -44,20 +47,23 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
             catch (DashboardImportFormatException exception)
             {
-                App.Snackbar.DisplayFailure($"Dit {format}-bestand kan niet worden ingeladen. {exception.Message}");
+                App.Snackbar.DisplayError($"Dit {format}-bestand kan niet worden ingeladen. {exception.Message}");
                 return null;
             }
             catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or CsvHelperException or FormatException)
             {
-                App.Snackbar.DisplayFailure($"Dit {format}-bestand kan niet worden ingeladen. Controleer het bestandsformaat.");
+                App.Snackbar.DisplayError($"Dit {format}-bestand kan niet worden ingeladen. Controleer het bestandsformaat.");
                 return null;
             }
 
             if (data.Housing.Count == 0 && data.NonHousing.Count == 0 && data.ProgramChanges.Count == 0)
             {
-                App.Snackbar.DisplayFailure($"Dit {format}-bestand bevat geen bruikbare gegevens." + GetSkippedLinesMessage(data));
+                App.Snackbar.DisplayError($"Dit {format}-bestand bevat geen bruikbare gegevens." + GetSkippedLinesMessage(data));
                 return null;
             }
+
+            if (data.SkippedRowCount > 0)
+                App.Snackbar.DisplayError($"Het {format}-bestand is ingeladen met overgeslagen rijen." + GetSkippedLinesMessage(data));
 
             var source = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
             var propertyData = new DashboardCsvPropertyData(source, data);
@@ -82,19 +88,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             return preset;
         }
 
-        internal static string GetSkippedLinesMessage(DashboardData data)
+        private static string GetSkippedLinesMessage(DashboardData data)
         {
             if (data.SkippedRowCount == 0)
                 return string.Empty;
 
-            const int maxVisibleRows = 3;
-            var lines = data.SkippedRows.Select(row => $"Rij {row.LineNumber}: {row.Reason}").ToArray();
-            var message = "\n" + string.Join("\n", lines.Take(maxVisibleRows));
-            if (lines.Length <= maxVisibleRows)
-                return message;
-
-            Debug.LogWarning("Overgeslagen dashboardrijen:\n" + string.Join("\n", lines));
-            return message + $"\nNog {lines.Length - maxVisibleRows} overgeslagen. Zie de Console voor alle rijen.";
+            return "\n" + string.Join("\n", data.SkippedRows.Select(row => $"Rij {row.LineNumber}: {row.Reason}"));
         }
     }
 }
