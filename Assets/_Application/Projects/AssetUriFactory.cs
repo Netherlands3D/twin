@@ -27,7 +27,8 @@ namespace Netherlands3D.Twin.Projects
                 path = Path.GetRelativePath(Application.persistentDataPath, path);
             }
             
-            return new Uri("project:///" + path);
+            var segments = path.Replace(Path.DirectorySeparatorChar, '/').Split('/');
+            return new Uri("project:///" + string.Join("/", Array.ConvertAll(segments, Uri.EscapeDataString)));
         }
 
         public static Uri CreateRemoteAssetUri(string url)
