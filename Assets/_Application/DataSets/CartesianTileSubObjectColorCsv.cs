@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ namespace Netherlands3D.Twin.DataSets
     {
         private readonly string path;
         private readonly int maxParsesPerFrame;
-        private readonly string[] requiredHeaders = { "BagId", "HexColor" };
+        private static readonly string[] RequiredHeaders = { "BagId", "HexColor" };
 
         private readonly CsvConfiguration config = new(CultureInfo.CurrentCulture)
         {
@@ -46,25 +45,28 @@ namespace Netherlands3D.Twin.DataSets
 
         public bool IsValid()
         {
-            if(!path.ToLower().EndsWith(".csv"))
+            if (!path.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                 return false;
 
             //Streamread first line to check if all required headers are present, and the config delimiter is used
             using var streamReader = new StreamReader(path);
             using var csv = new CsvReader(streamReader, config);
 
-            bool canReadWithConfig = csv.Read();
-            bool hasHeader = csv.ReadHeader();
-            
-            if (!canReadWithConfig || !hasHeader) return false;
-
-            return requiredHeaders.All(header => csv.Context.HeaderRecord.Contains(header));
+            return ReadHeader(csv);
         }
 
         public Dictionary<string, Color> Read()
         {
-            // Not yet needed for this Dataset
-            throw new NotImplementedException();
+            using var streamReader = new StreamReader(path);
+            using var csv = new CsvReader(streamReader, config);
+            if (!ReadHeader(csv))
+                throw new FormatException("The building color CSV must contain BagId and HexColor columns.");
+
+            var colors = new Dictionary<string, Color>();
+            while (csv.Read())
+                ParseRecord(csv, colors);
+
+            return colors;
         }
 
         public IEnumerator ReadAsync(Action<float> onProgress, Action<Dictionary<string, Color>> onComplete) 
@@ -76,8 +78,8 @@ namespace Netherlands3D.Twin.DataSets
             using var streamReader = new StreamReader(path);
             using var csvReader = new CsvReader(streamReader, config);
 
-            csvReader.Read();
-            csvReader.ReadHeader();
+            if (!ReadHeader(csvReader))
+                throw new FormatException("The building color CSV must contain BagId and HexColor columns.");
             var count = 0;
 
             while (csvReader.Read())
@@ -96,20 +98,28 @@ namespace Netherlands3D.Twin.DataSets
             onProgress(1f);
         }
 
-        private static void ParseRecord(IReaderRow csvReader, IDictionary<string, Color> dictionary)
+        internal static bool HasColorColumns(string[] headers)
         {
-            var id = csvReader.GetField<string>("BagId");
-            var hexColor = csvReader.GetField<string>("HexColor");
-            dictionary[id] = ParseHexColor(hexColor);
+            return RequiredHeaders.All(header => headers.Contains(header));
         }
 
-        private static Color ParseHexColor(string hex)
+        private static bool ReadHeader(CsvReader csv)
         {
-            if (!hex.StartsWith("#"))
-                hex = "#" + hex;
+            return csv.Read() && csv.ReadHeader() && HasColorColumns(csv.Context.HeaderRecord);
+        }
 
-            var canParse = ColorUtility.TryParseHtmlString(hex, out var color);
-            return canParse ? color : Interaction.NO_OVERRIDE_COLOR;
+        private static void ParseRecord(IReaderRow csvReader, IDictionary<string, Color> dictionary)
+        {
+            var id = csvReader.GetField<string>("BagId")?.Trim();
+            var hexColor = csvReader.GetField<string>("HexColor")?.Trim();
+            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(hexColor))
+                return;
+
+            if (!hexColor.StartsWith("#"))
+                hexColor = "#" + hexColor;
+
+            if (ColorUtility.TryParseHtmlString(hexColor, out var color))
+                dictionary[id] = color;
         }
     }
 }
