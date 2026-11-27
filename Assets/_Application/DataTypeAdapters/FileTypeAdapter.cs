@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
@@ -38,9 +39,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             if (file.EndsWith(','))
                 file = file.Remove(file.Length - 1);
 
-            string fileExtension = Path.GetExtension(file).ToLower();
+            string fileExtension = Path.GetExtension(file).ToLowerInvariant();
             if (fileExtension.StartsWith('.'))
                 fileExtension = fileExtension.Substring(1);
+
+            var dashboardFile = fileExtension is "csv" or "xlsx";
+            if (dashboardFile && !CanImportCsv(fileExtension.ToUpperInvariant()))
+                return;
 
             var possibleFileTypeEvents = fileTypeEvents.Where(fte => fte.Extension == fileExtension);
 
@@ -51,13 +56,23 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 LocalFilePath = path
             };
 
-            AdapterChain(localFile, possibleFileTypeEvents);
+            var matched = AdapterChain(localFile, possibleFileTypeEvents);
+            if (!matched && dashboardFile)
+                App.Snackbar.DisplayError($"Dit {fileExtension.ToUpperInvariant()}-bestand kan niet worden ingeladen. Controleer de kolommen en het bestandsformaat.");
         }
 
-        private void AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
+        internal static bool CanImportCsv(string format = "CSV")
         {
-            if (possibleFileTypeEvents == null)
-                possibleFileTypeEvents = fileTypeEvents;
+            if (Configurator.IsDashboardingEnabled)
+                return true;
+
+            App.Snackbar.DisplayError($"{format}-import is niet beschikbaar.");
+            return false;
+        }
+
+        private bool AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents)
+        {
+            var matched = false;
 
             // Get our interface references
             foreach (var fte in possibleFileTypeEvents)
@@ -65,6 +80,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 var adapter = fte.DataTypeAdapter;
                 if (adapter.Supports(localFile))
                 {
+                    matched = true;
                     var preset = adapter.Execute(localFile);
                     
                     if (preset is LayerPresetResult result)
@@ -77,6 +93,8 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     }
                 }
             }
+
+            return matched;
         }
     }
 }
