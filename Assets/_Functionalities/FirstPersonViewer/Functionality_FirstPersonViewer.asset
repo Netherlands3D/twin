@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
   m_Name: Functionality_FirstPersonViewer
   m_EditorClassIdentifier: 
-  data:
-    Id: first-person-viewer
-    IsEnabled: 1
+  defaultData:
+    rid: 1540143709279486062
   Title: First Person Viewer
   Caption: 
   Header: First Person Viewer
@@ -26,9 +25,23 @@ MonoBehaviour:
     viewer, <a href=\"https://netherlands3d.eu/docs/handleiding/first-person-viewer\">kijk
     in de documentatie</a>."
   configuration: {fileID: 0}
-  OnEnable:
+  settingsCategory: 0
+  statePersistence: 0
+  enableOnHosts: []
+  OnEnableFunctionality:
     m_PersistentCalls:
       m_Calls: []
-  OnDisable:
+  OnDisableFunctionality:
     m_PersistentCalls:
       m_Calls: []
+  OnFunctionalityChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1540143709279486062
+      type: {class: FunctionalityData, ns: Netherlands3D.Twin.Functionalities, asm: eu.netherlands3d.twin.functionalities}
+      data:
+        Id: first-person-viewer
+        IsEnabled: 0

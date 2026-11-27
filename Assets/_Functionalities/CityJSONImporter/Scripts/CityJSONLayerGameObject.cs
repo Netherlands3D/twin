@@ -87,11 +87,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             
             foreach (var visualizer in importedObject.GetComponentsInChildren<CityObjectVisualizer>())
             {
-                ApplyStylingToFeature(LayerFeatures[visualizer]);
+                ApplyStylingToFeature(StylingFeatures[visualizer]);
             }
         }
         
-        public override void ApplyStylingToFeature(LayerFeature feature)
+        public override void ApplyStylingToFeature(StylingFeature feature)
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
             
@@ -143,11 +143,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         private void AddStylingFeature(CityObjectVisualizer visualizer)
         {
-            if(LayerFeatures.ContainsKey(visualizer))
+            if(StylingFeatures.ContainsKey(visualizer))
                 return;
             
             var layerFeature = CreateFeature(visualizer);
-            LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            StylingFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);
         }
