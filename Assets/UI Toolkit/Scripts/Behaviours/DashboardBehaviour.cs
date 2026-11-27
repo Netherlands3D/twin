@@ -1,14 +1,16 @@
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Configuration;
 using Netherlands3D.Twin.Functionalities;
+using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 {
     /// <summary>
-    /// Controls Dashboarding activation, the temporary test override and the placeholder dashboard view.
+    /// Controls Dashboarding activation, the temporary test override and the dashboard view.
     /// </summary>
     [RequireComponent(typeof(AppRootBehaviour))]
     public class DashboardBehaviour : MonoBehaviour
@@ -16,8 +18,10 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         [SerializeField] private Configuration configuration;
         [SerializeField] private Functionality dashboardFunctionality;
 
-        private AppRootBehaviour appRoot;
         private InputService input;
+        private InputAction toggleDashboardAction;
+        private AppRootBehaviour appRoot;
+        private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
         private VisualElement previousFocus;
         private bool isOpen;
@@ -25,6 +29,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private void Start()
         {
             appRoot = GetComponent<AppRootBehaviour>();
+            toolbarNavigation = appRoot.Root.Q<ToolbarNavigation>();
             closeButton = appRoot.Root.Q<Button>("CloseDashboard");
             input = ServiceLocator.GetService<InputService>();
             Subscribe();
@@ -38,23 +43,29 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void Subscribe()
         {
-            input.ToggleDashboardAction.performed += OnToggleDashboard;
-            dashboardFunctionality.OnEnableFunctionality.AddListener(OpenDashboard);
-            dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
-            closeButton.clicked += CloseDashboard;
+            if (toggleDashboardAction != null) return;
 
-            if (dashboardFunctionality.IsEnabled)
-                OpenDashboard();
+            toggleDashboardAction = input.ToggleDashboardAction;
+            toggleDashboardAction.performed += OnToggleDashboard;
+            toolbarNavigation.OnDashboardClicked += OpenDashboard;
+            closeButton.clicked += CloseDashboard;
+            dashboardFunctionality.OnDisableFunctionality.AddListener(CloseDashboard);
         }
 
         private void OnDisable()
         {
-            if (input == null) return;
+            if (toggleDashboardAction != null)
+            {
+                toggleDashboardAction.performed -= OnToggleDashboard;
+                toggleDashboardAction = null;
+            }
 
-            input.ToggleDashboardAction.performed -= OnToggleDashboard;
-            dashboardFunctionality.OnEnableFunctionality.RemoveListener(OpenDashboard);
-            dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
-            closeButton.clicked -= CloseDashboard;
+            if (toolbarNavigation != null)
+                toolbarNavigation.OnDashboardClicked -= OpenDashboard;
+            if (closeButton != null)
+                closeButton.clicked -= CloseDashboard;
+            if (dashboardFunctionality != null)
+                dashboardFunctionality.OnDisableFunctionality.RemoveListener(CloseDashboard);
             CloseDashboard();
         }
 
@@ -67,12 +78,12 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OpenDashboard()
         {
-            if (!dashboardFunctionality.IsEnabled || isOpen) return;
+            if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || isOpen) return;
 
             previousFocus = appRoot.Root.focusController?.focusedElement as VisualElement;
             isOpen = true;
             appRoot.SetDashboardVisible(true);
-            // Focus can only move after the newly visible UI has been laid out.
+            // Move focus after the dashboard has become visible.
             closeButton.schedule.Execute(() =>
             {
                 if (isOpen)
@@ -90,6 +101,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             previousFocus = null;
             if (elementToFocus?.panel == null) return;
 
+            // Restore focus after the viewer has become visible again.
             appRoot.Root.schedule.Execute(() =>
             {
                 if (!isOpen && elementToFocus.panel == appRoot.Root.panel)

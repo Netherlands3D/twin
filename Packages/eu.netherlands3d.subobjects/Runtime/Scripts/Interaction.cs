@@ -19,6 +19,7 @@ namespace Netherlands3D.SubObjects
         private static readonly Dictionary<string, Color32> overrideColors = new();
         private static readonly Dictionary<string, Dictionary<string, Color32>> layerColors = new();
         private static readonly Dictionary<string, Dictionary<string, Color32>> selectionColors = new();
+        private static IReadOnlyDictionary<string, Color> importedBuildingColors;
 
         internal static void CheckIn(ObjectMapping mapping)
         {
@@ -87,6 +88,37 @@ namespace Netherlands3D.SubObjects
             return false;
         }
 
+        public static void RemoveSelectionColors()
+        {
+            selectionColors.Clear();
+        }
+
+        public static void SetImportedBuildingColors(IReadOnlyDictionary<string, Color> colors)
+        {
+            var previousColors = importedBuildingColors;
+            if (ReferenceEquals(previousColors, colors))
+                return;
+
+            importedBuildingColors = colors;
+            if (mappings == null)
+                return;
+
+            foreach (var mapping in mappings)
+            {
+                if (!mapping)
+                    continue;
+
+                foreach (var objectId in mapping.items.Keys)
+                {
+                    if (previousColors?.ContainsKey(objectId) == true || colors?.ContainsKey(objectId) == true)
+                    {
+                        ApplyMappedColors(mapping, forceRefresh: true);
+                        break;
+                    }
+                }
+            }
+        }
+
         //TODO we will need a cascading coloring system to apply colors, when multiple colors are registered to one bagid, is this still needed?
         /// <summary>
         /// This will color the final result from styling, by its objectmapping it will find the corresponding bagids in the override color dictionary and apply mesh vertex coloring.
@@ -94,9 +126,22 @@ namespace Netherlands3D.SubObjects
         /// </summary>
         public static void ApplyColors(ObjectMapping mapping, string layerId = null)
         {
-            bool hasOverrides = overrideColors.Count > 0;
+            if (!mapping)
+                return;
 
-            if (layerId == null && !hasOverrides) return;
+            if (layerId != null)
+                mapping.StylingLayerId = layerId;
+
+            ApplyMappedColors(mapping);
+        }
+
+        private static void ApplyMappedColors(ObjectMapping mapping, bool forceRefresh = false)
+        {
+            var layerId = mapping.StylingLayerId;
+            bool hasOverrides = overrideColors.Count > 0;
+            bool hasImportedColors = importedBuildingColors != null && importedBuildingColors.Count > 0;
+
+            if (layerId == null && !hasOverrides && !hasImportedColors && !forceRefresh) return;
 
             if (!mapping.TryGetComponent(out MeshFilter meshFilter)) return;
             Mesh mesh = meshFilter.sharedMesh;
@@ -133,6 +178,11 @@ namespace Netherlands3D.SubObjects
                 }
                 else if (layer != null && layer.TryGetValue(key, out color))
                 {
+                    anyColor = true;
+                }
+                else if (hasImportedColors && importedBuildingColors.TryGetValue(key, out var importedColor))
+                {
+                    color = importedColor;
                     anyColor = true;
                 }
                 else
