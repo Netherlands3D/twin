@@ -71,13 +71,5 @@ namespace Netherlands3D.Twin.Layers.Properties
             this.imageCaption = imageCaption;
             this.readOnly = readOnly;
         }
-
-        public override LayerPropertyData Clone()
-        {
-            return new AnnotationPropertyData(annotationText, title, imageUrl, imageCaption, readOnly)
-            {
-                isEditable = isEditable
-            };
-        }
     }
 }

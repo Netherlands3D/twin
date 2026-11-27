@@ -112,13 +112,5 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         {
             OnResetRangeValues.Invoke();
         }
-
-        public override LayerPropertyData Clone()
-        {
-            return new SensorPropertyData(minValue, maxValue, minColor, maxColor, startDate, endDate)
-            {
-                isEditable = isEditable
-            };
-        }
     }
 }

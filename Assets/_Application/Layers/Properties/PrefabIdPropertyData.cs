@@ -32,13 +32,5 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             this.prefabId = prefabId;
         }
-
-        public override LayerPropertyData Clone()
-        {
-            return new PrefabIdPropertyData(prefabId)
-            {
-                isEditable = isEditable
-            };
-        }
     }
 }

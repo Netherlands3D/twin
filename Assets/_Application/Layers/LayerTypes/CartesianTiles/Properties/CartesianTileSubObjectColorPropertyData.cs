@@ -32,14 +32,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
                 new (this, data != null ? data : null)
             };
         }
-
-        public override LayerPropertyData Clone()
-        {
-            return new CartesianTileSubObjectColorPropertyData()
-            {
-                data = data,
-                isEditable = isEditable
-            };
-        }
     }
 }

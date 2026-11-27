@@ -59,14 +59,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             this.rotationAxes = rotationAxes;
             this.scaleAxes = scaleAxes;
         }
-
-        public override LayerPropertyData Clone()
-        {
-            return new TransformLockLayerPropertyData(positionAxes, rotationAxes, scaleAxes)
-            {
-                isEditable = isEditable
-            };
-        }
-
     }
 }

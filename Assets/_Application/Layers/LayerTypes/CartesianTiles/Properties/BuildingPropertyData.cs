@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
@@ -24,14 +24,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties
                 buildingIds = value;
                 OnIdsChanged.Invoke(buildingIds);
             }
-        }
-
-        public override LayerPropertyData Clone()
-        {
-            return new BuildingPropertyData()
-            {
-                isEditable = isEditable
-            };
         }
     }
 }

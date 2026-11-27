@@ -37,15 +37,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
                 AllowScatterChanged.Invoke(allowScatter);
             }
         }
-
-        public override LayerPropertyData Clone()
-        {
-            return new ToggleScatterPropertyData()
-            {
-                isScattered = isScattered,
-                allowScatter = allowScatter,
-                isEditable = isEditable
-            };
-        }
     }
 }

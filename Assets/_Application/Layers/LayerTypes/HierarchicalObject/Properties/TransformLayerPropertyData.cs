@@ -69,13 +69,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             this.localScale = localScale;
             this.scaleUnitCharacter = scaleUnitCharacter;
         }
-
-        public override LayerPropertyData Clone()
-        {
-            return new TransformLayerPropertyData(position, eulerRotation, localScale, scaleUnitCharacter)
-            {
-                isEditable = isEditable
-            };
-        }
     }
 }

@@ -1,7 +1,6 @@
 using Netherlands3D.LayerStyles;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using UnityEngine.Events;
 
@@ -26,7 +25,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         [DataMember(Name = "metadata")] public Metadata Metadata { get; } = new();
 
-        [DataMember(Name = "stylingRules")] public Dictionary<string, StylingRule> StylingRules { get; private set; } = new()
+        [DataMember(Name = "stylingRules")] public Dictionary<string, StylingRule> StylingRules { get; } = new()
         {
             { DefaultRuleName, new StylingRule(DefaultRuleName) }
         };
@@ -92,18 +91,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         public virtual List<string> GetUsedColorTypes()
         {
             return null; //todo: CartesianTyleLayerFeaturePropertyData should maybe become a subclass of ColorPropertyData so this function does not exist here but in ColorPropertyData
-        }
-
-        public override LayerPropertyData Clone()
-        {
-            var copy = new StylingPropertyData();
-
-            copy.styleName = styleName;
-            copy.colorType = colorType;
-            copy.isEditable = isEditable;
-            copy.Metadata.Name = Metadata.Name;
-            copy.StylingRules = StylingRules.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Clone());
-            return copy;
         }
     }
 }

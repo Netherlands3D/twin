@@ -52,16 +52,5 @@ namespace Netherlands3D.Functionalities.CityJSON
 
             return existingAssets;
         }
-        
-        public override LayerPropertyData Clone()
-        {
-            return new CityJSONPropertyData()
-            {
-                cityJsonFile = cityJsonFile,
-                contentCRS = contentCRS,
-                isEditable = isEditable
-            };
-        }
-
     }
 }
