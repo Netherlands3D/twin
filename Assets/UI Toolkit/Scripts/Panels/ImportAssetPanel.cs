@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.UI_Toolkit;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -157,6 +159,9 @@ namespace Netherlands3D.UI.Panels
             {
                 credentialHandler.ClearCredentials();
                 Uri uri = new Uri(value);
+                var extension = uri.IsAbsoluteUri ? Path.GetExtension(uri.AbsolutePath).ToLowerInvariant() : string.Empty;
+                if ((extension is ".csv" or ".xlsx") && !FileTypeAdapter.CanImportCsv(extension.TrimStart('.').ToUpperInvariant()))
+                    return;
 
                 credentialHandler.Uri = uri;
                 credentialHandler.ApplyCredentials();

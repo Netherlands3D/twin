@@ -29,6 +29,7 @@ MonoBehaviour:
   supportedFileTypes:
   - obj
   - csv
+  - xlsx
   - json
   - geojson
   - glb

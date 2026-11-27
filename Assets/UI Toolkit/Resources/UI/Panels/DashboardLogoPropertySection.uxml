@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" xmlns:nl3dP="Netherlands3D.UI.Panels" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="dashboard-logo-property-section">
+    <nl3d:ContentContainer leading-icon="Object" text="Dashboardlogo">
+        <ui:Label text="Kies een PNG- of JPG-bestand voor het logo naast de projecttitel."/>
+        <ui:Label name="LogoFileName" text="Geen logo toegevoegd." enable-rich-text="false" class="dashboard-logo-property-section__file-name"/>
+        <nl3d:Button name="ImportLogo" LabelText="Logo toevoegen" button-style="Normal" class="dashboard-logo-property-section__button"/>
+        <nl3dP:ErrorPanelContent message="Het logo kan niet worden geladen. Kies een geldig PNG- of JPG-bestand."/>
+    </nl3d:ContentContainer>
+</ui:UXML>
