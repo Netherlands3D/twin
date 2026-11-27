@@ -85,38 +85,6 @@ namespace Netherlands3D.Services
             ToggleDashboardAction.Disable();
         }
 
-        public bool IsInputFieldSelected()
-        {
-            var root = App.UIRoot?.Root;
-            if (root == null) return false;
-
-            var focusedElement = root.focusController?.focusedElement as VisualElement;
-            for (var element = focusedElement; element != null; element = element.parent)
-            {
-                for (var type = element.GetType(); type != null; type = type.BaseType)
-                {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(TextInputBaseField<>))
-                        return true;
-                }
-            }
-
-            return root.Query<EditableNameField>().ToList().Exists(IsVisibleNameFieldBeingEdited);
-        }
-
-        private static bool IsVisibleNameFieldBeingEdited(EditableNameField field)
-        {
-            // Inline name fields can stay in edit mode after losing focus while Shift is held.
-            if (!field.IsEditing || !field.visible) return false;
-
-            for (VisualElement element = field; element != null; element = element.parent)
-            {
-                if (element.resolvedStyle.display == DisplayStyle.None)
-                    return false;
-            }
-
-            return true;
-        }
-
         public void SetCameraActionsEnabled(bool enable)
         {
             if (enable)
