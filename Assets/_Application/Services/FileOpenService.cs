@@ -111,7 +111,8 @@ public class FileOpenService : MonoBehaviour //todo: the FileOpener prefab shoul
 
     public void OpenFileBrowser()
     {
-        OpenFile(string.Join(",", allowedDragAndDropFileTypes));
+        var extensions = allowedDragAndDropFileTypes.Where(extension => Configurator.IsDashboardingEnabled || !string.Equals(extension, "csv", StringComparison.OrdinalIgnoreCase));
+        OpenFile(string.Join(",", extensions));
     }
 
     /// <summary>
