@@ -23,8 +23,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
     [RequireComponent(typeof(AppRootBehaviour))]
     public class DashboardBehaviour : MonoBehaviour
     {
-        private const string DashboardOpenClass = "app--dashboard-open";
-
         [SerializeField] private Configuration configuration;
         [SerializeField] private Functionality dashboardFunctionality;
 
@@ -38,13 +36,14 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private bool objectSelectionChanged;
         private bool mapRefreshPending;
         private InputAction toggleDashboardAction;
-        private VisualElement root;
+        private AppRootBehaviour appRoot;
         private DashboardHUD dashboardOverlay;
         private DashboardAnnotation dashboardAnnotation;
         private DashboardHeader dashboardHeader;
         private ToolbarNavigation toolbarNavigation;
         private Button closeButton;
         private VisualElement previousFocus;
+        private bool isOpen;
         internal DashboardObjectBinding ObjectBinding { get; private set; }
         internal CityJSONMapping SelectedObjectMapping { get; private set; }
         internal (MeshRenderer Renderer, int MaterialIndex)? SelectedMeshObject { get; private set; }
@@ -61,13 +60,13 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void Start()
         {
-            root = GetComponent<AppRootBehaviour>().Root;
-            dashboardOverlay = root.Q<DashboardHUD>("DashboardOverlay");
+            appRoot = GetComponent<AppRootBehaviour>();
+            dashboardOverlay = appRoot.Root.Q<DashboardHUD>("DashboardOverlay");
             dashboardAnnotation = dashboardOverlay.Q<DashboardAnnotation>("DashboardAnnotation");
             dashboardHeader = dashboardOverlay.Q<DashboardHeader>("DashboardHeader");
-            toolbarNavigation = root.Q<ToolbarNavigation>();
-            closeButton = root.Q<Button>("CloseDashboard");
-            mapColorPanel = root.Q("DashboardMapColors");
+            toolbarNavigation = appRoot.Root.Q<ToolbarNavigation>();
+            closeButton = appRoot.Root.Q<Button>("CloseDashboard");
+            mapColorPanel = appRoot.Root.Q("DashboardMapColors");
             paletteSource = mapColorPanel;
             mapColorContent = mapColorPanel.Q("MapColorContent");
             mapColorEmpty = mapColorPanel.Q<Label>("MapColorEmpty");
@@ -189,15 +188,15 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnMapDataChanged()
         {
-            ObjectBinding?.SetObjPickingEnabled(root.ClassListContains(DashboardOpenClass));
+            ObjectBinding?.SetObjPickingEnabled(isOpen);
             dashboardHeader.SetBlocks(ObjectBinding?.HasData == true ? ObjectBinding.BlockIdentifiers : Array.Empty<string>());
-            dashboardOverlay.SetData(root.ClassListContains(DashboardOpenClass) ? ObjectBinding?.Data : null, dashboardHeader.SelectedBlock);
+            dashboardOverlay.SetData(isOpen ? ObjectBinding?.Data : null, dashboardHeader.SelectedBlock);
             var linkedBlocks = ObjectBinding?.HasData == true
                 ? ObjectBinding.Objects.Values.Concat(ObjectBinding.ObjObjects.Values).Concat(ObjectBinding.GlbObjects.Values)
                     .Select(block => block.Block).ToHashSet(StringComparer.OrdinalIgnoreCase)
                 : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             dashboardHeader.SetLinkedBlocks(linkedBlocks);
-            if (root.ClassListContains(DashboardOpenClass))
+            if (isOpen)
             {
                 if (dashboardHeader.SelectedBlock != null)
                 {
@@ -231,7 +230,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnCityJsonSelected(CityJSONMapping mapping)
         {
-            if (!root.ClassListContains(DashboardOpenClass))
+            if (!isOpen)
                 return;
 
             var block = GetObjectBlock(mapping);
@@ -249,7 +248,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
         private bool AllowNormalSelection()
         {
             pendingMeshSelection = null;
-            if (!root.ClassListContains(DashboardOpenClass) || Pointer.current == null || ObjectBinding?.HasData != true
+            if (!isOpen || Pointer.current == null || ObjectBinding?.HasData != true
                 || ObjectBinding.GlbObjects.Count == 0 && ObjectBinding.ObjObjects.Count == 0)
                 return true;
 
@@ -339,7 +338,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void UpdateAnnotationPosition()
         {
-            if (!root.ClassListContains(DashboardOpenClass) || SelectedObjectBlock == null)
+            if (!isOpen || SelectedObjectBlock == null)
             {
                 dashboardAnnotation.SetPosition(default, false);
                 return;
@@ -402,7 +401,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnTransformTargetChanged(GameObject target)
         {
-            if (!root.ClassListContains(DashboardOpenClass))
+            if (!isOpen)
                 return;
 
             restoreTransformHandles = target != null;
@@ -426,7 +425,6 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void RefreshMapColors()
         {
-            var dashboardOpen = root.ClassListContains(DashboardOpenClass);
             var composition = dashboardOverlay.NonHousing ? "Grootste functiecategorie" : "Grootste woningsegment";
             if (mapColorSelection.choices[1] != composition)
             {
@@ -436,8 +434,8 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 mapColorSelection.SetValue((int)selectedMapLayer);
             }
             mapStyling?.Update(CurrentMapLayer,
-                ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null,
-                dashboardOpen ? dashboardOverlay.SelectedProgramPhase : null, dashboardOverlay.NonHousing);
+                isOpen && ObjectBinding?.HasData == true && DashboardColors.HasMapColors(mapColors) ? mapColors : null,
+                isOpen ? dashboardOverlay.SelectedProgramPhase : null, dashboardOverlay.NonHousing);
         }
 
         private void RefreshMapLegend()
@@ -495,20 +493,18 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
 
         private void OnToggleDashboard(InputAction.CallbackContext _)
         {
-            if (input.IsInputFieldSelected()) return;
-
             // The WebGL test override changes permission and Dashboarding together for this session only.
             var enable = !dashboardFunctionality.IsEnabled;
-            configuration.AllowHiddenFeatures = enable;
             dashboardFunctionality.IsEnabled = enable;
         }
 
         private void OpenDashboard()
         {
-            if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || root.ClassListContains(DashboardOpenClass)) return;
+            if (!isActiveAndEnabled || !dashboardFunctionality.IsEnabled || isOpen) return;
 
-            previousFocus = root.focusController?.focusedElement as VisualElement;
-            root.AddToClassList(DashboardOpenClass);
+            previousFocus = appRoot.Root.focusController?.focusedElement as VisualElement;
+            isOpen = true;
+            appRoot.SetDashboardVisible(true);
             ObjectBinding.SetObjPickingEnabled(true);
             if (transformHandles != null)
             {
@@ -516,6 +512,7 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
                 transformHandles.gameObject.SetActive(false);
             }
             dashboardOverlay.SetData(ObjectBinding.Data, dashboardHeader.SelectedBlock);
+            RequestMapRefresh();
             foreach (var mapping in selectionService.SelectedMappings.Values)
             {
                 if (mapping is not CityJSONMapping cityJson)
@@ -531,16 +528,17 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             // Move focus after the dashboard has become visible.
             closeButton.schedule.Execute(() =>
             {
-                if (root.ClassListContains(DashboardOpenClass))
+                if (isOpen)
                     closeButton.Focus();
             });
         }
 
         private void CloseDashboard()
         {
-            if (root == null || !root.ClassListContains(DashboardOpenClass)) return;
+            if (!isOpen) return;
 
-            root.RemoveFromClassList(DashboardOpenClass);
+            isOpen = false;
+            appRoot.SetDashboardVisible(false);
             ObjectBinding?.SetObjPickingEnabled(false);
             selectionService.Deselect();
             ClearObjectSelection();
@@ -550,14 +548,15 @@ namespace Netherlands3D.UI_Toolkit.Scripts.Behaviours
             restoreTransformHandles = false;
             objectSelectionChanged = false;
             dashboardOverlay.SetData(null);
+            RefreshMapColors();
             var elementToFocus = previousFocus;
             previousFocus = null;
             if (elementToFocus?.panel == null) return;
 
             // Restore focus after the viewer has become visible again.
-            root.schedule.Execute(() =>
+            appRoot.Root.schedule.Execute(() =>
             {
-                if (!root.ClassListContains(DashboardOpenClass) && elementToFocus.panel == root.panel)
+                if (!isOpen && elementToFocus.panel == appRoot.Root.panel)
                     elementToFocus.Focus();
             });
         }
