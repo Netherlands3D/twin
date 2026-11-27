@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" editor-extension-mode="False" class="bar-chart">
+    <nl3d:Header name="ChartTitle" icon="PresentationChart" text="" class="bar-chart__title"/>
+    <ui:Label name="ChartDescription" class="bar-chart__description"/>
+    <ui:VisualElement name="ChartBody" class="bar-chart__body">
+        <ui:VisualElement picking-mode="Ignore" class="bar-chart__axis">
+            <ui:VisualElement name="AxisTitle" picking-mode="Ignore" class="bar-chart__axis-title">
+                <ui:Label name="ValueAxisLabel" class="bar-chart__axis-label"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="AxisTicks" picking-mode="Ignore" class="bar-chart__ticks"/>
+        </ui:VisualElement>
+        <ui:ScrollView name="ChartScrollView" mode="Horizontal" vertical-scroller-visibility="Hidden" class="bar-chart__scroll">
+            <ui:VisualElement name="Columns" class="bar-chart__columns"/>
+        </ui:ScrollView>
+        <ui:VisualElement name="HorizontalPlotArea" class="bar-chart__horizontal-plot-area"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="ChartLegend" class="bar-chart__legend"/>
+    <ui:Label name="EmptyChart" text="Geen gegevens beschikbaar" class="bar-chart__empty"/>
+</ui:UXML>

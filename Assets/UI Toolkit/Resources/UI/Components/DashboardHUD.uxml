@@ -1,0 +1,65 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" xmlns:nl3dP="Netherlands3D.UI.Panels" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="DashboardRoot" picking-mode="Ignore" class="dashboard-hud__body">
+        <ui:VisualElement name="Sidebar" class="dashboard-hud__sidebar">
+            <nl3d:ToggleSwitch name="DashboardViewSwitch" toggle-on-label-click="false" label="Faseweergave" class="dashboard-hud__phase-toggle"/>
+            <ui:VisualElement class="panel-divider" picking-mode="Ignore"/>
+            <nl3d:TextCallOut name="SidebarDataExplanation" class="dashboard-hud__data-explanation hidden"/>
+            <ui:ToggleButtonGroup name="PlanPhases" value="0" allow-empty-selection="false" tooltip="Kies een planfase voor het programmaoverzicht." class="dashboard-hud__phase-toolbar">
+                <nl3d:Button button-style="Normal" LabelText="Actuele stand" tooltip="Laatste beschikbare gegevens per bouwblok."/>
+                <nl3d:Button name="BBP" button-style="Normal" LabelText="BBP"/>
+                <nl3d:Button name="SO" button-style="Normal" LabelText="SO"/>
+                <nl3d:Button name="VO" button-style="Normal" LabelText="VO"/>
+                <nl3d:Button name="DO" button-style="Normal" LabelText="DO"/>
+            </ui:ToggleButtonGroup>
+            <nl3d:ScrollView name="Scrollview" mode="Vertical" horizontal-scroller-visibility="Hidden">
+                <nl3dP:DashboardProjectOverview/>
+                <nl3d:TextCallOut name="EmptyProgramSelection" text="" class="dashboard-hud__empty-selection hidden"/>
+                <nl3dP:DashboardBlockOverview class="hidden"/>
+                <ui:VisualElement name="ProgramOverviewContent">
+                    <ui:VisualElement name="HousingProgramCharts">
+                        <nl3d:RingChart name="HousingSegmentChart" title="Segmentverdeling woningen" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>
+                        <nl3d:AreaComparisonChart name="HousingFloorAreaChart" title="Gemiddelde minimale woonoppervlakte per segment (m²)" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>
+                        <nl3d:BarChart minimum-column-count="4" name="HousingBlockChart" title="Woningen per blok" icon="Tile" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                        <nl3d:BarChart minimum-column-count="4" name="HousingRoomChart" title="Kamerverdeling woningen" icon="Tile" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="NonHousingProgramCharts" class="hidden">
+                        <nl3d:RingChart name="NonHousingCategoryChart" title="BVO per categorie (m&#178;)" icon="Tile" class="dashboard-hud__housing-chart dashboard-theme"/>
+                        <nl3d:BarChart name="NonHousingBlockChart" title="BVO per blok (m&#178;)" icon="Tile" value-axis-label="BVO (m&#178;)" minimum-column-count="4" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="PhaseProgressContent" class="hidden">
+                    <ui:VisualElement name="HousingPhaseCharts">
+                        <nl3d:BarChart minimum-column-count="4" name="HousingPhaseChart" title="Woningen per segment per fase" icon="PresentationChart" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                        <nl3d:BarChart minimum-column-count="4" name="HousingRoomPhaseChart" title="Kamerverdeling per fase" icon="PresentationChart" value-axis-label="Aantal woningen" minimum-step="1" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                        <nl3d:AreaComparisonChart name="HousingFloorAreaPhaseChart" title="Gemiddelde minimale woonoppervlakte per fase (m&#178;)" icon="PresentationChart" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="NonHousingPhaseCharts" class="hidden">
+                        <nl3d:BarChart minimum-column-count="4" name="NonHousingPhaseChart" title="BVO per categorie per fase" icon="PresentationChart" value-axis-label="BVO (m&#178;)" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                        <nl3d:BarChart minimum-column-count="4" name="NonHousingBlockPhaseChart" title="BVO per blok en fase" icon="PresentationChart" value-axis-label="BVO (m&#178;)" compact-numbers="true" million-suffix=" mln" billion-suffix=" mld" class="dashboard-hud__housing-chart dashboard-theme"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </nl3d:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="HudMain" picking-mode="Ignore" class="dashboard-hud__main">
+            <nl3d:DashboardHeader name="DashboardHeader"/>
+            <ui:VisualElement name="DashboardMapArea" picking-mode="Ignore" class="dashboard-hud__map-area">
+                <ui:VisualElement name="DashboardAnnotations" picking-mode="Ignore" class="dashboard-hud__annotations">
+                    <nl3d:DashboardAnnotation name="DashboardAnnotation" picking-mode="Ignore"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="DashboardMapColors" class="dashboard-map-layers dashboard-theme">
+                    <nl3d:ContentContainer text="Kaartkleuren" container-style="Normal" expanded="true" show-divider="true" class="dashboard-map-layers__container">
+                        <ui:Label name="MapColorEmpty" text="Geen gegevens beschikbaar"/>
+                        <ui:VisualElement name="MapColorContent" class="hidden">
+                            <nl3d:DropDown name="ColorMode" dropdown-style="Text" choices="Basiskleur,Grootste woningsegment,Aantal woningen,Laatst beschikbare planfase" tooltip="Kies waarop de kleuren van de gekoppelde bouwblokken zijn gebaseerd."/>
+                            <nl3d:Header text="Legenda" icon="Legend" class="dashboard-map-layers__label"/>
+                            <ui:VisualElement name="ColorLegend" class="dashboard-map-layers__legend"/>
+                        </ui:VisualElement>
+                    </nl3d:ContentContainer>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="PhaseChangesPanel" class="dashboard-hud__phase-changes hidden">
+                <nl3dP:DashboardPhaseComparisonPanel/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

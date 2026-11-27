@@ -1,0 +1,60 @@
+@import url("WorldAnnotation-style.uss");
+@import url("Chart-style.uss");
+@import url("../_DashboardTheme.uss");
+
+.dashboard-annotation {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.dashboard-annotation__panel {
+    position: absolute;
+    width: 336px;
+    left: 0;
+    /* Place the visible background's bottom edge on the projected geometry centre. */
+    bottom: 10px;
+    translate: -50% 0;
+}
+
+.dashboard-annotation__anchor {
+    /* 12px visible point radius + 8px gap below the panel. */
+    top: 20px;
+}
+
+.dashboard-annotation__header {
+    flex-direction: row;
+    align-items: center;
+}
+
+.dashboard-annotation__count {
+    margin-left: var(--spacing-2);
+}
+
+.dashboard-annotation__scroll {
+    min-height: 0;
+    max-height: 240px;
+    margin-top: var(--spacing-2);
+}
+
+.dashboard-annotation__change {
+    border-top-width: 1px;
+    border-top-color: var(--color-blue-100);
+    padding-top: var(--spacing-2);
+}
+
+.dashboard-annotation__labels {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: var(--spacing-1);
+}
+
+.dashboard-annotation__phase {
+    margin-right: var(--spacing-2);
+}
+
+.dashboard-annotation__text,
+.dashboard-annotation__empty {
+    white-space: normal;
+}

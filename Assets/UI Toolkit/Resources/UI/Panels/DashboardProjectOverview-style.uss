@@ -1,0 +1,46 @@
+.dashboard-project-overview {
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+.dashboard-project-overview__cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    margin: var(--spacing-1) -4px -4px;
+}
+
+.dashboard-project-overview__card {
+    flex-basis: 45%;
+    flex-grow: 1;
+    min-width: 148px;
+    max-width: 100%;
+    margin: var(--spacing-1);
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-blue-100);
+    border-width: var(--spacing-0_5);
+    border-color: var(--color-blue-200);
+    border-radius: var(--spacing-2);
+}
+
+.dashboard-project-overview__card > .unity-label {
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-project-overview #ProjectPhase,
+.dashboard-project-overview #ProjectNonHousingPhase {
+    white-space: normal;
+}
+
+.dashboard-project-overview .text-header,
+.dashboard-project-overview .header__label {
+    -unity-font-definition: var(--nl3d-header-font);
+}
+
+.dashboard-project-overview__card > .dashboard-project-overview__value {
+    margin: var(--spacing-1) 0;
+    font-size: var(--spacing-6);
+    -unity-font-definition: var(--nl3d-default-font-bold);
+    color: var(--color-blue-700);
+}
